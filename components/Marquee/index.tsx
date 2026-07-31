@@ -1,9 +1,9 @@
 'use client'
 // components/Marquee/index.tsx
-// Auto-scrolling partner/sponsor strip with pause-on-hover
+// Seamless horizontal scrolling partner marquee strip with Voltage styling
 
-import { useRef, useState } from 'react'
 import { SPONSORS } from '@/lib/data'
+import { Zap } from 'lucide-react'
 
 const ALL_LOGOS = [
   ...SPONSORS.title,
@@ -12,77 +12,37 @@ const ALL_LOGOS = [
   ...SPONSORS.media,
 ]
 
-function LogoPlaceholder({ name }: { name: string }) {
-  return (
-    <div
-      className="flex items-center justify-center px-8 py-3 rounded"
-      style={{
-        background: 'rgba(138,144,166,0.06)',
-        border: '1px solid rgba(138,144,166,0.1)',
-        minWidth: '140px',
-        height: '52px',
-      }}
-      aria-label={name}
-    >
-      {/* TODO: replace with real logo <img src={logo} alt={name} /> */}
-      <span
-        className="font-body font-semibold text-sm whitespace-nowrap tracking-wide"
-        style={{ color: 'var(--text-muted)' }}
-      >
-        {name}
-      </span>
-    </div>
-  )
-}
-
 export default function Marquee() {
-  const [paused, setPaused] = useState(false)
-  // Double the items for seamless loop
-  const items = [...ALL_LOGOS, ...ALL_LOGOS]
+  const items = [...ALL_LOGOS, ...ALL_LOGOS, ...ALL_LOGOS]
 
   return (
     <section
-      className="py-10 overflow-hidden"
-      style={{
-        borderTop: '1px solid rgba(138,144,166,0.08)',
-        borderBottom: '1px solid rgba(138,144,166,0.08)',
-        background: 'rgba(19,24,41,0.4)',
-      }}
+      className="py-6 relative overflow-hidden bg-panel border-t border-b border-volt-dim/30"
       aria-label="Partners and sponsors"
     >
-      <div className="mb-4 flex items-center justify-center">
-        <span
-          className="font-mono-data text-[10px] uppercase tracking-[0.2em]"
-          style={{ color: 'var(--text-muted)' }}
-        >
-          Partners &amp; Media
+      <div className="mb-3 flex items-center justify-center gap-2">
+        <Zap size={12} className="text-volt fill-volt" />
+        <span className="font-mono-data text-[10px] uppercase tracking-[0.25em] text-volt font-bold">
+          Official Partners &amp; Media Ecosystem
         </span>
       </div>
 
-      <div
-        className="marquee-wrapper relative"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-        role="region"
-        aria-roledescription="marquee"
-        aria-label="Scrolling list of partners"
-      >
-        {/* Fade edges */}
-        <div
-          className="absolute left-0 top-0 w-24 h-full z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to right, var(--bg-void), transparent)' }}
-        />
-        <div
-          className="absolute right-0 top-0 w-24 h-full z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to left, var(--bg-void), transparent)' }}
-        />
+      {/* Marquee Wrapper */}
+      <div className="relative overflow-hidden flex items-center">
+        {/* Left Fade Gradient */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-r from-panel to-transparent" />
+        {/* Right Fade Gradient */}
+        <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none bg-gradient-to-l from-panel to-transparent" />
 
-        <div
-          className={`marquee-track ${paused ? 'paused' : ''}`}
-          aria-hidden="true"
-        >
+        {/* Continuous Horizontal Row Line */}
+        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] py-2">
           {items.map((item, i) => (
-            <LogoPlaceholder key={`${item.id}-${i}`} name={item.name} />
+            <div
+              key={`${item.id}-${i}`}
+              className="inline-flex items-center justify-center px-6 py-2.5 mx-2 rounded-xl bg-void border border-volt-dim/30 text-muted font-mono-data text-xs font-semibold hover:text-volt hover:border-volt transition-all shrink-0 cursor-pointer shadow-md"
+            >
+              <span>{item.name}</span>
+            </div>
           ))}
         </div>
       </div>

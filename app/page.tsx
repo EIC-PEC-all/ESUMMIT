@@ -1,5 +1,5 @@
 // app/page.tsx
-// Main page — all sections assembled in order
+// Main page — all sections assembled in order (Momentum Direction)
 'use client'
 
 import { Toaster } from 'react-hot-toast'
@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic'
 // Static sections
 import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
+import StatBurst from '@/components/StatBurst'
 import Marquee from '@/components/Marquee'
 import About from '@/components/About'
 import Tracks from '@/components/Tracks'
@@ -21,7 +22,7 @@ const Timeline = dynamic(() => import('@/components/Timeline'), {
   ssr: false,
   loading: () => (
     <div className="py-32 flex items-center justify-center section-container">
-      <span className="font-mono-data text-sm" style={{ color: 'var(--text-muted)' }}>
+      <span className="font-mono-data text-sm text-muted">
         Loading schedule…
       </span>
     </div>
@@ -34,7 +35,6 @@ const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false }
 export default function Home() {
   return (
     <main>
-      {/* Toast provider */}
       <Toaster
         position="top-center"
         gutter={8}
@@ -43,6 +43,9 @@ export default function Home() {
           style: {
             fontFamily: 'Inter, sans-serif',
             fontSize: '0.875rem',
+            background: 'var(--bg-panel)',
+            color: 'var(--text-primary)',
+            border: '1px solid rgba(199, 208, 222, 0.15)',
           },
         }}
       />
@@ -50,25 +53,28 @@ export default function Home() {
       {/* Navigation */}
       <Nav />
 
-      {/* 1. Hero */}
+      {/* 1. Hero with 3D Crystal */}
       <Hero />
 
-      {/* 2. Marquee */}
+      {/* 2. StatBurst Transition */}
+      <StatBurst />
+
+      {/* 3. Marquee */}
       <Marquee />
 
-      {/* 3. About / Stats */}
+      {/* 4. About with Scroll-Pinned Text Reveal */}
       <About />
 
-      {/* 4. Tracks / Events */}
+      {/* 5. Tracks / Events */}
       <Tracks />
 
-      {/* 5. Speakers */}
+      {/* 6. Speakers */}
       <Speakers />
 
-      {/* 6. Schedule / Timeline */}
+      {/* 7. Schedule / Timeline */}
       <Timeline />
 
-      {/* 7. Sponsors */}
+      {/* 8. Sponsors */}
       <Sponsors />
 
       {/* 9. FAQ */}
@@ -77,7 +83,7 @@ export default function Home() {
       {/* 10. Register / Footer CTA */}
       <Footer />
 
-      {/* 8. AI Concierge (floating) */}
+      {/* 11. AI Summit Agent (floating) + My Plan Drawer */}
       <Concierge />
     </main>
   )

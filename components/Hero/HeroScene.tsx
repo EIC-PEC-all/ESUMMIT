@@ -1,74 +1,79 @@
 'use client'
 // components/Hero/HeroScene.tsx
-// React Three Fiber signature element — wireframe launch-form geometry
-// Only rendered on desktop; mobile gets a CSS fallback
+// React Three Fiber signature 3D set-piece: Torus-Knot polyhedron with glowing volt yellow wireframe edges
 
 import { useRef, useMemo } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useScroll } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
-function LaunchForm({ mouse }: { mouse: React.RefObject<{ x: number; y: number }> }) {
+function VoltageTorusKnot({ mouse }: { mouse: React.RefObject<{ x: number; y: number }> }) {
   const meshRef = useRef<THREE.Mesh>(null)
   const edgesRef = useRef<THREE.LineSegments>(null)
-  const innerRef = useRef<THREE.LineSegments>(null)
+  const coreRef = useRef<THREE.Mesh>(null)
   const time = useRef(0)
 
-  // Composite geometry: icosahedron + octahedron for the "launch vehicle silhouette"
-  const { geo1, geo2, geo3 } = useMemo(() => {
-    const ico = new THREE.IcosahedronGeometry(1.4, 1)
-    const oct = new THREE.OctahedronGeometry(0.9, 0)
-    const tetra = new THREE.TetrahedronGeometry(1.8, 0)
-    return { geo1: ico, geo2: oct, geo3: tetra }
+  // TorusKnot + Octahedron core
+  const { geoTorus, geoCore } = useMemo(() => {
+    const torus = new THREE.TorusKnotGeometry(1.2, 0.35, 128, 16)
+    const core = new THREE.OctahedronGeometry(0.7, 0)
+    return { geoTorus: torus, geoCore: core }
   }, [])
 
   useFrame(({ clock }) => {
     time.current = clock.getElapsedTime()
-    if (!meshRef.current || !edgesRef.current || !innerRef.current) return
+    if (!meshRef.current || !edgesRef.current || !coreRef.current) return
 
     const mx = mouse.current?.x ?? 0
     const my = mouse.current?.y ?? 0
 
-    // Slow base rotation
-    meshRef.current.rotation.y = time.current * 0.12 + mx * 0.3
-    meshRef.current.rotation.x = Math.sin(time.current * 0.07) * 0.15 + my * 0.2
-    meshRef.current.rotation.z = Math.cos(time.current * 0.05) * 0.08
+    // Smooth electric rotation
+    meshRef.current.rotation.y = time.current * 0.2 + mx * 0.4
+    meshRef.current.rotation.x = Math.sin(time.current * 0.1) * 0.25 + my * 0.3
 
-    edgesRef.current.rotation.y = time.current * 0.08 - mx * 0.2
-    edgesRef.current.rotation.x = -Math.sin(time.current * 0.06) * 0.12 - my * 0.15
-    edgesRef.current.rotation.z = Math.sin(time.current * 0.04) * 0.06
+    edgesRef.current.rotation.y = time.current * 0.2 + mx * 0.4
+    edgesRef.current.rotation.x = Math.sin(time.current * 0.1) * 0.25 + my * 0.3
 
-    innerRef.current.rotation.y = -time.current * 0.15 + mx * 0.1
-    innerRef.current.rotation.x = Math.cos(time.current * 0.09) * 0.1
+    coreRef.current.rotation.y = -time.current * 0.3 - mx * 0.3
+    coreRef.current.rotation.x = Math.cos(time.current * 0.15) * 0.2
 
-    // Subtle breathing scale
-    const breathe = 1 + Math.sin(time.current * 0.4) * 0.03
-    meshRef.current.scale.setScalar(breathe)
+    // Pulsing current pulse
+    const pulse = 1 + Math.sin(time.current * 0.8) * 0.04
+    meshRef.current.scale.setScalar(pulse)
+    edgesRef.current.scale.setScalar(pulse)
   })
 
   return (
     <group position={[0, 0, 0]}>
-      {/* Outer wireframe — ignite red */}
-      <lineSegments ref={edgesRef}>
-        <edgesGeometry args={[geo3]} />
-        <lineBasicMaterial color="#FF4D3D" transparent opacity={0.35} />
-      </lineSegments>
-
-      {/* Mid mesh wireframe — signal cyan */}
+      {/* Torus-Knot Metallic Black Body */}
       <mesh ref={meshRef}>
-        <primitive object={geo1} />
-        <meshBasicMaterial color="#3DD9FF" wireframe transparent opacity={0.25} />
+        <primitive object={geoTorus} />
+        <meshPhongMaterial
+          color="#0A0A0A"
+          emissive="#151515"
+          specular="#F5D400"
+          shininess={80}
+          transparent
+          opacity={0.8}
+          flatShading
+        />
       </mesh>
 
-      {/* Inner solid — subtle fill */}
-      <lineSegments ref={innerRef}>
-        <edgesGeometry args={[geo2]} />
-        <lineBasicMaterial color="#F5F3EE" transparent opacity={0.12} />
+      {/* Electric Volt Yellow Emissive Wireframe Edge Highlight */}
+      <lineSegments ref={edgesRef}>
+        <edgesGeometry args={[geoTorus]} />
+        <lineBasicMaterial color="#F5D400" transparent opacity={0.75} linewidth={1.5} />
       </lineSegments>
 
-      {/* Point light for depth */}
-      <pointLight color="#FF4D3D" intensity={1.5} distance={5} position={[2, 1, 2]} />
-      <pointLight color="#3DD9FF" intensity={0.8} distance={5} position={[-2, -1, 1]} />
+      {/* Glowing Energy Core */}
+      <mesh ref={coreRef}>
+        <primitive object={geoCore} />
+        <meshBasicMaterial color="#F5D400" wireframe transparent opacity={0.5} />
+      </mesh>
+
+      {/* Electric Lighting */}
+      <pointLight color="#F5D400" intensity={3.5} distance={7} position={[3, 2, 3]} />
+      <pointLight color="#8A7600" intensity={2} distance={6} position={[-3, -2, 2]} />
+      <directionalLight color="#F2F2ED" intensity={0.8} position={[0, 4, 4]} />
     </group>
   )
 }
@@ -86,8 +91,8 @@ export default function HeroScene({ mouse, scrollY }: HeroSceneProps) {
       gl={{ antialias: true, alpha: true }}
       dpr={[1, 2]}
     >
-      <ambientLight intensity={0.15} />
-      <LaunchForm mouse={mouse} />
+      <ambientLight intensity={0.2} />
+      <VoltageTorusKnot mouse={mouse} />
     </Canvas>
   )
 }

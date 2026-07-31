@@ -1,96 +1,75 @@
 'use client'
 // components/Timeline/index.tsx
-// Schedule section — staggered reveal per row, day tabs, agent highlight support
+// Pinned Schedule & Lineup timeline with Voltage current line spine and interactive day toggle
 
-import { useEffect, useRef, useState } from 'react'
-import { motion, useInView } from 'framer-motion'
-import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Clock, Calendar, Zap, ArrowRight } from 'lucide-react'
 import { SCHEDULE } from '@/lib/data'
 import { onAgentEvent } from '@/lib/events'
+import Link from 'next/link'
 
-const TYPE_COLORS: Record<string, string> = {
-  logistics:   '#8A90A6',
-  keynote:     '#FF4D3D',
-  panel:       '#3DD9FF',
-  expo:        '#FF8C42',
-  break:       '#8A90A6',
-  competition: '#FF4D3D',
-  hackathon:   '#9B5CFF',
-  networking:  '#3DD9FF',
-  social:      '#FF8C42',
-}
+type ScheduleEvent = typeof SCHEDULE.day1.events[0]
 
-type ScheduleEvent = {
-  id: string
-  time: string
-  title: string
-  type: string
-  track: string | null
-}
-
-function ScheduleRow({
+function TimelineEventCard({
   event,
-  index,
   isHighlighted,
+  index,
 }: {
   event: ScheduleEvent
-  index: number
   isHighlighted: boolean
+  index: number
 }) {
-  const color = TYPE_COLORS[event.type] ?? '#8A90A6'
   return (
     <motion.div
-      id={`schedule-${event.id}`}
-      className="flex items-start gap-4 py-4 border-b"
-      style={{
-        borderColor: 'rgba(138,144,166,0.08)',
-        outline: isHighlighted ? `2px solid ${color}` : 'none',
-        outlineOffset: '4px',
-        borderRadius: isHighlighted ? '6px' : '0',
-        transition: 'outline 0.3s ease',
-      }}
-      initial={{ opacity: 0, x: -16 }}
+      id={`schedule-row-${event.id}`}
+      initial={{ opacity: 0, x: -20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.45, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, delay: index * 0.06 }}
+      className={`relative pl-8 sm:pl-12 pb-8 border-l-2 ${
+        isHighlighted ? 'border-volt highlight-active' : 'border-volt-dim/30'
+      } group`}
     >
-      {/* Row number */}
-      <span
-        className="font-mono-data text-xs w-6 shrink-0 pt-0.5 select-none"
-        style={{ color: 'var(--text-muted)', opacity: 0.4 }}
-        aria-hidden="true"
-      >
-        {String(index + 1).padStart(2, '0')}
-      </span>
-
-      {/* Time */}
-      <span
-        className="font-mono-data text-sm w-14 shrink-0 pt-0.5"
-        style={{ color }}
-      >
-        {event.time}
-      </span>
-
-      {/* Title */}
-      <span
-        className="font-body text-sm leading-snug flex-1"
-        style={{ color: 'var(--text-primary)' }}
-      >
-        {event.title}
-      </span>
-
-      {/* Type badge */}
-      <span
-        className="font-mono-data text-[9px] uppercase tracking-wider px-2 py-1 rounded shrink-0"
+      {/* Node Dot on Timeline Spine */}
+      <div
+        className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-void border-2 transition-all duration-300 group-hover:scale-125"
         style={{
-          background: `${color}15`,
-          color,
-          border: `1px solid ${color}30`,
+          borderColor: isHighlighted ? '#F5D400' : 'var(--accent-volt-dim)',
+          boxShadow: isHighlighted ? '0 0 16px #F5D400' : undefined,
         }}
-        aria-label={`type: ${event.type}`}
-      >
-        {event.type}
-      </span>
+      />
+
+      <div className="p-6 rounded-2xl bg-panel border border-volt-dim/25 hover:border-volt transition-all duration-300 shadow-xl group-hover:-translate-y-1">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
+          {/* Time */}
+          <div className="flex items-center gap-2 font-mono-data text-xs text-volt font-bold">
+            <Clock size={13} /> {event.time}
+          </div>
+
+          {/* Type Badge */}
+          <span className="font-mono-data text-[10px] uppercase font-bold px-2.5 py-1 rounded bg-void text-volt border border-volt/30">
+            {event.type}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3 className="font-display text-2xl text-primary group-hover:text-volt transition-colors">
+          {event.title}
+        </h3>
+
+        {/* Track tag if present */}
+        {event.track && (
+          <div className="mt-3 pt-3 border-t border-volt-dim/20 flex items-center justify-between">
+            <span className="font-mono-data text-[10px] uppercase text-volt">
+              ⚡ Track: {event.track}
+            </span>
+            <span className="font-mono-data text-[10px] text-muted">
+              Main Campus Auditorium
+            </span>
+          </div>
+        )}
+      </div>
     </motion.div>
   )
 }
@@ -98,23 +77,15 @@ function ScheduleRow({
 export default function Timeline() {
   const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1')
   const [highlightId, setHighlightId] = useState<string | null>(null)
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const headerInView = useInView(sectionRef, { once: true, margin: '-60px' })
 
-  const days = { day1: SCHEDULE.day1, day2: SCHEDULE.day2 }
-  const currentDay = days[activeDay]
+  const dayData = SCHEDULE[activeDay]
 
-  // Listen for agent highlight events
   useEffect(() => {
     const unsub = onAgentEvent((event) => {
       if (event.type === 'highlightScheduleRow') {
         const id = event.payload.id as string
         setHighlightId(id)
-        const inDay1 = SCHEDULE.day1.events.some((e) => e.id === id)
-        setActiveDay(inDay1 ? 'day1' : 'day2')
-        setTimeout(() => {
-          document.getElementById(`schedule-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        }, 200)
+        document.getElementById(`schedule-row-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
         setTimeout(() => setHighlightId(null), 4000)
       }
     })
@@ -124,81 +95,91 @@ export default function Timeline() {
   return (
     <section
       id="schedule"
-      ref={sectionRef}
-      className="py-24 lg:py-32"
+      className="py-24 lg:py-32 relative"
       style={{ background: 'var(--bg-void)' }}
       aria-labelledby="schedule-heading"
     >
+      {/* Current Line Top Accent */}
+      <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
+
       <div className="section-container">
         {/* Header */}
         <motion.div
-          className="mb-12"
+          className="mb-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6"
           initial={{ opacity: 0, y: 24 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8">
-            <div>
-              <p
-                className="font-mono-data text-xs uppercase tracking-[0.2em] mb-4"
-                style={{ color: 'var(--accent-ignite)' }}
-              >
-                Event Schedule
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Zap size={14} className="text-volt fill-volt" />
+              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-volt">
+                Lineup &amp; Agenda
               </p>
-              <h2
-                id="schedule-heading"
-                className="font-display leading-none"
-                style={{ fontSize: 'clamp(40px, 5vw, 72px)', color: 'var(--text-primary)' }}
-              >
-                THE LINEUP
-              </h2>
             </div>
-            <Link
-              href="/schedule"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-signal hover:text-primary transition-colors"
+            <h2
+              id="schedule-heading"
+              className="font-display leading-none"
+              style={{ fontSize: 'clamp(40px, 5vw, 72px)', color: 'var(--text-primary)' }}
             >
-              Full Interactive Agenda &amp; Bookmarks &rarr;
-            </Link>
+              SUMMIT <br />
+              <span className="text-volt">SCHEDULE</span>
+            </h2>
           </div>
 
-          {/* Day tabs */}
-          <div className="flex flex-wrap gap-2" role="tablist" aria-label="Schedule days">
-            {(['day1', 'day2'] as const).map((day) => (
-              <button
-                key={day}
-                role="tab"
-                aria-selected={activeDay === day}
-                aria-controls={`schedule-panel-${day}`}
-                onClick={() => setActiveDay(day)}
-                className="px-5 py-2.5 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
-                style={{
-                  background: activeDay === day ? 'var(--accent-ignite)' : 'rgba(138,144,166,0.08)',
-                  color:      activeDay === day ? 'var(--text-primary)' : 'var(--text-muted)',
-                  border:     `1px solid ${activeDay === day ? 'transparent' : 'rgba(138,144,166,0.1)'}`,
-                }}
-              >
-                {days[day].label} — {days[day].date}
-              </button>
-            ))}
-          </div>
+          <Link
+            href="/schedule"
+            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-volt hover:text-primary transition-colors"
+          >
+            View Interactive Schedule Page &rarr;
+          </Link>
         </motion.div>
 
-        {/* Schedule rows */}
-        <div
-          id={`schedule-panel-${activeDay}`}
-          role="tabpanel"
-          aria-label={`${currentDay.label} schedule`}
-          className="max-w-2xl"
-          key={activeDay} // re-mount list on day switch so animations replay
-        >
-          {currentDay.events.map((event, i) => (
-            <ScheduleRow
-              key={event.id}
-              event={event}
-              index={i}
-              isHighlighted={highlightId === event.id}
-            />
-          ))}
+        {/* Day Selector Pills */}
+        <div className="flex items-center gap-4 mb-12">
+          {(['day1', 'day2'] as const).map((dayKey) => {
+            const isActive = activeDay === dayKey
+            const d = SCHEDULE[dayKey]
+            return (
+              <button
+                key={dayKey}
+                onClick={() => setActiveDay(dayKey)}
+                className="px-6 py-3 rounded-xl font-mono-data text-xs uppercase tracking-wider flex items-center gap-2 transition-all duration-200"
+                style={{
+                  background: isActive ? 'var(--accent-volt)' : 'var(--bg-panel)',
+                  color: isActive ? '#0A0A0A' : 'var(--text-muted)',
+                  fontWeight: isActive ? 700 : 400,
+                  border: `1px solid ${isActive ? 'transparent' : 'rgba(138,118,0,0.3)'}`,
+                }}
+              >
+                <Calendar size={14} />
+                <span>{d.label} ({d.date})</span>
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Timeline Events List */}
+        <div className="max-w-4xl relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeDay}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.3 }}
+            >
+              {dayData.events.map((event, idx) => (
+                <TimelineEventCard
+                  key={event.id}
+                  event={event}
+                  isHighlighted={highlightId === event.id}
+                  index={idx}
+                />
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>

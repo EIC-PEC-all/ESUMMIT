@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
+import OpeningLoader from '@/components/Providers/OpeningLoader'
 
 export const metadata: Metadata = {
   title: 'PEC Summit 2025 — E-Cell PEC, Chandigarh',
   description:
-    'PEC Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, Chandigarh. Join the tricity\'s biggest platform for student innovators, startup founders, and venture builders.',
+    'PEC Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, Chandigarh. Join North India\'s premier high-voltage platform for student innovators, startup founders, and venture builders.',
   keywords: [
     'PEC Summit',
     'E-Cell PEC',
@@ -16,19 +18,15 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'E-Cell PEC' }],
   openGraph: {
-    title: 'PEC Summit 2025 — Ignite Your Idea',
+    title: 'PEC Summit 2025 — High Voltage',
     description:
-      'The flagship entrepreneurship summit of E-Cell PEC, Chandigarh. Pitches, panels, expo, and more.',
+      'The flagship entrepreneurship summit of E-Cell PEC, Chandigarh. Pitches, panels, expo, hackathon, and VIP investor networking.',
     type: 'website',
-    // TODO: replace with real OG image URL
-    // images: [{ url: 'https://pecsummit.in/og-image.png' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'PEC Summit 2025',
-    description: 'Ignite your idea at Chandigarh\'s biggest student entrepreneurship summit.',
-    // TODO: replace with real Twitter handle
-    // site: '@ecellpec',
+    description: 'Build and launch at Chandigarh\'s premier student entrepreneurship summit.',
   },
 }
 
@@ -40,7 +38,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="noise">
-        {children}
+        <SmoothScrollProvider>
+          <OpeningLoader>
+            {children}
+          </OpeningLoader>
+        </SmoothScrollProvider>
       </body>
     </html>
   )

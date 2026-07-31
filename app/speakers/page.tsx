@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Twitter, Linkedin, ArrowLeft, Sparkles, X, User, MessageSquare } from 'lucide-react'
+import { Search, Twitter, Linkedin, ArrowLeft, Sparkles, X, MessageSquare, Zap } from 'lucide-react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import Concierge from '@/components/Concierge'
@@ -28,23 +28,23 @@ export default function SpeakersLandingPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[#8A90A6]/10 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none opacity-15 bg-[radial-gradient(#FF4D3D_1px,transparent_1px)] [background-size:28px_28px]" />
+      <section className="relative pt-36 pb-20 border-b border-volt-dim/30 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#F5D400_1px,transparent_1px)] [background-size:28px_28px]" />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-signal transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-volt transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ignite/10 border border-ignite/30 mb-6">
-              <Sparkles size={14} className="text-ignite" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-ignite">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-volt/10 border border-volt/30 mb-6">
+              <Zap size={14} className="text-volt fill-volt" />
+              <span className="font-mono-data text-xs uppercase tracking-wider text-volt">
                 E-Summit 2025 Speaker Lineup
               </span>
             </div>
@@ -54,7 +54,7 @@ export default function SpeakersLandingPage() {
               style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
             >
               VOICES THAT <br />
-              <span style={{ color: 'var(--accent-ignite)' }}>BUILD &amp; INVEST</span>
+              <span className="text-volt">BUILD &amp; INVEST</span>
             </h1>
 
             <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
@@ -70,7 +70,7 @@ export default function SpeakersLandingPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search speaker by name, company, or domain..."
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-panel border border-[#8A90A6]/20 text-primary font-body text-sm outline-none focus:border-ignite"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-panel border border-volt-dim/30 text-primary font-body text-sm outline-none focus:border-volt"
                 />
               </div>
 
@@ -81,9 +81,10 @@ export default function SpeakersLandingPage() {
                     onClick={() => setSelectedTrack(tr)}
                     className="px-4 py-3 rounded-xl font-mono-data text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-200"
                     style={{
-                      background: selectedTrack === tr ? 'var(--accent-ignite)' : 'rgba(138,144,166,0.08)',
-                      color: selectedTrack === tr ? '#F5F3EE' : 'var(--text-muted)',
-                      border: `1px solid ${selectedTrack === tr ? 'transparent' : 'rgba(138,144,166,0.12)'}`,
+                      background: selectedTrack === tr ? 'var(--accent-volt)' : 'var(--bg-panel)',
+                      color: selectedTrack === tr ? '#0A0A0A' : 'var(--text-muted)',
+                      fontWeight: selectedTrack === tr ? 700 : 400,
+                      border: `1px solid ${selectedTrack === tr ? 'transparent' : 'rgba(138,118,0,0.3)'}`,
                     }}
                   >
                     {tr === 'All' ? 'All Sessions' : tr}
@@ -106,29 +107,24 @@ export default function SpeakersLandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => setActiveSpeaker(spk)}
-                className="group relative rounded-2xl p-6 bg-panel border border-[#8A90A6]/12 hover:border-ignite/40 cursor-pointer transition-all duration-300 flex flex-col justify-between"
+                className="group relative rounded-2xl p-6 bg-panel border border-volt-dim/30 hover:border-volt cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-lg"
               >
                 <div>
-                  <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 text-2xl font-display font-bold relative overflow-hidden"
-                    style={{ background: `${spk.color}20`, color: spk.color, border: `1px solid ${spk.color}40` }}
-                  >
+                  <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 text-2xl font-display font-bold bg-void border border-volt-dim/40 text-volt group-hover:scale-105 transition-transform">
                     {spk.initials}
                   </div>
 
-                  <span
-                    className="font-mono-data text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full inline-block mb-3"
-                    style={{ background: 'rgba(138,144,166,0.1)', color: spk.color }}
-                  >
-                    {spk.track} Track
+                  <span className="font-mono-data text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full inline-block mb-3 bg-void text-volt border border-volt/20">
+                    ⚡ {spk.track} Track
                   </span>
 
-                  <h3 className="font-body font-bold text-xl text-primary group-hover:text-ignite transition-colors mb-1">
+                  <h3 className="font-body font-bold text-xl text-primary group-hover:text-volt transition-colors mb-1">
                     {spk.name}
                   </h3>
                   <p className="font-mono-data text-xs text-muted leading-snug mb-4">{spk.title}</p>
                 </div>
 
-                <div className="pt-4 border-t border-[#8A90A6]/10 flex items-center justify-between font-mono-data text-xs text-signal group-hover:underline">
+                <div className="pt-4 border-t border-volt-dim/20 flex items-center justify-between font-mono-data text-xs text-volt group-hover:underline">
                   <span>View Speaker Bio</span>
                   <MessageSquare size={14} />
                 </div>
@@ -146,20 +142,17 @@ export default function SpeakersLandingPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg rounded-2xl p-8 bg-panel border border-[#8A90A6]/20 shadow-2xl relative"
+              className="w-full max-w-lg rounded-2xl p-8 bg-panel border border-volt-dim/40 shadow-2xl relative"
             >
               <button
                 onClick={() => setActiveSpeaker(null)}
-                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-primary bg-void/50"
+                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-primary bg-void"
               >
                 <X size={18} />
               </button>
 
               <div className="flex items-center gap-4 mb-6">
-                <div
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center font-display text-2xl font-bold"
-                  style={{ background: `${activeSpeaker.color}25`, color: activeSpeaker.color }}
-                >
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center font-display text-2xl font-bold bg-void border border-volt text-volt">
                   {activeSpeaker.initials}
                 </div>
                 <div>
@@ -168,23 +161,23 @@ export default function SpeakersLandingPage() {
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-void border border-[#8A90A6]/10 mb-6">
-                <h4 className="font-mono-data text-xs uppercase text-signal mb-2">Speaker Overview</h4>
+              <div className="p-4 rounded-xl bg-void border border-volt-dim/20 mb-6">
+                <h4 className="font-mono-data text-xs uppercase text-volt mb-2">⚡ Speaker Overview</h4>
                 <p className="font-body text-sm text-muted leading-relaxed">{activeSpeaker.bio}</p>
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex gap-3">
-                  <a href="#" className="p-2 rounded-lg bg-void border border-[#8A90A6]/20 text-muted hover:text-signal">
+                  <a href="#" className="p-2 rounded-lg bg-void border border-volt-dim/30 text-muted hover:text-volt">
                     <Twitter size={16} />
                   </a>
-                  <a href="#" className="p-2 rounded-lg bg-void border border-[#8A90A6]/20 text-muted hover:text-signal">
+                  <a href="#" className="p-2 rounded-lg bg-void border border-volt-dim/30 text-muted hover:text-volt">
                     <Linkedin size={16} />
                   </a>
                 </div>
                 <button
                   onClick={() => setActiveSpeaker(null)}
-                  className="btn-ignite px-6 py-2.5 text-xs"
+                  className="btn-volt px-6 py-2.5 text-xs"
                 >
                   Close Profile
                 </button>

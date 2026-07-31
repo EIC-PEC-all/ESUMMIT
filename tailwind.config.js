@@ -8,12 +8,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        void: '#0B0E1A',
-        panel: '#131829',
-        ignite: '#FF4D3D',
-        signal: '#3DD9FF',
-        primary: '#F5F3EE',
-        muted: '#8A90A6',
+        void: '#0A0A0A',        // warm near-black void
+        panel: '#151515',       // card/panel surface
+        volt: '#F5D400',        // electric yellow primary accent (<15% surface area)
+        'volt-dim': '#8A7600',   // muted yellow-brown border/secondary
+        primary: '#F2F2ED',     // warm off-white text
+        muted: '#8C8C86',       // slate muted text
       },
       fontFamily: {
         display: ['var(--font-bebas)', 'sans-serif'],
@@ -24,7 +24,7 @@ module.exports = {
         'marquee': 'marquee 30s linear infinite',
         'marquee2': 'marquee2 30s linear infinite',
         'flip-in': 'flipIn 0.4s ease forwards',
-        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+        'pulse-volt': 'pulseVolt 2.5s ease-in-out infinite',
       },
       keyframes: {
         marquee: {
@@ -39,9 +39,9 @@ module.exports = {
           '0%': { transform: 'rotateX(90deg)', opacity: '0' },
           '100%': { transform: 'rotateX(0deg)', opacity: '1' },
         },
-        pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 12px rgba(255,77,61,0.3)' },
-          '50%': { boxShadow: '0 0 28px rgba(255,77,61,0.7)' },
+        pulseVolt: {
+          '0%, 100%': { boxShadow: '0 0 12px rgba(245,212,0,0.25)' },
+          '50%': { boxShadow: '0 0 32px rgba(245,212,0,0.65)' },
         },
       },
     },

@@ -1,12 +1,12 @@
 'use client'
 // components/Concierge/index.tsx
-// Floating agentic chat widget — bottom-right, expandable
+// Floating Agentic Summit Agent + "My Plan" Persistent Itinerary Drawer (Voltage Theme)
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X, Send, Bot, User, ChevronDown } from 'lucide-react'
+import { MessageCircle, X, Send, Bot, User, ChevronDown, Calendar, Plus, Trash2, Bookmark, Check, Zap } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { getAgentResponse, SUGGESTED_STARTERS } from './agent'
+import { getAgentResponse, SUGGESTED_STARTERS, type ItinerarySession } from './agent'
 import { FEST_CONTEXT } from '@/lib/data'
 
 interface Message {
@@ -15,76 +15,21 @@ interface Message {
   text: string
   timestamp: Date
   suggestedReplies?: string[]
-}
-
-function TypingIndicator() {
-  return (
-    <div className="flex items-end gap-2" aria-label="Concierge is typing" role="status">
-      <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
-        style={{ background: 'rgba(255,77,61,0.15)', border: '1px solid rgba(255,77,61,0.3)' }}>
-        <Bot size={13} style={{ color: 'var(--accent-ignite)' }} />
-      </div>
-      <div className="chat-bubble-bot px-4 py-3">
-        <div className="flex gap-1 items-center h-4">
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              className="w-1.5 h-1.5 rounded-full"
-              style={{
-                background: 'var(--text-muted)',
-                animation: `bounce 1.2s ease-in-out ${i * 0.2}s infinite`,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function MessageBubble({ message }: { message: Message }) {
-  const isUser = message.role === 'user'
-  return (
-    <div className={`flex items-end gap-2 ${isUser ? 'flex-row-reverse' : ''}`}>
-      {/* Avatar */}
-      <div
-        className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
-        style={
-          isUser
-            ? { background: 'rgba(61,217,255,0.15)', border: '1px solid rgba(61,217,255,0.3)' }
-            : { background: 'rgba(255,77,61,0.15)', border: '1px solid rgba(255,77,61,0.3)' }
-        }
-        aria-hidden="true"
-      >
-        {isUser
-          ? <User size={13} style={{ color: 'var(--accent-signal)' }} />
-          : <Bot size={13} style={{ color: 'var(--accent-ignite)' }} />
-        }
-      </div>
-
-      {/* Bubble */}
-      <div
-        className={`max-w-[80%] px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap ${isUser ? 'chat-bubble-user' : 'chat-bubble-bot'}`}
-        style={{ fontFamily: 'Inter, sans-serif' }}
-      >
-        {/* Simple markdown bold support */}
-        {message.text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
-          i % 2 === 1
-            ? <strong key={i} style={{ color: isUser ? '#fff' : 'var(--text-primary)' }}>{part}</strong>
-            : <span key={i}>{part}</span>
-        )}
-      </div>
-    </div>
-  )
+  itinerary?: {
+    title: string
+    sessions: ItinerarySession[]
+  }
 }
 
 export default function Concierge() {
   const [open, setOpen] = useState(false)
+  const [planOpen, setPlanOpen] = useState(false)
+  const [myPlan, setMyPlan] = useState<ItinerarySession[]>([])
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       role: 'bot',
-      text: `Hey! I'm the PEC Summit Concierge. I can answer questions about tracks, speakers, and the schedule — or take you directly to any section. What would you like to know?`,
+      text: `Hey! I'm the Summit Agent. I can answer questions, scroll to sections, or **generate a personalized itinerary** for you. Ask me "Build my Day 1 plan" or "Recommend AI sessions"!`,
       timestamp: new Date(),
       suggestedReplies: SUGGESTED_STARTERS.slice(0, 3),
     },
@@ -95,14 +40,51 @@ export default function Concierge() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Scroll to bottom on new message
+  // Load plan from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('pec_summit_my_plan')
+      if (saved) setMyPlan(JSON.parse(saved))
+    } catch (e) {
+      console.warn('Failed to load My Plan:', e)
+    }
+  }, [])
+
+  // Save plan to localStorage
+  const savePlan = (newPlan: ItinerarySession[]) => {
+    setMyPlan(newPlan)
+    try {
+      localStorage.setItem('pec_summit_my_plan', JSON.stringify(newPlan))
+    } catch (e) {
+      console.warn('Failed to save My Plan:', e)
+    }
+  }
+
+  const addToPlan = (session: ItinerarySession) => {
+    if (myPlan.some((s) => s.id === session.id)) {
+      toast('Session already in My Plan', { icon: 'ℹ️', style: { background: '#151515', color: '#F2F2ED' } })
+      return
+    }
+    const updated = [...myPlan, session]
+    savePlan(updated)
+    toast.success(`Added "${session.title}" to My Plan!`, {
+      style: { background: '#151515', color: '#F2F2ED', border: '1px solid #F5D400' },
+      iconTheme: { primary: '#F5D400', secondary: '#0A0A0A' },
+    })
+  }
+
+  const removeFromPlan = (id: string) => {
+    const updated = myPlan.filter((s) => s.id !== id)
+    savePlan(updated)
+    toast('Removed from My Plan', { icon: '🗑️', style: { background: '#151515', color: '#F2F2ED' } })
+  }
+
   useEffect(() => {
     if (open) {
       bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
     }
   }, [messages, isTyping, open])
 
-  // Focus input when opened
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 200)
@@ -133,17 +115,18 @@ export default function Concierge() {
         text: response.text,
         timestamp: new Date(),
         suggestedReplies: response.suggestedReplies,
+        itinerary: response.itinerary,
       }
       setMessages((m) => [...m, botMsg])
 
       if (response.toast) {
         toast.success(response.toast, {
           style: {
-            background: 'var(--bg-panel)',
-            color: 'var(--text-primary)',
-            border: '1px solid rgba(61,217,255,0.3)',
+            background: '#151515',
+            color: '#F2F2ED',
+            border: '1px solid #F5D400',
           },
-          iconTheme: { primary: '#3DD9FF', secondary: '#131829' },
+          iconTheme: { primary: '#F5D400', secondary: '#0A0A0A' },
         })
       }
 
@@ -163,142 +146,147 @@ export default function Concierge() {
     }
   }, [isTyping, open])
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      sendMessage(input)
-    }
-  }
-
-  const lastBotMsg = [...messages].reverse().find((m) => m.role === 'bot')
-
   return (
     <>
-      {/* Bounce-keyframe inline */}
-      <style>{`@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }`}</style>
+      {/* Floating My Plan Drawer Button */}
+      <button
+        onClick={() => setPlanOpen(true)}
+        className="fixed top-20 right-6 z-30 px-3.5 py-2 rounded-xl bg-panel border border-volt-dim/40 text-primary font-mono-data text-xs flex items-center gap-2 shadow-lg hover:border-volt transition-all"
+        aria-label="Open My Plan itinerary drawer"
+      >
+        <Bookmark size={14} className="text-volt fill-volt/20" />
+        <span>My Plan</span>
+        <span className="w-5 h-5 rounded-full bg-volt text-black font-bold text-[10px] flex items-center justify-center">
+          {myPlan.length}
+        </span>
+      </button>
 
-      {/* Floating toggle button */}
+      {/* Floating Toggle Button (Bottom-Right) */}
       <motion.button
         onClick={() => setOpen((o) => !o)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
         style={{
-          background: open ? 'var(--bg-panel)' : 'var(--accent-ignite)',
-          border: '1px solid rgba(255,255,255,0.12)',
+          background: open ? '#151515' : '#F5D400',
+          border: '1px solid rgba(245,212,0,0.3)',
+          color: open ? '#F2F2ED' : '#0A0A0A',
         }}
         whileHover={{ scale: 1.07 }}
         whileTap={{ scale: 0.95 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-        aria-label={open ? 'Close Concierge chat' : 'Open PEC Summit Concierge'}
-        aria-expanded={open}
-        aria-haspopup="dialog"
-        id="concierge-toggle-btn"
+        aria-label={open ? 'Close Summit Agent' : 'Open Summit Agent'}
       >
         <AnimatePresence mode="wait">
           {open ? (
-            <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-              <X size={22} style={{ color: 'var(--text-primary)' }} />
-            </motion.div>
+            <X size={22} />
           ) : (
-            <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
-              <MessageCircle size={22} style={{ color: '#fff' }} />
-            </motion.div>
+            <MessageCircle size={22} />
           )}
         </AnimatePresence>
-        {/* Unread badge */}
         {!open && unread > 0 && (
-          <span
-            className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center font-mono-data text-[10px] font-bold"
-            style={{ background: 'var(--accent-signal)', color: '#0B0E1A' }}
-            aria-label={`${unread} unread messages`}
-          >
+          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-volt text-black font-mono-data text-[10px] font-bold flex items-center justify-center">
             {unread}
           </span>
         )}
       </motion.button>
 
-      {/* Chat panel */}
+      {/* Chat Widget Panel */}
       <AnimatePresence>
         {open && (
           <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-label="PEC Summit Concierge chat"
-            className="fixed bottom-24 right-6 z-50 w-[360px] max-w-[calc(100vw-24px)] rounded-2xl overflow-hidden flex flex-col"
-            style={{
-              height: '520px',
-              background: 'var(--bg-void)',
-              border: '1px solid rgba(138,144,166,0.12)',
-              boxShadow: '0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,77,61,0.08)',
-            }}
+            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-24px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-void border border-volt-dim/40"
+            style={{ height: '540px' }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 360, damping: 30 }}
           >
             {/* Header */}
-            <div
-              className="flex items-center gap-3 px-4 py-3 shrink-0"
-              style={{
-                borderBottom: '1px solid rgba(138,144,166,0.08)',
-                background: 'var(--bg-panel)',
-              }}
-            >
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ background: 'rgba(255,77,61,0.15)' }}
-                aria-hidden="true"
-              >
-                <Bot size={18} style={{ color: 'var(--accent-ignite)' }} />
+            <div className="flex items-center gap-3 px-4 py-3 shrink-0 bg-panel border-b border-volt-dim/30">
+              <div className="w-9 h-9 rounded-xl bg-volt/20 border border-volt/40 flex items-center justify-center">
+                <Bot size={18} className="text-volt" />
               </div>
               <div className="flex-1">
-                <p className="font-body font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
-                  Fest Concierge
+                <p className="font-body font-semibold text-sm text-primary flex items-center gap-1.5">
+                  Summit Agent <Zap size={12} className="text-volt fill-volt" />
                 </p>
-                <p className="font-mono-data text-[10px]" style={{ color: 'var(--accent-signal)' }}>
-                  ● Online — PEC Summit
-                </p>
+                <p className="font-mono-data text-[10px] text-volt">⚡ High-Voltage AI Assistant</p>
               </div>
-              <button
-                onClick={() => setOpen(false)}
-                className="p-1.5 rounded-lg"
-                style={{ color: 'var(--text-muted)' }}
-                aria-label="Minimise chat"
-              >
+              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg text-muted hover:text-primary">
                 <ChevronDown size={16} />
               </button>
             </div>
 
-            {/* Messages */}
-            <div
-              className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-4"
-              role="log"
-              aria-live="polite"
-              aria-label="Chat messages"
-            >
+            {/* Messages Log */}
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 font-body text-sm">
               {messages.map((msg) => (
-                <div key={msg.id}>
-                  <MessageBubble message={msg} />
-                  {/* Suggested replies after bot messages */}
+                <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                  <div className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+                      style={{
+                        background: msg.role === 'user' ? 'rgba(138,118,0,0.3)' : 'rgba(245,212,0,0.2)',
+                        border: `1px solid ${msg.role === 'user' ? 'rgba(245,212,0,0.3)' : '#F5D400'}`,
+                      }}
+                    >
+                      {msg.role === 'user' ? <User size={13} className="text-volt" /> : <Bot size={13} className="text-volt" />}
+                    </div>
+
+                    <div
+                      className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed ${
+                        msg.role === 'user'
+                          ? 'bg-volt text-black font-semibold rounded-br-none'
+                          : 'bg-panel border-l-4 border-l-volt border-t border-r border-b border-volt-dim/30 text-primary rounded-bl-none'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  </div>
+
+                  {/* Render Inline Itinerary Card */}
+                  {msg.itinerary && (
+                    <div className="mt-3 ml-9 w-[85%] rounded-xl p-4 bg-panel border border-volt/50 shadow-lg space-y-3">
+                      <div className="flex items-center gap-2 text-xs font-mono-data text-volt uppercase">
+                        <Calendar size={14} />
+                        <span>{msg.itinerary.title}</span>
+                      </div>
+                      <div className="space-y-2">
+                        {msg.itinerary.sessions.map((session) => {
+                          const isInPlan = myPlan.some((s) => s.id === session.id)
+                          return (
+                            <div
+                              key={session.id}
+                              className="p-2.5 rounded-lg bg-void border border-volt-dim/30 flex items-center justify-between gap-2"
+                            >
+                              <div className="flex-1 min-w-0">
+                                <p className="font-mono-data text-[10px] text-muted">
+                                  [{session.day}] {session.time}
+                                </p>
+                                <p className="font-body text-xs font-semibold text-primary truncate">{session.title}</p>
+                              </div>
+                              <button
+                                onClick={() => addToPlan(session)}
+                                className={`px-2 py-1 rounded text-[10px] font-mono-data shrink-0 flex items-center gap-1 transition-all ${
+                                  isInPlan
+                                    ? 'bg-volt/20 text-volt border border-volt/40'
+                                    : 'bg-volt text-black font-bold hover:bg-volt/90'
+                                }`}
+                              >
+                                {isInPlan ? <Check size={10} /> : <Plus size={10} />}
+                                <span>{isInPlan ? 'Added' : 'Add'}</span>
+                              </button>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Suggested Quick Replies */}
                   {msg.role === 'bot' && msg.suggestedReplies && msg.id === messages[messages.length - 1].id && (
                     <div className="flex flex-wrap gap-2 mt-3 ml-9">
                       {msg.suggestedReplies.map((r) => (
                         <button
                           key={r}
                           onClick={() => sendMessage(r)}
-                          className="px-3 py-1.5 rounded-full font-body text-xs transition-all duration-150"
-                          style={{
-                            background: 'rgba(138,144,166,0.08)',
-                            color: 'var(--text-muted)',
-                            border: '1px solid rgba(138,144,166,0.15)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.borderColor = 'rgba(255,77,61,0.4)'
-                            e.currentTarget.style.color = 'var(--accent-ignite)'
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.borderColor = 'rgba(138,144,166,0.15)'
-                            e.currentTarget.style.color = 'var(--text-muted)'
-                          }}
+                          className="px-3 py-1 rounded-full text-xs font-mono-data bg-panel border border-volt-dim/40 text-muted hover:border-volt hover:text-volt transition-all"
                         >
                           {r}
                         </button>
@@ -307,59 +295,101 @@ export default function Concierge() {
                   )}
                 </div>
               ))}
-              {isTyping && <TypingIndicator />}
+              {isTyping && <p className="text-xs font-mono-data text-volt ml-9">Agent is planning...</p>}
               <div ref={bottomRef} />
             </div>
 
-            {/* Input */}
-            <div
-              className="shrink-0 px-3 py-3"
-              style={{ borderTop: '1px solid rgba(138,144,166,0.08)' }}
-            >
-              <form
-                onSubmit={(e) => { e.preventDefault(); sendMessage(input) }}
-                className="flex items-center gap-2"
-              >
+            {/* Input Form */}
+            <div className="p-3 bg-panel border-t border-volt-dim/30">
+              <form onSubmit={(e) => { e.preventDefault(); sendMessage(input) }} className="flex items-center gap-2">
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Ask about tracks, speakers, schedule…"
-                  className="flex-1 bg-transparent outline-none font-body text-sm placeholder:text-muted/50"
-                  style={{
-                    color: 'var(--text-primary)',
-                    padding: '10px 12px',
-                    borderRadius: '8px',
-                    background: 'rgba(138,144,166,0.06)',
-                    border: '1px solid rgba(138,144,166,0.12)',
-                  }}
-                  aria-label="Message input"
-                  maxLength={400}
-                  disabled={isTyping}
-                  id="concierge-input"
-                  autoComplete="off"
+                  placeholder="Ask about tracks, speakers, or build an itinerary..."
+                  className="flex-1 bg-void border border-volt-dim/40 rounded-lg px-3 py-2 text-sm text-primary placeholder:text-muted/60 outline-none focus:border-volt font-body"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
-                  className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-all duration-150"
-                  style={{
-                    background: input.trim() ? 'var(--accent-ignite)' : 'rgba(138,144,166,0.1)',
-                    color: input.trim() ? '#fff' : 'var(--text-muted)',
-                  }}
-                  aria-label="Send message"
-                  id="concierge-send-btn"
+                  className="w-9 h-9 rounded-lg bg-volt text-black flex items-center justify-center disabled:opacity-40"
                 >
                   <Send size={15} />
                 </button>
               </form>
-              <p className="text-center font-mono-data text-[9px] mt-2" style={{ color: 'var(--text-muted)', opacity: 0.4 }}>
-                Powered by E-Cell PEC · Frontend demo
-              </p>
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Persistent "My Plan" Itinerary Drawer */}
+      <AnimatePresence>
+        {planOpen && (
+          <div className="fixed inset-0 z-50 flex justify-end bg-void/80 backdrop-blur-sm">
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="w-full max-w-md bg-panel border-l border-volt-dim/40 h-full flex flex-col p-6 shadow-2xl relative"
+            >
+              <div className="flex items-center justify-between pb-4 border-b border-volt-dim/30 mb-6">
+                <div className="flex items-center gap-2">
+                  <Bookmark size={18} className="text-volt fill-volt/20" />
+                  <h3 className="font-display text-2xl text-primary">My Personal Itinerary</h3>
+                </div>
+                <button onClick={() => setPlanOpen(false)} className="p-2 rounded-lg text-muted hover:text-primary">
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto space-y-3">
+                {myPlan.length === 0 ? (
+                  <div className="py-16 text-center text-muted font-body text-sm">
+                    <Calendar size={36} className="mx-auto mb-3 opacity-30 text-volt" />
+                    <p>Your plan is empty.</p>
+                    <p className="text-xs text-muted/70 mt-1">Ask Summit Agent in chat to build a custom itinerary for you!</p>
+                  </div>
+                ) : (
+                  myPlan.map((session) => (
+                    <div
+                      key={session.id}
+                      className="p-4 rounded-xl bg-void border border-volt-dim/30 flex items-start justify-between gap-3"
+                    >
+                      <div>
+                        <span className="font-mono-data text-[10px] uppercase text-volt block mb-1">
+                          [{session.day}] {session.time}
+                        </span>
+                        <h4 className="font-body font-semibold text-sm text-primary mb-1">{session.title}</h4>
+                        <span className="font-mono-data text-[9px] uppercase px-2 py-0.5 rounded bg-panel text-muted">
+                          {session.type}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => removeFromPlan(session.id)}
+                        className="p-2 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {myPlan.length > 0 && (
+                <div className="pt-4 border-t border-volt-dim/30 mt-4 flex justify-between items-center">
+                  <span className="font-mono-data text-xs text-muted">{myPlan.length} Saved Sessions</span>
+                  <button
+                    onClick={() => savePlan([])}
+                    className="font-mono-data text-xs text-red-400 hover:underline"
+                  >
+                    Clear All
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </>

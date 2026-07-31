@@ -2,11 +2,10 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Zap, Users, Store, Code2, Network, ArrowLeft, ArrowRight, CheckCircle2, Trophy, Clock, X, Sparkles } from 'lucide-react'
+import { Zap, Users, Store, Code2, Network, ArrowLeft, CheckCircle2, X, Sparkles } from 'lucide-react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import Concierge from '@/components/Concierge'
-import { TRACKS, TRACKS as ALL_TRACKS } from '@/lib/data'
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 
@@ -24,7 +23,7 @@ const DETAILED_TRACK_DATA = [
     teams: '2-4 Members',
     category: 'Competitions',
     icon: 'Zap',
-    color: '#FF4D3D',
+    color: '#F5D400',
     highlights: [
       'Pitch directly to Surge, Sequoia EIRs, and Chandigarh Angels',
       'Top 3 teams get guaranteed incubation offer at PEC TBI',
@@ -42,7 +41,7 @@ const DETAILED_TRACK_DATA = [
     teams: '2-4 Members',
     category: 'Competitions',
     icon: 'Code2',
-    color: '#9B5CFF',
+    color: '#F5D400',
     highlights: [
       'Problem statements revealed 48 hours before kickoff',
       'Tracks: AI/ML, ClimateTech, Web3, and Open Innovation',
@@ -60,7 +59,7 @@ const DETAILED_TRACK_DATA = [
     teams: '1-5 Members',
     category: 'Exhibitions',
     icon: 'Store',
-    color: '#FF8C42',
+    color: '#FFB700',
     highlights: [
       'Dedicated exhibit booth with power, high-speed Wi-Fi, and signage',
       'Investor floor walks with 20+ active Angel Investors & VC Partners',
@@ -78,7 +77,7 @@ const DETAILED_TRACK_DATA = [
     teams: 'Individual',
     category: 'Sessions',
     icon: 'Users',
-    color: '#3DD9FF',
+    color: '#F5D400',
     highlights: [
       'Fundraising in Tough Times: Lessons from Series B Founders',
       'DeepTech India: AI & Hardware Innovation from Campus to Market',
@@ -96,7 +95,7 @@ const DETAILED_TRACK_DATA = [
     teams: 'Individual / Co-founders',
     category: 'Networking',
     icon: 'Network',
-    color: '#3DD9FF',
+    color: '#F5D400',
     highlights: [
       'Speed Networking: 5-minute rotation rounds with fellow builders',
       'Investor Open Hours: 15-minute 1-on-1 slots by prior booking',
@@ -120,7 +119,8 @@ export default function TracksLandingPage() {
     e.preventDefault()
     setRegistered(true)
     toast.success(`Registered for ${selectedTrack?.title}! Details sent to email.`, {
-      style: { background: 'var(--bg-panel)', color: 'var(--text-primary)' },
+      style: { background: '#151515', color: '#F2F2ED', border: '1px solid #F5D400' },
+      iconTheme: { primary: '#F5D400', secondary: '#0A0A0A' },
     })
   }
 
@@ -130,23 +130,23 @@ export default function TracksLandingPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[#8A90A6]/10 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none opacity-15 bg-[radial-gradient(#3DD9FF_1px,transparent_1px)] [background-size:28px_28px]" />
+      <section className="relative pt-36 pb-20 border-b border-volt-dim/30 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#F5D400_1px,transparent_1px)] [background-size:28px_28px]" />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-signal transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-volt transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-signal/10 border border-signal/30 mb-6">
-              <Sparkles size={14} className="text-signal" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-signal">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-volt/10 border border-volt/30 mb-6">
+              <Sparkles size={14} className="text-volt" />
+              <span className="font-mono-data text-xs uppercase tracking-wider text-volt">
                 E-Summit 2025 Flagship Tracks
               </span>
             </div>
@@ -156,7 +156,7 @@ export default function TracksLandingPage() {
               style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
             >
               SUMMIT TRACKS &amp; <br />
-              <span style={{ color: 'var(--accent-ignite)' }}>COMPETITIONS</span>
+              <span className="text-volt">COMPETITIONS</span>
             </h1>
 
             <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
@@ -171,9 +171,10 @@ export default function TracksLandingPage() {
                   onClick={() => setActiveCategory(cat as any)}
                   className="px-5 py-2.5 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
                   style={{
-                    background: activeCategory === cat ? 'var(--accent-ignite)' : 'rgba(138,144,166,0.08)',
-                    color: activeCategory === cat ? '#F5F3EE' : 'var(--text-muted)',
-                    border: `1px solid ${activeCategory === cat ? 'transparent' : 'rgba(138,144,166,0.12)'}`,
+                    background: activeCategory === cat ? 'var(--accent-volt)' : 'var(--bg-panel)',
+                    color: activeCategory === cat ? '#0A0A0A' : 'var(--text-muted)',
+                    fontWeight: activeCategory === cat ? 700 : 400,
+                    border: `1px solid ${activeCategory === cat ? 'transparent' : 'rgba(138,118,0,0.3)'}`,
                   }}
                 >
                   {cat}
@@ -197,33 +198,31 @@ export default function TracksLandingPage() {
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="rounded-2xl p-8 flex flex-col justify-between border border-[#8A90A6]/12 bg-panel hover:border-ignite/40 transition-all duration-300 group"
+                  className="rounded-2xl p-8 flex flex-col justify-between border border-volt-dim/30 bg-panel hover:border-volt transition-all duration-300 group shadow-lg"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-6">
                       <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center"
-                        style={{ background: `${track.color}20`, border: `1px solid ${track.color}40` }}
+                        className="w-12 h-12 rounded-xl flex items-center justify-center bg-void border border-volt-dim/40"
                       >
-                        <IconComp size={24} style={{ color: track.color }} />
+                        <IconComp size={24} className="text-volt" />
                       </div>
                       <span
-                        className="font-mono-data text-[10px] uppercase tracking-widest px-3 py-1 rounded-full"
-                        style={{ background: 'rgba(138,144,166,0.08)', color: 'var(--text-muted)' }}
+                        className="font-mono-data text-[10px] uppercase tracking-widest px-3 py-1 rounded-full bg-void text-muted border border-volt-dim/20"
                       >
                         {track.category}
                       </span>
                     </div>
 
-                    <h3 className="font-display text-3xl mb-2 text-primary group-hover:text-ignite transition-colors">
+                    <h3 className="font-display text-3xl mb-2 text-primary group-hover:text-volt transition-colors">
                       {track.title}
                     </h3>
                     <p className="font-body text-sm text-muted mb-6">{track.tagline}</p>
 
-                    <div className="space-y-2 mb-8 py-4 border-t border-b border-[#8A90A6]/10 font-mono-data text-xs">
+                    <div className="space-y-2 mb-8 py-4 border-t border-b border-volt-dim/20 font-mono-data text-xs">
                       <div className="flex justify-between">
                         <span className="text-muted">Prize / Value:</span>
-                        <span className="text-signal font-semibold">{track.prize}</span>
+                        <span className="text-volt font-semibold">{track.prize}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted">Format:</span>
@@ -231,14 +230,14 @@ export default function TracksLandingPage() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-muted">Deadline:</span>
-                        <span className="text-ignite">{track.deadline}</span>
+                        <span className="text-volt">{track.deadline}</span>
                       </div>
                     </div>
 
                     <ul className="space-y-2.5 mb-8">
                       {track.highlights.slice(0, 3).map((item, idx) => (
                         <li key={idx} className="flex items-start gap-2.5 font-body text-xs text-primary/80">
-                          <CheckCircle2 size={14} className="text-signal shrink-0 mt-0.5" />
+                          <CheckCircle2 size={14} className="text-volt shrink-0 mt-0.5" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -247,7 +246,7 @@ export default function TracksLandingPage() {
 
                   <button
                     onClick={() => { setSelectedTrack(track); setRegistered(false) }}
-                    className="w-full py-3.5 rounded-xl font-body font-semibold text-sm btn-ghost justify-center hover:border-ignite hover:text-ignite"
+                    className="w-full py-3.5 rounded-xl font-body font-semibold text-sm btn-ghost justify-center hover:border-volt hover:text-volt"
                   >
                     View Guidelines &amp; Register
                   </button>
@@ -266,11 +265,11 @@ export default function TracksLandingPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xl rounded-2xl p-8 bg-panel border border-[#8A90A6]/20 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+              className="w-full max-w-xl rounded-2xl p-8 bg-panel border border-volt-dim/40 shadow-2xl relative max-h-[90vh] overflow-y-auto"
             >
               <button
                 onClick={() => setSelectedTrack(null)}
-                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-primary bg-void/50"
+                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-primary bg-void"
               >
                 <X size={18} />
               </button>
@@ -278,28 +277,28 @@ export default function TracksLandingPage() {
               {!registered ? (
                 <>
                   <div className="mb-6">
-                    <span className="font-mono-data text-xs uppercase tracking-widest text-signal">
-                      {selectedTrack.category} Track
+                    <span className="font-mono-data text-xs uppercase tracking-widest text-volt">
+                      ⚡ {selectedTrack.category} Track
                     </span>
                     <h3 className="font-display text-4xl text-primary mt-1">{selectedTrack.title}</h3>
                     <p className="font-body text-sm text-muted mt-1">{selectedTrack.tagline}</p>
                   </div>
 
                   <div className="space-y-4 mb-6">
-                    <div className="p-4 rounded-xl bg-void border border-[#8A90A6]/10">
-                      <h4 className="font-mono-data text-xs uppercase text-ignite mb-2">Key Highlights</h4>
+                    <div className="p-4 rounded-xl bg-void border border-volt-dim/20">
+                      <h4 className="font-mono-data text-xs uppercase text-volt mb-2">Key Highlights</h4>
                       <ul className="space-y-2">
                         {selectedTrack.highlights.map((h, i) => (
                           <li key={i} className="flex items-start gap-2 text-xs text-primary/90">
-                            <span className="text-ignite">•</span>
+                            <span className="text-volt">•</span>
                             <span>{h}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-void border border-[#8A90A6]/10">
-                      <h4 className="font-mono-data text-xs uppercase text-signal mb-1">Eligibility Criteria</h4>
+                    <div className="p-4 rounded-xl bg-void border border-volt-dim/20">
+                      <h4 className="font-mono-data text-xs uppercase text-volt mb-1">Eligibility Criteria</h4>
                       <p className="font-body text-xs text-muted leading-relaxed">{selectedTrack.eligibility}</p>
                     </div>
                   </div>
@@ -313,7 +312,7 @@ export default function TracksLandingPage() {
                         type="text"
                         required
                         placeholder="Enter full name"
-                        className="w-full px-4 py-3 rounded-lg bg-void border border-[#8A90A6]/20 text-primary font-body text-sm outline-none focus:border-signal"
+                        className="w-full px-4 py-3 rounded-lg bg-void border border-volt-dim/30 text-primary font-body text-sm outline-none focus:border-volt"
                       />
                     </div>
                     <div>
@@ -324,25 +323,25 @@ export default function TracksLandingPage() {
                         type="email"
                         required
                         placeholder="team@startup.com"
-                        className="w-full px-4 py-3 rounded-lg bg-void border border-[#8A90A6]/20 text-primary font-body text-sm outline-none focus:border-signal"
+                        className="w-full px-4 py-3 rounded-lg bg-void border border-volt-dim/30 text-primary font-body text-sm outline-none focus:border-volt"
                       />
                     </div>
 
-                    <button type="submit" className="w-full btn-ignite justify-center py-3.5 text-sm mt-4">
+                    <button type="submit" className="w-full btn-volt justify-center py-3.5 text-sm mt-4">
                       Submit Track Registration
                     </button>
                   </form>
                 </>
               ) : (
                 <div className="py-8 text-center">
-                  <div className="w-16 h-16 rounded-full bg-signal/20 border border-signal text-signal flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 rounded-full bg-volt/20 border border-volt text-volt flex items-center justify-center mx-auto mb-4">
                     <CheckCircle2 size={32} />
                   </div>
                   <h3 className="font-display text-3xl text-primary mb-2">Registration Submitted!</h3>
                   <p className="font-body text-sm text-muted mb-6">
                     You have successfully applied for <strong>{selectedTrack.title}</strong>. Check your inbox for confirmation details and submission guidelines.
                   </p>
-                  <button onClick={() => setSelectedTrack(null)} className="btn-ignite px-8 py-3">
+                  <button onClick={() => setSelectedTrack(null)} className="btn-volt px-8 py-3">
                     Close Window
                   </button>
                 </div>

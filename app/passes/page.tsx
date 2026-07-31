@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, ShieldCheck, Zap, Sparkles, Star, Users, ArrowRight, Ticket, ArrowLeft } from 'lucide-react'
+import { Check, ShieldCheck, Zap, Sparkles, Users, ArrowRight, Ticket, ArrowLeft, X } from 'lucide-react'
 import toast, { Toaster } from 'react-hot-toast'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
@@ -27,7 +27,7 @@ const PASSES: PassTier[] = [
   {
     id: 'student-general',
     name: 'Student Pass',
-    tagline: 'Full 2-day access for college students & innovators.',
+    tagline: 'Full 2-day access for college students & campus innovators.',
     price: '₹299',
     originalPrice: '₹499',
     badge: 'EARLY BIRD',
@@ -39,7 +39,7 @@ const PASSES: PassTier[] = [
       'Summit Delegate Kit & Swag',
       'Access to General Networking Zone',
     ],
-    accentColor: '#3DD9FF',
+    accentColor: '#F5D400',
     ctaText: 'Claim Student Pass',
   },
   {
@@ -58,7 +58,7 @@ const PASSES: PassTier[] = [
       'Startup Expo booth discount eligibility',
       'All perks included in Student Pass',
     ],
-    accentColor: '#FF4D3D',
+    accentColor: '#F5D400',
     ctaText: 'Register Startup Team',
   },
   {
@@ -76,7 +76,7 @@ const PASSES: PassTier[] = [
       'Mentorship from senior tech leads',
       'All-night Hacker Lounge access',
     ],
-    accentColor: '#9B5CFF',
+    accentColor: '#F5D400',
     ctaText: 'Register Hackathon Team',
   },
   {
@@ -94,7 +94,7 @@ const PASSES: PassTier[] = [
       'Exclusive PEC Summit Founder Swag Box',
       'Fast-track Badge & Dedicated Check-in',
     ],
-    accentColor: '#FF8C42',
+    accentColor: '#F5D400',
     ctaText: 'Get VIP Pass',
   },
   {
@@ -112,7 +112,7 @@ const PASSES: PassTier[] = [
       'Dedicated Student Ambassador point-of-contact',
       'Complimentary Pass for Faculty / Lead',
     ],
-    accentColor: '#3DD9FF',
+    accentColor: '#F5D400',
     ctaText: 'Get Group Pass',
   },
 ]
@@ -137,7 +137,6 @@ export default function PassesPage() {
       return
     }
 
-    // Store dummy order in localStorage
     const existingOrders = JSON.parse(localStorage.getItem('pec_summit_orders') || '[]')
     const newOrder = {
       id: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -152,7 +151,8 @@ export default function PassesPage() {
 
     setCheckoutStep('success')
     toast.success(`Pass reserved for ${formData.name}!`, {
-      style: { background: 'var(--bg-panel)', color: 'var(--text-primary)' },
+      style: { background: '#151515', color: '#F2F2ED', border: '1px solid #F5D400' },
+      iconTheme: { primary: '#F5D400', secondary: '#0A0A0A' },
     })
   }
 
@@ -162,23 +162,23 @@ export default function PassesPage() {
       <Nav />
 
       {/* Hero Section */}
-      <section className="relative pt-36 pb-20 overflow-hidden border-b border-[#8A90A6]/10">
-        <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#FF4D3D_1px,transparent_1px)] [background-size:24px_24px]" />
+      <section className="relative pt-36 pb-20 overflow-hidden border-b border-volt-dim/30">
+        <div className="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#F5D400_1px,transparent_1px)] [background-size:24px_24px]" />
         
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-signal transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-volt transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ignite/10 border border-ignite/30 mb-6">
-              <Sparkles size={14} className="text-ignite" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-ignite">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-volt/10 border border-volt/30 mb-6">
+              <Zap size={14} className="text-volt fill-volt" />
+              <span className="font-mono-data text-xs uppercase tracking-wider text-volt">
                 Official E-Summit 2025 Passes
               </span>
             </div>
@@ -188,7 +188,7 @@ export default function PassesPage() {
               style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
             >
               CHOOSE YOUR <br />
-              <span style={{ color: 'var(--accent-ignite)' }}>IGNITION PASS</span>
+              <span className="text-volt">HIGH-VOLTAGE PASS</span>
             </h1>
 
             <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
@@ -208,9 +208,10 @@ export default function PassesPage() {
                   onClick={() => setFilter(item.id as any)}
                   className="px-5 py-2.5 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
                   style={{
-                    background: filter === item.id ? 'var(--accent-ignite)' : 'rgba(138,144,166,0.08)',
-                    color: filter === item.id ? '#F5F3EE' : 'var(--text-muted)',
-                    border: `1px solid ${filter === item.id ? 'transparent' : 'rgba(138,144,166,0.12)'}`,
+                    background: filter === item.id ? 'var(--accent-volt)' : 'rgba(21,21,21,0.8)',
+                    color: filter === item.id ? '#0A0A0A' : 'var(--text-muted)',
+                    fontWeight: filter === item.id ? 700 : 400,
+                    border: `1px solid ${filter === item.id ? 'transparent' : 'rgba(138,118,0,0.3)'}`,
                   }}
                 >
                   {item.label}
@@ -233,11 +234,11 @@ export default function PassesPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
                 className={`relative rounded-2xl p-8 flex flex-col justify-between transition-all duration-300 ${
-                  pass.popular ? 'glow-ignite' : ''
+                  pass.popular ? 'glow-volt' : ''
                 }`}
                 style={{
                   background: 'var(--bg-panel)',
-                  border: `1px solid ${pass.popular ? 'var(--accent-ignite)' : 'rgba(138,144,166,0.12)'}`,
+                  border: `1px solid ${pass.popular ? 'var(--accent-volt)' : 'rgba(138,118,0,0.2)'}`,
                 }}
               >
                 {/* Badge */}
@@ -245,9 +246,9 @@ export default function PassesPage() {
                   <div
                     className="absolute -top-3.5 right-6 px-3 py-1 rounded-full font-mono-data text-[10px] font-bold uppercase tracking-widest"
                     style={{
-                      background: pass.popular ? 'var(--accent-ignite)' : 'rgba(61,217,255,0.15)',
-                      color: pass.popular ? '#fff' : 'var(--accent-signal)',
-                      border: `1px solid ${pass.popular ? 'transparent' : 'rgba(61,217,255,0.3)'}`,
+                      background: pass.popular ? 'var(--accent-volt)' : 'rgba(245,212,0,0.15)',
+                      color: pass.popular ? '#0A0A0A' : 'var(--accent-volt)',
+                      border: `1px solid ${pass.popular ? 'transparent' : 'rgba(245,212,0,0.4)'}`,
                     }}
                   >
                     {pass.badge}
@@ -258,10 +259,9 @@ export default function PassesPage() {
                   <h3 className="font-display text-3xl mb-2 text-primary">{pass.name}</h3>
                   <p className="font-body text-sm text-muted mb-6 leading-relaxed">{pass.tagline}</p>
 
-                  <div className="flex items-baseline gap-3 mb-8 pb-6 border-b border-[#8A90A6]/10">
+                  <div className="flex items-baseline gap-3 mb-8 pb-6 border-b border-[#8C8C86]/10">
                     <span
-                      className="font-mono-data text-4xl font-bold"
-                      style={{ color: pass.accentColor }}
+                      className="font-mono-data text-4xl font-bold text-volt"
                     >
                       {pass.price}
                     </span>
@@ -278,10 +278,9 @@ export default function PassesPage() {
                     {pass.features.map((feat, idx) => (
                       <li key={idx} className="flex items-start gap-3 font-body text-sm text-primary/90">
                         <div
-                          className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                          style={{ background: `${pass.accentColor}20` }}
+                          className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-volt/20 text-volt"
                         >
-                          <Check size={12} style={{ color: pass.accentColor }} />
+                          <Check size={12} />
                         </div>
                         <span>{feat}</span>
                       </li>
@@ -291,25 +290,11 @@ export default function PassesPage() {
 
                 <button
                   onClick={() => handleSelectPass(pass)}
-                  className="w-full py-4 rounded-xl font-body font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200"
+                  className="w-full py-4 rounded-xl font-body font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200"
                   style={{
-                    background: pass.popular ? 'var(--accent-ignite)' : 'transparent',
-                    color: '#F5F3EE',
-                    border: `1px solid ${pass.popular ? 'transparent' : 'rgba(245,243,238,0.2)'}`,
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!pass.popular) {
-                      e.currentTarget.style.borderColor = pass.accentColor
-                      e.currentTarget.style.color = pass.accentColor
-                      e.currentTarget.style.background = `${pass.accentColor}10`
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!pass.popular) {
-                      e.currentTarget.style.borderColor = 'rgba(245,243,238,0.2)'
-                      e.currentTarget.style.color = '#F5F3EE'
-                      e.currentTarget.style.background = 'transparent'
-                    }
+                    background: pass.popular ? 'var(--accent-volt)' : 'transparent',
+                    color: pass.popular ? '#0A0A0A' : 'var(--text-primary)',
+                    border: `1px solid ${pass.popular ? 'transparent' : 'rgba(138,118,0,0.4)'}`,
                   }}
                 >
                   {pass.ctaText}
@@ -322,20 +307,20 @@ export default function PassesPage() {
       </section>
 
       {/* Trust & Guarantee Banner */}
-      <section className="py-16 border-t border-b border-[#8A90A6]/10 bg-void">
+      <section className="py-16 border-t border-b border-volt-dim/30 bg-void">
         <div className="section-container grid sm:grid-cols-3 gap-8 text-center">
           <div className="flex flex-col items-center">
-            <ShieldCheck size={28} className="text-signal mb-3" />
+            <ShieldCheck size={28} className="text-volt mb-3" />
             <h4 className="font-body font-semibold text-base mb-1">100% Instant E-Badge</h4>
             <p className="font-body text-xs text-muted">Receive your digital pass & QR code instantly on booking.</p>
           </div>
           <div className="flex flex-col items-center">
-            <Ticket size={28} className="text-ignite mb-3" />
+            <Ticket size={28} className="text-volt mb-3" />
             <h4 className="font-body font-semibold text-base mb-1">Hostel & Stay Assistance</h4>
             <p className="font-body text-xs text-muted">Outstation attendees get priority hostel accommodation guidance.</p>
           </div>
           <div className="flex flex-col items-center">
-            <Users size={28} className="text-signal mb-3" />
+            <Users size={28} className="text-volt mb-3" />
             <h4 className="font-body font-semibold text-base mb-1">Investor Matchmaking</h4>
             <p className="font-body text-xs text-muted">Pass holders get access to the E-Summit digital networking portal.</p>
           </div>
@@ -350,26 +335,26 @@ export default function PassesPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg rounded-2xl p-8 bg-panel border border-[#8A90A6]/20 shadow-2xl relative"
+              className="w-full max-w-lg rounded-2xl p-8 bg-panel border border-volt-dim/40 shadow-2xl relative"
             >
               <button
                 onClick={() => setSelectedPass(null)}
                 className="absolute top-6 right-6 text-muted hover:text-primary font-mono-data text-sm"
               >
-                ✕
+                <X size={18} />
               </button>
 
               {checkoutStep === 'form' ? (
                 <>
                   <div className="mb-6">
-                    <span className="font-mono-data text-xs uppercase tracking-widest text-signal">
-                      Pass Checkout Demo
+                    <span className="font-mono-data text-xs uppercase tracking-widest text-volt">
+                      ⚡ Pass Checkout Demo
                     </span>
                     <h3 className="font-display text-3xl text-primary mt-1">
                       Reserve {selectedPass.name}
                     </h3>
                     <p className="font-body text-sm text-muted mt-1">
-                      Total: <span className="text-primary font-semibold">{selectedPass.price}</span> (Early Bird Rate)
+                      Total: <span className="text-volt font-semibold">{selectedPass.price}</span> (Early Bird Rate)
                     </p>
                   </div>
 
@@ -384,7 +369,7 @@ export default function PassesPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. Rahul Sharma"
-                        className="w-full px-4 py-3 rounded-lg bg-void border border-[#8A90A6]/20 text-primary font-body text-sm outline-none focus:border-signal"
+                        className="w-full px-4 py-3 rounded-lg bg-void border border-volt-dim/30 text-primary font-body text-sm outline-none focus:border-volt"
                       />
                     </div>
 
@@ -398,7 +383,7 @@ export default function PassesPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="rahul@example.com"
-                        className="w-full px-4 py-3 rounded-lg bg-void border border-[#8A90A6]/20 text-primary font-body text-sm outline-none focus:border-signal"
+                        className="w-full px-4 py-3 rounded-lg bg-void border border-volt-dim/30 text-primary font-body text-sm outline-none focus:border-volt"
                       />
                     </div>
 
@@ -412,7 +397,7 @@ export default function PassesPage() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="+91 98765 43210"
-                          className="w-full px-4 py-3 rounded-lg bg-void border border-[#8A90A6]/20 text-primary font-body text-sm outline-none focus:border-signal"
+                          className="w-full px-4 py-3 rounded-lg bg-void border border-volt-dim/30 text-primary font-body text-sm outline-none focus:border-volt"
                         />
                       </div>
                       <div>
@@ -424,14 +409,14 @@ export default function PassesPage() {
                           value={formData.college}
                           onChange={(e) => setFormData({ ...formData, college: e.target.value })}
                           placeholder="PEC Chandigarh"
-                          className="w-full px-4 py-3 rounded-lg bg-void border border-[#8A90A6]/20 text-primary font-body text-sm outline-none focus:border-signal"
+                          className="w-full px-4 py-3 rounded-lg bg-void border border-volt-dim/30 text-primary font-body text-sm outline-none focus:border-volt"
                         />
                       </div>
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full mt-6 btn-ignite justify-center py-3.5 text-base"
+                      className="w-full mt-6 btn-volt justify-center py-3.5 text-base"
                     >
                       Confirm Booking ({selectedPass.price})
                     </button>
@@ -439,16 +424,16 @@ export default function PassesPage() {
                 </>
               ) : (
                 <div className="py-6 text-center">
-                  <div className="w-16 h-16 rounded-full bg-signal/20 border border-signal text-signal flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 rounded-full bg-volt/20 border border-volt text-volt flex items-center justify-center mx-auto mb-4">
                     <Check size={32} />
                   </div>
                   <h3 className="font-display text-3xl text-primary mb-2">Booking Reserved!</h3>
                   <p className="font-body text-sm text-muted mb-6 leading-relaxed">
-                    Congratulations <span className="text-primary font-semibold">{formData.name}</span>! Your pass reservation for <strong className="text-signal">{selectedPass.name}</strong> is confirmed. A confirmation has been saved to your session.
+                    Congratulations <span className="text-primary font-semibold">{formData.name}</span>! Your pass reservation for <strong className="text-volt">{selectedPass.name}</strong> is confirmed. A confirmation has been saved to your session.
                   </p>
                   <button
                     onClick={() => setSelectedPass(null)}
-                    className="btn-ignite justify-center py-3 px-8"
+                    className="btn-volt justify-center py-3 px-8"
                   >
                     Done
                   </button>

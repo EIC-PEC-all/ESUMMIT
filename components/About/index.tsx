@@ -1,114 +1,115 @@
 'use client'
-// components/About/index.tsx
-// Fest description + animated stat counters
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
-import { useCountUp } from '@/hooks/useCountUp'
-import { STATS } from '@/lib/data'
+import { useEffect, useRef } from 'react'
+import { Zap } from 'lucide-react'
 
-function StatCard({ stat, inView }: { stat: typeof STATS[0]; inView: boolean }) {
-  const value = useCountUp(stat.value, 2200, inView)
-  return (
-    <div
-      className="flex flex-col p-6 rounded-lg"
-      style={{
-        background: 'var(--bg-panel)',
-        border: '1px solid rgba(138,144,166,0.08)',
-      }}
-      id={`stat-${stat.id}`}
-    >
-      <span
-        className="font-mono-data font-bold mb-1 leading-none"
-        style={{
-          fontSize: 'clamp(40px, 5vw, 64px)',
-          color: 'var(--accent-ignite)',
-        }}
-        aria-label={`${stat.prefix ?? ''}${stat.value}${stat.suffix} ${stat.label}`}
-      >
-        {stat.prefix}{value}{stat.suffix}
-      </span>
-      <span
-        className="font-body text-sm tracking-wide"
-        style={{ color: 'var(--text-muted)' }}
-      >
-        {stat.label}
-      </span>
-    </div>
-  )
-}
-
-const ABOUT_TEXT = `PEC Summit is E-Cell PEC's annual two-day entrepreneurship summit, bringing together student founders, seasoned investors, and industry leaders on the campus of Punjab Engineering College, Chandigarh. From high-stakes pitch competitions to hands-on hackathons and curated networking, it's the tricity's most concentrated dose of startup energy in one place.`
+const SCROLL_WORDS = [
+  'PEC', 'Summit', 'is', 'E-Cell', 'PEC’s', 'high-voltage', 'flagship', 'entrepreneurship', 'summit',
+  'bringing', 'together', '3,000+', 'student', 'founders,', 'seasoned', 'venture', 'capitalists,',
+  'and', 'industry', 'leaders', 'at', 'Punjab', 'Engineering', 'College,', 'Chandigarh.',
+  'From', 'high-stakes', 'pitching', 'to', 'overnight', 'hackathons', 'and', 'exclusive',
+  'VIP', 'investor', 'networking,', 'it', 'is', 'North', 'India’s', 'most', 'kinetic',
+  'platform', 'for', 'startup', 'current.'
+]
 
 export default function About() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const textRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    let gsapInstance: any = null
+    let ScrollTriggerInstance: any = null
+
+    const initGSAP = async () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+      try {
+        const { gsap } = await import('gsap')
+        const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+        gsap.registerPlugin(ScrollTrigger)
+        gsapInstance = gsap
+        ScrollTriggerInstance = ScrollTrigger
+
+        if (!textRef.current) return
+
+        const words = textRef.current.querySelectorAll('.word-reveal')
+
+        gsap.fromTo(
+          words,
+          { color: '#8C8C86', opacity: 0.35 },
+          {
+            color: '#F5D400',
+            opacity: 1,
+            stagger: 0.1,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: textRef.current,
+              start: 'top 75%',
+              end: 'bottom 40%',
+              scrub: 0.8,
+            },
+          }
+        )
+      } catch (err) {
+        console.warn('GSAP Text Reveal initialization failed:', err)
+      }
+    }
+
+    initGSAP()
+
+    return () => {
+      if (ScrollTriggerInstance) {
+        ScrollTriggerInstance.getAll().forEach((st: any) => st.kill())
+      }
+    }
+  }, [])
 
   return (
     <section
       id="about"
-      ref={ref}
-      className="py-24 lg:py-32"
+      className="py-32 relative overflow-hidden"
       aria-labelledby="about-heading"
     >
-      <div className="section-container">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      {/* Current Line Divider */}
+      <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
 
-          {/* Left: Description */}
-          <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p
-              className="font-mono-data text-xs uppercase tracking-[0.2em] mb-4"
-              style={{ color: 'var(--accent-signal)' }}
-            >
-              About the Summit
+      {/* Radial yellow glow */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-volt/10 rounded-full blur-[140px] pointer-events-none" />
+
+      <div className="section-container relative z-10">
+        <div className="max-w-4xl">
+          <div className="flex items-center gap-2 mb-6">
+            <Zap size={14} className="text-volt" />
+            <p className="font-mono-data text-xs uppercase tracking-[0.25em] text-volt">
+              High-Voltage Platform
             </p>
-            <h2
-              id="about-heading"
-              className="font-display mb-6 leading-none"
-              style={{ fontSize: 'clamp(40px, 5vw, 72px)', color: 'var(--text-primary)' }}
-            >
-              IGNITE<br />YOUR IDEA
-            </h2>
-            <p
-              className="font-body text-base leading-relaxed max-w-lg"
-              style={{ color: 'var(--text-muted)' }}
-            >
-              {ABOUT_TEXT}
-            </p>
+          </div>
 
-            <div className="mt-8 flex items-start gap-3">
-              <div
-                className="w-1 self-stretch rounded-full"
-                style={{ background: 'var(--accent-ignite)' }}
-                aria-hidden="true"
-              />
-              <blockquote
-                className="font-body text-sm italic leading-relaxed"
-                style={{ color: 'var(--text-primary)', opacity: 0.7 }}
-              >
-                &ldquo;Every unicorn in India&apos;s startup ecosystem started with a conversation. PEC Summit is where those conversations happen.&rdquo;
-                <cite className="not-italic block mt-2 font-mono-data text-xs" style={{ color: 'var(--text-muted)' }}>
-                  — E-Cell PEC
-                </cite>
-              </blockquote>
-            </div>
-          </motion.div>
-
-          {/* Right: Stats grid */}
-          <motion.div
-            className="grid grid-cols-2 gap-4"
-            initial={{ opacity: 0, y: 32 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          <h2
+            id="about-heading"
+            className="font-display leading-none mb-10"
+            style={{ fontSize: 'clamp(44px, 7vw, 96px)', color: 'var(--text-primary)' }}
           >
-            {STATS.map((stat) => (
-              <StatCard key={stat.id} stat={stat} inView={inView} />
+            WHERE IDEAS CHARGE &amp; <br />
+            <span className="text-volt">DISCHARGE INTO IMPACT</span>
+          </h2>
+
+          {/* Volt Yellow GSAP Word Illuminate */}
+          <div ref={textRef} className="font-body text-xl sm:text-2xl lg:text-3xl font-medium leading-relaxed mb-12">
+            {SCROLL_WORDS.map((word, idx) => (
+              <span key={idx} className="word-reveal inline-block mr-2 transition-colors">
+                {word}
+              </span>
             ))}
-          </motion.div>
+          </div>
+
+          <blockquote
+            className="p-6 rounded-2xl bg-panel border border-volt-dim/30 font-body text-base italic leading-relaxed text-muted"
+          >
+            &ldquo;Every unicorn in India&apos;s startup ecosystem started with a single electric idea. PEC Summit is where campus builders ignite.&rdquo;
+            <cite className="not-italic block mt-3 font-mono-data text-xs text-volt">
+              — E-Cell PEC Board
+            </cite>
+          </blockquote>
         </div>
       </div>
     </section>

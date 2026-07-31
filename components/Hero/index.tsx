@@ -1,22 +1,21 @@
 'use client'
 // components/Hero/index.tsx
-// Full hero section: asymmetric layout, 3D element, countdown, load sequence
+// High-Voltage Hero: Current-Line Trace-In + Split-Text Headline Reveal + 3D Materializing Last
 
 import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, useAnimate, stagger } from 'framer-motion'
-import Link from 'next/link'
-import { ArrowDown, MapPin, Calendar, Ticket } from 'lucide-react'
+import { MapPin, Calendar, Ticket, Zap } from 'lucide-react'
 import Countdown from './Countdown'
 import { FEST_META } from '@/lib/data'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
+import Link from 'next/link'
 
-// Load 3D scene client-side only (no SSR)
 const HeroScene = dynamic(() => import('./HeroScene'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center opacity-30">
-      <div className="w-32 h-32 border border-[#FF4D3D] rounded-full animate-pulse" />
+      <div className="w-32 h-32 border border-[#F5D400] rounded-full animate-pulse" />
     </div>
   ),
 })
@@ -36,7 +35,6 @@ export default function Hero() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Track mouse for 3D scene
   useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
       mouseRef.current = {
@@ -48,34 +46,47 @@ export default function Hero() {
     return () => window.removeEventListener('mousemove', handleMouse)
   }, [])
 
-  // Track scroll for 3D scene
   useEffect(() => {
     const handleScroll = () => { scrollYRef.current = window.scrollY }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Orchestrated page-load reveal sequence
+  // Precise Choreographed Opening Sequence: Eyebrow -> Split-Text Headline -> Meta & Countdown -> 3D Materializes LAST
   useEffect(() => {
-    if (prefersReduced) return
-    const seq = async () => {
-      await animate('[data-hero-eyebrow]', { opacity: [0, 1], y: [16, 0] }, { duration: 0.5 })
+    if (prefersReduced) {
+      setSceneReady(true)
+      return
+    }
+
+    const runOpeningSequence = async () => {
+      // 1. Current-line trace
+      await animate('[data-hero-line]', { width: ['0%', '100%'] }, { duration: 0.8, ease: 'easeOut' })
+      
+      // 2. Eyebrow
+      await animate('[data-hero-eyebrow]', { opacity: [0, 1], y: [16, 0] }, { duration: 0.4 })
+      
+      // 3. Split-text headline words
       await animate(
-        '[data-hero-word]',
-        { opacity: [0, 1], y: [40, 0] },
-        { duration: 0.6, delay: stagger(0.08) }
+        '[data-hero-split-text]',
+        { opacity: [0, 1], y: [48, 0], filter: ['blur(8px)', 'blur(0px)'] },
+        { duration: 0.7, delay: stagger(0.12), ease: [0.16, 1, 0.3, 1] }
       )
-      await animate('[data-hero-sub]', { opacity: [0, 1], y: [16, 0] }, { duration: 0.5 })
+      
+      // 4. Subtitle & Metadata
+      await animate('[data-hero-sub]', { opacity: [0, 1], y: [16, 0] }, { duration: 0.4 })
       await animate('[data-hero-meta]', { opacity: [0, 1], y: [12, 0] }, { duration: 0.4 })
       await animate('[data-hero-cta]', { opacity: [0, 1], y: [12, 0] }, { duration: 0.4, delay: stagger(0.08) })
-      setSceneReady(true)
+      
+      // 5. 3D Materializing LAST with electric scale-in
+      setTimeout(() => {
+        setSceneReady(true)
+      }, 200)
     }
-    // Small initial delay to let fonts settle
-    const t = setTimeout(seq, 200)
+
+    const t = setTimeout(runOpeningSequence, 300)
     return () => clearTimeout(t)
   }, [animate, prefersReduced])
-
-  const words = ['PEC', 'SUMMIT']
 
   return (
     <section
@@ -85,28 +96,22 @@ export default function Hero() {
       style={{ background: 'var(--bg-void)' }}
       aria-label="PEC Summit Hero"
     >
-      {/* Background grid lines */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(138,144,166,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(138,144,166,0.04) 1px, transparent 1px)
-          `,
-          backgroundSize: '80px 80px',
-        }}
+      {/* 1. Animated Current Line Top Border (Trace-In) */}
+      <motion.div
+        data-hero-line
+        className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-[#F5D400] to-transparent shadow-[0_0_12px_#F5D400] pointer-events-none z-20"
+        style={{ width: prefersReduced ? '100%' : '0%' }}
       />
 
-      {/* Radial glow behind 3D element */}
+      {/* Radial Voltage Glow */}
       <div
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full pointer-events-none opacity-20"
         style={{
-          background: 'radial-gradient(circle, rgba(255,77,61,0.07) 0%, rgba(61,217,255,0.04) 40%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(245,212,0,0.15) 0%, transparent 70%)',
           transform: 'translateY(-50%) translateX(20%)',
         }}
       />
 
-      {/* ── Main layout: text left, 3D right ── */}
       <div className="section-container w-full py-32 lg:py-0 lg:min-h-screen flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-0">
 
         {/* Left: Text content */}
@@ -117,19 +122,16 @@ export default function Hero() {
             className="mb-6 flex items-center gap-3"
             style={{ opacity: prefersReduced ? 1 : 0 }}
           >
-            <div
-              className="h-px w-8"
-              style={{ background: 'var(--accent-ignite)' }}
-            />
+            <Zap size={14} className="text-volt" />
             <span
               className="font-mono-data text-xs uppercase tracking-[0.25em]"
-              style={{ color: 'var(--accent-ignite)' }}
+              style={{ color: 'var(--accent-volt)' }}
             >
               E-Cell PEC &nbsp;·&nbsp; Chandigarh
             </span>
           </div>
 
-          {/* Headline */}
+          {/* 2. Split-Text Headline Reveal */}
           <h1
             className="font-display mb-6 leading-none"
             style={{
@@ -138,31 +140,29 @@ export default function Hero() {
             }}
             aria-label="PEC Summit"
           >
-            {words.map((word, i) => (
-              <span
-                key={word}
-                data-hero-word
-                className="block"
-                style={{
-                  opacity: prefersReduced ? 1 : 0,
-                  color: i === 0 ? 'var(--text-primary)' : 'var(--accent-ignite)',
-                }}
-              >
-                {word}
-              </span>
-            ))}
+            <span
+              data-hero-split-text
+              className="block text-primary"
+              style={{ opacity: prefersReduced ? 1 : 0 }}
+            >
+              PEC
+            </span>
+            <span
+              data-hero-split-text
+              className="block text-stroke-volt"
+              style={{ opacity: prefersReduced ? 1 : 0 }}
+            >
+              SUMMIT
+            </span>
           </h1>
 
           {/* Tagline */}
           <p
             data-hero-sub
-            className="text-lg sm:text-xl max-w-md mb-8 leading-relaxed"
-            style={{
-              color: 'var(--text-muted)',
-              opacity: prefersReduced ? 1 : 0,
-            }}
+            className="text-lg sm:text-xl max-w-md mb-8 leading-relaxed text-muted"
+            style={{ opacity: prefersReduced ? 1 : 0 }}
           >
-            {FEST_META.tagline}
+            North India&apos;s boldest high-voltage platform for student founders and campus innovators.
           </p>
 
           {/* Date + Venue */}
@@ -172,15 +172,15 @@ export default function Hero() {
             style={{ opacity: prefersReduced ? 1 : 0 }}
           >
             <div className="flex items-center gap-2">
-              <Calendar size={14} style={{ color: 'var(--accent-signal)' }} aria-hidden="true" />
-              <span className="font-mono-data text-sm" style={{ color: 'var(--text-muted)' }}>
+              <Calendar size={14} className="text-volt" />
+              <span className="font-mono-data text-sm text-muted">
                 {FEST_META.dates}
                 <span className="ml-2 text-xs opacity-50">{"// TODO: confirm"}</span>
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin size={14} style={{ color: 'var(--accent-signal)' }} aria-hidden="true" />
-              <span className="font-mono-data text-sm" style={{ color: 'var(--text-muted)' }}>
+              <MapPin size={14} className="text-volt" />
+              <span className="font-mono-data text-sm text-muted">
                 {FEST_META.venue}
               </span>
             </div>
@@ -192,8 +192,8 @@ export default function Hero() {
             className="mb-10"
             style={{ opacity: prefersReduced ? 1 : 0 }}
           >
-            <p className="font-mono-data text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--text-muted)' }}>
-              Countdown to Ignition
+            <p className="font-mono-data text-xs uppercase tracking-widest mb-3 text-volt font-bold">
+              ⚡ Countdown to Ignition
             </p>
             <Countdown targetISO={FEST_META.countdownTarget} />
           </div>
@@ -206,64 +206,37 @@ export default function Hero() {
           >
             <Link
               href="/passes"
-              className="btn-ignite"
+              className="btn-volt"
               id="hero-passes-btn"
-              aria-label="Get Passes for E-Summit"
             >
-              <Ticket size={16} aria-hidden="true" />
-              Get Passes
+              <Ticket size={16} />
+              Get Summit Passes
             </Link>
-            <a
-              href="#register"
-              className="btn-ghost"
-              id="hero-register-btn"
-              aria-label="Register for E-Summit"
-            >
-              Register Now
-            </a>
             <a
               href="#tracks"
               className="btn-ghost"
               id="hero-explore-btn"
-              aria-label="Explore E-Summit tracks"
             >
               Explore Tracks
             </a>
           </div>
         </div>
 
-        {/* Right: 3D Scene */}
+        {/* Right: 3. 3D Scene Materializing LAST */}
         <div className="flex-1 relative flex items-center justify-center lg:justify-end">
           <motion.div
             className="relative w-full max-w-xl"
             style={{ height: isMobile ? '280px' : '560px' }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={sceneReady || prefersReduced ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, scale: 0.75, filter: 'blur(12px)' }}
+            animate={sceneReady || prefersReduced ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : { opacity: 0, scale: 0.75, filter: 'blur(12px)' }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
           >
             {!isMobile ? (
               <HeroScene mouse={mouseRef} scrollY={scrollYRef} />
             ) : (
-              /* Mobile fallback: CSS animated rings */
               <div className="w-full h-full flex items-center justify-center">
-                <div className="relative w-48 h-48">
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="absolute inset-0 rounded-full border"
-                      style={{
-                        borderColor: i === 0 ? 'rgba(255,77,61,0.4)' : i === 1 ? 'rgba(61,217,255,0.25)' : 'rgba(245,243,238,0.1)',
-                        transform: `scale(${1 + i * 0.35})`,
-                        animation: `pulse ${2 + i * 0.5}s ease-in-out infinite ${i * 0.3}s`,
-                      }}
-                    />
-                  ))}
-                  <div
-                    className="absolute inset-0 flex items-center justify-center font-display text-5xl"
-                    style={{ color: 'var(--accent-ignite)' }}
-                  >
-                    ∆
-                  </div>
+                <div className="relative w-48 h-48 rounded-full border border-volt/40 flex items-center justify-center font-display text-5xl text-volt">
+                  ⚡
                 </div>
               </div>
             )}
@@ -275,16 +248,14 @@ export default function Hero() {
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.5 }}
-        transition={{ delay: 2.5, duration: 1 }}
-        aria-hidden="true"
+        animate={{ opacity: 0.7 }}
+        transition={{ delay: 2, duration: 1 }}
       >
-        <span className="font-mono-data text-[10px] uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+        <span className="font-mono-data text-[10px] uppercase tracking-widest text-volt">
           Scroll
         </span>
         <motion.div
-          className="w-px h-10"
-          style={{ background: 'linear-gradient(to bottom, var(--accent-ignite), transparent)' }}
+          className="w-px h-10 bg-gradient-to-b from-volt to-transparent"
           animate={{ scaleY: [1, 0.3, 1] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         />

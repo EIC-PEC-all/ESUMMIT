@@ -1,15 +1,16 @@
 'use client'
 // components/Nav/index.tsx
-// Sticky transparent-to-solid navigation bar with smooth scroll + subpage support
+// Sticky transparent-to-solid navigation bar with Voltage styling & direct Register subpage link
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Ticket } from 'lucide-react'
+import { Menu, X, Ticket, Zap, UserCheck } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const NAV_ITEMS = [
-  { label: 'Passes', href: '/passes', sectionId: null, highlight: true },
+  { label: 'Register', href: '/register', sectionId: null, highlight: true },
+  { label: 'Passes', href: '/passes', sectionId: null, highlight: false },
   { label: 'Tracks', href: '/tracks', sectionId: 'tracks' },
   { label: 'Speakers', href: '/speakers', sectionId: 'speakers' },
   { label: 'Schedule', href: '/schedule', sectionId: 'schedule' },
@@ -43,20 +44,22 @@ export default function Nav() {
     <header
       className="fixed top-0 left-0 right-0 z-40 transition-all duration-300"
       style={{
-        background: scrolled ? 'rgba(11,14,26,0.88)' : 'transparent',
+        background: scrolled ? 'rgba(10,10,10,0.92)' : 'transparent',
         backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(138,144,166,0.1)' : '1px solid transparent',
+        borderBottom: scrolled ? '1px solid rgba(138,118,0,0.25)' : '1px solid transparent',
       }}
     >
       <div className="section-container flex items-center justify-between h-16">
         {/* Logo */}
         <Link
           href="/"
-          className="font-display text-xl tracking-wide"
+          className="font-display text-xl tracking-wide flex items-center gap-1"
           style={{ color: 'var(--text-primary)' }}
           aria-label="E-Summit — Home"
         >
-          E-<span style={{ color: 'var(--accent-ignite)' }}>SUMMIT</span>
+          <Zap size={18} className="text-volt" />
+          <span>E-</span>
+          <span className="text-volt">SUMMIT</span>
         </Link>
 
         {/* Desktop nav */}
@@ -69,15 +72,15 @@ export default function Nav() {
                 href={targetHref}
                 onClick={(e) => handleItemClick(e, item)}
                 className={`font-body text-sm transition-colors duration-150 flex items-center gap-1.5 ${
-                  item.highlight ? 'text-signal font-semibold' : ''
+                  item.highlight ? 'text-volt font-bold' : ''
                 }`}
-                style={{ color: item.highlight ? 'var(--accent-signal)' : 'var(--text-muted)' }}
+                style={{ color: item.highlight ? 'var(--accent-volt)' : 'var(--text-muted)' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = item.highlight ? 'var(--accent-signal)' : 'var(--text-muted)')
+                  (e.currentTarget.style.color = item.highlight ? 'var(--accent-volt)' : 'var(--text-muted)')
                 }
               >
-                {item.highlight && <Ticket size={14} className="text-signal" />}
+                {item.highlight && <UserCheck size={14} className="text-volt" />}
                 {item.label}
               </Link>
             )
@@ -90,29 +93,23 @@ export default function Nav() {
             href="/passes"
             className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
             style={{
-              background: 'rgba(61,217,255,0.1)',
-              color: 'var(--accent-signal)',
-              border: '1px solid rgba(61,217,255,0.3)',
+              background: 'rgba(245,212,0,0.12)',
+              color: 'var(--accent-volt)',
+              border: '1px solid rgba(245,212,0,0.4)',
             }}
           >
             <Ticket size={14} />
             Passes
           </Link>
 
-          <a
-            href="/#register"
-            onClick={(e) => {
-              if (pathname === '/') {
-                e.preventDefault()
-                document.getElementById('register')?.scrollIntoView({ behavior: 'smooth' })
-              }
-            }}
-            className="hidden md:inline-flex btn-ignite text-xs py-2 px-4"
+          <Link
+            href="/register"
+            className="hidden md:inline-flex btn-volt text-xs py-2 px-4"
             id="nav-register-btn"
-            aria-label="Register for PEC Summit"
+            aria-label="Register for PEC Summit Dashboard"
           >
             Register
-          </a>
+          </Link>
 
           {/* Mobile menu toggle */}
           <button
@@ -133,7 +130,7 @@ export default function Nav() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden px-6 pb-4 pt-2"
-          style={{ background: 'rgba(11,14,26,0.96)', borderBottom: '1px solid rgba(138,144,166,0.1)' }}
+          style={{ background: 'rgba(10,10,10,0.96)', borderBottom: '1px solid rgba(138,118,0,0.3)' }}
         >
           <nav aria-label="Mobile navigation">
             {NAV_ITEMS.map((item) => {
@@ -144,20 +141,20 @@ export default function Nav() {
                   href={targetHref}
                   onClick={(e) => handleItemClick(e, item)}
                   className="block py-3 font-body text-base border-b flex items-center justify-between"
-                  style={{ color: item.highlight ? 'var(--accent-signal)' : 'var(--text-muted)', borderColor: 'rgba(138,144,166,0.08)' }}
+                  style={{ color: item.highlight ? 'var(--accent-volt)' : 'var(--text-muted)', borderColor: 'rgba(140,140,134,0.1)' }}
                 >
                   <span>{item.label}</span>
-                  {item.highlight && <Ticket size={16} className="text-signal" />}
+                  {item.highlight && <UserCheck size={16} className="text-volt" />}
                 </Link>
               )
             })}
             <Link
-              href="/passes"
+              href="/register"
               onClick={() => setMenuOpen(false)}
-              className="btn-ignite w-full justify-center mt-4 text-sm py-3"
-              id="nav-mobile-passes-btn"
+              className="btn-volt w-full justify-center mt-4 text-sm py-3"
+              id="nav-mobile-register-btn"
             >
-              Get Summit Passes
+              Open Registration Dashboard
             </Link>
           </nav>
         </motion.div>

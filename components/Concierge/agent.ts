@@ -1,12 +1,30 @@
 // components/Concierge/agent.ts
-// Agentic Fest Concierge — frontend-only intent matcher + tool dispatcher
+// Agentic Summit Agent — multi-turn intent matcher + itinerary generator + tool dispatcher
 // ─────────────────────────────────────────────────────────────────────────
 // SWAP POINT: Replace getAgentResponse() body with a real LLM call when ready.
-// The TOOLS object and FestContext structure remain the same.
 // ─────────────────────────────────────────────────────────────────────────
 
 import { emitAgentEvent } from '@/lib/events'
 import type { FestContext } from '@/lib/data'
+
+export interface ItinerarySession {
+  id: string
+  day: 'Day 1' | 'Day 2'
+  time: string
+  title: string
+  type: string
+  track: string | null
+}
+
+export interface AgentResponse {
+  text: string
+  toast?: string
+  suggestedReplies?: string[]
+  itinerary?: {
+    title: string
+    sessions: ItinerarySession[]
+  }
+}
 
 // ── Tool Definitions ──────────────────────────────────────────────────────
 
@@ -38,7 +56,6 @@ function openTrackCard(id: string, name: string): string {
 
 function subscribeEmail(email: string): { message: string; toast: string } {
   if (typeof window === 'undefined') return { message: 'Could not save — browser required.', toast: '' }
-  // Validate email (basic)
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
     return { message: `That doesn't look like a valid email address. Try again?`, toast: '' }
@@ -53,14 +70,59 @@ function subscribeEmail(email: string): { message: string; toast: string } {
   existing.push(email)
   localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
   return {
-    message: `Done! ${email} has been added to the PEC Summit updates list. We'll reach out with early-bird registration details.`,
+    message: `Done! ${email} has been added to the PEC Summit updates list.`,
     toast: `✓ ${email} subscribed to PEC Summit updates`,
+  }
+}
+
+/**
+ * Tool: buildItinerary
+ * Generates a structured personalized itinerary based on constraints (day, interest/topic)
+ */
+export function buildItinerary(
+  ctx: FestContext,
+  constraints: { day?: 'day1' | 'day2' | 'all'; topic?: string }
+): { title: string; sessions: ItinerarySession[] } {
+  const d1 = ctx.schedule.day1.events.map((e) => ({ ...e, day: 'Day 1' as const }))
+  const d2 = ctx.schedule.day2.events.map((e) => ({ ...e, day: 'Day 2' as const }))
+  let pool = [...d1, ...d2]
+
+  if (constraints.day === 'day1') pool = d1
+  if (constraints.day === 'day2') pool = d2
+
+  if (constraints.topic) {
+    const t = constraints.topic.toLowerCase()
+    pool = pool.filter(
+      (e) =>
+        e.title.toLowerCase().includes(t) ||
+        e.type.toLowerCase().includes(t) ||
+        (e.track && e.track.toLowerCase().includes(t))
+    )
+  }
+
+  // Fallback to top keynotes & panels if pool is too small
+  if (pool.length < 2) {
+    const defaultPool = (constraints.day === 'day2' ? d2 : d1).filter(
+      (e) => e.type === 'keynote' || e.type === 'panel' || e.type === 'competition' || e.type === 'hackathon'
+    )
+    pool = defaultPool.slice(0, 4)
+  }
+
+  const topicLabel = constraints.topic
+    ? constraints.topic.charAt(0).toUpperCase() + constraints.topic.slice(1)
+    : 'Recommended'
+  const dayLabel = constraints.day === 'day1' ? 'Day 1' : constraints.day === 'day2' ? 'Day 2' : '2-Day'
+
+  return {
+    title: `Custom ${dayLabel} ${topicLabel} Itinerary`,
+    sessions: pool.slice(0, 5),
   }
 }
 
 // ── Intent Matching ───────────────────────────────────────────────────────
 
 type Intent =
+  | { type: 'itinerary'; day?: 'day1' | 'day2' | 'all'; topic?: string }
   | { type: 'scroll_to'; section: string }
   | { type: 'highlight_track'; id: string; name: string }
   | { type: 'open_track'; id: string; name: string }
@@ -75,6 +137,22 @@ type Intent =
 function matchIntent(msg: string, ctx: FestContext): Intent {
   const m = msg.toLowerCase().trim()
 
+  // Itinerary generation intent
+  if (/(itinerary|plan|schedule for me|recommend|suggest|what should i attend|day 1 plan|day 2 plan)/i.test(m)) {
+    let day: 'day1' | 'day2' | 'all' = 'all'
+    if (/day 1|first day/i.test(m)) day = 'day1'
+    if (/day 2|second day/i.test(m)) day = 'day2'
+
+    let topic: string | undefined = undefined
+    if (/fintech|payment/i.test(m)) topic = 'fintech'
+    if (/ai|machine learning|ml/i.test(m)) topic = 'ai'
+    if (/pitch|pitching|vc|investor/i.test(m)) topic = 'pitch'
+    if (/hackathon|code|developer/i.test(m)) topic = 'hackathon'
+    if (/deep-tech|hardware/i.test(m)) topic = 'deep-tech'
+
+    return { type: 'itinerary', day, topic }
+  }
+
   // Email capture
   const emailMatch = m.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/)
   if (emailMatch) return { type: 'subscribe', email: emailMatch[0] }
@@ -88,7 +166,6 @@ function matchIntent(msg: string, ctx: FestContext): Intent {
   if (/(scroll|go|take me|show).*(schedule|lineup|agenda|timetable)/i.test(m)) return { type: 'scroll_to', section: 'schedule' }
   if (/(scroll|go|take me|show).*(sponsor|partner)/i.test(m)) return { type: 'scroll_to', section: 'sponsors' }
   if (/(scroll|go|take me|show).*(faq|question|answer)/i.test(m)) return { type: 'scroll_to', section: 'faq' }
-  if (/(scroll|go|take me|show).*(register|signup|register)/i.test(m)) return { type: 'scroll_to', section: 'register' }
 
   // Specific track open / highlight
   for (const track of ctx.tracks) {
@@ -101,8 +178,7 @@ function matchIntent(msg: string, ctx: FestContext): Intent {
   }
 
   // Schedule / timeline queries
-  if (/(schedule|when|time|agenda|lineup|day 1|day 2|starts?|ends?)/i.test(m)) {
-    // Check if querying a specific track
+  if (/(schedule|when|time|agenda|lineup|starts?|ends?)/i.test(m)) {
     for (const track of ctx.tracks) {
       if (new RegExp(track.id, 'i').test(m) || new RegExp(track.title, 'i').test(m)) {
         return { type: 'schedule_query', track: track.id }
@@ -118,7 +194,7 @@ function matchIntent(msg: string, ctx: FestContext): Intent {
   if (/(sponsor|partner|support|fund|brand)/i.test(m)) return { type: 'sponsor_query' }
 
   // FAQ
-  if (/(free|cost|price|ticket|fee|where|location|venue|hostel|accommodation|accommodation)/i.test(m)) {
+  if (/(free|cost|price|ticket|fee|where|location|venue|hostel|accommodation)/i.test(m)) {
     return { type: 'faq_query', topic: 'logistics' }
   }
   if (/(faq|question|how do i|can i|eligible|who can)/i.test(m)) return { type: 'faq_query' }
@@ -131,37 +207,30 @@ function matchIntent(msg: string, ctx: FestContext): Intent {
 
 // ── Response Generator ─────────────────────────────────────────────────────
 
-export interface AgentResponse {
-  text: string
-  toast?: string
-  suggestedReplies?: string[]
-}
-
-/**
- * getAgentResponse — THE SWAP POINT for a real LLM
- *
- * To connect a real LLM (e.g., Gemini, GPT-4, Claude):
- *   1. Replace the function body below with an API call
- *   2. Pass `ctx` as a system prompt / context block
- *   3. Map LLM tool calls back to the TOOLS object above
- *   4. Return { text, toast?, suggestedReplies? }
- */
 export async function getAgentResponse(
   userMessage: string,
   ctx: FestContext
 ): Promise<AgentResponse> {
-  // Simulate a small network delay for realism
-  await new Promise((r) => setTimeout(r, 600 + Math.random() * 400))
+  await new Promise((r) => setTimeout(r, 500 + Math.random() * 300))
 
   const intent = matchIntent(userMessage, ctx)
 
   switch (intent.type) {
+    case 'itinerary': {
+      const it = buildItinerary(ctx, { day: intent.day, topic: intent.topic })
+      return {
+        text: `Here is a **${it.title}** curated for your preferences. You can click "Add to My Plan" on any session to save it to your persistent itinerary drawer!`,
+        itinerary: it,
+        suggestedReplies: ['Build Day 1 plan', 'Show AI track', 'How do I register?'],
+      }
+    }
+
     case 'scroll_to': {
       const label = intent.section.charAt(0).toUpperCase() + intent.section.slice(1)
       scrollToSection(intent.section)
       return {
         text: `Taking you to the ${label} section now.`,
-        suggestedReplies: ['What tracks are there?', 'Who are the speakers?', 'When does it start?'],
+        suggestedReplies: ['Build my itinerary', 'Who are the speakers?', 'When does it start?'],
       }
     }
 
@@ -170,7 +239,7 @@ export async function getAgentResponse(
       scrollToSection('tracks')
       return {
         text: `That's the **${intent.name}** — I've highlighted it for you. Want me to open the full details?`,
-        suggestedReplies: [`Tell me more about ${intent.name}`, 'Show me speakers', 'What time does it start?'],
+        suggestedReplies: [`Tell me more about ${intent.name}`, 'Build my itinerary', 'What time does it start?'],
       }
     }
 
@@ -179,7 +248,7 @@ export async function getAgentResponse(
       const track = ctx.tracks.find((t) => t.id === intent.id)
       return {
         text: `Opening **${intent.name}**. ${track?.shortDesc ?? ''}`,
-        suggestedReplies: ['What other events are there?', 'Who are the judges?', 'How do I register?'],
+        suggestedReplies: ['Build my itinerary', 'Who are the judges?', 'Get passes'],
       }
     }
 
@@ -187,24 +256,22 @@ export async function getAgentResponse(
       scrollToSection('schedule')
       if (intent.track) {
         const allEvents = [
-          ...ctx.schedule.day1.events,
-          ...ctx.schedule.day2.events,
+          ...ctx.schedule.day1.events.map((e) => ({ ...e, day: 'Day 1' })),
+          ...ctx.schedule.day2.events.map((e) => ({ ...e, day: 'Day 2' })),
         ].filter((e) => e.track === intent.track)
         if (allEvents.length > 0) {
           const first = allEvents[0]
           highlightScheduleRow(first.id, first.title)
-          const list = allEvents.map((e) => `• ${e.time} — ${e.title}`).join('\n')
+          const list = allEvents.map((e) => `• [${e.day}] ${e.time} — ${e.title}`).join('\n')
           return {
             text: `Here are the **${intent.track}** sessions:\n${list}\n\nI've highlighted the first one in the schedule.`,
-            suggestedReplies: ['Show me Day 1', 'Show me Day 2', 'What time does it start?'],
+            suggestedReplies: ['Build Day 1 plan', 'Build Day 2 plan', 'Show speakers'],
           }
         }
       }
-      const d1Start = ctx.schedule.day1.events[0]
-      const d2Start = ctx.schedule.day2.events[0]
       return {
-        text: `**Day 1** starts at ${d1Start.time} with "${d1Start.title}". **Day 2** kicks off at ${d2Start.time}. I've scrolled to the full schedule — use the tabs to switch days.`,
-        suggestedReplies: ['When is the pitch competition?', 'When is the hackathon?', 'Show me speakers'],
+        text: `**Day 1** kicks off at 09:00 with Registration & Ceremony. **Day 2** features hackathon final presentations & pitch finals. I've scrolled to the schedule section for you.`,
+        suggestedReplies: ['Build my itinerary', 'When is the pitch competition?', 'Show speakers'],
       }
     }
 
@@ -212,16 +279,16 @@ export async function getAgentResponse(
       scrollToSection('speakers')
       const names = ctx.speakers.slice(0, 3).map((s) => `**${s.name}** (${s.title})`).join(', ')
       return {
-        text: `We have ${ctx.speakers.length} confirmed speakers so far, including ${names}, and more to be announced. I've scrolled to the speakers section — hover any card for their full bio.`,
-        suggestedReplies: ['What tracks are there?', 'Show me the schedule', 'How do I register?'],
+        text: `We have ${ctx.speakers.length} confirmed speakers so far, including ${names}. Hover any card to view their full bio!`,
+        suggestedReplies: ['Build my itinerary', 'Show schedule', 'Get passes'],
       }
     }
 
     case 'sponsor_query': {
       scrollToSection('sponsors')
       return {
-        text: `PEC Summit is supported by sponsors across Title, Gold, and Silver tiers, plus media partners. I've scrolled to the sponsors section. Interested in partnering? Contact partnerships@ecellpec.in`,
-        suggestedReplies: ['Tell me about the fest', 'How many attendees?', 'When does it start?'],
+        text: `PEC Summit is supported by premier partners across Title, Gold, and Silver tiers. Interested in sponsoring? Contact partnerships@ecellpec.in`,
+        suggestedReplies: ['Tell me about the fest', 'Build my itinerary', 'When does it start?'],
       }
     }
 
@@ -229,7 +296,7 @@ export async function getAgentResponse(
       const email = intent.email
       if (!email) {
         return {
-          text: `Sure! Just share your email address and I'll add you to the PEC Summit updates list.`,
+          text: `Sure! Share your email address and I'll add you to the PEC Summit updates list.`,
           suggestedReplies: [],
         }
       }
@@ -239,39 +306,32 @@ export async function getAgentResponse(
 
     case 'faq_query': {
       scrollToSection('faq')
-      if (intent.topic === 'logistics') {
-        return {
-          text: `The summit is held at **PEC Campus, Sector 12, Chandigarh**. General attendance passes are available — check the registration section for pricing. The FAQ section has details on accommodation, hostel access, and more.`,
-          suggestedReplies: ['How do I register?', 'Is it free?', 'Show me the schedule'],
-        }
-      }
       return {
-        text: `Great question! I've scrolled to the FAQ section. You can also ask me directly — I'm happy to answer specific questions about the fest.`,
-        suggestedReplies: ['Is it free to attend?', 'Where is the venue?', 'How do I register?'],
+        text: `I've scrolled to the FAQ section. Venue: **PEC Campus, Sector 12, Chandigarh**. You can also ask me specific questions directly!`,
+        suggestedReplies: ['Build my itinerary', 'Is it free to attend?', 'Get passes'],
       }
     }
 
     case 'general_info': {
-      const stats = ctx.stats
       return {
-        text: `**PEC Summit** is ${ctx.meta.org}'s flagship entrepreneurship summit. It's a two-day event featuring ${stats.find((s) => s.id === 'attendees')?.value}+ attendees, ${stats.find((s) => s.id === 'speakers')?.value}+ speakers, and a ₹${stats.find((s) => s.id === 'prize')?.value}L+ prize pool. This is edition #${stats.find((s) => s.id === 'editions')?.value}. Venue: ${ctx.meta.venue}. Dates: ${ctx.meta.dates}.`,
-        suggestedReplies: ['What tracks are there?', 'Show me the speakers', 'How do I register?'],
+        text: `**PEC Summit** is E-Cell PEC's flagship entrepreneurship summit featuring 3,000+ attendees, 40+ speakers, ₹15L+ prize pool, and 2 days of pitches & hackathons. Dates: ${ctx.meta.dates}.`,
+        suggestedReplies: ['Build my itinerary', 'What tracks are there?', 'Get passes'],
       }
     }
 
     default: {
       return {
-        text: `I can help you navigate PEC Summit! You can ask me about tracks, speakers, the schedule, sponsors, registration — or just say "show me speakers" and I'll scroll right there.`,
-        suggestedReplies: ['What tracks are there?', 'When does it start?', 'Show me speakers'],
+        text: `I'm the Summit Agent! I can answer questions, take you to sections, or **build a personalized itinerary** (try asking: "Build a Day 2 itinerary for AI"). What would you like to do?`,
+        suggestedReplies: ['Build my itinerary', 'When does it start?', 'Show speakers'],
       }
     }
   }
 }
 
 export const SUGGESTED_STARTERS = [
+  'Build my itinerary',
   'What tracks are there?',
   'When does it start?',
   'Show me speakers',
   'Tell me about the pitch competition',
-  'Is it free to attend?',
 ]
