@@ -20,20 +20,20 @@ function BurstCard({ stat, index, inView }: { stat: typeof STATS[0]; index: numb
       className="relative rounded-2xl p-8 overflow-hidden group flex flex-col justify-between"
       style={{
         background: 'var(--bg-panel)',
-        border: '1px solid rgba(138, 118, 0, 0.2)',
+        border: '1px solid rgba(158, 100, 11, 0.25)',
       }}
-      whileHover={{ y: -6, borderColor: '#F5D400', boxShadow: '0 0 24px rgba(245,212,0,0.2)' }}
+      whileHover={{ y: -6, borderColor: '#F8A21A', boxShadow: '0 0 24px rgba(248,162,26,0.25)' }}
     >
       {/* Background accent icon */}
-      <div className="absolute -right-4 -bottom-4 opacity-5 text-volt group-hover:opacity-15 transition-all duration-300">
+      <div className="absolute -right-4 -bottom-4 opacity-5 text-amber group-hover:opacity-15 transition-all duration-300">
         <Icon size={120} />
       </div>
 
       <div className="flex items-center justify-between mb-6 relative z-10">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center bg-void border border-volt-dim/40"
+          className="w-10 h-10 rounded-xl flex items-center justify-center bg-void border border-amber-dim/40"
         >
-          <Icon size={20} className="text-volt" />
+          <Icon size={20} className="text-amber" />
         </div>
         <span className="font-mono-data text-[10px] uppercase tracking-widest text-muted">
           ⚡ #0{index + 1}
@@ -50,7 +50,7 @@ function BurstCard({ stat, index, inView }: { stat: typeof STATS[0]; index: numb
         >
           {stat.prefix}
           {count}
-          <span className="text-volt">{stat.suffix}</span>
+          <span className="text-amber">{stat.suffix}</span>
         </span>
         <span className="font-body text-sm font-semibold text-muted uppercase tracking-wider block">
           {stat.label}
@@ -67,8 +67,8 @@ export default function StatBurst() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 relative border-t border-b border-[#8A7600]/20"
-      style={{ background: 'rgba(21, 21, 21, 0.5)' }}
+      className="py-20 relative border-t border-b border-amber-dim/20"
+      style={{ background: 'rgba(22, 31, 27, 0.5)' }}
     >
       {/* Current Line Top Divider */}
       <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />

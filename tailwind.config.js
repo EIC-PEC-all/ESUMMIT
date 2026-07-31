@@ -8,12 +8,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        void: '#0A0A0A',        // warm near-black void
-        panel: '#151515',       // card/panel surface
-        volt: '#F5D400',        // electric yellow primary accent (<15% surface area)
-        'volt-dim': '#8A7600',   // muted yellow-brown border/secondary
-        primary: '#F2F2ED',     // warm off-white text
-        muted: '#8C8C86',       // slate muted text
+        void: '#0D1110',          // deep dark void
+        panel: '#161F1B',         // dark green surface card
+        green: '#1E4637',         // official logo forest green
+        orange: '#FF9900',        // official logo vibrant orange-amber
+        'orange-dim': '#B36B00',  // muted orange border
+        primary: '#F9FAF6',       // cream white text
+        muted: '#7C8E85',         // sage muted text
       },
       fontFamily: {
         display: ['var(--font-bebas)', 'sans-serif'],
@@ -23,8 +24,6 @@ module.exports = {
       animation: {
         'marquee': 'marquee 30s linear infinite',
         'marquee2': 'marquee2 30s linear infinite',
-        'flip-in': 'flipIn 0.4s ease forwards',
-        'pulse-volt': 'pulseVolt 2.5s ease-in-out infinite',
       },
       keyframes: {
         marquee: {
@@ -34,14 +33,6 @@ module.exports = {
         marquee2: {
           '0%': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(0%)' },
-        },
-        flipIn: {
-          '0%': { transform: 'rotateX(90deg)', opacity: '0' },
-          '100%': { transform: 'rotateX(0deg)', opacity: '1' },
-        },
-        pulseVolt: {
-          '0%, 100%': { boxShadow: '0 0 12px rgba(245,212,0,0.25)' },
-          '50%': { boxShadow: '0 0 32px rgba(245,212,0,0.65)' },
         },
       },
     },

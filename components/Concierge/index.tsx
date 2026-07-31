@@ -1,6 +1,6 @@
 'use client'
 // components/Concierge/index.tsx
-// Floating Agentic Summit Agent + "My Plan" Persistent Itinerary Drawer (Voltage Theme)
+// Floating Agentic Summit Agent + "My Plan" Persistent Itinerary Drawer (Official Logo Theme)
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -40,7 +40,6 @@ export default function Concierge() {
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Load plan from localStorage on mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem('pec_summit_my_plan')
@@ -50,7 +49,6 @@ export default function Concierge() {
     }
   }, [])
 
-  // Save plan to localStorage
   const savePlan = (newPlan: ItinerarySession[]) => {
     setMyPlan(newPlan)
     try {
@@ -62,21 +60,21 @@ export default function Concierge() {
 
   const addToPlan = (session: ItinerarySession) => {
     if (myPlan.some((s) => s.id === session.id)) {
-      toast('Session already in My Plan', { icon: 'ℹ️', style: { background: '#151515', color: '#F2F2ED' } })
+      toast('Session already in My Plan', { icon: 'ℹ️', style: { background: '#161F1B', color: '#F9FAF6' } })
       return
     }
     const updated = [...myPlan, session]
     savePlan(updated)
     toast.success(`Added "${session.title}" to My Plan!`, {
-      style: { background: '#151515', color: '#F2F2ED', border: '1px solid #F5D400' },
-      iconTheme: { primary: '#F5D400', secondary: '#0A0A0A' },
+      style: { background: '#161F1B', color: '#F9FAF6', border: '1px solid #F8A21A' },
+      iconTheme: { primary: '#F8A21A', secondary: '#0D1110' },
     })
   }
 
   const removeFromPlan = (id: string) => {
     const updated = myPlan.filter((s) => s.id !== id)
     savePlan(updated)
-    toast('Removed from My Plan', { icon: '🗑️', style: { background: '#151515', color: '#F2F2ED' } })
+    toast('Removed from My Plan', { icon: '🗑️', style: { background: '#161F1B', color: '#F9FAF6' } })
   }
 
   useEffect(() => {
@@ -122,11 +120,11 @@ export default function Concierge() {
       if (response.toast) {
         toast.success(response.toast, {
           style: {
-            background: '#151515',
-            color: '#F2F2ED',
-            border: '1px solid #F5D400',
+            background: '#161F1B',
+            color: '#F9FAF6',
+            border: '1px solid #F8A21A',
           },
-          iconTheme: { primary: '#F5D400', secondary: '#0A0A0A' },
+          iconTheme: { primary: '#F8A21A', secondary: '#0D1110' },
         })
       }
 
@@ -151,24 +149,24 @@ export default function Concierge() {
       {/* Floating My Plan Drawer Button */}
       <button
         onClick={() => setPlanOpen(true)}
-        className="fixed top-20 right-6 z-30 px-3.5 py-2 rounded-xl bg-panel border border-volt-dim/40 text-primary font-mono-data text-xs flex items-center gap-2 shadow-lg hover:border-volt transition-all"
+        className="fixed top-20 right-6 z-30 px-3.5 py-2 rounded-xl bg-panel border border-amber-dim/40 text-primary font-mono-data text-xs flex items-center gap-2 shadow-lg hover:border-amber transition-all"
         aria-label="Open My Plan itinerary drawer"
       >
-        <Bookmark size={14} className="text-volt fill-volt/20" />
+        <Bookmark size={14} className="text-amber fill-amber/20" />
         <span>My Plan</span>
-        <span className="w-5 h-5 rounded-full bg-volt text-black font-bold text-[10px] flex items-center justify-center">
+        <span className="w-5 h-5 rounded-full bg-amber text-black font-bold text-[10px] flex items-center justify-center">
           {myPlan.length}
         </span>
       </button>
 
-      {/* Floating Toggle Button (Bottom-Right) */}
+      {/* Floating Toggle Button */}
       <motion.button
         onClick={() => setOpen((o) => !o)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
         style={{
-          background: open ? '#151515' : '#F5D400',
-          border: '1px solid rgba(245,212,0,0.3)',
-          color: open ? '#F2F2ED' : '#0A0A0A',
+          background: open ? '#161F1B' : '#F8A21A',
+          border: '1px solid rgba(248,162,26,0.4)',
+          color: open ? '#F9FAF6' : '#0D1110',
         }}
         whileHover={{ scale: 1.07 }}
         whileTap={{ scale: 0.95 }}
@@ -182,7 +180,7 @@ export default function Concierge() {
           )}
         </AnimatePresence>
         {!open && unread > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-volt text-black font-mono-data text-[10px] font-bold flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-amber text-black font-mono-data text-[10px] font-bold flex items-center justify-center">
             {unread}
           </span>
         )}
@@ -192,22 +190,22 @@ export default function Concierge() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-24px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-void border border-volt-dim/40"
+            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-24px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-void border border-amber-dim/40"
             style={{ height: '540px' }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 shrink-0 bg-panel border-b border-volt-dim/30">
-              <div className="w-9 h-9 rounded-xl bg-volt/20 border border-volt/40 flex items-center justify-center">
-                <Bot size={18} className="text-volt" />
+            <div className="flex items-center gap-3 px-4 py-3 shrink-0 bg-panel border-b border-amber-dim/30">
+              <div className="w-9 h-9 rounded-xl bg-amber/20 border border-amber/40 flex items-center justify-center">
+                <Bot size={18} className="text-amber" />
               </div>
               <div className="flex-1">
                 <p className="font-body font-semibold text-sm text-primary flex items-center gap-1.5">
-                  Summit Agent <Zap size={12} className="text-volt fill-volt" />
+                  Summit Agent <Zap size={12} className="text-amber fill-amber" />
                 </p>
-                <p className="font-mono-data text-[10px] text-volt">⚡ High-Voltage AI Assistant</p>
+                <p className="font-mono-data text-[10px] text-amber">⚡ Official E-Cell Assistant</p>
               </div>
               <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg text-muted hover:text-primary">
                 <ChevronDown size={16} />
@@ -222,18 +220,18 @@ export default function Concierge() {
                     <div
                       className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
                       style={{
-                        background: msg.role === 'user' ? 'rgba(138,118,0,0.3)' : 'rgba(245,212,0,0.2)',
-                        border: `1px solid ${msg.role === 'user' ? 'rgba(245,212,0,0.3)' : '#F5D400'}`,
+                        background: msg.role === 'user' ? 'rgba(35,78,62,0.4)' : 'rgba(248,162,26,0.2)',
+                        border: `1px solid ${msg.role === 'user' ? '#234E3E' : '#F8A21A'}`,
                       }}
                     >
-                      {msg.role === 'user' ? <User size={13} className="text-volt" /> : <Bot size={13} className="text-volt" />}
+                      {msg.role === 'user' ? <User size={13} className="text-amber" /> : <Bot size={13} className="text-amber" />}
                     </div>
 
                     <div
                       className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed ${
                         msg.role === 'user'
-                          ? 'bg-volt text-black font-semibold rounded-br-none'
-                          : 'bg-panel border-l-4 border-l-volt border-t border-r border-b border-volt-dim/30 text-primary rounded-bl-none'
+                          ? 'bg-amber text-black font-semibold rounded-br-none'
+                          : 'bg-panel border-l-4 border-l-amber border-t border-r border-b border-amber-dim/30 text-primary rounded-bl-none'
                       }`}
                     >
                       {msg.text}
@@ -242,8 +240,8 @@ export default function Concierge() {
 
                   {/* Render Inline Itinerary Card */}
                   {msg.itinerary && (
-                    <div className="mt-3 ml-9 w-[85%] rounded-xl p-4 bg-panel border border-volt/50 shadow-lg space-y-3">
-                      <div className="flex items-center gap-2 text-xs font-mono-data text-volt uppercase">
+                    <div className="mt-3 ml-9 w-[85%] rounded-xl p-4 bg-panel border border-amber/50 shadow-lg space-y-3">
+                      <div className="flex items-center gap-2 text-xs font-mono-data text-amber uppercase font-bold">
                         <Calendar size={14} />
                         <span>{msg.itinerary.title}</span>
                       </div>
@@ -253,7 +251,7 @@ export default function Concierge() {
                           return (
                             <div
                               key={session.id}
-                              className="p-2.5 rounded-lg bg-void border border-volt-dim/30 flex items-center justify-between gap-2"
+                              className="p-2.5 rounded-lg bg-void border border-amber-dim/30 flex items-center justify-between gap-2"
                             >
                               <div className="flex-1 min-w-0">
                                 <p className="font-mono-data text-[10px] text-muted">
@@ -265,8 +263,8 @@ export default function Concierge() {
                                 onClick={() => addToPlan(session)}
                                 className={`px-2 py-1 rounded text-[10px] font-mono-data shrink-0 flex items-center gap-1 transition-all ${
                                   isInPlan
-                                    ? 'bg-volt/20 text-volt border border-volt/40'
-                                    : 'bg-volt text-black font-bold hover:bg-volt/90'
+                                    ? 'bg-amber/20 text-amber border border-amber/40'
+                                    : 'bg-amber text-black font-bold hover:bg-amber/90'
                                 }`}
                               >
                                 {isInPlan ? <Check size={10} /> : <Plus size={10} />}
@@ -286,7 +284,7 @@ export default function Concierge() {
                         <button
                           key={r}
                           onClick={() => sendMessage(r)}
-                          className="px-3 py-1 rounded-full text-xs font-mono-data bg-panel border border-volt-dim/40 text-muted hover:border-volt hover:text-volt transition-all"
+                          className="px-3 py-1 rounded-full text-xs font-mono-data bg-panel border border-amber-dim/40 text-muted hover:border-amber hover:text-amber transition-all"
                         >
                           {r}
                         </button>
@@ -295,12 +293,12 @@ export default function Concierge() {
                   )}
                 </div>
               ))}
-              {isTyping && <p className="text-xs font-mono-data text-volt ml-9">Agent is planning...</p>}
+              {isTyping && <p className="text-xs font-mono-data text-amber ml-9">Agent is planning...</p>}
               <div ref={bottomRef} />
             </div>
 
             {/* Input Form */}
-            <div className="p-3 bg-panel border-t border-volt-dim/30">
+            <div className="p-3 bg-panel border-t border-amber-dim/30">
               <form onSubmit={(e) => { e.preventDefault(); sendMessage(input) }} className="flex items-center gap-2">
                 <input
                   ref={inputRef}
@@ -308,12 +306,12 @@ export default function Concierge() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about tracks, speakers, or build an itinerary..."
-                  className="flex-1 bg-void border border-volt-dim/40 rounded-lg px-3 py-2 text-sm text-primary placeholder:text-muted/60 outline-none focus:border-volt font-body"
+                  className="flex-1 bg-void border border-amber-dim/40 rounded-lg px-3 py-2 text-sm text-primary placeholder:text-muted/60 outline-none focus:border-amber font-body"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
-                  className="w-9 h-9 rounded-lg bg-volt text-black flex items-center justify-center disabled:opacity-40"
+                  className="w-9 h-9 rounded-lg bg-amber text-black flex items-center justify-center disabled:opacity-40"
                 >
                   <Send size={15} />
                 </button>
@@ -332,11 +330,11 @@ export default function Concierge() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-md bg-panel border-l border-volt-dim/40 h-full flex flex-col p-6 shadow-2xl relative"
+              className="w-full max-w-md bg-panel border-l border-amber-dim/40 h-full flex flex-col p-6 shadow-2xl relative"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-volt-dim/30 mb-6">
+              <div className="flex items-center justify-between pb-4 border-b border-amber-dim/30 mb-6">
                 <div className="flex items-center gap-2">
-                  <Bookmark size={18} className="text-volt fill-volt/20" />
+                  <Bookmark size={18} className="text-amber fill-amber/20" />
                   <h3 className="font-display text-2xl text-primary">My Personal Itinerary</h3>
                 </div>
                 <button onClick={() => setPlanOpen(false)} className="p-2 rounded-lg text-muted hover:text-primary">
@@ -347,7 +345,7 @@ export default function Concierge() {
               <div className="flex-1 overflow-y-auto space-y-3">
                 {myPlan.length === 0 ? (
                   <div className="py-16 text-center text-muted font-body text-sm">
-                    <Calendar size={36} className="mx-auto mb-3 opacity-30 text-volt" />
+                    <Calendar size={36} className="mx-auto mb-3 opacity-30 text-amber" />
                     <p>Your plan is empty.</p>
                     <p className="text-xs text-muted/70 mt-1">Ask Summit Agent in chat to build a custom itinerary for you!</p>
                   </div>
@@ -355,10 +353,10 @@ export default function Concierge() {
                   myPlan.map((session) => (
                     <div
                       key={session.id}
-                      className="p-4 rounded-xl bg-void border border-volt-dim/30 flex items-start justify-between gap-3"
+                      className="p-4 rounded-xl bg-void border border-amber-dim/30 flex items-start justify-between gap-3"
                     >
                       <div>
-                        <span className="font-mono-data text-[10px] uppercase text-volt block mb-1">
+                        <span className="font-mono-data text-[10px] uppercase text-amber block mb-1 font-bold">
                           [{session.day}] {session.time}
                         </span>
                         <h4 className="font-body font-semibold text-sm text-primary mb-1">{session.title}</h4>
@@ -378,7 +376,7 @@ export default function Concierge() {
               </div>
 
               {myPlan.length > 0 && (
-                <div className="pt-4 border-t border-volt-dim/30 mt-4 flex justify-between items-center">
+                <div className="pt-4 border-t border-amber-dim/30 mt-4 flex justify-between items-center">
                   <span className="font-mono-data text-xs text-muted">{myPlan.length} Saved Sessions</span>
                   <button
                     onClick={() => savePlan([])}

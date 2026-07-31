@@ -5,14 +5,17 @@
 @tailwind utilities;
 
 :root {
-  --bg-void: #0A0A0A;
-  --bg-panel: #151515;
-  --accent-volt: #F5D400;
-  --accent-volt-dim: #8A7600;
-  --text-primary: #F2F2ED;
-  --text-muted: #8C8C86;
-  --border-subtle: rgba(138, 118, 0, 0.2);
-  --border-panel: rgba(140, 140, 134, 0.12);
+  --bg-void: #0D1110;
+  --bg-panel: #161F1B;
+  --accent-green: #1E4637;
+  --accent-orange: #FF9900;
+  --accent-orange-dim: #B36B00;
+  --accent-amber: #FF9900;
+  --accent-volt: #FF9900;
+  --text-primary: #F9FAF6;
+  --text-muted: #7C8E85;
+  --border-subtle: rgba(179, 107, 0, 0.3);
+  --border-panel: rgba(124, 142, 133, 0.15);
 }
 
 * {
@@ -58,19 +61,19 @@ body {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg-void); }
-::-webkit-scrollbar-thumb { background: var(--accent-volt-dim); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-volt); }
+::-webkit-scrollbar-thumb { background: var(--accent-orange-dim); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-orange); }
 
 /* Focus states */
 :focus-visible {
-  outline: 2px solid var(--accent-volt);
+  outline: 2px solid var(--accent-orange);
   outline-offset: 3px;
   border-radius: 3px;
 }
 
 /* Selection */
 ::selection {
-  background: rgba(245, 212, 0, 0.3);
+  background: rgba(255, 153, 0, 0.3);
   color: var(--text-primary);
 }
 
@@ -78,44 +81,41 @@ body {
 .font-display { font-family: 'Bebas Neue', sans-serif; }
 .font-mono-data { font-family: 'Space Mono', 'JetBrains Mono', monospace; }
 
-.text-stroke-volt {
-  -webkit-text-stroke: 2px #F5D400;
+.text-stroke-amber, .text-stroke-volt, .text-stroke-orange {
+  -webkit-text-stroke: 2px #FF9900;
   color: transparent;
 }
 
 /* ─── Gradient utilities ─── */
-.gradient-volt {
-  background: linear-gradient(135deg, #F5D400 0%, #FFB700 100%);
+.gradient-orange {
+  background: linear-gradient(135deg, #FF9900 0%, #E67E00 100%);
 }
-.gradient-text-volt {
-  background: linear-gradient(135deg, #F5D400, #FFB700);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.gradient-green {
+  background: linear-gradient(135deg, #1E4637 0%, #122F24 100%);
 }
 
 /* ─── Glass / Panel ─── */
 .glass {
-  background: rgba(21, 21, 21, 0.8);
+  background: rgba(22, 31, 27, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
 }
 
 /* ─── Glow effects ─── */
-.glow-volt {
-  box-shadow: 0 0 20px rgba(245, 212, 0, 0.35), 0 0 40px rgba(245, 212, 0, 0.12);
+.glow-amber, .glow-volt, .glow-orange {
+  box-shadow: 0 0 24px rgba(255, 153, 0, 0.4), 0 0 48px rgba(255, 153, 0, 0.15);
 }
 
 /* ─── Button base ─── */
-.btn-ignite, .btn-volt {
+.btn-volt, .btn-amber, .btn-orange {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 14px 32px;
-  background: var(--accent-volt);
-  color: #0A0A0A;
+  background: var(--accent-orange);
+  color: #0D1110;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 0.9rem;
@@ -126,7 +126,7 @@ body {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
 }
-.btn-volt::after {
+.btn-orange::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -134,12 +134,12 @@ body {
   opacity: 0;
   transition: opacity 0.2s;
 }
-.btn-volt:hover::after { opacity: 1; }
-.btn-volt:hover {
+.btn-orange:hover::after { opacity: 1; }
+.btn-orange:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(245, 212, 0, 0.5);
+  box-shadow: 0 8px 24px rgba(255, 153, 0, 0.5);
 }
-.btn-volt:active { transform: translateY(0); }
+.btn-orange:active { transform: translateY(0); }
 
 .btn-ghost {
   display: inline-flex;
@@ -152,22 +152,22 @@ body {
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.04em;
-  border: 1px solid rgba(138, 118, 0, 0.4);
+  border: 1px solid rgba(179, 107, 0, 0.4);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .btn-ghost:hover {
-  border-color: var(--accent-volt);
-  color: var(--accent-volt);
-  background: rgba(245, 212, 0, 0.06);
+  border-color: var(--accent-orange);
+  color: var(--accent-orange);
+  background: rgba(255, 153, 0, 0.08);
 }
 
 /* ─── Current Line Accent ─── */
 .current-line-horizontal {
   height: 2px;
-  background: linear-gradient(90deg, transparent, #F5D400 50%, transparent);
-  box-shadow: 0 0 10px rgba(245, 212, 0, 0.6);
+  background: linear-gradient(90deg, transparent, #FF9900 50%, transparent);
+  box-shadow: 0 0 12px rgba(255, 153, 0, 0.6);
 }
 
 /* ─── Section layout ─── */
@@ -203,8 +203,8 @@ body {
 
 /* ─── Highlight pulse ─── */
 @keyframes highlightPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 212, 0, 0); }
-  50% { box-shadow: 0 0 0 4px rgba(245, 212, 0, 0.4), 0 0 28px rgba(245, 212, 0, 0.3); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(255, 153, 0, 0.4), 0 0 28px rgba(255, 153, 0, 0.3); }
 }
 .highlight-active {
   animation: highlightPulse 1.2s ease 3;

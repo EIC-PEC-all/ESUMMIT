@@ -1,6 +1,6 @@
 'use client'
 // components/Providers/OpeningLoader.tsx
-// Snappy 3-Second High-Voltage Opening Intro Sequence for PEC Summit
+// 3-Second High-Voltage Opening Intro Sequence for PEC Summit (Forest Green & Vibrant Orange Theme)
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -12,7 +12,6 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
   const [phase, setPhase] = useState<'charging' | 'title' | 'discharge'>('charging')
 
   useEffect(() => {
-    // 1. Fast Progress Counter Animation (0 to 100% in 1.8 seconds)
     const startTime = Date.now()
     const duration = 1800 // 1.8s for counter phase
 
@@ -27,17 +26,14 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
       }
     }, 20)
 
-    // 2. Title Reveal Phase at 1.8s
     const titleTimer = setTimeout(() => {
       setPhase('title')
     }, 1800)
 
-    // 3. Electric Discharge Outro at 2.5s
     const dischargeTimer = setTimeout(() => {
       setPhase('discharge')
     }, 2500)
 
-    // 4. Finish Loader at exactly 3.0s (3 seconds total duration)
     const finishTimer = setTimeout(() => {
       setLoading(false)
     }, 3000)
@@ -65,12 +61,12 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
             }}
             className="fixed inset-0 z-[9999] bg-void flex flex-col items-center justify-center p-6 overflow-hidden select-none"
           >
-            {/* Background Circuit Grid & Pulse Rays */}
-            <div className="absolute inset-0 bg-[radial-gradient(#F5D400_1px,transparent_1px)] opacity-15 [background-size:32px_32px] pointer-events-none" />
+            {/* Background Grid & Pulse Rays */}
+            <div className="absolute inset-0 bg-[radial-gradient(#FF9900_1px,transparent_1px)] opacity-15 [background-size:32px_32px] pointer-events-none" />
 
             {/* Glowing Center Radial Aura */}
             <motion.div
-              className="absolute w-[600px] h-[600px] rounded-full bg-volt/15 blur-[140px] pointer-events-none"
+              className="absolute w-[600px] h-[600px] rounded-full bg-orange/15 blur-[140px] pointer-events-none"
               animate={{
                 scale: [1, 1.2, 1],
                 opacity: [0.4, 0.8, 0.4],
@@ -83,9 +79,9 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
               initial={{ opacity: 0, y: -16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="absolute top-10 flex items-center gap-2 px-4 py-1.5 rounded-full bg-panel border border-volt-dim/40 font-mono-data text-xs uppercase tracking-[0.25em] text-volt shadow-lg"
+              className="absolute top-10 flex items-center gap-2 px-4 py-1.5 rounded-full bg-green/40 border border-green font-mono-data text-xs uppercase tracking-[0.25em] text-orange shadow-lg"
             >
-              <Zap size={14} className="text-volt fill-volt animate-pulse" />
+              <Zap size={14} className="text-orange fill-orange animate-pulse" />
               <span>E-Cell PEC · Chandigarh</span>
             </motion.div>
 
@@ -102,32 +98,32 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
                 >
                   {/* Glowing ⚡ Emblem Ring */}
                   <motion.div
-                    className="w-20 h-20 rounded-2xl bg-panel border-2 border-volt flex items-center justify-center mb-6 shadow-[0_0_36px_rgba(245,212,0,0.4)]"
+                    className="w-20 h-20 rounded-2xl bg-panel border-2 border-orange flex items-center justify-center mb-6 shadow-[0_0_36px_rgba(255,153,0,0.4)]"
                     animate={{ rotate: [0, 180, 360] }}
                     transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
                   >
-                    <Zap size={36} className="text-volt fill-volt" />
+                    <Zap size={36} className="text-orange fill-orange" />
                   </motion.div>
 
                   {/* 110px Digital Readout Counter */}
                   <div className="font-display leading-none mb-3 tracking-tighter" style={{ fontSize: 'clamp(72px, 12vw, 120px)' }}>
                     <span className="text-primary">{String(progress).padStart(2, '0')}</span>
-                    <span className="text-volt">%</span>
+                    <span className="text-orange">%</span>
                   </div>
 
                   {/* Dynamic Status Text */}
                   <div className="h-6 mb-6">
-                    <p className="font-mono-data text-xs uppercase tracking-[0.25em] text-volt font-bold">
-                      {progress < 40 && '⚡ CHARGING VOLTAGE CORE...'}
-                      {progress >= 40 && progress < 85 && '⚡ POWERING E-CELL PEC...'}
+                    <p className="font-mono-data text-xs uppercase tracking-[0.25em] text-orange font-bold">
+                      {progress < 40 && '⚡ CHARGING E-CELL PEC CORE...'}
+                      {progress >= 40 && progress < 85 && '⚡ POWERING SUMMIT ARCHITECTURE...'}
                       {progress >= 85 && '⚡ IGNITION READY'}
                     </p>
                   </div>
 
-                  {/* Electric Progress Bar */}
-                  <div className="w-72 sm:w-80 h-2.5 rounded-full bg-panel border border-volt-dim/50 p-0.5 overflow-hidden shadow-inner">
+                  {/* Orange Progress Bar */}
+                  <div className="w-72 sm:w-80 h-2.5 rounded-full bg-panel border border-orange-dim/50 p-0.5 overflow-hidden shadow-inner">
                     <motion.div
-                      className="h-full rounded-full bg-volt shadow-[0_0_20px_#F5D400]"
+                      className="h-full rounded-full bg-orange shadow-[0_0_20px_#FF9900]"
                       style={{ width: `${progress}%` }}
                     />
                   </div>
@@ -142,10 +138,10 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
                   transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   className="flex flex-col items-center"
                 >
-                  <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-volt/20 border border-volt mb-4">
-                    <Sparkles size={14} className="text-volt" />
-                    <span className="font-mono-data text-xs uppercase tracking-widest text-volt font-bold">
-                      NORTH INDIA’S FLAGSHIP SUMMIT
+                  <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-orange/20 border border-orange mb-4">
+                    <Sparkles size={14} className="text-orange" />
+                    <span className="font-mono-data text-xs uppercase tracking-widest text-orange font-bold">
+                      FLAGSHIP ENTREPRENEURSHIP SUMMIT
                     </span>
                   </div>
 
@@ -154,10 +150,10 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
                     style={{ fontSize: 'clamp(56px, 10vw, 110px)' }}
                   >
                     <span className="block text-primary">PEC</span>
-                    <span className="block text-stroke-volt tracking-tight">SUMMIT 2025</span>
+                    <span className="block text-stroke-orange tracking-tight">SUMMIT 2025</span>
                   </h1>
 
-                  <p className="font-mono-data text-xs uppercase tracking-[0.25em] text-volt font-bold">
+                  <p className="font-mono-data text-xs uppercase tracking-[0.25em] text-orange font-bold">
                     ⚡ Ignition Initiated
                   </p>
                 </motion.div>
@@ -172,7 +168,7 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
               className="absolute bottom-8 flex items-center gap-4 font-mono-data text-xs text-muted"
             >
               <span>Punjab Engineering College</span>
-              <span className="text-volt font-bold">•</span>
+              <span className="text-orange font-bold">•</span>
               <span>Chandigarh</span>
             </motion.div>
 
@@ -182,7 +178,7 @@ export default function OpeningLoader({ children }: { children: React.ReactNode 
                 initial={{ scale: 0.2, opacity: 1 }}
                 animate={{ scale: 3, opacity: 0 }}
                 transition={{ duration: 0.5, ease: 'easeOut' }}
-                className="absolute w-80 h-80 rounded-full border-4 border-volt pointer-events-none shadow-[0_0_60px_#F5D400]"
+                className="absolute w-80 h-80 rounded-full border-4 border-orange pointer-events-none shadow-[0_0_60px_#FF9900]"
               />
             )}
           </motion.div>

@@ -1,6 +1,6 @@
 'use client'
 // components/Footer/index.tsx
-// Register CTA + email capture + social links + credits (Voltage Theme)
+// Register CTA + email capture + social links + credits (Forest Green & Vibrant Orange Theme)
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
@@ -18,7 +18,7 @@ function EmailCapture() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       toast.error('Please enter a valid email address.', {
-        style: { background: '#151515', color: '#F2F2ED' },
+        style: { background: '#161F1B', color: '#F9FAF6' },
       })
       return
     }
@@ -31,11 +31,11 @@ function EmailCapture() {
     toast.success(`${email} — you're on the list!`, {
       duration: 4000,
       style: {
-        background: '#151515',
-        color: '#F2F2ED',
-        border: '1px solid #F5D400',
+        background: '#161F1B',
+        color: '#F9FAF6',
+        border: '1px solid #FF9900',
       },
-      iconTheme: { primary: '#F5D400', secondary: '#0A0A0A' },
+      iconTheme: { primary: '#FF9900', secondary: '#0D1110' },
     })
   }
 
@@ -47,12 +47,12 @@ function EmailCapture() {
         className="flex items-center gap-3 py-4"
       >
         <div
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-volt/20 border border-volt/40 text-volt"
+          className="w-8 h-8 rounded-full flex items-center justify-center bg-orange/20 border border-orange/40 text-orange"
           aria-hidden="true"
         >
           <Send size={14} />
         </div>
-        <p className="font-mono-data text-sm text-volt">
+        <p className="font-mono-data text-sm text-orange font-bold">
           You&apos;re on the list. Watch your inbox.
         </p>
       </motion.div>
@@ -69,12 +69,12 @@ function EmailCapture() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 font-body text-sm outline-none bg-void border border-volt-dim/30 rounded-lg px-4 py-3 text-primary focus:border-volt"
+        className="flex-1 font-body text-sm outline-none bg-void border border-orange-dim/30 rounded-lg px-4 py-3 text-primary focus:border-orange"
         aria-label="Enter your email to get PEC Summit updates"
       />
       <button
         type="submit"
-        className="btn-volt"
+        className="btn-orange"
         id="footer-subscribe-btn"
         aria-label="Subscribe to PEC Summit updates"
       >
@@ -104,7 +104,7 @@ export default function Footer() {
   return (
     <footer
       id="register"
-      className="bg-panel border-t border-volt-dim/30 relative"
+      className="bg-panel border-t border-orange-dim/30 relative"
       aria-labelledby="footer-cta-heading"
     >
       {/* Current Line Accent */}
@@ -114,7 +114,7 @@ export default function Footer() {
       <div
         className="py-24 lg:py-32"
         style={{
-          background: `linear-gradient(160deg, rgba(245,212,0,0.05) 0%, transparent 60%)`,
+          background: `linear-gradient(160deg, rgba(255,153,0,0.05) 0%, transparent 60%)`,
         }}
       >
         <div className="section-container">
@@ -126,9 +126,9 @@ export default function Footer() {
               transition={{ duration: 0.7 }}
             >
               <div className="flex items-center gap-2 mb-4">
-                <Zap size={16} className="text-volt fill-volt" />
-                <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-volt">
-                  Ready to Charge?
+                <Zap size={16} className="text-orange fill-orange" />
+                <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-orange font-bold">
+                  Official E-Cell PEC Summit
                 </p>
               </div>
 
@@ -138,16 +138,16 @@ export default function Footer() {
                 style={{ fontSize: 'clamp(48px, 7vw, 96px)', color: 'var(--text-primary)' }}
               >
                 REGISTER<br />
-                <span className="text-volt">NOW</span>
+                <span className="text-orange">NOW</span>
               </h2>
               <p className="font-body text-base mb-8 max-w-md leading-relaxed text-muted">
-                Early-bird passes are limited. Lock in your spot and be part of North India&apos;s premier high-voltage entrepreneurship summit.
+                Early-bird passes are limited. Lock in your spot and be part of North India&apos;s premier entrepreneurship summit.
               </p>
 
               <div className="flex flex-wrap gap-4 mb-12">
                 <Link
                   href="/register"
-                  className="btn-volt text-base py-4 px-10"
+                  className="btn-orange text-base py-4 px-10"
                   id="footer-register-btn"
                   aria-label="Open PEC Summit Registration Dashboard"
                 >
@@ -166,7 +166,7 @@ export default function Footer() {
 
               {/* Email subscribe */}
               <div className="mb-6">
-                <p className="font-mono-data text-xs uppercase tracking-widest mb-3 text-volt">
+                <p className="font-mono-data text-xs uppercase tracking-widest mb-3 text-orange font-bold">
                   ⚡ Get Summit Updates
                 </p>
                 <EmailCapture />
@@ -177,12 +177,12 @@ export default function Footer() {
       </div>
 
       {/* Footer bottom bar */}
-      <div className="py-8 border-t border-[#8C8C86]/10">
+      <div className="py-8 border-t border-[#7C8E85]/15">
         <div className="section-container flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           {/* Brand */}
           <div>
             <p className="font-display text-2xl mb-1 text-primary flex items-center gap-1">
-              PEC <span className="text-volt">SUMMIT</span>
+              PEC <span className="text-orange">SUMMIT</span>
             </p>
             <p className="font-mono-data text-xs text-muted">
               © {new Date().getFullYear()} E-Cell PEC · Punjab Engineering College, Chandigarh
@@ -196,7 +196,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="font-body text-sm text-muted hover:text-volt transition-colors duration-150"
+                    className="font-body text-sm text-muted hover:text-orange transition-colors duration-150"
                   >
                     {link.label}
                   </a>
@@ -215,7 +215,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label={label}
                 role="listitem"
-                className="w-9 h-9 rounded-lg flex items-center justify-center bg-void border border-volt-dim/30 text-muted hover:text-volt hover:border-volt transition-all"
+                className="w-9 h-9 rounded-lg flex items-center justify-center bg-void border border-orange-dim/30 text-muted hover:text-orange hover:border-orange transition-all"
               >
                 <Icon size={16} aria-hidden="true" />
               </a>

@@ -47,7 +47,7 @@ function DigitGroup({ value, label }: { value: string; label: string }) {
         {value.split('').map((digit, i) => (
           <div key={`${key}-${i}`} className="digit-wrapper">
             <span
-              className="digit font-mono-data text-4xl sm:text-5xl lg:text-6xl font-bold text-volt block leading-none"
+              className="digit font-mono-data text-4xl sm:text-5xl lg:text-6xl font-bold text-orange block leading-none"
             >
               {digit}
             </span>
@@ -81,11 +81,11 @@ export default function Countdown({ targetISO }: { targetISO: string }) {
       aria-label="Countdown to PEC Summit"
     >
       <DigitGroup value={timeLeft.days} label="days" />
-      <span className="font-mono-data text-3xl font-bold pb-5 text-volt">:</span>
+      <span className="font-mono-data text-3xl font-bold pb-5 text-orange">:</span>
       <DigitGroup value={timeLeft.hours} label="hours" />
-      <span className="font-mono-data text-3xl font-bold pb-5 text-volt">:</span>
+      <span className="font-mono-data text-3xl font-bold pb-5 text-orange">:</span>
       <DigitGroup value={timeLeft.minutes} label="min" />
-      <span className="font-mono-data text-3xl font-bold pb-5 text-volt">:</span>
+      <span className="font-mono-data text-3xl font-bold pb-5 text-orange">:</span>
       <DigitGroup value={timeLeft.seconds} label="sec" />
     </div>
   )

@@ -1,6 +1,6 @@
 'use client'
 // components/Hero/index.tsx
-// High-Voltage Hero: Current-Line Trace-In + Split-Text Headline Reveal + 3D Materializing Last
+// Green & Orange Logo Theme Hero: Current-Line Trace-In + Split-Text Headline Reveal + 3D Materializing Last
 
 import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
@@ -15,7 +15,7 @@ const HeroScene = dynamic(() => import('./HeroScene'), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center opacity-30">
-      <div className="w-32 h-32 border border-[#F5D400] rounded-full animate-pulse" />
+      <div className="w-32 h-32 border border-[#FF9900] rounded-full animate-pulse" />
     </div>
   ),
 })
@@ -52,7 +52,6 @@ export default function Hero() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Precise Choreographed Opening Sequence: Eyebrow -> Split-Text Headline -> Meta & Countdown -> 3D Materializes LAST
   useEffect(() => {
     if (prefersReduced) {
       setSceneReady(true)
@@ -60,25 +59,17 @@ export default function Hero() {
     }
 
     const runOpeningSequence = async () => {
-      // 1. Current-line trace
       await animate('[data-hero-line]', { width: ['0%', '100%'] }, { duration: 0.8, ease: 'easeOut' })
-      
-      // 2. Eyebrow
       await animate('[data-hero-eyebrow]', { opacity: [0, 1], y: [16, 0] }, { duration: 0.4 })
-      
-      // 3. Split-text headline words
       await animate(
         '[data-hero-split-text]',
         { opacity: [0, 1], y: [48, 0], filter: ['blur(8px)', 'blur(0px)'] },
         { duration: 0.7, delay: stagger(0.12), ease: [0.16, 1, 0.3, 1] }
       )
-      
-      // 4. Subtitle & Metadata
       await animate('[data-hero-sub]', { opacity: [0, 1], y: [16, 0] }, { duration: 0.4 })
       await animate('[data-hero-meta]', { opacity: [0, 1], y: [12, 0] }, { duration: 0.4 })
       await animate('[data-hero-cta]', { opacity: [0, 1], y: [12, 0] }, { duration: 0.4, delay: stagger(0.08) })
       
-      // 5. 3D Materializing LAST with electric scale-in
       setTimeout(() => {
         setSceneReady(true)
       }, 200)
@@ -96,18 +87,18 @@ export default function Hero() {
       style={{ background: 'var(--bg-void)' }}
       aria-label="PEC Summit Hero"
     >
-      {/* 1. Animated Current Line Top Border (Trace-In) */}
+      {/* Current Line Top Border */}
       <motion.div
         data-hero-line
-        className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-[#F5D400] to-transparent shadow-[0_0_12px_#F5D400] pointer-events-none z-20"
+        className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF9900] to-transparent shadow-[0_0_12px_#FF9900] pointer-events-none z-20"
         style={{ width: prefersReduced ? '100%' : '0%' }}
       />
 
-      {/* Radial Voltage Glow */}
+      {/* Radial Orange Glow */}
       <div
         className="absolute right-0 top-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full pointer-events-none opacity-20"
         style={{
-          background: 'radial-gradient(circle, rgba(245,212,0,0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(255,153,0,0.15) 0%, transparent 70%)',
           transform: 'translateY(-50%) translateX(20%)',
         }}
       />
@@ -116,22 +107,19 @@ export default function Hero() {
 
         {/* Left: Text content */}
         <div className="flex-1 lg:pr-8 z-10">
-          {/* Eyebrow */}
+          {/* Eyebrow with Forest Green Background + Vibrant Orange Icon */}
           <div
             data-hero-eyebrow
-            className="mb-6 flex items-center gap-3"
+            className="mb-6 inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-green/40 border border-green text-orange shadow-lg"
             style={{ opacity: prefersReduced ? 1 : 0 }}
           >
-            <Zap size={14} className="text-volt" />
-            <span
-              className="font-mono-data text-xs uppercase tracking-[0.25em]"
-              style={{ color: 'var(--accent-volt)' }}
-            >
+            <Zap size={14} className="text-orange fill-orange" />
+            <span className="font-mono-data text-xs uppercase tracking-[0.25em] font-bold">
               E-Cell PEC &nbsp;·&nbsp; Chandigarh
             </span>
           </div>
 
-          {/* 2. Split-Text Headline Reveal */}
+          {/* Headline with Vibrant Orange Outlined Text */}
           <h1
             className="font-display mb-6 leading-none"
             style={{
@@ -149,7 +137,7 @@ export default function Hero() {
             </span>
             <span
               data-hero-split-text
-              className="block text-stroke-volt"
+              className="block text-stroke-orange"
               style={{ opacity: prefersReduced ? 1 : 0 }}
             >
               SUMMIT
@@ -162,7 +150,7 @@ export default function Hero() {
             className="text-lg sm:text-xl max-w-md mb-8 leading-relaxed text-muted"
             style={{ opacity: prefersReduced ? 1 : 0 }}
           >
-            North India&apos;s boldest high-voltage platform for student founders and campus innovators.
+            North India&apos;s flagship entrepreneurship summit powered by E-Cell PEC.
           </p>
 
           {/* Date + Venue */}
@@ -172,14 +160,14 @@ export default function Hero() {
             style={{ opacity: prefersReduced ? 1 : 0 }}
           >
             <div className="flex items-center gap-2">
-              <Calendar size={14} className="text-volt" />
+              <Calendar size={14} className="text-orange" />
               <span className="font-mono-data text-sm text-muted">
                 {FEST_META.dates}
                 <span className="ml-2 text-xs opacity-50">{"// TODO: confirm"}</span>
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <MapPin size={14} className="text-volt" />
+              <MapPin size={14} className="text-orange" />
               <span className="font-mono-data text-sm text-muted">
                 {FEST_META.venue}
               </span>
@@ -192,7 +180,7 @@ export default function Hero() {
             className="mb-10"
             style={{ opacity: prefersReduced ? 1 : 0 }}
           >
-            <p className="font-mono-data text-xs uppercase tracking-widest mb-3 text-volt font-bold">
+            <p className="font-mono-data text-xs uppercase tracking-widest mb-3 text-orange font-bold flex items-center gap-1">
               ⚡ Countdown to Ignition
             </p>
             <Countdown targetISO={FEST_META.countdownTarget} />
@@ -206,7 +194,7 @@ export default function Hero() {
           >
             <Link
               href="/passes"
-              className="btn-volt"
+              className="btn-orange"
               id="hero-passes-btn"
             >
               <Ticket size={16} />
@@ -222,7 +210,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right: 3. 3D Scene Materializing LAST */}
+        {/* Right: 3D Scene Materializes Last */}
         <div className="flex-1 relative flex items-center justify-center lg:justify-end">
           <motion.div
             className="relative w-full max-w-xl"
@@ -235,7 +223,7 @@ export default function Hero() {
               <HeroScene mouse={mouseRef} scrollY={scrollYRef} />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <div className="relative w-48 h-48 rounded-full border border-volt/40 flex items-center justify-center font-display text-5xl text-volt">
+                <div className="relative w-48 h-48 rounded-full border border-orange/40 flex items-center justify-center font-display text-5xl text-orange">
                   ⚡
                 </div>
               </div>
@@ -251,11 +239,11 @@ export default function Hero() {
         animate={{ opacity: 0.7 }}
         transition={{ delay: 2, duration: 1 }}
       >
-        <span className="font-mono-data text-[10px] uppercase tracking-widest text-volt">
+        <span className="font-mono-data text-[10px] uppercase tracking-widest text-orange font-bold">
           Scroll
         </span>
         <motion.div
-          className="w-px h-10 bg-gradient-to-b from-volt to-transparent"
+          className="w-px h-10 bg-gradient-to-b from-orange to-transparent"
           animate={{ scaleY: [1, 0.3, 1] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
         />

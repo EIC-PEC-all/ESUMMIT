@@ -1,6 +1,6 @@
 'use client'
 // components/Nav/index.tsx
-// Sticky transparent-to-solid navigation bar with Voltage styling & direct Register subpage link
+// Sticky transparent-to-solid navigation bar with Forest Green & Vibrant Orange Theme
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
@@ -44,9 +44,9 @@ export default function Nav() {
     <header
       className="fixed top-0 left-0 right-0 z-40 transition-all duration-300"
       style={{
-        background: scrolled ? 'rgba(10,10,10,0.92)' : 'transparent',
+        background: scrolled ? 'rgba(13,17,16,0.94)' : 'transparent',
         backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(138,118,0,0.25)' : '1px solid transparent',
+        borderBottom: scrolled ? '1px solid rgba(179,107,0,0.3)' : '1px solid transparent',
       }}
     >
       <div className="section-container flex items-center justify-between h-16">
@@ -57,9 +57,9 @@ export default function Nav() {
           style={{ color: 'var(--text-primary)' }}
           aria-label="E-Summit — Home"
         >
-          <Zap size={18} className="text-volt" />
+          <Zap size={18} className="text-orange fill-orange" />
           <span>E-</span>
-          <span className="text-volt">SUMMIT</span>
+          <span className="text-orange">SUMMIT</span>
         </Link>
 
         {/* Desktop nav */}
@@ -72,15 +72,15 @@ export default function Nav() {
                 href={targetHref}
                 onClick={(e) => handleItemClick(e, item)}
                 className={`font-body text-sm transition-colors duration-150 flex items-center gap-1.5 ${
-                  item.highlight ? 'text-volt font-bold' : ''
+                  item.highlight ? 'text-orange font-bold' : ''
                 }`}
-                style={{ color: item.highlight ? 'var(--accent-volt)' : 'var(--text-muted)' }}
+                style={{ color: item.highlight ? 'var(--accent-orange)' : 'var(--text-muted)' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
                 onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = item.highlight ? 'var(--accent-volt)' : 'var(--text-muted)')
+                  (e.currentTarget.style.color = item.highlight ? 'var(--accent-orange)' : 'var(--text-muted)')
                 }
               >
-                {item.highlight && <UserCheck size={14} className="text-volt" />}
+                {item.highlight && <UserCheck size={14} className="text-orange" />}
                 {item.label}
               </Link>
             )
@@ -93,9 +93,9 @@ export default function Nav() {
             href="/passes"
             className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
             style={{
-              background: 'rgba(245,212,0,0.12)',
-              color: 'var(--accent-volt)',
-              border: '1px solid rgba(245,212,0,0.4)',
+              background: 'rgba(255,153,0,0.12)',
+              color: 'var(--accent-orange)',
+              border: '1px solid rgba(255,153,0,0.4)',
             }}
           >
             <Ticket size={14} />
@@ -104,7 +104,7 @@ export default function Nav() {
 
           <Link
             href="/register"
-            className="hidden md:inline-flex btn-volt text-xs py-2 px-4"
+            className="hidden md:inline-flex btn-orange text-xs py-2 px-4"
             id="nav-register-btn"
             aria-label="Register for PEC Summit Dashboard"
           >
@@ -130,7 +130,7 @@ export default function Nav() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden px-6 pb-4 pt-2"
-          style={{ background: 'rgba(10,10,10,0.96)', borderBottom: '1px solid rgba(138,118,0,0.3)' }}
+          style={{ background: 'rgba(13,17,16,0.96)', borderBottom: '1px solid rgba(179,107,0,0.3)' }}
         >
           <nav aria-label="Mobile navigation">
             {NAV_ITEMS.map((item) => {
@@ -141,17 +141,17 @@ export default function Nav() {
                   href={targetHref}
                   onClick={(e) => handleItemClick(e, item)}
                   className="block py-3 font-body text-base border-b flex items-center justify-between"
-                  style={{ color: item.highlight ? 'var(--accent-volt)' : 'var(--text-muted)', borderColor: 'rgba(140,140,134,0.1)' }}
+                  style={{ color: item.highlight ? 'var(--accent-orange)' : 'var(--text-muted)', borderColor: 'rgba(124,142,133,0.15)' }}
                 >
                   <span>{item.label}</span>
-                  {item.highlight && <UserCheck size={16} className="text-volt" />}
+                  {item.highlight && <UserCheck size={16} className="text-orange" />}
                 </Link>
               )
             })}
             <Link
               href="/register"
               onClick={() => setMenuOpen(false)}
-              className="btn-volt w-full justify-center mt-4 text-sm py-3"
+              className="btn-orange w-full justify-center mt-4 text-sm py-3"
               id="nav-mobile-register-btn"
             >
               Open Registration Dashboard
