@@ -14,6 +14,8 @@ module.exports = {
         orange: '#FF9900',        // official logo vibrant orange-amber
         amber: '#FF9900',         // alias for vibrant orange
         volt: '#FF9900',          // alias for vibrant orange
+        silver: '#E5E7EB',        // high-shine silver metallic
+        'silver-dim': '#9CA3AF',  // muted silver slate
         'orange-dim': '#B36B00',  // muted orange border
         'volt-dim': '#B36B00',    // muted orange border alias
         primary: '#F9FAF6',       // cream off-white text
