@@ -1,13 +1,13 @@
 'use client'
 // components/Hero/HeroScene.tsx
-// High-Voltage 3D Set-Piece: Extruded E-Cell PEC Logo Gear & Orbiting 3D "PEC" / "E-SUMMIT" Badges (Black & Electric Yellow Theme)
+// R3F 3D set-piece: Extruded E-Cell PEC Logo Gear, Pulsing Lightbulb Core, & Orbiting 3D "PEC" / "E-SUMMIT" Badges (Forest Green & Vibrant Orange Theme)
 
 import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, Html } from '@react-three/drei'
 import * as THREE from 'three'
 
-// 3D Gear Geometry
+// 3D Gear Geometry (Forest Green Body with Extrusion)
 function LogoGear() {
   const gearShape = useMemo(() => {
     const shape = new THREE.Shape()
@@ -58,9 +58,9 @@ function LogoGear() {
   return (
     <mesh geometry={new THREE.ExtrudeGeometry(gearShape, extrudeSettings)}>
       <meshPhongMaterial
-        color="#151515"
-        emissive="#0A0A0A"
-        specular="#F5D400"
+        color="#1E4637"
+        emissive="#0D241B"
+        specular="#FF9900"
         shininess={100}
         flatShading
       />
@@ -119,8 +119,8 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
         <mesh ref={bulbRef} position={[0, 0, 0.1]}>
           <sphereGeometry args={[0.5, 32, 32]} />
           <meshStandardMaterial
-            color="#F5D400"
-            emissive="#F5D400"
+            color="#FF9900"
+            emissive="#FF9900"
             emissiveIntensity={1.3}
             roughness={0.2}
             metalness={0.8}
@@ -129,7 +129,7 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
 
         <mesh position={[0, 0, 0.15]} rotation={[0, 0, Math.PI / 4]}>
           <octahedronGeometry args={[0.26, 0]} />
-          <meshBasicMaterial color="#F2F2ED" wireframe />
+          <meshBasicMaterial color="#F9FAF6" wireframe />
         </mesh>
       </Float>
 
@@ -138,7 +138,7 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
         <group position={[1.85, 0.65, 0]}>
           <Float speed={3.5} floatIntensity={0.6}>
             <Html transform distanceFactor={5.2} zIndexRange={[100, 0]}>
-              <div className="px-3.5 py-1.5 rounded-lg bg-panel border-2 border-volt shadow-[0_0_20px_rgba(245,212,0,0.4)] flex items-center justify-center select-none backdrop-blur-md">
+              <div className="px-3.5 py-1.5 rounded-lg bg-panel border-2 border-orange shadow-[0_0_20px_rgba(255,153,0,0.4)] flex items-center justify-center select-none backdrop-blur-md">
                 <span className="font-display text-2xl tracking-wider text-primary leading-none block">
                   PEC
                 </span>
@@ -153,8 +153,8 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
         <group position={[-1.95, -0.75, 0.15]}>
           <Float speed={3} floatIntensity={0.5}>
             <Html transform distanceFactor={5.2} zIndexRange={[100, 0]}>
-              <div className="px-4 py-1.5 rounded-lg bg-panel border-2 border-volt shadow-[0_0_20px_rgba(245,212,0,0.4)] flex items-center justify-center select-none backdrop-blur-md">
-                <span className="font-display text-xl tracking-wider text-volt leading-none block">
+              <div className="px-4 py-1.5 rounded-lg bg-green border-2 border-orange shadow-[0_0_20px_rgba(255,153,0,0.4)] flex items-center justify-center select-none backdrop-blur-md">
+                <span className="font-display text-xl tracking-wider text-orange leading-none block">
                   E-SUMMIT
                 </span>
               </div>
@@ -167,19 +167,19 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
       <group rotation={[Math.PI / 3, Math.PI / 6, 0]}>
         <mesh>
           <torusGeometry args={[2.35, 0.012, 16, 100]} />
-          <meshBasicMaterial color="#F5D400" transparent opacity={0.4} />
+          <meshBasicMaterial color="#FF9900" transparent opacity={0.4} />
         </mesh>
       </group>
       <group rotation={[-Math.PI / 4, -Math.PI / 4, 0]}>
         <mesh>
           <torusGeometry args={[2.1, 0.01, 16, 100]} />
-          <meshBasicMaterial color="#8A7600" transparent opacity={0.5} />
+          <meshBasicMaterial color="#1E4637" transparent opacity={0.5} />
         </mesh>
       </group>
 
       {/* 6. High-Voltage Lighting */}
-      <pointLight color="#F5D400" intensity={4} distance={8} position={[3, 3, 4]} />
-      <pointLight color="#F5D400" intensity={2.5} distance={7} position={[-3, -3, 3]} />
+      <pointLight color="#FF9900" intensity={4} distance={8} position={[3, 3, 4]} />
+      <pointLight color="#1E4637" intensity={2.8} distance={7} position={[-3, -3, 3]} />
       <ambientLight intensity={0.4} />
     </group>
   )
