@@ -1,10 +1,10 @@
 'use client'
 // components/Nav/index.tsx
-// Sticky transparent-to-solid navigation bar with Forest Green & Vibrant Orange Theme
+// Sticky transparent-to-solid navigation bar with Forest Green & Vibrant Orange Theme (Clean Mobile Header)
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X, Ticket, Zap, UserCheck } from 'lucide-react'
+import { Menu, X, Ticket, Zap, UserCheck, Bookmark } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -44,16 +44,16 @@ export default function Nav() {
     <header
       className="fixed top-0 left-0 right-0 z-40 transition-all duration-300"
       style={{
-        background: scrolled ? 'rgba(13,17,16,0.94)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(16px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(179,107,0,0.3)' : '1px solid transparent',
+        background: scrolled ? 'rgba(13,17,16,0.95)' : 'rgba(13,17,16,0.85)',
+        backdropFilter: 'blur(16px)',
+        borderBottom: scrolled ? '1px solid rgba(179,107,0,0.3)' : '1px solid rgba(179,107,0,0.15)',
       }}
     >
       <div className="section-container flex items-center justify-between h-16">
         {/* Logo */}
         <Link
           href="/"
-          className="font-display text-xl tracking-wide flex items-center gap-1"
+          className="font-display text-xl tracking-wide flex items-center gap-1 shrink-0"
           style={{ color: 'var(--text-primary)' }}
           aria-label="E-Summit — Home"
         >
@@ -87,8 +87,8 @@ export default function Nav() {
           })}
         </nav>
 
-        {/* Register & Passes CTA */}
-        <div className="flex items-center gap-3">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link
             href="/passes"
             className="hidden md:inline-flex items-center gap-2 px-4 py-2 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
@@ -104,7 +104,7 @@ export default function Nav() {
 
           <Link
             href="/register"
-            className="hidden md:inline-flex btn-orange text-xs py-2 px-4"
+            className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-lg btn-orange text-xs font-bold shrink-0"
             id="nav-register-btn"
             aria-label="Register for PEC Summit Dashboard"
           >
@@ -113,13 +113,12 @@ export default function Nav() {
 
           {/* Mobile menu toggle */}
           <button
-            className="md:hidden p-2 rounded-lg"
+            className="md:hidden p-2 rounded-lg text-muted hover:text-primary transition-colors"
             onClick={() => setMenuOpen((o) => !o)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
-            style={{ color: 'var(--text-muted)' }}
           >
-            {menuOpen ? <X size={20} /> : <Menu size={20} />}
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
@@ -129,8 +128,8 @@ export default function Nav() {
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden px-6 pb-4 pt-2"
-          style={{ background: 'rgba(13,17,16,0.96)', borderBottom: '1px solid rgba(179,107,0,0.3)' }}
+          className="md:hidden px-6 pb-6 pt-2"
+          style={{ background: 'rgba(13,17,16,0.98)', borderBottom: '1px solid rgba(179,107,0,0.3)' }}
         >
           <nav aria-label="Mobile navigation">
             {NAV_ITEMS.map((item) => {
@@ -148,14 +147,16 @@ export default function Nav() {
                 </Link>
               )
             })}
-            <Link
-              href="/register"
-              onClick={() => setMenuOpen(false)}
-              className="btn-orange w-full justify-center mt-4 text-sm py-3"
-              id="nav-mobile-register-btn"
-            >
-              Open Registration Dashboard
-            </Link>
+            <div className="pt-4 space-y-3">
+              <Link
+                href="/register"
+                onClick={() => setMenuOpen(false)}
+                className="btn-orange w-full justify-center text-sm py-3"
+                id="nav-mobile-register-btn"
+              >
+                Open Registration Dashboard
+              </Link>
+            </div>
           </nav>
         </motion.div>
       )}
