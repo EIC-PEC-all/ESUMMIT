@@ -1,13 +1,13 @@
 'use client'
 // components/Hero/HeroScene.tsx
-// Perfectly Arranged 3D Set-Piece: Centered E-Cell PEC Logo Gear Emblem & Non-Clipping Orbiting "PEC" / "E-SUMMIT" Badges
+// High-Voltage 3D Set-Piece: Extruded E-Cell PEC Logo Gear & Orbiting 3D "PEC" / "E-SUMMIT" Badges (Black & Electric Yellow Theme)
 
 import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, Html } from '@react-three/drei'
 import * as THREE from 'three'
 
-// 3D Gear Geometry (Native Three.js - 100% Offline & Bulletproof)
+// 3D Gear Geometry
 function LogoGear() {
   const gearShape = useMemo(() => {
     const shape = new THREE.Shape()
@@ -58,10 +58,10 @@ function LogoGear() {
   return (
     <mesh geometry={new THREE.ExtrudeGeometry(gearShape, extrudeSettings)}>
       <meshPhongMaterial
-        color="#1E4637"
-        emissive="#0D241B"
-        specular="#FF9900"
-        shininess={95}
+        color="#151515"
+        emissive="#0A0A0A"
+        specular="#F5D400"
+        shininess={100}
         flatShading
       />
     </mesh>
@@ -83,22 +83,18 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
     const mx = mouse.current?.x ?? 0
     const my = mouse.current?.y ?? 0
 
-    // Smooth subtle mouse tilt responsiveness
     groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, mx * 0.35, 0.06)
     groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, -my * 0.25, 0.06)
 
-    // Gear rotation
     if (gearGroupRef.current) {
       gearGroupRef.current.rotation.z = time.current * 0.3
     }
 
-    // Lightbulb pulse
     if (bulbRef.current) {
       const pulse = 1 + Math.sin(time.current * 2) * 0.05
       bulbRef.current.scale.setScalar(pulse)
     }
 
-    // Balanced Orbiting Badges (Tight Orbit Radius so they stay within container)
     if (orbit1Ref.current) {
       orbit1Ref.current.rotation.y = time.current * 0.45
       orbit1Ref.current.rotation.x = Math.sin(time.current * 0.3) * 0.15
@@ -123,27 +119,26 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
         <mesh ref={bulbRef} position={[0, 0, 0.1]}>
           <sphereGeometry args={[0.5, 32, 32]} />
           <meshStandardMaterial
-            color="#FF9900"
-            emissive="#FF9900"
-            emissiveIntensity={1.2}
+            color="#F5D400"
+            emissive="#F5D400"
+            emissiveIntensity={1.3}
             roughness={0.2}
             metalness={0.8}
           />
         </mesh>
 
-        {/* Inner 3D Wireframe Filament */}
         <mesh position={[0, 0, 0.15]} rotation={[0, 0, Math.PI / 4]}>
           <octahedronGeometry args={[0.26, 0]} />
-          <meshBasicMaterial color="#F9FAF6" wireframe />
+          <meshBasicMaterial color="#F2F2ED" wireframe />
         </mesh>
       </Float>
 
-      {/* 3. Orbiting "PEC" Badge (Clean arrangement radius 1.85) */}
+      {/* 3. Orbiting 3D "PEC" Badge */}
       <group ref={orbit1Ref}>
         <group position={[1.85, 0.65, 0]}>
           <Float speed={3.5} floatIntensity={0.6}>
             <Html transform distanceFactor={5.2} zIndexRange={[100, 0]}>
-              <div className="px-3.5 py-1.5 rounded-lg bg-panel border-2 border-orange shadow-[0_0_20px_rgba(255,153,0,0.4)] flex items-center justify-center select-none backdrop-blur-md">
+              <div className="px-3.5 py-1.5 rounded-lg bg-panel border-2 border-volt shadow-[0_0_20px_rgba(245,212,0,0.4)] flex items-center justify-center select-none backdrop-blur-md">
                 <span className="font-display text-2xl tracking-wider text-primary leading-none block">
                   PEC
                 </span>
@@ -153,13 +148,13 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
         </group>
       </group>
 
-      {/* 4. Orbiting "E-SUMMIT" Badge (Clean arrangement radius -1.95) */}
+      {/* 4. Orbiting 3D "E-SUMMIT" Badge */}
       <group ref={orbit2Ref}>
         <group position={[-1.95, -0.75, 0.15]}>
           <Float speed={3} floatIntensity={0.5}>
             <Html transform distanceFactor={5.2} zIndexRange={[100, 0]}>
-              <div className="px-4 py-1.5 rounded-lg bg-green border-2 border-orange shadow-[0_0_20px_rgba(255,153,0,0.4)] flex items-center justify-center select-none backdrop-blur-md">
-                <span className="font-display text-xl tracking-wider text-orange leading-none block">
+              <div className="px-4 py-1.5 rounded-lg bg-panel border-2 border-volt shadow-[0_0_20px_rgba(245,212,0,0.4)] flex items-center justify-center select-none backdrop-blur-md">
+                <span className="font-display text-xl tracking-wider text-volt leading-none block">
                   E-SUMMIT
                 </span>
               </div>
@@ -172,19 +167,19 @@ function KineticLogoScene({ mouse }: { mouse: React.RefObject<{ x: number; y: nu
       <group rotation={[Math.PI / 3, Math.PI / 6, 0]}>
         <mesh>
           <torusGeometry args={[2.35, 0.012, 16, 100]} />
-          <meshBasicMaterial color="#FF9900" transparent opacity={0.35} />
+          <meshBasicMaterial color="#F5D400" transparent opacity={0.4} />
         </mesh>
       </group>
       <group rotation={[-Math.PI / 4, -Math.PI / 4, 0]}>
         <mesh>
           <torusGeometry args={[2.1, 0.01, 16, 100]} />
-          <meshBasicMaterial color="#1E4637" transparent opacity={0.5} />
+          <meshBasicMaterial color="#8A7600" transparent opacity={0.5} />
         </mesh>
       </group>
 
-      {/* 6. Balanced High-Voltage Lighting */}
-      <pointLight color="#FF9900" intensity={3.5} distance={8} position={[3, 3, 4]} />
-      <pointLight color="#1E4637" intensity={2.8} distance={7} position={[-3, -3, 3]} />
+      {/* 6. High-Voltage Lighting */}
+      <pointLight color="#F5D400" intensity={4} distance={8} position={[3, 3, 4]} />
+      <pointLight color="#F5D400" intensity={2.5} distance={7} position={[-3, -3, 3]} />
       <ambientLight intensity={0.4} />
     </group>
   )

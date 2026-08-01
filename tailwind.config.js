@@ -8,13 +8,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        void: '#0D1110',          // deep dark void
-        panel: '#161F1B',         // dark green surface card
-        green: '#1E4637',         // official logo forest green
-        orange: '#FF9900',        // official logo vibrant orange-amber
-        'orange-dim': '#B36B00',  // muted orange border
-        primary: '#F9FAF6',       // cream white text
-        muted: '#7C8E85',         // sage muted text
+        void: '#0A0A0A',        // warm near-black void
+        panel: '#151515',       // sleek panel card surface
+        volt: '#F5D400',        // high-voltage electric yellow
+        'volt-dim': '#8A7600',  // secondary yellow-brown border
+        amber: '#F5D400',       // electric yellow alias
+        orange: '#F5D400',      // electric yellow alias
+        green: '#151515',       // panel alias
+        primary: '#F2F2ED',     // off-white primary text
+        muted: '#8C8C86',       // slate muted text
       },
       fontFamily: {
         display: ['var(--font-bebas)', 'sans-serif'],
