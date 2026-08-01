@@ -33,7 +33,7 @@ function TrackCard({
     const cy = rect.top + rect.height / 2
     const dx = (e.clientX - cx) / (rect.width / 2)
     const dy = (e.clientY - cy) / (rect.height / 2)
-    setTilt({ x: dy * -7, y: dx * 7 })
+    setTilt({ x: dy * -8, y: dx * 8 })
   }, [])
 
   const handleMouseLeave = useCallback(() => {
@@ -46,15 +46,15 @@ function TrackCard({
     <motion.div
       ref={cardRef}
       id={`track-${track.id}`}
-      className={`tilt-card cursor-pointer rounded-2xl p-6 relative overflow-hidden group ${isHighlighted ? 'highlight-active' : ''}`}
+      className={`tilt-card cursor-pointer rounded-2xl p-7 relative overflow-hidden group ${isHighlighted ? 'highlight-active' : ''}`}
       style={{
         background: 'var(--bg-void)',
-        border: `1px solid ${isHighlighted ? '#F5D400' : 'rgba(138,118,0,0.25)'}`,
+        border: `1px solid ${isHighlighted ? '#FF9900' : 'rgba(179,107,0,0.3)'}`,
         transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
         transition: tilt.x === 0 && tilt.y === 0 ? 'all 0.4s ease' : 'transform 0.1s ease',
-        boxShadow: isHighlighted ? '0 0 28px rgba(245,212,0,0.35)' : undefined,
+        boxShadow: isHighlighted ? '0 0 28px rgba(255,153,0,0.4)' : undefined,
       }}
-      whileHover={{ borderColor: '#F5D400', boxShadow: '0 0 24px rgba(245,212,0,0.2)' }}
+      whileHover={{ borderColor: '#FF9900', boxShadow: '0 0 24px rgba(255,153,0,0.25)' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
@@ -69,19 +69,19 @@ function TrackCard({
     >
       {/* Icon */}
       <div
-        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-panel border border-volt-dim/40 group-hover:border-volt transition-colors"
+        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-panel border border-orange-dim/40 group-hover:border-orange transition-colors"
         aria-hidden="true"
       >
-        <Icon size={22} className="text-volt" />
+        <Icon size={22} className="text-orange" />
       </div>
 
       {/* Eyebrow */}
-      <p className="font-mono-data text-[10px] uppercase tracking-widest mb-2 text-volt">
+      <p className="font-mono-data text-[10px] uppercase tracking-widest mb-2 text-orange font-bold">
         ⚡ {track.eyebrow}
       </p>
 
       {/* Title */}
-      <h3 className="font-display text-3xl mb-3 leading-none text-primary group-hover:text-volt transition-colors">
+      <h3 className="font-display text-3xl mb-3 leading-none text-primary group-hover:text-orange transition-colors">
         {track.title}
       </h3>
 
@@ -91,7 +91,7 @@ function TrackCard({
       </p>
 
       {/* Expand hint */}
-      <div className="mt-5 flex items-center gap-1.5 font-mono-data text-xs text-volt">
+      <div className="mt-5 flex items-center gap-1.5 font-mono-data text-xs text-orange font-bold">
         <span>Expand Track</span>
         <ChevronDown size={14} aria-hidden="true" />
       </div>
@@ -99,7 +99,7 @@ function TrackCard({
       {/* Decorative corner glow */}
       <div
         className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity"
-        style={{ background: 'radial-gradient(circle, #F5D400 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, #FF9900 0%, transparent 70%)' }}
         aria-hidden="true"
       />
     </motion.div>
@@ -151,8 +151,8 @@ export default function Tracks() {
         >
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-volt fill-volt" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-volt">
+              <Zap size={14} className="text-orange fill-orange" />
+              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-orange font-bold">
                 High-Voltage Agenda
               </p>
             </div>
@@ -162,12 +162,12 @@ export default function Tracks() {
               style={{ fontSize: 'clamp(40px, 5vw, 72px)', color: 'var(--text-primary)' }}
             >
               TRACKS &amp;<br />
-              <span className="text-volt">COMPETITIONS</span>
+              <span className="text-stroke-orange">COMPETITIONS</span>
             </h2>
           </div>
           <Link
             href="/tracks"
-            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-volt hover:text-primary transition-colors"
+            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-orange hover:text-primary transition-colors border-b border-orange/40 pb-1"
           >
             Explore Full Tracks Page &rarr;
           </Link>
@@ -199,18 +199,18 @@ export default function Tracks() {
             aria-label={`${openTrack.title} details`}
           >
             <div
-              className="mt-8 mx-4 lg:mx-0 rounded-2xl p-8 relative bg-void border border-volt-dim/40 shadow-2xl"
+              className="mt-8 mx-4 lg:mx-0 rounded-2xl p-8 relative bg-void border border-orange-dim/40 shadow-2xl"
               style={{ maxWidth: '1280px', margin: '32px auto 0' }}
             >
               <button
                 onClick={() => setOpenId(null)}
-                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-volt bg-panel"
+                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-orange bg-panel"
                 aria-label="Close details panel"
               >
                 <X size={16} />
               </button>
               <div className="flex items-center gap-3 mb-3">
-                <span className="font-mono-data text-xs uppercase tracking-widest text-volt">
+                <span className="font-mono-data text-xs uppercase tracking-widest text-orange font-bold">
                   ⚡ {openTrack.eyebrow}
                 </span>
               </div>
