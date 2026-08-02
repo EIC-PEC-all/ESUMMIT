@@ -1,7 +1,7 @@
 'use client'
 // components/Hero/index.tsx
 // High-Performance Money/Finance Hero — 3D Wavy Ribbon Dollar Bill, Canvas Money Rain,
-// GSAP Parallax, Stock Ticker Tape, Live Countdown
+// GSAP Parallax, Stock Ticker Tape, Live Countdown — Fully Responsive for Mobile & Desktop
 
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
@@ -58,8 +58,8 @@ export default function Hero() {
             })
           }
 
-          // Scroll parallax
-          if (sectionRef.current) {
+          // Scroll parallax for desktop
+          if (sectionRef.current && window.innerWidth > 768) {
             gsap.to(mainBillRef.current, {
               scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: 'bottom top', scrub: 0.6 },
               xPercent: 15,
@@ -82,7 +82,7 @@ export default function Hero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#070B08] pt-20"
+      className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#070B08] pt-24 sm:pt-28 pb-0"
       aria-label="PEC E-Summit Hero"
     >
       {/* Layer 0: Canvas money rain */}
@@ -93,7 +93,7 @@ export default function Hero() {
 
       {/* Layer 2: Deep radial glow */}
       <div
-        className="absolute right-[-5%] top-1/2 -translate-y-1/2 w-[750px] h-[750px] rounded-full pointer-events-none z-0 opacity-40"
+        className="absolute right-[-5%] top-1/2 -translate-y-1/2 w-[500px] sm:w-[750px] h-[500px] sm:h-[750px] rounded-full pointer-events-none z-0 opacity-35"
         style={{
           background: 'radial-gradient(circle, rgba(126,211,33,0.22) 0%, rgba(126,211,33,0.05) 50%, transparent 70%)',
         }}
@@ -106,45 +106,45 @@ export default function Hero() {
       />
 
       {/* MAIN CONTENT */}
-      <div className="section-container relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 flex-1 pb-12 mt-4">
+      <div className="section-container relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8 flex-1 pb-8 sm:pb-12 mt-2 sm:mt-4">
 
         {/* LEFT: Hero Content */}
-        <div ref={heroContentRef} className="flex-1 max-w-2xl z-10 pt-4">
+        <div ref={heroContentRef} className="flex-1 max-w-2xl z-10 pt-2 sm:pt-4 w-full">
 
           {/* Eyebrow badge */}
           <motion.div
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#7ED321]/15 border border-[#7ED321]/40 mb-6"
+            className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#7ED321]/15 border border-[#7ED321]/40 mb-4 sm:mb-6"
           >
             <span className="w-2 h-2 rounded-full bg-[#7ED321] animate-ping" />
-            <span className="font-mono-data text-xs uppercase tracking-widest text-[#7ED321] font-bold">
+            <span className="font-mono-data text-[10px] sm:text-xs uppercase tracking-widest text-[#7ED321] font-bold">
               LIVE REGISTRATION OPEN
             </span>
             <ArrowUpRight size={14} className="text-[#7ED321]" />
           </motion.div>
 
           {/* Headline */}
-          <h1 className="font-display leading-[0.88] mb-6 tracking-tight select-none">
+          <h1 className="font-display leading-[0.88] mb-4 sm:mb-6 tracking-tight select-none">
             <motion.span
-              initial={prefersReduced ? {} : { opacity: 0, y: 40 }}
+              initial={prefersReduced ? {} : { opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="block font-black text-white"
-              style={{ fontSize: 'clamp(74px, 12.5vw, 158px)' }}
+              style={{ fontSize: 'clamp(52px, 13.5vw, 158px)' }}
             >
               PEC
             </motion.span>
 
             <motion.span
-              initial={prefersReduced ? {} : { opacity: 0, y: 40 }}
+              initial={prefersReduced ? {} : { opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
               className="block font-black relative"
               style={{
-                fontSize: 'clamp(82px, 14vw, 172px)',
-                WebkitTextStroke: '3px #7ED321',
+                fontSize: 'clamp(58px, 15vw, 172px)',
+                WebkitTextStroke: '2.5px #7ED321',
                 color: 'transparent',
                 textShadow: '0 0 35px rgba(126,211,33,0.5)',
               }}
@@ -158,7 +158,7 @@ export default function Hero() {
             initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.28 }}
-            className="font-body text-lg sm:text-xl text-[#F5F5F0]/90 mb-7 leading-relaxed max-w-lg"
+            className="font-body text-base sm:text-xl text-[#F5F5F0]/90 mb-5 sm:mb-7 leading-relaxed max-w-lg"
           >
             Where ideas raise capital &amp; compound into impact.
           </motion.p>
@@ -168,15 +168,15 @@ export default function Hero() {
             initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.38 }}
-            className="flex flex-wrap items-center gap-3 mb-8"
+            className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-6 sm:mb-8"
           >
-            <div className="flex items-center gap-2 bg-[#0D140E]/90 border border-[#7ED321]/25 px-3.5 py-1.5 rounded-full">
-              <Calendar size={15} className="text-[#7ED321]" />
-              <span className="font-mono-data text-sm font-semibold text-gray-200">{FEST_META.dates}</span>
+            <div className="flex items-center gap-2 bg-[#0D140E]/90 border border-[#7ED321]/25 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full">
+              <Calendar size={14} className="text-[#7ED321]" />
+              <span className="font-mono-data text-xs sm:text-sm font-semibold text-gray-200">{FEST_META.dates}</span>
             </div>
-            <div className="flex items-center gap-2 bg-[#0D140E]/90 border border-[#7ED321]/25 px-3.5 py-1.5 rounded-full">
-              <MapPin size={15} className="text-[#7ED321]" />
-              <span className="font-mono-data text-sm font-semibold text-gray-200">{FEST_META.venue}</span>
+            <div className="flex items-center gap-2 bg-[#0D140E]/90 border border-[#7ED321]/25 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full">
+              <MapPin size={14} className="text-[#7ED321]" />
+              <span className="font-mono-data text-xs sm:text-sm font-semibold text-gray-200">{FEST_META.venue}</span>
             </div>
           </motion.div>
 
@@ -185,7 +185,7 @@ export default function Hero() {
             initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.46 }}
-            className="mb-10"
+            className="mb-8 sm:mb-10 w-full"
           >
             <Countdown targetISO={FEST_META.countdownTarget} prefersReduced={prefersReduced} />
           </motion.div>
@@ -195,30 +195,30 @@ export default function Hero() {
             initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.56 }}
-            className="flex flex-wrap items-center gap-4"
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full"
           >
             <Link
               href="/passes"
               id="hero-passes-btn"
-              className="btn-green text-sm sm:text-base font-bold py-4 px-8 rounded-xl flex items-center gap-2 shadow-[0_0_20px_rgba(126,211,33,0.4)] text-[#070B08]"
+              className="btn-green text-sm sm:text-base font-bold py-3.5 sm:py-4 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(126,211,33,0.4)] text-[#070B08]"
             >
               <Ticket size={18} />
-              🎫 GET SUMMIT PASSES
+              <span>🎫 GET SUMMIT PASSES</span>
             </Link>
 
             <a
               href="#tracks"
               id="hero-explore-btn"
-              className="btn-ghost text-sm sm:text-base py-4 px-8 rounded-xl flex items-center gap-2 border-white/30 text-white hover:border-[#7ED321] hover:text-[#7ED321] transition-all"
+              className="btn-ghost text-sm sm:text-base py-3.5 sm:py-4 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 border-white/30 text-white hover:border-[#7ED321] hover:text-[#7ED321] transition-all"
             >
-              EXPLORE TRACKS
+              <span>EXPLORE TRACKS</span>
               <ChevronRight size={16} />
             </a>
           </motion.div>
         </div>
 
-        {/* RIGHT: 3D Wavy Ribbon Dollar Bill (Ultra-Reliable Vector Ribbon Graphics + 3D Animation) */}
-        <div className="flex-1 w-full relative flex items-center justify-center lg:justify-end py-4 lg:py-0 min-h-[380px] sm:min-h-[460px]">
+        {/* RIGHT: 3D Wavy Ribbon Dollar Bill */}
+        <div className="flex-1 w-full relative flex items-center justify-center lg:justify-end py-2 lg:py-0 min-h-[300px] sm:min-h-[460px]">
           <div ref={mainBillRef} className="w-full flex justify-center lg:justify-end">
             <WavyDollarBill prefersReduced={prefersReduced} />
           </div>
@@ -228,12 +228,12 @@ export default function Hero() {
       {/* BOTTOM: Stock Ticker Tape */}
       <div className="relative z-10 border-t border-[#7ED321]/25 bg-[#060A07] overflow-hidden">
         <div className="py-2.5 flex items-center gap-0 overflow-hidden">
-          <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(90deg, #060A07 0%, transparent 100%)' }} />
-          <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(270deg, #060A07 0%, transparent 100%)' }} />
+          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(90deg, #060A07 0%, transparent 100%)' }} />
+          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(270deg, #060A07 0%, transparent 100%)' }} />
 
           <div ref={tickerRef} className="flex items-center gap-0 whitespace-nowrap" style={{ willChange: 'transform' }}>
             {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 px-6 border-r border-[#7ED321]/15">
+              <div key={i} className="flex items-center gap-3 px-4 sm:px-6 border-r border-[#7ED321]/15">
                 <span className="font-mono-data text-xs font-bold text-[#7ED321]">{item.sym}</span>
                 <span className="font-mono-data text-xs text-white font-semibold">{item.val}</span>
                 <span className={`font-mono-data text-[10px] font-bold flex items-center gap-0.5 ${item.up ? 'text-[#7ED321]' : 'text-red-400'}`}>
