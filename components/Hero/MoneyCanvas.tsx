@@ -1,6 +1,6 @@
 'use client'
 // components/Hero/MoneyCanvas.tsx
-// Canvas-based animated money rain — dollar bills and $ signs falling with rotation
+// High-performance canvas money rain using offscreen pre-rendering and IntersectionObserver
 
 import { useEffect, useRef } from 'react'
 
@@ -23,111 +23,114 @@ export default function MoneyCanvas({ prefersReduced }: { prefersReduced: boolea
     if (prefersReduced) return
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext('2d', { alpha: true })
     if (!ctx) return
 
     let animId: number
-    const particles: Particle[] = []
+    let isVisible = true
+
+    // 1. Offscreen Canvas Caching for zero-overhead frame drawing
+    const billCache = document.createElement('canvas')
+    billCache.width = 160
+    billCache.height = 68
+    const bCtx = billCache.getContext('2d')
+    if (bCtx) {
+      bCtx.fillStyle = '#0B1A10'
+      bCtx.strokeStyle = '#7ED321'
+      bCtx.lineWidth = 1.5
+      bCtx.beginPath()
+      bCtx.roundRect(2, 2, 156, 64, 6)
+      bCtx.fill()
+      bCtx.stroke()
+
+      bCtx.strokeStyle = 'rgba(126,211,33,0.4)'
+      bCtx.lineWidth = 0.8
+      bCtx.strokeRect(6, 6, 148, 56)
+
+      bCtx.fillStyle = '#7ED321'
+      bCtx.font = 'bold 16px serif'
+      bCtx.textAlign = 'center'
+      bCtx.textBaseline = 'middle'
+      bCtx.fillText('$1', 80, 34)
+
+      bCtx.fillStyle = 'rgba(126,211,33,0.7)'
+      bCtx.font = '6px monospace'
+      bCtx.fillText('★ PEC 2026 ★', 40, 14)
+    }
+
+    const dollarCache = document.createElement('canvas')
+    dollarCache.width = 40
+    dollarCache.height = 40
+    const dCtx = dollarCache.getContext('2d')
+    if (dCtx) {
+      dCtx.fillStyle = '#7ED321'
+      dCtx.font = 'bold 28px serif'
+      dCtx.textAlign = 'center'
+      dCtx.textBaseline = 'middle'
+      dCtx.fillText('$', 20, 20)
+    }
 
     const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
     }
     resize()
-    window.addEventListener('resize', resize)
+    window.addEventListener('resize', resize, { passive: true })
 
-    // Spawn particles
-    for (let i = 0; i < 28; i++) {
-      particles.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight * 1.5 - window.innerHeight * 0.5,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: 0.6 + Math.random() * 1.2,
-        rot: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.025,
-        scale: 0.25 + Math.random() * 0.45,
-        opacity: 0.08 + Math.random() * 0.18,
-        type: Math.random() > 0.5 ? 'bill' : 'dollar',
-      })
-    }
+    // 2. Pause when section scrolled out of view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isVisible = entries[0].isIntersecting
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(canvas)
 
-    const drawBill = (p: Particle) => {
-      ctx.save()
-      ctx.translate(p.x, p.y)
-      ctx.rotate(p.rot)
-      ctx.globalAlpha = p.opacity
-
-      const w = 160 * p.scale
-      const h = 68 * p.scale
-
-      // Bill body
-      ctx.fillStyle = '#0B1A10'
-      ctx.strokeStyle = '#7ED321'
-      ctx.lineWidth = 1.5 * p.scale
-      ctx.beginPath()
-      ctx.roundRect(-w / 2, -h / 2, w, h, 6 * p.scale)
-      ctx.fill()
-      ctx.stroke()
-
-      // Inner border
-      ctx.strokeStyle = 'rgba(126,211,33,0.5)'
-      ctx.lineWidth = 0.5 * p.scale
-      ctx.setLineDash([4 * p.scale, 2 * p.scale])
-      ctx.beginPath()
-      ctx.roundRect(-w / 2 + 4 * p.scale, -h / 2 + 4 * p.scale, w - 8 * p.scale, h - 8 * p.scale, 4 * p.scale)
-      ctx.stroke()
-      ctx.setLineDash([])
-
-      // Center $
-      ctx.fillStyle = '#7ED321'
-      ctx.font = `bold ${16 * p.scale}px serif`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText('$1', 0, 0)
-
-      // Serial number
-      ctx.fillStyle = 'rgba(126,211,33,0.7)'
-      ctx.font = `${5 * p.scale}px monospace`
-      ctx.textAlign = 'left'
-      ctx.fillText('★ PEC 2026 ★', -w / 2 + 8 * p.scale, -h / 2 + 10 * p.scale)
-
-      ctx.restore()
-    }
-
-    const drawDollar = (p: Particle) => {
-      ctx.save()
-      ctx.translate(p.x, p.y)
-      ctx.rotate(p.rot)
-      ctx.globalAlpha = p.opacity
-
-      ctx.fillStyle = '#7ED321'
-      ctx.font = `bold ${30 * p.scale}px serif`
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText('$', 0, 0)
-
-      ctx.restore()
-    }
+    // 3. Lightweight particle pool (14 particles max)
+    const particles: Particle[] = Array.from({ length: 14 }, () => ({
+      x: Math.random() * (canvas.width || 1200),
+      y: Math.random() * (canvas.height || 800),
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: 0.5 + Math.random() * 0.8,
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.015,
+      scale: 0.3 + Math.random() * 0.4,
+      opacity: 0.12 + Math.random() * 0.18,
+      type: Math.random() > 0.5 ? 'bill' : 'dollar',
+    }))
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      if (isVisible) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      particles.forEach((p) => {
-        p.x += p.vx
-        p.y += p.vy
-        p.rot += p.rotSpeed
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i]
+          p.x += p.vx
+          p.y += p.vy
+          p.rot += p.rotSpeed
 
-        if (p.type === 'bill') drawBill(p)
-        else drawDollar(p)
+          ctx.save()
+          ctx.translate(p.x, p.y)
+          ctx.rotate(p.rot)
+          ctx.globalAlpha = p.opacity
 
-        // Reset when off screen
-        if (p.y > canvas.height + 100) {
-          p.y = -120
-          p.x = Math.random() * canvas.width
+          if (p.type === 'bill') {
+            const w = 160 * p.scale
+            const h = 68 * p.scale
+            ctx.drawImage(billCache, -w / 2, -h / 2, w, h)
+          } else {
+            const size = 40 * p.scale
+            ctx.drawImage(dollarCache, -size / 2, -size / 2, size, size)
+          }
+
+          ctx.restore()
+
+          if (p.y > canvas.height + 60) {
+            p.y = -60
+            p.x = Math.random() * canvas.width
+          }
         }
-        if (p.x < -200) p.x = canvas.width + 100
-        if (p.x > canvas.width + 200) p.x = -100
-      })
+      }
 
       animId = requestAnimationFrame(animate)
     }
@@ -136,6 +139,7 @@ export default function MoneyCanvas({ prefersReduced }: { prefersReduced: boolea
 
     return () => {
       cancelAnimationFrame(animId)
+      observer.disconnect()
       window.removeEventListener('resize', resize)
     }
   }, [prefersReduced])
@@ -144,7 +148,7 @@ export default function MoneyCanvas({ prefersReduced }: { prefersReduced: boolea
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full pointer-events-none z-0"
-      style={{ opacity: 1 }}
+      style={{ opacity: 0.9, willChange: 'transform' }}
     />
   )
 }

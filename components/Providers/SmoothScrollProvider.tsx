@@ -7,7 +7,6 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     let lenisInstance: any = null
 
     const initLenis = async () => {
-      // Respect prefers-reduced-motion
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         return
       }
@@ -20,22 +19,23 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
         gsap.registerPlugin(ScrollTrigger)
 
         lenisInstance = new Lenis({
-          duration: 1.2,
+          duration: 1.0,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           orientation: 'vertical',
           gestureOrientation: 'vertical',
           smoothWheel: true,
-          wheelMultiplier: 1.1,
-          touchMultiplier: 1.5,
+          wheelMultiplier: 1.0,
+          touchMultiplier: 1.2,
         })
 
         lenisInstance.on('scroll', ScrollTrigger.update)
 
-        gsap.ticker.add((time) => {
+        const updateFn = (time: number) => {
           lenisInstance?.raf(time * 1000)
-        })
+        }
 
-        gsap.ticker.lagSmoothing(0)
+        gsap.ticker.add(updateFn)
+        gsap.ticker.lagSmoothing(500, 33)
       } catch (err) {
         console.warn('Lenis smooth scroll failed to initialize:', err)
       }

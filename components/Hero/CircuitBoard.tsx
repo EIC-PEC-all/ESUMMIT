@@ -1,6 +1,6 @@
 'use client'
 // components/Hero/CircuitBoard.tsx
-// High-tech vector circuit-board pattern overlay with animated pulsing green nodes
+// High-tech vector circuit-board pattern overlay with lightweight SVG animations (No SVG filters)
 
 import React from 'react'
 
@@ -9,7 +9,7 @@ export default function CircuitBoard({ prefersReduced }: { prefersReduced?: bool
     <div className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0">
       {/* Tile pattern background overlay */}
       <svg
-        className="w-full h-full opacity-[0.12]"
+        className="w-full h-full opacity-[0.10]"
         xmlns="http://www.w3.org/2000/svg"
         width="100%"
         height="100%"
@@ -69,87 +69,63 @@ export default function CircuitBoard({ prefersReduced }: { prefersReduced?: bool
             />
             <circle cx="100" cy="100" r="4" fill="#7ED321" opacity="0.6" />
           </pattern>
-
-          {/* Glow filter for active pulses */}
-          <filter id="pulse-glow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-          </filter>
         </defs>
 
         <rect width="100%" height="100%" fill="url(#circuit-grid)" />
       </svg>
 
-      {/* Dynamic Animated Pulse Overlays across key lines */}
+      {/* Dynamic Animated Pulse Overlays (Lightweight, zero SVG blur overhead) */}
       {!prefersReduced && (
         <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <g filter="url(#pulse-glow)">
+          <g>
             {/* Pulse 1 */}
-            <circle r="4" fill="#7ED321">
+            <circle r="3.5" fill="#7ED321">
               <animateMotion
                 path="M 100 0 L 100 120 L 300 300 L 600 300 L 900 600"
-                dur="7s"
+                dur="8s"
                 repeatCount="indefinite"
               />
               <animate
                 attributeName="opacity"
-                values="0;1;1;0"
+                values="0;0.8;0.8;0"
                 keyTimes="0;0.1;0.9;1"
-                dur="7s"
+                dur="8s"
                 repeatCount="indefinite"
               />
             </circle>
 
             {/* Pulse 2 */}
-            <circle r="3" fill="#8FE42F">
+            <circle r="3" fill="#7ED321">
               <animateMotion
                 path="M 800 100 L 500 100 L 300 300 L 300 700"
-                dur="9s"
+                dur="10s"
                 begin="2s"
                 repeatCount="indefinite"
               />
               <animate
                 attributeName="opacity"
-                values="0;1;1;0"
+                values="0;0.8;0.8;0"
                 keyTimes="0;0.15;0.85;1"
-                dur="9s"
+                dur="10s"
                 begin="2s"
                 repeatCount="indefinite"
               />
             </circle>
 
             {/* Pulse 3 */}
-            <circle r="4.5" fill="#7ED321">
+            <circle r="4" fill="#7ED321">
               <animateMotion
                 path="M 1200 400 L 900 400 L 700 200 L 300 200"
-                dur="6s"
+                dur="7s"
                 begin="1s"
                 repeatCount="indefinite"
               />
               <animate
                 attributeName="opacity"
-                values="0;1;1;0"
+                values="0;0.8;0.8;0"
                 keyTimes="0;0.2;0.8;1"
-                dur="6s"
+                dur="7s"
                 begin="1s"
-                repeatCount="indefinite"
-              />
-            </circle>
-
-            {/* Pulse 4 */}
-            <circle r="3.5" fill="#A4F048">
-              <animateMotion
-                path="M 200 800 L 500 500 L 800 500 L 1100 200"
-                dur="8s"
-                begin="3.5s"
-                repeatCount="indefinite"
-              />
-              <animate
-                attributeName="opacity"
-                values="0;1;1;0"
-                keyTimes="0;0.1;0.9;1"
-                dur="8s"
-                begin="3.5s"
                 repeatCount="indefinite"
               />
             </circle>
