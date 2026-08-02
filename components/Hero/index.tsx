@@ -1,253 +1,386 @@
 'use client'
 // components/Hero/index.tsx
-// Green & Orange Logo Theme Hero: Current-Line Trace-In + Split-Text Headline Reveal + 3D Materializing Last
+// Money/Finance Visual Theme Hero for PEC E-Summit
+// GSAP Parallax dollar bills, Mouse tilt, Idle sway, Circuit board pulses, Real live Countdown
 
 import { useEffect, useRef, useState } from 'react'
-import dynamic from 'next/dynamic'
-import { motion, useAnimate, stagger } from 'framer-motion'
-import { MapPin, Calendar, Ticket, Zap } from 'lucide-react'
-import Countdown from './Countdown'
-import { FEST_META } from '@/lib/data'
-import { useReducedMotion } from '@/hooks/useReducedMotion'
+import { motion, useAnimate } from 'framer-motion'
+import { Calendar, MapPin, Ticket, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 
-const HeroScene = dynamic(() => import('./HeroScene'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full flex items-center justify-center opacity-30">
-      <div className="w-32 h-32 border border-[#FF9900] rounded-full animate-pulse" />
-    </div>
-  ),
-})
+import Countdown from './Countdown'
+import CircuitBoard from './CircuitBoard'
+import DollarBill from './DollarBill'
+import MoneyParticles from './MoneyParticles'
+import { FEST_META } from '@/lib/data'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
 
 export default function Hero() {
   const prefersReduced = useReducedMotion()
-  const [scope, animate] = useAnimate()
-  const mouseRef = useRef({ x: 0, y: 0 })
-  const scrollYRef = useRef(0)
-  const [isMobile, setIsMobile] = useState(false)
-  const [sceneReady, setSceneReady] = useState(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const heroContentRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  // References for GSAP target elements
+  const mainBillRef = useRef<HTMLDivElement>(null)
+  const bgBill1Ref = useRef<HTMLDivElement>(null)
+  const bgBill2Ref = useRef<HTMLDivElement>(null)
+  const bgBill3Ref = useRef<HTMLDivElement>(null)
 
+  // Floating pill reference
+  const pillRef = useRef<HTMLDivElement>(null)
+
+  const [strokeDrawn, setStrokeDrawn] = useState(false)
+
+  // GSAP Animations & Interactions Setup
   useEffect(() => {
-    const handleMouse = (e: MouseEvent) => {
-      mouseRef.current = {
-        x: (e.clientX / window.innerWidth) * 2 - 1,
-        y: -(e.clientY / window.innerHeight) * 2 + 1,
+    let ctx: any = null
+
+    const initGSAP = async () => {
+      try {
+        const { gsap } = await import('gsap')
+        const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+        gsap.registerPlugin(ScrollTrigger)
+
+        ctx = gsap.context(() => {
+          // Trigger stroke draw-on completion indicator
+          setStrokeDrawn(true)
+
+          if (prefersReduced) return
+
+          // 1. Idle Sway Animation on Main Dollar Bill
+          gsap.to(mainBillRef.current, {
+            rotate: '+=2.5',
+            y: '+=8',
+            duration: 6,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+          })
+
+          // Idle drift on floating pill
+          gsap.to(pillRef.current, {
+            y: '-=10',
+            duration: 3.5,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+          })
+
+          // Idle drift on background bills
+          gsap.to(bgBill1Ref.current, {
+            rotate: '-=3',
+            y: '-=12',
+            duration: 7,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+          })
+          gsap.to(bgBill2Ref.current, {
+            rotate: '+=4',
+            y: '+=15',
+            duration: 8,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+          })
+
+          // 2. Mouse Reactive Tilt on Main Hero Dollar Bill
+          const xTo = gsap.quickTo(mainBillRef.current, 'rotateY', { duration: 0.5, ease: 'power2.out' })
+          const yTo = gsap.quickTo(mainBillRef.current, 'rotateX', { duration: 0.5, ease: 'power2.out' })
+
+          const handleMouseMove = (e: MouseEvent) => {
+            if (!sectionRef.current) return
+            const rect = sectionRef.current.getBoundingClientRect()
+            const relativeX = (e.clientX - rect.left) / rect.width - 0.5
+            const relativeY = (e.clientY - rect.top) / rect.height - 0.5
+
+            // Tilt within a small degree range
+            xTo(relativeX * 16)
+            yTo(-relativeY * 16)
+          }
+
+          const currentSection = sectionRef.current
+          if (currentSection) {
+            currentSection.addEventListener('mousemove', handleMouseMove)
+          }
+
+          // 3. Multi-Layer Scroll Parallax with GSAP ScrollTrigger
+          if (sectionRef.current) {
+            // Main hero dollar bill scroll exit (moves right + down + fades out)
+            gsap.to(mainBillRef.current, {
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.6,
+              },
+              xPercent: 35,
+              yPercent: 20,
+              opacity: 0.1,
+              ease: 'none',
+            })
+
+            // Layer 1 (Closest/Fastest foreground depth)
+            gsap.to(bgBill1Ref.current, {
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.4,
+              },
+              yPercent: -45,
+              xPercent: -15,
+              opacity: 0,
+              ease: 'none',
+            })
+
+            // Layer 2 (Medium depth)
+            gsap.to(bgBill2Ref.current, {
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.8,
+              },
+              yPercent: 40,
+              xPercent: 20,
+              opacity: 0,
+              ease: 'none',
+            })
+
+            // Layer 3 (Far background depth)
+            gsap.to(bgBill3Ref.current, {
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1.2,
+              },
+              yPercent: -20,
+              opacity: 0,
+              ease: 'none',
+            })
+
+            // Text Content parallax subtle lift
+            gsap.to(heroContentRef.current, {
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.3,
+              },
+              yPercent: -12,
+              opacity: 0.6,
+              ease: 'none',
+            })
+          }
+
+          return () => {
+            if (currentSection) {
+              currentSection.removeEventListener('mousemove', handleMouseMove)
+            }
+          }
+        }, sectionRef)
+      } catch (err) {
+        console.warn('GSAP initialization in Hero:', err)
       }
     }
-    window.addEventListener('mousemove', handleMouse)
-    return () => window.removeEventListener('mousemove', handleMouse)
-  }, [])
 
-  useEffect(() => {
-    const handleScroll = () => { scrollYRef.current = window.scrollY }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    initGSAP()
 
-  useEffect(() => {
-    if (prefersReduced) {
-      setSceneReady(true)
-      return
+    return () => {
+      if (ctx) ctx.revert()
     }
-
-    const runOpeningSequence = async () => {
-      await animate('[data-hero-line]', { width: ['0%', '100%'] }, { duration: 0.8, ease: 'easeOut' })
-      await animate('[data-hero-eyebrow]', { opacity: [0, 1], y: [16, 0] }, { duration: 0.4 })
-      await animate(
-        '[data-hero-split-text]',
-        { opacity: [0, 1], y: [48, 0], filter: ['blur(8px)', 'blur(0px)'] },
-        { duration: 0.7, delay: stagger(0.12), ease: [0.16, 1, 0.3, 1] }
-      )
-      await animate('[data-hero-sub]', { opacity: [0, 1], y: [16, 0] }, { duration: 0.4 })
-      await animate('[data-hero-meta]', { opacity: [0, 1], y: [12, 0] }, { duration: 0.4 })
-      await animate('[data-hero-cta]', { opacity: [0, 1], y: [12, 0] }, { duration: 0.4, delay: stagger(0.08) })
-      
-      setTimeout(() => {
-        setSceneReady(true)
-      }, 200)
-    }
-
-    const t = setTimeout(runOpeningSequence, 300)
-    return () => clearTimeout(t)
-  }, [animate, prefersReduced])
+  }, [prefersReduced])
 
   return (
     <section
       id="hero"
-      ref={scope}
-      className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: 'var(--bg-void)' }}
-      aria-label="PEC Summit Hero"
+      ref={sectionRef}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#070B08] pt-24 pb-16 lg:py-0"
+      aria-label="PEC E-Summit Hero"
+      style={{ perspective: '1000px' }}
     >
-      {/* Current Line Top Border */}
-      <motion.div
-        data-hero-line
-        className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-[#FF9900] to-transparent shadow-[0_0_12px_#FF9900] pointer-events-none z-20"
-        style={{ width: prefersReduced ? '100%' : '0%' }}
-      />
+      {/* 1. Circuit Board Vector Pattern Overlay + Pulse Animations */}
+      <CircuitBoard prefersReduced={prefersReduced} />
 
-      {/* Radial Orange Glow */}
+      {/* 2. Floating Ambient Money Particles */}
+      <MoneyParticles prefersReduced={prefersReduced} />
+
+      {/* 3. Deep Green Radial Glow emanating behind dollar bill area */}
       <div
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-[650px] h-[650px] rounded-full pointer-events-none opacity-20"
+        className="absolute right-0 top-1/2 -translate-y-1/2 w-[700px] lg:w-[900px] h-[700px] lg:h-[900px] rounded-full pointer-events-none opacity-40 z-0"
         style={{
-          background: 'radial-gradient(circle, rgba(255,153,0,0.15) 0%, transparent 70%)',
-          transform: 'translateY(-50%) translateX(20%)',
+          background: 'radial-gradient(circle, rgba(126, 211, 33, 0.22) 0%, rgba(126, 211, 33, 0.05) 45%, transparent 70%)',
+          transform: 'translateY(-50%) translateX(25%)',
         }}
       />
 
-      <div className="section-container w-full py-32 lg:py-0 lg:min-h-screen flex flex-col lg:flex-row lg:items-center gap-12 lg:gap-0">
+      {/* Dark gradient scrim behind left column for high text contrast */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-full lg:w-3/5 pointer-events-none z-1"
+        style={{
+          background: 'linear-gradient(90deg, rgba(7,11,8,0.95) 0%, rgba(7,11,8,0.8) 60%, transparent 100%)',
+        }}
+      />
 
-        {/* Left: Text content */}
-        <div className="flex-1 lg:pr-8 z-10">
-          {/* Eyebrow with Forest Green Background + Vibrant Orange Icon */}
-          <div
-            data-hero-eyebrow
-            className="mb-6 inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-green/40 border border-green text-orange shadow-lg"
-            style={{ opacity: prefersReduced ? 1 : 0 }}
-          >
-            <Zap size={14} className="text-orange fill-orange" />
-            <span className="font-mono-data text-xs uppercase tracking-[0.25em] font-bold">
-              E-Cell PEC &nbsp;·&nbsp; Chandigarh
-            </span>
-          </div>
+      {/* Background Dollar Bill Parallax Layer 2 (Top Left, smaller, low opacity) */}
+      <div
+        ref={bgBill2Ref}
+        className="absolute left-[-60px] top-[15%] pointer-events-none z-1 hidden md:block opacity-35 blur-[1px]"
+        style={{ transform: 'rotate(-18deg)' }}
+      >
+        <DollarBill variant="background" />
+      </div>
 
-          {/* Headline with Vibrant Orange Outlined Text */}
-          <h1
-            className="font-display mb-6 leading-none"
-            style={{
-              fontSize: 'clamp(72px, 12vw, 160px)',
-              letterSpacing: '-0.01em',
-            }}
-            aria-label="PEC Summit"
-          >
-            <span
-              data-hero-split-text
-              className="block text-primary"
-              style={{ opacity: prefersReduced ? 1 : 0 }}
+      {/* Background Dollar Bill Parallax Layer 3 (Bottom Right, subtle) */}
+      <div
+        ref={bgBill3Ref}
+        className="absolute right-[5%] bottom-[10%] pointer-events-none z-1 hidden md:block opacity-25 blur-[2px]"
+        style={{ transform: 'rotate(24deg)' }}
+      >
+        <DollarBill variant="background" />
+      </div>
+
+      {/* Main Container */}
+      <div className="section-container relative w-full z-10 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 min-h-[calc(100vh-80px)]">
+
+        {/* Left Column: Hero Content */}
+        <div ref={heroContentRef} className="flex-1 max-w-2xl lg:max-w-xl xl:max-w-2xl z-10 pt-4">
+
+          {/* Headline */}
+          <h1 className="font-display leading-[0.88] mb-6 tracking-tight select-none">
+            {/* Line 1: PEC (Solid White Fill, Heavy Weight) */}
+            <motion.span
+              initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="block font-black text-white"
+              style={{ fontSize: 'clamp(72px, 12vw, 150px)' }}
             >
               PEC
-            </span>
-            <span
-              data-hero-split-text
-              className="block text-stroke-orange"
-              style={{ opacity: prefersReduced ? 1 : 0 }}
+            </motion.span>
+
+            {/* Line 2: SUMMIT (Outlined stroke-only text in neon green, subtle glow, stroke draw-on) */}
+            <motion.span
+              initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="block font-black text-stroke-green relative"
+              style={{
+                fontSize: 'clamp(80px, 13.5vw, 168px)',
+                textShadow: '0 0 35px rgba(126, 211, 33, 0.5), 0 0 70px rgba(126, 211, 33, 0.2)',
+              }}
             >
               SUMMIT
-            </span>
+            </motion.span>
           </h1>
 
-          {/* Tagline */}
-          <p
-            data-hero-sub
-            className="text-lg sm:text-xl max-w-md mb-8 leading-relaxed text-muted"
-            style={{ opacity: prefersReduced ? 1 : 0 }}
+          {/* Subtext */}
+          <motion.p
+            initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="font-body text-lg sm:text-xl text-[#F5F5F0] mb-7 leading-relaxed max-w-lg font-normal"
           >
-            North India&apos;s flagship entrepreneurship summit powered by E-Cell PEC.
-          </p>
+            Where ideas raise capital &amp; compound into impact.
+          </motion.p>
 
-          {/* Date + Venue */}
-          <div
-            data-hero-meta
-            className="flex flex-col sm:flex-row gap-4 mb-10"
-            style={{ opacity: prefersReduced ? 1 : 0 }}
+          {/* Info row with icons */}
+          <motion.div
+            initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex flex-wrap items-center gap-5 sm:gap-8 mb-9 text-sm text-[#8A9488]"
           >
-            <div className="flex items-center gap-2">
-              <Calendar size={14} className="text-orange" />
-              <span className="font-mono-data text-sm text-muted">
+            <div className="flex items-center gap-2 bg-[#0D140E]/80 border border-[#7ED321]/20 px-3.5 py-1.5 rounded-full">
+              <Calendar size={16} className="text-[#7ED321]" />
+              <span className="font-mono-data font-semibold text-gray-200">
                 {FEST_META.dates}
-                <span className="ml-2 text-xs opacity-50">{"// TODO: confirm"}</span>
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <MapPin size={14} className="text-orange" />
-              <span className="font-mono-data text-sm text-muted">
+            <div className="flex items-center gap-2 bg-[#0D140E]/80 border border-[#7ED321]/20 px-3.5 py-1.5 rounded-full">
+              <MapPin size={16} className="text-[#7ED321]" />
+              <span className="font-mono-data font-semibold text-gray-200">
                 {FEST_META.venue}
               </span>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Countdown */}
-          <div
-            data-hero-cta
+          {/* Countdown Timer */}
+          <motion.div
+            initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
             className="mb-10"
-            style={{ opacity: prefersReduced ? 1 : 0 }}
           >
-            <p className="font-mono-data text-xs uppercase tracking-widest mb-3 text-orange font-bold flex items-center gap-1">
-              ⚡ Countdown to Ignition
-            </p>
-            <Countdown targetISO={FEST_META.countdownTarget} />
-          </div>
+            <Countdown targetISO={FEST_META.countdownTarget} prefersReduced={prefersReduced} />
+          </motion.div>
 
-          {/* CTAs */}
-          <div
-            data-hero-cta
-            className="flex flex-wrap gap-4"
-            style={{ opacity: prefersReduced ? 1 : 0 }}
+          {/* CTA Buttons */}
+          <motion.div
+            initial={prefersReduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="flex flex-wrap items-center gap-4"
           >
+            {/* Filled green button */}
             <Link
               href="/passes"
-              className="btn-orange"
+              className="btn-green text-sm sm:text-base font-bold py-3.5 px-7 rounded-xl flex items-center gap-2 shadow-[0_0_25px_rgba(126,211,33,0.4)]"
               id="hero-passes-btn"
             >
-              <Ticket size={16} />
-              Get Summit Passes
+              <Ticket size={18} />
+              <span>🎫 GET SUMMIT PASSES</span>
             </Link>
+
+            {/* Outlined button */}
             <a
               href="#tracks"
-              className="btn-ghost"
+              className="btn-ghost text-sm sm:text-base py-3.5 px-7 rounded-xl flex items-center gap-2 border border-white/30 text-white hover:border-[#7ED321] hover:text-[#7ED321] transition-all"
               id="hero-explore-btn"
             >
-              Explore Tracks
+              <span>EXPLORE TRACKS</span>
+              <ChevronRight size={16} />
             </a>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Right: 3D Scene Materializes Last */}
-        <div className="flex-1 relative flex items-center justify-center lg:justify-end">
-          <motion.div
-            className="relative w-full max-w-xl"
-            style={{ height: isMobile ? '280px' : '560px' }}
-            initial={{ opacity: 0, scale: 0.75, filter: 'blur(12px)' }}
-            animate={sceneReady || prefersReduced ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : { opacity: 0, scale: 0.75, filter: 'blur(12px)' }}
-            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+        {/* Right Column: Dominant Hero Dollar Bill & Interactive Art */}
+        <div className="flex-1 w-full relative flex items-center justify-center lg:justify-end py-8 lg:py-0 min-h-[380px] sm:min-h-[460px]">
+
+          {/* Background Dollar Bill Parallax Layer 1 (Scattered deeper behind main bill) */}
+          <div
+            ref={bgBill1Ref}
+            className="absolute right-[10%] top-[5%] pointer-events-none z-1 opacity-45 blur-[0.5px]"
+            style={{ transform: 'rotate(-14deg) scale(0.85)' }}
           >
-            {!isMobile ? (
-              <HeroScene mouse={mouseRef} scrollY={scrollYRef} />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="relative w-48 h-48 rounded-full border border-orange/40 flex items-center justify-center font-display text-5xl text-orange">
-                  ⚡
-                </div>
-              </div>
-            )}
+            <DollarBill variant="background" />
+          </div>
+
+          {/* Main Hero Dollar Bill (Angled ~18°, dominant visual anchor, mouse tilt, idle sway) */}
+          <motion.div
+            ref={mainBillRef}
+            initial={prefersReduced ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8, rotate: 18 }}
+            animate={{ opacity: 1, scale: 1, rotate: 18 }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="relative z-10 w-full max-w-[540px] sm:max-w-[620px] lg:max-w-[660px] translate-x-4 lg:translate-x-12 transform-preserve-3d"
+          >
+            {/* Main Dollar Bill SVG */}
+            <DollarBill variant="main" />
+
+            {/* Floating pill badge "🔖 My Plan 🟢" near top-right of hero art */}
+            <div
+              ref={pillRef}
+              className="absolute -top-6 right-8 sm:right-16 z-20 bg-[#0D140E]/95 border border-[#7ED321]/50 shadow-[0_8px_25px_rgba(0,0,0,0.8),0_0_15px_rgba(126,211,33,0.3)] rounded-full px-4 py-2 flex items-center gap-2 text-xs font-mono-data text-white font-bold backdrop-blur-md"
+            >
+              <span>🔖 My Plan</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-[#7ED321] animate-ping" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#7ED321] -ml-5" />
+            </div>
           </motion.div>
         </div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.7 }}
-        transition={{ delay: 2, duration: 1 }}
-      >
-        <span className="font-mono-data text-[10px] uppercase tracking-widest text-orange font-bold">
-          Scroll
-        </span>
-        <motion.div
-          className="w-px h-10 bg-gradient-to-b from-orange to-transparent"
-          animate={{ scaleY: [1, 0.3, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </motion.div>
     </section>
   )
 }

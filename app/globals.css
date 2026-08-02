@@ -5,18 +5,23 @@
 @tailwind utilities;
 
 :root {
-  --bg-void: #0D1110;
-  --bg-panel: #161F1B;
-  --accent-green: #1E4637;
+  --bg-deep: #070B08;
+  --bg-void: #070B08;
+  --bg-panel: #0D140E;
+  --accent-green: #7ED321;
+  --accent-green-glow: rgba(126, 211, 33, 0.35);
   --accent-orange: #FF9900;
   --accent-orange-dim: #B36B00;
-  --accent-volt: #FF9900;
-  --accent-volt-dim: #B36B00;
+  --accent-volt: #7ED321;
+  --accent-volt-dim: #5B9E16;
   --accent-amber: #FF9900;
-  --text-primary: #F9FAF6;
-  --text-muted: #7C8E85;
-  --border-subtle: rgba(179, 107, 0, 0.3);
-  --border-panel: rgba(124, 142, 133, 0.15);
+  --ink-light: #F5F5F0;
+  --text-primary: #F5F5F0;
+  --text-muted: #8A9488;
+  --muted: #8A9488;
+  --border-glow: rgba(126, 211, 33, 0.15);
+  --border-subtle: rgba(126, 211, 33, 0.2);
+  --border-panel: rgba(138, 148, 136, 0.15);
 }
 
 * {
@@ -87,17 +92,23 @@ body {
   color: transparent;
 }
 
+.text-stroke-green {
+  -webkit-text-stroke: 2.5px #7ED321;
+  color: transparent;
+  text-shadow: 0 0 24px rgba(126, 211, 33, 0.45);
+}
+
 /* ─── Gradient utilities ─── */
 .gradient-orange {
   background: linear-gradient(135deg, #FF9900 0%, #E67E00 100%);
 }
 .gradient-green {
-  background: linear-gradient(135deg, #1E4637 0%, #122F24 100%);
+  background: linear-gradient(135deg, #7ED321 0%, #4C9E0D 100%);
 }
 
 /* ─── Glass / Panel ─── */
 .glass {
-  background: rgba(22, 31, 27, 0.85);
+  background: rgba(13, 20, 14, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
@@ -108,7 +119,44 @@ body {
   box-shadow: 0 0 24px rgba(255, 153, 0, 0.4), 0 0 48px rgba(255, 153, 0, 0.15);
 }
 
+.glow-green {
+  box-shadow: 0 0 24px rgba(126, 211, 33, 0.5), 0 0 48px rgba(126, 211, 33, 0.2);
+}
+
 /* ─── Button base ─── */
+.btn-green {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: #7ED321;
+  color: #070B08;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+.btn-green::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.btn-green:hover::after { opacity: 1; }
+.btn-green:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(126, 211, 33, 0.5);
+}
+.btn-green:active { transform: translateY(0); }
+
 .btn-orange, .btn-volt, .btn-amber {
   position: relative;
   display: inline-flex;
@@ -153,15 +201,15 @@ body {
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.04em;
-  border: 1px solid rgba(179, 107, 0, 0.4);
+  border: 1px solid rgba(245, 245, 240, 0.25);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .btn-ghost:hover {
-  border-color: var(--accent-orange);
-  color: var(--accent-orange);
-  background: rgba(255, 153, 0, 0.08);
+  border-color: #7ED321;
+  color: #7ED321;
+  background: rgba(126, 211, 33, 0.08);
 }
 
 /* ─── Current Line Accent ─── */
