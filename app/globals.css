@@ -218,9 +218,36 @@ body {
 
 /* ─── Highlight pulse ─── */
 @keyframes highlightPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 153, 0, 0); }
-  50% { box-shadow: 0 0 0 4px rgba(255, 153, 0, 0.4), 0 0 28px rgba(255, 153, 0, 0.3); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(126, 211, 33, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(126, 211, 33, 0.4), 0 0 28px rgba(126, 211, 33, 0.3); }
 }
 .highlight-active {
   animation: highlightPulse 1.2s ease 3;
+}
+
+/* ─── Money ticker ─── */
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Bill float ─── */
+@keyframes billFloat {
+  0%, 100% { transform: translateY(0px) rotate(18deg); }
+  50% { transform: translateY(-16px) rotate(20deg); }
+}
+
+/* ─── Bill shimmer ─── */
+@keyframes shimmerSweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 300% center; }
+}
+
+/* ─── Glow pulse ring ─── */
+@keyframes glowRing {
+  0%, 100% { box-shadow: 0 0 20px rgba(126,211,33,0.3), 0 0 40px rgba(126,211,33,0.1); }
+  50% { box-shadow: 0 0 40px rgba(126,211,33,0.55), 0 0 80px rgba(126,211,33,0.25); }
+}
+.glow-pulse {
+  animation: glowRing 3s ease-in-out infinite;
 }
