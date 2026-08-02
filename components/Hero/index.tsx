@@ -7,19 +7,13 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Calendar, MapPin, Ticket, ChevronRight, TrendingUp, TrendingDown, ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 
 import Countdown from './Countdown'
 import CircuitBoard from './CircuitBoard'
 import MoneyCanvas from './MoneyCanvas'
+import WavyDollarBill from './WavyDollarBill'
 import { FEST_META } from '@/lib/data'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
-
-// Dynamically import 3D Wavy Ribbon Mesh to prevent SSR window issues
-const WavyDollarBill3D = dynamic(() => import('./WavyDollarBill3D'), {
-  ssr: false,
-  loading: () => <div className="w-full h-[400px]" />,
-})
 
 const TICKER_ITEMS = [
   { sym: 'PEC', val: '₹7,50,000', change: '+12.4%', up: true },
@@ -39,7 +33,6 @@ export default function Hero() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const heroContentRef = useRef<HTMLDivElement>(null)
   const mainBillRef = useRef<HTMLDivElement>(null)
-  const pillRef = useRef<HTMLDivElement>(null)
   const tickerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -53,15 +46,6 @@ export default function Hero() {
 
         ctx = gsap.context(() => {
           if (prefersReduced) return
-
-          // Floating pill bob
-          gsap.to(pillRef.current, {
-            y: '-=8',
-            duration: 3,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-          })
 
           // Ticker scroll animation
           if (tickerRef.current) {
@@ -117,7 +101,7 @@ export default function Hero() {
 
       {/* Layer 3: Left scrim */}
       <div
-        className="absolute left-0 top-0 bottom-0 w-full lg:w-[60%] pointer-events-none z-1"
+        className="absolute left-0 top-0 bottom-0 w-full lg:w-[58%] pointer-events-none z-1"
         style={{ background: 'linear-gradient(90deg, rgba(7,11,8,0.98) 0%, rgba(7,11,8,0.85) 65%, transparent 100%)' }}
       />
 
@@ -233,29 +217,11 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* RIGHT: Real 3D Wavy Ribbon Dollar Bill (GPU Accelerated, Three.js Mesh Wave Animation) */}
-        <div className="flex-1 w-full relative flex items-center justify-center lg:justify-end py-4 lg:py-0 min-h-[420px] sm:min-h-[500px]">
-
-          {/* "My Plan" floating pill */}
-          <div
-            ref={pillRef}
-            className="absolute top-0 right-4 sm:right-12 z-20 bg-[#0D140E]/95 border border-[#7ED321]/50 shadow-lg rounded-full px-4 py-2 flex items-center gap-2 text-xs font-mono-data text-white font-bold backdrop-blur-md"
-          >
-            <span>🔖 My Plan</span>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#7ED321] animate-ping" />
-            <span className="w-2.5 h-2.5 rounded-full bg-[#7ED321] -ml-5" />
+        {/* RIGHT: 3D Wavy Ribbon Dollar Bill (Ultra-Reliable Vector Ribbon Graphics + 3D Animation) */}
+        <div className="flex-1 w-full relative flex items-center justify-center lg:justify-end py-4 lg:py-0 min-h-[380px] sm:min-h-[460px]">
+          <div ref={mainBillRef} className="w-full flex justify-center lg:justify-end">
+            <WavyDollarBill prefersReduced={prefersReduced} />
           </div>
-
-          {/* Three.js 3D Wavy Ribbon Container */}
-          <motion.div
-            ref={mainBillRef}
-            initial={prefersReduced ? {} : { opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.1 }}
-            className="w-full max-w-[620px] sm:max-w-[720px] h-[440px] sm:h-[500px] relative"
-          >
-            <WavyDollarBill3D prefersReduced={prefersReduced} />
-          </motion.div>
         </div>
       </div>
 
