@@ -1,6 +1,6 @@
 'use client'
 // components/Tracks/index.tsx
-// Event tracks grid with 3D cursor-tilt, volt border charging stroke, and expandable detail drawer
+// Event tracks grid with 3D cursor-tilt, neon green glow, and expandable detail drawer
 
 import { useRef, useState, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { Zap, Users, Store, Code2, Network, ChevronDown, X, LucideIcon } from 'lucide-react'
 import { TRACKS } from '@/lib/data'
 import { onAgentEvent } from '@/lib/events'
+import CircuitBoard from '../Hero/CircuitBoard'
 
 const ICONS: Record<string, LucideIcon> = {
   Zap, Users, Store, Code2, Network,
@@ -48,13 +49,13 @@ function TrackCard({
       id={`track-${track.id}`}
       className={`tilt-card cursor-pointer rounded-2xl p-7 relative overflow-hidden group ${isHighlighted ? 'highlight-active' : ''}`}
       style={{
-        background: 'var(--bg-void)',
-        border: `1px solid ${isHighlighted ? '#FF9900' : 'rgba(179,107,0,0.3)'}`,
+        background: '#0D140E',
+        border: `1px solid ${isHighlighted ? '#7ED321' : 'rgba(126,211,33,0.2)'}`,
         transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
         transition: tilt.x === 0 && tilt.y === 0 ? 'all 0.4s ease' : 'transform 0.1s ease',
-        boxShadow: isHighlighted ? '0 0 28px rgba(255,153,0,0.4)' : undefined,
+        boxShadow: isHighlighted ? '0 0 28px rgba(126,211,33,0.4)' : undefined,
       }}
-      whileHover={{ borderColor: '#FF9900', boxShadow: '0 0 24px rgba(255,153,0,0.25)' }}
+      whileHover={{ borderColor: '#7ED321', boxShadow: '0 0 25px rgba(126,211,33,0.3)' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
@@ -67,39 +68,39 @@ function TrackCard({
       aria-label={`${track.title} — click to expand details`}
       onKeyDown={(e) => e.key === 'Enter' && onClick()}
     >
-      {/* Icon */}
+      {/* Icon in Green Glow Circle */}
       <div
-        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-panel border border-orange-dim/40 group-hover:border-orange transition-colors"
+        className="w-12 h-12 rounded-full flex items-center justify-center mb-5 bg-[#070B08] border border-[#7ED321]/40 group-hover:border-[#7ED321] group-hover:shadow-[0_0_20px_rgba(126,211,33,0.5)] transition-all"
         aria-hidden="true"
       >
-        <Icon size={22} className="text-orange" />
+        <Icon size={22} className="text-[#7ED321]" />
       </div>
 
       {/* Eyebrow */}
-      <p className="font-mono-data text-[10px] uppercase tracking-widest mb-2 text-orange font-bold">
-        ⚡ {track.eyebrow}
+      <p className="font-mono-data text-[10px] uppercase tracking-widest mb-2 text-[#7ED321] font-bold flex items-center gap-1">
+        <span>☑</span> {track.eyebrow}
       </p>
 
       {/* Title */}
-      <h3 className="font-display text-3xl mb-3 leading-none text-primary group-hover:text-orange transition-colors">
+      <h3 className="font-display text-3xl mb-3 leading-none text-white group-hover:text-[#7ED321] transition-colors">
         {track.title}
       </h3>
 
       {/* Short desc */}
-      <p className="font-body text-sm leading-relaxed text-muted">
+      <p className="font-body text-sm leading-relaxed text-[#8A9488]">
         {track.shortDesc}
       </p>
 
       {/* Expand hint */}
-      <div className="mt-5 flex items-center gap-1.5 font-mono-data text-xs text-orange font-bold">
+      <div className="mt-5 flex items-center gap-1.5 font-mono-data text-xs text-[#7ED321] font-bold">
         <span>Expand Track</span>
         <ChevronDown size={14} aria-hidden="true" />
       </div>
 
       {/* Decorative corner glow */}
       <div
-        className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity"
-        style={{ background: 'radial-gradient(circle, #FF9900 0%, transparent 70%)' }}
+        className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full pointer-events-none opacity-15 group-hover:opacity-35 transition-opacity"
+        style={{ background: 'radial-gradient(circle, #7ED321 0%, transparent 70%)' }}
         aria-hidden="true"
       />
     </motion.div>
@@ -133,14 +134,16 @@ export default function Tracks() {
   return (
     <section
       id="tracks"
-      className="py-24 lg:py-32 relative"
-      style={{ background: 'var(--bg-panel)' }}
+      className="py-24 lg:py-32 relative bg-[#070B08] border-t border-b border-[#7ED321]/15 overflow-hidden"
       aria-labelledby="tracks-heading"
     >
+      {/* Circuit overlay */}
+      <CircuitBoard prefersReduced={false} />
+
       {/* Current Line Top Accent */}
       <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
 
-      <div className="section-container">
+      <div className="section-container relative z-10">
         {/* Header */}
         <motion.div
           className="mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-6"
@@ -151,9 +154,9 @@ export default function Tracks() {
         >
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-orange fill-orange" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-orange font-bold">
-                High-Voltage Agenda
+              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
+              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
+                Capital &amp; Innovation Agenda
               </p>
             </div>
             <h2
@@ -162,12 +165,12 @@ export default function Tracks() {
               style={{ fontSize: 'clamp(40px, 5vw, 72px)', color: 'var(--text-primary)' }}
             >
               TRACKS &amp;<br />
-              <span className="text-stroke-orange">COMPETITIONS</span>
+              <span className="text-stroke-green">COMPETITIONS</span>
             </h2>
           </div>
           <Link
             href="/tracks"
-            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-orange hover:text-primary transition-colors border-b border-orange/40 pb-1"
+            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-[#7ED321] hover:text-white transition-colors border-b border-[#7ED321]/40 pb-1"
           >
             Explore Full Tracks Page &rarr;
           </Link>
@@ -194,32 +197,32 @@ export default function Tracks() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
+            className="overflow-hidden relative z-20"
             role="region"
             aria-label={`${openTrack.title} details`}
           >
             <div
-              className="mt-8 mx-4 lg:mx-0 rounded-2xl p-8 relative bg-void border border-orange-dim/40 shadow-2xl"
+              className="mt-8 mx-4 lg:mx-0 rounded-2xl p-8 relative bg-[#0D140E] border border-[#7ED321]/40 shadow-2xl"
               style={{ maxWidth: '1280px', margin: '32px auto 0' }}
             >
               <button
                 onClick={() => setOpenId(null)}
-                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-orange bg-panel"
+                className="absolute top-6 right-6 p-2 rounded-lg text-[#8A9488] hover:text-[#7ED321] bg-[#070B08]"
                 aria-label="Close details panel"
               >
                 <X size={16} />
               </button>
               <div className="flex items-center gap-3 mb-3">
-                <span className="font-mono-data text-xs uppercase tracking-widest text-orange font-bold">
+                <span className="font-mono-data text-xs uppercase tracking-widest text-[#7ED321] font-bold">
                   ⚡ {openTrack.eyebrow}
                 </span>
               </div>
-              <h3 className="font-display text-4xl mb-4 text-primary">
+              <h3 className="font-display text-4xl mb-4 text-white">
                 {openTrack.title}
               </h3>
               <div className="prose prose-invert max-w-2xl">
                 {openTrack.fullDesc.split('\n\n').map((para, i) => (
-                  <p key={i} className="font-body text-sm leading-relaxed mb-4 text-muted">
+                  <p key={i} className="font-body text-sm leading-relaxed mb-4 text-[#8A9488]">
                     {para}
                   </p>
                 ))}

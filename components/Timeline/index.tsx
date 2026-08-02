@@ -1,13 +1,14 @@
 'use client'
 // components/Timeline/index.tsx
-// Vertical Pipeline Schedule Timeline with Forest Green, Vibrant Orange, and Silver Metallic Accents
+// Vertical Schedule Timeline with Money/Fintech theme styling
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Clock, Calendar, Zap, ArrowRight, ShieldCheck, MapPin } from 'lucide-react'
+import { Clock, Calendar, Zap, ShieldCheck, MapPin } from 'lucide-react'
 import { SCHEDULE } from '@/lib/data'
 import { onAgentEvent } from '@/lib/events'
 import Link from 'next/link'
+import CircuitBoard from '../Hero/CircuitBoard'
 
 type ScheduleEvent = typeof SCHEDULE.day1.events[0]
 
@@ -29,60 +30,60 @@ function TimelineEventCard({
       transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       className={`relative pl-8 sm:pl-14 pb-10 border-l-2 ${
         isHighlighted
-          ? 'border-orange shadow-[0_0_20px_#FF9900] highlight-active'
-          : 'border-orange/30 hover:border-orange/70'
+          ? 'border-[#7ED321] shadow-[0_0_20px_#7ED321] highlight-active'
+          : 'border-[#7ED321]/30 hover:border-[#7ED321]'
       } transition-colors duration-300 group`}
     >
       {/* Node Bullet on Vertical Pipeline Spine */}
       <div
-        className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-void border-2 transition-all duration-300 group-hover:scale-125 flex items-center justify-center"
+        className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[#070B08] border-2 transition-all duration-300 group-hover:scale-125 flex items-center justify-center"
         style={{
-          borderColor: isHighlighted ? '#FF9900' : 'var(--accent-orange)',
-          boxShadow: isHighlighted ? '0 0 20px #FF9900' : '0 0 8px rgba(255,153,0,0.3)',
+          borderColor: isHighlighted ? '#7ED321' : '#7ED321',
+          boxShadow: isHighlighted ? '0 0 20px #7ED321' : '0 0 8px rgba(126,211,33,0.4)',
         }}
       >
-        <div className="w-1.5 h-1.5 rounded-full bg-orange" />
+        <div className="w-1.5 h-1.5 rounded-full bg-[#7ED321]" />
       </div>
 
       {/* Main Event Card */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-panel border border-[#D1D5DB]/20 hover:border-orange transition-all duration-300 shadow-xl group-hover:-translate-y-1 relative overflow-hidden">
+      <div className="p-6 sm:p-7 rounded-2xl bg-[#0D140E] border border-[#7ED321]/20 hover:border-[#7ED321] transition-all duration-300 shadow-xl group-hover:-translate-y-1 relative overflow-hidden">
         {/* Top Metallic Gloss Line */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D1D5DB]/30 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#7ED321]/30 to-transparent" />
 
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
           {/* Time */}
-          <div className="flex items-center gap-2 font-mono-data text-xs text-orange font-bold">
-            <Clock size={14} className="text-orange" />
+          <div className="flex items-center gap-2 font-mono-data text-xs text-[#7ED321] font-bold tabular-nums">
+            <Clock size={14} className="text-[#7ED321]" />
             <span>{event.time}</span>
           </div>
 
           {/* Type Badge */}
-          <span className="font-mono-data text-[10px] uppercase font-bold px-3 py-1 rounded bg-green/40 text-orange border border-green">
+          <span className="font-mono-data text-[10px] uppercase font-bold px-3 py-1 rounded bg-[#7ED321]/15 text-[#7ED321] border border-[#7ED321]/30">
             {event.type}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="font-display text-2xl sm:text-3xl text-primary group-hover:text-orange transition-colors mb-2">
+        <h3 className="font-display text-2xl sm:text-3xl text-white group-hover:text-[#7ED321] transition-colors mb-2">
           {event.title}
         </h3>
 
         {/* Track & Venue Footer */}
-        <div className="mt-4 pt-3 border-t border-[#D1D5DB]/15 flex flex-wrap items-center justify-between gap-2">
+        <div className="mt-4 pt-3 border-t border-[#7ED321]/15 flex flex-wrap items-center justify-between gap-2">
           {event.track ? (
-            <span className="font-mono-data text-[10px] uppercase text-orange font-bold flex items-center gap-1">
-              <Zap size={11} className="text-orange fill-orange" />
+            <span className="font-mono-data text-[10px] uppercase text-[#7ED321] font-bold flex items-center gap-1">
+              <Zap size={11} className="text-[#7ED321] fill-[#7ED321]" />
               Track: {event.track}
             </span>
           ) : (
-            <span className="font-mono-data text-[10px] uppercase text-[#D1D5DB] flex items-center gap-1">
-              <ShieldCheck size={11} className="text-[#D1D5DB]" />
+            <span className="font-mono-data text-[10px] uppercase text-[#8A9488] flex items-center gap-1">
+              <ShieldCheck size={11} className="text-[#8A9488]" />
               PEC Official Session
             </span>
           )}
 
-          <span className="font-mono-data text-[10px] text-muted flex items-center gap-1">
-            <MapPin size={11} className="text-orange" />
+          <span className="font-mono-data text-[10px] text-[#8A9488] flex items-center gap-1">
+            <MapPin size={11} className="text-[#7ED321]" />
             PEC Main Campus, Sector 12
           </span>
         </div>
@@ -112,14 +113,16 @@ export default function Timeline() {
   return (
     <section
       id="schedule"
-      className="py-24 lg:py-32 relative"
-      style={{ background: 'var(--bg-void)' }}
+      className="py-24 lg:py-32 relative bg-[#070B08] border-t border-b border-[#7ED321]/15 overflow-hidden"
       aria-labelledby="schedule-heading"
     >
+      {/* Circuit overlay */}
+      <CircuitBoard prefersReduced={false} />
+
       {/* Current Line Top Accent */}
       <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
 
-      <div className="section-container">
+      <div className="section-container relative z-10">
         {/* Header */}
         <motion.div
           className="mb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-6"
@@ -130,9 +133,9 @@ export default function Timeline() {
         >
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-orange fill-orange" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-orange font-bold">
-                Vertical Pipeline Lineup
+              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
+              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
+                Summit Agenda &amp; Timetable
               </p>
             </div>
             <h2
@@ -141,13 +144,13 @@ export default function Timeline() {
               style={{ fontSize: 'clamp(40px, 5vw, 76px)', color: 'var(--text-primary)' }}
             >
               SUMMIT <br />
-              <span className="text-stroke-orange">SCHEDULE</span>
+              <span className="text-stroke-green">SCHEDULE</span>
             </h2>
           </div>
 
           <Link
             href="/schedule"
-            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-orange hover:text-primary transition-colors border-b border-orange/40 pb-1"
+            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-[#7ED321] hover:text-white transition-colors border-b border-[#7ED321]/40 pb-1"
           >
             View Interactive Vertical Timetable &rarr;
           </Link>
@@ -164,11 +167,11 @@ export default function Timeline() {
                 onClick={() => setActiveDay(dayKey)}
                 className="px-6 py-3.5 rounded-xl font-mono-data text-xs uppercase tracking-wider flex items-center gap-2 transition-all duration-200"
                 style={{
-                  background: isActive ? 'var(--accent-orange)' : 'var(--bg-panel)',
-                  color: isActive ? '#0D1110' : 'var(--text-primary)',
+                  background: isActive ? '#7ED321' : '#0D140E',
+                  color: isActive ? '#070B08' : '#F5F5F0',
                   fontWeight: isActive ? 700 : 500,
-                  border: `1px solid ${isActive ? 'transparent' : 'rgba(209,213,219,0.2)'}`,
-                  boxShadow: isActive ? '0 0 20px rgba(255,153,0,0.4)' : undefined,
+                  border: `1px solid ${isActive ? 'transparent' : 'rgba(126,211,33,0.3)'}`,
+                  boxShadow: isActive ? '0 0 20px rgba(126,211,33,0.4)' : undefined,
                 }}
               >
                 <Calendar size={14} />

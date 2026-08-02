@@ -1,6 +1,6 @@
 'use client'
 // components/Concierge/index.tsx
-// Floating Agentic Summit Agent + "My Plan" Persistent Itinerary Drawer (Official Logo Theme)
+// Floating Agentic Summit Agent + "My Plan" Persistent Itinerary Drawer (Money/Fintech Green Theme)
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -60,21 +60,21 @@ export default function Concierge() {
 
   const addToPlan = (session: ItinerarySession) => {
     if (myPlan.some((s) => s.id === session.id)) {
-      toast('Session already in My Plan', { icon: 'ℹ️', style: { background: '#161F1B', color: '#F9FAF6' } })
+      toast('Session already in My Plan', { icon: 'ℹ️', style: { background: '#0D140E', color: '#F5F5F0' } })
       return
     }
     const updated = [...myPlan, session]
     savePlan(updated)
     toast.success(`Added "${session.title}" to My Plan!`, {
-      style: { background: '#161F1B', color: '#F9FAF6', border: '1px solid #FF9900' },
-      iconTheme: { primary: '#FF9900', secondary: '#0D1110' },
+      style: { background: '#0D140E', color: '#F5F5F0', border: '1px solid #7ED321' },
+      iconTheme: { primary: '#7ED321', secondary: '#070B08' },
     })
   }
 
   const removeFromPlan = (id: string) => {
     const updated = myPlan.filter((s) => s.id !== id)
     savePlan(updated)
-    toast('Removed from My Plan', { icon: '🗑️', style: { background: '#161F1B', color: '#F9FAF6' } })
+    toast('Removed from My Plan', { icon: '🗑️', style: { background: '#0D140E', color: '#F5F5F0' } })
   }
 
   useEffect(() => {
@@ -120,11 +120,11 @@ export default function Concierge() {
       if (response.toast) {
         toast.success(response.toast, {
           style: {
-            background: '#161F1B',
-            color: '#F9FAF6',
-            border: '1px solid #FF9900',
+            background: '#0D140E',
+            color: '#F5F5F0',
+            border: '1px solid #7ED321',
           },
-          iconTheme: { primary: '#FF9900', secondary: '#0D1110' },
+          iconTheme: { primary: '#7ED321', secondary: '#070B08' },
         })
       }
 
@@ -146,15 +146,15 @@ export default function Concierge() {
 
   return (
     <>
-      {/* Floating My Plan Drawer Button — Desktop only to prevent mobile overlap */}
+      {/* Floating My Plan Drawer Button — Desktop only */}
       <button
         onClick={() => setPlanOpen(true)}
-        className="hidden md:flex fixed top-20 right-6 z-30 px-3.5 py-2 rounded-xl bg-panel border border-orange-dim/40 text-primary font-mono-data text-xs items-center gap-2 shadow-lg hover:border-orange transition-all"
+        className="hidden md:flex fixed top-24 right-6 z-40 px-3.5 py-2 rounded-xl bg-[#0D140E] border border-[#7ED321]/40 text-white font-mono-data text-xs items-center gap-2 shadow-lg hover:border-[#7ED321] hover:shadow-[0_0_15px_rgba(126,211,33,0.3)] transition-all"
         aria-label="Open My Plan itinerary drawer"
       >
-        <Bookmark size={14} className="text-orange fill-orange/20" />
+        <Bookmark size={14} className="text-[#7ED321] fill-[#7ED321]/20" />
         <span>My Plan</span>
-        <span className="w-5 h-5 rounded-full bg-orange text-black font-bold text-[10px] flex items-center justify-center">
+        <span className="w-5 h-5 rounded-full bg-[#7ED321] text-[#070B08] font-bold text-[10px] flex items-center justify-center">
           {myPlan.length}
         </span>
       </button>
@@ -164,9 +164,9 @@ export default function Concierge() {
         onClick={() => setOpen((o) => !o)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
         style={{
-          background: open ? '#161F1B' : '#FF9900',
-          border: '1px solid rgba(255,153,0,0.4)',
-          color: open ? '#F9FAF6' : '#0D1110',
+          background: open ? '#0D140E' : '#7ED321',
+          border: '1px solid rgba(126,211,33,0.5)',
+          color: open ? '#F5F5F0' : '#070B08',
         }}
         whileHover={{ scale: 1.07 }}
         whileTap={{ scale: 0.95 }}
@@ -180,7 +180,7 @@ export default function Concierge() {
           )}
         </AnimatePresence>
         {!open && unread > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-orange text-black font-mono-data text-[10px] font-bold flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#7ED321] text-[#070B08] font-mono-data text-[10px] font-bold flex items-center justify-center">
             {unread}
           </span>
         )}
@@ -190,24 +190,24 @@ export default function Concierge() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-24px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-void border border-orange-dim/40"
+            className="fixed bottom-24 right-6 z-50 w-[380px] max-w-[calc(100vw-24px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-[#070B08] border border-[#7ED321]/40"
             style={{ height: '540px' }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 shrink-0 bg-panel border-b border-orange-dim/30">
-              <div className="w-9 h-9 rounded-xl bg-orange/20 border border-orange/40 flex items-center justify-center">
-                <Bot size={18} className="text-orange" />
+            <div className="flex items-center gap-3 px-4 py-3 shrink-0 bg-[#0D140E] border-b border-[#7ED321]/30">
+              <div className="w-9 h-9 rounded-xl bg-[#7ED321]/20 border border-[#7ED321]/40 flex items-center justify-center">
+                <Bot size={18} className="text-[#7ED321]" />
               </div>
               <div className="flex-1">
-                <p className="font-body font-semibold text-sm text-primary flex items-center gap-1.5">
-                  Summit Agent <Zap size={12} className="text-orange fill-orange" />
+                <p className="font-body font-semibold text-sm text-white flex items-center gap-1.5">
+                  Summit Agent <Zap size={12} className="text-[#7ED321] fill-[#7ED321]" />
                 </p>
-                <p className="font-mono-data text-[10px] text-orange font-bold">⚡ Official E-Cell Assistant</p>
+                <p className="font-mono-data text-[10px] text-[#7ED321] font-bold">⚡ Official E-Cell Assistant</p>
               </div>
-              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg text-muted hover:text-primary">
+              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg text-[#8A9488] hover:text-white">
                 <ChevronDown size={16} />
               </button>
             </div>
@@ -220,18 +220,18 @@ export default function Concierge() {
                     <div
                       className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
                       style={{
-                        background: msg.role === 'user' ? 'rgba(30,70,55,0.5)' : 'rgba(255,153,0,0.2)',
-                        border: `1px solid ${msg.role === 'user' ? '#1E4637' : '#FF9900'}`,
+                        background: msg.role === 'user' ? 'rgba(126,211,33,0.3)' : 'rgba(126,211,33,0.15)',
+                        border: `1px solid ${msg.role === 'user' ? '#7ED321' : '#7ED321'}`,
                       }}
                     >
-                      {msg.role === 'user' ? <User size={13} className="text-orange" /> : <Bot size={13} className="text-orange" />}
+                      {msg.role === 'user' ? <User size={13} className="text-[#7ED321]" /> : <Bot size={13} className="text-[#7ED321]" />}
                     </div>
 
                     <div
                       className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed ${
                         msg.role === 'user'
-                          ? 'bg-orange text-black font-semibold rounded-br-none'
-                          : 'bg-panel border-l-4 border-l-orange border-t border-r border-b border-orange-dim/30 text-primary rounded-bl-none'
+                          ? 'bg-[#7ED321] text-[#070B08] font-bold rounded-br-none'
+                          : 'bg-[#0D140E] border-l-4 border-l-[#7ED321] border-t border-r border-b border-[#7ED321]/30 text-white rounded-bl-none'
                       }`}
                     >
                       {msg.text}
@@ -240,8 +240,8 @@ export default function Concierge() {
 
                   {/* Render Inline Itinerary Card */}
                   {msg.itinerary && (
-                    <div className="mt-3 ml-9 w-[85%] rounded-xl p-4 bg-panel border border-orange/50 shadow-lg space-y-3">
-                      <div className="flex items-center gap-2 text-xs font-mono-data text-orange uppercase font-bold">
+                    <div className="mt-3 ml-9 w-[85%] rounded-xl p-4 bg-[#0D140E] border border-[#7ED321]/50 shadow-lg space-y-3">
+                      <div className="flex items-center gap-2 text-xs font-mono-data text-[#7ED321] uppercase font-bold">
                         <Calendar size={14} />
                         <span>{msg.itinerary.title}</span>
                       </div>
@@ -251,20 +251,20 @@ export default function Concierge() {
                           return (
                             <div
                               key={session.id}
-                              className="p-2.5 rounded-lg bg-void border border-orange-dim/30 flex items-center justify-between gap-2"
+                              className="p-2.5 rounded-lg bg-[#070B08] border border-[#7ED321]/30 flex items-center justify-between gap-2"
                             >
                               <div className="flex-1 min-w-0">
-                                <p className="font-mono-data text-[10px] text-muted">
+                                <p className="font-mono-data text-[10px] text-[#8A9488]">
                                   [{session.day}] {session.time}
                                 </p>
-                                <p className="font-body text-xs font-semibold text-primary truncate">{session.title}</p>
+                                <p className="font-body text-xs font-semibold text-white truncate">{session.title}</p>
                               </div>
                               <button
                                 onClick={() => addToPlan(session)}
                                 className={`px-2 py-1 rounded text-[10px] font-mono-data shrink-0 flex items-center gap-1 transition-all ${
                                   isInPlan
-                                    ? 'bg-orange/20 text-orange border border-orange/40'
-                                    : 'bg-orange text-black font-bold hover:bg-orange/90'
+                                    ? 'bg-[#7ED321]/20 text-[#7ED321] border border-[#7ED321]/40'
+                                    : 'bg-[#7ED321] text-[#070B08] font-bold hover:bg-[#7ED321]/90'
                                 }`}
                               >
                                 {isInPlan ? <Check size={10} /> : <Plus size={10} />}
@@ -284,7 +284,7 @@ export default function Concierge() {
                         <button
                           key={r}
                           onClick={() => sendMessage(r)}
-                          className="px-3 py-1 rounded-full text-xs font-mono-data bg-panel border border-orange-dim/40 text-muted hover:border-orange hover:text-orange transition-all"
+                          className="px-3 py-1 rounded-full text-xs font-mono-data bg-[#0D140E] border border-[#7ED321]/30 text-[#8A9488] hover:border-[#7ED321] hover:text-[#7ED321] transition-all"
                         >
                           {r}
                         </button>
@@ -293,12 +293,12 @@ export default function Concierge() {
                   )}
                 </div>
               ))}
-              {isTyping && <p className="text-xs font-mono-data text-orange ml-9">Agent is planning...</p>}
+              {isTyping && <p className="text-xs font-mono-data text-[#7ED321] ml-9">Agent is planning...</p>}
               <div ref={bottomRef} />
             </div>
 
             {/* Input Form */}
-            <div className="p-3 bg-panel border-t border-orange-dim/30">
+            <div className="p-3 bg-[#0D140E] border-t border-[#7ED321]/30">
               <form onSubmit={(e) => { e.preventDefault(); sendMessage(input) }} className="flex items-center gap-2">
                 <input
                   ref={inputRef}
@@ -306,12 +306,12 @@ export default function Concierge() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about tracks, speakers, or build an itinerary..."
-                  className="flex-1 bg-void border border-orange-dim/40 rounded-lg px-3 py-2 text-sm text-primary placeholder:text-muted/60 outline-none focus:border-orange font-body"
+                  className="flex-1 bg-[#070B08] border border-[#7ED321]/40 rounded-lg px-3 py-2 text-sm text-white placeholder:text-[#8A9488]/60 outline-none focus:border-[#7ED321] font-body"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
-                  className="w-9 h-9 rounded-lg bg-orange text-black flex items-center justify-center disabled:opacity-40"
+                  className="w-9 h-9 rounded-lg bg-[#7ED321] text-[#070B08] font-bold flex items-center justify-center disabled:opacity-40"
                 >
                   <Send size={15} />
                 </button>
@@ -324,49 +324,49 @@ export default function Concierge() {
       {/* Persistent "My Plan" Itinerary Drawer */}
       <AnimatePresence>
         {planOpen && (
-          <div className="fixed inset-0 z-50 flex justify-end bg-void/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex justify-end bg-[#070B08]/80 backdrop-blur-sm">
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-md bg-panel border-l border-orange-dim/40 h-full flex flex-col p-6 shadow-2xl relative"
+              className="w-full max-w-md bg-[#0D140E] border-l border-[#7ED321]/40 h-full flex flex-col p-6 shadow-2xl relative"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-orange-dim/30 mb-6">
+              <div className="flex items-center justify-between pb-4 border-b border-[#7ED321]/30 mb-6">
                 <div className="flex items-center gap-2">
-                  <Bookmark size={18} className="text-orange fill-orange/20" />
-                  <h3 className="font-display text-2xl text-primary">My Personal Itinerary</h3>
+                  <Bookmark size={18} className="text-[#7ED321] fill-[#7ED321]/20" />
+                  <h3 className="font-display text-2xl text-white">My Personal Itinerary</h3>
                 </div>
-                <button onClick={() => setPlanOpen(false)} className="p-2 rounded-lg text-muted hover:text-primary">
+                <button onClick={() => setPlanOpen(false)} className="p-2 rounded-lg text-[#8A9488] hover:text-white">
                   <X size={18} />
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto space-y-3">
                 {myPlan.length === 0 ? (
-                  <div className="py-16 text-center text-muted font-body text-sm">
-                    <Calendar size={36} className="mx-auto mb-3 opacity-30 text-orange" />
+                  <div className="py-16 text-center text-[#8A9488] font-body text-sm">
+                    <Calendar size={36} className="mx-auto mb-3 opacity-30 text-[#7ED321]" />
                     <p>Your plan is empty.</p>
-                    <p className="text-xs text-muted/70 mt-1">Ask Summit Agent in chat to build a custom itinerary for you!</p>
+                    <p className="text-xs text-[#8A9488]/70 mt-1">Ask Summit Agent in chat to build a custom itinerary for you!</p>
                   </div>
                 ) : (
                   myPlan.map((session) => (
                     <div
                       key={session.id}
-                      className="p-4 rounded-xl bg-void border border-orange-dim/30 flex items-start justify-between gap-3"
+                      className="p-4 rounded-xl bg-[#070B08] border border-[#7ED321]/30 flex items-start justify-between gap-3"
                     >
                       <div>
-                        <span className="font-mono-data text-[10px] uppercase text-orange block mb-1 font-bold">
+                        <span className="font-mono-data text-[10px] uppercase text-[#7ED321] block mb-1 font-bold">
                           [{session.day}] {session.time}
                         </span>
-                        <h4 className="font-body font-semibold text-sm text-primary mb-1">{session.title}</h4>
-                        <span className="font-mono-data text-[9px] uppercase px-2 py-0.5 rounded bg-panel text-muted">
+                        <h4 className="font-body font-semibold text-sm text-white mb-1">{session.title}</h4>
+                        <span className="font-mono-data text-[9px] uppercase px-2 py-0.5 rounded bg-[#0D140E] text-[#8A9488]">
                           {session.type}
                         </span>
                       </div>
                       <button
                         onClick={() => removeFromPlan(session.id)}
-                        className="p-2 rounded-lg text-muted hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                        className="p-2 rounded-lg text-[#8A9488] hover:text-red-400 hover:bg-red-500/10 transition-colors"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -376,8 +376,8 @@ export default function Concierge() {
               </div>
 
               {myPlan.length > 0 && (
-                <div className="pt-4 border-t border-orange-dim/30 mt-4 flex justify-between items-center">
-                  <span className="font-mono-data text-xs text-muted">{myPlan.length} Saved Sessions</span>
+                <div className="pt-4 border-t border-[#7ED321]/30 mt-4 flex justify-between items-center">
+                  <span className="font-mono-data text-xs text-[#8A9488]">{myPlan.length} Saved Sessions</span>
                   <button
                     onClick={() => savePlan([])}
                     className="font-mono-data text-xs text-red-400 hover:underline"

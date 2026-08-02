@@ -2,10 +2,11 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Twitter, Linkedin, ArrowLeft, Sparkles, X, MessageSquare, Zap } from 'lucide-react'
+import { Search, Twitter, Linkedin, ArrowLeft, X, MessageSquare, Zap } from 'lucide-react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import Concierge from '@/components/Concierge'
+import CircuitBoard from '@/components/Hero/CircuitBoard'
 import { SPEAKERS } from '@/lib/data'
 import Link from 'next/link'
 
@@ -24,28 +25,28 @@ export default function SpeakersLandingPage() {
   })
 
   return (
-    <main className="min-h-screen bg-void text-primary">
+    <main className="min-h-screen bg-[#070B08] text-white">
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-volt-dim/30 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#F5D400_1px,transparent_1px)] [background-size:28px_28px]" />
+      <section className="relative pt-36 pb-20 border-b border-[#7ED321]/20 overflow-hidden">
+        <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-volt transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-[#8A9488] hover:text-[#7ED321] transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-volt/10 border border-volt/30 mb-6">
-              <Zap size={14} className="text-volt fill-volt" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-volt">
-                E-Summit 2025 Speaker Lineup
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7ED321]/15 border border-[#7ED321]/30 mb-6">
+              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
+              <span className="font-mono-data text-xs uppercase tracking-wider text-[#7ED321]">
+                E-Summit 2026 Speaker Lineup
               </span>
             </div>
 
@@ -54,23 +55,23 @@ export default function SpeakersLandingPage() {
               style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
             >
               VOICES THAT <br />
-              <span className="text-volt">BUILD &amp; INVEST</span>
+              <span className="text-stroke-green">BUILD &amp; INVEST</span>
             </h1>
 
-            <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
+            <p className="font-body text-lg text-[#8A9488] max-w-xl leading-relaxed mb-8">
               Hear from India&apos;s leading venture capitalists, unicorn co-founders, policy experts, and campus innovators sharing real, hard-hitting founder playbooks.
             </p>
 
             {/* Search & Track Filters */}
             <div className="flex flex-col sm:flex-row gap-4 max-w-2xl">
               <div className="relative flex-1">
-                <Search size={16} className="absolute left-4 top-3.5 text-muted" />
+                <Search size={16} className="absolute left-4 top-3.5 text-[#8A9488]" />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search speaker by name, company, or domain..."
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-panel border border-volt-dim/30 text-primary font-body text-sm outline-none focus:border-volt"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#0D140E] border border-[#7ED321]/30 text-white font-body text-sm outline-none focus:border-[#7ED321]"
                 />
               </div>
 
@@ -81,10 +82,11 @@ export default function SpeakersLandingPage() {
                     onClick={() => setSelectedTrack(tr)}
                     className="px-4 py-3 rounded-xl font-mono-data text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-200"
                     style={{
-                      background: selectedTrack === tr ? 'var(--accent-volt)' : 'var(--bg-panel)',
-                      color: selectedTrack === tr ? '#0A0A0A' : 'var(--text-muted)',
+                      background: selectedTrack === tr ? '#7ED321' : '#0D140E',
+                      color: selectedTrack === tr ? '#070B08' : '#8A9488',
                       fontWeight: selectedTrack === tr ? 700 : 400,
-                      border: `1px solid ${selectedTrack === tr ? 'transparent' : 'rgba(138,118,0,0.3)'}`,
+                      border: `1px solid ${selectedTrack === tr ? 'transparent' : 'rgba(126,211,33,0.2)'}`,
+                      boxShadow: selectedTrack === tr ? '0 0 15px rgba(126,211,33,0.4)' : 'none',
                     }}
                   >
                     {tr === 'All' ? 'All Sessions' : tr}
@@ -97,7 +99,7 @@ export default function SpeakersLandingPage() {
       </section>
 
       {/* Speakers Grid */}
-      <section className="py-20 bg-panel/30">
+      <section className="py-20 bg-[#111A12]">
         <div className="section-container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredSpeakers.map((spk) => (
@@ -107,24 +109,25 @@ export default function SpeakersLandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => setActiveSpeaker(spk)}
-                className="group relative rounded-2xl p-6 bg-panel border border-volt-dim/30 hover:border-volt cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-lg"
+                className="group relative rounded-2xl p-6 bg-[#0D140E] border border-[#7ED321]/20 hover:border-[#7ED321] cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-lg"
+                whileHover={{ y: -6, boxShadow: '0 0 25px rgba(126,211,33,0.3)' }}
               >
                 <div>
-                  <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 text-2xl font-display font-bold bg-void border border-volt-dim/40 text-volt group-hover:scale-105 transition-transform">
+                  <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 text-2xl font-display font-bold bg-[#070B08] border border-[#7ED321]/30 text-gray-400 group-hover:text-[#7ED321] group-hover:border-[#7ED321] group-hover:scale-105 filter grayscale group-hover:grayscale-0 transition-all">
                     {spk.initials}
                   </div>
 
-                  <span className="font-mono-data text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full inline-block mb-3 bg-void text-volt border border-volt/20">
+                  <span className="font-mono-data text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full inline-block mb-3 bg-[#070B08] text-[#7ED321] border border-[#7ED321]/30 font-bold">
                     ⚡ {spk.track} Track
                   </span>
 
-                  <h3 className="font-body font-bold text-xl text-primary group-hover:text-volt transition-colors mb-1">
+                  <h3 className="font-body font-bold text-xl text-white group-hover:text-[#7ED321] transition-colors mb-1">
                     {spk.name}
                   </h3>
-                  <p className="font-mono-data text-xs text-muted leading-snug mb-4">{spk.title}</p>
+                  <p className="font-mono-data text-xs text-[#8A9488] leading-snug mb-4">{spk.title}</p>
                 </div>
 
-                <div className="pt-4 border-t border-volt-dim/20 flex items-center justify-between font-mono-data text-xs text-volt group-hover:underline">
+                <div className="pt-4 border-t border-[#7ED321]/15 flex items-center justify-between font-mono-data text-xs text-[#7ED321] group-hover:underline">
                   <span>View Speaker Bio</span>
                   <MessageSquare size={14} />
                 </div>
@@ -137,47 +140,47 @@ export default function SpeakersLandingPage() {
       {/* Speaker Detail Modal */}
       <AnimatePresence>
         {activeSpeaker && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-void/80 backdrop-blur-md">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#070B08]/80 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg rounded-2xl p-8 bg-panel border border-volt-dim/40 shadow-2xl relative"
+              className="w-full max-w-lg rounded-2xl p-8 bg-[#0D140E] border border-[#7ED321]/40 shadow-2xl relative"
             >
               <button
                 onClick={() => setActiveSpeaker(null)}
-                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-primary bg-void"
+                className="absolute top-6 right-6 p-2 rounded-lg text-[#8A9488] hover:text-white bg-[#070B08]"
               >
                 <X size={18} />
               </button>
 
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center font-display text-2xl font-bold bg-void border border-volt text-volt">
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center font-display text-2xl font-bold bg-[#070B08] border border-[#7ED321] text-[#7ED321]">
                   {activeSpeaker.initials}
                 </div>
                 <div>
-                  <h3 className="font-body font-bold text-2xl text-primary">{activeSpeaker.name}</h3>
-                  <p className="font-mono-data text-xs text-muted">{activeSpeaker.title}</p>
+                  <h3 className="font-body font-bold text-2xl text-white">{activeSpeaker.name}</h3>
+                  <p className="font-mono-data text-xs text-[#8A9488]">{activeSpeaker.title}</p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-void border border-volt-dim/20 mb-6">
-                <h4 className="font-mono-data text-xs uppercase text-volt mb-2">⚡ Speaker Overview</h4>
-                <p className="font-body text-sm text-muted leading-relaxed">{activeSpeaker.bio}</p>
+              <div className="p-4 rounded-xl bg-[#070B08] border border-[#7ED321]/20 mb-6">
+                <h4 className="font-mono-data text-xs uppercase text-[#7ED321] mb-2 font-bold">⚡ Speaker Overview</h4>
+                <p className="font-body text-sm text-[#8A9488] leading-relaxed">{activeSpeaker.bio}</p>
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex gap-3">
-                  <a href="#" className="p-2 rounded-lg bg-void border border-volt-dim/30 text-muted hover:text-volt">
+                  <a href="#" className="p-2 rounded-lg bg-[#070B08] border border-[#7ED321]/30 text-[#8A9488] hover:text-[#7ED321]">
                     <Twitter size={16} />
                   </a>
-                  <a href="#" className="p-2 rounded-lg bg-void border border-volt-dim/30 text-muted hover:text-volt">
+                  <a href="#" className="p-2 rounded-lg bg-[#070B08] border border-[#7ED321]/30 text-[#8A9488] hover:text-[#7ED321]">
                     <Linkedin size={16} />
                   </a>
                 </div>
                 <button
                   onClick={() => setActiveSpeaker(null)}
-                  className="btn-volt px-6 py-2.5 text-xs"
+                  className="btn-green px-6 py-2.5 text-xs font-bold"
                 >
                   Close Profile
                 </button>
