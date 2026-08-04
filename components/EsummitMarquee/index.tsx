@@ -4,32 +4,35 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-const ALL_GIFS = [
-  'https://motionsites.ai/assets/hero-space-voyage-preview-eECLH3Yc.gif',
-  'https://motionsites.ai/assets/hero-codenest-preview-Cgppc2qV.gif',
-  'https://motionsites.ai/assets/hero-vex-ventures-preview-BczMFIiw.gif',
-  'https://motionsites.ai/assets/hero-stellar-ai-v2-preview-DjvxjG3C.gif',
-  'https://motionsites.ai/assets/hero-asme-preview-B_nGDnTP.gif',
-  'https://motionsites.ai/assets/hero-transform-data-preview-Cx5OU29N.gif',
-  'https://motionsites.ai/assets/hero-vitara-preview-Cjz2QYyU.gif',
-  'https://motionsites.ai/assets/hero-terra-preview-BFjrCr7T.gif',
-  'https://motionsites.ai/assets/hero-skyelite-preview-DHaZIgUv.gif',
-  'https://motionsites.ai/assets/hero-aethera-preview-DknSlcTa.gif',
-  'https://motionsites.ai/assets/hero-designpro-preview-D8c5_een.gif',
-  'https://motionsites.ai/assets/hero-stellar-ai-preview-D3HL6bw1.gif',
-  'https://motionsites.ai/assets/hero-xportfolio-preview-D4A8maiC.gif',
-  'https://motionsites.ai/assets/hero-orbit-web3-preview-BXt4OttD.gif',
-  'https://motionsites.ai/assets/hero-nexora-preview-cx5HmUgo.gif',
-  'https://motionsites.ai/assets/hero-evr-ventures-preview-DZxeVFEX.gif',
-  'https://motionsites.ai/assets/hero-planet-orbit-preview-DWAP8Z1P.gif',
-  'https://motionsites.ai/assets/hero-new-era-preview-CocuDUm9.gif',
-  'https://motionsites.ai/assets/hero-wealth-preview-B70idl_u.gif',
-  'https://motionsites.ai/assets/hero-luminex-preview-CxOP7ce6.gif',
-  'https://motionsites.ai/assets/hero-celestia-preview-0yO3jXO8.gif',
+// E-Summit themed images — entrepreneurship summit, pitches, speakers, hackathons, networking
+const ALL_IMGS = [
+  // Row 1 — Speaker stages, keynotes, pitch competitions
+  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=840&q=80&auto=format&fit=crop', // conference stage
+  'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=840&q=80&auto=format&fit=crop', // speaker on stage
+  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=840&q=80&auto=format&fit=crop', // startup pitch
+  'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=840&q=80&auto=format&fit=crop', // tech talk panel
+  'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=840&q=80&auto=format&fit=crop', // networking crowd
+  'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=840&q=80&auto=format&fit=crop', // hackathon coding
+  'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=840&q=80&auto=format&fit=crop', // audience hall
+  'https://images.unsplash.com/photo-1543269664-7eef42226a21?w=840&q=80&auto=format&fit=crop', // startup expo
+  'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=840&q=80&auto=format&fit=crop', // team collaboration
+  'https://images.unsplash.com/photo-1560523160-754a9e25c68f?w=840&q=80&auto=format&fit=crop', // award ceremony
+  'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=840&q=80&auto=format&fit=crop', // summit crowd
+  // Row 2 — Investor meets, networking, workshops, celebrations
+  'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=840&q=80&auto=format&fit=crop', // business meeting
+  'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=840&q=80&auto=format&fit=crop', // workshop
+  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=840&q=80&auto=format&fit=crop', // panel discussion
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=840&q=80&auto=format&fit=crop', // entrepreneur presenting
+  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=840&q=80&auto=format&fit=crop', // team hackathon
+  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=840&q=80&auto=format&fit=crop', // coding team
+  'https://images.unsplash.com/photo-1463453091185-61582044d556?w=840&q=80&auto=format&fit=crop', // investor handshake
+  'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=840&q=80&auto=format&fit=crop', // celebration
+  'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=840&q=80&auto=format&fit=crop', // pitch deck
+  'https://images.unsplash.com/photo-1552664730-d307ca884978?w=840&q=80&auto=format&fit=crop', // networking event
 ]
 
-const ROW_1 = ALL_GIFS.slice(0, 11)
-const ROW_2 = ALL_GIFS.slice(11)
+const ROW_1 = ALL_IMGS.slice(0, 11)
+const ROW_2 = ALL_IMGS.slice(11)
 const TRIPLED_1 = [...ROW_1, ...ROW_1, ...ROW_1]
 const TRIPLED_2 = [...ROW_2, ...ROW_2, ...ROW_2]
 
@@ -198,7 +201,7 @@ export default function EsummitMarquee() {
       <div className="flex items-center justify-center gap-2 mb-8">
         <div className="h-px w-16 bg-[#7ED321]/40" />
         <span className="font-mono-data text-[10px] uppercase tracking-[0.25em] text-[#7ED321] font-bold">
-          Design Showcase
+          E-Summit Moments
         </span>
         <div className="h-px w-16 bg-[#7ED321]/40" />
       </div>
