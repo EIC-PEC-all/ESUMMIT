@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Kanit:wght@300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -88,6 +88,28 @@ body {
 /* ─── Typography & Outlined Text ─── */
 .font-display { font-family: 'Bebas Neue', sans-serif; }
 .font-mono-data { font-family: 'Space Mono', 'JetBrains Mono', monospace; }
+.font-kanit { font-family: 'Kanit', sans-serif; }
+
+/* ─── E-Summit Hero Gradient Heading ─── */
+.hero-heading {
+  background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Green variant for E-Summit green/black theme */
+.hero-heading-green {
+  background: linear-gradient(180deg, #4C9E0D 0%, #7ED321 55%, #B0EF4A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Kanit reset for E-Summit sections ─── */
+.esummit-section {
+  font-family: 'Kanit', sans-serif;
+}
 
 .text-stroke-orange, .text-stroke-volt, .text-stroke-amber {
   -webkit-text-stroke: 2.5px #7ED321;

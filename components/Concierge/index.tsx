@@ -4,7 +4,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { MessageCircle, X, Send, Bot, User, ChevronDown, Calendar, Plus, Trash2, Bookmark, Check, Zap } from 'lucide-react'
+import { X, Send, Bot, TrendingUp, ChevronDown, Calendar, Plus, Trash2, Bookmark, Check, Zap } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { getAgentResponse, SUGGESTED_STARTERS, type ItinerarySession } from './agent'
 import { FEST_CONTEXT } from '@/lib/data'
@@ -162,27 +162,45 @@ export default function Concierge() {
       {/* Floating Toggle Button */}
       <motion.button
         onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-lg relative"
         style={{
           background: open ? '#0D140E' : '#7ED321',
           border: '1px solid rgba(126,211,33,0.5)',
-          color: open ? '#F5F5F0' : '#070B08',
+          color: open ? '#7ED321' : '#070B08',
+          boxShadow: open ? '0 0 0 rgba(126,211,33,0)' : '0 0 24px rgba(126,211,33,0.5)',
         }}
-        whileHover={{ scale: 1.07 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.1, boxShadow: '0 0 32px rgba(126,211,33,0.7)' }}
+        whileTap={{ scale: 0.92 }}
         aria-label={open ? 'Close Summit Agent' : 'Open Summit Agent'}
       >
+        {/* Pulse ring — only when closed */}
+        {!open && (
+          <motion.span
+            className="absolute inset-0 rounded-full"
+            style={{ border: '2px solid rgba(126,211,33,0.6)' }}
+            animate={{ scale: [1, 1.5, 1.8], opacity: [0.7, 0.3, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
+          />
+        )}
         <AnimatePresence mode="wait">
           {open ? (
-            <X size={22} />
+            <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
+              <X size={22} />
+            </motion.span>
           ) : (
-            <MessageCircle size={22} />
+            <motion.span key="chart" initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.7, opacity: 0 }} transition={{ duration: 0.18 }}>
+              <TrendingUp size={22} strokeWidth={2.5} />
+            </motion.span>
           )}
         </AnimatePresence>
         {!open && unread > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#7ED321] text-[#070B08] font-mono-data text-[10px] font-bold flex items-center justify-center">
+          <motion.span
+            className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#7ED321] text-[#070B08] font-mono-data text-[10px] font-bold flex items-center justify-center"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 0.8, repeat: Infinity }}
+          >
             {unread}
-          </span>
+          </motion.span>
         )}
       </motion.button>
 
@@ -217,15 +235,39 @@ export default function Concierge() {
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                   <div className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                    <div
-                      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
-                      style={{
-                        background: msg.role === 'user' ? 'rgba(126,211,33,0.3)' : 'rgba(126,211,33,0.15)',
-                        border: `1px solid ${msg.role === 'user' ? '#7ED321' : '#7ED321'}`,
-                      }}
-                    >
-                      {msg.role === 'user' ? <User size={13} className="text-[#7ED321]" /> : <Bot size={13} className="text-[#7ED321]" />}
-                    </div>
+                    {msg.role === 'user' ? (
+                      /* ── Stock-market user avatar ── */
+                      <motion.div
+                        className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 relative"
+                        style={{
+                          background: 'linear-gradient(135deg, rgba(126,211,33,0.25) 0%, rgba(61,217,255,0.12) 100%)',
+                          border: '1.5px solid #7ED321',
+                          boxShadow: '0 0 10px rgba(126,211,33,0.4)',
+                        }}
+                        whileHover={{ scale: 1.15, boxShadow: '0 0 18px rgba(126,211,33,0.7)' }}
+                        title="You"
+                      >
+                        {/* Tiny ticker spark */}
+                        <motion.span
+                          className="absolute -top-1 -right-1 text-[8px] leading-none"
+                          animate={{ opacity: [1, 0.4, 1] }}
+                          transition={{ duration: 1.4, repeat: Infinity }}
+                        >📈</motion.span>
+                        <TrendingUp size={14} className="text-[#7ED321]" strokeWidth={2.5} />
+                      </motion.div>
+                    ) : (
+                      /* ── Bot avatar ── */
+                      <motion.div
+                        className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                        style={{
+                          background: 'rgba(126,211,33,0.15)',
+                          border: '1.5px solid rgba(126,211,33,0.6)',
+                        }}
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        <Bot size={14} className="text-[#7ED321]" />
+                      </motion.div>
+                    )}
 
                     <div
                       className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed ${

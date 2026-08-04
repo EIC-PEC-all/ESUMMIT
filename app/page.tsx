@@ -1,89 +1,104 @@
 // app/page.tsx
-// Main page — all sections assembled in order (Momentum Direction)
+// PEC E-Summit 2026 — Full-fledged landing page
+// Section order:
+//   1. EsummitHero        (creative full-viewport hero, Magnet + FadeIn)
+//   2. EsummitMarquee     (scroll-parallax GIF showcase rows)
+//   3. EsummitAbout       (char-by-char text reveal + 3D corner decor)
+//   4. EsummitTracks      (white bg, numbered events list)
+//   5. EsummitHighlights  (sticky card stacking — dark bg)
+//   6. StatBurst          (animated stats counter)
+//   7. Speakers           (speaker grid)
+//   8. Timeline           (GSAP scroll schedule)
+//   9. Sponsors           (partner logos marquee)
+//  10. FAQ               (accordion)
+//  11. Footer             (register CTA + links)
+//  12. Concierge          (AI agent, floating)
 'use client'
 
 import { Toaster } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 
-// Static sections
-import Nav from '@/components/Nav'
-import Hero from '@/components/Hero'
+// ── Creative landing sections ──────────────────────────────────────────────
+import EsummitHero from '@/components/EsummitHero'
+import EsummitMarquee from '@/components/EsummitMarquee'
+import EsummitAbout from '@/components/EsummitAbout'
+import EsummitTracks from '@/components/EsummitTracks'
+
+// Dynamic (Framer Motion scroll hooks — better as client-only)
+const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), {
+  ssr: false,
+})
+
+// ── Original detailed sections ─────────────────────────────────────────────
 import StatBurst from '@/components/StatBurst'
-import Marquee from '@/components/Marquee'
-import About from '@/components/About'
-import Tracks from '@/components/Tracks'
 import Speakers from '@/components/Speakers'
 import Sponsors from '@/components/Sponsors'
 import FAQ from '@/components/FAQ'
 import Footer from '@/components/Footer'
 
-// Timeline uses GSAP — dynamically loaded to avoid SSR issues
 const Timeline = dynamic(() => import('@/components/Timeline'), {
   ssr: false,
   loading: () => (
     <div className="py-32 flex items-center justify-center section-container">
-      <span className="font-mono-data text-sm text-muted">
-        Loading schedule…
-      </span>
+      <span className="font-mono-data text-sm text-muted">Loading schedule…</span>
     </div>
   ),
 })
 
-// Concierge is client-only
 const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false })
 
 export default function Home() {
   return (
-    <main>
+    <main style={{ overflowX: 'clip', background: '#070B08' }}>
       <Toaster
         position="top-center"
         gutter={8}
         toastOptions={{
           duration: 4000,
           style: {
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: "'Kanit', sans-serif",
             fontSize: '0.875rem',
-            background: 'var(--bg-panel)',
-            color: 'var(--text-primary)',
-            border: '1px solid rgba(199, 208, 222, 0.15)',
+            background: '#0D140E',
+            color: '#F5F5F0',
+            border: '1px solid rgba(126, 211, 33, 0.2)',
           },
         }}
       />
 
-      {/* Navigation */}
-      <Nav />
+      {/* ── 1. Creative Hero ─────────────────────────────────────────────── */}
+      <EsummitHero />
 
-      {/* 1. Hero with 3D Crystal */}
-      <Hero />
+      {/* ── 2. Scroll-Parallax GIF Marquee ──────────────────────────────── */}
+      <EsummitMarquee />
 
-      {/* 2. StatBurst Transition */}
+      {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
+      <EsummitAbout />
+
+      {/* ── 4. Events — white bg, numbered list ─────────────────────────── */}
+      <EsummitTracks />
+
+      {/* ── 5. Highlights — sticky card stack, dark bg ──────────────────── */}
+      <EsummitHighlights />
+
+      {/* ── 6. Stats counter ────────────────────────────────────────────── */}
       <StatBurst />
 
-      {/* 3. Marquee */}
-      <Marquee />
-
-      {/* 4. About with Scroll-Pinned Text Reveal */}
-      <About />
-
-      {/* 5. Tracks / Events */}
-      <Tracks />
-
-      {/* 6. Speakers */}
+      {/* ── 7. Speakers grid ────────────────────────────────────────────── */}
       <Speakers />
 
-      {/* 7. Schedule / Timeline */}
+      {/* ── 8. Schedule / Timeline ──────────────────────────────────────── */}
       <Timeline />
 
-      {/* 8. Sponsors */}
+      {/* ── 9. Sponsors marquee ─────────────────────────────────────────── */}
       <Sponsors />
 
-      {/* 9. FAQ */}
+      {/* ── 10. FAQ accordion ───────────────────────────────────────────── */}
       <FAQ />
 
-      {/* 10. Register / Footer CTA */}
+      {/* ── 11. Footer / CTA ────────────────────────────────────────────── */}
       <Footer />
 
-      {/* 11. AI Summit Agent (floating) + My Plan Drawer */}
+      {/* ── 12. AI Concierge (floating) ─────────────────────────────────── */}
       <Concierge />
     </main>
   )
