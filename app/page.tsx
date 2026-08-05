@@ -48,6 +48,8 @@ const Timeline = dynamic(() => import('@/components/Timeline'), {
 
 const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false })
 
+const Alumni = dynamic(() => import('@/components/Alumni'), { ssr: false })
+
 export default function Home() {
   return (
     <main style={{ overflowX: 'clip', background: '#070B08' }}>
@@ -90,19 +92,22 @@ export default function Home() {
       {/* ── 7. Speakers grid ────────────────────────────────────────────── */}
       <Speakers />
 
-      {/* ── 8. Schedule / Timeline ──────────────────────────────────────── */}
+      {/* ── 8. Alumni — horizontal scroll with PixelTransition ───────────── */}
+      <Alumni />
+
+      {/* ── 9. Schedule / Timeline ──────────────────────────────────────── */}
       <Timeline />
 
-      {/* ── 9. Sponsors marquee ─────────────────────────────────────────── */}
+      {/* ── 10. Sponsors marquee ─────────────────────────────────────────── */}
       <Sponsors />
 
-      {/* ── 10. FAQ accordion ───────────────────────────────────────────── */}
+      {/* ── 11. FAQ accordion ───────────────────────────────────────────── */}
       <FAQ />
 
-      {/* ── 11. Footer / CTA ────────────────────────────────────────────── */}
+      {/* ── 12. Footer / CTA ────────────────────────────────────────────── */}
       <Footer />
 
-      {/* ── 12. AI Concierge (floating) ─────────────────────────────────── */}
+      {/* ── 13. AI Concierge (floating) ─────────────────────────────────── */}
       <Concierge />
     </main>
   )
