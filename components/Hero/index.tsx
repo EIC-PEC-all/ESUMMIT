@@ -1,0 +1,250 @@
+'use client'
+// components/Hero/index.tsx
+// High-Performance Money/Finance Hero — 3D Wavy Ribbon Dollar Bill, Canvas Money Rain,
+// GSAP Parallax, Stock Ticker Tape, Live Countdown — Fully Responsive for Mobile & Desktop
+
+import { useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
+import { Calendar, MapPin, Ticket, ChevronRight, TrendingUp, TrendingDown, ArrowUpRight } from 'lucide-react'
+import Link from 'next/link'
+
+import Countdown from './Countdown'
+import CircuitBoard from './CircuitBoard'
+import MoneyCanvas from './MoneyCanvas'
+import WavyDollarBill from './WavyDollarBill'
+import { FEST_META } from '@/lib/data'
+import { useReducedMotion } from '@/hooks/useReducedMotion'
+
+const TICKER_ITEMS = [
+  { sym: 'PEC', val: '₹7,50,000', change: '+12.4%', up: true },
+  { sym: 'INNOV', val: '₹5,00,000', change: '+8.7%', up: true },
+  { sym: 'HACK', val: '₹3,00,000', change: '+24.2%', up: true },
+  { sym: 'PITCH', val: '3,000+', change: 'DELEGATES', up: true },
+  { sym: 'IDEA', val: '50+', change: 'SPEAKERS', up: true },
+  { sym: 'VC', val: '₹15L', change: 'PRIZE POOL', up: true },
+  { sym: 'SUMMIT', val: '2 DAYS', change: 'OF ALPHA', up: true },
+  { sym: 'BETA', val: '100+', change: 'STARTUPS', up: true },
+  { sym: 'NET', val: 'MARCH 15-16', change: '2026', up: true },
+  { sym: 'ROI', val: '∞', change: '+CONNECTIONS', up: true },
+]
+
+export default function Hero() {
+  const prefersReduced = useReducedMotion()
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const heroContentRef = useRef<HTMLDivElement>(null)
+  const mainBillRef = useRef<HTMLDivElement>(null)
+  const tickerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    let ctx: any = null
+
+    const initGSAP = async () => {
+      try {
+        const { gsap } = await import('gsap')
+        const { ScrollTrigger } = await import('gsap/ScrollTrigger')
+        gsap.registerPlugin(ScrollTrigger)
+
+        ctx = gsap.context(() => {
+          if (prefersReduced) return
+
+          // Ticker scroll animation
+          if (tickerRef.current) {
+            const tickerWidth = tickerRef.current.scrollWidth / 2
+            gsap.to(tickerRef.current, {
+              x: -tickerWidth,
+              duration: 36,
+              repeat: -1,
+              ease: 'none',
+            })
+          }
+
+          // Scroll parallax for desktop
+          if (sectionRef.current && window.innerWidth > 768) {
+            gsap.to(mainBillRef.current, {
+              scrollTrigger: { trigger: sectionRef.current, start: 'top top', end: 'bottom top', scrub: 0.6 },
+              xPercent: 15,
+              yPercent: 15,
+              opacity: 0,
+              ease: 'none',
+            })
+          }
+        }, sectionRef)
+      } catch (err) {
+        console.warn('GSAP Hero init:', err)
+      }
+    }
+
+    initGSAP()
+    return () => { if (ctx) ctx.revert() }
+  }, [prefersReduced])
+
+  return (
+    <section
+      id="hero"
+      ref={sectionRef}
+      className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#070B08] pt-24 sm:pt-28 pb-0"
+      aria-label="PEC E-Summit Hero"
+    >
+      {/* Layer 0: Canvas money rain */}
+      <MoneyCanvas prefersReduced={prefersReduced} />
+
+      {/* Layer 1: Circuit board overlay */}
+      <CircuitBoard prefersReduced={prefersReduced} />
+
+      {/* Layer 2: Deep radial glow */}
+      <div
+        className="absolute right-[-5%] top-1/2 -translate-y-1/2 w-[500px] sm:w-[750px] h-[500px] sm:h-[750px] rounded-full pointer-events-none z-0 opacity-35"
+        style={{
+          background: 'radial-gradient(circle, rgba(126,211,33,0.22) 0%, rgba(126,211,33,0.05) 50%, transparent 70%)',
+        }}
+      />
+
+      {/* Layer 3: Left scrim */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-full lg:w-[58%] pointer-events-none z-1"
+        style={{ background: 'linear-gradient(90deg, rgba(7,11,8,0.98) 0%, rgba(7,11,8,0.85) 65%, transparent 100%)' }}
+      />
+
+      {/* MAIN CONTENT */}
+      <div className="section-container relative z-10 flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8 flex-1 pb-8 sm:pb-12 mt-2 sm:mt-4">
+
+        {/* LEFT: Hero Content */}
+        <div ref={heroContentRef} className="flex-1 max-w-2xl z-10 pt-2 sm:pt-4 w-full">
+
+          {/* Eyebrow badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#7ED321]/15 border border-[#7ED321]/40 mb-4 sm:mb-6"
+          >
+            <span className="w-2 h-2 rounded-full bg-[#7ED321] animate-ping" />
+            <span className="font-mono-data text-[10px] sm:text-xs uppercase tracking-widest text-[#7ED321] font-bold">
+              LIVE REGISTRATION OPEN
+            </span>
+            <ArrowUpRight size={14} className="text-[#7ED321]" />
+          </motion.div>
+
+          {/* Headline */}
+          <h1 className="font-display leading-[0.88] mb-4 sm:mb-6 tracking-tight select-none">
+            <motion.span
+              initial={prefersReduced ? {} : { opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="block font-black text-white"
+              style={{ fontSize: 'clamp(52px, 13.5vw, 158px)' }}
+            >
+              PEC
+            </motion.span>
+
+            <motion.span
+              initial={prefersReduced ? {} : { opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              className="block font-black relative"
+              style={{
+                fontSize: 'clamp(58px, 15vw, 172px)',
+                WebkitTextStroke: '2.5px #7ED321',
+                color: 'transparent',
+                textShadow: '0 0 35px rgba(126,211,33,0.5)',
+              }}
+            >
+              SUMMIT
+            </motion.span>
+          </h1>
+
+          {/* Subtext */}
+          <motion.p
+            initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.28 }}
+            className="font-body text-base sm:text-xl text-[#F5F5F0]/90 mb-5 sm:mb-7 leading-relaxed max-w-lg"
+          >
+            Where ideas raise capital &amp; compound into impact.
+          </motion.p>
+
+          {/* Info pills */}
+          <motion.div
+            initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.38 }}
+            className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-6 sm:mb-8"
+          >
+            <div className="flex items-center gap-2 bg-[#0D140E]/90 border border-[#7ED321]/25 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full">
+              <Calendar size={14} className="text-[#7ED321]" />
+              <span className="font-mono-data text-xs sm:text-sm font-semibold text-gray-200">{FEST_META.dates}</span>
+            </div>
+            <div className="flex items-center gap-2 bg-[#0D140E]/90 border border-[#7ED321]/25 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full">
+              <MapPin size={14} className="text-[#7ED321]" />
+              <span className="font-mono-data text-xs sm:text-sm font-semibold text-gray-200">{FEST_META.venue}</span>
+            </div>
+          </motion.div>
+
+          {/* Countdown */}
+          <motion.div
+            initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.46 }}
+            className="mb-8 sm:mb-10 w-full"
+          >
+            <Countdown targetISO={FEST_META.countdownTarget} prefersReduced={prefersReduced} />
+          </motion.div>
+
+          {/* CTA Buttons */}
+          <motion.div
+            initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.56 }}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full"
+          >
+            <Link
+              href="/passes"
+              id="hero-passes-btn"
+              className="btn-green text-sm sm:text-base font-bold py-3.5 sm:py-4 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(126,211,33,0.4)] text-[#070B08]"
+            >
+              <Ticket size={18} />
+              <span>🎫 GET SUMMIT PASSES</span>
+            </Link>
+
+            <a
+              href="#tracks"
+              id="hero-explore-btn"
+              className="btn-ghost text-sm sm:text-base py-3.5 sm:py-4 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 border-white/30 text-white hover:border-[#7ED321] hover:text-[#7ED321] transition-all"
+            >
+              <span>EXPLORE TRACKS</span>
+              <ChevronRight size={16} />
+            </a>
+          </motion.div>
+        </div>
+
+        {/* RIGHT: 3D Wavy Ribbon Dollar Bill */}
+        <div className="flex-1 w-full relative flex items-center justify-center lg:justify-end py-2 lg:py-0 min-h-[300px] sm:min-h-[460px]">
+          <div ref={mainBillRef} className="w-full flex justify-center lg:justify-end">
+            <WavyDollarBill prefersReduced={prefersReduced} />
+          </div>
+        </div>
+      </div>
+
+      {/* BOTTOM: Stock Ticker Tape */}
+      <div className="relative z-10 border-t border-[#7ED321]/25 bg-[#060A07] overflow-hidden">
+        <div className="py-2.5 flex items-center gap-0 overflow-hidden">
+          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(90deg, #060A07 0%, transparent 100%)' }} />
+          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(270deg, #060A07 0%, transparent 100%)' }} />
+
+          <div ref={tickerRef} className="flex items-center gap-0 whitespace-nowrap" style={{ willChange: 'transform' }}>
+            {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+              <div key={i} className="flex items-center gap-3 px-4 sm:px-6 border-r border-[#7ED321]/15">
+                <span className="font-mono-data text-xs font-bold text-[#7ED321]">{item.sym}</span>
+                <span className="font-mono-data text-xs text-white font-semibold">{item.val}</span>
+                <span className={`font-mono-data text-[10px] font-bold flex items-center gap-0.5 ${item.up ? 'text-[#7ED321]' : 'text-red-400'}`}>
+                  {item.up ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
+                  {item.change}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

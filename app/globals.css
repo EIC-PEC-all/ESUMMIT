@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Kanit:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-deep: #070B08;
+  --bg-void: #070B08;
+  --bg-panel: #0D140E;
+  --bg-panel-alt: #111A12;
+  --accent-green: #7ED321;
+  --accent-green-dim: rgba(126, 211, 33, 0.15);
+  --accent-green-glow: rgba(126, 211, 33, 0.35);
+  --accent-orange: #7ED321;
+  --accent-orange-dim: rgba(126, 211, 33, 0.25);
+  --accent-volt: #7ED321;
+  --accent-volt-dim: #5B9E16;
+  --accent-amber: #E8A33D;
+  --ink-light: #F5F5F0;
+  --text-primary: #F5F5F0;
+  --text-muted: #8A9488;
+  --muted: #8A9488;
+  --border-glow: rgba(126, 211, 33, 0.15);
+  --border-subtle: rgba(126, 211, 33, 0.2);
+  --border-panel: rgba(138, 148, 136, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+/* Lenis smooth scrolling rules */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: rgba(126, 211, 33, 0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+
+/* Focus states */
+:focus-visible {
+  outline: 2px solid var(--accent-green);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(126, 211, 33, 0.3);
+  color: var(--text-primary);
+}
+
+/* ─── Typography & Outlined Text ─── */
+.font-display { font-family: 'Bebas Neue', sans-serif; }
+.font-mono-data { font-family: 'Space Mono', 'JetBrains Mono', monospace; }
+.font-kanit { font-family: 'Kanit', sans-serif; }
+
+/* ─── E-Summit Hero Gradient Heading ─── */
+.hero-heading {
+  background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Green variant for E-Summit green/black theme */
+.hero-heading-green {
+  background: linear-gradient(180deg, #4C9E0D 0%, #7ED321 55%, #B0EF4A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Kanit reset for E-Summit sections ─── */
+.esummit-section {
+  font-family: 'Kanit', sans-serif;
+}
+
+.text-stroke-orange, .text-stroke-volt, .text-stroke-amber {
+  -webkit-text-stroke: 2.5px #7ED321;
+  color: transparent;
+  text-shadow: 0 0 24px rgba(126, 211, 33, 0.45);
+}
+
+.text-stroke-green {
+  -webkit-text-stroke: 2.5px #7ED321;
+  color: transparent;
+  text-shadow: 0 0 24px rgba(126, 211, 33, 0.45);
+}
+
+/* ─── Gradient utilities ─── */
+.gradient-orange {
+  background: linear-gradient(135deg, #7ED321 0%, #4C9E0D 100%);
+}
+.gradient-green {
+  background: linear-gradient(135deg, #7ED321 0%, #4C9E0D 100%);
+}
+
+/* ─── Glass / Panel ─── */
+.glass {
+  background: rgba(13, 20, 14, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+/* ─── Glow effects ─── */
+.glow-orange, .glow-volt, .glow-amber, .glow-green {
+  box-shadow: 0 0 24px rgba(126, 211, 33, 0.5), 0 0 48px rgba(126, 211, 33, 0.2);
+}
+
+/* ─── Button base ─── */
+.btn-green, .btn-orange, .btn-volt, .btn-amber {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: #7ED321;
+  color: #070B08;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+.btn-green::after, .btn-orange::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.btn-green:hover::after, .btn-orange:hover::after { opacity: 1; }
+.btn-green:hover, .btn-orange:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(126, 211, 33, 0.5);
+}
+.btn-green:active, .btn-orange:active { transform: translateY(0); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 31px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(245, 245, 240, 0.25);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-ghost:hover {
+  border-color: #7ED321;
+  color: #7ED321;
+  background: rgba(126, 211, 33, 0.08);
+}
+
+/* ─── Current Line Accent ─── */
+.current-line-horizontal {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #7ED321 50%, transparent);
+  box-shadow: 0 0 12px rgba(126, 211, 33, 0.6);
+}
+
+/* ─── Section layout ─── */
+.section-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 768px) {
+  .section-container { padding: 0 48px; }
+}
+@media (min-width: 1024px) {
+  .section-container { padding: 0 64px; }
+}
+
+/* ─── Noise overlay ─── */
+.noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
+}
+
+/* ─── Card tilt & highlights ─── */
+.tilt-card {
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  transform-style: preserve-3d;
+}
+
+/* ─── Highlight pulse ─── */
+@keyframes highlightPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(126, 211, 33, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(126, 211, 33, 0.4), 0 0 28px rgba(126, 211, 33, 0.3); }
+}
+.highlight-active {
+  animation: highlightPulse 1.2s ease 3;
+}
+
+/* ─── Money ticker ─── */
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Bill float ─── */
+@keyframes billFloat {
+  0%, 100% { transform: translateY(0px) rotate(18deg); }
+  50% { transform: translateY(-16px) rotate(20deg); }
+}
+
+/* ─── Bill shimmer ─── */
+@keyframes shimmerSweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 300% center; }
+}
+
+/* ─── Glow pulse ring ─── */
+@keyframes glowRing {
+  0%, 100% { box-shadow: 0 0 20px rgba(126,211,33,0.3), 0 0 40px rgba(126,211,33,0.1); }
+  50% { box-shadow: 0 0 40px rgba(126,211,33,0.55), 0 0 80px rgba(126,211,33,0.25); }
+}
+.glow-pulse {
+  animation: glowRing 3s ease-in-out infinite;
+}
