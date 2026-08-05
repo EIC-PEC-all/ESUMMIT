@@ -20,7 +20,7 @@ import dynamic from 'next/dynamic'
 
 // ── Creative landing sections ──────────────────────────────────────────────
 import Nav from '@/components/Nav'
-import EsummitHero from '@/components/EsummitHero'
+import NewHero from '@/components/Hero/NewHero'
 import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
 import EsummitTracks from '@/components/EsummitTracks'
@@ -69,8 +69,8 @@ export default function Home() {
       {/* Navigation */}
       <Nav />
 
-      {/* ── 1. Creative Hero ─────────────────────────────────────────────── */}
-      <EsummitHero />
+      {/* ── 1. ScrollExpand Hero ─────────────────────────────────────────── */}
+      <NewHero />
 
       {/* ── 2. Scroll-Parallax GIF Marquee ──────────────────────────────── */}
       <EsummitMarquee />
