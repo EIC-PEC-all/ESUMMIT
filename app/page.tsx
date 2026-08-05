@@ -35,7 +35,7 @@ import StatBurst from '@/components/StatBurst'
 import Speakers from '@/components/Speakers'
 import Sponsors from '@/components/Sponsors'
 import FAQ from '@/components/FAQ'
-import Footer from '@/components/Footer'
+import Footer, { RegisterCTA } from '@/components/Footer'
 
 const Timeline = dynamic(() => import('@/components/Timeline'), {
   ssr: false,
@@ -101,13 +101,16 @@ export default function Home() {
       {/* ── 10. Sponsors marquee ─────────────────────────────────────────── */}
       <Sponsors />
 
-      {/* ── 11. FAQ accordion ───────────────────────────────────────────── */}
+      {/* ── 11. Register CTA ────────────────────────────────────────────── */}
+      <RegisterCTA />
+
+      {/* ── 12. FAQ accordion ───────────────────────────────────────────── */}
       <FAQ />
 
-      {/* ── 12. Footer / CTA ────────────────────────────────────────────── */}
-      <Footer />
+      {/* ── 13. Corporate EIC Footer ────────────────────────────────────── */}
+      <Footer hideCTA={true} />
 
-      {/* ── 13. AI Concierge (floating) ─────────────────────────────────── */}
+      {/* ── 14. AI Concierge (floating) ─────────────────────────────────── */}
       <Concierge />
     </main>
   )
