@@ -19,6 +19,7 @@ import { Toaster } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 
 // ── Creative landing sections ──────────────────────────────────────────────
+import Nav from '@/components/Nav'
 import EsummitHero from '@/components/EsummitHero'
 import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
@@ -64,6 +65,9 @@ export default function Home() {
           },
         }}
       />
+
+      {/* Navigation */}
+      <Nav />
 
       {/* ── 1. Creative Hero ─────────────────────────────────────────────── */}
       <EsummitHero />
