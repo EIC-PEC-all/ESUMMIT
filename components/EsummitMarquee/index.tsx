@@ -242,22 +242,6 @@ export default function EsummitMarquee() {
         }} />
       </div>
 
-      {/* ── Section label ── */}
-      <div
-        className="flex items-center justify-center gap-2 mb-10 relative z-10"
-        style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? 'translateY(0)' : 'translateY(20px)',
-          transition: 'opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s',
-        }}
-      >
-        <div className="h-px w-16 bg-[#7ED321]/40" />
-        <span className="font-mono-data text-[10px] uppercase tracking-[0.25em] text-[#7ED321] font-bold">
-          E-Summit Moments
-        </span>
-        <div className="h-px w-16 bg-[#7ED321]/40" />
-      </div>
-
       {/* ── Row 1: enters from right, scrolls left (slower) ── */}
       <div className="mb-4">
         <PhotoRow images={LOOP_1} duration={55} visible={visible} delay={0} />
@@ -265,19 +249,12 @@ export default function EsummitMarquee() {
 
       {/* ── Speaker strip ── */}
       <div
-        className="relative z-10 my-5"
+        className="relative z-10 my-6"
         style={{
           opacity: visible ? 1 : 0,
-          transition: 'opacity 0.8s ease 0.5s',
+          transition: 'opacity 0.8s ease 0.3s',
         }}
       >
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <div className="h-px w-10 bg-[#7ED321]/30" />
-          <span className="font-mono-data text-[9px] uppercase tracking-[0.2em] text-[#7ED321]/60 font-bold">
-            Featured Speakers
-          </span>
-          <div className="h-px w-10 bg-[#7ED321]/30" />
-        </div>
         <SpeakerStrip />
       </div>
 

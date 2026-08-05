@@ -29,24 +29,17 @@ export default function NewHero() {
         backgroundContent={<VerticalGalleryBg />}
         title={
           <div className="flex flex-col items-center justify-center text-center p-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#50E3C2]/15 border border-[#50E3C2]/40 backdrop-blur-md mb-4">
-              <Zap size={14} className="text-[#50E3C2] fill-[#50E3C2]" />
-              <span className="font-mono-data text-[10px] sm:text-xs uppercase tracking-widest font-black text-[#50E3C2]">
-                EIC PEC PRESENTS
-              </span>
-            </div>
-
-            <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-none drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)]">
+            <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tight leading-none drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)]">
               E-SUMMIT <span className="text-[#50E3C2] italic">&apos;26</span>
             </h1>
 
-            <p className="font-mono-data text-xs sm:text-sm text-gray-200 mt-2 tracking-wider uppercase max-w-md font-semibold drop-shadow-md">
+            <p className="font-mono-data text-xs sm:text-sm text-[#A2B0A0] mt-3 tracking-widest uppercase max-w-md font-semibold drop-shadow-md">
               Chandigarh&apos;s Launchpad for Founders
             </p>
           </div>
         }
         scrollHint={
-          <div className="flex flex-col items-center gap-1.5 animate-bounce text-[#50E3C2]">
+          <div className="flex flex-col items-center gap-1.5 text-[#50E3C2] transition-opacity duration-1000 animate-pulse">
             <span className="font-mono-data text-[10px] uppercase tracking-widest font-bold">
               Scroll or Wait to Expand
             </span>
