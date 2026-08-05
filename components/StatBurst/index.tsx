@@ -13,30 +13,44 @@ function BurstCard({ stat, index, inView }: { stat: typeof STATS[0]; index: numb
   const count = useCountUp(stat.value, 2000, inView)
   const Icon = STAT_ICONS[index % STAT_ICONS.length]
 
+  const handleSpotlight = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`)
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`)
+  }
+
   return (
     <motion.div
+      onMouseMove={handleSpotlight}
       initial={{ opacity: 0, scale: 0.85, y: 30 }}
       animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
-      className="relative rounded-2xl p-8 overflow-hidden group flex flex-col justify-between transition-all duration-300"
+      className="relative rounded-2xl p-8 overflow-hidden group flex flex-col justify-between transition-all duration-300 bg-[#070B08]/90 border border-[#7ED321]/20 hover:border-[#7ED321]/60"
       style={{
-        background: 'var(--bg-panel)',
-        border: '1px solid rgba(126, 211, 33, 0.2)',
+        boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
       }}
-      whileHover={{ y: -6, borderColor: '#7ED321', boxShadow: '0 0 25px rgba(126,211,33,0.3)' }}
+      whileHover={{ y: -6 }}
     >
+      {/* Mouse spotlight radial glow */}
+      <div
+        className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          background: 'radial-gradient(300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(126,211,33,0.15), transparent 40%)',
+        }}
+      />
+
       {/* Background accent icon */}
       <div className="absolute -right-4 -bottom-4 opacity-5 text-[#7ED321] group-hover:opacity-15 transition-all duration-300 pointer-events-none">
         <Icon size={120} />
       </div>
 
       <div className="flex items-center justify-between mb-6 relative z-10">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#070B08] border border-[#7ED321]/30">
-          <Icon size={20} className="text-[#7ED321]" />
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#070B08] border border-[#7ED321]/30 text-[#7ED321] group-hover:scale-110 transition-transform duration-300">
+          <Icon size={20} />
         </div>
-        <span className="font-mono-data text-[10px] uppercase tracking-widest text-[#8A9488]">
-          ⚡ #0{index + 1}
-        </span>
+        <div className="w-2 h-2 rounded-full bg-[#7ED321] animate-pulse" />
       </div>
 
       <div className="relative z-10">

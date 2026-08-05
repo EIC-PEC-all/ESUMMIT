@@ -60,7 +60,7 @@ export default function Concierge() {
 
   const addToPlan = (session: ItinerarySession) => {
     if (myPlan.some((s) => s.id === session.id)) {
-      toast('Session already in My Plan', { icon: 'ℹ️', style: { background: '#0D140E', color: '#F5F5F0' } })
+      toast('Session already in My Plan', { style: { background: '#0D140E', color: '#F5F5F0', border: '1px solid rgba(126,211,33,0.3)' } })
       return
     }
     const updated = [...myPlan, session]
@@ -74,7 +74,7 @@ export default function Concierge() {
   const removeFromPlan = (id: string) => {
     const updated = myPlan.filter((s) => s.id !== id)
     savePlan(updated)
-    toast('Removed from My Plan', { icon: '🗑️', style: { background: '#0D140E', color: '#F5F5F0' } })
+    toast('Removed from My Plan', { style: { background: '#0D140E', color: '#F5F5F0', border: '1px solid rgba(239,68,68,0.3)' } })
   }
 
   useEffect(() => {
@@ -249,10 +249,12 @@ export default function Concierge() {
                       >
                         {/* Tiny ticker spark */}
                         <motion.span
-                          className="absolute -top-1 -right-1 text-[8px] leading-none"
+                          className="absolute -top-1 -right-1 leading-none text-[#7ED321]"
                           animate={{ opacity: [1, 0.4, 1] }}
                           transition={{ duration: 1.4, repeat: Infinity }}
-                        >📈</motion.span>
+                        >
+                          <Zap size={10} className="fill-[#7ED321]" />
+                        </motion.span>
                         <TrendingUp size={14} className="text-[#7ED321]" strokeWidth={2.5} />
                       </motion.div>
                     ) : (
@@ -273,7 +275,7 @@ export default function Concierge() {
                       className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed ${
                         msg.role === 'user'
                           ? 'bg-[#7ED321] text-[#070B08] font-bold rounded-br-none'
-                          : 'bg-[#0D140E] border-l-4 border-l-[#7ED321] border-t border-r border-b border-[#7ED321]/30 text-white rounded-bl-none'
+                          : 'bg-[#0D140E] border border-[#7ED321]/30 text-white rounded-bl-none shadow-md'
                       }`}
                     >
                       {msg.text}

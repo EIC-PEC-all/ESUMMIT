@@ -1,299 +1,245 @@
 'use client'
 // components/Speakers/index.tsx
-// 3D Tilt Wheel effect for the VISIONARIES speakers section.
-// Speaker tiles rotate around a circle in 3D space that tilts with the mouse pointer.
+// High-craft Horizontal Scroll-Tied Pinning Speaker Deck
+// Replaces previous iterations with an award-winning horizontal scroll card deck.
 
-import { useRef, useEffect, useState, useCallback } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { Zap, Linkedin, Twitter } from 'lucide-react'
+import React, { useRef, useState } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Linkedin, Twitter, Sparkles, ArrowRight, ChevronRight, ChevronLeft } from 'lucide-react'
 import { SPEAKERS } from '@/lib/data'
 import Link from 'next/link'
 import CircuitBoard from '../Hero/CircuitBoard'
 
-// Unsplash entrepreneurship images for the wheel tiles
-const TILE_IMAGES = [
-  'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=400&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&q=80&auto=format&fit=crop',
+// High-definition speaker portrait photography
+const SPEAKER_IMAGES = [
+  'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85&auto=format&fit=crop', // Priya Nair
+  'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=85&auto=format&fit=crop', // Arjun Mehta
+  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=85&auto=format&fit=crop', // Deepika Rangi
+  'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=85&auto=format&fit=crop', // Sameer Khanna
+  'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&q=85&auto=format&fit=crop', // Ritu Sharma
+  'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=800&q=85&auto=format&fit=crop', // Vikram Bose
+  'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=800&q=85&auto=format&fit=crop', // Ananya Joshi
+  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=85&auto=format&fit=crop', // Kabir Singh
 ]
 
-const COLORS = ['#FF4D3D', '#3DD9FF', '#FF8C42', '#9B5CFF', '#7ED321', '#FFD700', '#FF4D3D', '#3DD9FF']
+const COLORS = ['#FF4D3D', '#3DD9FF', '#FF8C42', '#9B5CFF', '#7ED321', '#3DD9FF', '#FF8C42', '#9B5CFF']
 
-/** 3D Tilt Wheel — tiles orbiting a circle, ring tilts with mouse */
-function TiltWheel() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const angleRef = useRef(0)
-  const rafRef = useRef<number>()
-  const [tiles, setTiles] = useState<{ angle: number; img: string; speaker: typeof SPEAKERS[0]; color: string }[]>([])
+interface HorizontalSpeakerCardProps {
+  speaker: (typeof SPEAKERS)[0]
+  index: number
+  image: string
+  color: string
+}
 
-  // Spring-damped mouse tilt
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const springX = useSpring(mouseX, { stiffness: 60, damping: 20 })
-  const springY = useSpring(mouseY, { stiffness: 60, damping: 20 })
-  const [tiltX, setTiltX] = useState(0)
-  const [tiltY, setTiltY] = useState(0)
+function HorizontalSpeakerCard({ speaker, index, image, color }: HorizontalSpeakerCardProps) {
+  const handleSpotlight = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    if (!rect) return
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    e.currentTarget.style.setProperty('--mouse-x', `${x}px`)
+    e.currentTarget.style.setProperty('--mouse-y', `${y}px`)
+  }
 
-  // Sync spring values to state for use in style
-  useEffect(() => {
-    const unsubX = springX.on('change', setTiltX)
-    const unsubY = springY.on('change', setTiltY)
-    return () => { unsubX(); unsubY() }
-  }, [springX, springY])
-
-  // Build tile data
-  useEffect(() => {
-    const count = SPEAKERS.length
-    setTiles(
-      SPEAKERS.map((speaker, i) => ({
-        angle: (360 / count) * i,
-        img: TILE_IMAGES[i % TILE_IMAGES.length],
-        speaker,
-        color: COLORS[i % COLORS.length],
-      }))
-    )
-  }, [])
-
-  // Auto-rotate
-  useEffect(() => {
-    let last = performance.now()
-    const tick = (now: number) => {
-      const delta = now - last
-      last = now
-      angleRef.current = (angleRef.current + delta * 0.018) % 360
-      setTiles((prev) =>
-        prev.map((t, i) => ({
-          ...t,
-          angle: (angleRef.current + (360 / SPEAKERS.length) * i) % 360,
-        }))
-      )
-      rafRef.current = requestAnimationFrame(tick)
-    }
-    rafRef.current = requestAnimationFrame(tick)
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
-  }, [])
-
-  // Mouse tracking for tilt
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      const rect = containerRef.current?.getBoundingClientRect()
-      if (!rect) return
-      const cx = rect.left + rect.width / 2
-      const cy = rect.top + rect.height / 2
-      // Map mouse to ±25° tilt
-      mouseX.set(((e.clientY - cy) / (rect.height / 2)) * -22)
-      mouseY.set(((e.clientX - cx) / (rect.width / 2)) * 22)
-    },
-    [mouseX, mouseY]
-  )
-
-  const handleMouseLeave = useCallback(() => {
-    mouseX.set(0)
-    mouseY.set(0)
-  }, [mouseX, mouseY])
-
-  const RADIUS = 320 // px — orbit radius
+  const boxShadowStyle = `0 16px 40px rgba(0,0,0,0.8), 0 0 24px ${color}20`
+  const spotlightBg = `radial-gradient(450px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), ${color}22, transparent 40%)`
+  const badgeBorder = `${color}40`
 
   return (
     <div
-      ref={containerRef}
-      className="relative flex items-center justify-center"
-      style={{ height: '680px', perspective: '1200px', cursor: 'grab' }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleSpotlight}
+      className="relative group shrink-0 w-[340px] sm:w-[380px] md:w-[420px] h-[460px] sm:h-[500px] rounded-3xl overflow-hidden bg-[#0D140E] border border-[#7ED321]/30 hover:border-[#7ED321]/80 transition-all duration-500 shadow-2xl flex flex-col justify-between p-6 sm:p-8"
+      style={{
+        boxShadow: boxShadowStyle,
+      }}
     >
-      {/* The rotating ring — tilts with mouse */}
+      {/* Radial mouse spotlight */}
       <div
-        className="relative"
+        className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"
         style={{
-          width: '1px',
-          height: '1px',
-          transformStyle: 'preserve-3d',
-          transform: `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`,
-          transition: 'transform 0.05s linear',
+          background: spotlightBg,
         }}
-      >
-        {tiles.map((tile, i) => {
-          const rad = (tile.angle * Math.PI) / 180
-          const x = Math.sin(rad) * RADIUS
-          const z = Math.cos(rad) * RADIUS
-          // Depth-based opacity & scale for realism
-          const depth = (z + RADIUS) / (2 * RADIUS) // 0..1
-          const scale = 0.72 + depth * 0.38
-          const opacity = 0.45 + depth * 0.55
+      />
 
-          return (
-            <div
-              key={tile.speaker.id}
-              className="absolute group"
-              style={{
-                width: '160px',
-                height: '210px',
-                transform: `translateX(${x - 80}px) translateZ(${z}px) rotateY(${-tile.angle}deg)`,
-                transformOrigin: 'center center',
-                opacity,
-                scale: String(scale),
-                zIndex: Math.round(depth * 100),
-                pointerEvents: depth > 0.7 ? 'auto' : 'none',
-              }}
-            >
-              {/* Card */}
-              <div
-                className="w-full h-full rounded-2xl overflow-hidden relative"
-                style={{
-                  boxShadow: depth > 0.85
-                    ? `0 0 0 2px ${tile.color}80, 0 8px 40px rgba(0,0,0,0.7), 0 0 24px ${tile.color}30`
-                    : '0 4px 20px rgba(0,0,0,0.6)',
-                  transition: 'box-shadow 0.3s',
-                  transform: `scale(${scale})`,
-                  transformOrigin: 'center bottom',
-                }}
-              >
-                {/* Photo */}
-                <img
-                  src={tile.img}
-                  alt={tile.speaker.name}
-                  className="w-full h-full object-cover"
-                  draggable={false}
-                />
-                {/* Bottom gradient */}
-                <div
-                  className="absolute inset-0"
-                  style={{ background: 'linear-gradient(0deg, rgba(7,11,8,0.95) 0%, rgba(7,11,8,0.3) 50%, transparent 100%)' }}
-                />
-                {/* Glow border on front tile */}
-                {depth > 0.85 && (
-                  <div
-                    className="absolute inset-0 rounded-2xl pointer-events-none"
-                    style={{ boxShadow: `0 0 0 2px ${tile.color}` }}
-                  />
-                )}
-                {/* Speaker name + title */}
-                <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <p className="font-bold text-xs text-white leading-tight" style={{ fontFamily: "'Kanit', sans-serif" }}>
-                    {tile.speaker.name}
-                  </p>
-                  <p className="text-[10px] leading-tight mt-0.5" style={{ color: tile.color, fontFamily: "'Kanit', sans-serif" }}>
-                    {tile.speaker.title.split(',')[0]}
-                  </p>
-                  {/* Track badge */}
-                  <span
-                    className="inline-block mt-1.5 font-mono-data text-[8px] uppercase tracking-widest px-1.5 py-0.5 rounded font-bold"
-                    style={{ background: `${tile.color}22`, color: tile.color, border: `1px solid ${tile.color}44` }}
-                  >
-                    ⚡ {tile.speaker.track}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-
-        {/* Orbit ring — decorative circle in 3D space */}
-        <div
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: `${RADIUS * 2}px`,
-            height: `${RADIUS * 2}px`,
-            left: `-${RADIUS}px`,
-            top: `-${RADIUS}px`,
-            border: '1px solid rgba(126,211,33,0.12)',
-            transformStyle: 'preserve-3d',
-            transform: 'rotateX(90deg)',
-          }}
+      {/* Speaker Background Photo with Gradient Fade */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <img
+          src={image}
+          alt={speaker.name}
+          loading="lazy"
+          className="w-full h-full object-cover object-center grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
         />
+        {/* Layered vignette gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070B08] via-[#070B08]/75 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#070B08]/60 via-transparent to-transparent" />
       </div>
 
-      {/* Center label — sits in the middle of the wheel */}
-      <div
-        className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10"
-        style={{ textAlign: 'center' }}
-      >
-        <p className="font-mono-data text-[10px] uppercase tracking-[0.25em] text-[#7ED321] font-bold mb-2 opacity-70">
-          ⚡ Drag to explore
-        </p>
-        <h2
-          className="font-display font-black uppercase leading-none text-stroke-green select-none"
+      {/* Top Row: Track Badge */}
+      <div className="relative z-10 flex items-center justify-between">
+        <span
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider backdrop-blur-md border"
           style={{
-            fontSize: 'clamp(48px, 7vw, 110px)',
-            WebkitTextStroke: '1.5px rgba(126,211,33,0.6)',
-            color: 'transparent',
-            textShadow: '0 0 60px rgba(126,211,33,0.15)',
-            fontFamily: "'Kanit', sans-serif",
+            background: 'rgba(7, 11, 8, 0.85)',
+            color: color,
+            borderColor: badgeBorder,
           }}
         >
-          VISION<br />ARIES
-        </h2>
+          <Sparkles size={12} />
+          <span>{speaker.track}</span>
+        </span>
+
+        {/* Social Links */}
+        <div className="flex items-center gap-2">
+          <a
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-8 h-8 rounded-full bg-[#070B08]/80 hover:bg-[#7ED321] text-gray-300 hover:text-[#070B08] flex items-center justify-center transition-colors backdrop-blur-md border border-white/10"
+            title="LinkedIn Profile"
+          >
+            <Linkedin size={14} />
+          </a>
+          <a
+            href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-8 h-8 rounded-full bg-[#070B08]/80 hover:bg-[#7ED321] text-gray-300 hover:text-[#070B08] flex items-center justify-center transition-colors backdrop-blur-md border border-white/10"
+            title="Twitter Profile"
+          >
+            <Twitter size={14} />
+          </a>
+        </div>
       </div>
 
-      {/* Hint: mouse instruction fade */}
-      <div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 font-mono-data text-[10px] uppercase tracking-widest text-[#8A9488] pointer-events-none"
-      >
-        Move cursor to tilt · Auto-rotating
+      {/* Bottom Row: Speaker Name, Title & Bio */}
+      <div className="relative z-10 pt-4 border-t border-white/15">
+        <h3 className="font-display font-black text-2xl sm:text-3xl text-white uppercase tracking-tight leading-none mb-1 group-hover:text-[#7ED321] transition-colors">
+          {speaker.name}
+        </h3>
+        <p className="font-mono-data text-xs font-semibold mb-3" style={{ color }}>
+          {speaker.title}
+        </p>
+
+        <p className="font-body text-xs sm:text-sm text-gray-300 leading-relaxed line-clamp-3 mb-4">
+          {speaker.bio}
+        </p>
+
+        <Link
+          href="/speakers"
+          className="inline-flex items-center gap-1.5 font-mono-data text-xs font-bold uppercase tracking-wider text-[#7ED321] hover:text-white transition-colors"
+        >
+          <span>Speaker Profile</span>
+          <ChevronRight size={14} />
+        </Link>
       </div>
     </div>
   )
 }
 
 export default function Speakers() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [activeTrack, setActiveTrack] = useState<string>('all')
+
+  // Track vertical scroll to translate horizontally
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end end'],
+  })
+
+  // Map vertical scroll [0, 1] to horizontal offset percentage ['0%', '-68%']
+  const xTransform = useTransform(scrollYProgress, [0, 1], ['0%', '-68%'])
+
+  const filteredSpeakers = activeTrack === 'all'
+    ? SPEAKERS
+    : SPEAKERS.filter((s) => s.track.toLowerCase() === activeTrack.toLowerCase())
+
   return (
     <section
       id="speakers"
-      className="py-24 lg:py-32 relative bg-[#111A12] border-t border-b border-[#7ED321]/15 overflow-hidden"
+      ref={containerRef}
+      className="relative h-[300vh] bg-[#070B08] border-t border-b border-[#7ED321]/15"
       aria-labelledby="speakers-heading"
     >
-      {/* Circuit overlay */}
+      {/* Background circuit pattern */}
       <CircuitBoard prefersReduced={false} />
       <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
 
-      <div className="section-container relative z-10">
-        {/* Header row */}
-        <motion.div
-          className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-6"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
+      {/* Sticky Fullscreen Container */}
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-between py-8 sm:py-12 px-5 sm:px-8 md:px-12 z-10">
+        
+        {/* Header Row & Filters */}
+        <div className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row lg:items-end justify-between gap-6 z-10">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
-                Keynote Speakers &amp; Panelists
-              </p>
-            </div>
             <h2
               id="speakers-heading"
-              className="font-display leading-none"
-              style={{ fontSize: 'clamp(40px, 5vw, 72px)', color: 'var(--text-primary)' }}
+              className="font-display font-black uppercase text-white leading-none tracking-tight mb-2"
+              style={{ fontSize: 'clamp(2.2rem, 5vw, 68px)' }}
             >
-              LEARN FROM THE <br />
-              <span className="text-stroke-green">VISIONARIES</span>
+              LEARN FROM THE <span className="text-[#7ED321]">VISIONARIES</span>
             </h2>
+            <p className="font-body text-xs sm:text-base text-[#8A9488] leading-relaxed max-w-xl">
+              Industry titans, founders, and venture capitalists sharing actionable playbooks on stage at PEC E-Summit 2026.
+            </p>
           </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            {['all', 'panels', 'pitch', 'hackathon', 'expo'].map((track) => (
+              <button
+                key={track}
+                onClick={() => setActiveTrack(track)}
+                className={`px-3.5 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all ${
+                  activeTrack === track
+                    ? 'bg-[#7ED321] text-[#070B08] shadow-[0_0_20px_rgba(126,211,33,0.4)]'
+                    : 'bg-[#0D140E] text-[#8A9488] border border-[#7ED321]/20 hover:border-[#7ED321] hover:text-white'
+                }`}
+              >
+                {track === 'all' ? 'All Tracks' : track}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Horizontal Scroll Motion Deck ── */}
+        <div className="w-full overflow-hidden my-auto py-4">
+          <motion.div
+            style={{ x: xTransform }}
+            className="flex gap-6 sm:gap-8 w-max pl-4 sm:pl-8 md:pl-12 pr-12"
+          >
+            {filteredSpeakers.map((speaker, index) => (
+              <HorizontalSpeakerCard
+                key={speaker.id}
+                speaker={speaker}
+                index={index}
+                image={SPEAKER_IMAGES[index % SPEAKER_IMAGES.length]}
+                color={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Bottom Footer Bar (Scroll progress & link) */}
+        <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-6 pt-4 border-t border-white/10 text-xs font-mono-data text-[#8A9488]">
+          {/* Scroll Progress Bar */}
+          <div className="flex items-center gap-3">
+            <span className="uppercase tracking-widest text-[#7ED321] font-bold">Scroll Down to Explore</span>
+            <div className="w-32 sm:w-48 h-1.5 bg-white/10 rounded-full overflow-hidden relative">
+              <motion.div
+                className="h-full bg-[#7ED321] rounded-full origin-left"
+                style={{ scaleX: scrollYProgress }}
+              />
+            </div>
+          </div>
+
           <Link
             href="/speakers"
-            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-[#7ED321] hover:text-white transition-colors border-b border-[#7ED321]/40 pb-1"
+            className="inline-flex items-center gap-1.5 text-[#7ED321] hover:text-white transition-colors uppercase font-bold tracking-wider"
           >
-            View All Speakers &rarr;
+            <span>Full Lineup</span>
+            <ArrowRight size={14} />
           </Link>
-        </motion.div>
+        </div>
 
-        {/* 3D Tilt Wheel */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <TiltWheel />
-        </motion.div>
       </div>
     </section>
   )
