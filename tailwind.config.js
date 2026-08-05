@@ -8,18 +8,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        void: '#0D1110',          // deep dark void
-        panel: '#161F1B',         // dark green surface panel
-        green: '#1E4637',         // official logo forest green
-        orange: '#FF9900',        // official logo vibrant orange-amber
-        amber: '#FF9900',         // alias for vibrant orange
-        volt: '#FF9900',          // alias for vibrant orange
+        void: '#070B08',          // deep dark background from EIC
+        panel: '#0D140E',         // dark green surface panel from EIC
+        'panel-alt': '#111A12',   // slightly lighter panel surface from EIC
+        green: '#50E3C2',         // electric emerald brand accent from EIC
+        mint: '#50E3C2',          // mint emerald alias
+        amber: '#E8A33D',         // secondary accent amber from EIC
+        orange: '#E8A33D',        // orange alias
+        volt: '#50E3C2',          // brand accent alias
         silver: '#E5E7EB',        // high-shine silver metallic
         'silver-dim': '#9CA3AF',  // muted silver slate
-        'orange-dim': '#B36B00',  // muted orange border
-        'volt-dim': '#B36B00',    // muted orange border alias
-        primary: '#F9FAF6',       // cream off-white text
-        muted: '#7C8E85',         // sage slate muted text
+        'green-dim': 'rgba(80, 227, 194, 0.15)',
+        primary: '#F5F5F0',       // cream off-white text from EIC
+        muted: '#8A9488',         // sage slate muted text from EIC
       },
       fontFamily: {
         display: ['var(--font-bebas)', 'sans-serif'],
