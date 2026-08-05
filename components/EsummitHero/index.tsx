@@ -35,12 +35,7 @@ const BADGES = [
 // Sparkline mini-chart SVG points
 const SPARKLINE_PTS = '0,40 12,32 24,36 36,20 48,28 60,12 72,18 84,6 96,14 108,4'
 
-const NAV_LINKS = [
-  { label: 'About',      href: '#esummit-about' },
-  { label: 'Events',     href: '#esummit-tracks' },
-  { label: 'Highlights', href: '#esummit-highlights' },
-  { label: 'Register',   href: '/register' },
-]
+
 
 /** Animated live ticker strip */
 function TickerStrip() {
@@ -147,24 +142,7 @@ export default function EsummitHero() {
           </div>
         </motion.div>
 
-        {/* Nav */}
-        <motion.nav
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.08, ease: easing }}
-          className="flex justify-between items-center px-6 md:px-10 pt-4 md:pt-5"
-        >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-sm md:text-lg lg:text-[1.4rem] font-medium uppercase tracking-wider transition-colors duration-200 hover:text-[#7ED321]"
-              style={{ color: '#F5F5F0' }}
-            >
-              {link.label}
-            </a>
-          ))}
-        </motion.nav>
+
       </div>
 
       {/* ── Ticker strip ── */}
