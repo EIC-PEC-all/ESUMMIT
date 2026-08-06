@@ -252,19 +252,19 @@ export default function Nav() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={toggleTheme}
-                      className="w-11 h-11 bg-void text-mint font-black flex items-center justify-center border-2 border-black hover:bg-black/80 transition-all cursor-pointer shadow-[2px_2px_0px_rgba(0,0,0,0.3)]"
+                      className="w-10 h-10 rounded-xl bg-void text-mint font-bold flex items-center justify-center border border-void/30 hover:bg-black/90 transition-all cursor-pointer shadow-md"
                       aria-label="Toggle Light/Dark Theme"
                       title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
                     >
                       {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                     </button>
-                    {/* High-Contrast Black Close Box Button */}
+                    {/* High-Contrast Black Close Button */}
                     <button
                       onClick={() => setMenuOpen(false)}
-                      className="w-11 h-11 bg-void text-white font-black flex items-center justify-center border-2 border-black hover:bg-black/80 transition-all cursor-pointer shadow-[2px_2px_0px_rgba(0,0,0,0.3)]"
+                      className="w-10 h-10 rounded-xl bg-void text-white font-bold flex items-center justify-center border border-void/30 hover:bg-black/90 transition-all cursor-pointer shadow-md"
                       aria-label="Close navigation sidebar"
                     >
-                      <X size={24} className="stroke-[3]" />
+                      <X size={20} className="stroke-[2.5]" />
                     </button>
                   </div>
                 </div>

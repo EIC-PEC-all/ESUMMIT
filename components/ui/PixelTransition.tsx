@@ -91,7 +91,11 @@ export default function PixelTransition({
 
     delayedCallRef.current = gsap.delayedCall(animationStepDuration, () => {
       activeEl.style.display = activate ? 'block' : 'none'
-      activeEl.style.pointerEvents = activate ? 'none' : ''
+      activeEl.style.pointerEvents = activate ? 'auto' : 'none'
+      const defaultEl = containerRef.current?.querySelector<HTMLElement>('.pixelated-image-card__default')
+      if (defaultEl) {
+        defaultEl.style.visibility = activate ? 'hidden' : 'visible'
+      }
     })
 
     gsap.to(pixels, {

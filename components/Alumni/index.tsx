@@ -156,7 +156,7 @@ export default function AlumniSection() {
 
                       {/* Top Batch Tag */}
                       <div className="absolute top-4 left-4 z-10">
-                        <span className="px-3 py-1 rounded-md bg-panel/80 backdrop-blur-md border border-border-subtle text-primary font-mono text-xs font-semibold tracking-wider">
+                        <span className="px-3 py-1 rounded-md bg-black/80 backdrop-blur-md border border-white/20 text-white font-mono text-xs font-bold tracking-wider shadow-md">
                           {person.batch}
                         </span>
                       </div>
