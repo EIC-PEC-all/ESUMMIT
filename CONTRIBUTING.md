@@ -1,136 +1,170 @@
-# Contributing to PEC E-Summit '26 🚀
+# Contributing to PEC E-Summit '26
 
-Thank you for your interest in contributing to the official website of **PEC E-Summit '26** — hosted by the **Entrepreneurship and Incubation Cell (EIC), Punjab Engineering College, Chandigarh**.
-
-This document provides a set of guidelines and standards for contributing code, features, and fixes to the codebase.
+This document covers the workflow, conventions, and standards for contributing to the official website of PEC E-Summit '26, hosted by the Entrepreneurship and Incubation Cell (EIC), Punjab Engineering College, Chandigarh.
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Getting Started](#-getting-started)
-- [Branching Strategy](#-branching-strategy)
-- [Commit Message Conventions](#-commit-message-conventions)
-- [Coding Standards & Guidelines](#-coding-standards--guidelines)
-- [Pull Request Process](#-pull-request-process)
-- [Project Architecture Overview](#-project-architecture-overview)
-
----
-
-## 🛠️ Getting Started
-
-### Prerequisites
-
-- **Node.js**: `v18.x` or higher
-- **npm**: `v9.x` or higher (or `pnpm` / `yarn`)
-- **Git**: Installed and configured with your GitHub credentials
-
-### Setup Instructions
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/EIC-PEC-all/ESUMMIT.git
-   cd ESUMMIT
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser to see the live application.
-
-4. **Verify TypeScript compilation:**
-   ```bash
-   npx tsc --noEmit
-   ```
+- [Getting Started](#getting-started)
+- [Branching Strategy](#branching-strategy)
+- [Commit Conventions](#commit-conventions)
+- [Coding Standards](#coding-standards)
+- [Pull Request Process](#pull-request-process)
 
 ---
 
-## 🌿 Branching Strategy
+## Getting Started
 
-We follow a structured branch naming convention for organized collaboration:
-
-| Branch Type | Naming Format | Description |
-|---|---|---|
-| **Production** | `main` | Production-ready stable codebase. |
-| **Active Staging** | `ananay` / `manan` | Primary development branches for active feature integration. |
-| **Feature** | `feature/feature-name` | New UI components or section additions. |
-| **Bugfix** | `fix/bug-description` | Fixing styling, layout, or hydration issues. |
-| **Refactor** | `refactor/component-name` | Performance optimizations or architectural cleanup. |
-
-### Workflow Example
+**Prerequisites:** Node.js 20+, npm, Git
 
 ```bash
-# Checkout working development branch
-git checkout ananay
+# Clone the repository
+git clone https://github.com/EIC-PEC/E-Summit-26.git
+cd E-Summit-26
 
-# Create a feature branch
-git checkout -b feature/interactive-timeline
+# Install dependencies
+npm install
 
-# Make changes, stage and commit
-git add .
-git commit -m "feat: implement GSAP scroll timeline for campus map"
+# Start development server
+npm run dev
+```
 
-# Push to remote branch
-git push origin feature/interactive-timeline
+Dev server runs at `http://localhost:3000`.
+
+Before opening a PR, verify the build passes locally:
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
 ```
 
 ---
 
-## 📝 Commit Message Conventions
+## Branching Strategy
 
-We enforce [Conventional Commits](https://www.conventionalcommits.org/) to maintain a clean git log:
+| Branch | Purpose |
+|---|---|
+| `main` | Production — deploys to live site |
+| `develop` | Integration — all feature branches merge here first |
+| `feature/<name>` | New UI components or sections |
+| `fix/<description>` | Bug fixes — styling, layout, hydration |
+| `refactor/<component>` | Performance or architectural cleanup |
+| `docs/<topic>` | Documentation-only changes |
+
+**Workflow:**
+
+```bash
+# Start from develop
+git checkout develop
+git pull origin develop
+
+# Create your branch
+git checkout -b feature/interactive-timeline
+
+# Work, commit, push
+git add .
+git commit -m "feat(timeline): implement GSAP scroll-driven animation"
+git push origin feature/interactive-timeline
+```
+
+Open a pull request from your branch into `develop`. Do not open PRs directly to `main`.
+
+---
+
+## Commit Conventions
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
 <type>(<scope>): <short description>
 ```
 
-### Commit Types
+**Types:**
 
-- `feat`: A new feature or major UI component (e.g., `feat: add 60fps frame scrubber to hero`).
-- `fix`: A bug fix or layout correction (e.g., `fix: align navbar width with footer grid`).
-- `style`: CSS/Tailwind styling updates, theme variables, or padding tweaks without logic changes.
-- `refactor`: Code changes that neither fix a bug nor add a feature.
-- `docs`: Documentation updates (e.g., README or CONTRIBUTING updates).
-- `perf`: Performance improvements (e.g., image sequence optimizations).
+| Type | When to use |
+|---|---|
+| `feat` | New component, section, or user-facing feature |
+| `fix` | Bug fix — layout, hydration, scroll, logic |
+| `style` | CSS, Tailwind, or token-only changes with no logic change |
+| `refactor` | Code restructure that does not fix a bug or add a feature |
+| `perf` | Performance improvement — frame sequence size, lazy loading |
+| `docs` | README, CONTRIBUTING, DESIGN_SYSTEM, or inline comment updates |
+| `chore` | Dependency updates, config changes, CI tweaks |
 
----
+**Examples:**
 
-## 🎨 Coding Standards & Guidelines
+```
+feat(hero): add 60fps scroll-scrubbed frame animation
+fix(navbar): correct z-index stacking on mobile
+style(statburst): adjust mint glow intensity on hover
+perf(sequence): compress JPEG frames to under 80KB each
+docs(readme): add performance notes for frame sequences
+```
 
-### 1. Theme Awareness & CSS Variables
-All components must support both **Dark Mode** (`data-theme="dark"`) and **Light/Olive Theme** (`data-theme="light"`):
-- Use Tailwind theme tokens like `bg-panel`, `bg-void`, `text-primary`, `text-secondary`, `text-mint`, `border-border-subtle`.
-- Avoid hardcoding black/white backgrounds on text containers unless explicitly required for dedicated dark-card sections (e.g., countdown digits).
-
-### 2. Button Styling Standards
-- **Navbar PASSES Button**: Solid Gold (`bg-[#FFD700] text-black font-black`).
-- **Main Action CTAs**: Neon Mint (`bg-mint text-void font-bold shadow-[0_0_25px_rgba(126,211,33,0.4)]`).
-- **Secondary Actions**: Theme-aware dark/light glass panels (`bg-panel text-primary border border-border-subtle`).
-
-### 3. Component Performance & Smooth Scroll
-- Keep Canvas frame scrubbers lightweight (sample 100 frames instead of heavy 600-frame full loads).
-- Ensure Framer Motion and Lenis smooth scrolling interoperate without layout shifts.
-- Include `'use client'` at the top of interactive components using React hooks or Framer Motion.
+Scope is optional but recommended — use the component or section name.
 
 ---
 
-## 📬 Pull Request Process
+## Coding Standards
 
-1. Ensure `npx tsc --noEmit` passes with **0 TypeScript errors** before opening a PR.
-2. Provide a descriptive title and summary of changes in your PR description.
-3. Attach screenshots or screen recordings for UI/design updates.
-4. Request review from team leads before merging into `ananay` or `main`.
+### TypeScript
+
+- Strict mode is enabled (`"strict": true` in `tsconfig.json`). All code must be type-safe.
+- No `any` types. Use proper generics or `unknown` where necessary.
+- Run `npm run typecheck` before committing.
+
+### Components
+
+- All interactive components using hooks or Framer Motion must have `'use client'` at the top.
+- Components that depend on browser-only APIs (scroll position, canvas, `window`) must be loaded via `next/dynamic` with `ssr: false`.
+- Keep components focused. If a component exceeds ~300 lines, split into subcomponents.
+
+### Styling
+
+- Use Tailwind utility classes. Do not write raw inline styles unless interfacing with animation libraries (GSAP, Anime.js, Framer Motion).
+- Use the design token aliases — `bg-void`, `text-primary`, `mint`, `font-display` — not hardcoded hex values.
+- CSS custom properties are defined in `app/globals.css`. Add new tokens there if needed and alias them in `tailwind.config.js`.
+- Do not hardcode `#000000` or `#FFFFFF` backgrounds on containers. Use `bg-void` and `bg-panel`.
+
+### Button Standards
+
+| Context | Class |
+|---|---|
+| Primary CTA (hero, register) | `bg-mint text-void font-bold` |
+| Navigation passes button | `bg-[#FFD700] text-black font-black` |
+| Secondary action | `bg-panel text-primary border border-border-subtle` |
+| Ghost / outline | `border border-mint text-mint hover:bg-mint/10` |
+
+### Performance
+
+- Frame sequences in `public/sequence/` and `public/vdo/` must be kept under 80KB per JPEG frame.
+- Do not import heavy libraries (Three.js, GSAP) at the top of pages — keep them inside the components that use them.
+- Use `useReducedMotion` hook to disable animations for accessibility.
+
+### Smooth Scroll
+
+- Lenis is mounted globally in `SmoothScrollProvider`. Do not instantiate a second Lenis instance anywhere.
+- Framer Motion `useScroll` and Lenis must not conflict — use Framer Motion's scroll hooks inside Lenis-wrapped containers without calling `lenis.stop()` unless intentionally pausing scroll.
 
 ---
 
-## 🏛️ Organization
+## Pull Request Process
 
-**Entrepreneurship and Incubation Cell (EIC)**  
-Punjab Engineering College (PEC), Sector 12, Chandigarh — 160012  
-📧 **Email**: eicpec@pec.edu.in | info@ecellpec.in
+1. Branch must be up to date with `develop` before opening a PR.
+2. All three checks must pass locally: `npm run typecheck`, `npm run lint`, `npm run build`.
+3. CI (`ci.yml`) must pass — the PR will be blocked if lint, typecheck, or build fails.
+4. PR description must include:
+   - What was changed and why
+   - Screenshots or a short screen recording for any visual change
+5. Request a review from at least one other team member before merging.
+6. Squash commits on merge to keep `develop` history clean.
+
+---
+
+## Organization
+
+Entrepreneurship and Incubation Cell (EIC)
+Punjab Engineering College, Sector 12, Chandigarh — 160012
+Contact: eicpec@pec.edu.in
