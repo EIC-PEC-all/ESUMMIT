@@ -11,6 +11,23 @@
 > **The flagship entrepreneurship summit of E-Cell PEC, Chandigarh.**  
 > North India's premier high-voltage platform for student innovators, startup founders, venture builders, and angel investors.
 
+![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.6-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.3-0055FF?style=flat-square&logo=framer&logoColor=white)
+![Three.js](https://img.shields.io/badge/Three.js-0.166-black?style=flat-square&logo=three.js)
+![GSAP](https://img.shields.io/badge/GSAP-3.12-88CE02?style=flat-square&logo=greensock&logoColor=black)
+![CI](https://github.com/EIC-PEC-all/E-Summit-26/actions/workflows/ci.yml/badge.svg?style=flat-square)
+
+---
+
+## Preview
+
+![Hero Section](public/readme-hero.png)
+
+![Highlights Section](public/readme-highlights.png)
+
 ---
 
 ## 🌟 Overview

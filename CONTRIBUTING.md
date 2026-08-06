@@ -20,7 +20,7 @@ This document covers the workflow, conventions, and standards for contributing t
 
 ```bash
 # Clone the repository
-git clone https://github.com/EIC-PEC/E-Summit-26.git
+git clone https://github.com/EIC-PEC-all/E-Summit-26.git
 cd E-Summit-26
 
 # Install dependencies

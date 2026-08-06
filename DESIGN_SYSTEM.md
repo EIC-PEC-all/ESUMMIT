@@ -1,57 +1,108 @@
-# PEC E-Summit '26 — Design System & Tokens 🎨
+# PEC E-Summit '26 — Design System
 
-This document outlines the visual design language, color tokens, typography scales, glassmorphism specs, and component styling rules for the **PEC E-Summit '26** platform.
+This document defines the visual language, color tokens, typography, and component styling rules for the PEC E-Summit '26 platform.
 
 ---
 
-## 🎨 Color Palette & CSS Variables
+## Color Palette
 
-The design system operates on dynamic CSS custom properties, allowing seamless switching between **Dark Void Mode** and **Light Olive Mode**.
+The design system is built on CSS custom properties defined in `app/globals.css`. Tailwind aliases are configured in `tailwind.config.js`.
 
-### 1. Dark Mode (`data-theme="dark"`)
+### Dark Mode (default)
 
-| Token | CSS Variable | Hex / Value | Description |
+| Token | CSS Variable | Value | Usage |
 |---|---|---|---|
-| **Void Deep** | `--bg-deep` | `#060B08` | Primary background void |
-| **Panel** | `--bg-panel` | `#0B150E` | Dark glass card background |
-| **Accent Mint** | `--accent-mint` | `#7ED321` | Brand primary neon green |
-| **Mint Glow** | `--accent-green-glow` | `rgba(126,211,33,0.3)` | Radial glow effect |
-| **Gold** | N/A | `#FFD700` | Navbar PASSES button accent |
-| **Text Primary** | `--text-primary` | `#F5F5F0` | High-contrast off-white text |
-| **Text Secondary** | `--text-secondary` | `#94A3B8` | Subtitle / muted text |
+| Void | `--bg-void` | `#060B08` | Primary page background |
+| Panel | `--bg-panel` | `#0B150E` | Card and panel backgrounds |
+| Panel Alt | `--bg-panel-alt` | `#0F1A12` | Elevated surface backgrounds |
+| Accent Mint | `--accent-mint` | `#7ED321` | Brand primary, CTAs, highlights |
+| Accent Green | `--accent-green` | `#4CAF50` | Secondary accent |
+| Accent Blue | `--accent-blue` | `#3DD9FF` | Info, cool contrast accent |
+| Accent Coral | `--accent-coral` | `#FF4D3D` | Warm accent, pitch track color |
+| Mint Glow | `--accent-green-dim` | `rgba(126,211,33,0.3)` | Radial glow, shadow effects |
+| Gold | — | `#FFD700` | Navbar PASSES button only |
+| Text Primary | `--text-primary` | `#F5F5F0` | Body text |
+| Text Secondary | `--text-secondary` | `#94A3B8` | Subtitles, secondary labels |
+| Text Muted | `--text-muted` | `#64748B` | Captions, placeholders |
+| Border Subtle | `--border-subtle` | `rgba(255,255,255,0.08)` | Default card borders |
+| Border Panel | `--border-panel` | `rgba(255,255,255,0.12)` | Panel dividers |
+| Border Glow | `--border-glow` | `rgba(126,211,33,0.3)` | Active / hover borders |
 
-### 2. Light / Olive Mode (`data-theme="light"`)
+### Light / Olive Mode
 
-| Token | CSS Variable | Hex / Value | Description |
-|---|---|---|---|
-| **Deep Background** | `--bg-deep` | `#F8FAFC` | Clean light canvas |
-| **Panel** | `--bg-panel` | `#FFFFFF` | Elevated white card backing |
-| **Accent Green** | `--accent-mint` | `#4E6527` | Deep olive green brand accent |
-| **Text Primary** | `--text-primary` | `#0F172A` | Dark charcoal high-contrast text |
-
----
-
-## 🔤 Typography & Font Hierarchy
-
-- **Hero & Headings**: `Khaviax` (custom display font) & `Inter` (sans-serif, weight 800-900).
-- **Data & Badges**: `JetBrains Mono` / `font-mono-data` (uppercase, tracked out `0.15em`).
-- **Body & Captions**: `Inter` (weights 400, 500, 600).
-
----
-
-## 🔘 Button Matrix
-
-| Button Type | Class Spec | Target Context |
+| CSS Variable | Value | Usage |
 |---|---|---|
-| **Solid Gold Pass** | `bg-[#FFD700] text-black font-black shadow-md` | Navbar header `/passes` CTA |
-| **Neon Mint Main** | `bg-mint text-void font-bold shadow-mint-glow` | Main hero CTAs & pitch registration |
-| **Dark Glass Secondary** | `bg-panel text-primary border border-border-subtle` | `EXPLORE TRACKS` & secondary buttons |
-| **Ghost Outline** | `border border-mint text-mint hover:bg-mint/10` | Secondary cards & drawer triggers |
+| `--bg-void` | `#F8FAFC` | Light page canvas |
+| `--bg-panel` | `#FFFFFF` | Card backgrounds |
+| `--accent-mint` | `#4E6527` | Deep olive brand accent |
+| `--text-primary` | `#0F172A` | Dark charcoal text |
+| `--text-secondary` | `#475569` | Subdued text |
 
 ---
 
-## ✨ Micro-Animations & Glows
+## Typography
 
-- **Canvas Frame Scrubber**: 60fps scroll-driven video frame scrubbing (`NewHero.tsx` & `Vdo2Showcase`).
-- **Mouse Spotlight**: Interactive radial gradient following cursor coordinates (`BurstCard` in `StatBurst`).
-- **Stacked Sliced Banner**: Scroll-scrubbed multi-layered typography expansion (`StackedSlicedText.tsx`).
+Three font families are configured. All are loaded in `app/layout.tsx` and exposed as CSS variables.
+
+| Font | Variable | Tailwind Alias | Usage |
+|---|---|---|---|
+| Khaviax (local OTF) | `--font-khaviax` | `font-display` | Hero headings, section titles |
+| Inter (Google) | `--font-inter` | `font-body` | Body text, paragraphs, buttons |
+| JetBrains Mono (Google) | `--font-jetbrains` | `font-mono` | Data labels, stat numbers, code, badges |
+
+**Scale notes:**
+- Hero headlines: `font-display`, weight 800–900, tight tracking
+- Data / badge text: `font-mono`, uppercase, `letter-spacing: 0.15em`
+- Body: `font-body`, weight 400–600
+
+---
+
+## Button Standards
+
+| Type | Tailwind Classes | Usage |
+|---|---|---|
+| Primary CTA | `bg-mint text-void font-bold shadow-[0_0_25px_rgba(126,211,33,0.4)]` | Hero register, pitch CTA, main actions |
+| Passes (Nav) | `bg-[#FFD700] text-black font-black` | Navbar PASSES button only |
+| Secondary | `bg-panel text-primary border border-border-subtle` | Explore Tracks, secondary actions |
+| Ghost Outline | `border border-mint text-mint hover:bg-mint/10` | Card triggers, drawer opens |
+
+---
+
+## Motion & Animation
+
+| Effect | Implementation | Component |
+|---|---|---|
+| Frame scrubbing | JPEG sequence rendered to canvas, frame index driven by scroll progress | `Hero/NewHero.tsx`, `Vdo2Showcase/` |
+| Smooth scroll | Lenis physics-based scroll inertia, global | `Providers/SmoothScrollProvider.tsx` |
+| Sticky card stack | Framer Motion `useScroll` + `useTransform`, cards pin and stack | `EsummitSpeakers/` |
+| Character reveal | Text split into chars, staggered opacity/transform on scroll entry | `EsummitAbout/` |
+| Mouse spotlight | Radial gradient position updated on `mousemove` | `StatBurst/` (BurstCard) |
+| Marquee | CSS `marquee` / `marquee2` keyframes, dual direction | `EsummitMarquee/`, `Sponsors/` |
+| Pixel transition | Canvas pixel-dissolve reveal on hover | `Alumni/` |
+| Counter | Intersection Observer triggers count-up animation | `hooks/useCountUp.ts` |
+
+**Reduced motion:** All scroll-driven and entrance animations must check `useReducedMotion()` and render a static fallback if `true`.
+
+---
+
+## Layout Tokens
+
+| Class | Value | Usage |
+|---|---|---|
+| `section-container` | `max-width + horizontal padding` | Standard section wrapper |
+| `bg-void` | CSS var backed | Page-level background |
+| `noise` | CSS noise texture overlay | Applied on `<body>` |
+
+---
+
+## Track Accent Colors
+
+Each event track has an assigned accent color used for card borders and icon tints:
+
+| Track | Hex |
+|---|---|
+| Pitch Competition | `#FF4D3D` |
+| Panel Discussions | `#3DD9FF` |
+| Startup Expo | `#7ED321` |
+| Hackathon | `#A855F7` |
+| Investor Networking | `#F59E0B` |
