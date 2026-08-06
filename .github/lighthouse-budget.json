@@ -1,0 +1,21 @@
+{
+  "assertions": [
+    {
+      "resource": ".*",
+      "resourceSizes": [
+        {
+          "resourceType": "script",
+          "budget": 500
+        },
+        {
+          "resourceType": "image",
+          "budget": 1000
+        },
+        {
+          "resourceType": "total",
+          "budget": 3000
+        }
+      ]
+    }
+  ]
+}
