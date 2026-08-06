@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import localFont from 'next/font/local'
+import Script from 'next/script'
 import './globals.css'
 import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
 
@@ -58,7 +59,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <Script
+          src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          strategy="beforeInteractive"
+        />
       </head>
       <body className={`noise ${khaviax.variable} ${inter.variable} ${jetbrains.variable} font-body text-primary bg-void`}>
         <SmoothScrollProvider>
