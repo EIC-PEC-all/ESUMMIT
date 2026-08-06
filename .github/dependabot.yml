@@ -1,4 +1,4 @@
-version: "2"
+version: 2
 updates:
   - package-ecosystem: npm
     directory: "/"
@@ -7,8 +7,3 @@ updates:
       day: monday
       time: "09:00"
     open-pull-requests-limit: 5
-    groups:
-      production-dependencies:
-        dependency-type: production
-      development-dependencies:
-        dependency-type: development
