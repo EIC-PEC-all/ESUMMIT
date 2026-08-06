@@ -120,7 +120,7 @@ export default function Nav() {
       <header
         className={`fixed z-50 transition-all duration-500 ease-out 
           top-0 left-0 right-0 w-full rounded-none
-          lg:top-4 lg:left-1/2 lg:w-[calc(100%-2rem)] lg:max-w-5xl lg:rounded-full
+          lg:top-4 lg:left-1/2 lg:w-[calc(100%-3rem)] lg:max-w-7xl lg:rounded-full
           bg-[#0A110E]/90 text-white backdrop-blur-2xl shadow-2xl border border-white/20
           ${scrolled || menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-[150%] opacity-0 pointer-events-none'} 
           ${menuOpen ? 'lg:-translate-x-[calc(50%+190px)]' : 'lg:-translate-x-1/2'}`}
@@ -147,7 +147,7 @@ export default function Nav() {
               <>
                 <Magnetic strength={0.3}>
                   <button
-                    onClick={() => window.dispatchEvent(new Event('open-concierge'))}
+                    onClick={() => window.dispatchEvent(new Event('open-my-plan'))}
                     className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 lg:rounded-full rounded-sm font-mono-data text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-white/10 text-white hover:text-mint hover:bg-white/20"
                     aria-label="Open My Plan"
                   >
@@ -167,10 +167,10 @@ export default function Nav() {
                 <Magnetic strength={0.3}>
                   <Link
                     href="/passes"
-                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 lg:rounded-full rounded-sm font-mono-data text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-mint/20 text-mint hover:bg-mint/30"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 lg:rounded-full rounded-sm font-mono-data text-xs font-bold uppercase tracking-wider transition-all duration-200 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 text-black hover:brightness-110 shadow-[0_0_15px_rgba(251,191,36,0.4)]"
                     id="nav-passes-btn"
                   >
-                    <Ticket size={14} />
+                    <Ticket size={14} className="text-black" />
                     <span>PASSES</span>
                   </Link>
                 </Magnetic>

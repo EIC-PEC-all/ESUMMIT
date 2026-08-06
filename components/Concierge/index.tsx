@@ -21,6 +21,24 @@ interface Message {
   }
 }
 
+function FormattedText({ text }: { text: string }) {
+  const parts = text.split(/(\*\*.*?\*\*)/g)
+  return (
+    <span>
+      {parts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return (
+            <strong key={i} className="font-bold text-mint">
+              {part.slice(2, -2)}
+            </strong>
+          )
+        }
+        return part
+      })}
+    </span>
+  )
+}
+
 export default function Concierge() {
   const [open, setOpen] = useState(false)
   const [planOpen, setPlanOpen] = useState(false)
@@ -45,234 +63,205 @@ export default function Concierge() {
       const saved = localStorage.getItem('pec_summit_my_plan')
       if (saved) setMyPlan(JSON.parse(saved))
     } catch (e) {
-      console.warn('Failed to load My Plan:', e)
+      console.error(e)
     }
   }, [])
 
-  const savePlan = (newPlan: ItinerarySession[]) => {
+  useEffect(() => {
+    const handleOpenPlan = () => {
+      setPlanOpen(true)
+    }
+    const handleOpenConcierge = () => {
+      setOpen(true)
+      setPlanOpen(true)
+    }
+
+    window.addEventListener('open-my-plan', handleOpenPlan)
+    window.addEventListener('open-concierge', handleOpenConcierge)
+    return () => {
+      window.removeEventListener('open-my-plan', handleOpenPlan)
+      window.removeEventListener('open-concierge', handleOpenConcierge)
+    }
+  }, [])
+
+  const savePlan = useCallback((newPlan: ItinerarySession[]) => {
     setMyPlan(newPlan)
     try {
       localStorage.setItem('pec_summit_my_plan', JSON.stringify(newPlan))
     } catch (e) {
-      console.warn('Failed to save My Plan:', e)
+      console.error(e)
     }
-  }
+  }, [])
 
   const addToPlan = (session: ItinerarySession) => {
-    if (myPlan.some((s) => s.id === session.id)) {
-      toast('Session already in My Plan', { style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid rgba(126,211,33,0.3)' } })
-      return
-    }
+    if (myPlan.some((s) => s.id === session.id)) return
     const updated = [...myPlan, session]
     savePlan(updated)
-    toast.success(`Added "${session.title}" to My Plan!`, {
-      style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' },
-      iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
-    })
+    toast.success(`Added "${session.title}" to My Plan!`)
   }
 
-  const removeFromPlan = (id: string) => {
-    const updated = myPlan.filter((s) => s.id !== id)
+  const removeFromPlan = (sessionId: string) => {
+    const updated = myPlan.filter((s) => s.id !== sessionId)
     savePlan(updated)
-    toast('Removed from My Plan', { style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid rgba(239,68,68,0.3)' } })
+    toast.success('Removed session from My Plan.')
   }
 
   useEffect(() => {
     if (open) {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [messages, isTyping, open])
-
-  useEffect(() => {
-    if (open) {
-      setTimeout(() => inputRef.current?.focus(), 200)
       setUnread(0)
+      setTimeout(() => inputRef.current?.focus(), 150)
     }
   }, [open])
 
-  const sendMessage = useCallback(async (text: string) => {
-    const trimmed = text.trim()
-    if (!trimmed || isTyping) return
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isTyping])
+
+  const sendMessage = async (userText: string) => {
+    if (!userText.trim()) return
 
     const userMsg: Message = {
-      id: `u-${Date.now()}`,
+      id: Date.now().toString(),
       role: 'user',
-      text: trimmed,
+      text: userText,
       timestamp: new Date(),
     }
-    setMessages((m) => [...m, userMsg])
+
+    setMessages((prev) => [...prev, userMsg])
     setInput('')
     setIsTyping(true)
 
     try {
-      const response = await getAgentResponse(trimmed, FEST_CONTEXT)
+      const res = await getAgentResponse(userText, FEST_CONTEXT)
+      setIsTyping(false)
 
       const botMsg: Message = {
-        id: `b-${Date.now()}`,
+        id: (Date.now() + 1).toString(),
         role: 'bot',
-        text: response.text,
+        text: res.text,
         timestamp: new Date(),
-        suggestedReplies: response.suggestedReplies,
-        itinerary: response.itinerary,
-      }
-      setMessages((m) => [...m, botMsg])
-
-      if (response.toast) {
-        toast.success(response.toast, {
-          style: {
-            background: '#0A110E',
-            color: '#FFFFFF',
-            border: '1px solid var(--accent-mint)',
-          },
-          iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
-        })
+        suggestedReplies: res.suggestedReplies,
+        itinerary: res.itinerary,
       }
 
-      if (!open) setUnread((n) => n + 1)
-    } catch {
-      setMessages((m) => [
-        ...m,
+      setMessages((prev) => [...prev, botMsg])
+      if (!open) setUnread((u) => u + 1)
+    } catch (err) {
+      setIsTyping(false)
+      setMessages((prev) => [
+        ...prev,
         {
-          id: `err-${Date.now()}`,
+          id: Date.now().toString(),
           role: 'bot',
-          text: 'Something went wrong. Please try again.',
+          text: 'Apologies, I encountered a temporary connection issue. How else can I assist with E-Summit 2026?',
           timestamp: new Date(),
         },
       ])
-    } finally {
-      setIsTyping(false)
     }
-  }, [isTyping, open])
+  }
 
   return (
     <>
-      {/* Floating Toggle Button — Strictly Anchored to Bottom Right */}
+      {/* Floating Concierge Action Pill */}
       <motion.button
-        onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-14 sm:bottom-16 right-6 sm:right-8 left-auto z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl"
-        style={{
-          background: open ? 'var(--bg-panel)' : 'var(--accent-mint)',
-          border: '1px solid var(--border-subtle)',
-          color: open ? 'var(--accent-mint)' : 'var(--bg-void)',
-          boxShadow: open ? '0 0 0 rgba(0,0,0,0)' : '0 8px 30px var(--accent-green-glow)',
-        }}
-        whileHover={{ scale: 1.1, boxShadow: '0 12px 40px var(--accent-green-glow)' }}
-        whileTap={{ scale: 0.92 }}
-        aria-label={open ? 'Close Summit Agent' : 'Open Summit Agent'}
+        onClick={() => setOpen(!open)}
+        className="fixed bottom-14 right-6 z-40 px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        aria-label="Open Summit AI Concierge Assistant"
       >
-        {/* Pulse ring — only when closed */}
+        <Bot size={18} />
+        <span className="hidden sm:inline">Ask AI Agent</span>
         {!open && (
           <motion.span
-            className="absolute inset-0 rounded-full pointer-events-none"
-            style={{ border: '2px solid var(--accent-mint)' }}
-            animate={{ scale: [1, 1.4, 1.7], opacity: [0.6, 0.2, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
+            className="w-2 h-2 rounded-full bg-void"
+            animate={{ opacity: [1, 0.3, 1] }}
+            transition={{ duration: 1.2, repeat: Infinity }}
           />
-        )}
-        <AnimatePresence mode="wait">
-          {open ? (
-            <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
-              <X size={22} />
-            </motion.span>
-          ) : (
-            <motion.span key="chart" initial={{ scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.7, opacity: 0 }} transition={{ duration: 0.18 }}>
-              <TrendingUp size={22} strokeWidth={2.5} />
-            </motion.span>
-          )}
-        </AnimatePresence>
-        {!open && unread > 0 && (
-          <motion.span
-            className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[var(--accent-mint)] text-void font-mono-data text-[10px] font-bold flex items-center justify-center"
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 0.8, repeat: Infinity }}
-          >
-            {unread}
-          </motion.span>
         )}
       </motion.button>
 
-      {/* Chat Widget Panel — Strictly Anchored to Bottom Right */}
+      {/* Chat Widget Panel */}
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-32 right-6 sm:right-8 left-auto z-50 w-[380px] max-w-[calc(100vw-32px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-void border border-border-subtle"
-            style={{ height: '540px' }}
+            className="fixed bottom-24 right-4 sm:right-8 left-auto z-50 w-[390px] max-w-[calc(100vw-32px)] rounded-3xl overflow-hidden flex flex-col shadow-2xl bg-[#0A1A17]/95 [.light_&]:bg-[#1E2B12]/95 backdrop-blur-2xl border border-mint/40"
+            style={{ height: '560px' }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
           >
             {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 shrink-0 bg-panel border-b border-[var(--accent-mint)]/30">
-              <div className="w-9 h-9 rounded-xl bg-[var(--accent-mint)]/20 border border-[var(--accent-mint)]/40 flex items-center justify-center">
-                <Bot size={18} className="text-[var(--accent-mint)]" />
+            <div className="flex items-center justify-between px-5 py-3.5 shrink-0 bg-white/5 border-b border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="relative w-9 h-9 rounded-2xl bg-mint/20 border border-mint/40 flex items-center justify-center">
+                  <Bot size={18} className="text-mint" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-mint animate-ping" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-mint" />
+                </div>
+                <div>
+                  <p className="font-display font-bold text-sm text-white flex items-center gap-1.5">
+                    Summit AI Assistant
+                  </p>
+                  <p className="font-mono-data text-[10px] text-mint font-semibold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-mint inline-block" />
+                    <span>Official E-Cell Assistant</span>
+                  </p>
+                </div>
               </div>
-              <div className="flex-1">
-                <p className="font-body font-semibold text-sm text-white flex items-center gap-1.5">
-                  Summit Agent <Zap size={12} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
-                </p>
-                <p className="font-mono-data text-[10px] text-[var(--accent-mint)] font-bold">⚡ Official E-Cell Assistant</p>
+
+              <div className="flex items-center gap-2">
+                {myPlan.length > 0 && (
+                  <button
+                    onClick={() => setPlanOpen(true)}
+                    className="px-2.5 py-1 rounded-xl bg-mint/20 text-mint border border-mint/30 font-mono-data text-[10px] font-bold flex items-center gap-1 hover:bg-mint hover:text-void transition-all"
+                  >
+                    <Bookmark size={11} />
+                    <span>Plan ({myPlan.length})</span>
+                  </button>
+                )}
+                <button
+                  onClick={() => setOpen(false)}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer"
+                  aria-label="Close Assistant"
+                >
+                  <ChevronDown size={18} />
+                </button>
               </div>
-              <button onClick={() => setOpen(false)} className="p-1.5 rounded-lg text-muted hover:text-white">
-                <ChevronDown size={16} />
-              </button>
             </div>
 
             {/* Messages Log */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 font-body text-sm">
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 font-body text-sm scrollbar-thin">
               {messages.map((msg) => (
                 <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                   <div className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     {msg.role === 'user' ? (
-                      /* ── Stock-market user avatar ── */
-                      <motion.div
-                        className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 relative"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(126,211,33,0.25) 0%, rgba(61,217,255,0.12) 100%)',
-                          border: '1.5px solid var(--accent-mint)',
-                          boxShadow: '0 0 10px rgba(126,211,33,0.4)',
-                        }}
-                        whileHover={{ scale: 1.15, boxShadow: '0 0 18px rgba(126,211,33,0.7)' }}
-                        title="You"
-                      >
-                        {/* Tiny ticker spark */}
-                        <motion.span
-                          className="absolute -top-1 -right-1 leading-none text-[var(--accent-mint)]"
-                          animate={{ opacity: [1, 0.4, 1] }}
-                          transition={{ duration: 1.4, repeat: Infinity }}
-                        >
-                          <Zap size={10} className="fill-[var(--accent-mint)]" />
-                        </motion.span>
-                        <TrendingUp size={14} className="text-[var(--accent-mint)]" strokeWidth={2.5} />
-                      </motion.div>
+                      <div className="w-7 h-7 rounded-full bg-mint/20 border border-mint flex items-center justify-center shrink-0">
+                        <TrendingUp size={13} className="text-mint" />
+                      </div>
                     ) : (
-                      /* ── Bot avatar ── */
-                      <motion.div
-                        className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                        style={{
-                          background: 'rgba(126,211,33,0.15)',
-                          border: '1.5px solid rgba(126,211,33,0.6)',
-                        }}
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        <Bot size={14} className="text-[var(--accent-mint)]" />
-                      </motion.div>
+                      <div className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                        <Bot size={13} className="text-mint" />
+                      </div>
                     )}
 
                     <div
-                      className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed ${
+                      className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed text-xs sm:text-sm ${
                         msg.role === 'user'
-                          ? 'bg-[var(--accent-mint)] text-void font-bold rounded-br-none'
-                          : 'bg-panel border border-[var(--accent-mint)]/30 text-white rounded-bl-none shadow-md'
+                          ? 'bg-mint text-void font-bold rounded-br-none shadow-md'
+                          : 'bg-white/10 border border-white/15 text-white rounded-bl-none shadow-md backdrop-blur-md'
                       }`}
                     >
-                      {msg.text}
+                      <FormattedText text={msg.text} />
                     </div>
                   </div>
 
                   {/* Render Inline Itinerary Card */}
                   {msg.itinerary && (
-                    <div className="mt-3 ml-9 w-[85%] rounded-xl p-4 bg-panel border border-[var(--accent-mint)]/50 shadow-lg space-y-3">
-                      <div className="flex items-center gap-2 text-xs font-mono-data text-[var(--accent-mint)] uppercase font-bold">
+                    <div className="mt-3 ml-8 w-[88%] rounded-2xl p-4 bg-white/5 border border-mint/40 shadow-xl space-y-3">
+                      <div className="flex items-center gap-2 text-xs font-mono-data text-mint uppercase font-bold">
                         <Calendar size={14} />
                         <span>{msg.itinerary.title}</span>
                       </div>
@@ -282,24 +271,24 @@ export default function Concierge() {
                           return (
                             <div
                               key={session.id}
-                              className="p-2.5 rounded-lg bg-void border border-[var(--accent-mint)]/30 flex items-center justify-between gap-2"
+                              className="p-3 rounded-xl bg-black/40 border border-white/15 flex items-center justify-between gap-2"
                             >
                               <div className="flex-1 min-w-0">
-                                <p className="font-mono-data text-[10px] text-muted">
+                                <p className="font-mono-data text-[10px] text-mint font-bold">
                                   [{session.day}] {session.time}
                                 </p>
-                                <p className="font-body text-xs font-semibold text-white truncate">{session.title}</p>
+                                <p className="font-body text-xs font-bold text-white truncate">{session.title}</p>
                               </div>
                               <button
                                 onClick={() => addToPlan(session)}
-                                className={`px-2 py-1 rounded text-[10px] font-mono-data shrink-0 flex items-center gap-1 transition-all ${
+                                className={`px-2.5 py-1 rounded-lg text-[10px] font-mono-data shrink-0 flex items-center gap-1 transition-all ${
                                   isInPlan
-                                    ? 'bg-[var(--accent-mint)]/20 text-[var(--accent-mint)] border border-[var(--accent-mint)]/40'
-                                    : 'bg-[var(--accent-mint)] text-void font-bold hover:bg-[var(--accent-mint)]/90'
+                                    ? 'bg-mint/20 text-mint border border-mint/40'
+                                    : 'bg-mint text-void font-bold hover:opacity-90'
                                 }`}
                               >
                                 {isInPlan ? <Check size={10} /> : <Plus size={10} />}
-                                <span>{isInPlan ? 'Added' : 'Add'}</span>
+                                <span>{isInPlan ? 'Saved' : 'Add'}</span>
                               </button>
                             </div>
                           )
@@ -310,12 +299,12 @@ export default function Concierge() {
 
                   {/* Suggested Quick Replies */}
                   {msg.role === 'bot' && msg.suggestedReplies && msg.id === messages[messages.length - 1].id && (
-                    <div className="flex flex-wrap gap-2 mt-3 ml-9">
+                    <div className="flex flex-wrap gap-2 mt-3 ml-8">
                       {msg.suggestedReplies.map((r) => (
                         <button
                           key={r}
                           onClick={() => sendMessage(r)}
-                          className="px-3 py-1 rounded-full text-xs font-mono-data bg-panel border border-[var(--accent-mint)]/30 text-muted hover:border-[var(--accent-mint)] hover:text-[var(--accent-mint)] transition-all"
+                          className="px-3.5 py-1.5 rounded-full text-xs font-mono-data bg-white/10 hover:bg-mint hover:text-void text-white border border-white/20 transition-all font-semibold shadow-sm cursor-pointer"
                         >
                           {r}
                         </button>
@@ -324,25 +313,32 @@ export default function Concierge() {
                   )}
                 </div>
               ))}
-              {isTyping && <p className="text-xs font-mono-data text-[var(--accent-mint)] ml-9">Agent is planning...</p>}
+              {isTyping && <p className="text-xs font-mono-data text-mint ml-8 animate-pulse">Agent is thinking...</p>}
               <div ref={bottomRef} />
             </div>
 
-            {/* Input Form */}
-            <div className="p-3 bg-panel border-t border-[var(--accent-mint)]/30">
-              <form onSubmit={(e) => { e.preventDefault(); sendMessage(input) }} className="flex items-center gap-2">
+            {/* Input Form Container */}
+            <div className="p-3 bg-white/5 border-t border-white/10">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  sendMessage(input)
+                }}
+                className="flex items-center gap-2 bg-black/40 border border-white/20 focus-within:border-mint rounded-2xl p-1.5 transition-all"
+              >
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about tracks, speakers, or build an itinerary..."
-                  className="flex-1 bg-void border border-[var(--accent-mint)]/40 rounded-lg px-3 py-2 text-sm text-white placeholder:text-muted/60 outline-none focus:border-[var(--accent-mint)] font-body"
+                  placeholder="Ask about schedule, tracks, or plan..."
+                  className="flex-1 bg-transparent px-3 py-1.5 text-xs sm:text-sm text-white placeholder:text-gray-400 outline-none font-body"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isTyping}
-                  className="w-9 h-9 rounded-lg bg-[var(--accent-mint)] text-void font-bold flex items-center justify-center disabled:opacity-40"
+                  className="w-9 h-9 rounded-xl bg-mint text-void font-bold flex items-center justify-center disabled:opacity-30 hover:scale-105 transition-all shrink-0 cursor-pointer"
+                  aria-label="Send message"
                 >
                   <Send size={15} />
                 </button>

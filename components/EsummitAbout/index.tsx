@@ -1,6 +1,6 @@
 'use client'
 // components/EsummitAbout/index.tsx
-// High-end About section with interactive geometric node canvas, clean typography (no banned eyebrows),
+// High-end About section with interactive geometric node canvas, clean typography,
 // and cursor-tracking spotlight pillar cards.
 
 import { useRef, useEffect } from 'react'
@@ -167,7 +167,10 @@ export default function EsummitAbout() {
       <div className="relative z-10 flex flex-col items-center gap-12 sm:gap-16 max-w-5xl mx-auto px-5 sm:px-8">
         {/* Section Heading */}
         <FadeIn delay={0.05}>
-          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-primary text-center">
+          <h2
+            id="esummit-about-heading"
+            className="font-display font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-primary text-center"
+          >
             About Us
           </h2>
         </FadeIn>
@@ -190,7 +193,7 @@ export default function EsummitAbout() {
               <FadeIn key={pillar.title} delay={0.15 + idx * 0.1}>
                 <div
                   onMouseMove={handleSpotlight}
-                  className="relative group rounded-2xl p-6 sm:p-8 bg-panel border border-border-subtle hover:border-mint/60 transition-all duration-300 overflow-hidden shadow-xl"
+                  className="relative group rounded-2xl p-6 sm:p-8 bg-panel transition-all duration-300 overflow-hidden shadow-xl"
                 >
                   {/* Mouse spotlight overlay */}
                   <div
@@ -233,4 +236,3 @@ export default function EsummitAbout() {
     </section>
   )
 }
-

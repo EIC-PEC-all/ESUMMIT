@@ -11,6 +11,7 @@ import Link from 'next/link'
 import DynamicWeightHeading from '../DynamicWeightHeading'
 import CircuitBoard from '../Hero/CircuitBoard'
 import { ScrollGradientFill, GlitchText } from '@/components/Common/TextAnims'
+import StackedSlicedText from '@/components/ui/StackedSlicedText'
 import { FEST_META } from '@/lib/data'
 
 function EmailCapture() {
@@ -239,11 +240,11 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
             {/* Column 3: Quick Links */}
             <div>
-              <h4 className="font-display text-2xl text-white mb-6 tracking-wide">Quick Links</h4>
+              <h4 className="font-display text-xl font-bold uppercase tracking-wider text-white mb-6">Quick Links</h4>
               <ul className="space-y-3">
                 {QUICK_LINKS.map((link) => (
                   <li key={link.label}>
-                    <a href={link.href} className="font-body text-gray-300 hover:text-[#C8E696] font-medium transition-colors text-sm">
+                    <a href={link.href} className="font-body text-gray-200 hover:text-mint font-medium transition-colors text-sm">
                       {link.label}
                     </a>
                   </li>
@@ -253,7 +254,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
             {/* Column 4: Contact */}
             <div>
-              <h4 className="font-display text-2xl text-white mb-6 tracking-wide">Contact</h4>
+              <h4 className="font-display text-xl font-bold uppercase tracking-wider text-white mb-6">Contact</h4>
               <p className="font-body text-sm text-gray-300 mb-6 leading-relaxed">
                 Entrepreneurship and Incubation Cell, Punjab Engineering College, Chandigarh 160012
               </p>
@@ -282,8 +283,13 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
           </div>
 
+          {/* Brutalist Stacked & Sliced Typography Reveal */}
+          <div className="pt-10 pb-4">
+            <StackedSlicedText text="E SUMMIT 26" sliceCount={8} />
+          </div>
+
           {/* Bottom copyright line */}
-          <div className="mt-12 pt-6 border-t border-[#4E6527]/30 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-300 gap-4 font-mono-data">
+          <div className="pt-6 border-t border-[#4E6527]/30 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-300 gap-4 font-mono-data">
             <p>© {new Date().getFullYear()} E-Cell PEC · Punjab Engineering College, Chandigarh</p>
             <p className="text-[#C8E696]">PEC E-Summit 2026</p>
           </div>

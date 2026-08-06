@@ -31,6 +31,7 @@ export interface ScrollExpandProps extends Omit<React.HTMLAttributes<HTMLDivElem
   autoExpandDelay?: number
   lockUntilExpanded?: boolean
   backgroundContent?: React.ReactNode
+  customMedia?: React.ReactNode
   children?: React.ReactNode
   className?: string
   style?: React.CSSProperties
@@ -57,6 +58,7 @@ export default function ScrollExpand({
   autoExpandDelay = 1500,
   lockUntilExpanded = true,
   backgroundContent,
+  customMedia,
   children,
   className = '',
   style,
@@ -64,7 +66,7 @@ export default function ScrollExpand({
 }: ScrollExpandProps) {
   const rootRef = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
-  const mediaRef = useRef<HTMLImageElement | HTMLVideoElement>(null)
+  const mediaRef = useRef<HTMLDivElement | HTMLImageElement | HTMLVideoElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const scrimRef = useRef<HTMLDivElement>(null)
@@ -140,10 +142,11 @@ export default function ScrollExpand({
       return
     }
 
-    // Prevent browser from restoring scroll position mid-page on refresh so splash loader always plays
-    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual'
-      window.scrollTo(0, 0)
+    if (autoExpandDelay > 0) {
+      if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+        window.history.scrollRestoration = 'manual'
+        window.scrollTo(0, 0)
+      }
     }
 
     let autoProgress = 0
@@ -191,27 +194,30 @@ export default function ScrollExpand({
     }
   }, [enabled, autoExpandDelay, applyProgress])
 
-  const media =
-    mediaType === 'video' ? (
-      <video
-        ref={mediaRef as React.RefObject<HTMLVideoElement>}
-        className="scroll-expand__media"
-        src={src}
-        poster={poster}
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
-    ) : (
-      <img
-        ref={mediaRef as React.RefObject<HTMLImageElement>}
-        className="scroll-expand__media"
-        src={src}
-        alt={alt}
-        draggable={false}
-      />
-    )
+  const media = customMedia ? (
+    <div ref={mediaRef as React.RefObject<HTMLDivElement>} className="scroll-expand__media w-full h-full">
+      {customMedia}
+    </div>
+  ) : mediaType === 'video' ? (
+    <video
+      ref={mediaRef as React.RefObject<HTMLVideoElement>}
+      className="scroll-expand__media"
+      src={src}
+      poster={poster}
+      autoPlay
+      muted
+      loop
+      playsInline
+    />
+  ) : (
+    <img
+      ref={mediaRef as React.RefObject<HTMLImageElement>}
+      className="scroll-expand__media"
+      src={src}
+      alt={alt}
+      draggable={false}
+    />
+  )
 
   return (
     <div

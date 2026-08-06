@@ -18,11 +18,12 @@
 import { Toaster } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 
-// ── Creative landing sections ──────────────────────────────────────────────
 import Nav from '@/components/Nav'
 import NewHero from '@/components/Hero/NewHero'
+import StatBurst from '@/components/StatBurst'
 import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
+import Vdo2Showcase from '@/components/Vdo2Showcase'
 
 // Dynamic (Framer Motion scroll hooks — better as client-only)
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), {
@@ -67,8 +68,11 @@ export default function Home() {
       {/* Navigation */}
       <Nav />
 
-      {/* ── 1. ScrollExpand Hero ─────────────────────────────────────────── */}
+      {/* ── 1. NewHero 60fps Frame Scrubbing ───────────────────────────── */}
       <NewHero />
+
+      {/* ── 1.5. Interactive StatBurst Section (Greenish BG & Mint Accents) ─ */}
+      <StatBurst />
 
       {/* ── 2. Scroll-Parallax GIF Marquee ──────────────────────────────── */}
       <EsummitMarquee />
@@ -78,6 +82,9 @@ export default function Home() {
 
       {/* ── 4. Highlights — sticky card stack, dark bg ──────────────────── */}
       <EsummitHighlights />
+
+      {/* ── 5. Market Surge Video Showcase (vdo2 frame scrubber) ───────── */}
+      <Vdo2Showcase />
 
       {/* ── 6. Alumni — horizontal scroll with PixelTransition ───────────── */}
       <Alumni />
