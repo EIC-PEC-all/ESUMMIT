@@ -1,37 +1,109 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=JetBrains+Mono:wght@400;500;700&family=Kanit:wght@300;400;500;600;700;800;900&display=swap');
+/* Fonts are loaded via next/font in layout.tsx */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-deep: #070B08;
-  --bg-void: #070B08;
-  --bg-panel: #0D140E;
-  --bg-panel-alt: #111A12;
+  --bg-void: #040605;
+  --bg-deep: #040605;
+  --bg-panel: #0A110E;
+  --bg-panel-alt: #101915;
 
+  --accent-mint: #50E3C2;
   --accent-green: #50E3C2;
   --accent-green-dim: rgba(80, 227, 194, 0.15);
   --accent-green-glow: rgba(80, 227, 194, 0.35);
-  --accent-mint: #50E3C2;
 
-  --accent-orange: #50E3C2;
-  --accent-orange-dim: rgba(80, 227, 194, 0.25);
-  --accent-volt: #50E3C2;
-  --accent-volt-dim: rgba(80, 227, 194, 0.2);
+  --accent-blue: #3DD9FF;
+  --accent-coral: #FF4D3D;
 
-  --accent-amber: #E8A33D;
-  --accent-amber-dim: rgba(232, 163, 61, 0.2);
-
-  --ink-light: #F5F5F0;
-  --text-primary: #E2FBEA;
+  --text-primary: #FFFFFF;
   --text-secondary: #A3B899;
   --text-muted: #8A9488;
   --muted: #8A9488;
 
-  --border-glow: rgba(80, 227, 194, 0.15);
-  --border-subtle: rgba(80, 227, 194, 0.2);
-  --border-panel: rgba(138, 148, 136, 0.15);
+  --border-subtle: #1E2923;
+  --border-panel: #16201B;
+  --border-glow: rgba(80, 227, 194, 0.25);
+
+  color-scheme: dark;
+}
+
+[data-theme='light'],
+.light {
+  --bg-void: #F8FAFC;
+  --bg-deep: #F8FAFC;
+  --bg-panel: #FFFFFF;
+  --bg-panel-alt: #F1F5F9;
+
+  --accent-mint: #4E6527;
+  --accent-green: #4E6527;
+  --accent-green-dim: rgba(78, 101, 39, 0.12);
+  --accent-green-glow: rgba(78, 101, 39, 0.25);
+
+  --accent-blue: #0284C7;
+  --accent-coral: #E11D48;
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --muted: #64748B;
+
+  --border-subtle: rgba(15, 23, 42, 0.12);
+  --border-panel: rgba(15, 23, 42, 0.08);
+  --border-glow: rgba(78, 101, 39, 0.25);
+
+  color-scheme: light;
+}
+
+/* ─── Light Mode Olive Green Overrides ─── */
+[data-theme='light'] .text-mint,
+.light .text-mint {
+  color: #4E6527 !important;
+}
+
+[data-theme='light'] .bg-mint,
+.light .bg-mint {
+  background-color: #4E6527 !important;
+}
+
+[data-theme='light'] .border-mint,
+.light .border-mint {
+  border-color: #4E6527 !important;
+}
+
+[data-theme='light'] .fill-mint,
+.light .fill-mint {
+  fill: #4E6527 !important;
+}
+
+[data-theme='light'] .text-stroke-green,
+.light .text-stroke-green {
+  color: #4E6527 !important;
+  -webkit-text-stroke: 1.5px #4E6527 !important;
+}
+
+/* ─── Light Mode Hardcoded Background Overrides ─── */
+[data-theme='light'] .bg-\[\#111A12\],
+.light .bg-\[\#111A12\] {
+  background-color: var(--bg-panel-alt) !important;
+}
+
+[data-theme='light'] .bg-\[\#0A110E\],
+.light .bg-\[\#0A110E\] {
+  background-color: var(--bg-panel) !important;
+}
+
+[data-theme='light'] .bg-\[\#060A07\],
+.light .bg-\[\#060A07\] {
+  background-color: var(--bg-void) !important;
+}
+
+@layer base {
+  *, ::before, ::after {
+    border-color: var(--border-subtle);
+  }
 }
 
 * {
@@ -88,11 +160,35 @@ header {
 }
 
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-deep); }
-::-webkit-scrollbar-thumb { background: rgba(126, 211, 33, 0.4); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+/* Scrollbar Styling — Sleek, subtle, zero horizontal bar leakage */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 0px;
+}
+::-webkit-scrollbar:horizontal {
+  display: none !important;
+  height: 0px !important;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 /* Focus states */
 :focus-visible {
@@ -107,10 +203,7 @@ header {
   color: var(--text-primary);
 }
 
-/* ─── Typography & Outlined Text ─── */
-.font-display { font-family: 'Bebas Neue', sans-serif; }
-.font-mono-data { font-family: 'Space Mono', 'JetBrains Mono', monospace; }
-.font-kanit { font-family: 'Kanit', sans-serif; }
+/* ─── Tailwind typography utility classes will handle fonts automatically now ─── */
 
 /* ─── E-Summit Hero Gradient Heading ─── */
 .hero-heading {
@@ -122,35 +215,21 @@ header {
 
 /* Green variant for E-Summit green/black theme */
 .hero-heading-green {
-  background: linear-gradient(180deg, #4C9E0D 0%, #7ED321 55%, #B0EF4A 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-mint);
 }
 
-/* ─── Kanit reset for E-Summit sections ─── */
-.esummit-section {
-  font-family: 'Kanit', sans-serif;
-}
+/* ─── Kanit reset removed. All sections inherit the standard font stack ─── */
 
-.text-stroke-orange, .text-stroke-volt, .text-stroke-amber {
-  -webkit-text-stroke: 2.5px #7ED321;
-  color: transparent;
-  text-shadow: 0 0 24px rgba(126, 211, 33, 0.45);
-}
-
-.text-stroke-green {
-  -webkit-text-stroke: 2.5px #7ED321;
-  color: transparent;
-  text-shadow: 0 0 24px rgba(126, 211, 33, 0.45);
+.text-stroke-orange, .text-stroke-volt, .text-stroke-amber, .text-stroke-green {
+  color: var(--accent-mint);
 }
 
 /* ─── Gradient utilities ─── */
 .gradient-orange {
-  background: linear-gradient(135deg, #7ED321 0%, #4C9E0D 100%);
+  background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-blue) 100%);
 }
 .gradient-green {
-  background: linear-gradient(135deg, #7ED321 0%, #4C9E0D 100%);
+  background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-blue) 100%);
 }
 
 /* ─── Glass / Panel ─── */
@@ -173,8 +252,8 @@ header {
   align-items: center;
   gap: 8px;
   padding: 14px 32px;
-  background: #7ED321;
-  color: #070B08;
+  background: var(--accent-mint);
+  color: var(--bg-void);
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 0.9rem;
@@ -217,15 +296,15 @@ header {
   transition: all 0.2s ease;
 }
 .btn-ghost:hover {
-  border-color: #7ED321;
-  color: #7ED321;
+  border-color: #50E3C2;
+  color: #50E3C2;
   background: rgba(126, 211, 33, 0.08);
 }
 
 /* ─── Current Line Accent ─── */
 .current-line-horizontal {
   height: 2px;
-  background: linear-gradient(90deg, transparent, #7ED321 50%, transparent);
+  background: linear-gradient(90deg, transparent, #50E3C2 50%, transparent);
   box-shadow: 0 0 12px rgba(126, 211, 33, 0.6);
 }
 

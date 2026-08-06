@@ -69,6 +69,7 @@ export default function ScrollExpand({
   const overlayRef = useRef<HTMLDivElement>(null)
   const scrimRef = useRef<HTMLDivElement>(null)
   const hintRef = useRef<HTMLDivElement>(null)
+  const bgRef = useRef<HTMLDivElement>(null)
 
   const isUnlockedRef = useRef(false)
 
@@ -90,19 +91,6 @@ export default function ScrollExpand({
     overlayScrim,
   }
 
-  const unlockScroll = useCallback(() => {
-    if (isUnlockedRef.current) return
-    isUnlockedRef.current = true
-    document.body.classList.remove('hero-scroll-locked')
-    document.documentElement.classList.remove('hero-scroll-locked')
-  }, [])
-
-  const lockScroll = useCallback(() => {
-    isUnlockedRef.current = false
-    document.body.classList.add('hero-scroll-locked')
-    document.documentElement.classList.add('hero-scroll-locked')
-  }, [])
-
   const applyProgress = useCallback((p: number) => {
     const frame = frameRef.current
     const media = mediaRef.current
@@ -110,6 +98,10 @@ export default function ScrollExpand({
     const c = propsRef.current
 
     const e = smoothstep(0, 1, p)
+
+    if (bgRef.current) {
+      bgRef.current.style.opacity = `${e}`
+    }
 
     const w = c.startWidth + (100 - c.startWidth) * e
     const h = c.startHeight + (100 - c.startHeight) * e
@@ -145,46 +137,59 @@ export default function ScrollExpand({
   useEffect(() => {
     if (!enabled) {
       applyProgress(1)
-      unlockScroll()
       return
     }
 
-    let rafId = 0
-    let startTime: number | null = null
-    const duration = 900 // 900ms smooth single-pass expansion
-
-    if (lockUntilExpanded) {
-      lockScroll()
+    // Prevent browser from restoring scroll position mid-page on refresh so splash loader always plays
+    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+      window.scrollTo(0, 0)
     }
 
-    applyProgress(0)
+    let autoProgress = 0
+    let startTime: number | null = null
+    const duration = 900
+    let rafId = 0
 
-    const animateExpansion = (timestamp: number) => {
+    const updateProgress = () => {
+      const scrollY = typeof window !== 'undefined' ? (window.scrollY || document.documentElement.scrollTop || 0) : 0
+      const scrollProgress = clamp(scrollY / 300, 0, 1)
+      const effectiveProgress = Math.max(scrollProgress, autoProgress)
+      applyProgress(effectiveProgress)
+    }
+
+    const animateAuto = (timestamp: number) => {
       if (!startTime) startTime = timestamp
       const elapsed = timestamp - startTime
-      const p = Math.min(1, elapsed / duration)
+      autoProgress = Math.min(1, elapsed / duration)
 
-      applyProgress(p)
+      updateProgress()
 
-      if (p < 1) {
-        rafId = requestAnimationFrame(animateExpansion)
-      } else {
-        if (lockUntilExpanded) {
-          unlockScroll()
-        }
+      if (autoProgress < 1) {
+        rafId = requestAnimationFrame(animateAuto)
       }
     }
 
+    // Always start at 0
+    applyProgress(0)
+
+    // Start auto-expansion animation smoothly after delay
     const timer = setTimeout(() => {
-      rafId = requestAnimationFrame(animateExpansion)
+      rafId = requestAnimationFrame(animateAuto)
     }, autoExpandDelay)
+
+    const handleScroll = () => {
+      updateProgress()
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
       clearTimeout(timer)
       if (rafId) cancelAnimationFrame(rafId)
-      unlockScroll()
+      window.removeEventListener('scroll', handleScroll)
     }
-  }, [enabled, autoExpandDelay, lockUntilExpanded, applyProgress, lockScroll, unlockScroll])
+  }, [enabled, autoExpandDelay, applyProgress])
 
   const media =
     mediaType === 'video' ? (
@@ -216,16 +221,16 @@ export default function ScrollExpand({
       {...rest}
     >
       <div className="relative w-full h-screen sticky top-0 overflow-hidden">
-        {/* Background content (6-8 vertical column gallery) */}
+        {/* Background content (fades in as card expands) */}
         {backgroundContent && (
-          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <div ref={bgRef} className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-0">
             {backgroundContent}
           </div>
         )}
 
         <div ref={frameRef} className="scroll-expand__frame">
           {media}
-          <div ref={scrimRef} className="scroll-expand__scrim" />
+          <div ref={scrimRef} className="scroll-expand__scrim z-[2]" />
           {children ? (
             <div ref={overlayRef} className="scroll-expand__overlay">
               {children}

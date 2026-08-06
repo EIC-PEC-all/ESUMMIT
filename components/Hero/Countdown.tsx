@@ -40,13 +40,13 @@ function DigitBlock({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col items-center">
       {/* Number container with dark panel card backing */}
-      <div className="bg-[#0D140E] border border-[#7ED321]/30 rounded-xl px-3 sm:px-4 py-2 sm:py-3 shadow-[0_4px_20px_rgba(0,0,0,0.6)] flex items-center justify-center min-w-[64px] sm:min-w-[88px] lg:min-w-[100px] tabular-nums">
+      <div className="bg-panel border border-[var(--accent-mint)]/30 rounded-xl px-3 sm:px-4 py-2 sm:py-3 shadow-[0_4px_20px_rgba(0,0,0,0.6)] flex items-center justify-center min-w-[64px] sm:min-w-[88px] lg:min-w-[100px] tabular-nums">
         <span className="font-mono-data text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-none tracking-normal">
           {value}
         </span>
       </div>
       {/* Label */}
-      <span className="font-mono-data text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-2 text-[#8A9488]">
+      <span className="font-mono-data text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-2 text-muted">
         {label}
       </span>
     </div>
@@ -80,7 +80,7 @@ export default function Countdown({
   return (
     <div className="flex flex-col items-start gap-3">
       {/* Small label above countdown */}
-      <div className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-[#7ED321] flex items-center gap-1.5">
+      <div className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent-mint)] flex items-center gap-1.5">
         <span className="text-sm">☑</span>
         <span>COUNTDOWN TO OPENING BELL</span>
       </div>
@@ -88,15 +88,15 @@ export default function Countdown({
       {/* Countdown timer: four blocks separated by ":" */}
       <div className="flex items-center gap-2 sm:gap-3 lg:gap-4" role="timer" aria-label="Countdown to E-Summit">
         <DigitBlock value={timeLeft.days} label="DAYS" />
-        <span className="font-mono-data text-2xl sm:text-4xl lg:text-5xl font-bold text-[#7ED321] pb-5 select-none">
+        <span className="font-mono-data text-2xl sm:text-4xl lg:text-5xl font-bold text-[var(--accent-mint)] pb-5 select-none">
           :
         </span>
         <DigitBlock value={timeLeft.hours} label="HOURS" />
-        <span className="font-mono-data text-2xl sm:text-4xl lg:text-5xl font-bold text-[#7ED321] pb-5 select-none">
+        <span className="font-mono-data text-2xl sm:text-4xl lg:text-5xl font-bold text-[var(--accent-mint)] pb-5 select-none">
           :
         </span>
         <DigitBlock value={timeLeft.minutes} label="MIN" />
-        <span className="font-mono-data text-2xl sm:text-4xl lg:text-5xl font-bold text-[#7ED321] pb-5 select-none">
+        <span className="font-mono-data text-2xl sm:text-4xl lg:text-5xl font-bold text-[var(--accent-mint)] pb-5 select-none">
           :
         </span>
         <DigitBlock value={timeLeft.seconds} label="SEC" />

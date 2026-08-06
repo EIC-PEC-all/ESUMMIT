@@ -33,7 +33,7 @@ export default function WavyDollarBill3D({ prefersReduced }: { prefersReduced?: 
     ctx.fillRect(0, 0, 1440, 640)
 
     // Outer border frame
-    ctx.strokeStyle = '#7ED321'
+    ctx.strokeStyle = 'var(--accent-mint)'
     ctx.lineWidth = 6
     ctx.strokeRect(16, 16, 1408, 608)
 
@@ -56,11 +56,11 @@ export default function WavyDollarBill3D({ prefersReduced }: { prefersReduced?: 
       ctx.arc(c.x, c.y, 45, 0, Math.PI * 2)
       ctx.fillStyle = '#061209'
       ctx.fill()
-      ctx.strokeStyle = '#7ED321'
+      ctx.strokeStyle = 'var(--accent-mint)'
       ctx.lineWidth = 4
       ctx.stroke()
 
-      ctx.fillStyle = '#7ED321'
+      ctx.fillStyle = 'var(--accent-mint)'
       ctx.font = 'bold 42px serif'
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
@@ -68,17 +68,17 @@ export default function WavyDollarBill3D({ prefersReduced }: { prefersReduced?: 
     })
 
     // Banknote Top Typography
-    ctx.fillStyle = '#8A9488'
+    ctx.fillStyle = '#9CA3AF'
     ctx.font = 'bold 20px monospace'
     ctx.textAlign = 'center'
     ctx.fillText('FEDERAL RESERVE NOTE', 720, 75)
 
-    ctx.fillStyle = '#F5F5F0'
+    ctx.fillStyle = '#FFFFFF'
     ctx.font = 'bold 36px serif'
     ctx.fillText('THE UNITED STATES OF AMERICA', 720, 120)
 
     // Serial Numbers
-    ctx.fillStyle = '#7ED321'
+    ctx.fillStyle = 'var(--accent-mint)'
     ctx.font = 'bold 24px monospace'
     ctx.textAlign = 'left'
     ctx.fillText('★ E 20260315 B ★', 220, 175)
@@ -90,7 +90,7 @@ export default function WavyDollarBill3D({ prefersReduced }: { prefersReduced?: 
     ctx.ellipse(720, 340, 190, 150, 0, 0, Math.PI * 2)
     ctx.fillStyle = '#08170D'
     ctx.fill()
-    ctx.strokeStyle = '#7ED321'
+    ctx.strokeStyle = 'var(--accent-mint)'
     ctx.lineWidth = 5
     ctx.stroke()
 
@@ -99,19 +99,19 @@ export default function WavyDollarBill3D({ prefersReduced }: { prefersReduced?: 
     ctx.ellipse(720, 330, 110, 100, 0, 0, Math.PI * 2)
     ctx.fillStyle = '#0E2616'
     ctx.fill()
-    ctx.strokeStyle = '#7ED321'
+    ctx.strokeStyle = 'var(--accent-mint)'
     ctx.lineWidth = 3
     ctx.stroke()
 
     // Giant Center $ Sign
-    ctx.fillStyle = '#7ED321'
+    ctx.fillStyle = 'var(--accent-mint)'
     ctx.font = 'bold 110px sans-serif'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.fillText('$', 720, 325)
 
     // Washington / PEC Summit Label
-    ctx.fillStyle = '#F5F5F0'
+    ctx.fillStyle = '#FFFFFF'
     ctx.font = 'bold 20px monospace'
     ctx.fillText('WASHINGTON', 720, 465)
 
@@ -120,10 +120,10 @@ export default function WavyDollarBill3D({ prefersReduced }: { prefersReduced?: 
     ctx.arc(360, 340, 90, 0, Math.PI * 2)
     ctx.fillStyle = '#07140B'
     ctx.fill()
-    ctx.strokeStyle = '#7ED321'
+    ctx.strokeStyle = 'var(--accent-mint)'
     ctx.lineWidth = 4
     ctx.stroke()
-    ctx.fillStyle = '#8A9488'
+    ctx.fillStyle = '#9CA3AF'
     ctx.font = '16px monospace'
     ctx.fillText('GREAT SEAL', 360, 345)
 
@@ -132,20 +132,20 @@ export default function WavyDollarBill3D({ prefersReduced }: { prefersReduced?: 
     ctx.arc(1080, 340, 90, 0, Math.PI * 2)
     ctx.fillStyle = '#07140B'
     ctx.fill()
-    ctx.strokeStyle = '#7ED321'
+    ctx.strokeStyle = 'var(--accent-mint)'
     ctx.lineWidth = 4
     ctx.stroke()
-    ctx.fillStyle = '#8A9488'
+    ctx.fillStyle = '#9CA3AF'
     ctx.font = '16px monospace'
     ctx.fillText('TREASURY', 1080, 345)
 
     // Bottom Banner "ONE DOLLAR"
     ctx.fillStyle = '#061008'
     ctx.fillRect(520, 530, 400, 50)
-    ctx.strokeStyle = '#7ED321'
+    ctx.strokeStyle = 'var(--accent-mint)'
     ctx.lineWidth = 3
     ctx.strokeRect(520, 530, 400, 50)
-    ctx.fillStyle = '#7ED321'
+    ctx.fillStyle = 'var(--accent-mint)'
     ctx.font = 'bold 32px serif'
     ctx.fillText('ONE DOLLAR', 720, 562)
 

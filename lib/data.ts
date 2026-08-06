@@ -173,6 +173,8 @@ export interface CampusVenue {
   name: string
   shortName: string
   code: string
+  lat: number
+  lng: number
   x: number
   y: number
   description: string
@@ -187,6 +189,8 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     name: 'PEC Main Entry Gate 1',
     shortName: 'Main Gate 1',
     code: 'GATE-01',
+    lat: 30.7688,
+    lng: 76.7865,
     x: 120,
     y: 520,
     description: 'Main Campus Entrance from Sector 12 Main Road',
@@ -199,6 +203,8 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     name: 'PEC Main Auditorium',
     shortName: 'Main Auditorium',
     code: 'AUD-101',
+    lat: 30.7675,
+    lng: 76.7878,
     x: 320,
     y: 360,
     description: 'Primary stage for keynotes, inaugurals, and pitch finals',
@@ -219,6 +225,8 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     name: 'PEC Senate Hall',
     shortName: 'Senate Hall',
     code: 'SNT-202',
+    lat: 30.7670,
+    lng: 76.7872,
     x: 520,
     y: 260,
     description: 'Executive conference hall for panels & leader keynotes',
@@ -239,6 +247,8 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     name: 'Central Library Lawns',
     shortName: 'Library Lawns',
     code: 'LIB-EXPO',
+    lat: 30.7668,
+    lng: 76.7885,
     x: 380,
     y: 160,
     description: 'Open air arena for 30+ startup expo booths & showcases',
@@ -261,6 +271,8 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     name: 'PEC Student Center',
     shortName: 'Student Center',
     code: 'STC-MAIN',
+    lat: 30.7678,
+    lng: 76.7880,
     x: 640,
     y: 440,
     description: 'Central hub for dining, networking lunch & social mixers',
@@ -281,6 +293,8 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     name: 'Siemens Center of Excellence',
     shortName: 'Siemens CoE',
     code: 'SIEM-304',
+    lat: 30.7682,
+    lng: 76.7890,
     x: 720,
     y: 160,
     description: '24-hour computing lab & hackathon headquarters',
@@ -301,6 +315,8 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     name: 'PEC Open Air Theatre',
     shortName: 'OAT Arena',
     code: 'OAT-STAGE',
+    lat: 30.7662,
+    lng: 76.7875,
     x: 540,
     y: 480,
     description: 'Amphitheatre for speed networking & community sessions',
@@ -321,6 +337,8 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     name: 'PEC Executive Lounge',
     shortName: 'VIP Lounge',
     code: 'VIP-001',
+    lat: 30.7672,
+    lng: 76.7868,
     x: 340,
     y: 480,
     description: 'Private slots for investor matchmaking & 1-on-1 hours',

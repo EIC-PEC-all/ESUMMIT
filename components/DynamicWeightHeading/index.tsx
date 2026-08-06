@@ -210,8 +210,7 @@ const INTER_VARIABLE_FONT_FACE = `
 }
 `
 
-const VARIABLE_FONT_STACK =
-    '"InterVariableFramer", "Inter Variable", "Inter", system-ui, sans-serif'
+const VARIABLE_FONT_STACK = 'var(--font-khaviax), sans-serif'
 
 const MAX_REACH = 800
 

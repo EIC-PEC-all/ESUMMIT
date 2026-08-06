@@ -145,8 +145,7 @@ export default function EsummitAbout() {
   return (
     <section
       id="esummit-about"
-      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden"
-      style={{ background: '#0D140E', fontFamily: "'Kanit', sans-serif" }}
+      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden bg-void text-primary"
       aria-labelledby="esummit-about-heading"
     >
       {/* Interactive geometric node canvas background */}
@@ -165,19 +164,10 @@ export default function EsummitAbout() {
       />
 
       {/* ── Central content ── */}
-      <div className="relative z-10 flex flex-col items-center gap-12 sm:gap-16 max-w-5xl w-full">
-
-        {/* Heading — let the heading speak directly without banned eyebrow kickers */}
-        <FadeIn delay={0.05} y={30}>
-          <h2
-            id="esummit-about-heading"
-            className="hero-heading-green font-black uppercase leading-none tracking-tight text-center"
-            style={{
-              fontFamily: "'Kanit', sans-serif",
-              fontSize: 'clamp(3.5rem, 12vw, 150px)',
-              textShadow: '0 0 50px rgba(126, 211, 33, 0.2)',
-            }}
-          >
+      <div className="relative z-10 flex flex-col items-center gap-12 sm:gap-16 max-w-5xl mx-auto px-5 sm:px-8">
+        {/* Section Heading */}
+        <FadeIn delay={0.05}>
+          <h2 className="font-display font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-primary text-center">
             About Us
           </h2>
         </FadeIn>
@@ -185,10 +175,9 @@ export default function EsummitAbout() {
         {/* Core Paragraph Text */}
         <AnimatedText
           text={ABOUT_TEXT}
-          className="font-medium text-center leading-relaxed max-w-[680px]"
+          className="font-body font-medium text-center leading-relaxed max-w-[680px]"
           style={{
-            color: '#A2B0A0',
-            fontFamily: "'Kanit', sans-serif",
+            color: 'var(--text-secondary)',
             fontSize: 'clamp(1.05rem, 2.2vw, 1.4rem)',
           }}
         />
@@ -201,28 +190,25 @@ export default function EsummitAbout() {
               <FadeIn key={pillar.title} delay={0.15 + idx * 0.1}>
                 <div
                   onMouseMove={handleSpotlight}
-                  className="relative group rounded-2xl p-6 sm:p-8 bg-[#070B08]/90 border border-[#7ED321]/20 hover:border-[#7ED321]/60 transition-all duration-300 overflow-hidden"
-                  style={{
-                    boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-                  }}
+                  className="relative group rounded-2xl p-6 sm:p-8 bg-panel border border-border-subtle hover:border-mint/60 transition-all duration-300 overflow-hidden shadow-xl"
                 >
                   {/* Mouse spotlight overlay */}
                   <div
                     className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{
-                      background: 'radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(126,211,33,0.12), transparent 40%)',
+                      background: 'radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--accent-green-glow), transparent 40%)',
                     }}
                   />
 
-                  <div className="w-12 h-12 rounded-xl bg-[#7ED321]/10 border border-[#7ED321]/30 flex items-center justify-center mb-5 text-[#7ED321] group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-mint/10 border border-mint/30 flex items-center justify-center mb-5 text-mint group-hover:scale-110 transition-transform duration-300">
                     <Icon size={24} />
                   </div>
 
-                  <h3 className="font-display font-bold text-lg text-white uppercase mb-2">
+                  <h3 className="font-display font-bold text-lg text-primary uppercase mb-2">
                     {pillar.title}
                   </h3>
 
-                  <p className="font-body text-xs sm:text-sm text-[#8A9488] leading-relaxed">
+                  <p className="font-body text-xs sm:text-sm text-secondary leading-relaxed">
                     {pillar.desc}
                   </p>
                 </div>

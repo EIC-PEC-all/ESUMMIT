@@ -82,7 +82,7 @@ export default function Hero() {
     <section
       id="hero"
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-[#070B08] pt-24 sm:pt-28 pb-0"
+      className="relative min-h-screen flex flex-col justify-between overflow-hidden bg-void pt-24 sm:pt-28 pb-0"
       aria-label="PEC E-Summit Hero"
     >
       {/* Layer 0: Canvas money rain */}
@@ -116,13 +116,13 @@ export default function Hero() {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#7ED321]/15 border border-[#7ED321]/40 mb-4 sm:mb-6"
+            className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/40 mb-4 sm:mb-6"
           >
-            <span className="w-2 h-2 rounded-full bg-[#7ED321] animate-ping" />
-            <span className="font-mono-data text-[10px] sm:text-xs uppercase tracking-widest text-[#7ED321] font-bold">
+            <span className="w-2 h-2 rounded-full bg-[var(--accent-mint)] animate-ping" />
+            <span className="font-mono-data text-[10px] sm:text-xs uppercase tracking-widest text-[var(--accent-mint)] font-bold">
               LIVE REGISTRATION OPEN
             </span>
-            <ArrowUpRight size={14} className="text-[#7ED321]" />
+            <ArrowUpRight size={14} className="text-[var(--accent-mint)]" />
           </motion.div>
 
           {/* Headline */}
@@ -144,7 +144,7 @@ export default function Hero() {
               className="block font-black relative"
               style={{
                 fontSize: 'clamp(58px, 15vw, 172px)',
-                WebkitTextStroke: '2.5px #7ED321',
+                WebkitTextStroke: '2.5px var(--accent-mint)',
                 color: 'transparent',
                 textShadow: '0 0 35px rgba(126,211,33,0.5)',
               }}
@@ -158,7 +158,7 @@ export default function Hero() {
             initial={prefersReduced ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.28 }}
-            className="font-body text-base sm:text-xl text-[#F5F5F0]/90 mb-5 sm:mb-7 leading-relaxed max-w-lg"
+            className="font-body text-base sm:text-xl text-primary/90 mb-5 sm:mb-7 leading-relaxed max-w-lg"
           >
             Where ideas raise capital &amp; compound into impact.
           </motion.p>
@@ -170,12 +170,12 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.38 }}
             className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-6 sm:mb-8"
           >
-            <div className="flex items-center gap-2 bg-[#0D140E]/90 border border-[#7ED321]/25 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full">
-              <Calendar size={14} className="text-[#7ED321]" />
+            <div className="flex items-center gap-2 bg-panel/90 border border-[var(--accent-mint)]/25 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full">
+              <Calendar size={14} className="text-[var(--accent-mint)]" />
               <span className="font-mono-data text-xs sm:text-sm font-semibold text-gray-200">{FEST_META.dates}</span>
             </div>
-            <div className="flex items-center gap-2 bg-[#0D140E]/90 border border-[#7ED321]/25 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full">
-              <MapPin size={14} className="text-[#7ED321]" />
+            <div className="flex items-center gap-2 bg-panel/90 border border-[var(--accent-mint)]/25 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full">
+              <MapPin size={14} className="text-[var(--accent-mint)]" />
               <span className="font-mono-data text-xs sm:text-sm font-semibold text-gray-200">{FEST_META.venue}</span>
             </div>
           </motion.div>
@@ -200,7 +200,7 @@ export default function Hero() {
             <Link
               href="/passes"
               id="hero-passes-btn"
-              className="btn-green text-sm sm:text-base font-bold py-3.5 sm:py-4 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(126,211,33,0.4)] text-[#070B08]"
+              className="btn-green text-sm sm:text-base font-bold py-3.5 sm:py-4 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(126,211,33,0.4)] text-void"
             >
               <Ticket size={18} />
               <span>🎫 GET SUMMIT PASSES</span>
@@ -209,7 +209,7 @@ export default function Hero() {
             <a
               href="#tracks"
               id="hero-explore-btn"
-              className="btn-ghost text-sm sm:text-base py-3.5 sm:py-4 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 border-white/30 text-white hover:border-[#7ED321] hover:text-[#7ED321] transition-all"
+              className="btn-ghost text-sm sm:text-base py-3.5 sm:py-4 px-6 sm:px-8 rounded-xl flex items-center justify-center gap-2 border-border-subtle text-primary hover:border-mint hover:text-mint transition-all"
             >
               <span>EXPLORE TRACKS</span>
               <ChevronRight size={16} />
@@ -226,17 +226,17 @@ export default function Hero() {
       </div>
 
       {/* BOTTOM: Stock Ticker Tape */}
-      <div className="relative z-10 border-t border-[#7ED321]/25 bg-[#060A07] overflow-hidden">
+      <div className="relative z-10 border-t border-[var(--accent-mint)]/25 bg-[#060A07] overflow-hidden">
         <div className="py-2.5 flex items-center gap-0 overflow-hidden">
           <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(90deg, #060A07 0%, transparent 100%)' }} />
           <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-16 z-10 pointer-events-none" style={{ background: 'linear-gradient(270deg, #060A07 0%, transparent 100%)' }} />
 
           <div ref={tickerRef} className="flex items-center gap-0 whitespace-nowrap" style={{ willChange: 'transform' }}>
             {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-              <div key={i} className="flex items-center gap-3 px-4 sm:px-6 border-r border-[#7ED321]/15">
-                <span className="font-mono-data text-xs font-bold text-[#7ED321]">{item.sym}</span>
+              <div key={i} className="flex items-center gap-3 px-4 sm:px-6 border-r border-[var(--accent-mint)]/15">
+                <span className="font-mono-data text-xs font-bold text-[var(--accent-mint)]">{item.sym}</span>
                 <span className="font-mono-data text-xs text-white font-semibold">{item.val}</span>
-                <span className={`font-mono-data text-[10px] font-bold flex items-center gap-0.5 ${item.up ? 'text-[#7ED321]' : 'text-red-400'}`}>
+                <span className={`font-mono-data text-[10px] font-bold flex items-center gap-0.5 ${item.up ? 'text-[var(--accent-mint)]' : 'text-red-400'}`}>
                   {item.up ? <TrendingUp size={10} /> : <TrendingDown size={10} />}
                   {item.change}
                 </span>

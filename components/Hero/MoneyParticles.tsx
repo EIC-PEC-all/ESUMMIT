@@ -36,7 +36,7 @@ export default function MoneyParticles({ prefersReduced }: { prefersReduced?: bo
       {particles.map((p) => (
         <div
           key={p.id}
-          className="absolute font-mono-data font-bold text-[#7ED321] animate-particle-float"
+          className="absolute font-mono-data font-bold text-[var(--accent-mint)] animate-particle-float"
           style={{
             left: `${p.left}%`,
             bottom: '-40px',

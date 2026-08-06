@@ -104,7 +104,7 @@ export function ScrollGradientFill({ text, className = '' }: { text: string; cla
   return (
     <motion.span
       ref={ref}
-      className={`relative inline bg-gradient-to-r from-[#7ED321] via-[#50E3C2] to-white/15 bg-clip-text text-transparent bg-[length:200%_100%] transition-all duration-300 ${className}`}
+      className={`relative inline bg-gradient-to-r from-[var(--accent-mint)] via-mint to-white/15 bg-clip-text text-transparent bg-[length:200%_100%] transition-all duration-300 ${className}`}
       style={{
         backgroundPositionX: gradientPos,
       }}
@@ -128,13 +128,13 @@ export function GlitchText({ text, className = '' }: { text: string; className?:
       {isHovered && (
         <>
           <span
-            className="absolute top-0 left-[-2px] text-[#7ED321] opacity-75 z-0 animate-[glitch-anim-1_0.2s_infinite] select-none pointer-events-none w-full"
+            className="absolute top-0 left-[-2px] text-[var(--accent-mint)] opacity-75 z-0 animate-[glitch-anim-1_0.2s_infinite] select-none pointer-events-none w-full"
             style={{ clipPath: 'inset(12% 0 28% 0)' }}
           >
             {text}
           </span>
           <span
-            className="absolute top-0 left-[2px] text-[#FF4D3D] opacity-75 z-0 animate-[glitch-anim-2_0.2s_infinite] select-none pointer-events-none w-full"
+            className="absolute top-0 left-[2px] text-coral opacity-75 z-0 animate-[glitch-anim-2_0.2s_infinite] select-none pointer-events-none w-full"
             style={{ clipPath: 'inset(45% 0 8% 0)' }}
           >
             {text}

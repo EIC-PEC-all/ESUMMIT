@@ -34,9 +34,9 @@ export default function About() {
 
         gsap.fromTo(
           words,
-          { color: '#8A9488', opacity: 0.35 },
+          { color: '#9CA3AF', opacity: 0.35 },
           {
-            color: '#7ED321',
+            color: 'var(--accent-mint)',
             opacity: 1,
             stagger: 0.1,
             ease: 'none',
@@ -65,7 +65,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="py-32 relative overflow-hidden bg-[#111A12] border-t border-b border-[#7ED321]/15"
+      className="py-32 relative overflow-hidden bg-[#111A12] border-t border-b border-[var(--accent-mint)]/15"
       aria-labelledby="about-heading"
     >
       {/* Circuit Pattern Overlay */}
@@ -75,13 +75,13 @@ export default function About() {
       <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
 
       {/* Radial Green Glow */}
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-[#7ED321]/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-96 h-96 bg-[var(--accent-mint)]/10 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="section-container relative z-10">
         <div className="max-w-4xl">
           <div className="flex items-center gap-2 mb-6">
-            <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
-            <p className="font-mono-data text-xs uppercase tracking-[0.25em] text-[#7ED321] font-bold">
+            <Zap size={14} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
+            <p className="font-mono-data text-xs uppercase tracking-[0.25em] text-[var(--accent-mint)] font-bold">
               Official E-Cell PEC Platform
             </p>
           </div>
@@ -105,10 +105,10 @@ export default function About() {
           </div>
 
           <blockquote
-            className="p-6 rounded-2xl bg-[#0D140E] border border-[#7ED321]/25 font-body text-base italic leading-relaxed text-[#8A9488]"
+            className="p-6 rounded-2xl bg-panel border border-[var(--accent-mint)]/25 font-body text-base italic leading-relaxed text-muted"
           >
             &ldquo;Every venture in India&apos;s startup ecosystem started with a single bold idea. PEC Summit is where high-growth founders and capital align.&rdquo;
-            <cite className="not-italic block mt-3 font-mono-data text-xs text-[#7ED321] font-bold">
+            <cite className="not-italic block mt-3 font-mono-data text-xs text-[var(--accent-mint)] font-bold">
               — E-Cell PEC Board
             </cite>
           </blockquote>
