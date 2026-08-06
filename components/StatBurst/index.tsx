@@ -27,45 +27,41 @@ function BurstCard({ stat, index, inView }: { stat: typeof STATS[0]; index: numb
       initial={{ opacity: 0, scale: 0.85, y: 30 }}
       animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
-      className="relative rounded-2xl p-8 overflow-hidden group flex flex-col justify-between transition-all duration-300 bg-void/90 border border-[var(--accent-mint)]/20 hover:border-[var(--accent-mint)]/60"
-      style={{
-        boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-      }}
-      whileHover={{ y: -6 }}
+      className="relative rounded-2xl p-5 sm:p-6 overflow-hidden group flex flex-col justify-between transition-all duration-300 bg-panel border border-border-subtle hover:border-mint/60 shadow-xl"
+      whileHover={{ y: -4 }}
     >
       {/* Mouse spotlight radial glow */}
       <div
         className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         style={{
-          background: 'radial-gradient(300px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(126,211,33,0.15), transparent 40%)',
+          background: 'radial-gradient(250px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--accent-green-glow), transparent 40%)',
         }}
       />
 
       {/* Background accent icon */}
-      <div className="absolute -right-4 -bottom-4 opacity-5 text-[var(--accent-mint)] group-hover:opacity-15 transition-all duration-300 pointer-events-none">
-        <Icon size={120} />
+      <div className="absolute -right-2 -bottom-2 opacity-5 text-mint group-hover:opacity-15 transition-all duration-300 pointer-events-none">
+        <Icon size={70} />
       </div>
 
-      <div className="flex items-center justify-between mb-6 relative z-10">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-void border border-[var(--accent-mint)]/30 text-[var(--accent-mint)] group-hover:scale-110 transition-transform duration-300">
-          <Icon size={20} />
+      <div className="flex items-center justify-between mb-4 relative z-10">
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-mint/10 text-mint group-hover:scale-110 transition-transform duration-300">
+          <Icon size={16} />
         </div>
-        <div className="w-2 h-2 rounded-full bg-[var(--accent-mint)] animate-pulse" />
+        <div className="w-1.5 h-1.5 rounded-full bg-mint animate-pulse" />
       </div>
 
       <div className="relative z-10">
         <span
-          className="font-mono-data font-bold block leading-none mb-2"
+          className="font-mono-data font-bold block leading-none mb-1.5 text-primary"
           style={{
-            fontSize: 'clamp(44px, 6vw, 76px)',
-            color: 'var(--text-primary)',
+            fontSize: 'clamp(26px, 3.2vw, 42px)',
           }}
         >
           {stat.prefix}
           {count}
-          <span className="text-[var(--accent-mint)]">{stat.suffix}</span>
+          <span className="text-mint">{stat.suffix}</span>
         </span>
-        <span className="font-body text-sm font-semibold text-muted uppercase tracking-wider block">
+        <span className="font-mono-data text-[11px] sm:text-xs font-semibold text-secondary uppercase tracking-widest block">
           {stat.label}
         </span>
       </div>
@@ -80,7 +76,7 @@ export default function StatBurst() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 relative overflow-hidden bg-[#111A12] border-t border-b border-[var(--accent-mint)]/15"
+      className="py-20 relative overflow-hidden bg-void"
     >
       {/* Global Circuit board pattern layer */}
       <CircuitBoard prefersReduced={false} />

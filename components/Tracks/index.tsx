@@ -10,6 +10,9 @@ import { TRACKS } from '@/lib/data'
 import { onAgentEvent } from '@/lib/events'
 import CircuitBoard from '../Hero/CircuitBoard'
 
+import KineticText from '@/components/ui/KineticText'
+import AnimatedCircuitTraces from '@/components/ui/AnimatedCircuitTraces'
+
 const ICONS: Record<string, LucideIcon> = {
   Zap, Users, Store, Code2, Network,
 }
@@ -136,6 +139,9 @@ export default function Tracks() {
       className="py-24 lg:py-32 relative bg-void border-t border-b border-[var(--accent-mint)]/15 overflow-hidden"
       aria-labelledby="tracks-heading"
     >
+      {/* Self-drawing PCB Circuit lines overlay (Anime.js) */}
+      <AnimatedCircuitTraces />
+
       {/* Circuit overlay */}
       <CircuitBoard prefersReduced={false} />
 
@@ -158,13 +164,12 @@ export default function Tracks() {
                 Capital &amp; Innovation Agenda
               </p>
             </div>
-            <h2
-              id="tracks-heading"
-              className="font-display leading-none"
-              style={{ fontSize: 'clamp(40px, 5vw, 72px)', color: 'var(--text-primary)' }}
-            >
-              TRACKS &amp;<br />
-              <span className="text-stroke-green">COMPETITIONS</span>
+            <h2 id="tracks-heading" className="font-display leading-none text-4xl sm:text-6xl font-black uppercase text-primary">
+              <KineticText
+                text="Executive Tracks"
+                highlightWords={['Tracks']}
+                staggerDelay={0.03}
+              />
             </h2>
           </div>
           <Link
@@ -212,8 +217,9 @@ export default function Tracks() {
                 <X size={16} />
               </button>
               <div className="flex items-center gap-3 mb-3">
-                <span className="font-mono-data text-xs uppercase tracking-widest text-[var(--accent-mint)] font-bold">
-                  ⚡ {openTrack.eyebrow}
+                <span className="font-mono-data text-xs uppercase tracking-widest text-[var(--accent-mint)] font-bold flex items-center gap-1">
+                  <Zap size={12} className="text-[var(--accent-mint)]" />
+                  <span>{openTrack.eyebrow}</span>
                 </span>
               </div>
               <h3 className="font-display text-4xl mb-4 text-white">
