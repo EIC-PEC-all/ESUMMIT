@@ -167,10 +167,10 @@ export default function Nav() {
                 <Magnetic strength={0.3}>
                   <Link
                     href="/passes"
-                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 lg:rounded-full rounded-sm font-mono-data text-xs font-bold uppercase tracking-wider transition-all duration-200 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 text-black hover:brightness-110 shadow-[0_0_15px_rgba(251,191,36,0.4)]"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 lg:rounded-full rounded-sm font-mono-data text-xs font-black uppercase tracking-wider transition-all duration-200 bg-[#FFD700] text-black hover:bg-[#F5C400] shadow-[0_0_16px_rgba(255,215,0,0.5)]"
                     id="nav-passes-btn"
                   >
-                    <Ticket size={14} className="text-black" />
+                    <Ticket size={14} className="text-black stroke-[2.5]" />
                     <span>PASSES</span>
                   </Link>
                 </Magnetic>
