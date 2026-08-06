@@ -15,11 +15,9 @@ function FAQItem({ faq, isOpen, onToggle }: {
 }) {
   return (
     <div
-      className="mb-4 rounded-xl overflow-hidden transition-all duration-300"
+      className="mb-4 rounded-xl overflow-hidden transition-all duration-300 bg-panel border border-border-subtle"
       style={{
-        background: '#0D140E',
-        border: `1px solid ${isOpen ? '#7ED321' : 'rgba(126, 211, 33, 0.15)'}`,
-        boxShadow: isOpen ? '0 0 20px rgba(126, 211, 33, 0.2)' : 'none',
+        boxShadow: isOpen ? '0 0 20px var(--accent-green-glow)' : 'none',
       }}
     >
       <button
@@ -31,7 +29,7 @@ function FAQItem({ faq, isOpen, onToggle }: {
       >
         <span
           className={`font-body font-semibold text-base leading-snug transition-colors ${
-            isOpen ? 'text-[#7ED321]' : 'text-white group-hover:text-[#7ED321]'
+            isOpen ? 'text-mint' : 'text-primary group-hover:text-mint'
           }`}
         >
           {faq.question}
@@ -39,14 +37,10 @@ function FAQItem({ faq, isOpen, onToggle }: {
         <motion.span
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300"
-          style={{
-            background: isOpen ? 'rgba(126, 211, 33, 0.2)' : 'rgba(7, 11, 8, 0.8)',
-            border: `1px solid ${isOpen ? '#7ED321' : 'rgba(126, 211, 33, 0.2)'}`,
-          }}
+          className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 bg-void border border-border-subtle"
           aria-hidden="true"
         >
-          <ChevronDown size={16} className={isOpen ? 'text-[#7ED321]' : 'text-[#8A9488]'} />
+          <ChevronDown size={16} className={isOpen ? 'text-mint' : 'text-muted'} />
         </motion.span>
       </button>
 
@@ -62,8 +56,8 @@ function FAQItem({ faq, isOpen, onToggle }: {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             style={{ overflow: 'hidden' }}
           >
-            <div className="px-5 pb-5 pt-1 border-t border-[#7ED321]/10">
-              <p className="font-body text-sm leading-relaxed text-[#8A9488]">
+            <div className="px-5 pb-5 pt-1 border-t border-[var(--accent-mint)]/10">
+              <p className="font-body text-sm leading-relaxed text-muted">
                 {faq.answer}
               </p>
             </div>
@@ -80,7 +74,7 @@ export default function FAQ() {
   return (
     <section
       id="faq"
-      className="py-24 lg:py-32 relative bg-[#070B08] border-t border-b border-[#7ED321]/15 overflow-hidden"
+      className="py-24 lg:py-32 relative bg-void border-t border-b border-[var(--accent-mint)]/15 overflow-hidden"
       aria-labelledby="faq-heading"
     >
       {/* Circuit pattern overlay */}
@@ -99,12 +93,6 @@ export default function FAQ() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
-                Common Questions
-              </p>
-            </div>
             <h2
               id="faq-heading"
               className="font-display leading-none mb-6"
@@ -113,9 +101,9 @@ export default function FAQ() {
               GOT<br />
               <span className="text-stroke-green">QUESTIONS?</span>
             </h2>
-            <p className="font-body text-sm leading-relaxed text-[#8A9488]">
+            <p className="font-body text-sm leading-relaxed text-muted">
               If you don&apos;t find your answer here, our Concierge agent (bottom right) can assist — or email us directly at{' '}
-              <a href="mailto:info@ecellpec.in" className="text-[#7ED321] underline underline-offset-4 font-semibold">
+              <a href="mailto:info@ecellpec.in" className="text-[var(--accent-mint)] underline underline-offset-4 font-semibold">
                 info@ecellpec.in
               </a>
             </p>

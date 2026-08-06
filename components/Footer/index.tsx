@@ -22,7 +22,7 @@ function EmailCapture() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
       toast.error('Please enter a valid email address.', {
-        style: { background: '#0D140E', color: '#F5F5F0', border: '1px solid #7ED321' },
+        style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' },
       })
       return
     }
@@ -35,11 +35,11 @@ function EmailCapture() {
     toast.success(`${email} — you're on the list!`, {
       duration: 4000,
       style: {
-        background: '#0D140E',
-        color: '#F5F5F0',
-        border: '1px solid #7ED321',
+        background: '#0A110E',
+        color: '#FFFFFF',
+        border: '1px solid var(--accent-mint)',
       },
-      iconTheme: { primary: '#7ED321', secondary: '#070B08' },
+      iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
     })
   }
 
@@ -51,12 +51,12 @@ function EmailCapture() {
         className="flex items-center gap-3 py-4"
       >
         <div
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-[#7ED321]/20 border border-[#7ED321]/40 text-[#7ED321]"
+          className="w-8 h-8 rounded-full flex items-center justify-center bg-[var(--accent-mint)]/20 border border-[var(--accent-mint)]/40 text-[var(--accent-mint)]"
           aria-hidden="true"
         >
           <Send size={14} />
         </div>
-        <p className="font-mono-data text-sm text-[#7ED321] font-bold">
+        <p className="font-mono-data text-sm text-[var(--accent-mint)] font-bold">
           You&apos;re on the list. Watch your inbox.
         </p>
       </motion.div>
@@ -73,7 +73,7 @@ function EmailCapture() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 font-body text-sm outline-none bg-[#0D140E] border border-[#7ED321]/30 rounded-lg px-4 py-3 text-white focus:border-[#7ED321] focus:shadow-[0_0_15px_rgba(126,211,33,0.3)]"
+        className="flex-1 font-body text-sm outline-none bg-[#1E2B12] border border-[#4E6527]/60 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:border-[#C8E696]"
         aria-label="Enter your email to get PEC Summit updates"
       />
       <button
@@ -112,7 +112,7 @@ export function RegisterCTA() {
   return (
     <div
       id="register"
-      className="bg-[#070B08] border-t border-[#7ED321]/25 relative overflow-hidden"
+      className="bg-[#0D2420] [.light_&]:bg-[#2A3C1A] text-white border-t border-mint/30 [.light_&]:border-[#4E6527]/50 relative overflow-hidden"
       aria-labelledby="footer-cta-heading"
     >
       {/* Circuit board closing moment */}
@@ -124,9 +124,6 @@ export function RegisterCTA() {
       {/* Main CTA block */}
       <div
         className="py-24 lg:py-32 relative z-10"
-        style={{
-          background: `linear-gradient(160deg, rgba(126,211,33,0.06) 0%, transparent 60%)`,
-        }}
       >
         <div className="section-container">
           <div className="max-w-2xl">
@@ -136,13 +133,6 @@ export function RegisterCTA() {
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
             >
-              <div className="flex items-center gap-2 mb-4">
-                <Zap size={16} className="text-[#7ED321] fill-[#7ED321]" />
-                <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
-                  Official E-Cell PEC Summit
-                </p>
-              </div>
-
               <div
                 id="footer-cta-heading"
                 className="font-display leading-none mb-6 flex flex-col items-start"
@@ -150,18 +140,18 @@ export function RegisterCTA() {
               >
                 <DynamicWeightHeading 
                   label="REGISTER"
-                  style={{ color: 'var(--text-primary)' }}
+                  style={{ color: '#FFFFFF' }}
                 />
-                <span className="text-white/60"><ScrollGradientFill text="NOW" /></span>
+                <span className="text-mint font-bold"><ScrollGradientFill text="NOW" /></span>
               </div>
-              <p className="font-body text-base mb-8 max-w-md leading-relaxed text-[#8A9488]">
+              <p className="font-body text-base mb-8 max-w-md leading-relaxed text-gray-200">
                 Early-bird passes are limited. Lock in your spot and be part of North India&apos;s premier entrepreneurship summit.
               </p>
 
               <div className="flex flex-wrap gap-4 mb-12">
                 <Link
                   href="/register"
-                  className="btn-green text-base py-4 px-10 rounded-xl font-bold flex items-center gap-2"
+                  className="btn-green text-base py-4 px-10 rounded-xl font-bold flex items-center gap-2 shadow-lg"
                   id="footer-register-btn"
                   aria-label="Open PEC Summit Registration Dashboard"
                 >
@@ -170,7 +160,7 @@ export function RegisterCTA() {
                 </Link>
                 <a
                   href="mailto:info@ecellpec.in"
-                  className="btn-ghost py-4 px-8 rounded-xl"
+                  className="px-8 py-4 rounded-xl border border-white/40 text-white hover:bg-white/10 font-bold transition-all text-sm flex items-center"
                   id="footer-contact-btn"
                   aria-label="Contact E-Cell PEC"
                 >
@@ -180,9 +170,6 @@ export function RegisterCTA() {
 
               {/* Email subscribe */}
               <div className="mb-6">
-                <p className="font-mono-data text-xs uppercase tracking-widest mb-3 text-[#7ED321] font-bold">
-                  ⚡ Get Summit Updates
-                </p>
                 <EmailCapture />
               </div>
             </motion.div>
@@ -199,12 +186,12 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
       {!hideCTA && <RegisterCTA />}
 
       {/* Corporate EIC / PEC Footer */}
-      <div className="py-12 relative z-10 bg-[#070B08] border-t border-[#7ED321]/20">
+      <div className="py-12 relative z-10 bg-[#0A1A17] [.light_&]:bg-[#1E2B12] text-white border-t border-mint/20 [.light_&]:border-[#4E6527]/50 shadow-inner">
         <div className="section-container">
           
           {/* Top Social Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between pb-8 border-b border-[#7ED321]/15 mb-10 gap-4">
-            <p className="font-body text-[#8A9488] text-base">
+          <div className="flex flex-col sm:flex-row items-center justify-between pb-8 border-b border-[#4E6527]/30 mb-10 gap-4">
+            <p className="font-body text-gray-200 text-base font-medium">
               Get connected with us on social networks:
             </p>
             <div className="flex items-center gap-4 sm:gap-6" role="list" aria-label="Social media links">
@@ -216,7 +203,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   rel="noopener noreferrer"
                   aria-label={label}
                   role="listitem"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#0D140E] border border-[#7ED321]/20 text-[#8A9488] hover:text-[#7ED321] hover:border-[#7ED321] hover:shadow-[0_0_12px_rgba(126,211,33,0.3)] transition-all"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#2A3C1A] border border-[#4E6527]/50 text-white hover:text-[#C8E696] hover:bg-[#395024] hover:border-[#C8E696] transition-all shadow-sm"
                 >
                   <Icon size={18} aria-hidden="true" strokeWidth={1.5} />
                 </a>
@@ -235,28 +222,28 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   alt="Punjab Engineering College Logo" 
                   width={120} 
                   height={80} 
-                  className="object-contain brightness-110"
+                  className="object-contain brightness-120 drop-shadow-md"
                 />
                 <Image 
                   src="/eic-logo.png" 
                   alt="EIC Logo" 
                   width={90} 
                   height={90} 
-                  className="object-contain brightness-110"
+                  className="object-contain brightness-120 drop-shadow-md"
                 />
               </div>
-              <p className="font-body text-sm text-[#8A9488] leading-relaxed max-w-md">
+              <p className="font-body text-sm text-gray-300 leading-relaxed max-w-md">
                 Entrepreneurship and Incubation Cell at PEC operates under the Ministry of Education&apos;s Innovation Cell Programs since 2015. EIC Provides mentoring in entrepreneurship, achieving its goal of nurturing businesses.
               </p>
             </div>
 
             {/* Column 3: Quick Links */}
             <div>
-              <h4 className="font-display text-2xl text-white mb-6">Quick Links</h4>
+              <h4 className="font-display text-2xl text-white mb-6 tracking-wide">Quick Links</h4>
               <ul className="space-y-3">
                 {QUICK_LINKS.map((link) => (
                   <li key={link.label}>
-                    <a href={link.href} className="font-body text-[#8A9488] hover:text-[#7ED321] transition-colors text-sm">
+                    <a href={link.href} className="font-body text-gray-300 hover:text-[#C8E696] font-medium transition-colors text-sm">
                       {link.label}
                     </a>
                   </li>
@@ -266,27 +253,27 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
             {/* Column 4: Contact */}
             <div>
-              <h4 className="font-display text-2xl text-white mb-6">Contact</h4>
-              <p className="font-body text-sm text-[#8A9488] mb-6 leading-relaxed">
+              <h4 className="font-display text-2xl text-white mb-6 tracking-wide">Contact</h4>
+              <p className="font-body text-sm text-gray-300 mb-6 leading-relaxed">
                 Entrepreneurship and Incubation Cell, Punjab Engineering College, Chandigarh 160012
               </p>
               
               <div className="space-y-4">
                 <div>
-                  <div className="flex items-center gap-2 mb-1 text-[#8A9488]">
-                    <Briefcase size={16} className="text-[#7ED321]" />
-                    <span className="font-body text-sm font-medium text-white">For Queries And Collaboration</span>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Briefcase size={16} className="text-[#C8E696] shrink-0" />
+                    <span className="font-body text-sm font-bold text-[#C8E696]">For Queries And Collaboration</span>
                   </div>
-                  <a href="mailto:eicpec@pec.edu.in" className="font-body text-sm text-[#7ED321] hover:underline block pl-6">
+                  <a href="mailto:eicpec@pec.edu.in" className="font-body text-sm text-[#A0C868] hover:text-white font-medium hover:underline block pl-6">
                     eicpec@pec.edu.in
                   </a>
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-1 text-[#8A9488]">
-                    <Phone size={16} className="text-[#7ED321]" />
-                    <span className="font-body text-sm font-medium text-white">For General Contact</span>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Phone size={16} className="text-[#C8E696] shrink-0" />
+                    <span className="font-body text-sm font-bold text-[#C8E696]">For General Contact</span>
                   </div>
-                  <a href="mailto:info@ecellpec.in" className="font-body text-sm text-[#7ED321] hover:underline block pl-6">
+                  <a href="mailto:info@ecellpec.in" className="font-body text-sm text-[#A0C868] hover:text-white font-medium hover:underline block pl-6">
                     info@ecellpec.in
                   </a>
                 </div>
@@ -296,9 +283,9 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
           </div>
 
           {/* Bottom copyright line */}
-          <div className="mt-12 pt-6 border-t border-[#7ED321]/10 flex flex-col sm:flex-row items-center justify-between text-xs text-[#8A9488] gap-4 font-mono-data">
+          <div className="mt-12 pt-6 border-t border-[#4E6527]/30 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-300 gap-4 font-mono-data">
             <p>© {new Date().getFullYear()} E-Cell PEC · Punjab Engineering College, Chandigarh</p>
-            <p>PEC E-Summit 2026</p>
+            <p className="text-[#C8E696]">PEC E-Summit 2026</p>
           </div>
 
         </div>

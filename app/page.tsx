@@ -23,7 +23,6 @@ import Nav from '@/components/Nav'
 import NewHero from '@/components/Hero/NewHero'
 import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
-import EsummitTracks from '@/components/EsummitTracks'
 
 // Dynamic (Framer Motion scroll hooks — better as client-only)
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), {
@@ -31,8 +30,6 @@ const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), 
 })
 
 // ── Original detailed sections ─────────────────────────────────────────────
-import StatBurst from '@/components/StatBurst'
-import Speakers from '@/components/Speakers'
 import Sponsors from '@/components/Sponsors'
 import FAQ from '@/components/FAQ'
 import Footer, { RegisterCTA } from '@/components/Footer'
@@ -52,17 +49,16 @@ const Alumni = dynamic(() => import('@/components/Alumni'), { ssr: false })
 
 export default function Home() {
   return (
-    <main style={{ overflowX: 'clip', background: '#070B08' }}>
+    <main id="main-content" className="bg-void" style={{ overflowX: 'clip' }}>
       <Toaster
         position="top-center"
         gutter={8}
         toastOptions={{
           duration: 4000,
           style: {
-            fontFamily: "'Kanit', sans-serif",
             fontSize: '0.875rem',
-            background: '#0D140E',
-            color: '#F5F5F0',
+            background: '#0A110E',
+            color: '#FFFFFF',
             border: '1px solid rgba(126, 211, 33, 0.2)',
           },
         }}
@@ -80,19 +76,10 @@ export default function Home() {
       {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
       <EsummitAbout />
 
-      {/* ── 4. Events — white bg, numbered list ─────────────────────────── */}
-      <EsummitTracks />
-
-      {/* ── 5. Highlights — sticky card stack, dark bg ──────────────────── */}
+      {/* ── 4. Highlights — sticky card stack, dark bg ──────────────────── */}
       <EsummitHighlights />
 
-      {/* ── 6. Stats counter ────────────────────────────────────────────── */}
-      <StatBurst />
-
-      {/* ── 7. Speakers grid ────────────────────────────────────────────── */}
-      <Speakers />
-
-      {/* ── 8. Alumni — horizontal scroll with PixelTransition ───────────── */}
+      {/* ── 6. Alumni — horizontal scroll with PixelTransition ───────────── */}
       <Alumni />
 
       {/* ── 9. Schedule / Timeline ──────────────────────────────────────── */}

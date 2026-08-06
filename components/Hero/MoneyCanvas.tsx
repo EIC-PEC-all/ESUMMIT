@@ -36,7 +36,7 @@ export default function MoneyCanvas({ prefersReduced }: { prefersReduced: boolea
     const bCtx = billCache.getContext('2d')
     if (bCtx) {
       bCtx.fillStyle = '#0B1A10'
-      bCtx.strokeStyle = '#7ED321'
+      bCtx.strokeStyle = 'var(--accent-mint)'
       bCtx.lineWidth = 1.5
       bCtx.beginPath()
       bCtx.roundRect(2, 2, 156, 64, 6)
@@ -47,7 +47,7 @@ export default function MoneyCanvas({ prefersReduced }: { prefersReduced: boolea
       bCtx.lineWidth = 0.8
       bCtx.strokeRect(6, 6, 148, 56)
 
-      bCtx.fillStyle = '#7ED321'
+      bCtx.fillStyle = 'var(--accent-mint)'
       bCtx.font = 'bold 16px serif'
       bCtx.textAlign = 'center'
       bCtx.textBaseline = 'middle'
@@ -63,7 +63,7 @@ export default function MoneyCanvas({ prefersReduced }: { prefersReduced: boolea
     dollarCache.height = 40
     const dCtx = dollarCache.getContext('2d')
     if (dCtx) {
-      dCtx.fillStyle = '#7ED321'
+      dCtx.fillStyle = 'var(--accent-mint)'
       dCtx.font = 'bold 28px serif'
       dCtx.textAlign = 'center'
       dCtx.textBaseline = 'middle'

@@ -47,15 +47,14 @@ function TrackCard({
     <motion.div
       ref={cardRef}
       id={`track-${track.id}`}
-      className={`tilt-card cursor-pointer rounded-2xl p-7 relative overflow-hidden group ${isHighlighted ? 'highlight-active' : ''}`}
+      className={`tilt-card cursor-pointer rounded-2xl p-7 relative overflow-hidden group bg-panel ${isHighlighted ? 'highlight-active' : ''}`}
       style={{
-        background: '#0D140E',
-        border: `1px solid ${isHighlighted ? '#7ED321' : 'rgba(126,211,33,0.2)'}`,
+        border: `1px solid ${isHighlighted ? 'var(--accent-mint)' : 'var(--border-subtle)'}`,
         transform: `perspective(800px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
         transition: tilt.x === 0 && tilt.y === 0 ? 'all 0.4s ease' : 'transform 0.1s ease',
-        boxShadow: isHighlighted ? '0 0 28px rgba(126,211,33,0.4)' : undefined,
+        boxShadow: isHighlighted ? '0 0 28px var(--accent-green-glow)' : undefined,
       }}
-      whileHover={{ borderColor: '#7ED321', boxShadow: '0 0 25px rgba(126,211,33,0.3)' }}
+      whileHover={{ borderColor: 'var(--accent-mint)', boxShadow: '0 0 25px var(--accent-green-glow)' }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
@@ -70,29 +69,29 @@ function TrackCard({
     >
       {/* Icon in Green Glow Circle */}
       <div
-        className="w-12 h-12 rounded-full flex items-center justify-center mb-5 bg-[#070B08] border border-[#7ED321]/40 group-hover:border-[#7ED321] group-hover:shadow-[0_0_20px_rgba(126,211,33,0.5)] transition-all"
+        className="w-12 h-12 rounded-full flex items-center justify-center mb-5 bg-void border border-mint/40 group-hover:border-mint transition-all"
         aria-hidden="true"
       >
-        <Icon size={22} className="text-[#7ED321]" />
+        <Icon size={22} className="text-mint" />
       </div>
 
       {/* Eyebrow */}
-      <p className="font-mono-data text-[10px] uppercase tracking-widest mb-2 text-[#7ED321] font-bold flex items-center gap-1">
+      <p className="font-mono-data text-[10px] uppercase tracking-widest mb-2 text-mint font-bold flex items-center gap-1">
         <span>☑</span> {track.eyebrow}
       </p>
 
       {/* Title */}
-      <h3 className="font-display text-3xl mb-3 leading-none text-white group-hover:text-[#7ED321] transition-colors">
+      <h3 className="font-display text-3xl mb-3 leading-none text-primary group-hover:text-mint transition-colors">
         {track.title}
       </h3>
 
       {/* Short desc */}
-      <p className="font-body text-sm leading-relaxed text-[#8A9488]">
+      <p className="font-body text-sm leading-relaxed text-muted">
         {track.shortDesc}
       </p>
 
       {/* Expand hint */}
-      <div className="mt-5 flex items-center gap-1.5 font-mono-data text-xs text-[#7ED321] font-bold">
+      <div className="mt-5 flex items-center gap-1.5 font-mono-data text-xs text-mint font-bold">
         <span>Expand Track</span>
         <ChevronDown size={14} aria-hidden="true" />
       </div>
@@ -100,7 +99,7 @@ function TrackCard({
       {/* Decorative corner glow */}
       <div
         className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full pointer-events-none opacity-15 group-hover:opacity-35 transition-opacity"
-        style={{ background: 'radial-gradient(circle, #7ED321 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, var(--accent-mint) 0%, transparent 70%)' }}
         aria-hidden="true"
       />
     </motion.div>
@@ -134,7 +133,7 @@ export default function Tracks() {
   return (
     <section
       id="tracks"
-      className="py-24 lg:py-32 relative bg-[#070B08] border-t border-b border-[#7ED321]/15 overflow-hidden"
+      className="py-24 lg:py-32 relative bg-void border-t border-b border-[var(--accent-mint)]/15 overflow-hidden"
       aria-labelledby="tracks-heading"
     >
       {/* Circuit overlay */}
@@ -154,8 +153,8 @@ export default function Tracks() {
         >
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
+              <Zap size={14} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
+              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[var(--accent-mint)] font-bold">
                 Capital &amp; Innovation Agenda
               </p>
             </div>
@@ -170,7 +169,7 @@ export default function Tracks() {
           </div>
           <Link
             href="/tracks"
-            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-[#7ED321] hover:text-white transition-colors border-b border-[#7ED321]/40 pb-1"
+            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)] hover:text-white transition-colors border-b border-[var(--accent-mint)]/40 pb-1"
           >
             Explore Full Tracks Page &rarr;
           </Link>
@@ -202,18 +201,18 @@ export default function Tracks() {
             aria-label={`${openTrack.title} details`}
           >
             <div
-              className="mt-8 mx-4 lg:mx-0 rounded-2xl p-8 relative bg-[#0D140E] border border-[#7ED321]/40 shadow-2xl"
+              className="mt-8 mx-4 lg:mx-0 rounded-2xl p-8 relative bg-panel border border-[var(--accent-mint)]/40 shadow-2xl"
               style={{ maxWidth: '1280px', margin: '32px auto 0' }}
             >
               <button
                 onClick={() => setOpenId(null)}
-                className="absolute top-6 right-6 p-2 rounded-lg text-[#8A9488] hover:text-[#7ED321] bg-[#070B08]"
+                className="absolute top-6 right-6 p-2 rounded-lg text-muted hover:text-[var(--accent-mint)] bg-void"
                 aria-label="Close details panel"
               >
                 <X size={16} />
               </button>
               <div className="flex items-center gap-3 mb-3">
-                <span className="font-mono-data text-xs uppercase tracking-widest text-[#7ED321] font-bold">
+                <span className="font-mono-data text-xs uppercase tracking-widest text-[var(--accent-mint)] font-bold">
                   ⚡ {openTrack.eyebrow}
                 </span>
               </div>
@@ -222,7 +221,7 @@ export default function Tracks() {
               </h3>
               <div className="prose prose-invert max-w-2xl">
                 {openTrack.fullDesc.split('\n\n').map((para, i) => (
-                  <p key={i} className="font-body text-sm leading-relaxed mb-4 text-[#8A9488]">
+                  <p key={i} className="font-body text-sm leading-relaxed mb-4 text-muted">
                     {para}
                   </p>
                 ))}

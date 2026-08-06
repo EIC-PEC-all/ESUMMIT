@@ -55,14 +55,14 @@ export default function WavyDollarBill({ prefersReduced }: { prefersReduced?: bo
             </linearGradient>
 
             <linearGradient id="wavyBorder" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#7ED321" stopOpacity="1" />
-              <stop offset="50%" stopColor="#4C9E0D" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#7ED321" stopOpacity="1" />
+              <stop offset="0%" stopColor="var(--accent-mint)" stopOpacity="1" />
+              <stop offset="50%" stopColor="#3DD9FF" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="var(--accent-mint)" stopOpacity="1" />
             </linearGradient>
 
             <pattern id="wavyGuilloche" width="30" height="30" patternUnits="userSpaceOnUse">
-              <path d="M 0 15 Q 7.5 0 15 15 T 30 15" fill="none" stroke="#7ED321" strokeWidth="0.6" strokeOpacity="0.18" />
-              <path d="M 0 7.5 Q 7.5 22.5 15 7.5 T 30 7.5" fill="none" stroke="#7ED321" strokeWidth="0.4" strokeOpacity="0.12" />
+              <path d="M 0 15 Q 7.5 0 15 15 T 30 15" fill="none" stroke="var(--accent-mint)" strokeWidth="0.6" strokeOpacity="0.18" />
+              <path d="M 0 7.5 Q 7.5 22.5 15 7.5 T 30 7.5" fill="none" stroke="var(--accent-mint)" strokeWidth="0.4" strokeOpacity="0.12" />
             </pattern>
           </defs>
 
@@ -80,67 +80,67 @@ export default function WavyDollarBill({ prefersReduced }: { prefersReduced?: bo
             <path
               d="M 45 62 Q 225 -5 440 52 T 815 45 Q 840 160 822 315 Q 615 362 420 295 T 38 322 Z"
               fill="none"
-              stroke="#7ED321"
+              stroke="var(--accent-mint)"
               strokeWidth="1.5"
               strokeDasharray="8 4"
               strokeOpacity="0.75"
             />
 
-            <text x="440" y="55" textAnchor="middle" fill="#8A9488" fontSize="11" letterSpacing="5" fontFamily="monospace" fontWeight="bold">
+            <text x="440" y="55" textAnchor="middle" fill='#9CA3AF' fontSize="11" letterSpacing="5" fontFamily="monospace" fontWeight="bold">
               FEDERAL RESERVE NOTE
             </text>
-            <text x="440" y="85" textAnchor="middle" fill="#F5F5F0" fontSize="22" letterSpacing="4" fontWeight="900" fontFamily="serif">
+            <text x="440" y="85" textAnchor="middle" fill='#FFFFFF' fontSize="22" letterSpacing="4" fontWeight="900" fontFamily="serif">
               THE UNITED STATES OF AMERICA
             </text>
 
-            <text x="140" y="125" fill="#7ED321" fontSize="13" letterSpacing="2.5" fontFamily="monospace" fontWeight="bold">
+            <text x="140" y="125" fill="var(--accent-mint)" fontSize="13" letterSpacing="2.5" fontFamily="monospace" fontWeight="bold">
               ★ E 20260315 B ★
             </text>
-            <text x="730" y="115" textAnchor="end" fill="#7ED321" fontSize="13" letterSpacing="2.5" fontFamily="monospace" fontWeight="bold">
+            <text x="730" y="115" textAnchor="end" fill="var(--accent-mint)" fontSize="13" letterSpacing="2.5" fontFamily="monospace" fontWeight="bold">
               ★ PEC 2026 E ★
             </text>
 
             <g transform="translate(70, 75)">
-              <circle cx="0" cy="0" r="28" fill="#08150C" stroke="#7ED321" strokeWidth="2" />
-              <text x="0" y="7" textAnchor="middle" fill="#7ED321" fontSize="22" fontWeight="900" fontFamily="serif">$1</text>
+              <circle cx="0" cy="0" r="28" fill="#08150C" stroke="var(--accent-mint)" strokeWidth="2" />
+              <text x="0" y="7" textAnchor="middle" fill="var(--accent-mint)" fontSize="22" fontWeight="900" fontFamily="serif">$1</text>
             </g>
             <g transform="translate(800, 65)">
-              <circle cx="0" cy="0" r="28" fill="#08150C" stroke="#7ED321" strokeWidth="2" />
-              <text x="0" y="7" textAnchor="middle" fill="#7ED321" fontSize="22" fontWeight="900" fontFamily="serif">$1</text>
+              <circle cx="0" cy="0" r="28" fill="#08150C" stroke="var(--accent-mint)" strokeWidth="2" />
+              <text x="0" y="7" textAnchor="middle" fill="var(--accent-mint)" fontSize="22" fontWeight="900" fontFamily="serif">$1</text>
             </g>
             <g transform="translate(60, 310)">
-              <circle cx="0" cy="0" r="28" fill="#08150C" stroke="#7ED321" strokeWidth="2" />
-              <text x="0" y="7" textAnchor="middle" fill="#7ED321" fontSize="22" fontWeight="900" fontFamily="serif">$1</text>
+              <circle cx="0" cy="0" r="28" fill="#08150C" stroke="var(--accent-mint)" strokeWidth="2" />
+              <text x="0" y="7" textAnchor="middle" fill="var(--accent-mint)" fontSize="22" fontWeight="900" fontFamily="serif">$1</text>
             </g>
             <g transform="translate(800, 300)">
-              <circle cx="0" cy="0" r="28" fill="#08150C" stroke="#7ED321" strokeWidth="2" />
-              <text x="0" y="7" textAnchor="middle" fill="#7ED321" fontSize="22" fontWeight="900" fontFamily="serif">$1</text>
+              <circle cx="0" cy="0" r="28" fill="#08150C" stroke="var(--accent-mint)" strokeWidth="2" />
+              <text x="0" y="7" textAnchor="middle" fill="var(--accent-mint)" fontSize="22" fontWeight="900" fontFamily="serif">$1</text>
             </g>
 
             <g transform="translate(440, 200)">
-              <ellipse cx="0" cy="0" rx="125" ry="95" fill="#091A0F" stroke="#7ED321" strokeWidth="3" />
-              <ellipse cx="0" cy="0" rx="115" ry="86" fill="none" stroke="#7ED321" strokeWidth="1" strokeDasharray="5 3" />
-              <circle cx="0" cy="-6" r="62" fill="#0F2A18" stroke="#7ED321" strokeWidth="1.8" />
-              <text x="0" y="12" textAnchor="middle" fill="#7ED321" fontSize="54" fontWeight="900" fontFamily="sans-serif">$</text>
-              <text x="0" y="76" textAnchor="middle" fill="#F5F5F0" fontSize="12" letterSpacing="3" fontFamily="monospace" fontWeight="bold">GEORGE WASHINGTON</text>
+              <ellipse cx="0" cy="0" rx="125" ry="95" fill="#091A0F" stroke="var(--accent-mint)" strokeWidth="3" />
+              <ellipse cx="0" cy="0" rx="115" ry="86" fill="none" stroke="var(--accent-mint)" strokeWidth="1" strokeDasharray="5 3" />
+              <circle cx="0" cy="-6" r="62" fill="#0F2A18" stroke="var(--accent-mint)" strokeWidth="1.8" />
+              <text x="0" y="12" textAnchor="middle" fill="var(--accent-mint)" fontSize="54" fontWeight="900" fontFamily="sans-serif">$</text>
+              <text x="0" y="76" textAnchor="middle" fill='#FFFFFF' fontSize="12" letterSpacing="3" fontFamily="monospace" fontWeight="bold">GEORGE WASHINGTON</text>
             </g>
 
             <g transform="translate(200, 215)">
-              <circle cx="0" cy="0" r="56" fill="#07150C" stroke="#7ED321" strokeWidth="2" />
-              <polygon points="0,-28 26,18 -26,18" fill="none" stroke="#7ED321" strokeWidth="2" />
-              <circle cx="0" cy="-28" r="4" fill="#7ED321" />
-              <text x="0" y="32" textAnchor="middle" fill="#8A9488" fontSize="8" letterSpacing="1.5" fontFamily="monospace">GREAT SEAL</text>
+              <circle cx="0" cy="0" r="56" fill="#07150C" stroke="var(--accent-mint)" strokeWidth="2" />
+              <polygon points="0,-28 26,18 -26,18" fill="none" stroke="var(--accent-mint)" strokeWidth="2" />
+              <circle cx="0" cy="-28" r="4" fill="var(--accent-mint)" />
+              <text x="0" y="32" textAnchor="middle" fill='#9CA3AF' fontSize="8" letterSpacing="1.5" fontFamily="monospace">GREAT SEAL</text>
             </g>
 
             <g transform="translate(680, 205)">
-              <circle cx="0" cy="0" r="56" fill="#07150C" stroke="#7ED321" strokeWidth="2" />
-              <path d="M0,-30 L24,-18 L24 8 Q24 26 0 34 Q-24 26 -24 8 L-24,-18 Z" fill="#0F2416" stroke="#7ED321" strokeWidth="1.8" />
-              <text x="0" y="-8" textAnchor="middle" fill="#7ED321" fontSize="12" fontWeight="bold">PEC</text>
-              <text x="0" y="40" textAnchor="middle" fill="#8A9488" fontSize="8" letterSpacing="1.5" fontFamily="monospace">TREASURY</text>
+              <circle cx="0" cy="0" r="56" fill="#07150C" stroke="var(--accent-mint)" strokeWidth="2" />
+              <path d="M0,-30 L24,-18 L24 8 Q24 26 0 34 Q-24 26 -24 8 L-24,-18 Z" fill="#0F2416" stroke="var(--accent-mint)" strokeWidth="1.8" />
+              <text x="0" y="-8" textAnchor="middle" fill="var(--accent-mint)" fontSize="12" fontWeight="bold">PEC</text>
+              <text x="0" y="40" textAnchor="middle" fill='#9CA3AF' fontSize="8" letterSpacing="1.5" fontFamily="monospace">TREASURY</text>
             </g>
 
-            <rect x="310" y="310" width="260" height="34" rx="6" fill="#061209" stroke="#7ED321" strokeWidth="1.5" />
-            <text x="440" y="334" textAnchor="middle" fill="#7ED321" fontSize="18" letterSpacing="7" fontWeight="900" fontFamily="serif">
+            <rect x="310" y="310" width="260" height="34" rx="6" fill="#061209" stroke="var(--accent-mint)" strokeWidth="1.5" />
+            <text x="440" y="334" textAnchor="middle" fill="var(--accent-mint)" fontSize="18" letterSpacing="7" fontWeight="900" fontFamily="serif">
               ONE DOLLAR
             </text>
           </g>
@@ -178,9 +178,9 @@ export default function WavyDollarBill({ prefersReduced }: { prefersReduced?: bo
             </linearGradient>
 
             <linearGradient id="mobBorder" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#7ED321" />
-              <stop offset="50%" stopColor="#4C9E0D" />
-              <stop offset="100%" stopColor="#7ED321" />
+              <stop offset="0%" stopColor="var(--accent-mint)" />
+              <stop offset="50%" stopColor="#3DD9FF" />
+              <stop offset="100%" stopColor="var(--accent-mint)" />
             </linearGradient>
           </defs>
 
@@ -197,45 +197,45 @@ export default function WavyDollarBill({ prefersReduced }: { prefersReduced?: bo
             <path
               d="M 60 35 Q 260 55 320 185 T 75 465 Q 130 580 335 595 Q 305 440 265 325 T 35 130 Z"
               fill="none"
-              stroke="#7ED321"
+              stroke="var(--accent-mint)"
               strokeWidth="1.2"
               strokeDasharray="6 3"
               strokeOpacity="0.75"
             />
 
             {/* Top Federal Reserve Note */}
-            <text x="200" y="70" textAnchor="middle" fill="#8A9488" fontSize="10" letterSpacing="3" fontFamily="monospace" fontWeight="bold">
+            <text x="200" y="70" textAnchor="middle" fill='#9CA3AF' fontSize="10" letterSpacing="3" fontFamily="monospace" fontWeight="bold">
               FEDERAL RESERVE NOTE
             </text>
-            <text x="200" y="100" textAnchor="middle" fill="#F5F5F0" fontSize="16" letterSpacing="2" fontWeight="900" fontFamily="serif">
+            <text x="200" y="100" textAnchor="middle" fill='#FFFFFF' fontSize="16" letterSpacing="2" fontWeight="900" fontFamily="serif">
               THE UNITED STATES OF AMERICA
             </text>
 
             {/* Center Medallion */}
             <g transform="translate(200, 290)">
-              <ellipse cx="0" cy="0" rx="90" ry="70" fill="#091A0F" stroke="#7ED321" strokeWidth="2.5" />
-              <circle cx="0" cy="-4" r="45" fill="#0F2A18" stroke="#7ED321" strokeWidth="1.5" />
-              <text x="0" y="10" textAnchor="middle" fill="#7ED321" fontSize="42" fontWeight="900" fontFamily="sans-serif">$</text>
-              <text x="0" y="58" textAnchor="middle" fill="#F5F5F0" fontSize="10" letterSpacing="2" fontFamily="monospace" fontWeight="bold">PEC SUMMIT</text>
+              <ellipse cx="0" cy="0" rx="90" ry="70" fill="#091A0F" stroke="var(--accent-mint)" strokeWidth="2.5" />
+              <circle cx="0" cy="-4" r="45" fill="#0F2A18" stroke="var(--accent-mint)" strokeWidth="1.5" />
+              <text x="0" y="10" textAnchor="middle" fill="var(--accent-mint)" fontSize="42" fontWeight="900" fontFamily="sans-serif">$</text>
+              <text x="0" y="58" textAnchor="middle" fill='#FFFFFF' fontSize="10" letterSpacing="2" fontFamily="monospace" fontWeight="bold">PEC SUMMIT</text>
             </g>
 
             {/* $1 Seals */}
             <g transform="translate(60, 80)">
-              <circle cx="0" cy="0" r="20" fill="#08150C" stroke="#7ED321" strokeWidth="1.5" />
-              <text x="0" y="5" textAnchor="middle" fill="#7ED321" fontSize="16" fontWeight="900" fontFamily="serif">$1</text>
+              <circle cx="0" cy="0" r="20" fill="#08150C" stroke="var(--accent-mint)" strokeWidth="1.5" />
+              <text x="0" y="5" textAnchor="middle" fill="var(--accent-mint)" fontSize="16" fontWeight="900" fontFamily="serif">$1</text>
             </g>
             <g transform="translate(320, 140)">
-              <circle cx="0" cy="0" r="20" fill="#08150C" stroke="#7ED321" strokeWidth="1.5" />
-              <text x="0" y="5" textAnchor="middle" fill="#7ED321" fontSize="16" fontWeight="900" fontFamily="serif">$1</text>
+              <circle cx="0" cy="0" r="20" fill="#08150C" stroke="var(--accent-mint)" strokeWidth="1.5" />
+              <text x="0" y="5" textAnchor="middle" fill="var(--accent-mint)" fontSize="16" fontWeight="900" fontFamily="serif">$1</text>
             </g>
             <g transform="translate(80, 500)">
-              <circle cx="0" cy="0" r="20" fill="#08150C" stroke="#7ED321" strokeWidth="1.5" />
-              <text x="0" y="5" textAnchor="middle" fill="#7ED321" fontSize="16" fontWeight="900" fontFamily="serif">$1</text>
+              <circle cx="0" cy="0" r="20" fill="#08150C" stroke="var(--accent-mint)" strokeWidth="1.5" />
+              <text x="0" y="5" textAnchor="middle" fill="var(--accent-mint)" fontSize="16" fontWeight="900" fontFamily="serif">$1</text>
             </g>
 
             {/* Bottom Banner */}
-            <rect x="110" y="540" width="180" height="28" rx="5" fill="#061209" stroke="#7ED321" strokeWidth="1.2" />
-            <text x="200" y="560" textAnchor="middle" fill="#7ED321" fontSize="14" letterSpacing="4" fontWeight="900" fontFamily="serif">
+            <rect x="110" y="540" width="180" height="28" rx="5" fill="#061209" stroke="var(--accent-mint)" strokeWidth="1.2" />
+            <text x="200" y="560" textAnchor="middle" fill="var(--accent-mint)" fontSize="14" letterSpacing="4" fontWeight="900" fontFamily="serif">
               ONE DOLLAR
             </text>
           </g>

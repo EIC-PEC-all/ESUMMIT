@@ -8,22 +8,37 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        void: '#070B08',          // deep dark background from EIC
-        panel: '#0D140E',         // dark green surface panel from EIC
-        'panel-alt': '#111A12',   // slightly lighter panel surface from EIC
-        green: '#50E3C2',         // electric emerald brand accent from EIC
-        mint: '#50E3C2',          // mint emerald alias
-        amber: '#E8A33D',         // secondary accent amber from EIC
-        orange: '#E8A33D',        // orange alias
-        volt: '#50E3C2',          // brand accent alias
-        silver: '#E5E7EB',        // high-shine silver metallic
-        'silver-dim': '#9CA3AF',  // muted silver slate
-        'green-dim': 'rgba(80, 227, 194, 0.15)',
-        primary: '#F5F5F0',       // cream off-white text from EIC
-        muted: '#8A9488',         // sage slate muted text from EIC
+        // Neon Cyber-Finance Core Palette (CSS Variable Backed)
+        void: 'var(--bg-void)',
+        panel: 'var(--bg-panel)',
+        'panel-alt': 'var(--bg-panel-alt)',
+        
+        // Accents
+        mint: 'var(--accent-mint)',
+        green: 'var(--accent-green)',
+        volt: 'var(--accent-green)',
+        blue: 'var(--accent-blue)',
+        coral: 'var(--accent-coral)',
+        orange: 'var(--accent-coral)',
+        amber: 'var(--accent-coral)',
+        
+        // Neutrals & Effects
+        primary: 'var(--text-primary)',
+        secondary: 'var(--text-secondary)',
+        muted: 'var(--text-muted)',
+        'green-dim': 'var(--accent-green-dim)',
+        'border-subtle': 'var(--border-subtle)',
+        'border-panel': 'var(--border-panel)',
+        'border-glow': 'var(--border-glow)',
+      },
+      borderColor: {
+        DEFAULT: 'var(--border-subtle)',
+        subtle: 'var(--border-subtle)',
+        panel: 'var(--border-panel)',
+        glow: 'var(--border-glow)',
       },
       fontFamily: {
-        display: ['var(--font-bebas)', 'sans-serif'],
+        display: ['var(--font-khaviax)', 'sans-serif'],
         body: ['var(--font-inter)', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'monospace'],
       },
