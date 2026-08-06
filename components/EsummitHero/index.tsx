@@ -1,7 +1,7 @@
 'use client'
 // components/EsummitHero/index.tsx
 // Premium E-Summit Hero — Stock Market Bull Edition
-// Dark #070B08 bg · Volt-green #7ED321 accents · Kanit font
+// Dark #070B08 bg · Volt-green var(--accent-mint) accents · Kanit font
 // Features: live ticker strip · floating market badges · orbit ring · magnetic bull
 
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
@@ -26,21 +26,16 @@ const TICKERS = [
 
 // Floating badge data around the bull
 const BADGES = [
-  { label: 'NIFTY',   value: '+2.4%', color: '#7ED321', icon: '📈', delay: 0.9,  pos: { top: '14%',    left: '-22%' } },
+  { label: 'NIFTY',   value: '+2.4%', color: 'var(--accent-mint)', icon: '📈', delay: 0.9,  pos: { top: '14%',    left: '-22%' } },
   { label: 'BTC',     value: '+5.1%', color: '#FF8C42', icon: '₿',  delay: 1.05, pos: { top: '14%',    right: '-22%' } },
-  { label: 'SENSEX',  value: '+1.8%', color: '#7ED321', icon: '📊', delay: 1.2,  pos: { bottom: '30%', left: '-26%' } },
+  { label: 'SENSEX',  value: '+1.8%', color: 'var(--accent-mint)', icon: '📊', delay: 1.2,  pos: { bottom: '30%', left: '-26%' } },
   { label: 'GOLD',    value: '+0.6%', color: '#FFD700', icon: '🥇', delay: 1.35, pos: { bottom: '30%', right: '-26%' } },
 ]
 
 // Sparkline mini-chart SVG points
 const SPARKLINE_PTS = '0,40 12,32 24,36 36,20 48,28 60,12 72,18 84,6 96,14 108,4'
 
-const NAV_LINKS = [
-  { label: 'About',      href: '#esummit-about' },
-  { label: 'Events',     href: '#esummit-tracks' },
-  { label: 'Highlights', href: '#esummit-highlights' },
-  { label: 'Register',   href: '/register' },
-]
+
 
 /** Animated live ticker strip */
 function TickerStrip() {
@@ -54,16 +49,16 @@ function TickerStrip() {
       >
         {items.map((t, i) => (
           <span key={i} className="inline-flex items-center gap-2 shrink-0">
-            <span className="font-mono-data text-[11px] font-bold uppercase tracking-widest" style={{ color: '#8A9488' }}>
+            <span className="font-mono-data text-[11px] font-bold uppercase tracking-widest" style={{ color: '#9CA3AF' }}>
               {t.symbol}
             </span>
-            <span className="font-mono-data text-[11px] font-bold" style={{ color: '#F5F5F0' }}>
+            <span className="font-mono-data text-[11px] font-bold" style={{ color: '#FFFFFF' }}>
               {t.val}
             </span>
-            <span className="font-mono-data text-[11px] font-bold" style={{ color: '#7ED321' }}>
+            <span className="font-mono-data text-[11px] font-bold" style={{ color: 'var(--accent-mint)' }}>
               {t.change}
             </span>
-            <span className="text-[#7ED321]/30 text-xs">·</span>
+            <span className="text-[var(--accent-mint)]/30 text-xs">·</span>
           </span>
         ))}
       </motion.div>
@@ -77,13 +72,13 @@ function Sparkline() {
     <svg viewBox="0 0 108 50" className="w-full h-full" fill="none">
       <polyline
         points={SPARKLINE_PTS}
-        stroke="#7ED321"
+        stroke="var(--accent-mint)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
         opacity="0.7"
       />
-      <circle cx="108" cy="4" r="3" fill="#7ED321" opacity="0.9" />
+      <circle cx="108" cy="4" r="3" fill="var(--accent-mint)" opacity="0.9" />
     </svg>
   )
 }
@@ -98,7 +93,7 @@ export default function EsummitHero() {
     <section
       id="esummit-hero"
       className="esummit-section relative h-screen flex flex-col overflow-hidden"
-      style={{ background: '#070B08', fontFamily: "'Kanit', sans-serif" }}
+      style={{ background: '#040605' }}
     >
       {/* ── Deep background grid ── */}
       <div
@@ -136,35 +131,18 @@ export default function EsummitHero() {
             style={{ background: 'rgba(126,211,33,0.08)', borderColor: 'rgba(126,211,33,0.35)' }}
           >
             <motion.span
-              className="w-2 h-2 rounded-full bg-[#7ED321]"
+              className="w-2 h-2 rounded-full bg-[var(--accent-mint)]"
               animate={{ opacity: [1, 0.3, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
             />
-            <span className="font-mono-data text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[#7ED321]">
+            <span className="font-mono-data text-[10px] sm:text-xs uppercase tracking-widest font-bold text-[var(--accent-mint)]">
               LIVE — Registration Open
             </span>
-            <ArrowUpRight size={12} className="text-[#7ED321]" />
+            <ArrowUpRight size={12} className="text-[var(--accent-mint)]" />
           </div>
         </motion.div>
 
-        {/* Nav */}
-        <motion.nav
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.08, ease: easing }}
-          className="flex justify-between items-center px-6 md:px-10 pt-4 md:pt-5"
-        >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="text-sm md:text-lg lg:text-[1.4rem] font-medium uppercase tracking-wider transition-colors duration-200 hover:text-[#7ED321]"
-              style={{ color: '#F5F5F0' }}
-            >
-              {link.label}
-            </a>
-          ))}
-        </motion.nav>
+
       </div>
 
       {/* ── Ticker strip ── */}
@@ -183,10 +161,9 @@ export default function EsummitHero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: easing }}
-          className="hero-heading-green font-black uppercase tracking-tight leading-none whitespace-nowrap w-full
+          className="hero-heading-green font-display font-black uppercase tracking-tight leading-none whitespace-nowrap w-full
             text-[13vw] sm:text-[14vw] md:text-[15vw] lg:text-[16vw]
             mt-3 sm:mt-2 md:-mt-1 px-6 md:px-10"
-          style={{ fontFamily: "'Kanit', sans-serif" }}
         >
           PEC E&#8209;Summit
         </motion.h1>
@@ -243,13 +220,13 @@ export default function EsummitHero() {
               <path
                 d="M 100 12 A 88 88 0 0 1 185 65"
                 fill="none"
-                stroke="#7ED321"
+                stroke="var(--accent-mint)"
                 strokeWidth="2"
                 strokeLinecap="round"
                 opacity="0.6"
               />
               {/* Dot at arc end */}
-              <circle cx="185" cy="65" r="3.5" fill="#7ED321" opacity="0.9" />
+              <circle cx="185" cy="65" r="3.5" fill="var(--accent-mint)" opacity="0.9" />
             </svg>
           </motion.div>
 
@@ -284,7 +261,7 @@ export default function EsummitHero() {
             >
               <span className="text-sm leading-none">{b.icon}</span>
               <div className="flex flex-col leading-tight">
-                <span className="font-mono-data text-[9px] uppercase tracking-widest font-bold" style={{ color: '#8A9488' }}>
+                <span className="font-mono-data text-[9px] uppercase tracking-widest font-bold" style={{ color: '#9CA3AF' }}>
                   {b.label}
                 </span>
                 <span className="font-mono-data text-[13px] font-black" style={{ color: b.color }}>
@@ -309,12 +286,12 @@ export default function EsummitHero() {
             transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
           >
             <motion.span
-              className="w-1.5 h-1.5 rounded-full bg-[#7ED321]"
+              className="w-1.5 h-1.5 rounded-full bg-[var(--accent-mint)]"
               animate={{ opacity: [1, 0.2, 1] }}
               transition={{ duration: 0.8, repeat: Infinity }}
             />
-            <TrendingUp size={11} className="text-[#7ED321]" strokeWidth={2.5} />
-            <span className="font-mono-data text-[10px] uppercase tracking-[0.2em] font-bold text-[#7ED321]">
+            <TrendingUp size={11} className="text-[var(--accent-mint)]" strokeWidth={2.5} />
+            <span className="font-mono-data text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--accent-mint)]">
               Bull Market
             </span>
           </motion.div>
@@ -336,7 +313,7 @@ export default function EsummitHero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.5, duration: 0.5 }}
           >
-            <p className="font-mono-data text-[8px] uppercase tracking-widest text-[#8A9488] mb-1">Live Chart</p>
+            <p className="font-mono-data text-[8px] uppercase tracking-widest text-muted mb-1">Live Chart</p>
             <Sparkline />
           </motion.div>
 
@@ -378,14 +355,14 @@ export default function EsummitHero() {
           className="flex flex-col gap-1"
         >
           <div className="flex items-center gap-1.5">
-            <Zap size={11} className="text-[#7ED321] fill-[#7ED321]" />
-            <span className="font-mono-data text-[10px] uppercase tracking-widest text-[#7ED321] font-bold">
+            <Zap size={11} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
+            <span className="font-mono-data text-[10px] uppercase tracking-widest text-[var(--accent-mint)] font-bold">
               March 15–16, 2026
             </span>
           </div>
           <p
-            className="font-light uppercase tracking-wide leading-snug max-w-[160px] sm:max-w-[220px] md:max-w-[280px]"
-            style={{ color: '#8A9488', fontFamily: "'Kanit', sans-serif", fontSize: 'clamp(0.7rem, 1.3vw, 1.3rem)' }}
+            className="font-display font-light uppercase tracking-wide leading-snug max-w-[160px] sm:max-w-[220px] md:max-w-[280px]"
+            style={{ color: '#9CA3AF', fontSize: 'clamp(0.7rem, 1.3vw, 1.3rem)' }}
           >
             North India&apos;s premier entrepreneurship summit — where ideas raise capital
           </p>
@@ -409,8 +386,8 @@ export default function EsummitHero() {
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg"
                 style={{ background: 'rgba(126,211,33,0.06)', border: '1px solid rgba(126,211,33,0.2)' }}
               >
-                <span className="text-[#7ED321]">{s.icon}</span>
-                <span className="font-mono-data text-[10px] text-[#8A9488] uppercase tracking-widest font-bold">{s.label}</span>
+                <span className="text-[var(--accent-mint)]">{s.icon}</span>
+                <span className="font-mono-data text-[10px] text-muted uppercase tracking-widest font-bold">{s.label}</span>
               </div>
             ))}
           </div>

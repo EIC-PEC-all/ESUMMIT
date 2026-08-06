@@ -1,92 +1,100 @@
 'use client'
-// components/Timeline/index.tsx
-// Vertical Schedule Timeline with Money/Fintech theme styling
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Clock, Calendar, Zap, ShieldCheck, MapPin } from 'lucide-react'
+import { Clock, Calendar, Zap, MapPin, Navigation, Filter, ArrowUpRight } from 'lucide-react'
 import { SCHEDULE } from '@/lib/data'
 import { onAgentEvent } from '@/lib/events'
 import Link from 'next/link'
 import CircuitBoard from '../Hero/CircuitBoard'
+import CampusMap from './CampusMap'
 
 type ScheduleEvent = typeof SCHEDULE.day1.events[0]
 
 function TimelineEventCard({
   event,
-  isHighlighted,
+  isSelected,
+  onSelect,
   index,
 }: {
   event: ScheduleEvent
-  isHighlighted: boolean
+  isSelected: boolean
+  onSelect: () => void
   index: number
 }) {
   return (
     <motion.div
       id={`schedule-row-${event.id}`}
-      initial={{ opacity: 0, x: -24 }}
+      initial={{ opacity: 0, x: 20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      className={`relative pl-8 sm:pl-14 pb-10 border-l-2 ${
-        isHighlighted
-          ? 'border-[#7ED321] shadow-[0_0_20px_#7ED321] highlight-active'
-          : 'border-[#7ED321]/30 hover:border-[#7ED321]'
-      } transition-colors duration-300 group`}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
+      onClick={onSelect}
+      className={`relative p-5 sm:p-6 rounded-2xl border transition-all duration-300 cursor-pointer group ${
+        isSelected
+          ? 'bg-[#0D2420] [.light_&]:bg-[#2A3C1A] border-mint [.light_&]:border-[#C8E696] shadow-xl translate-x-1'
+          : 'bg-[#061210]/90 [.light_&]:bg-[#18230F]/90 hover:bg-[#0D2420]/80 [.light_&]:hover:bg-[#202E14] border-mint/20 [.light_&]:border-[#4E6527]/50 shadow-md'
+      }`}
     >
-      {/* Node Bullet on Vertical Pipeline Spine */}
+      {/* Top Gloss Line */}
       <div
-        className="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[#070B08] border-2 transition-all duration-300 group-hover:scale-125 flex items-center justify-center"
-        style={{
-          borderColor: isHighlighted ? '#7ED321' : '#7ED321',
-          boxShadow: isHighlighted ? '0 0 20px #7ED321' : '0 0 8px rgba(126,211,33,0.4)',
-        }}
-      >
-        <div className="w-1.5 h-1.5 rounded-full bg-[#7ED321]" />
+        className={`absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl transition-opacity duration-300 ${
+          isSelected
+            ? 'bg-gradient-to-r from-mint via-white to-mint opacity-100'
+            : 'bg-gradient-to-r from-transparent via-mint/30 to-transparent opacity-0 group-hover:opacity-100'
+        }`}
+      />
+
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+        {/* Time Badge */}
+        <div className="flex items-center gap-1.5 font-mono-data text-xs text-mint [.light_&]:text-[#C8E696] font-bold tabular-nums">
+          <Clock size={13} className="text-mint [.light_&]:text-[#C8E696]" />
+          <span>{event.time}</span>
+        </div>
+
+        {/* Type Badge */}
+        <span
+          className={`font-mono-data text-[10px] uppercase font-bold px-2.5 py-0.5 rounded border transition-colors ${
+            isSelected
+              ? 'bg-mint text-void border-mint [.light_&]:bg-[#C8E696] [.light_&]:text-[#0A110E] [.light_&]:border-[#C8E696]'
+              : 'bg-mint/15 text-mint border-mint/30 [.light_&]:bg-[#C8E696]/15 [.light_&]:text-[#C8E696] [.light_&]:border-[#C8E696]/30'
+          }`}
+        >
+          {event.type}
+        </span>
       </div>
 
-      {/* Main Event Card */}
-      <div className="p-6 sm:p-7 rounded-2xl bg-[#0D140E] border border-[#7ED321]/20 hover:border-[#7ED321] transition-all duration-300 shadow-xl group-hover:-translate-y-1 relative overflow-hidden">
-        {/* Top Metallic Gloss Line */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#7ED321]/30 to-transparent" />
+      {/* Event Title — CRISP HIGH CONTRAST WHITE TEXT */}
+      <h3
+        className={`font-display text-xl sm:text-2xl mb-2 transition-colors ${
+          isSelected ? 'text-mint [.light_&]:text-[#C8E696] font-bold' : 'text-white font-bold group-hover:text-mint [.light_&]:group-hover:text-[#C8E696]'
+        }`}
+      >
+        {event.title}
+      </h3>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-          {/* Time */}
-          <div className="flex items-center gap-2 font-mono-data text-xs text-[#7ED321] font-bold tabular-nums">
-            <Clock size={14} className="text-[#7ED321]" />
-            <span>{event.time}</span>
-          </div>
-
-          {/* Type Badge */}
-          <span className="font-mono-data text-[10px] uppercase font-bold px-3 py-1 rounded bg-[#7ED321]/15 text-[#7ED321] border border-[#7ED321]/30">
-            {event.type}
-          </span>
+      {/* Venue & Route Meta Footer */}
+      <div className="mt-3 pt-3 border-t border-mint/20 [.light_&]:border-[#4E6527]/40 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 font-mono-data text-xs text-gray-200">
+          <MapPin size={13} className="text-mint [.light_&]:text-[#C8E696] shrink-0" />
+          <span className="text-gray-200 font-medium">{event.venueName}</span>
         </div>
 
-        {/* Title */}
-        <h3 className="font-display text-2xl sm:text-3xl text-white group-hover:text-[#7ED321] transition-colors mb-2">
-          {event.title}
-        </h3>
-
-        {/* Track & Venue Footer */}
-        <div className="mt-4 pt-3 border-t border-[#7ED321]/15 flex flex-wrap items-center justify-between gap-2">
-          {event.track ? (
-            <span className="font-mono-data text-[10px] uppercase text-[#7ED321] font-bold flex items-center gap-1">
-              <Zap size={11} className="text-[#7ED321] fill-[#7ED321]" />
-              Track: {event.track}
-            </span>
-          ) : (
-            <span className="font-mono-data text-[10px] uppercase text-[#8A9488] flex items-center gap-1">
-              <ShieldCheck size={11} className="text-[#8A9488]" />
-              PEC Official Session
-            </span>
-          )}
-
-          <span className="font-mono-data text-[10px] text-[#8A9488] flex items-center gap-1">
-            <MapPin size={11} className="text-[#7ED321]" />
-            PEC Main Campus, Sector 12
-          </span>
-        </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            onSelect()
+          }}
+          className={`inline-flex items-center gap-1 font-mono-data text-[11px] uppercase font-bold px-3 py-1.5 rounded-xl transition-all ${
+            isSelected
+              ? 'bg-mint text-void shadow-md [.light_&]:bg-[#C8E696] [.light_&]:text-[#0A110E]'
+              : 'bg-white/10 text-white border border-white/20 hover:bg-mint hover:text-void [.light_&]:hover:bg-[#C8E696] [.light_&]:hover:text-[#0A110E]'
+          }`}
+        >
+          <Navigation size={11} className={isSelected ? 'animate-bounce' : ''} />
+          <span>{isSelected ? 'Route Active' : 'View Path'}</span>
+          <span className="text-[10px] opacity-80">({event.walkTime})</span>
+        </button>
       </div>
     </motion.div>
   )
@@ -94,17 +102,50 @@ function TimelineEventCard({
 
 export default function Timeline() {
   const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1')
-  const [highlightId, setHighlightId] = useState<string | null>(null)
+  const [typeFilter, setTypeFilter] = useState<string>('all')
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
+  const [mobileView, setMobileView] = useState<'both' | 'map' | 'list'>('both')
 
   const dayData = SCHEDULE[activeDay]
 
+  const filteredEvents = dayData.events.filter((event) => {
+    if (typeFilter === 'all') return true
+    return event.type.toLowerCase() === typeFilter.toLowerCase()
+  })
+
+  const selectedEvent =
+    filteredEvents.find((e) => e.id === selectedEventId) ||
+    dayData.events.find((e) => e.id === selectedEventId) ||
+    null
+
+  const handleSelectEvent = (event: ScheduleEvent | null) => {
+    if (!event) {
+      setSelectedEventId(null)
+      return
+    }
+    setSelectedEventId(event.id)
+  }
+
+  const handleDaySwitch = (day: 'day1' | 'day2') => {
+    setActiveDay(day)
+    setSelectedEventId(null)
+  }
+
   useEffect(() => {
-    const unsub = onAgentEvent((event) => {
-      if (event.type === 'highlightScheduleRow') {
-        const id = event.payload.id as string
-        setHighlightId(id)
-        document.getElementById(`schedule-row-${id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-        setTimeout(() => setHighlightId(null), 4000)
+    const unsub = onAgentEvent((detail: any) => {
+      if (detail.type === 'highlightScheduleRow') {
+        const id = detail.id as string
+        const inDay1 = SCHEDULE.day1.events.some((e) => e.id === id)
+        const inDay2 = SCHEDULE.day2.events.some((e) => e.id === id)
+        if (inDay1) setActiveDay('day1')
+        else if (inDay2) setActiveDay('day2')
+        setSelectedEventId(id)
+
+        setTimeout(() => {
+          document
+            .getElementById(`schedule-row-${id}`)
+            ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }, 150)
       }
     })
     return unsub
@@ -113,94 +154,168 @@ export default function Timeline() {
   return (
     <section
       id="schedule"
-      className="py-24 lg:py-32 relative bg-[#070B08] border-t border-b border-[#7ED321]/15 overflow-hidden"
+      className="pt-32 pb-20 lg:pt-40 lg:pb-32 relative bg-[#0A1A17] [.light_&]:bg-[#1E2B12] text-white border-t border-b border-mint/20 [.light_&]:border-[#4E6527]/50 overflow-hidden"
       aria-labelledby="schedule-heading"
     >
-      {/* Circuit overlay */}
       <CircuitBoard prefersReduced={false} />
 
-      {/* Current Line Top Accent */}
-      <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-mint/40 to-transparent pointer-events-none" />
 
       <div className="section-container relative z-10">
-        {/* Header */}
+        {/* Section Header */}
         <motion.div
-          className="mb-14 flex flex-col sm:flex-row sm:items-end justify-between gap-6"
-          initial={{ opacity: 0, y: 24 }}
+          className="mb-10 lg:mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6"
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
+          transition={{ duration: 0.6 }}
         >
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
-                Summit Agenda &amp; Timetable
-              </p>
-            </div>
             <h2
               id="schedule-heading"
-              className="font-display leading-none"
-              style={{ fontSize: 'clamp(40px, 5vw, 76px)', color: 'var(--text-primary)' }}
+              className="font-display leading-none text-white"
+              style={{ fontSize: 'clamp(38px, 5vw, 76px)' }}
             >
-              SUMMIT <br />
-              <span className="text-stroke-green">SCHEDULE</span>
+              EVENT <br />
+              <span className="text-mint [.light_&]:text-[#C8E696]">TIMELINE &amp; MAP</span>
             </h2>
           </div>
 
-          <Link
-            href="/schedule"
-            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-[#7ED321] hover:text-white transition-colors border-b border-[#7ED321]/40 pb-1"
-          >
-            View Interactive Vertical Timetable &rarr;
-          </Link>
+          <div className="flex flex-wrap items-center gap-4">
+            <Link
+              href="/schedule"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-mint [.light_&]:text-[#C8E696] hover:text-white transition-colors border-b border-mint/40 [.light_&]:border-[#C8E696]/40 pb-1"
+            >
+              Full Interactive Schedule <ArrowUpRight size={14} />
+            </Link>
+          </div>
         </motion.div>
 
-        {/* Day Selector Pills */}
-        <div className="flex items-center gap-4 mb-14">
-          {(['day1', 'day2'] as const).map((dayKey) => {
-            const isActive = activeDay === dayKey
-            const d = SCHEDULE[dayKey]
-            return (
+        {/* Day Selector Tabs & Filters Row */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 pb-6 border-b border-mint/20 [.light_&]:border-[#4E6527]/30">
+          {/* Day 1 / Day 2 Tabs */}
+          <div className="flex items-center gap-3">
+            {(['day1', 'day2'] as const).map((dayKey) => {
+              const isActive = activeDay === dayKey
+              const d = SCHEDULE[dayKey]
+              return (
+                <button
+                  key={dayKey}
+                  onClick={() => handleDaySwitch(dayKey)}
+                  className={`px-5 py-3 rounded-2xl font-mono-data text-xs uppercase tracking-wider flex items-center gap-2.5 transition-all duration-200 ${
+                    isActive
+                      ? 'bg-mint text-void font-bold shadow-lg [.light_&]:bg-[#C8E696] [.light_&]:text-[#0A110E]'
+                      : 'bg-white/10 text-white hover:text-mint [.light_&]:hover:text-[#C8E696] border border-white/20'
+                  }`}
+                >
+                  <Calendar size={14} />
+                  <span>
+                    {d.label} — {d.date}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Event Type Filter Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar max-w-full pb-2 sm:pb-0">
+            <Filter size={13} className="text-mint [.light_&]:text-[#C8E696] shrink-0 hidden md:block" />
+            {['all', 'keynote', 'panel', 'competition', 'hackathon', 'expo'].map((type) => (
               <button
-                key={dayKey}
-                onClick={() => setActiveDay(dayKey)}
-                className="px-6 py-3.5 rounded-xl font-mono-data text-xs uppercase tracking-wider flex items-center gap-2 transition-all duration-200"
-                style={{
-                  background: isActive ? '#7ED321' : '#0D140E',
-                  color: isActive ? '#070B08' : '#F5F5F0',
-                  fontWeight: isActive ? 700 : 500,
-                  border: `1px solid ${isActive ? 'transparent' : 'rgba(126,211,33,0.3)'}`,
-                  boxShadow: isActive ? '0 0 20px rgba(126,211,33,0.4)' : undefined,
-                }}
+                key={type}
+                onClick={() => setTypeFilter(type)}
+                className={`px-3.5 py-2 rounded-xl font-mono-data text-[11px] uppercase tracking-wider whitespace-nowrap transition-all ${
+                  typeFilter === type
+                    ? 'bg-mint text-void font-bold shadow-md [.light_&]:bg-[#C8E696] [.light_&]:text-[#0A110E]'
+                    : 'bg-white/10 text-white hover:text-mint [.light_&]:hover:text-[#C8E696] border border-white/20'
+                }`}
               >
-                <Calendar size={14} />
-                <span>{d.label} ({d.date})</span>
+                {type}
               </button>
-            )
-          })}
+            ))}
+          </div>
         </div>
 
-        {/* Vertical Pipeline Events Stream */}
-        <div className="max-w-3xl relative">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeDay}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.3 }}
-            >
-              {dayData.events.map((event, idx) => (
-                <TimelineEventCard
-                  key={event.id}
-                  event={event}
-                  isHighlighted={highlightId === event.id}
-                  index={idx}
-                />
-              ))}
-            </motion.div>
-          </AnimatePresence>
+        {/* Mobile View Toggle Pills */}
+        <div className="lg:hidden flex items-center justify-center p-1 rounded-2xl bg-white/10 border border-white/20 mb-6">
+          <button
+            onClick={() => setMobileView('both')}
+            className={`flex-1 py-2 font-mono-data text-xs uppercase font-bold rounded-xl transition-all ${
+              mobileView === 'both' ? 'bg-[#C8E696] text-[#0A110E]' : 'text-white'
+            }`}
+          >
+            Split View
+          </button>
+          <button
+            onClick={() => setMobileView('map')}
+            className={`flex-1 py-2 font-mono-data text-xs uppercase font-bold rounded-xl transition-all ${
+              mobileView === 'map' ? 'bg-[#C8E696] text-[#0A110E]' : 'text-white'
+            }`}
+          >
+            Map
+          </button>
+          <button
+            onClick={() => setMobileView('list')}
+            className={`flex-1 py-2 font-mono-data text-xs uppercase font-bold rounded-xl transition-all ${
+              mobileView === 'list' ? 'bg-[#C8E696] text-[#0A110E]' : 'text-white'
+            }`}
+          >
+            List
+          </button>
+        </div>
+
+        {/* Main 2-Column Split Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Column: Interactive Leaflet Map */}
+          <div
+            className={`lg:col-span-6 xl:col-span-6 sticky top-28 ${
+              mobileView === 'list' ? 'hidden lg:block' : 'block'
+            }`}
+          >
+            <CampusMap
+              events={dayData.events}
+              selectedEvent={selectedEvent}
+              onSelectEvent={handleSelectEvent}
+              activeDayLabel={dayData.label}
+            />
+          </div>
+
+          {/* Right Column: Events Stream */}
+          <div
+            className={`lg:col-span-6 xl:col-span-6 space-y-4 ${
+              mobileView === 'map' ? 'hidden lg:block' : 'block'
+            }`}
+          >
+            <div className="flex items-center justify-between px-2 mb-2">
+              <span className="font-mono-data text-xs uppercase text-gray-200">
+                Select an event to preview turning path
+              </span>
+              <span className="font-mono-data text-xs text-mint [.light_&]:text-[#C8E696] font-bold">
+                {filteredEvents.length} Sessions
+              </span>
+            </div>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`${activeDay}-${typeFilter}`}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4 max-h-[660px] overflow-y-auto pr-1 custom-scrollbar"
+              >
+                {filteredEvents.map((event, idx) => (
+                  <TimelineEventCard
+                    key={event.id}
+                    event={event}
+                    isSelected={selectedEventId === event.id}
+                    onSelect={() => handleSelectEvent(event)}
+                    index={idx}
+                  />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </section>

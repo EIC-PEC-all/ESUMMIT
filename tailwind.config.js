@@ -8,21 +8,37 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        void: '#0D1110',          // deep dark void
-        panel: '#161F1B',         // dark green surface panel
-        green: '#1E4637',         // official logo forest green
-        orange: '#FF9900',        // official logo vibrant orange-amber
-        amber: '#FF9900',         // alias for vibrant orange
-        volt: '#FF9900',          // alias for vibrant orange
-        silver: '#E5E7EB',        // high-shine silver metallic
-        'silver-dim': '#9CA3AF',  // muted silver slate
-        'orange-dim': '#B36B00',  // muted orange border
-        'volt-dim': '#B36B00',    // muted orange border alias
-        primary: '#F9FAF6',       // cream off-white text
-        muted: '#7C8E85',         // sage slate muted text
+        // Neon Cyber-Finance Core Palette (CSS Variable Backed)
+        void: 'var(--bg-void)',
+        panel: 'var(--bg-panel)',
+        'panel-alt': 'var(--bg-panel-alt)',
+        
+        // Accents
+        mint: 'var(--accent-mint)',
+        green: 'var(--accent-green)',
+        volt: 'var(--accent-green)',
+        blue: 'var(--accent-blue)',
+        coral: 'var(--accent-coral)',
+        orange: 'var(--accent-coral)',
+        amber: 'var(--accent-coral)',
+        
+        // Neutrals & Effects
+        primary: 'var(--text-primary)',
+        secondary: 'var(--text-secondary)',
+        muted: 'var(--text-muted)',
+        'green-dim': 'var(--accent-green-dim)',
+        'border-subtle': 'var(--border-subtle)',
+        'border-panel': 'var(--border-panel)',
+        'border-glow': 'var(--border-glow)',
+      },
+      borderColor: {
+        DEFAULT: 'var(--border-subtle)',
+        subtle: 'var(--border-subtle)',
+        panel: 'var(--border-panel)',
+        glow: 'var(--border-glow)',
       },
       fontFamily: {
-        display: ['var(--font-bebas)', 'sans-serif'],
+        display: ['var(--font-khaviax)', 'sans-serif'],
         body: ['var(--font-inter)', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'monospace'],
       },

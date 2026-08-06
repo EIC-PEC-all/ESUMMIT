@@ -11,12 +11,11 @@ function ViewButton() {
   return (
     <button
       className="rounded-full border-2 font-medium uppercase tracking-widest transition-all duration-200
-        hover:bg-[#7ED321]/10 hover:shadow-[0_0_20px_rgba(126,211,33,0.3)]
+        hover:bg-mint/10 hover:shadow-md
         px-6 py-2.5 sm:px-8 sm:py-3 text-xs sm:text-sm whitespace-nowrap"
       style={{
-        borderColor: '#7ED321',
-        color: '#7ED321',
-        fontFamily: "'Kanit', sans-serif",
+        borderColor: 'var(--accent-mint)',
+        color: 'var(--accent-mint)',
       }}
     >
       Learn More
@@ -42,21 +41,21 @@ function SpeakerChip({
     >
       {/* Avatar circle */}
       <div
-        className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 font-bold text-[10px]"
-        style={{ background: color, color: '#070B08', fontFamily: "'Kanit', sans-serif" }}
+        className="font-display w-7 h-7 rounded-full flex items-center justify-center shrink-0 font-bold text-[10px]"
+        style={{ background: color, color: '#040605' }}
       >
         {initials}
       </div>
       <div className="flex flex-col leading-tight">
         <span
-          className="font-medium text-xs sm:text-sm whitespace-nowrap"
-          style={{ color: '#F5F5F0', fontFamily: "'Kanit', sans-serif" }}
+          className="font-display font-medium text-xs sm:text-sm whitespace-nowrap"
+          style={{ color: 'var(--text-primary)' }}
         >
           {name}
         </span>
         <span
-          className="font-light text-[10px] sm:text-xs whitespace-nowrap"
-          style={{ color: '#7ED321', fontFamily: "'Kanit', sans-serif", opacity: 0.8 }}
+          className="font-display font-light text-[10px] sm:text-xs whitespace-nowrap"
+          style={{ color: 'var(--accent-mint)', opacity: 0.8 }}
         >
           {title}
         </span>
@@ -110,6 +109,31 @@ const CARDS = [
       col2:       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=85&auto=format&fit=crop', // entrepreneur presenting
     },
   },
+  {
+    num: '04',
+    category: 'Panel Discussions',
+    name: 'Playbooks & AI',
+    speakers: [
+      { name: 'Sameer Khanna', title: 'Angel Investor', initials: 'SK', color: '#9B5CFF' },
+      { name: 'Vikram Bose', title: 'VP Product, Razorpay', initials: 'VB', color: '#3DD9FF' },
+    ],
+    images: {
+      col1Top:    'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=700&q=85&auto=format&fit=crop',
+      col1Bottom: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=700&q=85&auto=format&fit=crop',
+      col2:       'https://images.unsplash.com/photo-1558403194-611308249627?w=700&q=85&auto=format&fit=crop',
+    },
+  },
+  {
+    num: '05',
+    category: 'Startup Expo',
+    name: '30+ Exhibitors',
+    speakers: [],
+    images: {
+      col1Top:    'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=85&auto=format&fit=crop',
+      col1Bottom: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=700&q=85&auto=format&fit=crop',
+      col2:       'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=700&q=85&auto=format&fit=crop',
+    },
+  },
 ]
 
 const TOTAL = CARDS.length
@@ -137,7 +161,7 @@ function HighlightCard({
           border-2 p-4 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4"
         style={{
           borderColor: 'rgba(126, 211, 33, 0.4)',
-          background: '#0D140E',
+          background: 'var(--bg-panel)',
           boxShadow: '0 0 60px rgba(126, 211, 33, 0.05) inset',
           scale,
           originY: 0,
@@ -148,13 +172,12 @@ function HighlightCard({
           <div className="flex items-baseline gap-4 sm:gap-6">
             {/* Number */}
             <span
-              className="font-black leading-none select-none"
+              className="font-display font-black leading-none select-none"
               style={{
-                fontFamily: "'Kanit', sans-serif",
                 fontSize: 'clamp(2.5rem, 8vw, 120px)',
                 lineHeight: 0.9,
-                color: '#7ED321',
-                textShadow: '0 0 40px rgba(126, 211, 33, 0.4)',
+                color: 'var(--accent-mint)',
+                textShadow: '0 0 40px var(--accent-green-glow)',
               }}
             >
               {card.num}
@@ -164,7 +187,7 @@ function HighlightCard({
               <span
                 className="font-mono-data uppercase tracking-widest"
                 style={{
-                  color: '#7ED321',
+                  color: 'var(--accent-mint)',
                   fontSize: 'clamp(0.6rem, 1vw, 0.85rem)',
                   opacity: 0.7,
                 }}
@@ -172,10 +195,9 @@ function HighlightCard({
                 {card.category}
               </span>
               <span
-                className="font-medium uppercase"
+                className="font-display font-medium uppercase"
                 style={{
-                  color: '#F5F5F0',
-                  fontFamily: "'Kanit', sans-serif",
+                  color: 'var(--text-primary)',
                   fontSize: 'clamp(1rem, 2.2vw, 2.1rem)',
                 }}
               >
@@ -190,7 +212,7 @@ function HighlightCard({
         <div className="flex flex-wrap items-center gap-2">
           <span
             className="font-mono-data text-[10px] uppercase tracking-widest mr-1"
-            style={{ color: '#7ED321', opacity: 0.5 }}
+            style={{ color: 'var(--accent-mint)', opacity: 0.5 }}
           >
             Speakers:
           </span>
@@ -253,8 +275,7 @@ export default function EsummitHighlights() {
       ref={containerRef}
       className="esummit-section rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]
         -mt-10 sm:-mt-12 md:-mt-14 z-10 relative
-        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
-      style={{ background: '#070B08', fontFamily: "'Kanit', sans-serif" }}
+        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-[#0D2420] [.light_&]:bg-[#2A3C1A] text-white border-t border-mint/30 [.light_&]:border-[#4E6527]/50"
       aria-labelledby="highlights-heading"
     >
       {/* Green top divider */}
@@ -265,10 +286,9 @@ export default function EsummitHighlights() {
 
       <h2
         id="highlights-heading"
-        className="hero-heading-green font-black uppercase leading-none tracking-tight text-center
+        className="text-white drop-shadow-lg font-display font-black uppercase leading-none tracking-tight text-center
           mb-16 sm:mb-20 md:mb-24"
         style={{
-          fontFamily: "'Kanit', sans-serif",
           fontSize: 'clamp(3rem, 12vw, 160px)',
         }}
       >

@@ -18,11 +18,12 @@
 import { Toaster } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 
-// ── Creative landing sections ──────────────────────────────────────────────
-import EsummitHero from '@/components/EsummitHero'
+import Nav from '@/components/Nav'
+import NewHero from '@/components/Hero/NewHero'
+import StatBurst from '@/components/StatBurst'
 import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
-import EsummitTracks from '@/components/EsummitTracks'
+import Vdo2Showcase from '@/components/Vdo2Showcase'
 
 // Dynamic (Framer Motion scroll hooks — better as client-only)
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), {
@@ -30,11 +31,9 @@ const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), 
 })
 
 // ── Original detailed sections ─────────────────────────────────────────────
-import StatBurst from '@/components/StatBurst'
-import Speakers from '@/components/Speakers'
 import Sponsors from '@/components/Sponsors'
 import FAQ from '@/components/FAQ'
-import Footer from '@/components/Footer'
+import Footer, { RegisterCTA } from '@/components/Footer'
 
 const Timeline = dynamic(() => import('@/components/Timeline'), {
   ssr: false,
@@ -47,26 +46,33 @@ const Timeline = dynamic(() => import('@/components/Timeline'), {
 
 const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false })
 
+const Alumni = dynamic(() => import('@/components/Alumni'), { ssr: false })
+
 export default function Home() {
   return (
-    <main style={{ overflowX: 'clip', background: '#070B08' }}>
+    <main id="main-content" className="bg-void" style={{ overflowX: 'clip' }}>
       <Toaster
         position="top-center"
         gutter={8}
         toastOptions={{
           duration: 4000,
           style: {
-            fontFamily: "'Kanit', sans-serif",
             fontSize: '0.875rem',
-            background: '#0D140E',
-            color: '#F5F5F0',
+            background: '#0A110E',
+            color: '#FFFFFF',
             border: '1px solid rgba(126, 211, 33, 0.2)',
           },
         }}
       />
 
-      {/* ── 1. Creative Hero ─────────────────────────────────────────────── */}
-      <EsummitHero />
+      {/* Navigation */}
+      <Nav />
+
+      {/* ── 1. NewHero 60fps Frame Scrubbing ───────────────────────────── */}
+      <NewHero />
+
+      {/* ── 1.5. Interactive StatBurst Section (Greenish BG & Mint Accents) ─ */}
+      <StatBurst />
 
       {/* ── 2. Scroll-Parallax GIF Marquee ──────────────────────────────── */}
       <EsummitMarquee />
@@ -74,31 +80,31 @@ export default function Home() {
       {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
       <EsummitAbout />
 
-      {/* ── 4. Events — white bg, numbered list ─────────────────────────── */}
-      <EsummitTracks />
-
-      {/* ── 5. Highlights — sticky card stack, dark bg ──────────────────── */}
+      {/* ── 4. Highlights — sticky card stack, dark bg ──────────────────── */}
       <EsummitHighlights />
 
-      {/* ── 6. Stats counter ────────────────────────────────────────────── */}
-      <StatBurst />
+      {/* ── 5. Market Surge Video Showcase (vdo2 frame scrubber) ───────── */}
+      <Vdo2Showcase />
 
-      {/* ── 7. Speakers grid ────────────────────────────────────────────── */}
-      <Speakers />
+      {/* ── 6. Alumni — horizontal scroll with PixelTransition ───────────── */}
+      <Alumni />
 
-      {/* ── 8. Schedule / Timeline ──────────────────────────────────────── */}
+      {/* ── 9. Schedule / Timeline ──────────────────────────────────────── */}
       <Timeline />
 
-      {/* ── 9. Sponsors marquee ─────────────────────────────────────────── */}
+      {/* ── 10. Sponsors marquee ─────────────────────────────────────────── */}
       <Sponsors />
 
-      {/* ── 10. FAQ accordion ───────────────────────────────────────────── */}
+      {/* ── 11. Register CTA ────────────────────────────────────────────── */}
+      <RegisterCTA />
+
+      {/* ── 12. FAQ accordion ───────────────────────────────────────────── */}
       <FAQ />
 
-      {/* ── 11. Footer / CTA ────────────────────────────────────────────── */}
-      <Footer />
+      {/* ── 13. Corporate EIC Footer ────────────────────────────────────── */}
+      <Footer hideCTA={true} />
 
-      {/* ── 12. AI Concierge (floating) ─────────────────────────────────── */}
+      {/* ── 14. AI Concierge (floating) ─────────────────────────────────── */}
       <Concierge />
     </main>
   )
