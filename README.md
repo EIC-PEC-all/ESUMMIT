@@ -2,6 +2,23 @@
 
 Official website for PEC E-Summit '26 — the flagship entrepreneurship summit of E-Cell Punjab Engineering College, Chandigarh.
 
+![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.6-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.3-0055FF?style=flat-square&logo=framer&logoColor=white)
+![Three.js](https://img.shields.io/badge/Three.js-0.166-black?style=flat-square&logo=three.js)
+![GSAP](https://img.shields.io/badge/GSAP-3.12-88CE02?style=flat-square&logo=greensock&logoColor=black)
+![CI](https://github.com/EIC-PEC-all/E-Summit-26/actions/workflows/ci.yml/badge.svg?style=flat-square)
+
+---
+
+## Preview
+
+![Hero Section](public/readme-hero.png)
+
+![Highlights Section](public/readme-highlights.png)
+
 ---
 
 ## What's Built
@@ -37,6 +54,38 @@ A single-page experience composed of the following sections in order:
 | `/sponsors` | Sponsor listing by tier |
 | `/tracks` | Detailed breakdown of event tracks |
 | `/faq` | Standalone FAQ page |
+
+### Event Tracks
+
+| Track | Format | Description |
+|---|---|---|
+| Pitch Competition | 5-min pitch + 5-min Q&A | Teams of 2–4 pitch to a jury of active investors. Categories: Pre-revenue, Revenue-stage, Social Impact. |
+| Hackathon | 24 hours | Overnight build sprint. Problem statements revealed at kickoff. Judged on technical depth and demo. |
+| Investor Networking | Structured sessions | Speed networking and open hours with seed-stage angels and tier-1 VC funds. |
+| Panel Discussions | 60-min moderated | Topics: Fundraising in a Tough Climate, AI for Startups, Deep-Tech in India, Student-to-Founder Playbook. |
+| Startup Expo | Open floor | 30+ student and early-stage startups exhibit live products to attendees and investors. |
+
+### Confirmed Speakers
+
+| Name | Title | Organization |
+|---|---|---|
+| Priya Nair | Partner | Surge Ventures |
+| Arjun Mehta | Co-founder & CTO | Kira.ai |
+| Deepika Rangi | Head of Startup Ecosystem | Nasscom |
+| Sameer Khanna | Angel Investor | ex-Sequoia EIR |
+| Ritu Sharma | Founder | GreenMile Logistics |
+| Vikram Bose | VP Product | Razorpay |
+| Ananya Joshi | Founder | MindBloom EdTech |
+| Kabir Singh | CTO | Stealth Agri-Startup |
+
+### Sponsors & Partners
+
+| Tier | Partners |
+|---|---|
+| Title | NorthStar Ventures |
+| Gold | TechCorp India, Finova Capital, CloudBase SaaS |
+| Ecosystem | DevStack, InnoHub, Launchpad AI, Seed & Grow, PitchDeck Pro, MentorBridge |
+| Media | StartupStory, YourStory, INC42, Entrepreneur India, TechCircle, The Economic Times |
 
 ### Key Technical Features
 
@@ -246,4 +295,19 @@ Direct push to `main` should be blocked via GitHub branch protection. All change
 
 ## Organization
 
-E-Cell PEC — Entrepreneurship Cell, Punjab Engineering College, Sector 12, Chandigarh
+E-Cell PEC — Entrepreneurship and Incubation Cell, Punjab Engineering College, Sector 12, Chandigarh — 160012
+
+---
+
+## Contact
+
+| Purpose | Email |
+|---|---|
+| Sponsorship & Collaboration | eicpec@pec.edu.in |
+| General Queries | info@ecellpec.in |
+
+---
+
+## License
+
+All source code in this repository is proprietary and owned by the Entrepreneurship and Incubation Cell, Punjab Engineering College. Unauthorized use, copying, or distribution outside of authorized contributors is not permitted.
