@@ -232,16 +232,16 @@ export default function NewHero() {
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 w-full">
               <Link
                 href="/passes"
-                className="group relative inline-flex items-center justify-center gap-3 px-8 h-14 rounded-full font-mono-data text-sm font-bold uppercase tracking-[0.15em] bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 text-black overflow-hidden transition-transform hover:scale-105 shadow-[0_0_25px_rgba(251,191,36,0.4)]"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 h-14 rounded-full font-mono-data text-sm font-bold uppercase tracking-[0.15em] bg-mint text-void overflow-hidden transition-transform hover:scale-105 shadow-[0_0_25px_rgba(126,211,33,0.4)]"
               >
-                <Ticket size={18} strokeWidth={1.5} className="text-black" />
+                <Ticket size={18} strokeWidth={1.5} />
                 <span>GET PASSES</span>
-                <ArrowUpRight size={18} strokeWidth={1.5} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all text-black" />
+                <ArrowUpRight size={18} strokeWidth={1.5} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
               </Link>
 
               <a
                 href="#schedule"
-                className="group relative inline-flex items-center justify-center gap-3 px-8 h-14 rounded-full font-mono-data text-sm font-bold uppercase tracking-[0.15em] bg-[#0B150E]/80 text-white border border-mint/40 backdrop-blur-md overflow-hidden transition-all hover:border-mint hover:scale-105 shadow-lg"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 h-14 rounded-full font-mono-data text-sm font-bold uppercase tracking-[0.15em] bg-panel text-primary border border-border-subtle backdrop-blur-md overflow-hidden transition-all hover:border-mint hover:scale-105 shadow-lg"
               >
                 <Sparkles size={18} strokeWidth={1.5} className="text-mint group-hover:animate-pulse" />
                 <span>EXPLORE TRACKS</span>

@@ -207,10 +207,10 @@ export default function Vdo2Showcase() {
           {/* CTA Link */}
           <Link
             href="/passes"
-            className="group relative inline-flex items-center justify-center gap-3 px-8 h-14 rounded-full font-mono-data text-sm font-bold uppercase tracking-[0.15em] bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 text-black overflow-hidden transition-transform hover:scale-105 shadow-[0_0_30px_rgba(251,191,36,0.4)]"
+            className="group relative inline-flex items-center justify-center gap-3 px-8 h-14 rounded-full font-mono-data text-sm font-bold uppercase tracking-[0.15em] bg-mint text-void overflow-hidden transition-transform hover:scale-105 shadow-[0_0_30px_rgba(126,211,33,0.3)]"
           >
             <span>REGISTER FOR PITCH</span>
-            <ArrowUpRight size={18} strokeWidth={2} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform text-black" />
+            <ArrowUpRight size={18} strokeWidth={2} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
           </Link>
         </motion.div>
 
