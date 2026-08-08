@@ -51,10 +51,9 @@ a:hover {
 
 html {
   color-scheme: dark;
-  scroll-snap-type: y mandatory;
 }
 
-/* ─── Section Layout & Scroll Snapping ─── */
+/* ─── Section Layout ─── */
 section,
 .esummit-section,
 #register,
@@ -65,8 +64,6 @@ section,
 #esummit-about,
 footer {
   min-height: 100dvh;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 /* Lenis smooth scrolling rules */

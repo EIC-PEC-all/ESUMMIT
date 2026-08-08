@@ -10,8 +10,6 @@ import CircuitBoard from '../Hero/CircuitBoard'
 
 export default function Sponsors() {
   const titleAndGold = [...SPONSORS.title, ...SPONSORS.gold]
-  const silverAndMedia = [...SPONSORS.silver, ...SPONSORS.media]
-  const tickerItems = [...silverAndMedia, ...silverAndMedia, ...silverAndMedia, ...silverAndMedia]
 
   return (
     <section
@@ -73,30 +71,6 @@ export default function Sponsors() {
                   {s.name}
                 </h3>
               </motion.a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Silver & Media Partners Fast Infinite Ticker Strip ── */}
-      <div className="mb-20 relative z-10">
-        <div className="relative overflow-hidden py-4 border-y-2 border-[#0A1C14]/10 bg-[#E2EBD3]">
-          {/* Gradient Edge Masks (Matching background) */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#E2EBD3] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#E2EBD3] to-transparent z-10 pointer-events-none" />
-
-          {/* High-Velocity Marquee */}
-          <div className="flex whitespace-nowrap animate-marquee">
-            {tickerItems.map((s, idx) => (
-              <a
-                key={`${s.id}-${idx}`}
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-8 py-3 mx-3 rounded-full bg-transparent border-2 border-[#0A1C14] font-mono-data text-xs text-[#0A1C14] hover:bg-[#0A1C14] hover:text-[#E2EBD3] transition-all shrink-0 shadow-[4px_4px_0px_#0A1C14] hover:shadow-[0px_0px_0px_#0A1C14] hover:translate-y-1 hover:translate-x-1 font-bold uppercase tracking-wider"
-              >
-                <span>{s.name}</span>
-              </a>
             ))}
           </div>
         </div>

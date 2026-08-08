@@ -36,64 +36,6 @@ const ROW_2 = ALL_IMGS.slice(8)
 const LOOP_1 = [...ROW_1, ...ROW_1, ...ROW_1, ...ROW_1]
 const LOOP_2 = [...ROW_2, ...ROW_2, ...ROW_2, ...ROW_2]
 
-const SPEAKERS = [
-  { name: 'Priya Nair',    title: 'Partner, Surge Ventures',           initials: 'PN', color: '#FF4D3D' },
-  { name: 'Arjun Mehta',   title: 'Co-founder & CTO, Kira.ai',         initials: 'AM', color: '#3DD9FF' },
-  { name: 'Deepika Rangi', title: 'Head of Startup Ecosystem, Nasscom', initials: 'DR', color: '#FF8C42' },
-  { name: 'Sameer Khanna', title: 'Angel Investor & ex-Sequoia EIR',    initials: 'SK', color: '#9B5CFF' },
-  { name: 'Ritu Sharma',   title: 'Founder, GreenMile Logistics',       initials: 'RS', color: '#FF4D3D' },
-  { name: 'Vikram Bose',   title: 'VP Product, Razorpay',               initials: 'VB', color: '#3DD9FF' },
-  { name: 'Ananya Joshi',  title: 'Founder, MindBloom EdTech',          initials: 'AJ', color: '#FF8C42' },
-  { name: 'Kabir Singh',   title: 'CTO, Stealth Agri-Startup',          initials: 'KS', color: '#9B5CFF' },
-]
-
-function SpeakerCard({ speaker }: { speaker: (typeof SPEAKERS)[0] }) {
-  return (
-    <div
-      className="inline-flex items-center gap-4 px-5 py-3 rounded-full shrink-0 mx-3 bg-white/5 border border-white/10 hover:border-[var(--accent-mint)] hover:bg-white/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-      style={{
-        backdropFilter: 'blur(10px)',
-      }}
-    >
-      <div
-        className="font-body w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
-        style={{
-          background: `${speaker.color}22`,
-          border: `2px solid ${speaker.color}`,
-          color: speaker.color,
-        }}
-      >
-        {speaker.initials}
-      </div>
-      <div className="flex flex-col leading-tight">
-        <span className="font-body font-bold text-sm whitespace-nowrap text-white">
-          {speaker.name}
-        </span>
-        <span className="font-mono-data font-bold tracking-tight text-[10px] uppercase whitespace-nowrap text-gray-400">
-          {speaker.title}
-        </span>
-      </div>
-    </div>
-  )
-}
-
-function SpeakerStrip({ direction = 'left' }: { direction?: 'left' | 'right' }) {
-  const items = [...SPEAKERS, ...SPEAKERS, ...SPEAKERS, ...SPEAKERS]
-  return (
-    <div className="relative overflow-hidden py-4">
-      <div 
-        className="flex" 
-        style={{ 
-          animation: `${direction === 'right' ? 'speakerScrollReverse' : 'speakerScroll'} 35s linear infinite`, 
-          willChange: 'transform' 
-        }}
-      >
-        {items.map((s, i) => <SpeakerCard key={`${s.name}-${i}`} speaker={s} />)}
-      </div>
-    </div>
-  )
-}
-
 /** Single image card with hover glow */
 function PhotoCard({ src }: { src: string }) {
   return (
@@ -187,7 +129,7 @@ export default function EsummitMarquee() {
       ref={sectionRef}
       id="esummit-marquee"
       className="esummit-section overflow-hidden pt-20 pb-40 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 relative bg-void text-white"
-      aria-label="E-Summit moments and speakers"
+      aria-label="E-Summit moments"
     >
       {/* ── CSS keyframes ── */}
       <style>{`
@@ -199,30 +141,11 @@ export default function EsummitMarquee() {
           0%   { transform: translateX(-50%); }
           100% { transform: translateX(0%); }
         }
-        @keyframes speakerScroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-25%); }
-        }
-        @keyframes speakerScrollReverse {
-          0%   { transform: translateX(-25%); }
-          100% { transform: translateX(0%); }
-        }
       `}</style>
 
       {/* ── Row 1: enters from right, scrolls LEFT ── */}
       <div className="mb-4">
         <PhotoRow images={LOOP_1} duration={50} visible={visible} delay={0} direction="left" />
-      </div>
-
-      {/* ── Speaker strip: scrolls RIGHT ── */}
-      <div
-        className="relative z-10 my-6"
-        style={{
-          opacity: visible ? 1 : 0,
-          transition: 'opacity 0.8s ease 0.3s',
-        }}
-      >
-        <SpeakerStrip direction="right" />
       </div>
 
       {/* ── Row 2: enters from right, scrolls RIGHT (opposite to Row 1) ── */}
