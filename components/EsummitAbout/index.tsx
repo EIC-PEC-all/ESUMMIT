@@ -145,7 +145,7 @@ export default function EsummitAbout() {
   return (
     <section
       id="esummit-about"
-      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 bg-[#0D2420] text-white"
+      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 bg-void text-white border-t border-mint/20"
       aria-labelledby="esummit-about-heading"
     >
       {/* Interactive geometric node canvas background */}

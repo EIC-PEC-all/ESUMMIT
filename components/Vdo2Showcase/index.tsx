@@ -155,7 +155,7 @@ export default function Vdo2Showcase() {
   }, [])
 
   return (
-    <section ref={containerRef} className="relative h-[105vh] bg-[#0D2420] text-white overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10" aria-label="Market Surge Showcase">
+    <section ref={containerRef} className="relative h-[105vh] bg-void text-white overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-mint/20" aria-label="Market Surge Showcase">
       {/* Sticky Full-Viewport Viewport */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
         

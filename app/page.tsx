@@ -23,6 +23,7 @@ import NewHero from '@/components/Hero/NewHero'
 import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
 import Vdo2Showcase from '@/components/Vdo2Showcase'
+import LimeTransitionBanner from '@/components/Common/LimeTransitionBanner'
 
 const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), {
   ssr: false,
@@ -82,6 +83,9 @@ export default function Home() {
 
       {/* ── 3b. React Bits Masonry — 2x Viewport Height Scroll Parallax ───── */}
       <MasonryShowcase />
+
+      {/* ── Lime Transition Banner before Highlights ────────────────────── */}
+      <LimeTransitionBanner />
 
       {/* ── 4. Highlights — sticky card stack, dark bg ──────────────────── */}
       <EsummitHighlights />
