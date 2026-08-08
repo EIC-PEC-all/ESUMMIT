@@ -50,7 +50,7 @@ const SPEAKERS = [
 function SpeakerCard({ speaker }: { speaker: (typeof SPEAKERS)[0] }) {
   return (
     <div
-      className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl shrink-0 mx-2 bg-panel border border-border-subtle"
+      className="inline-flex items-center gap-4 px-5 py-3 rounded-full shrink-0 mx-3 bg-white/5 border border-white/10 hover:border-[var(--accent-mint)] hover:bg-white/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
       style={{
         backdropFilter: 'blur(10px)',
       }}
@@ -59,18 +59,17 @@ function SpeakerCard({ speaker }: { speaker: (typeof SPEAKERS)[0] }) {
         className="font-body w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0"
         style={{
           background: `${speaker.color}22`,
-          border: `2px solid ${speaker.color}66`,
+          border: `2px solid ${speaker.color}`,
           color: speaker.color,
-          boxShadow: `0 0 16px ${speaker.color}33`,
         }}
       >
         {speaker.initials}
       </div>
       <div className="flex flex-col leading-tight">
-        <span className="font-body font-semibold text-sm whitespace-nowrap text-primary">
+        <span className="font-body font-bold text-sm whitespace-nowrap text-white">
           {speaker.name}
         </span>
-        <span className="font-body text-xs whitespace-nowrap text-mint/80">
+        <span className="font-mono-data font-bold tracking-tight text-[10px] uppercase whitespace-nowrap text-gray-400">
           {speaker.title}
         </span>
       </div>
@@ -81,11 +80,7 @@ function SpeakerCard({ speaker }: { speaker: (typeof SPEAKERS)[0] }) {
 function SpeakerStrip({ direction = 'left' }: { direction?: 'left' | 'right' }) {
   const items = [...SPEAKERS, ...SPEAKERS, ...SPEAKERS, ...SPEAKERS]
   return (
-    <div className="relative overflow-hidden py-2">
-      <div className="absolute left-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, var(--bg-void) 0%, transparent 100%)' }} />
-      <div className="absolute right-0 top-0 bottom-0 w-32 z-10 pointer-events-none"
-        style={{ background: 'linear-gradient(270deg, var(--bg-void) 0%, transparent 100%)' }} />
+    <div className="relative overflow-hidden py-4">
       <div 
         className="flex" 
         style={{ 
@@ -118,7 +113,7 @@ function PhotoCard({ src }: { src: string }) {
       />
       {/* Subtle vignette */}
       <div
-        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-void/80 via-transparent to-transparent"
+        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 via-transparent to-transparent"
       />
       {/* Green border glow on hover */}
       <div
@@ -191,7 +186,7 @@ export default function EsummitMarquee() {
     <section
       ref={sectionRef}
       id="esummit-marquee"
-      className="esummit-section overflow-hidden pt-20 pb-12 relative bg-void"
+      className="esummit-section overflow-hidden pt-20 pb-40 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 relative bg-void text-white"
       aria-label="E-Summit moments and speakers"
     >
       {/* ── CSS keyframes ── */}
@@ -213,10 +208,6 @@ export default function EsummitMarquee() {
           100% { transform: translateX(0%); }
         }
       `}</style>
-
-      {/* ── Cloudy / dreamy fog edges ── */}
-      <div className="absolute left-0 top-0 bottom-0 z-20 pointer-events-none w-48 bg-gradient-to-r from-void via-void/80 to-transparent" />
-      <div className="absolute right-0 top-0 bottom-0 z-20 pointer-events-none w-48 bg-gradient-to-l from-void via-void/80 to-transparent" />
 
       {/* ── Row 1: enters from right, scrolls LEFT ── */}
       <div className="mb-4">

@@ -20,7 +20,6 @@ import dynamic from 'next/dynamic'
 
 import Nav from '@/components/Nav'
 import NewHero from '@/components/Hero/NewHero'
-import StatBurst from '@/components/StatBurst'
 import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
 import Vdo2Showcase from '@/components/Vdo2Showcase'
@@ -70,9 +69,6 @@ export default function Home() {
 
       {/* ── 1. NewHero 60fps Frame Scrubbing ───────────────────────────── */}
       <NewHero />
-
-      {/* ── 1.5. Interactive StatBurst Section (Greenish BG & Mint Accents) ─ */}
-      <StatBurst />
 
       {/* ── 2. Scroll-Parallax GIF Marquee ──────────────────────────────── */}
       <EsummitMarquee />

@@ -61,11 +61,25 @@ export default function Nav() {
     localStorage.setItem('theme', nextTheme)
   }
 
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up')
+  const prevScrollY = useRef(0)
+
   // Framer Motion useScroll hook
   const { scrollY } = useScroll()
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
-    setScrolled(latest > 40)
+    const isScrolled = latest > 40
+    setScrolled(isScrolled)
+
+    const diff = latest - prevScrollY.current
+    if (Math.abs(diff) > 5) {
+      if (diff > 0 && latest > 80) {
+        setScrollDirection('down')
+      } else if (diff < 0) {
+        setScrollDirection('up')
+      }
+    }
+    prevScrollY.current = latest
   })
 
   // Toggle body class for page shrink effect
@@ -122,7 +136,7 @@ export default function Nav() {
           top-0 left-0 right-0 w-full rounded-none
           lg:top-4 lg:left-1/2 lg:w-[calc(100%-3rem)] lg:max-w-7xl lg:rounded-full
           bg-[#0A110E]/90 text-white backdrop-blur-2xl shadow-2xl border border-white/20
-          ${scrolled || menuOpen ? 'translate-y-0 opacity-100' : '-translate-y-[150%] opacity-0 pointer-events-none'} 
+          ${(!scrolled || scrollDirection === 'up' || menuOpen) ? 'translate-y-0 opacity-100' : '-translate-y-[150%] opacity-0 pointer-events-none'} 
           ${menuOpen ? 'lg:-translate-x-[calc(50%+190px)]' : 'lg:-translate-x-1/2'}`}
       >
         <div className="flex items-center justify-between h-14 sm:h-16 px-4 sm:px-6">
@@ -148,26 +162,16 @@ export default function Nav() {
                 <Magnetic strength={0.3}>
                   <button
                     onClick={() => window.dispatchEvent(new Event('open-my-plan'))}
-                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 lg:rounded-full rounded-sm font-mono-data text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-white/10 text-white hover:text-mint hover:bg-white/20"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-mono-data text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-white/10 text-white hover:text-mint hover:bg-white/20 border border-white/20"
                     aria-label="Open My Plan"
                   >
                     MY PLAN
                   </button>
                 </Magnetic>
                 <Magnetic strength={0.3}>
-                  <button
-                    onClick={toggleTheme}
-                    className="p-2 sm:px-3 sm:py-2 lg:rounded-full rounded-sm font-mono-data text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-white/10 text-mint hover:bg-mint/20 flex items-center justify-center cursor-pointer"
-                    aria-label="Toggle Light/Dark Theme"
-                    title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                  >
-                    {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-                  </button>
-                </Magnetic>
-                <Magnetic strength={0.3}>
                   <Link
                     href="/passes"
-                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 lg:rounded-full rounded-sm font-mono-data text-xs font-black uppercase tracking-wider transition-all duration-200 bg-[#FFD700] text-black hover:bg-[#F5C400] shadow-[0_0_16px_rgba(255,215,0,0.5)]"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider transition-all duration-200 bg-[#FFD700] text-black hover:bg-[#F5C400] border border-[#FFE033]"
                     id="nav-passes-btn"
                   >
                     <Ticket size={14} className="text-black stroke-[2.5]" />
@@ -180,7 +184,7 @@ export default function Nav() {
             {/* Hamburger Trigger Button */}
             <Magnetic strength={0.3}>
               <button
-                className="p-2 sm:px-4 sm:py-2 lg:rounded-full rounded-sm text-white hover:text-mint bg-white/10 hover:bg-white/20 transition-all flex items-center gap-2 font-mono-data text-xs font-bold uppercase tracking-wider cursor-pointer backdrop-blur-sm"
+                className="p-2 sm:px-4 sm:py-2 rounded-full text-white hover:text-mint bg-white/10 hover:bg-white/20 transition-all flex items-center gap-2 font-mono-data text-xs font-bold uppercase tracking-wider cursor-pointer backdrop-blur-sm border border-white/20"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label={menuOpen ? "Close navigation sidebar" : "Open navigation sidebar"}
                 aria-expanded={menuOpen}
@@ -195,14 +199,44 @@ export default function Nav() {
 
 
 
-      {/* Fixed Bottom Sponsor Marquee */}
-      <div className={`fixed bottom-0 left-0 right-0 z-40 bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${scrolled || menuOpen ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}>
+      {/* TOP SPONSOR MARQUEE BAR — Slides in from top when navbar hides on scroll down */}
+      <div
+        className={`fixed top-0 left-0 right-0 z-40 bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-b border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 shadow-2xl transition-all duration-500 ease-out ${
+          scrolled && scrollDirection === 'down' && !menuOpen
+            ? 'translate-y-0 opacity-100'
+            : '-translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
         <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center">
           {[...SPONSOR_ITEMS, ...SPONSOR_ITEMS, ...SPONSOR_ITEMS].map((item, i) => (
             <div
-              key={`${item.id}-${i}`}
+              key={`top-${item.id}-${i}`}
+              className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"
+            >
+              <span className="text-mint [.light_&]:text-[#A0C868] font-bold">•</span>
+              <span className="text-white font-bold tracking-widest uppercase">{item.name}</span>
+              <span className="text-mint [.light_&]:text-[#C8E696] font-bold uppercase tracking-widest ml-1">{item.tier}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* BOTTOM SPONSOR MARQUEE BAR — Sits at bottom initially & when scrolling up */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-40 bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
+          !scrolled || scrollDirection === 'up' || menuOpen
+            ? 'translate-y-0 opacity-100'
+            : 'translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
+        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center">
+          {[...SPONSOR_ITEMS, ...SPONSOR_ITEMS, ...SPONSOR_ITEMS].map((item, i) => (
+            <div
+              key={`bot-${item.id}-${i}`}
               className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"
             >
               <span className="text-mint [.light_&]:text-[#A0C868] font-bold">•</span>
@@ -235,7 +269,7 @@ export default function Nav() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[999] bg-mint text-void shadow-[0_0_60px_rgba(80, 227, 194,0.4)] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto border-l-4 border-void"
+              className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[999] bg-mint text-void shadow-[0_0_60px_rgba(126,211,33,0.4)] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto border-l-4 border-void"
               role="dialog"
               aria-label="Navigation Menu Drawer"
             >

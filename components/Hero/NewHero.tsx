@@ -17,15 +17,22 @@ export default function NewHero() {
   const imagesRef = useRef<HTMLImageElement[]>([])
   const currentFrameRef = useRef(0)
 
-  // Track scroll progress throughout the 320vh Hero section
+  // Track scroll progress throughout the Hero section
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  // Clean sequential opacity transitions so content NEVER overlaps
+  // Initial title fades out smoothly (0% -> 12%)
   const initialOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0])
-  const mainContentOpacity = useTransform(scrollYProgress, [0.18, 0.38], [0, 1])
+
+  // Main hero content fades in at 0.12, STAYS FULLY VISIBLE & PINNED from 0.25 to 0.78, then fades out at 0.95
+  const mainContentOpacity = useTransform(scrollYProgress, [0.12, 0.25, 0.78, 0.95], [0, 1, 1, 0])
+  const mainContentScale = useTransform(scrollYProgress, [0.12, 0.25, 0.78, 0.95], [0.95, 1, 1, 0.95])
+
+  // Soothing end-of-video blur & blackening overlay when video completes
+  const endBlur = useTransform(scrollYProgress, [0.72, 0.96], ['blur(0px)', 'blur(24px)'])
+  const endBlackenOpacity = useTransform(scrollYProgress, [0.72, 0.96], [0, 0.95])
 
   // Get nearest loaded image so canvas never freezes during load
   const getLoadedImage = (targetIndex: number): HTMLImageElement | null => {
@@ -155,10 +162,10 @@ export default function NewHero() {
   }, [])
 
   return (
-    <section ref={containerRef} className="relative h-[145vh] bg-void" aria-label="PEC E-Summit Hero">
+    <section ref={containerRef} className="relative h-[250vh] bg-void" aria-label="PEC E-Summit Hero">
       
-      {/* Fixed Sticky Background Canvas Container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden z-0">
+      {/* Sticky Fullscreen Container — Pins Canvas and Content during entire scroll */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center z-0">
         
         {/* 60fps 3D Rupee Video Canvas Frame Scrubber */}
         <canvas
@@ -170,6 +177,16 @@ export default function NewHero() {
         <div
           className="absolute inset-0 z-1 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse at center, rgba(7,11,8,0.45) 0%, rgba(7,11,8,0.88) 100%)' }}
+        />
+
+        {/* Soothing End-of-Video Blur & Blackening Layer */}
+        <motion.div
+          className="absolute inset-0 z-2 pointer-events-none bg-void"
+          style={{
+            opacity: endBlackenOpacity,
+            filter: endBlur,
+            backdropFilter: endBlur,
+          }}
         />
 
         {/* Initial Viewport Hero Banner Overlay */}
@@ -192,68 +209,66 @@ export default function NewHero() {
             <ChevronDown size={20} />
           </div>
         </motion.div>
-      </div>
 
-      {/* Content Scrolling Overlay (Scrolls ON TOP of Fixed Background Canvas with Tight Spacing) */}
-      <div className="relative z-10 -mt-[90vh] pt-[35vh] pb-12 px-4 sm:px-6">
-        
-        {/* Main Expanded Hero Content */}
+        {/* Pinned Main Hero Content Overlay — Stays 100% visible & centered throughout middle scroll range (0.25 -> 0.78) */}
         <motion.div
-          style={{ opacity: mainContentOpacity }}
-          className="max-w-5xl mx-auto flex flex-col items-center text-center gap-16"
+          style={{ opacity: mainContentOpacity, scale: mainContentScale }}
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-auto"
         >
-          {/* Main Headline & Metadata Group */}
-          <div className="flex flex-col items-center text-center max-w-4xl">
-            {/* Metadata Info */}
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:text-sm font-mono-data font-semibold text-gray-300 mb-6 uppercase tracking-widest drop-shadow-md">
+          <div className="max-w-5xl mx-auto flex flex-col items-center text-center gap-6">
+            {/* Cyber Glass Date & Location Badge */}
+            <div className="inline-flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 px-4 sm:px-6 py-2 rounded-full bg-[#07130F]/90 border border-mint/40 text-[11px] sm:text-xs font-mono-data uppercase tracking-wider backdrop-blur-2xl mb-2 group hover:border-mint transition-all">
               <div className="flex items-center gap-2 text-mint font-bold">
-                <Calendar size={15} strokeWidth={1.5} />
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-mint opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-mint" />
+                </span>
+                <Calendar size={13} strokeWidth={2} />
                 <span>{FEST_META.dates}</span>
               </div>
-              <span className="text-secondary hidden sm:inline">•</span>
-              <div className="flex items-center gap-2 text-gray-300">
-                <MapPin size={15} strokeWidth={1.5} className="text-mint" />
+              <span className="text-mint/40 font-bold hidden sm:inline">•</span>
+              <div className="flex items-center gap-1.5 text-gray-200 font-bold">
+                <MapPin size={13} strokeWidth={2} className="text-mint" />
                 <span>{FEST_META.venue}</span>
               </div>
             </div>
 
-            {/* Main Headline */}
-            <h2 className="font-display text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tight text-white leading-[0.95] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] mb-6">
+            {/* Main Headline — Compact 2 Lines */}
+            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-[1.05] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] mb-2 max-w-3xl">
               WHERE IDEAS RAISE <span className="text-mint">CAPITAL</span><br />
               &amp; COMPOUND INTO <span className="text-mint">IMPACT</span>
             </h2>
 
             {/* Subtitle Paragraph */}
-            <p className="font-body text-base sm:text-xl text-gray-200 max-w-2xl leading-relaxed font-medium mb-10 drop-shadow-md">
+            <p className="font-body text-xs sm:text-sm md:text-base text-gray-300 max-w-xl leading-relaxed font-normal mb-3 drop-shadow-md">
               North India&apos;s premier stage for student builders, startup founders, and venture thinkers. Join 3,000+ attendees for pitches, keynotes, hackathons, and VC networking.
             </p>
 
-            {/* Action CTAs */}
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 w-full">
+            {/* Action CTAs — Compact Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-3 w-full mb-1">
               <Link
                 href="/passes"
-                className="group relative inline-flex items-center justify-center gap-3 px-8 h-14 rounded-full font-mono-data text-sm font-bold uppercase tracking-[0.15em] bg-mint text-void overflow-hidden transition-transform hover:scale-105 shadow-[0_0_25px_rgba(126,211,33,0.4)]"
+                className="group relative inline-flex items-center justify-center gap-2 px-6 h-11 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider bg-mint text-void overflow-hidden transition-transform hover:scale-105"
               >
-                <Ticket size={18} strokeWidth={1.5} />
+                <Ticket size={15} strokeWidth={1.5} />
                 <span>GET PASSES</span>
-                <ArrowUpRight size={18} strokeWidth={1.5} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                <ArrowUpRight size={15} strokeWidth={1.5} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
               </Link>
 
               <a
                 href="#schedule"
-                className="group relative inline-flex items-center justify-center gap-3 px-8 h-14 rounded-full font-mono-data text-sm font-bold uppercase tracking-[0.15em] bg-panel text-primary border border-border-subtle backdrop-blur-md overflow-hidden transition-all hover:border-mint hover:scale-105 shadow-lg"
+                className="group relative inline-flex items-center justify-center gap-2 px-6 h-11 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider bg-panel/90 text-primary border border-border-subtle backdrop-blur-md overflow-hidden transition-all hover:border-mint hover:scale-105 shadow-md"
               >
-                <Sparkles size={18} strokeWidth={1.5} className="text-mint group-hover:animate-pulse" />
+                <Sparkles size={15} strokeWidth={1.5} className="text-mint group-hover:animate-pulse" />
                 <span>EXPLORE TRACKS</span>
               </a>
             </div>
-          </div>
 
-          {/* Pure Minimalist Countdown Timer (Zero text headers, completely clean digit blocks) */}
-          <div className="w-full flex justify-center pt-6 pb-4">
-            <Countdown targetISO={FEST_META.countdownTarget} hideHeader={true} />
+            {/* Pure Minimalist Countdown Timer */}
+            <div className="w-full flex justify-center pt-1">
+              <Countdown targetISO={FEST_META.countdownTarget} hideHeader={true} />
+            </div>
           </div>
-
         </motion.div>
 
       </div>

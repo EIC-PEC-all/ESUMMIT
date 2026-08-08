@@ -1,19 +1,21 @@
-/* Fonts are loaded via next/font in layout.tsx */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --bg-void: #040605;
-  --bg-deep: #040605;
-  --bg-panel: #0A110E;
-  --bg-panel-alt: #101915;
+h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
+  font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
 
-  --accent-mint: #50E3C2;
-  --accent-green: #50E3C2;
-  --accent-green-dim: rgba(80, 227, 194, 0.15);
-  --accent-green-glow: rgba(80, 227, 194, 0.35);
+:root {
+  --bg-void: #071511;
+  --bg-deep: #071511;
+  --bg-panel: #0E241D;
+  --bg-panel-alt: #132D25;
+
+  --accent-mint: #7ED321;
+  --accent-green: #7ED321;
+  --accent-green-dim: rgba(126, 211, 33, 0.15);
+  --accent-green-glow: rgba(126, 211, 33, 0.35);
 
   --accent-blue: #3DD9FF;
   --accent-coral: #FF4D3D;
@@ -23,81 +25,16 @@
   --text-muted: #8A9488;
   --muted: #8A9488;
 
-  --border-subtle: #1E2923;
-  --border-panel: #16201B;
-  --border-glow: rgba(80, 227, 194, 0.25);
+  --border-subtle: #193B2F;
+  --border-panel: #163328;
+  --border-glow: rgba(126, 211, 33, 0.25);
 
   color-scheme: dark;
 }
 
-[data-theme='light'],
-.light {
-  --bg-void: #F8FAFC;
-  --bg-deep: #F8FAFC;
-  --bg-panel: #FFFFFF;
-  --bg-panel-alt: #F1F5F9;
-
-  --accent-mint: #4E6527;
-  --accent-green: #4E6527;
-  --accent-green-dim: rgba(78, 101, 39, 0.12);
-  --accent-green-glow: rgba(78, 101, 39, 0.25);
-
-  --accent-blue: #0284C7;
-  --accent-coral: #E11D48;
-
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-muted: #64748B;
-  --muted: #64748B;
-
-  --border-subtle: rgba(15, 23, 42, 0.12);
-  --border-panel: rgba(15, 23, 42, 0.08);
-  --border-glow: rgba(78, 101, 39, 0.25);
-
-  color-scheme: light;
-}
-
-/* ─── Light Mode Olive Green Overrides ─── */
-[data-theme='light'] .text-mint,
-.light .text-mint {
-  color: #4E6527 !important;
-}
-
-[data-theme='light'] .bg-mint,
-.light .bg-mint {
-  background-color: #4E6527 !important;
-}
-
-[data-theme='light'] .border-mint,
-.light .border-mint {
-  border-color: #4E6527 !important;
-}
-
-[data-theme='light'] .fill-mint,
-.light .fill-mint {
-  fill: #4E6527 !important;
-}
-
-[data-theme='light'] .text-stroke-green,
-.light .text-stroke-green {
-  color: #4E6527 !important;
-  -webkit-text-stroke: 1.5px #4E6527 !important;
-}
-
-/* ─── Light Mode Hardcoded Background Overrides ─── */
-[data-theme='light'] .bg-\[\#111A12\],
-.light .bg-\[\#111A12\] {
-  background-color: var(--bg-panel-alt) !important;
-}
-
-[data-theme='light'] .bg-\[\#0A110E\],
-.light .bg-\[\#0A110E\] {
-  background-color: var(--bg-panel) !important;
-}
-
-[data-theme='light'] .bg-\[\#060A07\],
-.light .bg-\[\#060A07\] {
-  background-color: var(--bg-void) !important;
+/* ─── Global Link Hover Underline ─── */
+a:hover {
+  text-decoration: underline !important;
 }
 
 @layer base {
@@ -114,6 +51,22 @@
 
 html {
   color-scheme: dark;
+  scroll-snap-type: y mandatory;
+}
+
+/* ─── Section Layout & Scroll Snapping ─── */
+section,
+.esummit-section,
+#register,
+#faq,
+#sponsors,
+#schedule,
+#esummit-marquee,
+#esummit-about,
+footer {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 /* Lenis smooth scrolling rules */
@@ -203,22 +156,11 @@ header {
   color: var(--text-primary);
 }
 
-/* ─── Tailwind typography utility classes will handle fonts automatically now ─── */
-
-/* ─── E-Summit Hero Gradient Heading ─── */
-.hero-heading {
-  background: linear-gradient(180deg, #646973 0%, #BBCCD7 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ─── Big Headings Font Rule (Kanit) ─── */
+h1, h2, h3 {
+  font-family: var(--font-kanit), var(--font-khaviax), sans-serif;
 }
 
-/* Green variant for E-Summit green/black theme */
-.hero-heading-green {
-  color: var(--accent-mint);
-}
-
-/* ─── Kanit reset removed. All sections inherit the standard font stack ─── */
 
 .text-stroke-orange, .text-stroke-volt, .text-stroke-amber, .text-stroke-green {
   color: var(--accent-mint);
@@ -259,23 +201,15 @@ header {
   font-size: 0.9rem;
   letter-spacing: 0.04em;
   border: none;
-  border-radius: 6px;
+  border-radius: 9999px !important;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease, background-color 0.15s ease;
   overflow: hidden;
+  box-shadow: none !important;
 }
-.btn-green::after, .btn-orange::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.btn-green:hover::after, .btn-orange:hover::after { opacity: 1; }
 .btn-green:hover, .btn-orange:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(126, 211, 33, 0.5);
+  transform: translateY(-1px);
+  box-shadow: none !important;
 }
 .btn-green:active, .btn-orange:active { transform: translateY(0); }
 
@@ -291,21 +225,20 @@ header {
   font-size: 0.9rem;
   letter-spacing: 0.04em;
   border: 1px solid rgba(245, 245, 240, 0.25);
-  border-radius: 6px;
+  border-radius: 9999px !important;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: none !important;
 }
 .btn-ghost:hover {
-  border-color: #50E3C2;
-  color: #50E3C2;
+  border-color: #7ED321;
+  color: #7ED321;
   background: rgba(126, 211, 33, 0.08);
 }
 
 /* ─── Current Line Accent ─── */
 .current-line-horizontal {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #50E3C2 50%, transparent);
-  box-shadow: 0 0 12px rgba(126, 211, 33, 0.6);
+  display: none !important;
 }
 
 /* ─── Section layout ─── */

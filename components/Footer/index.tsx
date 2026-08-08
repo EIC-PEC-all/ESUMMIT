@@ -113,7 +113,7 @@ export function RegisterCTA() {
   return (
     <div
       id="register"
-      className="bg-[#0D2420] [.light_&]:bg-[#2A3C1A] text-white border-t border-mint/30 [.light_&]:border-[#4E6527]/50 relative overflow-hidden"
+      className="bg-[#0D2420] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 relative overflow-hidden"
       aria-labelledby="footer-cta-heading"
     >
       {/* Circuit board closing moment */}
@@ -127,32 +127,29 @@ export function RegisterCTA() {
         className="py-24 lg:py-32 relative z-10"
       >
         <div className="section-container">
-          <div className="max-w-2xl">
+          <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
+              className="flex flex-col items-center text-center"
             >
-              <div
+              <h2
                 id="footer-cta-heading"
-                className="font-display leading-none mb-6 flex flex-col items-start"
-                style={{ fontSize: 'clamp(48px, 7vw, 96px)' }}
+                className="font-display font-black uppercase leading-none tracking-tight text-white drop-shadow-lg mb-6"
+                style={{ fontSize: 'clamp(3rem, 12vw, 150px)' }}
               >
-                <DynamicWeightHeading 
-                  label="REGISTER"
-                  style={{ color: '#FFFFFF' }}
-                />
-                <span className="text-mint font-bold"><ScrollGradientFill text="NOW" /></span>
-              </div>
-              <p className="font-body text-base mb-8 max-w-md leading-relaxed text-gray-200">
+                REGISTER
+              </h2>
+              <p className="font-body text-base mb-8 max-w-lg leading-relaxed text-gray-200">
                 Early-bird passes are limited. Lock in your spot and be part of North India&apos;s premier entrepreneurship summit.
               </p>
 
-              <div className="flex flex-wrap gap-4 mb-12">
+              <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
                 <Link
                   href="/register"
-                  className="btn-green text-base py-4 px-10 rounded-xl font-bold flex items-center gap-2 shadow-lg"
+                  className="btn-green text-base py-4 px-10 rounded-full font-bold flex items-center gap-2 shadow-lg"
                   id="footer-register-btn"
                   aria-label="Open PEC Summit Registration Dashboard"
                 >
@@ -161,7 +158,7 @@ export function RegisterCTA() {
                 </Link>
                 <a
                   href="mailto:info@ecellpec.in"
-                  className="px-8 py-4 rounded-xl border border-white/40 text-white hover:bg-white/10 font-bold transition-all text-sm flex items-center"
+                  className="px-8 py-4 rounded-full border border-white/40 text-white hover:bg-white/10 font-bold transition-all text-sm flex items-center"
                   id="footer-contact-btn"
                   aria-label="Contact E-Cell PEC"
                 >
@@ -187,11 +184,11 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
       {!hideCTA && <RegisterCTA />}
 
       {/* Corporate EIC / PEC Footer */}
-      <div className="py-12 relative z-10 bg-[#0A1A17] [.light_&]:bg-[#1E2B12] text-white border-t border-mint/20 [.light_&]:border-[#4E6527]/50 shadow-inner">
+      <div className="py-12 relative z-10 bg-[#0D2420] text-white border-t border-mint/20 shadow-inner">
         <div className="section-container">
           
           {/* Top Social Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between pb-8 border-b border-[#4E6527]/30 mb-10 gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between pb-8 border-b border-mint/20 mb-10 gap-4">
             <p className="font-body text-gray-200 text-base font-medium">
               Get connected with us on social networks:
             </p>
@@ -204,7 +201,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   rel="noopener noreferrer"
                   aria-label={label}
                   role="listitem"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#2A3C1A] border border-[#4E6527]/50 text-white hover:text-[#C8E696] hover:bg-[#395024] hover:border-[#C8E696] transition-all shadow-sm"
+                  className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#07130F] border border-mint/30 text-white hover:text-mint hover:border-mint transition-all shadow-sm hover:scale-105"
                 >
                   <Icon size={18} aria-hidden="true" strokeWidth={1.5} />
                 </a>
@@ -262,19 +259,19 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
               <div className="space-y-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Briefcase size={16} className="text-[#C8E696] shrink-0" />
-                    <span className="font-body text-sm font-bold text-[#C8E696]">For Queries And Collaboration</span>
+                    <Briefcase size={16} className="text-mint shrink-0" />
+                    <span className="font-body text-sm font-bold text-mint">For Queries And Collaboration</span>
                   </div>
-                  <a href="mailto:eicpec@pec.edu.in" className="font-body text-sm text-[#A0C868] hover:text-white font-medium hover:underline block pl-6">
+                  <a href="mailto:eicpec@pec.edu.in" className="font-body text-sm text-gray-200 hover:text-mint font-medium hover:underline block pl-6">
                     eicpec@pec.edu.in
                   </a>
                 </div>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Phone size={16} className="text-[#C8E696] shrink-0" />
-                    <span className="font-body text-sm font-bold text-[#C8E696]">For General Contact</span>
+                    <Phone size={16} className="text-mint shrink-0" />
+                    <span className="font-body text-sm font-bold text-mint">For General Contact</span>
                   </div>
-                  <a href="mailto:info@ecellpec.in" className="font-body text-sm text-[#A0C868] hover:text-white font-medium hover:underline block pl-6">
+                  <a href="mailto:info@ecellpec.in" className="font-body text-sm text-gray-200 hover:text-mint font-medium hover:underline block pl-6">
                     info@ecellpec.in
                   </a>
                 </div>
@@ -283,15 +280,10 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
           </div>
 
-          {/* Brutalist Stacked & Sliced Typography Reveal */}
-          <div className="pt-10 pb-4">
-            <StackedSlicedText text="E SUMMIT 26" sliceCount={8} />
-          </div>
-
           {/* Bottom copyright line */}
-          <div className="pt-6 border-t border-[#4E6527]/30 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-300 gap-4 font-mono-data">
+          <div className="pt-10 border-t border-mint/20 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-300 gap-4 font-mono-data">
             <p>© {new Date().getFullYear()} E-Cell PEC · Punjab Engineering College, Chandigarh</p>
-            <p className="text-[#C8E696]">PEC E-Summit 2026</p>
+            <p className="text-mint font-bold">PEC E-Summit 2026</p>
           </div>
 
         </div>

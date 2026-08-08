@@ -158,11 +158,10 @@ function HighlightCard({
     >
       <motion.div
         className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px]
-          border-2 p-4 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4"
+          border-2 p-4 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4 shadow-xl"
         style={{
-          borderColor: 'rgba(126, 211, 33, 0.4)',
-          background: 'var(--bg-panel)',
-          boxShadow: '0 0 60px rgba(126, 211, 33, 0.05) inset',
+          borderColor: '#193B2F',
+          background: '#07130F',
           scale,
           originY: 0,
         }}
@@ -172,12 +171,10 @@ function HighlightCard({
           <div className="flex items-baseline gap-4 sm:gap-6">
             {/* Number */}
             <span
-              className="font-display font-black leading-none select-none"
+              className="font-display font-black leading-none select-none text-mint"
               style={{
                 fontSize: 'clamp(2.5rem, 8vw, 120px)',
                 lineHeight: 0.9,
-                color: 'var(--accent-mint)',
-                textShadow: '0 0 40px var(--accent-green-glow)',
               }}
             >
               {card.num}
@@ -185,19 +182,17 @@ function HighlightCard({
             {/* Category + name */}
             <div className="flex flex-col">
               <span
-                className="font-mono-data uppercase tracking-widest"
+                className="font-mono-data uppercase tracking-widest text-mint"
                 style={{
-                  color: 'var(--accent-mint)',
                   fontSize: 'clamp(0.6rem, 1vw, 0.85rem)',
-                  opacity: 0.7,
+                  opacity: 0.9,
                 }}
               >
                 {card.category}
               </span>
               <span
-                className="font-display font-medium uppercase"
+                className="font-display font-bold uppercase text-white"
                 style={{
-                  color: 'var(--text-primary)',
                   fontSize: 'clamp(1rem, 2.2vw, 2.1rem)',
                 }}
               >
@@ -275,24 +270,18 @@ export default function EsummitHighlights() {
       ref={containerRef}
       className="esummit-section rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]
         -mt-10 sm:-mt-12 md:-mt-14 z-10 relative
-        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-[#0D2420] [.light_&]:bg-[#2A3C1A] text-white border-t border-mint/30 [.light_&]:border-[#4E6527]/50"
+        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-void text-white"
       aria-labelledby="highlights-heading"
     >
-      {/* Green top divider */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(126,211,33,0.5) 50%, transparent)' }}
-      />
-
       <h2
         id="highlights-heading"
-        className="text-white drop-shadow-lg font-display font-black uppercase leading-none tracking-tight text-center
+        className="text-[var(--accent-mint)] font-display font-black uppercase leading-none tracking-tight text-center
           mb-16 sm:mb-20 md:mb-24"
         style={{
           fontSize: 'clamp(3rem, 12vw, 160px)',
         }}
       >
-        Highlights
+        HIGHLIGHTS
       </h2>
 
       <div className="relative">

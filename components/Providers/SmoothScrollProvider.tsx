@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 export default function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let lenisInstance: any = null
-
+    let stSnap: any = null
     const initLenis = async () => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         return
@@ -13,6 +13,7 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
 
       try {
         const Lenis = (await import('lenis')).default
+        const Snap = (await import('lenis/snap')).default
         const { gsap } = await import('gsap')
         const { ScrollTrigger } = await import('gsap/ScrollTrigger')
 
@@ -26,6 +27,14 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
           smoothWheel: true,
           wheelMultiplier: 1.0,
           touchMultiplier: 1.2,
+        })
+
+        // Initialize snap plugin
+        stSnap = new Snap(lenisInstance, {
+          type: 'mandatory',
+          velocityThreshold: 0.2,
+          duration: 1.2,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         })
 
         lenisInstance.on('scroll', ScrollTrigger.update)
@@ -44,9 +53,8 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     initLenis()
 
     return () => {
-      if (lenisInstance) {
-        lenisInstance.destroy()
-      }
+      if (stSnap) stSnap.destroy()
+      if (lenisInstance) lenisInstance.destroy()
     }
   }, [])
 
