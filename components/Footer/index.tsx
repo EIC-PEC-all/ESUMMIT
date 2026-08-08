@@ -131,7 +131,7 @@ export function RegisterCTA() {
   return (
     <div
       id="register"
-      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#081C16] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#7ED321]/20 py-24 sm:py-32"
+      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#081C16] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#7ED321]/20 pt-28 pb-44 sm:pt-36 sm:pb-56 md:pb-64"
       aria-labelledby="footer-cta-heading"
     >
       {/* ── Lightweight Hardware-Accelerated Radial Mesh Glow (NO CPU Blur Filter) ── */}
@@ -143,11 +143,15 @@ export function RegisterCTA() {
         }}
       />
 
-      {/* ── Left 3D Perspective Geometric Glass Panel (60fps Accelerated) ───────── */}
-      <div
-        className="pointer-events-none absolute -left-16 top-1/2 -translate-y-1/2 hidden xl:block w-[420px] h-[280px] rounded-[36px] border border-white/20 bg-[#0A140F]/90 p-6 shadow-2xl transition-transform duration-500 z-0 will-change-transform"
+      {/* ── Left 3D Perspective Geometric Glass Panel (Steep 3D Tilt) ───────────── */}
+      <motion.div
+        initial={{ opacity: 0, x: -220, rotateY: 42, rotateX: 12, rotateZ: -8, scale: 0.8 }}
+        whileInView={{ opacity: 1, x: 0, rotateY: 28, rotateX: 6, rotateZ: -4, scale: 0.9 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-none absolute -left-16 top-1/2 -translate-y-1/2 hidden xl:block w-[420px] h-[280px] rounded-[36px] border border-white/20 bg-[#0A140F]/90 p-6 shadow-2xl z-0 will-change-transform"
         style={{
-          transform: 'perspective(1200px) rotateY(28deg) rotateX(6deg) scale(0.9)',
+          transformStyle: 'preserve-3d',
           boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15)',
         }}
       >
@@ -156,13 +160,17 @@ export function RegisterCTA() {
           <div className="h-28 w-28 rounded-full border border-[#7ED321]/30 bg-[#7ED321]/10" />
           <div className="h-16 w-16 rounded-2xl border border-white/20 bg-white/5" />
         </div>
-      </div>
+      </motion.div>
 
-      {/* ── Right 3D Perspective Geometric Glass Panel (60fps Accelerated) ──────── */}
-      <div
-        className="pointer-events-none absolute -right-16 top-1/2 -translate-y-1/2 hidden xl:block w-[420px] h-[280px] rounded-[36px] border border-white/20 p-6 shadow-2xl transition-transform duration-500 z-0 will-change-transform"
+      {/* ── Right 3D Perspective Geometric Glass Panel (Steep 3D Tilt) ──────────── */}
+      <motion.div
+        initial={{ opacity: 0, x: 220, rotateY: -42, rotateX: 12, rotateZ: 8, scale: 0.8 }}
+        whileInView={{ opacity: 1, x: 0, rotateY: -28, rotateX: 6, rotateZ: 4, scale: 0.9 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-none absolute -right-16 top-1/2 -translate-y-1/2 hidden xl:block w-[420px] h-[280px] rounded-[36px] border border-white/20 p-6 shadow-2xl z-0 will-change-transform"
         style={{
-          transform: 'perspective(1200px) rotateY(-28deg) rotateX(6deg) scale(0.9)',
+          transformStyle: 'preserve-3d',
           background: 'linear-gradient(145deg, rgba(124,58,237,0.2) 0%, rgba(244,63,94,0.15) 50%, rgba(7,11,8,0.9) 100%)',
           boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15)',
         }}
@@ -171,7 +179,7 @@ export function RegisterCTA() {
           <div className="h-32 w-32 rounded-full border border-purple-500/30 bg-purple-500/15" />
           <div className="h-20 w-20 rounded-full border border-pink-400/30 bg-pink-400/10" />
         </div>
-      </div>
+      </motion.div>
 
       {/* ── Center Content Block ──────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
