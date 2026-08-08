@@ -301,9 +301,9 @@ function HighlightCard({
 }) {
   return (
     <div
-      className={`sticky h-[80vh] ${index > 0 ? 'mt-[45vh]' : ''}`}
+      className={`sticky min-h-[70vh] max-h-[85vh] sm:h-[80vh] ${index > 0 ? 'mt-[35vh] sm:mt-[45vh]' : ''}`}
       style={{
-        top: index === 0 ? '7rem' : 'calc(7rem + 136px)',
+        top: index === 0 ? '5.5rem' : 'calc(5.5rem + 80px)',
         zIndex: 10 + index,
       }}
     >
@@ -430,15 +430,15 @@ export default function EsummitHighlights() {
       ref={containerRef}
       className="esummit-section rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]
         -mt-10 sm:-mt-12 md:-mt-14 z-10 relative
-        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-void text-white"
+        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-[#060F0B] text-white"
       aria-labelledby="timeline-heading"
     >
       <h2
         id="timeline-heading"
         className="text-[var(--accent-mint)] font-display font-black uppercase leading-none tracking-tight text-center
-          mb-16 sm:mb-20 md:mb-24"
+          mb-12 sm:mb-20 md:mb-24"
         style={{
-          fontSize: 'clamp(3rem, 12vw, 160px)',
+          fontSize: 'clamp(2.2rem, 10vw, 160px)',
         }}
       >
         TIMELINE
@@ -446,8 +446,8 @@ export default function EsummitHighlights() {
 
       {/* 2-Column Responsive Layout */}
       <div className="relative flex flex-col lg:flex-row gap-8 items-start min-h-[150vh]">
-        {/* Left Column: Sticky Borderless Leaflet Map (50%) */}
-        <div className="w-full lg:w-1/2 h-[80vh] sticky top-28 z-30 overflow-hidden rounded-[32px]">
+        {/* Left Column: Leaflet Map (Responsive Card on mobile, Sticky 50% on desktop) */}
+        <div className="w-full lg:w-1/2 h-[320px] sm:h-[420px] lg:h-[80vh] relative lg:sticky lg:top-28 z-30 overflow-hidden rounded-[28px] sm:rounded-[32px]">
           <HighlightsCampusMap
             selectedEvent={selectedEvent}
             activeDayIndex={activeDayIndex}

@@ -54,7 +54,7 @@ export default function EventPortfolioShowcase() {
           <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-mint block mb-1">PROPOSED ACTIVITIES</span>
           <h2
             className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-lg"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+            style={{ fontSize: 'clamp(2.5rem, 10vw, 160px)' }}
           >
             EVENTS
           </h2>

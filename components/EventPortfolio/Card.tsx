@@ -57,7 +57,7 @@ export function Card({ event, index, total, onSelect }: CardProps) {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: index * 0.03 }}
       whileHover={{ y: -6 }}
-      className="group relative flex w-[320px] sm:w-[380px] md:w-[420px] lg:w-[440px] shrink-0 cursor-pointer flex-col justify-between rounded-2xl border border-white/10 bg-[#0C120F] p-5 sm:p-6 transition-colors duration-200 hover:border-mint/50 hover:bg-[#101914]"
+      className="group relative flex w-[275px] sm:w-[360px] md:w-[420px] lg:w-[440px] shrink-0 cursor-pointer flex-col justify-between rounded-2xl border border-white/10 bg-[#0C120F] p-4 sm:p-6 transition-colors duration-200 hover:border-mint/50 hover:bg-[#101914]"
     >
       {/* ── Top Header: Eyebrow + Index ── */}
       <div className="relative z-20 flex items-center justify-between mb-3">

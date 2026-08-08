@@ -145,7 +145,7 @@ export default function EsummitAbout() {
   return (
     <section
       id="esummit-about"
-      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 bg-void text-white border-t border-mint/20"
+      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 bg-[#07150E] text-white border-t border-mint/20"
       aria-labelledby="esummit-about-heading"
     >
       {/* Interactive geometric node canvas background */}
@@ -170,7 +170,7 @@ export default function EsummitAbout() {
           <h2
             id="esummit-about-heading"
             className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-lg"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+            style={{ fontSize: 'clamp(2.5rem, 10vw, 160px)' }}
           >
             ABOUT
           </h2>
@@ -182,7 +182,7 @@ export default function EsummitAbout() {
           className="font-body font-medium text-center leading-relaxed max-w-[680px]"
           style={{
             color: 'var(--text-secondary)',
-            fontSize: 'clamp(1.05rem, 2.2vw, 1.4rem)',
+            fontSize: 'clamp(0.95rem, 3.8vw, 1.35rem)',
           }}
         />
 

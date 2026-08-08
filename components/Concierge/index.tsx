@@ -197,7 +197,7 @@ export default function Concierge() {
       {/* Floating Concierge Action Pill */}
       <motion.button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-14 right-6 z-[2500] px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
+        className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-[2500] min-h-[44px] px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
         initial={{ opacity: 0, y: 20 }}
         animate={{
           opacity: isLoaderActive ? 0 : 1,
@@ -224,8 +224,8 @@ export default function Concierge() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-24 right-4 sm:right-8 left-auto z-[2500] w-[390px] max-w-[calc(100vw-32px)] rounded-3xl overflow-hidden flex flex-col shadow-2xl bg-[#0A1A17]/95 [.light_&]:bg-[#1E2B12]/95 backdrop-blur-2xl border border-mint/40"
-            style={{ height: '560px' }}
+            className="fixed bottom-28 sm:bottom-24 right-4 sm:right-8 left-auto z-[2500] w-[390px] max-w-[calc(100vw-32px)] rounded-3xl overflow-hidden flex flex-col shadow-2xl bg-[#0A1A17]/95 [.light_&]:bg-[#1E2B12]/95 backdrop-blur-2xl border border-mint/40"
+            style={{ height: 'min(560px, 78vh)' }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}

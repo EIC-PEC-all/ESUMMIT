@@ -219,7 +219,7 @@ export default function Nav() {
             {/* Hamburger Trigger Button */}
             <Magnetic strength={0.3}>
               <button
-                className="p-2 sm:px-4 sm:py-2 rounded-full text-white hover:text-mint bg-white/10 hover:bg-white/20 transition-all flex items-center gap-2 font-mono-data text-xs font-bold uppercase tracking-wider cursor-pointer backdrop-blur-sm border border-white/20"
+                className="min-h-[44px] min-w-[44px] px-3 py-2 sm:px-4 sm:py-2 rounded-full text-white hover:text-mint bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center gap-2 font-mono-data text-xs font-bold uppercase tracking-wider cursor-pointer backdrop-blur-sm border border-white/20"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label={menuOpen ? "Close navigation sidebar" : "Open navigation sidebar"}
                 aria-expanded={menuOpen}
@@ -292,7 +292,7 @@ export default function Nav() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 bg-black/60 lg:hidden z-[998]"
+              className="fixed inset-0 bg-black/60 lg:hidden z-[2998]"
               aria-hidden="true"
               onClick={() => setMenuOpen(false)}
             />
@@ -304,7 +304,7 @@ export default function Nav() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[999] bg-mint text-void shadow-[0_0_60px_rgba(126,211,33,0.4)] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto border-l-4 border-void"
+              className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[3000] bg-mint text-void shadow-[0_0_60px_rgba(126,211,33,0.4)] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto border-l-4 border-void"
               role="dialog"
               aria-label="Navigation Menu Drawer"
             >

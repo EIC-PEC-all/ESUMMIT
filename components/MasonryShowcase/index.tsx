@@ -238,7 +238,7 @@ export default function MasonryShowcase() {
           </span>
           <h2
             className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+            style={{ fontSize: 'clamp(2.2rem, 10vw, 160px)' }}
           >
             SUMMIT GALLERY
           </h2>
