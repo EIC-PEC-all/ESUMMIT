@@ -145,7 +145,7 @@ export default function EsummitAbout() {
   return (
     <section
       id="esummit-about"
-      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden bg-void text-primary"
+      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 bg-void text-white border-t border-mint/20"
       aria-labelledby="esummit-about-heading"
     >
       {/* Interactive geometric node canvas background */}
@@ -169,9 +169,10 @@ export default function EsummitAbout() {
         <FadeIn delay={0.05}>
           <h2
             id="esummit-about-heading"
-            className="font-display font-black text-4xl sm:text-6xl md:text-7xl uppercase tracking-tight text-primary text-center"
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-[var(--accent-mint)] drop-shadow-lg"
+            style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
           >
-            About Us
+            About
           </h2>
         </FadeIn>
 

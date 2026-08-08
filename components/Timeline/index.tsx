@@ -154,7 +154,7 @@ export default function Timeline() {
   return (
     <section
       id="schedule"
-      className="pt-32 pb-20 lg:pt-40 lg:pb-32 relative bg-[#0A1A17] [.light_&]:bg-[#1E2B12] text-white border-t border-b border-mint/20 [.light_&]:border-[#4E6527]/50 overflow-hidden"
+      className="pt-32 pb-20 lg:pt-40 lg:pb-32 relative bg-[#0D2420] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 overflow-hidden"
       aria-labelledby="schedule-heading"
     >
       <CircuitBoard prefersReduced={false} />
@@ -164,31 +164,26 @@ export default function Timeline() {
       <div className="section-container relative z-10">
         {/* Section Header */}
         <motion.div
-          className="mb-10 lg:mb-14 flex flex-col md:flex-row md:items-end justify-between gap-6"
+          className="mb-8 flex flex-col items-center text-center gap-2"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div>
-            <h2
-              id="schedule-heading"
-              className="font-display leading-none text-white"
-              style={{ fontSize: 'clamp(38px, 5vw, 76px)' }}
-            >
-              EVENT <br />
-              <span className="text-mint [.light_&]:text-[#C8E696]">TIMELINE &amp; MAP</span>
-            </h2>
-          </div>
+          <h2
+            id="schedule-heading"
+            className="font-display font-black uppercase leading-none tracking-tight text-[var(--accent-mint)] drop-shadow-lg mb-2"
+            style={{ fontSize: 'clamp(3rem, 12vw, 150px)' }}
+          >
+            TIMELINE
+          </h2>
 
-          <div className="flex flex-wrap items-center gap-4">
-            <Link
-              href="/schedule"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-mint [.light_&]:text-[#C8E696] hover:text-white transition-colors border-b border-mint/40 [.light_&]:border-[#C8E696]/40 pb-1"
-            >
-              Full Interactive Schedule <ArrowUpRight size={14} />
-            </Link>
-          </div>
+          <Link
+            href="/schedule"
+            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-mint [.light_&]:text-[#C8E696] hover:text-white transition-colors border-b border-mint/40 [.light_&]:border-[#C8E696]/40 pb-1"
+          >
+            Full Interactive Schedule <ArrowUpRight size={14} />
+          </Link>
         </motion.div>
 
         {/* Day Selector Tabs & Filters Row */}

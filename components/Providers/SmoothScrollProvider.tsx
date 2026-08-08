@@ -5,7 +5,6 @@ import { useEffect } from 'react'
 export default function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let lenisInstance: any = null
-
     const initLenis = async () => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         return
@@ -44,9 +43,7 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     initLenis()
 
     return () => {
-      if (lenisInstance) {
-        lenisInstance.destroy()
-      }
+      if (lenisInstance) lenisInstance.destroy()
     }
   }, [])
 

@@ -9,7 +9,15 @@ import CircuitBoard from '../Hero/CircuitBoard'
 
 const STAT_ICONS = [Users, Zap, Trophy, Layers]
 
-function BurstCard({ stat, index, inView }: { stat: typeof STATS[0]; index: number; inView: boolean }) {
+function BurstCard({
+  stat,
+  index,
+  inView,
+}: {
+  stat: (typeof STATS)[0]
+  index: number
+  inView: boolean
+}) {
   const count = useCountUp(stat.value, 2000, inView)
   const Icon = STAT_ICONS[index % STAT_ICONS.length]
 
@@ -27,32 +35,33 @@ function BurstCard({ stat, index, inView }: { stat: typeof STATS[0]; index: numb
       initial={{ opacity: 0, scale: 0.85, y: 30 }}
       animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
-      className="relative rounded-2xl p-5 sm:p-6 overflow-hidden group flex flex-col justify-between transition-all duration-300 bg-panel border border-border-subtle hover:border-mint/60 shadow-xl"
+      className="hover:border-mint/60 group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-border-subtle bg-panel p-5 shadow-xl transition-all duration-300 sm:p-6"
       whileHover={{ y: -4 }}
     >
       {/* Mouse spotlight radial glow */}
       <div
-        className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: 'radial-gradient(250px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--accent-green-glow), transparent 40%)',
+          background:
+            'radial-gradient(250px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--accent-green-glow), transparent 40%)',
         }}
       />
 
       {/* Background accent icon */}
-      <div className="absolute -right-2 -bottom-2 opacity-5 text-mint group-hover:opacity-15 transition-all duration-300 pointer-events-none">
+      <div className="pointer-events-none absolute -bottom-2 -right-2 text-mint opacity-5 transition-all duration-300 group-hover:opacity-15">
         <Icon size={70} />
       </div>
 
-      <div className="flex items-center justify-between mb-4 relative z-10">
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-mint/10 text-mint group-hover:scale-110 transition-transform duration-300">
+      <div className="relative z-10 mb-4 flex items-center justify-between">
+        <div className="bg-mint/10 flex h-8 w-8 items-center justify-center rounded-lg text-mint transition-transform duration-300 group-hover:scale-110">
           <Icon size={16} />
         </div>
-        <div className="w-1.5 h-1.5 rounded-full bg-mint animate-pulse" />
+        <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-mint" />
       </div>
 
       <div className="relative z-10">
         <span
-          className="font-mono-data font-bold block leading-none mb-1.5 text-primary"
+          className="mb-1.5 block font-mono-data font-bold leading-none text-primary"
           style={{
             fontSize: 'clamp(26px, 3.2vw, 42px)',
           }}
@@ -61,7 +70,7 @@ function BurstCard({ stat, index, inView }: { stat: typeof STATS[0]; index: numb
           {count}
           <span className="text-mint">{stat.suffix}</span>
         </span>
-        <span className="font-mono-data text-[11px] sm:text-xs font-semibold text-secondary uppercase tracking-widest block">
+        <span className="block font-mono-data text-[11px] font-semibold uppercase tracking-widest text-secondary sm:text-xs">
           {stat.label}
         </span>
       </div>
@@ -74,18 +83,15 @@ export default function StatBurst() {
   const inView = useInView(sectionRef, { once: true, margin: '-80px' })
 
   return (
-    <section
-      ref={sectionRef}
-      className="py-20 relative overflow-hidden bg-void"
-    >
+    <section ref={sectionRef} className="relative overflow-hidden bg-void py-20">
       {/* Global Circuit board pattern layer */}
       <CircuitBoard prefersReduced={false} />
 
       {/* Top Divider Line */}
-      <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
+      <div className="current-line-horizontal pointer-events-none absolute left-0 right-0 top-0" />
 
       <div className="section-container relative z-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {STATS.map((stat, idx) => (
             <BurstCard key={stat.id} stat={stat} index={idx} inView={inView} />
           ))}

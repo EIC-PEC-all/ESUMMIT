@@ -158,42 +158,33 @@ export default function PassesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-void text-white relative">
+    <main className="relative min-h-screen bg-void text-white">
       <Toaster position="top-center" />
       <Nav />
 
       {/* Hero Section */}
-      <section className="relative pt-36 pb-20 overflow-hidden border-b border-[var(--accent-mint)]/20">
+      <section className="relative overflow-hidden border-b border-border-subtle bg-void pb-20 pt-36">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-[var(--accent-mint)] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted transition-colors hover:text-mint"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 mb-6">
-              <Zap size={14} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)]">
-                Official E-Summit 2026 Passes
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="mb-6 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl">
               CHOOSE YOUR <br />
-              <span className="text-stroke-green">SUMMIT PASS</span>
+              <span className="text-mint">SUMMIT PASS</span>
             </h1>
 
-            <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
-              Whether you are pitching your startup to top VCs, hacking overnight for prize pools, or attending high-impact keynotes, grab your pass now before early-bird pricing ends.
+            <p className="mb-8 max-w-xl font-body text-lg leading-relaxed text-secondary">
+              Whether you are pitching your startup to top VCs, hacking overnight for prize pools,
+              or attending high-impact keynotes, grab your pass now before early-bird pricing ends.
             </p>
 
             {/* Filter Pills */}
@@ -207,14 +198,11 @@ export default function PassesPage() {
                 <button
                   key={item.id}
                   onClick={() => setFilter(item.id as any)}
-                  className="px-5 py-2.5 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
-                  style={{
-                    background: filter === item.id ? 'var(--accent-mint)' : '#0A110E',
-                    color: filter === item.id ? '#040605' : '#9CA3AF',
-                    fontWeight: filter === item.id ? 700 : 400,
-                    border: `1px solid ${filter === item.id ? 'transparent' : 'rgba(126,211,33,0.2)'}`,
-                    boxShadow: filter === item.id ? '0 0 18px rgba(126,211,33,0.4)' : 'none',
-                  }}
+                  className={`rounded-xl px-5 py-2.5 font-mono-data text-xs uppercase tracking-wider transition-all duration-200 ${
+                    filter === item.id
+                      ? 'bg-mint font-bold text-void shadow-[0_0_18px_rgba(126,211,33,0.4)]'
+                      : 'hover:border-mint/40 border border-border-subtle bg-panel text-secondary hover:text-white'
+                  }`}
                 >
                   {item.label}
                 </button>
@@ -225,9 +213,9 @@ export default function PassesPage() {
       </section>
 
       {/* Pass Cards Grid */}
-      <section className="py-20 bg-[#111A12]">
+      <section className="bg-void py-20">
         <div className="section-container">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {filteredPasses.map((pass) => (
               <motion.div
                 key={pass.id}
@@ -235,19 +223,17 @@ export default function PassesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className={`relative rounded-2xl p-8 flex flex-col justify-between transition-all duration-300 group ${
-                  pass.popular ? 'glow-green' : ''
+                className={`group relative flex flex-col justify-between rounded-2xl border bg-panel p-8 transition-all duration-300 ${
+                  pass.popular
+                    ? 'border-mint shadow-[0_0_28px_rgba(126,211,33,0.25)]'
+                    : 'hover:border-mint/50 border-border-subtle'
                 }`}
-                style={{
-                  background: '#0A110E',
-                  border: `1px solid ${pass.popular ? 'var(--accent-mint)' : 'rgba(126,211,33,0.2)'}`,
-                }}
-                whileHover={{ y: -6, borderColor: 'var(--accent-mint)', boxShadow: '0 0 28px rgba(126,211,33,0.35)' }}
+                whileHover={{ y: -6 }}
               >
                 {/* Ribbon / Badge */}
                 {pass.badge && (
                   <div
-                    className="absolute -top-3.5 right-6 px-3.5 py-1 rounded-full font-mono-data text-[10px] font-bold uppercase tracking-widest shadow-md"
+                    className="absolute -top-3.5 right-6 rounded-full px-3.5 py-1 font-mono-data text-[10px] font-bold uppercase tracking-widest shadow-md"
                     style={{
                       background: pass.popular ? 'var(--accent-mint)' : 'rgba(126,211,33,0.15)',
                       color: pass.popular ? '#040605' : 'var(--accent-mint)',
@@ -259,11 +245,15 @@ export default function PassesPage() {
                 )}
 
                 <div>
-                  <h3 className="font-display text-3xl mb-2 text-white group-hover:text-[var(--accent-mint)] transition-colors">{pass.name}</h3>
-                  <p className="font-body text-sm text-muted mb-6 leading-relaxed">{pass.tagline}</p>
+                  <h3 className="mb-2 font-display text-3xl text-white transition-colors group-hover:text-[var(--accent-mint)]">
+                    {pass.name}
+                  </h3>
+                  <p className="mb-6 font-body text-sm leading-relaxed text-muted">
+                    {pass.tagline}
+                  </p>
 
-                  <div className="flex items-baseline gap-3 mb-8 pb-6 border-b border-[var(--accent-mint)]/15">
-                    <span className="font-mono-data text-4xl font-bold text-[var(--accent-mint)] tabular-nums">
+                  <div className="border-[var(--accent-mint)]/15 mb-8 flex items-baseline gap-3 border-b pb-6">
+                    <span className="font-mono-data text-4xl font-bold tabular-nums text-[var(--accent-mint)]">
                       {pass.price}
                     </span>
                     {pass.originalPrice && (
@@ -275,10 +265,13 @@ export default function PassesPage() {
                   </div>
 
                   {/* Feature List */}
-                  <ul className="space-y-3.5 mb-8">
+                  <ul className="mb-8 space-y-3.5">
                     {pass.features.map((feat, idx) => (
-                      <li key={idx} className="flex items-start gap-3 font-body text-sm text-gray-200">
-                        <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-[var(--accent-mint)]/20 text-[var(--accent-mint)] border border-[var(--accent-mint)]/40">
+                      <li
+                        key={idx}
+                        className="flex items-start gap-3 font-body text-sm text-gray-200"
+                      >
+                        <div className="bg-[var(--accent-mint)]/20 border-[var(--accent-mint)]/40 mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[var(--accent-mint)]">
                           <Check size={12} />
                         </div>
                         <span>{feat}</span>
@@ -289,7 +282,7 @@ export default function PassesPage() {
 
                 <button
                   onClick={() => handleSelectPass(pass)}
-                  className="w-full py-4 rounded-xl font-body font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl py-4 font-body text-sm font-bold transition-all duration-200"
                   style={{
                     background: pass.popular ? 'var(--accent-mint)' : 'transparent',
                     color: pass.popular ? '#040605' : '#FFFFFF',
@@ -306,22 +299,28 @@ export default function PassesPage() {
       </section>
 
       {/* Trust & Guarantee Banner */}
-      <section className="py-16 border-t border-b border-[var(--accent-mint)]/20 bg-void">
-        <div className="section-container grid sm:grid-cols-3 gap-8 text-center">
+      <section className="border-[var(--accent-mint)]/20 border-b border-t bg-void py-16">
+        <div className="section-container grid gap-8 text-center sm:grid-cols-3">
           <div className="flex flex-col items-center">
-            <ShieldCheck size={28} className="text-[var(--accent-mint)] mb-3" />
-            <h4 className="font-body font-semibold text-base mb-1">100% Instant E-Badge</h4>
-            <p className="font-body text-xs text-muted">Receive your digital pass &amp; QR code instantly on booking.</p>
+            <ShieldCheck size={28} className="mb-3 text-[var(--accent-mint)]" />
+            <h4 className="mb-1 font-body text-base font-semibold">100% Instant E-Badge</h4>
+            <p className="font-body text-xs text-muted">
+              Receive your digital pass &amp; QR code instantly on booking.
+            </p>
           </div>
           <div className="flex flex-col items-center">
-            <Ticket size={28} className="text-[var(--accent-mint)] mb-3" />
-            <h4 className="font-body font-semibold text-base mb-1">Hostel &amp; Stay Assistance</h4>
-            <p className="font-body text-xs text-muted">Outstation attendees get priority hostel accommodation guidance.</p>
+            <Ticket size={28} className="mb-3 text-[var(--accent-mint)]" />
+            <h4 className="mb-1 font-body text-base font-semibold">Hostel &amp; Stay Assistance</h4>
+            <p className="font-body text-xs text-muted">
+              Outstation attendees get priority hostel accommodation guidance.
+            </p>
           </div>
           <div className="flex flex-col items-center">
-            <Users size={28} className="text-[var(--accent-mint)] mb-3" />
-            <h4 className="font-body font-semibold text-base mb-1">Investor Matchmaking</h4>
-            <p className="font-body text-xs text-muted">Pass holders get access to the E-Summit digital networking portal.</p>
+            <Users size={28} className="mb-3 text-[var(--accent-mint)]" />
+            <h4 className="mb-1 font-body text-base font-semibold">Investor Matchmaking</h4>
+            <p className="font-body text-xs text-muted">
+              Pass holders get access to the E-Summit digital networking portal.
+            </p>
           </div>
         </div>
       </section>
@@ -329,16 +328,16 @@ export default function PassesPage() {
       {/* Booking Modal */}
       <AnimatePresence>
         {selectedPass && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-void/80 backdrop-blur-md">
+          <div className="bg-void/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg rounded-2xl p-8 bg-panel border border-[var(--accent-mint)]/40 shadow-2xl relative"
+              className="border-[var(--accent-mint)]/40 relative w-full max-w-lg rounded-2xl border bg-panel p-8 shadow-2xl"
             >
               <button
                 onClick={() => setSelectedPass(null)}
-                className="absolute top-6 right-6 text-muted hover:text-white font-mono-data text-sm"
+                className="absolute right-6 top-6 font-mono-data text-sm text-muted hover:text-white"
               >
                 <X size={18} />
               </button>
@@ -346,20 +345,24 @@ export default function PassesPage() {
               {checkoutStep === 'form' ? (
                 <>
                   <div className="mb-6">
-                    <span className="font-mono-data text-xs uppercase tracking-widest text-[var(--accent-mint)] font-bold">
+                    <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-[var(--accent-mint)]">
                       ⚡ Pass Checkout
                     </span>
-                    <h3 className="font-display text-3xl text-white mt-1">
+                    <h3 className="mt-1 font-display text-3xl text-white">
                       Reserve {selectedPass.name}
                     </h3>
-                    <p className="font-body text-sm text-muted mt-1">
-                      Total: <span className="text-[var(--accent-mint)] font-semibold">{selectedPass.price}</span> (Early Bird Rate)
+                    <p className="mt-1 font-body text-sm text-muted">
+                      Total:{' '}
+                      <span className="font-semibold text-[var(--accent-mint)]">
+                        {selectedPass.price}
+                      </span>{' '}
+                      (Early Bird Rate)
                     </p>
                   </div>
 
                   <form onSubmit={handleConfirmBooking} className="space-y-4">
                     <div>
-                      <label className="block font-mono-data text-xs text-muted uppercase mb-1.5 font-bold">
+                      <label className="mb-1.5 block font-mono-data text-xs font-bold uppercase text-muted">
                         Full Name *
                       </label>
                       <input
@@ -368,12 +371,12 @@ export default function PassesPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="e.g. Rahul Sharma"
-                        className="w-full px-4 py-3 rounded-lg bg-void border border-[var(--accent-mint)]/30 text-white font-body text-sm outline-none focus:border-[var(--accent-mint)]"
+                        className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
                       />
                     </div>
 
                     <div>
-                      <label className="block font-mono-data text-xs text-muted uppercase mb-1.5 font-bold">
+                      <label className="mb-1.5 block font-mono-data text-xs font-bold uppercase text-muted">
                         Email Address *
                       </label>
                       <input
@@ -382,13 +385,13 @@ export default function PassesPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="rahul@example.com"
-                        className="w-full px-4 py-3 rounded-lg bg-void border border-[var(--accent-mint)]/30 text-white font-body text-sm outline-none focus:border-[var(--accent-mint)]"
+                        className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block font-mono-data text-xs text-muted uppercase mb-1.5 font-bold">
+                        <label className="mb-1.5 block font-mono-data text-xs font-bold uppercase text-muted">
                           Phone Number
                         </label>
                         <input
@@ -396,11 +399,11 @@ export default function PassesPage() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="+91 98765 43210"
-                          className="w-full px-4 py-3 rounded-lg bg-void border border-[var(--accent-mint)]/30 text-white font-body text-sm outline-none focus:border-[var(--accent-mint)]"
+                          className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
                         />
                       </div>
                       <div>
-                        <label className="block font-mono-data text-xs text-muted uppercase mb-1.5 font-bold">
+                        <label className="mb-1.5 block font-mono-data text-xs font-bold uppercase text-muted">
                           College / Org
                         </label>
                         <input
@@ -408,14 +411,14 @@ export default function PassesPage() {
                           value={formData.college}
                           onChange={(e) => setFormData({ ...formData, college: e.target.value })}
                           placeholder="PEC Chandigarh"
-                          className="w-full px-4 py-3 rounded-lg bg-void border border-[var(--accent-mint)]/30 text-white font-body text-sm outline-none focus:border-[var(--accent-mint)]"
+                          className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
                         />
                       </div>
                     </div>
 
                     <button
                       type="submit"
-                      className="w-full mt-6 btn-green justify-center py-3.5 text-base font-bold"
+                      className="btn-green mt-6 w-full justify-center py-3.5 text-base font-bold"
                     >
                       Confirm Booking ({selectedPass.price})
                     </button>
@@ -423,16 +426,20 @@ export default function PassesPage() {
                 </>
               ) : (
                 <div className="py-6 text-center">
-                  <div className="w-16 h-16 rounded-full bg-[var(--accent-mint)]/20 border border-[var(--accent-mint)] text-[var(--accent-mint)] flex items-center justify-center mx-auto mb-4">
+                  <div className="bg-[var(--accent-mint)]/20 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--accent-mint)] text-[var(--accent-mint)]">
                     <Check size={32} />
                   </div>
-                  <h3 className="font-display text-3xl text-white mb-2">Booking Reserved!</h3>
-                  <p className="font-body text-sm text-muted mb-6 leading-relaxed">
-                    Congratulations <span className="text-white font-semibold">{formData.name}</span>! Your pass reservation for <strong className="text-[var(--accent-mint)]">{selectedPass.name}</strong> is confirmed.
+                  <h3 className="mb-2 font-display text-3xl text-white">Booking Reserved!</h3>
+                  <p className="mb-6 font-body text-sm leading-relaxed text-muted">
+                    Congratulations{' '}
+                    <span className="font-semibold text-white">{formData.name}</span>! Your pass
+                    reservation for{' '}
+                    <strong className="text-[var(--accent-mint)]">{selectedPass.name}</strong> is
+                    confirmed.
                   </p>
                   <button
                     onClick={() => setSelectedPass(null)}
-                    className="btn-green justify-center py-3 px-8"
+                    className="btn-green justify-center px-8 py-3"
                   >
                     Done
                   </button>

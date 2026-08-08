@@ -100,48 +100,43 @@ export default function AlumniSection() {
   // Scroll progress for horizontal animation
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start start', 'end end'],
+    offset: ['start 90%', 'end end'],
   })
 
   // Map vertical scroll progress [0, 1] to horizontal translation percentage
   const xTransform = useTransform(scrollYProgress, [0, 1], ['0%', '-65%'])
 
   return (
-    <section ref={containerRef} className="relative h-[250vh] bg-void text-primary">
+    <section ref={containerRef} className="relative h-[180vh] bg-void text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10">
       {/* Background ambient lighting glows */}
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-[var(--accent-mint)]/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/3 right-10 w-[600px] h-[600px] bg-[#3B82F6]/5 rounded-full blur-[160px] pointer-events-none" />
 
       {/* Sticky Fullscreen Container */}
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center pt-20 md:pt-24 pb-16 px-4 md:px-12">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-start pt-16 md:pt-20 pb-6 px-4 md:px-12">
         {/* Header Section */}
-        <div className="max-w-7xl mx-auto w-full mb-4 flex flex-col md:flex-row md:items-end justify-between gap-4 z-10">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-black font-display tracking-tight text-primary uppercase">
-              <KineticText text="Distinguished Alumni" highlightWords={['Alumni']} staggerDelay={0.03} />
-            </h2>
-            <p className="text-sm text-secondary font-sans max-w-xl mt-1.5">
-              Pioneers, founders, and leaders who emerged from PEC E-Cell to shape global technology and venture ecosystems.
-            </p>
-          </div>
-
-          {/* Scroll hint indicator */}
-          <div className="hidden md:flex items-center gap-3 text-xs font-mono text-secondary bg-panel px-4 py-2 rounded-full">
-            <span>SCROLL DOWN TO EXPLORE</span>
-            <ArrowRight className="w-4 h-4 text-mint animate-pulse" />
-          </div>
+        <div className="max-w-7xl mx-auto w-full mb-3 flex flex-col items-center text-center gap-1 z-10">
+          <h2
+            className="font-display font-black uppercase leading-none tracking-tight text-[var(--accent-mint)] mb-1"
+            style={{ fontSize: 'clamp(2.5rem, 7vw, 95px)' }}
+          >
+            ALUMNI
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-400 font-sans max-w-xl">
+            Pioneers, founders, and leaders who emerged from PEC E-Cell to shape global technology and venture ecosystems.
+          </p>
         </div>
 
         {/* Horizontal Motion Track */}
-        <div className="w-full overflow-hidden z-10 py-1">
+        <div className="w-full overflow-hidden z-10 py-1 mt-1">
           <motion.div style={{ x: xTransform }} className="flex gap-5 md:gap-7 w-max pl-4 md:pl-12 pr-12">
             {ALUMNI_DATA.map((person) => (
-              <div key={person.id} className="w-[280px] sm:w-[320px] shrink-0">
+              <div key={person.id} className="w-[260px] sm:w-[295px] shrink-0">
                 <PixelTransition
                   gridSize={10}
                   pixelColor="var(--accent-mint)"
                   animationStepDuration={0.4}
-                  aspectRatio="125%"
+                  aspectRatio="112%"
                   className="rounded-2xl shadow-2xl bg-panel w-full overflow-hidden"
                   firstContent={
                     <div className="relative w-full h-full group overflow-hidden bg-panel">
