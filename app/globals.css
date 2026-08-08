@@ -60,13 +60,16 @@ html {
 /* ─── Section Layout ─── */
 section,
 .esummit-section,
-#register,
 #faq,
 #sponsors,
 #schedule,
 #esummit-marquee,
 #esummit-about {
   min-height: 100dvh;
+}
+
+#register {
+  min-height: auto !important;
 }
 
 /* Lenis smooth scrolling rules */

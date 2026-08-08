@@ -15,6 +15,11 @@ import {
   Facebook,
   Briefcase,
   Phone,
+  Users,
+  Trophy,
+  Sparkles,
+  CheckCircle2,
+  ChevronRight,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Image from 'next/image'
@@ -129,22 +134,19 @@ export function RegisterCTA() {
       className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#0D2420] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px]"
       aria-labelledby="footer-cta-heading"
     >
-      {/* Circuit board closing moment */}
+      {/* Circuit board background accent */}
       <CircuitBoard prefersReduced={false} />
 
-      {/* Top Green Glow Line Accent */}
-      <div className="current-line-horizontal pointer-events-none absolute left-0 right-0 top-0" />
-
       {/* Main CTA block */}
-      <div className="relative z-10 py-24 lg:py-32">
+      <div className="relative z-10 py-20 lg:py-28">
         <div className="section-container">
           <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="flex flex-col items-center text-center"
+              transition={{ duration: 0.6 }}
+              className="flex w-full flex-col items-center text-center"
             >
               <h2
                 id="footer-cta-heading"
@@ -153,34 +155,30 @@ export function RegisterCTA() {
               >
                 REGISTER
               </h2>
-              <p className="mb-8 max-w-lg font-body text-base leading-relaxed text-gray-200">
-                Early-bird passes are limited. Lock in your spot and be part of North India&apos;s
-                premier entrepreneurship summit.
+
+              <p className="mb-10 max-w-lg font-body text-base leading-relaxed text-gray-200 sm:text-lg">
+                Early-bird passes are limited. Lock in your spot and be part of North India&apos;s premier entrepreneurship summit.
               </p>
 
-              <div className="mb-12 flex flex-wrap items-center justify-center gap-4">
+              <div className="flex flex-wrap items-center justify-center gap-4">
                 <Link
                   href="/register"
-                  className="btn-green flex items-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg"
+                  className="btn-green flex items-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105"
                   id="footer-register-btn"
                   aria-label="Open PEC Summit Registration Dashboard"
                 >
-                  <GlitchText text="Register Now" />
+                  <span>Register Now</span>
                   <ArrowRight size={18} aria-hidden="true" />
                 </Link>
+
                 <a
                   href="mailto:info@ecellpec.in"
-                  className="flex items-center rounded-full border border-white/40 px-8 py-4 text-sm font-bold text-white transition-all hover:bg-white/10"
+                  className="flex items-center rounded-full border border-white/40 px-8 py-4 text-base font-bold text-white transition-all hover:bg-white/10"
                   id="footer-contact-btn"
                   aria-label="Contact E-Cell PEC"
                 >
-                  <GlitchText text="Contact Us" />
+                  <span>Contact Us</span>
                 </a>
-              </div>
-
-              {/* Email subscribe */}
-              <div className="mb-6">
-                <EmailCapture />
               </div>
             </motion.div>
           </div>

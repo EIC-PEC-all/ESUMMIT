@@ -67,77 +67,32 @@ function SpeakerChip({
 const CARDS = [
   {
     num: '01',
-    category: 'Pitch Competition',
-    name: 'Pitch Finals',
-    speakers: [
-      { name: 'Priya Nair', title: 'Partner, Surge Ventures', initials: 'PN', color: '#FF4D3D' },
-      { name: 'Sameer Khanna', title: 'Angel Investor', initials: 'SK', color: '#9B5CFF' },
-      { name: 'Ritu Sharma', title: 'Founder, GreenMile', initials: 'RS', color: '#FF4D3D' },
+    day: 'DAY 01',
+    date: 'MARCH 15, 2026',
+    title: 'Inauguration & Pitch Arena',
+    events: [
+      { time: '09:30 AM', title: 'Grand Opening & Keynote Address', tag: 'Main Stage' },
+      { time: '11:00 AM', title: 'Startup Expo & Founder Alley Launch', tag: 'Expo Floor' },
+      { time: '02:00 PM', title: 'VC Pitch Arena: Qualifying Round', tag: 'Pitch Room' },
+      { time: '05:00 PM', title: '24-Hour National Hackathon Kickoff', tag: 'Hacker Lab' },
+      { time: '08:00 PM', title: 'VIP Investor & Founder Networking Dinner', tag: 'VIP Lounge' },
     ],
-    images: {
-      col1Top:    'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=700&q=85&auto=format&fit=crop', // speaker on stage
-      col1Bottom: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=85&auto=format&fit=crop', // conference hall
-      col2:       'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=700&q=85&auto=format&fit=crop', // startup pitch
-    },
   },
   {
     num: '02',
-    category: 'Hackathon',
-    name: '24-Hour Build',
-    speakers: [
-      { name: 'Arjun Mehta', title: 'Co-founder, Kira.ai', initials: 'AM', color: '#3DD9FF' },
-      { name: 'Kabir Singh', title: 'ex-Microsoft Research', initials: 'KS', color: '#9B5CFF' },
+    day: 'DAY 02',
+    date: 'MARCH 16, 2026',
+    title: 'Hackathon Demos & Grand Finals',
+    events: [
+      { time: '10:00 AM', title: 'DeepTech & GenAI VC Masterclass', tag: 'Auditorium' },
+      { time: '12:30 PM', title: 'Hackathon Live Project Demos & Judging', tag: 'Hacker Lab' },
+      { time: '03:00 PM', title: 'Grand Pitch Finals (₹7.5L Pool)', tag: 'Main Stage' },
+      { time: '05:30 PM', title: 'Valedictory Keynote & Award Ceremony', tag: 'Main Stage' },
     ],
-    images: {
-      col1Top:    'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=700&q=85&auto=format&fit=crop', // hackathon coding
-      col1Bottom: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=700&q=85&auto=format&fit=crop', // team coding
-      col2:       'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&q=85&auto=format&fit=crop', // hackathon team
-    },
-  },
-  {
-    num: '03',
-    category: 'Investor Networking',
-    name: 'Investor Meet',
-    speakers: [
-      { name: 'Vikram Bose', title: 'VP Product, Razorpay', initials: 'VB', color: '#3DD9FF' },
-      { name: 'Deepika Rangi', title: 'Head, Nasscom', initials: 'DR', color: '#FF8C42' },
-      { name: 'Ananya Joshi', title: 'Founder, MindBloom', initials: 'AJ', color: '#FF8C42' },
-    ],
-    images: {
-      col1Top:    'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=700&q=85&auto=format&fit=crop', // investor meeting
-      col1Bottom: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&q=85&auto=format&fit=crop', // panel discussion
-      col2:       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=85&auto=format&fit=crop', // entrepreneur presenting
-    },
-  },
-  {
-    num: '04',
-    category: 'Panel Discussions',
-    name: 'Playbooks & AI',
-    speakers: [
-      { name: 'Sameer Khanna', title: 'Angel Investor', initials: 'SK', color: '#9B5CFF' },
-      { name: 'Vikram Bose', title: 'VP Product, Razorpay', initials: 'VB', color: '#3DD9FF' },
-    ],
-    images: {
-      col1Top:    'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=700&q=85&auto=format&fit=crop',
-      col1Bottom: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=700&q=85&auto=format&fit=crop',
-      col2:       'https://images.unsplash.com/photo-1558403194-611308249627?w=700&q=85&auto=format&fit=crop',
-    },
-  },
-  {
-    num: '05',
-    category: 'Startup Expo',
-    name: '30+ Exhibitors',
-    speakers: [],
-    images: {
-      col1Top:    'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=85&auto=format&fit=crop',
-      col1Bottom: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=700&q=85&auto=format&fit=crop',
-      col2:       'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=700&q=85&auto=format&fit=crop',
-    },
   },
 ]
 
 const TOTAL = CARDS.length
-const IMG_RADIUS = 'clamp(16px, 3vw, 36px)'
 
 function HighlightCard({
   card,
@@ -148,111 +103,78 @@ function HighlightCard({
   index: number
   scrollYProgress: any
 }) {
-  const targetScale = 1 - (TOTAL - 1 - index) * 0.03
+  const targetScale = 1 - (TOTAL - 1 - index) * 0.04
   const scale = useTransform(scrollYProgress, [index / TOTAL, 1], [1, targetScale])
 
   return (
     <div
-      className="h-[85vh] sticky"
-      style={{ top: `calc(${index * 28}px + 6rem)` }}
+      className="h-[80vh] sticky"
+      style={{ top: `calc(${index * 36}px + 6rem)` }}
     >
-      <motion.div
-        className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px]
-          border-2 p-4 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4 shadow-xl"
-        style={{
-          borderColor: '#193B2F',
-          background: '#07130F',
-          scale,
-          originY: 0,
-        }}
-      >
-        {/* ── Top row: number + name + button ── */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-baseline gap-4 sm:gap-6">
-            {/* Number */}
-            <span
-              className="font-display font-black leading-none select-none text-mint"
-              style={{
-                fontSize: 'clamp(2.5rem, 8vw, 120px)',
-                lineHeight: 0.9,
-              }}
-            >
-              {card.num}
-            </span>
-            {/* Category + name */}
-            <div className="flex flex-col">
-              <span
-                className="font-mono-data uppercase tracking-widest text-mint"
-                style={{
-                  fontSize: 'clamp(0.6rem, 1vw, 0.85rem)',
-                  opacity: 0.9,
-                }}
-              >
-                {card.category}
-              </span>
-              <span
-                className="font-display font-bold uppercase text-white"
-                style={{
-                  fontSize: 'clamp(1rem, 2.2vw, 2.1rem)',
-                }}
-              >
-                {card.name}
+      <div className="flex w-full h-full justify-end">
+        {/* Left side empty space (50%) */}
+        <div className="hidden lg:block w-1/2" aria-hidden="true" />
+
+        {/* Right side 50% card */}
+        <motion.div
+          className="w-full lg:w-1/2 h-full rounded-[32px] sm:rounded-[40px] border-2 p-6 sm:p-8 flex flex-col justify-between shadow-2xl overflow-y-auto"
+          style={{
+            borderColor: 'rgba(126, 211, 33, 0.3)',
+            background: '#07130F',
+            scale,
+            originY: 0,
+          }}
+        >
+          <div>
+            {/* Card Top Header */}
+            <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-baseline gap-3">
+                <span className="font-display font-black text-4xl sm:text-5xl text-[#7ED321]">
+                  {card.day}
+                </span>
+                <span className="font-mono-data text-xs text-gray-400 font-bold uppercase tracking-wider">
+                  {card.date}
+                </span>
+              </div>
+              <span className="font-mono-data text-xs font-bold text-[#7ED321] border border-[#7ED321]/30 bg-[#7ED321]/10 px-3 py-1 rounded-full">
+                Phase {card.num}
               </span>
             </div>
-          </div>
-          <ViewButton />
-        </div>
 
-        {/* ── Speaker chips row ── */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span
-            className="font-mono-data text-[10px] uppercase tracking-widest mr-1"
-            style={{ color: 'var(--accent-mint)', opacity: 0.5 }}
-          >
-            Speakers:
-          </span>
-          {card.speakers.map((s) => (
-            <SpeakerChip
-              key={s.name}
-              name={s.name}
-              title={s.title}
-              initials={s.initials}
-              color={s.color}
-            />
-          ))}
-        </div>
+            <h3 className="mb-6 font-display font-bold text-xl sm:text-2xl text-white">
+              {card.title}
+            </h3>
 
-        {/* ── Image grid ── */}
-        <div className="flex gap-3 sm:gap-4 flex-1 overflow-hidden">
-          {/* Left col — 40% — 2 stacked images */}
-          <div className="flex flex-col gap-3 sm:gap-4" style={{ width: '40%' }}>
-            <img
-              src={card.images.col1Top}
-              alt=""
-              loading="lazy"
-              className="w-full object-cover"
-              style={{ borderRadius: IMG_RADIUS, height: 'clamp(120px, 15vw, 210px)' }}
-            />
-            <img
-              src={card.images.col1Bottom}
-              alt=""
-              loading="lazy"
-              className="w-full object-cover flex-1"
-              style={{ borderRadius: IMG_RADIUS, height: 'clamp(140px, 20vw, 300px)' }}
-            />
+            {/* Events List */}
+            <div className="space-y-3">
+              {card.events.map((ev, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-[#040A07]/80 p-3.5 backdrop-blur-sm"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="font-mono-data text-xs font-bold text-[#7ED321] shrink-0">
+                      {ev.time}
+                    </span>
+                    <span className="font-body text-xs sm:text-sm font-medium text-white truncate">
+                      {ev.title}
+                    </span>
+                  </div>
+                  <span className="font-mono-data text-[10px] text-gray-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded shrink-0">
+                    {ev.tag}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-          {/* Right col — 60% — tall image */}
-          <div className="flex-1">
-            <img
-              src={card.images.col2}
-              alt=""
-              loading="lazy"
-              className="w-full h-full object-cover"
-              style={{ borderRadius: IMG_RADIUS }}
-            />
+
+          {/* Card Footer note */}
+          <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4 font-mono-data text-xs text-gray-400">
+            <span>PEC Sector 12, Chandigarh</span>
+            <span className="text-[#7ED321]">E-Summit 2026</span>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   )
 }
