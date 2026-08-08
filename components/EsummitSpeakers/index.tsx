@@ -430,7 +430,7 @@ export default function EsummitHighlights() {
       ref={containerRef}
       className="esummit-section rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]
         -mt-10 sm:-mt-12 md:-mt-14 z-10 relative
-        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-void text-white"
+        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-[#060F0B] text-white"
       aria-labelledby="timeline-heading"
     >
       <h2

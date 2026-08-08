@@ -74,7 +74,7 @@ export default function Sponsors() {
   return (
     <section
       id="sponsors"
-      className="relative bg-[#040705] text-white py-24 sm:py-32 px-4 sm:px-6 md:px-12 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-10 border-t border-white/10"
+      className="relative bg-[#07150E] text-white py-24 sm:py-32 px-4 sm:px-6 md:px-12 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-10 border-t border-white/10"
       aria-labelledby="sponsors-heading"
     >
       <div className="max-w-6xl mx-auto relative z-10">

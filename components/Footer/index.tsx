@@ -131,7 +131,7 @@ export function RegisterCTA() {
   return (
     <div
       id="register"
-      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#040705] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-white/10 py-24 sm:py-32"
+      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#081C16] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#7ED321]/20 py-24 sm:py-32"
       aria-labelledby="footer-cta-heading"
     >
       {/* ── Lightweight Hardware-Accelerated Radial Mesh Glow (NO CPU Blur Filter) ── */}
@@ -193,11 +193,10 @@ export function RegisterCTA() {
           {/* Main Headline */}
           <h2
             id="footer-cta-heading"
-            className="mb-6 font-display font-black uppercase text-center text-white leading-[0.96] tracking-tight drop-shadow-md"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 110px)' }}
+            className="mb-6 font-display font-black uppercase text-center text-mint leading-none tracking-tight drop-shadow-lg"
+            style={{ fontSize: 'clamp(3.5rem, 14vw, 180px)' }}
           >
-            YOUR STARTUP STAGE <br />
-            <span className="text-mint">AT PEC SUMMIT</span>
+            REGISTER
           </h2>
 
           {/* Subtitle */}
