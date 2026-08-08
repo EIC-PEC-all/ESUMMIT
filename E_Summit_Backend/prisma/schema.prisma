@@ -1,0 +1,251 @@
+// PEC Summit 2026 — E_Summit_Backend
+// Schema follows §3 of BACKEND_IMPLEMENTATION_PLAN.md.
+// Additions beyond the plan blueprint are marked with `// +plan` and explained inline.
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector] // +plan: pgvector, required by the §4.6 RAG concierge
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+enum Role {
+  SUPER_ADMIN
+  ORGANIZER
+  VOLUNTEER_CHECKIN
+  INVESTOR
+  DELEGATE
+}
+
+enum PassType {
+  STUDENT_GENERAL
+  FOUNDER_PITCH
+  HACKATHON_BUILDER
+  CAMPUS_AMBASSADOR
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum CompetitionType {
+  PITCH_COMPETITION
+  HACKATHON
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String?
+  name          String
+  phone         String?
+  college       String?
+  gradYear      String?
+  city          String?
+  role          Role           @default(DELEGATE)
+  referralCode  String?        @unique
+  referredById  String?
+  referredBy    User?          @relation("CAReferrals", fields: [referredById], references: [id])
+  referrals     User[]         @relation("CAReferrals")
+  registrations Registration[]
+  teamMembers   TeamMember[]
+  checkIns      CheckIn[]      @relation("AttendeeCheckIns")
+  scannedLogs   CheckIn[]      @relation("VolunteerScans")
+  judgeScores   Score[]        @relation("JudgeScores") // +plan: back-relation for Score.judge
+  refreshTokens RefreshToken[] // +plan: supports refresh-token rotation (§4.1)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([role])
+  @@index([referredById])
+}
+
+/// +plan: The §4.1 auth spec requires an HTTP-only refresh cookie that can be
+/// revoked on logout. Storing a hash of each issued token lets us rotate on every
+/// refresh and invalidate a whole session family on reuse detection.
+model RefreshToken {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique
+  familyId   String
+  userAgent  String?
+  ipAddress  String?
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([familyId])
+  @@index([expiresAt])
+}
+
+model Registration {
+  id          String   @id @default(uuid())
+  passId      String   @unique // e.g. PEC-984210
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  passType    PassType
+  amountPaid  Float    @default(0.0)
+  qrToken     String   @unique // HMAC signed token, see §5.1
+  paymentId   String?  @unique
+  payment     Payment? @relation(fields: [paymentId], references: [id])
+  tracks      String[]
+  isCheckedIn Boolean  @default(false)
+  badgePdfUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt // +plan: check-in and badge writes mutate this row
+
+  @@index([userId])
+  @@index([passType])
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  orderId       String        @unique // Razorpay Order ID
+  transactionId String?       @unique
+  amount        Float
+  currency      String        @default("INR")
+  status        PaymentStatus @default(PENDING)
+  registration  Registration?
+  rawWebhookLog Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([status])
+}
+
+model Team {
+  id         String          @id @default(uuid())
+  name       String
+  code       String          @unique // e.g. HACK-9A4B
+  type       CompetitionType
+  trackName  String
+  leaderId   String
+  members    TeamMember[]
+  submission Submission?
+  scores     Score[]
+  createdAt  DateTime        @default(now())
+
+  @@index([type])
+}
+
+model TeamMember {
+  id       String   @id @default(uuid())
+  teamId   String
+  team     Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  role     String   @default("MEMBER") // LEADER or MEMBER
+  joinedAt DateTime @default(now())
+
+  @@unique([teamId, userId])
+  @@index([userId])
+}
+
+model Submission {
+  id          String   @id @default(uuid())
+  teamId      String   @unique
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  repoUrl     String?
+  demoUrl     String?
+  deckPdfUrl  String? // S3 URL
+  submittedAt DateTime @default(now())
+}
+
+model Score {
+  id           String   @id @default(uuid())
+  teamId       String
+  team         Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  judgeId      String
+  judge        User     @relation("JudgeScores", fields: [judgeId], references: [id]) // +plan: referential integrity
+  innovation   Int // 1-10
+  execution    Int // 1-10
+  marketSize   Int // 1-10
+  presentation Int // 1-10
+  comments     String?
+  createdAt    DateTime @default(now())
+
+  @@unique([teamId, judgeId])
+  @@index([judgeId])
+}
+
+model CheckIn {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation("AttendeeCheckIns", fields: [userId], references: [id])
+  scannedById String
+  scannedBy   User     @relation("VolunteerScans", fields: [scannedById], references: [id])
+  gateName    String   @default("MAIN_GATE")
+  timestamp   DateTime @default(now())
+
+  @@index([userId])
+  @@index([timestamp])
+}
+
+model Event {
+  id         String   @id @default(uuid())
+  title      String
+  type       String // keynote, panel, competition, hackathon, social
+  track      String?
+  day        Int // 1 or 2
+  startTime  String // e.g. "10:00"
+  endTime    String // e.g. "11:30"
+  venue      String
+  speakerIds String[]
+  createdAt  DateTime @default(now())
+
+  @@index([day])
+}
+
+model Speaker {
+  id        String  @id @default(uuid())
+  name      String
+  title     String
+  bio       String
+  track     String
+  avatarUrl String?
+  initials  String
+  color     String  @default("#7ED321")
+}
+
+model Sponsor {
+  id         String  @id @default(uuid())
+  tier       String // title, gold, silver, media
+  name       String
+  logoUrl    String?
+  websiteUrl String?
+
+  @@index([tier])
+}
+
+model Subscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+/// +plan: Backing store for the §4.6 pgvector retrieval index. Each row is one
+/// chunk of fest context (schedule entry, speaker bio, track description, FAQ)
+/// with its embedding. `sourceType`/`sourceId` let a chunk be re-synced when the
+/// CMS row behind it changes.
+model KnowledgeChunk {
+  id         String                      @id @default(uuid())
+  sourceType String // event | speaker | track | faq | sponsor | meta
+  sourceId   String?
+  content    String
+  embedding  Unsupported("vector(768)")?
+  createdAt  DateTime                    @default(now())
+  updatedAt  DateTime                    @updatedAt
+
+  @@index([sourceType])
+}

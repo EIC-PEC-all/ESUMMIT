@@ -1,26 +1,34 @@
+# ─────────────────────────────────────────────────────────────
+# Monorepo: ESUMMIT (public site) · E_Summit_Backend (API) · esummit-admin (portal)
+# Patterns are unanchored so they apply at every depth, not just the repo root.
+# ─────────────────────────────────────────────────────────────
+
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
-# production
-/build
+# build output
+build/
+dist/
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
 
-# local env files
-.env*.local
+# local env files — never commit real secrets (.env.example IS committed)
 .env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -28,3 +36,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# os
+.DS_Store
