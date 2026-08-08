@@ -189,54 +189,210 @@ export default function Vdo2Showcase() {
             Unlock 2 days of high-octane pitch battles, 24-hr hackathons, keynotes, and 1-on-1 VC deal-making at North India&apos;s flagship summit.
           </p>
 
-          {/* Pass Tier Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 max-w-4xl w-full mb-6">
-            {/* Student Pass */}
+          {/* Pass Tier Cards Grid — Exact Scalloped Barcode Ticket Stubs */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-4xl w-full mb-6 text-black">
+            {/* Student Pass — Electric Blue/Purple Gradient */}
             <Link
               href="/passes"
-              className="group relative p-4 rounded-2xl bg-[#07130F]/90 border border-mint/30 backdrop-blur-xl flex flex-col items-center justify-between text-center transition-all hover:border-mint hover:-translate-y-1 shadow-[0_8px_30px_rgba(0,0,0,0.7)]"
+              className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[24px] p-5 text-black shadow-xl transition-all duration-300 hover:-translate-y-2 select-none min-h-[420px]"
+              style={{
+                background: 'linear-gradient(165deg, #0284C7 0%, #2563EB 35%, #7C3AED 70%, #EC4899 100%)',
+                boxShadow: '0 12px 30px rgba(37,99,235,0.4)',
+              }}
             >
-              <span className="font-mono-data text-[10px] font-bold text-mint uppercase tracking-widest mb-1">STUDENT DELEGATE</span>
-              <span className="font-display text-xl font-black text-white">Student Pass</span>
-              <div className="my-2 flex items-baseline gap-1">
-                <span className="font-mono-data text-2xl font-bold text-mint">₹299</span>
-                <span className="font-mono-data text-xs text-gray-400 line-through">₹499</span>
+              {/* Top Scalloped Teeth */}
+              <div className="absolute left-0 right-0 -top-1.5 z-30 flex justify-between px-2">
+                {[...Array(7)].map((_, i) => (
+                  <div key={i} className="h-3.5 w-3.5 rounded-full bg-void" />
+                ))}
               </div>
-              <span className="font-mono-data text-[10px] text-gray-300 group-hover:text-mint transition-colors flex items-center gap-1 font-bold">
-                CLAIM PASS <ArrowUpRight size={12} />
-              </span>
+              {/* Bottom Scalloped Teeth */}
+              <div className="absolute left-0 right-0 -bottom-1.5 z-30 flex justify-between px-2">
+                {[...Array(7)].map((_, i) => (
+                  <div key={i} className="h-3.5 w-3.5 rounded-full bg-void" />
+                ))}
+              </div>
+              {/* Side Circular Notches */}
+              <div className="pointer-events-none absolute left-0 top-20 -translate-x-1/2 h-6 w-6 rounded-full bg-void z-30" />
+              <div className="pointer-events-none absolute right-0 top-20 translate-x-1/2 h-6 w-6 rounded-full bg-void z-30" />
+
+              {/* Header */}
+              <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
+                <div className="rounded bg-black px-2.5 py-1 text-white shadow-sm">
+                  <span className="font-display text-xs font-black tracking-tighter">PEC SUMMIT</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
+                    STU-88742
+                  </span>
+                  <div className="flex h-9 gap-0.5 bg-white/90 p-1 rounded">
+                    {[2, 1, 3, 1, 2, 1, 3, 2, 1, 4].map((w, idx) => (
+                      <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Title & Price */}
+              <div className="my-3 flex-1 flex flex-col justify-center text-left">
+                <span className="font-mono-data text-[9px] font-bold text-black/70">#STU-88742</span>
+                <h3 className="font-display text-3xl font-black uppercase tracking-tighter text-black leading-none my-1">
+                  STUDENT <br /> <span className="text-stroke-black">PASS</span>
+                </h3>
+                <div className="my-2 flex items-baseline gap-1.5">
+                  <span className="font-mono-data text-3xl font-black text-black">₹299</span>
+                  <span className="font-mono-data text-xs text-black/60 line-through">₹499</span>
+                </div>
+              </div>
+
+              {/* Metadata & Barcode */}
+              <div className="border-t border-black/20 pt-2.5">
+                <div className="flex justify-between font-mono-data text-[9px] font-bold text-black mb-2">
+                  <span>MARCH 15-16</span>
+                  <span>GENERAL ACCESS</span>
+                </div>
+                <div className="w-full flex h-9 items-center justify-between bg-white/90 p-1 rounded-lg border border-black/20 overflow-hidden">
+                  {[2, 1, 3, 1, 4, 1, 2, 1, 3, 2, 1, 4, 1, 2, 3, 1, 2].map((w, idx) => (
+                    <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
+                  ))}
+                </div>
+              </div>
             </Link>
 
-            {/* Founder & Pitch Pass */}
+            {/* Founder & Pitch Pass — Reference Purple/Coral Gradient (Featured) */}
             <Link
               href="/passes"
-              className="group relative p-4 rounded-2xl bg-[#0D241A]/95 border-2 border-mint backdrop-blur-xl flex flex-col items-center justify-between text-center transition-all hover:-translate-y-1 shadow-[0_0_30px_rgba(126,211,33,0.25)]"
+              className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[24px] p-5 text-black shadow-2xl transition-all duration-300 hover:-translate-y-2 select-none min-h-[420px]"
+              style={{
+                background: 'linear-gradient(165deg, #7C3AED 0%, #C026D3 30%, #F43F5E 65%, #F97316 85%, #FBBF24 100%)',
+                boxShadow: '0 20px 40px rgba(244,63,94,0.4), 0 0 30px rgba(124,58,237,0.3)',
+              }}
             >
-              <span className="font-mono-data text-[10px] font-bold text-mint uppercase tracking-widest mb-1 mt-1">FOUNDER &amp; PITCH</span>
-              <span className="font-display text-xl font-black text-white">Pitch Pass</span>
-              <div className="my-2 flex items-baseline gap-1">
-                <span className="font-mono-data text-2xl font-bold text-mint">₹799</span>
-                <span className="font-mono-data text-xs text-gray-400 line-through">₹1,299</span>
+              {/* Top Scalloped Teeth */}
+              <div className="absolute left-0 right-0 -top-1.5 z-30 flex justify-between px-2">
+                {[...Array(7)].map((_, i) => (
+                  <div key={i} className="h-3.5 w-3.5 rounded-full bg-void" />
+                ))}
               </div>
-              <span className="font-mono-data text-[10px] text-mint transition-colors flex items-center gap-1 font-bold">
-                REGISTER TEAM <ArrowUpRight size={12} />
-              </span>
+              {/* Bottom Scalloped Teeth */}
+              <div className="absolute left-0 right-0 -bottom-1.5 z-30 flex justify-between px-2">
+                {[...Array(7)].map((_, i) => (
+                  <div key={i} className="h-3.5 w-3.5 rounded-full bg-void" />
+                ))}
+              </div>
+              {/* Side Circular Notches */}
+              <div className="pointer-events-none absolute left-0 top-20 -translate-x-1/2 h-6 w-6 rounded-full bg-void z-30" />
+              <div className="pointer-events-none absolute right-0 top-20 translate-x-1/2 h-6 w-6 rounded-full bg-void z-30" />
+
+              {/* Header */}
+              <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
+                <div className="rounded bg-black px-2.5 py-1 text-white shadow-sm">
+                  <span className="font-display text-xs font-black tracking-tighter">PEC SUMMIT</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
+                    PITCH-087636
+                  </span>
+                  <div className="flex h-9 gap-0.5 bg-white/90 p-1 rounded">
+                    {[2, 1, 3, 1, 2, 1, 3, 2, 1, 4].map((w, idx) => (
+                      <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Title & Price */}
+              <div className="my-3 flex-1 flex flex-col justify-center text-left">
+                <span className="font-mono-data text-[9px] font-bold text-black/70">#PITCH-087636</span>
+                <h3 className="font-display text-3xl font-black uppercase tracking-tighter text-black leading-none my-1">
+                  PITCH <br /> <span className="text-stroke-black">PASS</span>
+                </h3>
+                <div className="my-2 flex items-baseline gap-1.5">
+                  <span className="font-mono-data text-3xl font-black text-black">₹799</span>
+                  <span className="font-mono-data text-xs text-black/60 line-through">₹1,299</span>
+                </div>
+              </div>
+
+              {/* Metadata & Barcode */}
+              <div className="border-t border-black/20 pt-2.5">
+                <div className="flex justify-between font-mono-data text-[9px] font-bold text-black mb-2">
+                  <span>MARCH 15-16</span>
+                  <span>PITCH ARENA</span>
+                </div>
+                <div className="w-full flex h-9 items-center justify-between bg-white/90 p-1 rounded-lg border border-black/20 overflow-hidden">
+                  {[2, 1, 3, 1, 4, 1, 2, 1, 3, 2, 1, 4, 1, 2, 3, 1, 2].map((w, idx) => (
+                    <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
+                  ))}
+                </div>
+              </div>
             </Link>
 
-            {/* VIP Pass */}
+            {/* VIP Pass — Golden Amber/Rose Gradient */}
             <Link
               href="/passes"
-              className="group relative p-4 rounded-2xl bg-[#07130F]/90 border border-mint/30 backdrop-blur-xl flex flex-col items-center justify-between text-center transition-all hover:border-mint hover:-translate-y-1 shadow-[0_8px_30px_rgba(0,0,0,0.7)]"
+              className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[24px] p-5 text-black shadow-xl transition-all duration-300 hover:-translate-y-2 select-none min-h-[420px]"
+              style={{
+                background: 'linear-gradient(165deg, #D97706 0%, #F59E0B 35%, #F43F5E 70%, #9333EA 100%)',
+                boxShadow: '0 12px 30px rgba(217,119,6,0.4)',
+              }}
             >
-              <span className="font-mono-data text-[10px] font-bold text-mint uppercase tracking-widest mb-1">VIP &amp; INVESTOR</span>
-              <span className="font-display text-xl font-black text-white">VIP Pass</span>
-              <div className="my-2 flex items-baseline gap-1">
-                <span className="font-mono-data text-2xl font-bold text-mint">₹1,499</span>
-                <span className="font-mono-data text-xs text-gray-400 line-through">₹2,499</span>
+              {/* Top Scalloped Teeth */}
+              <div className="absolute left-0 right-0 -top-1.5 z-30 flex justify-between px-2">
+                {[...Array(7)].map((_, i) => (
+                  <div key={i} className="h-3.5 w-3.5 rounded-full bg-void" />
+                ))}
               </div>
-              <span className="font-mono-data text-[10px] text-gray-300 group-hover:text-mint transition-colors flex items-center gap-1 font-bold">
-                GET VIP ACCESS <ArrowUpRight size={12} />
-              </span>
+              {/* Bottom Scalloped Teeth */}
+              <div className="absolute left-0 right-0 -bottom-1.5 z-30 flex justify-between px-2">
+                {[...Array(7)].map((_, i) => (
+                  <div key={i} className="h-3.5 w-3.5 rounded-full bg-void" />
+                ))}
+              </div>
+              {/* Side Circular Notches */}
+              <div className="pointer-events-none absolute left-0 top-20 -translate-x-1/2 h-6 w-6 rounded-full bg-void z-30" />
+              <div className="pointer-events-none absolute right-0 top-20 translate-x-1/2 h-6 w-6 rounded-full bg-void z-30" />
+
+              {/* Header */}
+              <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
+                <div className="rounded bg-black px-2.5 py-1 text-white shadow-sm">
+                  <span className="font-display text-xs font-black tracking-tighter">PEC SUMMIT</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
+                    VIP-00109
+                  </span>
+                  <div className="flex h-9 gap-0.5 bg-white/90 p-1 rounded">
+                    {[2, 1, 3, 1, 2, 1, 3, 2, 1, 4].map((w, idx) => (
+                      <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Title & Price */}
+              <div className="my-3 flex-1 flex flex-col justify-center text-left">
+                <span className="font-mono-data text-[9px] font-bold text-black/70">#VIP-00109</span>
+                <h3 className="font-display text-3xl font-black uppercase tracking-tighter text-black leading-none my-1">
+                  VIP <br /> <span className="text-stroke-black">PASS</span>
+                </h3>
+                <div className="my-2 flex items-baseline gap-1.5">
+                  <span className="font-mono-data text-3xl font-black text-black">₹1,499</span>
+                  <span className="font-mono-data text-xs text-black/60 line-through">₹2,499</span>
+                </div>
+              </div>
+
+              {/* Metadata & Barcode */}
+              <div className="border-t border-black/20 pt-2.5">
+                <div className="flex justify-between font-mono-data text-[9px] font-bold text-black mb-2">
+                  <span>MARCH 15-16</span>
+                  <span>VIP LOUNGE</span>
+                </div>
+                <div className="w-full flex h-9 items-center justify-between bg-white/90 p-1 rounded-lg border border-black/20 overflow-hidden">
+                  {[2, 1, 3, 1, 4, 1, 2, 1, 3, 2, 1, 4, 1, 2, 3, 1, 2].map((w, idx) => (
+                    <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
+                  ))}
+                </div>
+              </div>
             </Link>
           </div>
 

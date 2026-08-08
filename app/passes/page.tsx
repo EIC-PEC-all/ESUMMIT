@@ -9,25 +9,12 @@ import Footer from '@/components/Footer'
 import Concierge from '@/components/Concierge'
 import CircuitBoard from '@/components/Hero/CircuitBoard'
 import Link from 'next/link'
-
-interface PassTier {
-  id: string
-  name: string
-  tagline: string
-  price: string
-  originalPrice?: string
-  badge?: string
-  popular?: boolean
-  category: 'student' | 'founder' | 'group'
-  features: string[]
-  accentColor: string
-  ctaText: string
-}
+import TicketPassCard, { PassTier } from '@/components/Common/TicketPassCard'
 
 const PASSES: PassTier[] = [
   {
     id: 'student-general',
-    name: 'Student Pass',
+    name: 'STUDENT PASS',
     tagline: 'Full 2-day access for college students & campus innovators.',
     price: '₹299',
     originalPrice: '₹499',
@@ -38,14 +25,16 @@ const PASSES: PassTier[] = [
       'Startup Expo floor pass (Both Days)',
       'E-Certificate of Participation',
       'Summit Delegate Kit & Swag',
-      'Access to General Networking Zone',
     ],
-    accentColor: 'var(--accent-mint)',
+    gradient: 'linear-gradient(165deg, #0284C7 0%, #2563EB 30%, #7C3AED 65%, #EC4899 100%)',
+    code: 'STU-88742',
+    passengerType: 'STUDENT DELEGATE',
+    cabinClass: 'GENERAL ACCESS',
     ctaText: 'Claim Student Pass',
   },
   {
     id: 'pitch-competition',
-    name: 'Founder & Pitch Pass',
+    name: 'PITCH PASS',
     tagline: 'For startup teams ready to pitch to VCs & Angels.',
     price: '₹799',
     originalPrice: '₹1,299',
@@ -57,14 +46,16 @@ const PASSES: PassTier[] = [
       '1-on-1 Investor Deck Review',
       'Priority application for Investor Open Hours',
       'Startup Expo booth discount eligibility',
-      'All perks included in Student Pass',
     ],
-    accentColor: 'var(--accent-mint)',
+    gradient: 'linear-gradient(165deg, #7C3AED 0%, #C026D3 30%, #F43F5E 65%, #F97316 85%, #FBBF24 100%)',
+    code: 'PITCH-087636',
+    passengerType: 'STARTUP FOUNDER',
+    cabinClass: 'PITCH ARENA',
     ctaText: 'Register Startup Team',
   },
   {
     id: 'hackathon-pass',
-    name: 'Hackathon Builder Pass',
+    name: 'HACKATHON PASS',
     tagline: '24-hour sprint to build, hack, and win ₹15L+ pool.',
     price: '₹199',
     originalPrice: '₹399',
@@ -75,14 +66,16 @@ const PASSES: PassTier[] = [
       'Midnight meals, Red Bull & snacks included',
       '$500+ cloud & API developer credits',
       'Mentorship from senior tech leads',
-      'All-night Hacker Lounge access',
     ],
-    accentColor: 'var(--accent-mint)',
+    gradient: 'linear-gradient(165deg, #059669 0%, #10B981 30%, #06B6D4 65%, #3B82F6 100%)',
+    code: 'HACK-24790',
+    passengerType: 'HACKER / BUILDER',
+    cabinClass: '24-HR ARENA',
     ctaText: 'Register Hackathon Team',
   },
   {
     id: 'vip-pass',
-    name: 'VIP Founder & Investor Pass',
+    name: 'VIP PASS',
     tagline: 'Premium networking pass for founders, executives & angels.',
     price: '₹1,499',
     originalPrice: '₹2,499',
@@ -93,15 +86,17 @@ const PASSES: PassTier[] = [
       'Reserved Front-Row Seating at Keynotes',
       'Direct Investor Matchmaking Lounge access',
       'Exclusive PEC Summit Founder Swag Box',
-      'Fast-track Badge & Dedicated Check-in',
     ],
-    accentColor: 'var(--accent-mint)',
+    gradient: 'linear-gradient(165deg, #D97706 0%, #F59E0B 35%, #F43F5E 70%, #9333EA 100%)',
+    code: 'VIP-00109',
+    passengerType: 'VIP INVESTOR',
+    cabinClass: 'EXECUTIVE LOUNGE',
     ctaText: 'Get VIP Pass',
   },
   {
     id: 'group-pass',
-    name: 'College Delegation (5+ Passes)',
-    tagline: 'Group discount for college societies & e-cells.',
+    name: 'DELEGATION PASS',
+    tagline: 'Group discount for college societies & e-cells (5+ Passes).',
     price: '₹249',
     originalPrice: '₹499',
     badge: 'BULK DISCOUNT',
@@ -111,9 +106,11 @@ const PASSES: PassTier[] = [
       'Reserved group seating for major panels',
       'Custom Delegation Certificate for college',
       'Dedicated Student Ambassador point-of-contact',
-      'Complimentary Pass for Faculty / Lead',
     ],
-    accentColor: 'var(--accent-mint)',
+    gradient: 'linear-gradient(165deg, #4F46E5 0%, #7C3AED 35%, #DB2777 75%, #F43F5E 100%)',
+    code: 'GRP-55421',
+    passengerType: 'COLLEGE DELEGATION',
+    cabinClass: 'GROUP RESERVED',
     ctaText: 'Get Group Pass',
   },
 ]
@@ -212,87 +209,12 @@ export default function PassesPage() {
         </div>
       </section>
 
-      {/* Pass Cards Grid */}
+      {/* Ticket Pass Cards Grid */}
       <section className="bg-void py-20">
         <div className="section-container">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {filteredPasses.map((pass) => (
-              <motion.div
-                key={pass.id}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className={`group relative flex flex-col justify-between rounded-2xl border bg-panel p-8 transition-all duration-300 ${
-                  pass.popular
-                    ? 'border-mint shadow-[0_0_28px_rgba(126,211,33,0.25)]'
-                    : 'hover:border-mint/50 border-border-subtle'
-                }`}
-                whileHover={{ y: -6 }}
-              >
-                {/* Ribbon / Badge */}
-                {pass.badge && (
-                  <div
-                    className="absolute -top-3.5 right-6 rounded-full px-3.5 py-1 font-mono-data text-[10px] font-bold uppercase tracking-widest shadow-md"
-                    style={{
-                      background: pass.popular ? 'var(--accent-mint)' : 'rgba(126,211,33,0.15)',
-                      color: pass.popular ? '#040605' : 'var(--accent-mint)',
-                      border: `1px solid ${pass.popular ? 'transparent' : 'rgba(126,211,33,0.4)'}`,
-                    }}
-                  >
-                    {pass.badge}
-                  </div>
-                )}
-
-                <div>
-                  <h3 className="mb-2 font-display text-3xl text-white transition-colors group-hover:text-[var(--accent-mint)]">
-                    {pass.name}
-                  </h3>
-                  <p className="mb-6 font-body text-sm leading-relaxed text-muted">
-                    {pass.tagline}
-                  </p>
-
-                  <div className="border-[var(--accent-mint)]/15 mb-8 flex items-baseline gap-3 border-b pb-6">
-                    <span className="font-mono-data text-4xl font-bold tabular-nums text-[var(--accent-mint)]">
-                      {pass.price}
-                    </span>
-                    {pass.originalPrice && (
-                      <span className="font-mono-data text-sm text-muted line-through">
-                        {pass.originalPrice}
-                      </span>
-                    )}
-                    <span className="font-mono-data text-xs text-muted">/ pass</span>
-                  </div>
-
-                  {/* Feature List */}
-                  <ul className="mb-8 space-y-3.5">
-                    {pass.features.map((feat, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-3 font-body text-sm text-gray-200"
-                      >
-                        <div className="bg-[var(--accent-mint)]/20 border-[var(--accent-mint)]/40 mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[var(--accent-mint)]">
-                          <Check size={12} />
-                        </div>
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <button
-                  onClick={() => handleSelectPass(pass)}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl py-4 font-body text-sm font-bold transition-all duration-200"
-                  style={{
-                    background: pass.popular ? 'var(--accent-mint)' : 'transparent',
-                    color: pass.popular ? '#040605' : '#FFFFFF',
-                    border: `1px solid ${pass.popular ? 'transparent' : 'rgba(126,211,33,0.4)'}`,
-                  }}
-                >
-                  {pass.ctaText}
-                  <ArrowRight size={16} />
-                </button>
-              </motion.div>
+              <TicketPassCard key={pass.id} pass={pass} onSelectPass={handleSelectPass} />
             ))}
           </div>
         </div>
