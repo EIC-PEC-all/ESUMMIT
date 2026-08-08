@@ -6,11 +6,15 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
   font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 
+.font-mono-data {
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace !important;
+}
+
 :root {
-  --bg-void: #071511;
-  --bg-deep: #071511;
-  --bg-panel: #0E241D;
-  --bg-panel-alt: #132D25;
+  --bg-void: #060B08;
+  --bg-deep: #060B08;
+  --bg-panel: #0B150E;
+  --bg-panel-alt: #0F1A12;
 
   --accent-mint: #7ED321;
   --accent-green: #7ED321;
@@ -21,20 +25,20 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
   --accent-coral: #FF4D3D;
 
   --text-primary: #FFFFFF;
-  --text-secondary: #A3B899;
-  --text-muted: #8A9488;
-  --muted: #8A9488;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --muted: #64748B;
 
-  --border-subtle: #193B2F;
-  --border-panel: #163328;
-  --border-glow: rgba(126, 211, 33, 0.25);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-panel: rgba(255, 255, 255, 0.12);
+  --border-glow: rgba(126, 211, 33, 0.3);
 
   color-scheme: dark;
 }
 
-/* ─── Global Link Hover Underline ─── */
+/* ─── Global Link Hover ─── */
 a:hover {
-  text-decoration: underline !important;
+  text-decoration: none;
 }
 
 @layer base {

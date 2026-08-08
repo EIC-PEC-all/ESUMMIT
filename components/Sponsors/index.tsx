@@ -91,7 +91,7 @@ export default function Sponsors() {
               Partner With PEC Summit 2026
             </p>
             <p className="font-body text-sm md:text-base text-white/70 max-w-lg">
-              Reach 3,000+ student founders, software engineers, and venture capital investors at North India's flagship summit.
+              Reach 3,000+ student founders, software engineers, and venture capital investors at North India&apos;s flagship summit.
             </p>
           </div>
           <Link

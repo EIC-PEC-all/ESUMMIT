@@ -163,36 +163,26 @@ export default function PassesPage() {
       <Nav />
 
       {/* Hero Section */}
-      <section className="relative pt-36 pb-20 overflow-hidden border-b border-[var(--accent-mint)]/20">
+      <section className="relative pt-36 pb-20 overflow-hidden border-b border-border-subtle bg-void">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-[var(--accent-mint)] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-mint transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 mb-6">
-              <Zap size={14} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)]">
-                Official E-Summit 2026 Passes
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.05]">
               CHOOSE YOUR <br />
-              <span className="text-stroke-green">SUMMIT PASS</span>
+              <span className="text-mint">SUMMIT PASS</span>
             </h1>
 
-            <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
+            <p className="font-body text-lg text-secondary max-w-xl leading-relaxed mb-8">
               Whether you are pitching your startup to top VCs, hacking overnight for prize pools, or attending high-impact keynotes, grab your pass now before early-bird pricing ends.
             </p>
 
@@ -207,14 +197,11 @@ export default function PassesPage() {
                 <button
                   key={item.id}
                   onClick={() => setFilter(item.id as any)}
-                  className="px-5 py-2.5 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
-                  style={{
-                    background: filter === item.id ? 'var(--accent-mint)' : '#0A110E',
-                    color: filter === item.id ? '#040605' : '#9CA3AF',
-                    fontWeight: filter === item.id ? 700 : 400,
-                    border: `1px solid ${filter === item.id ? 'transparent' : 'rgba(126,211,33,0.2)'}`,
-                    boxShadow: filter === item.id ? '0 0 18px rgba(126,211,33,0.4)' : 'none',
-                  }}
+                  className={`px-5 py-2.5 rounded-xl font-mono-data text-xs uppercase tracking-wider transition-all duration-200 ${
+                    filter === item.id
+                      ? 'bg-mint text-void font-bold shadow-[0_0_18px_rgba(126,211,33,0.4)]'
+                      : 'bg-panel text-secondary hover:text-white border border-border-subtle hover:border-mint/40'
+                  }`}
                 >
                   {item.label}
                 </button>
@@ -225,7 +212,7 @@ export default function PassesPage() {
       </section>
 
       {/* Pass Cards Grid */}
-      <section className="py-20 bg-[#111A12]">
+      <section className="py-20 bg-void">
         <div className="section-container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPasses.map((pass) => (
@@ -235,14 +222,10 @@ export default function PassesPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className={`relative rounded-2xl p-8 flex flex-col justify-between transition-all duration-300 group ${
-                  pass.popular ? 'glow-green' : ''
+                className={`relative rounded-2xl p-8 flex flex-col justify-between transition-all duration-300 group bg-panel border ${
+                  pass.popular ? 'border-mint shadow-[0_0_28px_rgba(126,211,33,0.25)]' : 'border-border-subtle hover:border-mint/50'
                 }`}
-                style={{
-                  background: '#0A110E',
-                  border: `1px solid ${pass.popular ? 'var(--accent-mint)' : 'rgba(126,211,33,0.2)'}`,
-                }}
-                whileHover={{ y: -6, borderColor: 'var(--accent-mint)', boxShadow: '0 0 28px rgba(126,211,33,0.35)' }}
+                whileHover={{ y: -6 }}
               >
                 {/* Ribbon / Badge */}
                 {pass.badge && (

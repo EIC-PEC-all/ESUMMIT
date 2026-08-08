@@ -29,36 +29,26 @@ export default function SponsorsLandingPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[var(--accent-mint)]/20 overflow-hidden">
+      <section className="relative pt-36 pb-20 border-b border-border-subtle overflow-hidden bg-void">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-[var(--accent-mint)] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-mint transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 mb-6">
-              <Sparkles size={14} className="text-[var(--accent-mint)]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)] font-bold">
-                E-Summit 2026 Ecosystem Partners
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.05]">
               POWERED BY <br />
-              <span className="text-stroke-green">INDUSTRY LEADERS</span>
+              <span className="text-mint">INDUSTRY LEADERS</span>
             </h1>
 
-            <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
+            <p className="font-body text-lg text-secondary max-w-xl leading-relaxed mb-8">
               PEC Summit is brought to life with the generous backing of venture capitals, tech conglomerates, incubators, and media partners dedicated to fostering student innovation.
             </p>
 
@@ -74,7 +64,7 @@ export default function SponsorsLandingPage() {
       </section>
 
       {/* Tier Sections */}
-      <section className="py-20 bg-[#111A12] space-y-16">
+      <section className="py-20 bg-void space-y-16">
         <div className="section-container">
           {/* Title Sponsor */}
           <div className="mb-16">

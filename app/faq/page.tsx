@@ -39,36 +39,26 @@ export default function FAQLandingPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[var(--accent-mint)]/20 overflow-hidden">
+      <section className="relative pt-36 pb-20 border-b border-border-subtle overflow-hidden bg-void">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-[var(--accent-mint)] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-mint transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 mb-6">
-              <Sparkles size={14} className="text-[var(--accent-mint)]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)] font-bold">
-                E-Summit Help &amp; FAQ Center
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.05]">
               FREQUENTLY ASKED <br />
-              <span className="text-stroke-green">QUESTIONS</span>
+              <span className="text-mint">QUESTIONS</span>
             </h1>
 
-            <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
+            <p className="font-body text-lg text-secondary max-w-xl leading-relaxed mb-8">
               Everything you need to know about passes, venue, accommodation, competition rules, and registration.
             </p>
 
@@ -80,7 +70,7 @@ export default function FAQLandingPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search questions (e.g., tickets, hackathon, venue, hostel)..."
-                className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-panel border border-[var(--accent-mint)]/30 text-white font-body text-sm outline-none focus:border-[var(--accent-mint)]"
+                className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-panel border border-border-subtle text-white font-body text-sm outline-none focus:border-mint"
               />
             </div>
           </div>
@@ -88,7 +78,7 @@ export default function FAQLandingPage() {
       </section>
 
       {/* Accordion Section */}
-      <section className="py-20 bg-[#111A12]">
+      <section className="py-20 bg-void">
         <div className="section-container max-w-4xl">
           <div className="space-y-4">
             {filteredFaqs.map((faq) => {
@@ -96,12 +86,9 @@ export default function FAQLandingPage() {
               return (
                 <div
                   key={faq.id}
-                  className="rounded-xl border transition-all duration-300 overflow-hidden"
-                  style={{
-                    background: '#0A110E',
-                    borderColor: isOpen ? 'var(--accent-mint)' : 'rgba(126,211,33,0.15)',
-                    boxShadow: isOpen ? '0 0 20px rgba(126,211,33,0.2)' : 'none',
-                  }}
+                  className={`rounded-xl border transition-all duration-300 overflow-hidden bg-panel ${
+                    isOpen ? 'border-mint shadow-[0_0_20px_rgba(126,211,33,0.2)]' : 'border-border-subtle'
+                  }`}
                 >
                   <button
                     onClick={() => setOpenId(isOpen ? null : faq.id)}

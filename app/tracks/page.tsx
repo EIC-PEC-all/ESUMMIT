@@ -131,36 +131,26 @@ export default function TracksLandingPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[var(--accent-mint)]/20 overflow-hidden">
+      <section className="relative pt-36 pb-20 border-b border-border-subtle overflow-hidden bg-void">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-[var(--accent-mint)] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-mint transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 mb-6">
-              <Sparkles size={14} className="text-[var(--accent-mint)]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)]">
-                E-Summit 2026 Flagship Tracks
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.05]">
               SUMMIT TRACKS &amp; <br />
-              <span className="text-stroke-green">COMPETITIONS</span>
+              <span className="text-mint">COMPETITIONS</span>
             </h1>
 
-            <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
+            <p className="font-body text-lg text-secondary max-w-xl leading-relaxed mb-8">
               Explore our core tracks — pitch your startup, hack through the night, demo your product at the Expo, or connect with India’s leading venture capital partners.
             </p>
 
@@ -170,14 +160,11 @@ export default function TracksLandingPage() {
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat as any)}
-                  className="px-5 py-2.5 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
-                  style={{
-                    background: activeCategory === cat ? 'var(--accent-mint)' : '#0A110E',
-                    color: activeCategory === cat ? '#040605' : '#9CA3AF',
-                    fontWeight: activeCategory === cat ? 700 : 400,
-                    border: `1px solid ${activeCategory === cat ? 'transparent' : 'rgba(126,211,33,0.2)'}`,
-                    boxShadow: activeCategory === cat ? '0 0 15px rgba(126,211,33,0.4)' : 'none',
-                  }}
+                  className={`px-5 py-2.5 rounded-xl font-mono-data text-xs uppercase tracking-wider transition-all duration-200 ${
+                    activeCategory === cat
+                      ? 'bg-mint text-void font-bold shadow-[0_0_15px_rgba(126,211,33,0.4)]'
+                      : 'bg-panel text-secondary hover:text-white border border-border-subtle hover:border-mint/40'
+                  }`}
                 >
                   {cat}
                 </button>
@@ -188,7 +175,7 @@ export default function TracksLandingPage() {
       </section>
 
       {/* Tracks Grid */}
-      <section className="py-20 bg-[#111A12]">
+      <section className="py-20 bg-void">
         <div className="section-container">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredTracks.map((track) => {

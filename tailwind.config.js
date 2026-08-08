@@ -42,6 +42,7 @@ module.exports = {
         kanit: ['Kanit', 'sans-serif'],
         body: ['var(--font-inter)', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'monospace'],
+        'mono-data': ['var(--font-jetbrains)', 'monospace'],
       },
       animation: {
         'marquee': 'marquee 12s linear infinite',

@@ -29,36 +29,26 @@ export default function SpeakersLandingPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[var(--accent-mint)]/20 overflow-hidden">
+      <section className="relative pt-36 pb-20 border-b border-border-subtle overflow-hidden bg-void">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-[var(--accent-mint)] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-mint transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 mb-6">
-              <Zap size={14} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)]">
-                E-Summit 2026 Speaker Lineup
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.05]">
               VOICES THAT <br />
-              <span className="text-stroke-green">BUILD &amp; INVEST</span>
+              <span className="text-mint">BUILD &amp; INVEST</span>
             </h1>
 
-            <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
+            <p className="font-body text-lg text-secondary max-w-xl leading-relaxed mb-8">
               Hear from India&apos;s leading venture capitalists, unicorn co-founders, policy experts, and campus innovators sharing real, hard-hitting founder playbooks.
             </p>
 
@@ -71,7 +61,7 @@ export default function SpeakersLandingPage() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search speaker by name, company, or domain..."
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-panel border border-[var(--accent-mint)]/30 text-white font-body text-sm outline-none focus:border-[var(--accent-mint)]"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-panel border border-border-subtle text-white font-body text-sm outline-none focus:border-mint"
                 />
               </div>
 
@@ -80,14 +70,11 @@ export default function SpeakersLandingPage() {
                   <button
                     key={tr}
                     onClick={() => setSelectedTrack(tr)}
-                    className="px-4 py-3 rounded-xl font-mono-data text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-200"
-                    style={{
-                      background: selectedTrack === tr ? 'var(--accent-mint)' : '#0A110E',
-                      color: selectedTrack === tr ? '#040605' : '#9CA3AF',
-                      fontWeight: selectedTrack === tr ? 700 : 400,
-                      border: `1px solid ${selectedTrack === tr ? 'transparent' : 'rgba(126,211,33,0.2)'}`,
-                      boxShadow: selectedTrack === tr ? '0 0 15px rgba(126,211,33,0.4)' : 'none',
-                    }}
+                    className={`px-4 py-3 rounded-xl font-mono-data text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-200 ${
+                      selectedTrack === tr
+                        ? 'bg-mint text-void font-bold shadow-[0_0_15px_rgba(126,211,33,0.4)]'
+                        : 'bg-panel text-secondary hover:text-white border border-border-subtle hover:border-mint/40'
+                    }`}
                   >
                     {tr === 'All' ? 'All Sessions' : tr}
                   </button>
@@ -99,7 +86,7 @@ export default function SpeakersLandingPage() {
       </section>
 
       {/* Speakers Grid */}
-      <section className="py-20 bg-[#111A12]">
+      <section className="py-20 bg-void">
         <div className="section-container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredSpeakers.map((spk) => (

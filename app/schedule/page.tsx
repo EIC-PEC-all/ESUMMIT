@@ -39,36 +39,26 @@ export default function ScheduleLandingPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[var(--accent-mint)]/20 overflow-hidden">
+      <section className="relative pt-36 pb-20 border-b border-border-subtle overflow-hidden bg-void">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-[var(--accent-mint)] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-mint transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 mb-6">
-              <Zap size={14} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)] font-bold">
-                E-Summit 2026 Interactive Timetable
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-[1.05]">
               SUMMIT <br />
-              <span className="text-stroke-green">TIMETABLE</span>
+              <span className="text-mint">TIMETABLE</span>
             </h1>
 
-            <p className="font-body text-lg text-muted max-w-xl leading-relaxed mb-8">
+            <p className="font-body text-lg text-secondary max-w-xl leading-relaxed mb-8">
               Plan your 2-day summit experience. Bookmark keynotes, panel discussions, hackathon checkpoints, and speed networking sessions.
             </p>
 
@@ -78,21 +68,18 @@ export default function ScheduleLandingPage() {
                 <button
                   key={dayKey}
                   onClick={() => setActiveDay(dayKey)}
-                  className="px-6 py-3 rounded-xl font-mono-data text-xs uppercase tracking-wider transition-all duration-200"
-                  style={{
-                    background: activeDay === dayKey ? 'var(--accent-mint)' : '#0A110E',
-                    color: activeDay === dayKey ? '#040605' : '#FFFFFF',
-                    fontWeight: activeDay === dayKey ? 700 : 500,
-                    border: `1px solid ${activeDay === dayKey ? 'transparent' : 'rgba(126,211,33,0.3)'}`,
-                    boxShadow: activeDay === dayKey ? '0 0 20px rgba(126,211,33,0.4)' : 'none',
-                  }}
+                  className={`px-6 py-3 rounded-xl font-mono-data text-xs uppercase tracking-wider transition-all duration-200 ${
+                    activeDay === dayKey
+                      ? 'bg-mint text-void font-bold shadow-[0_0_20px_rgba(126,211,33,0.4)]'
+                      : 'bg-panel text-secondary hover:text-white border border-border-subtle hover:border-mint/40'
+                  }`}
                 >
                   {SCHEDULE[dayKey].label} — {SCHEDULE[dayKey].date}
                 </button>
               ))}
 
               {bookmarks.length > 0 && (
-                <div className="font-mono-data text-xs text-[var(--accent-mint)] px-3 py-2 rounded-lg bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 font-bold">
+                <div className="font-mono-data text-xs text-mint px-3 py-2 rounded-xl bg-mint/10 border border-mint/30 font-bold">
                   {bookmarks.length} Bookmarked Sessions
                 </div>
               )}
@@ -102,7 +89,7 @@ export default function ScheduleLandingPage() {
       </section>
 
       {/* Schedule Vertical Pipeline */}
-      <section className="py-20 bg-[#111A12]">
+      <section className="py-20 bg-void">
         <div className="section-container max-w-3xl">
           {/* Type Filter Pills */}
           <div className="flex gap-2 overflow-x-auto pb-4 mb-10">
@@ -110,13 +97,11 @@ export default function ScheduleLandingPage() {
               <button
                 key={t}
                 onClick={() => setFilterType(t)}
-                className="px-4 py-2 rounded-lg font-mono-data text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-150"
-                style={{
-                  background: filterType === t ? 'var(--accent-mint)' : '#0A110E',
-                  color: filterType === t ? '#040605' : '#9CA3AF',
-                  fontWeight: filterType === t ? 700 : 400,
-                  border: `1px solid ${filterType === t ? 'transparent' : 'rgba(126,211,33,0.2)'}`,
-                }}
+                className={`px-4 py-2 rounded-xl font-mono-data text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-150 ${
+                  filterType === t
+                    ? 'bg-mint text-void font-bold shadow-[0_0_15px_rgba(126,211,33,0.3)]'
+                    : 'bg-panel text-secondary hover:text-white border border-border-subtle hover:border-mint/40'
+                }`}
               >
                 {t === 'all' ? 'All Event Types' : t}
               </button>

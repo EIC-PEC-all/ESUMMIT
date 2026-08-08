@@ -150,39 +150,37 @@ export default function RegisterPage() {
       <Nav />
 
       {/* Header Banner */}
-      <section className="relative pt-36 pb-16 border-b border-[var(--accent-mint)]/20 overflow-hidden">
+      <section className="relative pt-36 pb-16 border-b border-border-subtle overflow-hidden bg-void">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center justify-between flex-wrap gap-4">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-[var(--accent-mint)] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted hover:text-mint transition-colors"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
 
             {/* Dashboard Tab Switcher */}
-            <div className="flex items-center gap-2 p-1 rounded-xl bg-panel border border-[var(--accent-mint)]/30">
+            <div className="flex items-center gap-2 p-1 rounded-xl bg-panel border border-border-subtle">
               <button
                 onClick={() => setActiveTab('new')}
-                className="px-4 py-2 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all"
-                style={{
-                  background: activeTab === 'new' ? 'var(--accent-mint)' : 'transparent',
-                  color: activeTab === 'new' ? '#040605' : '#9CA3AF',
-                  fontWeight: activeTab === 'new' ? 700 : 400,
-                }}
+                className={`px-4 py-2 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all ${
+                  activeTab === 'new'
+                    ? 'bg-mint text-void font-bold shadow-[0_0_12px_rgba(126,211,33,0.3)]'
+                    : 'text-secondary hover:text-white'
+                }`}
               >
                 + New Registration
               </button>
               <button
                 onClick={() => setActiveTab('dashboard')}
-                className="px-4 py-2 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all flex items-center gap-1.5"
-                style={{
-                  background: activeTab === 'dashboard' ? 'var(--accent-mint)' : 'transparent',
-                  color: activeTab === 'dashboard' ? '#040605' : '#9CA3AF',
-                  fontWeight: activeTab === 'dashboard' ? 700 : 400,
-                }}
+                className={`px-4 py-2 rounded-lg font-mono-data text-xs uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+                  activeTab === 'dashboard'
+                    ? 'bg-mint text-void font-bold shadow-[0_0_12px_rgba(126,211,33,0.3)]'
+                    : 'text-secondary hover:text-white'
+                }`}
               >
                 <Ticket size={13} /> My E-Badges ({myRegistrations.length})
               </button>
@@ -190,21 +188,11 @@ export default function RegisterPage() {
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--accent-mint)]/15 border border-[var(--accent-mint)]/30 mb-6">
-              <Zap size={14} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[var(--accent-mint)] font-bold">
-                Official Delegate Portal
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-4"
-              style={{ fontSize: 'clamp(48px, 7vw, 96px)' }}
-            >
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-4 leading-[1.05]">
               REGISTRATION <br />
-              <span className="text-stroke-green">DASHBOARD</span>
+              <span className="text-mint">DASHBOARD</span>
             </h1>
-            <p className="font-body text-base text-muted max-w-xl leading-relaxed">
+            <p className="font-body text-base text-secondary max-w-xl leading-relaxed">
               Complete your delegate pass registration, select your tracks, and instantly generate your digital E-Badge with check-in QR code.
             </p>
           </div>
@@ -212,7 +200,7 @@ export default function RegisterPage() {
       </section>
 
       {/* Main Content Area */}
-      <section className="py-16 bg-[#111A12]">
+      <section className="py-16 bg-void">
         <div className="section-container">
           {activeTab === 'dashboard' ? (
             /* ── MY REGISTRATIONS DASHBOARD TAB ── */
