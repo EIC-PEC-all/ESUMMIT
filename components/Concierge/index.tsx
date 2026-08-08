@@ -6,6 +6,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send, Bot, TrendingUp, ChevronDown, Calendar, Plus, Trash2, Bookmark, Check, Zap } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { usePathname } from 'next/navigation'
 import { getAgentResponse, SUGGESTED_STARTERS, type ItinerarySession } from './agent'
 import { FEST_CONTEXT } from '@/lib/data'
 
@@ -42,6 +43,15 @@ function FormattedText({ text }: { text: string }) {
 export default function Concierge() {
   const [open, setOpen] = useState(false)
   const [planOpen, setPlanOpen] = useState(false)
+  const pathname = usePathname()
+  const [isLoaderActive, setIsLoaderActive] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      if (window.__SCROLL_LOADER_ACTIVE__ === false) return false
+      if (window.__SCROLL_LOADER_ACTIVE__ === true || document.body.classList.contains('loader-active')) return true
+      return pathname === '/'
+    }
+    return pathname === '/'
+  })
   const [myPlan, setMyPlan] = useState<ItinerarySession[]>([])
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -57,6 +67,28 @@ export default function Concierge() {
   const [unread, setUnread] = useState(0)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Listen to loader state updates
+  useEffect(() => {
+    const checkState = () => {
+      if (typeof window !== 'undefined') {
+        setIsLoaderActive(Boolean(window.__SCROLL_LOADER_ACTIVE__ || document.body.classList.contains('loader-active')))
+      }
+    }
+    checkState()
+
+    const handleLoaderState = (e: Event) => {
+      const customEvt = e as CustomEvent<{ active: boolean }>
+      if (customEvt.detail !== undefined) {
+        setIsLoaderActive(customEvt.detail.active)
+      }
+    }
+
+    window.addEventListener('scroll-loader-state', handleLoaderState)
+    return () => {
+      window.removeEventListener('scroll-loader-state', handleLoaderState)
+    }
+  }, [])
 
   useEffect(() => {
     try {
@@ -165,11 +197,16 @@ export default function Concierge() {
       {/* Floating Concierge Action Pill */}
       <motion.button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-14 right-6 z-40 px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
+        className="fixed bottom-14 right-6 z-[2500] px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
         initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        animate={{
+          opacity: isLoaderActive ? 0 : 1,
+          y: isLoaderActive ? 20 : 0,
+          pointerEvents: isLoaderActive ? 'none' : 'auto',
+        }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        whileHover={{ scale: isLoaderActive ? 1 : 1.05 }}
+        whileTap={{ scale: isLoaderActive ? 1 : 0.95 }}
         aria-label="Open Summit AI Concierge Assistant"
       >
         <Bot size={18} />
@@ -187,7 +224,7 @@ export default function Concierge() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-24 right-4 sm:right-8 left-auto z-50 w-[390px] max-w-[calc(100vw-32px)] rounded-3xl overflow-hidden flex flex-col shadow-2xl bg-[#0A1A17]/95 [.light_&]:bg-[#1E2B12]/95 backdrop-blur-2xl border border-mint/40"
+            className="fixed bottom-24 right-4 sm:right-8 left-auto z-[2500] w-[390px] max-w-[calc(100vw-32px)] rounded-3xl overflow-hidden flex flex-col shadow-2xl bg-[#0A1A17]/95 [.light_&]:bg-[#1E2B12]/95 backdrop-blur-2xl border border-mint/40"
             style={{ height: '560px' }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

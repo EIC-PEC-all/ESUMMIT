@@ -107,7 +107,7 @@ export default function AlumniSection() {
   const xTransform = useTransform(scrollYProgress, [0, 1], ['0%', '-65%'])
 
   return (
-    <section ref={containerRef} className="relative h-[180vh] bg-void text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10">
+    <section ref={containerRef} className="relative h-[180vh] bg-[#0D1812] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-white/10">
       {/* Background ambient lighting glows */}
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-[var(--accent-mint)]/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/3 right-10 w-[600px] h-[600px] bg-[#3B82F6]/5 rounded-full blur-[160px] pointer-events-none" />
@@ -117,8 +117,8 @@ export default function AlumniSection() {
         {/* Header Section */}
         <div className="max-w-7xl mx-auto w-full mb-3 flex flex-col items-center text-center gap-1 z-10">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-[var(--accent-mint)] mb-1"
-            style={{ fontSize: 'clamp(2.5rem, 7vw, 95px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint mb-1"
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
             ALUMNI
           </h2>

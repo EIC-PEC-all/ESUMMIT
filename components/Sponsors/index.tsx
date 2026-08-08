@@ -31,7 +31,7 @@ export default function Sponsors() {
         >
           <h2
             id="sponsors-heading"
-            className="font-display font-black uppercase leading-none tracking-tight text-[var(--accent-mint)]"
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint"
             style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
             SPONSORS

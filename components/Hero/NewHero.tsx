@@ -38,6 +38,13 @@ export default function NewHero() {
   const endBlur = useTransform(scrollYProgress, [0.72, 0.96], ['blur(0px)', 'blur(24px)'])
   const endBlackenOpacity = useTransform(scrollYProgress, [0.72, 0.96], [0, 0.95])
 
+  // Initial Expand-on-scroll animation (starts as rounded floating card at 0%, expands to full screen by 14% scroll)
+  const expandClip = useTransform(
+    scrollYProgress,
+    [0, 0.14],
+    ['inset(3% 5% 3% 5% round 24px)', 'inset(0% 0% 0% 0% round 0px)']
+  )
+
   // Get nearest loaded image so canvas never freezes during load
   const getLoadedImage = (targetIndex: number): HTMLImageElement | null => {
     const list = imagesRef.current

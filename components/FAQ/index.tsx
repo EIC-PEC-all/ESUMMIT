@@ -71,33 +71,28 @@ export default function FAQ() {
   return (
     <section
       id="faq"
-      className="py-24 lg:py-32 relative bg-void text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 overflow-hidden"
+      className="py-24 lg:py-32 relative bg-[#0D1812] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 overflow-hidden border-t border-white/10"
       aria-labelledby="faq-heading"
     >
       <div className="section-container relative z-10">
-        <div className="grid lg:grid-cols-[1fr_2fr] gap-12 lg:gap-20 items-start">
-          {/* Left: Sticky Header */}
-          <motion.div
-            className="lg:sticky lg:top-28 self-start"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
+        {/* Centered Large Section Title */}
+        <div className="mb-12 flex flex-col items-center justify-center text-center">
+          <h2
+            id="faq-heading"
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint mb-4"
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
-            <h2
-              id="faq-heading"
-              className="font-display font-black uppercase leading-none tracking-tight text-[var(--accent-mint)] mb-4"
-              style={{ fontSize: 'clamp(3rem, 12vw, 150px)' }}
-            >
-              FAQ
-            </h2>
-            <p className="font-body text-sm leading-relaxed text-gray-300 max-w-sm">
-              If you don&apos;t find your answer here, our Concierge agent (bottom right) can assist — or email us directly at{' '}
-              <a href="mailto:info@ecellpec.in" className="text-[var(--accent-mint)] underline underline-offset-4 font-semibold">
-                info@ecellpec.in
-              </a>
-            </p>
-          </motion.div>
+            FAQ
+          </h2>
+          <p className="font-body text-sm sm:text-base leading-relaxed text-gray-300 max-w-lg">
+            If you don&apos;t find your answer here, our Concierge agent (bottom right) can assist — or email us directly at{' '}
+            <a href="mailto:info@ecellpec.in" className="text-mint underline underline-offset-4 font-semibold">
+              info@ecellpec.in
+            </a>
+          </p>
+        </div>
+
+        <div className="max-w-4xl mx-auto">
 
           {/* Right: Accordion */}
           <motion.div

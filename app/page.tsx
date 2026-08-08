@@ -10,8 +10,12 @@ import FlipFlopTransition from '@/components/Common/FlipFlopTransition'
 import EsummitAbout from '@/components/EsummitAbout'
 import Vdo2Showcase from '@/components/Vdo2Showcase'
 import LimeTransitionBanner from '@/components/Common/LimeTransitionBanner'
+import LimeEdgeMasks from '@/components/Common/LimeEdgeMasks'
+
+const ScrollExpandLoader = dynamic(() => import('@/components/Common/ScrollExpandLoader'), { ssr: false })
 
 const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), { ssr: false })
+const EventPortfolioShowcase = dynamic(() => import('@/components/EventPortfolio'), { ssr: false })
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), { ssr: false })
 const Sponsors = dynamic(() => import('@/components/Sponsors'), { ssr: false })
 const FAQ = dynamic(() => import('@/components/FAQ'), { ssr: false })
@@ -27,12 +31,14 @@ export default function Home() {
     setIsMounted(true)
   }, [])
 
-  if (!isMounted) {
-    return <main id="main-content" className="bg-void min-h-screen" suppressHydrationWarning />
-  }
-
   return (
     <main id="main-content" className="bg-void" style={{ overflowX: 'clip' }} suppressHydrationWarning>
+      {/* Vantage Initial Page Loader (Auto Expands & Unmounts after 3.5s) */}
+      <ScrollExpandLoader />
+
+      {/* ── Fixed Page Top & Bottom Boundary-to-Center Lime Tinted Edge Masks ── */}
+      <LimeEdgeMasks />
+
       <Toaster
         position="top-center"
         gutter={8}
@@ -50,7 +56,7 @@ export default function Home() {
       {/* Navigation */}
       <Nav />
 
-      {/* ── 1. NewHero 60fps Frame Scrubbing ───────────────────────────── */}
+      {/* ── 1. NewHero 60fps Frame Scrubbing (100% Original & Untouched) ── */}
       <NewHero />
 
       {/* ── 2. Strip Collapse Transition Revealing Marquee Gallery ───── */}
@@ -67,6 +73,9 @@ export default function Home() {
 
       {/* ── 4. Timeline / Highlights — sticky card stack, dark bg ─────────── */}
       <EsummitHighlights />
+
+      {/* ── Trionn-inspired Event Portfolio Horizontal Showcase ──────────── */}
+      <EventPortfolioShowcase />
 
       {/* ── 5. Market Surge Video Showcase (vdo2 frame scrubber) ───────── */}
       <Vdo2Showcase />
