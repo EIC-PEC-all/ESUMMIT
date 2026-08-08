@@ -24,6 +24,10 @@ import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
 import Vdo2Showcase from '@/components/Vdo2Showcase'
 
+const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), {
+  ssr: false,
+})
+
 // Dynamic (Framer Motion scroll hooks — better as client-only)
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), {
   ssr: false,
@@ -75,6 +79,9 @@ export default function Home() {
 
       {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
       <EsummitAbout />
+
+      {/* ── 3b. React Bits Masonry — 2x Viewport Height Scroll Parallax ───── */}
+      <MasonryShowcase />
 
       {/* ── 4. Highlights — sticky card stack, dark bg ──────────────────── */}
       <EsummitHighlights />
