@@ -1,11 +1,4 @@
 'use client'
-// components/EsummitMarquee/index.tsx
-// Photo gallery with:
-//   · Entry animation: rows slide in from the RIGHT when section scrolls into view
-//   · Continuous right-to-left infinite CSS scroll (Row 1 slower, Row 2 faster)
-//   · Cloudy/dreamy fog masks on both edges with layered blur
-//   · Speaker strip in the middle
-//   · Green hover glow on each photo card
 
 import { useEffect, useRef, useState } from 'react'
 
@@ -40,7 +33,7 @@ const LOOP_2 = [...ROW_2, ...ROW_2, ...ROW_2, ...ROW_2]
 function PhotoCard({ src }: { src: string }) {
   return (
     <div
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl"
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-void/20 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-void"
       style={{ width: '400px', height: '250px' }}
     >
       <img
@@ -49,17 +42,15 @@ function PhotoCard({ src }: { src: string }) {
         loading="lazy"
         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
-      {/* Green tint on hover */}
-      <div className="bg-mint/10 pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       {/* Subtle vignette */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-      {/* Green border glow on hover */}
-      <div className="border-mint/40 pointer-events-none absolute inset-0 rounded-2xl border opacity-0 shadow-[inset_0_0_20px_rgba(80,227,194,0.2)] transition-all duration-300 group-hover:opacity-100" />
+      {/* Border glow on hover */}
+      <div className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-void opacity-0 shadow-[0_0_20px_rgba(7,11,8,0.4)] transition-all duration-300 group-hover:opacity-100" />
     </div>
   )
 }
 
-/** One infinite-scroll photo row — direction left or right */
+/** One infinite-scroll photo row — smooth reveal when transition completes */
 function PhotoRow({
   images,
   duration,
@@ -77,9 +68,9 @@ function PhotoRow({
     <div
       className="overflow-hidden"
       style={{
-        transform: visible ? 'translateX(0)' : 'translateX(110vw)',
+        transform: visible ? 'translateY(0) scale(1)' : 'translateY(70px) scale(0.95)',
         opacity: visible ? 1 : 0,
-        transition: `transform 1.1s cubic-bezier(0.16,1,0.3,1) ${delay}s, opacity 0.7s ease ${delay}s`,
+        transition: `transform 1s cubic-bezier(0.16,1,0.3,1) ${delay}s, opacity 0.8s ease ${delay}s`,
         willChange: 'transform, opacity',
       }}
     >
@@ -103,7 +94,7 @@ export default function EsummitMarquee() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
 
-  // Trigger entry animation when section enters viewport
+  // Trigger entry animation ONLY when section is sufficiently scrolled past transition
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -112,7 +103,7 @@ export default function EsummitMarquee() {
           observer.disconnect()
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.55 }
     )
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
@@ -122,7 +113,7 @@ export default function EsummitMarquee() {
     <section
       ref={sectionRef}
       id="esummit-marquee"
-      className="esummit-section relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-mint pb-40 pt-20 text-void sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px]"
+      className="esummit-section relative z-10 -mt-24 sm:-mt-28 md:-mt-32 overflow-hidden rounded-t-[40px] bg-mint pb-32 pt-16 sm:pt-20 text-void sm:rounded-t-[50px] md:rounded-t-[60px]"
       aria-label="E-Summit moments"
     >
       {/* ── CSS keyframes ── */}
@@ -137,14 +128,14 @@ export default function EsummitMarquee() {
         }
       `}</style>
 
-      {/* ── Row 1: enters from right, scrolls LEFT ── */}
+      {/* ── Row 1: enters smoothly, scrolls LEFT ── */}
       <div className="mb-4">
         <PhotoRow images={LOOP_1} duration={50} visible={visible} delay={0} direction="left" />
       </div>
 
-      {/* ── Row 2: enters from right, scrolls RIGHT (opposite to Row 1) ── */}
+      {/* ── Row 2: enters smoothly, scrolls RIGHT (opposite to Row 1) ── */}
       <div className="mt-4">
-        <PhotoRow images={LOOP_2} duration={45} visible={visible} delay={0.18} direction="right" />
+        <PhotoRow images={LOOP_2} duration={45} visible={visible} delay={0.15} direction="right" />
       </div>
     </section>
   )

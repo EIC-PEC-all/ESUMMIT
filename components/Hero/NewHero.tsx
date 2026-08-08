@@ -168,7 +168,7 @@ export default function NewHero() {
   return (
     <section
       ref={containerRef}
-      className="relative h-[250vh] bg-void"
+      className="relative h-[210vh] bg-void"
       aria-label="PEC E-Summit Hero"
     >
       {/* Sticky Fullscreen Container — Pins Canvas and Content during entire scroll */}

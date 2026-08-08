@@ -76,11 +76,8 @@ export default function Home() {
       {/* ── 1. NewHero 60fps Frame Scrubbing ───────────────────────────── */}
       <NewHero />
 
-      {/* ── Flip-Flop 3D Slat Page Transition ──────────────────────────── */}
+      {/* ── 2. Strip Collapse Transition Revealing Marquee Gallery ───── */}
       <FlipFlopTransition />
-
-      {/* ── 2. Scroll-Parallax GIF Marquee ──────────────────────────────── */}
-      <EsummitMarquee />
 
       {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
       <EsummitAbout />
