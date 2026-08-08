@@ -32,7 +32,7 @@ export default function Sponsors() {
           <h2
             id="sponsors-heading"
             className="font-display font-black uppercase leading-none tracking-tight text-center text-mint"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+            style={{ fontSize: 'clamp(2.5rem, 10vw, 160px)' }}
           >
             SPONSORS
           </h2>
@@ -96,7 +96,7 @@ export default function Sponsors() {
           </div>
           <Link
             href="/sponsors"
-            className="btn-green shrink-0 whitespace-nowrap text-sm px-8 py-4"
+            className="btn-green shrink-0 whitespace-nowrap text-sm px-8 py-4 w-full md:w-auto text-center justify-center"
             id="sponsor-cta-btn"
           >
             Become a Sponsor

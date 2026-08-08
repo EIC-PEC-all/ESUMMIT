@@ -118,7 +118,7 @@ export default function AlumniSection() {
         <div className="max-w-7xl mx-auto w-full mb-3 flex flex-col items-center text-center gap-1 z-10">
           <h2
             className="font-display font-black uppercase leading-none tracking-tight text-center text-mint mb-1"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+            style={{ fontSize: 'clamp(2.5rem, 10vw, 160px)' }}
           >
             ALUMNI
           </h2>

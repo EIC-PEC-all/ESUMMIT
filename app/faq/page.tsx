@@ -53,7 +53,7 @@ export default function FAQLandingPage() {
           </div>
 
           <div className="max-w-3xl">
-            <h1 className="mb-6 font-display text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-6xl md:text-7xl">
+            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
               FREQUENTLY ASKED <br />
               <span className="text-mint">QUESTIONS</span>
             </h1>
