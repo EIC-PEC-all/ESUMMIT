@@ -74,7 +74,10 @@ export default function RootLayout({
           strategy="beforeInteractive"
         />
       </head>
-      <body className={`noise ${kanit.variable} ${khaviax.variable} ${inter.variable} ${jetbrains.variable} font-body text-primary bg-void`}>
+      <body
+        className={`noise ${kanit.variable} ${khaviax.variable} ${inter.variable} ${jetbrains.variable} font-body text-primary bg-void`}
+        suppressHydrationWarning
+      >
         <SmoothScrollProvider>
           {children}
         </SmoothScrollProvider>

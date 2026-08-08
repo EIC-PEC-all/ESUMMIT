@@ -40,22 +40,13 @@ import Sponsors from '@/components/Sponsors'
 import FAQ from '@/components/FAQ'
 import Footer, { RegisterCTA } from '@/components/Footer'
 
-const Timeline = dynamic(() => import('@/components/Timeline'), {
-  ssr: false,
-  loading: () => (
-    <div className="section-container flex items-center justify-center py-32">
-      <span className="font-mono-data text-sm text-muted">Loading schedule…</span>
-    </div>
-  ),
-})
-
 const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false })
 
 const Alumni = dynamic(() => import('@/components/Alumni'), { ssr: false })
 
 export default function Home() {
   return (
-    <main id="main-content" className="bg-void" style={{ overflowX: 'clip' }}>
+    <main id="main-content" className="bg-void" style={{ overflowX: 'clip' }} suppressHydrationWarning>
       <Toaster
         position="top-center"
         gutter={8}
@@ -96,9 +87,6 @@ export default function Home() {
 
       {/* ── 6. Alumni — horizontal scroll with PixelTransition ───────────── */}
       <Alumni />
-
-      {/* ── 9. Schedule / Timeline ──────────────────────────────────────── */}
-      <Timeline />
 
       {/* ── 10. Sponsors marquee ─────────────────────────────────────────── */}
       <Sponsors />

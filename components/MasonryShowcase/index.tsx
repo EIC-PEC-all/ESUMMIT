@@ -201,9 +201,9 @@ export default function MasonryShowcase() {
   const headlineScale = useTransform(scrollYProgress, [0.02, 0.2], [1, 0.82])
   const headlineY = useTransform(scrollYProgress, [0.02, 0.2], ['0px', '-60px'])
 
-  // ── 2. Gallery Fade In / Fade Out Sequence (Fades in after headline, fades out at section end) ──
-  const galleryOpacity = useTransform(scrollYProgress, [0.05, 0.18, 0.82, 0.95], [0, 1, 1, 0])
-  const galleryScale = useTransform(scrollYProgress, [0.82, 0.95], [1, 0.92])
+  // ── 2. Gallery Fade Sequence (Subtle 0.3 opacity behind title at start, 1.0 full opacity through section end) ──
+  const galleryOpacity = useTransform(scrollYProgress, [0, 0.15, 1], [0.3, 1, 1])
+  const galleryScale = useTransform(scrollYProgress, [0.85, 1], [1, 1])
 
   // ── 3. Opposing Scroll Parallax Transforms ──
   const colY_1 = useTransform(scrollYProgress, [0.15, 0.85], ['0px', '-400px'])
