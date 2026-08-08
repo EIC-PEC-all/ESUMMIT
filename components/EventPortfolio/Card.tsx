@@ -3,40 +3,8 @@
 
 import React from 'react'
 import { motion, MotionValue } from 'framer-motion'
-import {
-  Laptop,
-  Briefcase,
-  Microscope,
-  Gavel,
-  Zap,
-  Compass,
-  ShoppingBag,
-  HelpCircle,
-  Brain,
-  Users,
-  Mic,
-  TrendingUp,
-  FileText,
-  ArrowUpRight,
-  LucideIcon,
-} from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { PortfolioEvent } from './data'
-
-const ICON_MAP: Record<string, LucideIcon> = {
-  Laptop,
-  Briefcase,
-  Microscope,
-  Gavel,
-  Zap,
-  Compass,
-  ShoppingBag,
-  HelpCircle,
-  Brain,
-  Users,
-  Mic,
-  TrendingUp,
-  FileText,
-}
 
 interface CardProps {
   event: PortfolioEvent
@@ -47,92 +15,70 @@ interface CardProps {
 }
 
 export function Card({ event, index, total, onSelect }: CardProps) {
-  const IconComponent = ICON_MAP[event.iconName] || Zap
-
   return (
     <motion.div
       onClick={() => onSelect(event)}
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.4, delay: index * 0.03 }}
-      whileHover={{ y: -6 }}
-      className="group relative flex w-[275px] sm:w-[360px] md:w-[420px] lg:w-[440px] shrink-0 cursor-pointer flex-col justify-between rounded-2xl border border-white/10 bg-[#0C120F] p-4 sm:p-6 transition-colors duration-200 hover:border-mint/50 hover:bg-[#101914]"
+      transition={{ duration: 0.45, delay: index * 0.04, ease: [0.25, 0.46, 0.45, 0.94] }}
+      whileHover={{ y: -8, scale: 1.02 }}
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl"
+      style={{ width: 'clamp(200px, 22vw, 280px)', height: 'clamp(280px, 40vh, 380px)' }}
     >
-      {/* ── Top Header: Eyebrow + Index ── */}
-      <div className="relative z-20 flex items-center justify-between mb-3">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-mint">
-          {event.eyebrow}
-        </span>
-        <span className="text-xs font-mono-data text-neutral-500 group-hover:text-neutral-300 transition-colors">
-          {event.number} / {total.toString().padStart(2, '0')}
+      {/* Full-bleed image */}
+      <img
+        src={event.image}
+        alt={event.title}
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+      />
+
+      {/* Bottom gradient scrim — primary text zone */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+
+      {/* Subtle top vignette so category pill reads cleanly */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent h-1/3" />
+
+      {/* Index number — large faded watermark */}
+      <span
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display font-black text-white/[0.06] select-none pointer-events-none leading-none"
+        style={{ fontSize: 'clamp(80px, 15vw, 140px)' }}
+        aria-hidden
+      >
+        {String(index + 1).padStart(2, '0')}
+      </span>
+
+
+
+      {/* Top-left: index counter */}
+      <div className="absolute top-3 left-3 z-10">
+        <span className="font-mono-data text-[10px] font-bold text-white/40">
+          {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
         </span>
       </div>
 
-      {/* ── 16:9 Media Preview Artwork Container with Thematic Image ── */}
-      <div className="relative z-20 my-2 w-full aspect-[16/9] rounded-xl border border-white/10 bg-neutral-950 overflow-hidden transition-colors duration-200 group-hover:border-mint/40">
-        {/* Event Specific Thematic Image */}
-        <img
-          src={event.image}
-          alt={event.title}
-          className="absolute inset-0 h-full w-full object-cover opacity-65 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
-          loading="lazy"
-        />
-
-        {/* Gradient Scrim Overlay for Contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0C120F] via-[#0C120F]/40 to-transparent opacity-85 group-hover:opacity-60 transition-opacity duration-300 pointer-events-none" />
-
-        {/* Badge & Icon Overlay */}
-        <div className="absolute bottom-2.5 left-2.5 flex items-center gap-2 z-10">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-black/60 text-white shadow-md backdrop-blur-md">
-            <IconComponent size={16} className="text-mint" />
-          </div>
-
-          <span className="inline-flex items-center rounded-full border border-white/15 bg-black/70 px-2.5 py-0.5 text-[10px] font-medium text-neutral-200 backdrop-blur-md">
-            {event.badge}
+      {/* Bottom content zone */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 flex items-end justify-between gap-3">
+        <div className="flex flex-col gap-0.5 min-w-0">
+          {/* Eyebrow */}
+          <span className="font-mono-data text-[9px] font-bold uppercase tracking-[0.2em] text-mint/80 truncate">
+            {event.eyebrow}
           </span>
+          {/* Event name */}
+          <h3 className="font-display text-lg font-black uppercase leading-tight tracking-tight text-white group-hover:text-mint transition-colors duration-300 line-clamp-2">
+            {event.title}
+          </h3>
         </div>
 
-        {/* Top-Right Category Pill */}
-        <div className="absolute right-2.5 top-2.5 z-10">
-          <span className="rounded-full bg-black/75 border border-white/15 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-mint backdrop-blur-md">
-            {event.category}
-          </span>
+        {/* Arrow CTA */}
+        <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-all duration-300 group-hover:bg-mint group-hover:border-mint group-hover:text-black">
+          <ArrowUpRight size={16} />
         </div>
       </div>
 
-      {/* ── Content Block: Title & Purpose ── */}
-      <div className="relative z-20 mt-3 flex flex-col gap-1.5">
-        <h3 className="text-lg sm:text-xl font-bold tracking-tight text-white group-hover:text-mint transition-colors line-clamp-1">
-          {event.title}
-        </h3>
-        <p className="text-xs sm:text-sm leading-relaxed text-neutral-400 line-clamp-2">
-          {event.purpose}
-        </p>
-      </div>
-
-      {/* ── Tag Chips ── */}
-      <div className="relative z-20 mt-3 flex flex-wrap gap-1.5">
-        {event.tags.slice(0, 3).map((tag, i) => (
-          <span
-            key={i}
-            className="rounded-md bg-neutral-950 border border-white/5 px-2.5 py-1 text-[11px] font-medium text-neutral-400 group-hover:border-mint/20 group-hover:text-neutral-300 transition-colors"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* ── Bottom Action Row ── */}
-      <div className="relative z-20 mt-4 flex items-center justify-between border-t border-white/10 pt-3.5">
-        <span className="text-xs font-semibold uppercase tracking-wider text-neutral-300 group-hover:text-mint transition-colors">
-          Explore Event
-        </span>
-
-        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-neutral-950 text-neutral-300 group-hover:border-mint group-hover:bg-mint group-hover:text-black transition-all duration-200">
-          <ArrowUpRight size={15} />
-        </div>
-      </div>
+      {/* Mint border reveal on hover */}
+      <div className="absolute inset-0 rounded-2xl border border-mint/0 group-hover:border-mint/40 transition-colors duration-300 pointer-events-none" />
     </motion.div>
   )
 }

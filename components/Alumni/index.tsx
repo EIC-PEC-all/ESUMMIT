@@ -116,18 +116,9 @@ export default function AlumniSection() {
       <div className="absolute bottom-1/3 right-10 w-[600px] h-[600px] bg-[#3DD9FF]/10 rounded-full blur-[160px] pointer-events-none" />
 
       {/* Sticky Fullscreen Container */}
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-between py-8 sm:py-12 md:py-14 px-4 sm:px-8 md:px-12">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-start pt-16 sm:pt-20 pb-8 px-4 sm:px-8 md:px-12">
         {/* Header Section */}
-        <div className="max-w-3xl mx-auto w-full flex flex-col items-center text-center gap-2 sm:gap-3 z-10 pt-2">
-          {/* Eyebrow Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-mint/10 border border-mint/30 font-mono-data text-[10px] sm:text-xs text-mint font-bold uppercase tracking-widest backdrop-blur-md">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-mint opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-mint" />
-            </span>
-            <span>HALL OF FAME &amp; LEGACY</span>
-          </div>
-
+        <div className="max-w-3xl mx-auto w-full flex flex-col items-center text-center z-10">
           <h2
             className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_4px_25px_rgba(126,211,33,0.35)]"
             style={{ fontSize: 'clamp(2.5rem, 9vw, 140px)' }}
@@ -135,76 +126,50 @@ export default function AlumniSection() {
             ALUMNI
           </h2>
 
-          <p className="text-xs sm:text-sm md:text-base text-gray-300 font-body max-w-xl leading-relaxed">
+          <p className="text-xs sm:text-sm md:text-base text-gray-300 font-body max-w-xl leading-relaxed mt-4">
             Pioneers, founders, and venture leaders who emerged from PEC E-Cell to build tech giants and shape global ecosystems.
           </p>
         </div>
 
         {/* Horizontal Motion Track */}
-        <div className="w-full overflow-hidden z-10 py-2 my-auto">
-          <motion.div style={{ x: xTransform }} className="flex gap-6 sm:gap-8 md:gap-10 w-max pl-4 sm:pl-8 md:pl-16 pr-16">
+        <div className="w-full overflow-hidden z-10 py-2 mt-6 sm:mt-8 md:mt-10 mb-auto">
+          <motion.div style={{ x: xTransform }} className="flex gap-4 sm:gap-5 md:gap-6 w-max pl-4 sm:pl-8 md:pl-16 pr-16">
             {ALUMNI_DATA.map((person, idx) => (
-              <div key={person.id} className="w-[275px] sm:w-[315px] md:w-[340px] shrink-0">
+              <div key={person.id} className="w-[230px] sm:w-[270px] md:w-[290px] shrink-0">
                 <PixelTransition
                   gridSize={10}
                   pixelColor="var(--accent-mint)"
                   animationStepDuration={0.4}
-                  aspectRatio="112%"
-                  className="rounded-2xl shadow-2xl bg-[#0B1712] border border-white/15 hover:border-mint/60 transition-all duration-300 w-full overflow-hidden group/card"
+                  aspectRatio="105%"
+                  className="rounded-2xl shadow-2xl bg-[#0B1712] transition-all duration-300 w-full overflow-hidden group/card isolate border-0 border-transparent outline-none"
+                  style={{ border: 'none', outline: 'none' }}
                   firstContent={
-                    <div className="relative w-full h-full group overflow-hidden bg-[#0B1712]">
+                    <div className="relative w-full h-full group overflow-hidden bg-[#0B1712] rounded-2xl">
                       {/* Image */}
                       <img
                         src={person.imageUrl}
                         alt={person.name}
-                        className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100"
+                        className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 scale-105 group-hover:scale-100 rounded-2xl"
                       />
 
-                      {/* Gradient Scrim Overlays */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#07130F] via-[#07130F]/40 to-transparent opacity-90" />
-
-                      {/* Top Batch Tag */}
-                      <div className="absolute top-4 left-4 z-10">
-                        <span className="px-3 py-1 rounded-full bg-mint text-void font-mono-data text-xs font-black tracking-wider shadow-md">
-                          {person.batch}
-                        </span>
-                      </div>
-
-                      {/* Index Badge */}
-                      <div className="absolute top-4 right-4 z-10">
-                        <span className="px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/20 text-gray-300 font-mono-data text-[10px] font-bold">
-                          0{idx + 1} / 06
-                        </span>
-                      </div>
+                       {/* Gradient Scrim Overlays */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#07130F] via-[#07130F]/40 to-transparent opacity-90 rounded-2xl" />
 
                       {/* Bottom Front Content */}
-                      <div className="absolute bottom-0 inset-x-0 p-5 z-10 flex flex-col justify-end">
+                      <div className="absolute bottom-0 inset-x-0 p-5 z-10 flex flex-col justify-end rounded-2xl">
                         <span className="text-xs font-mono-data text-mint font-bold tracking-wide flex items-center gap-1.5 mb-1">
                           <Building2 className="w-3.5 h-3.5" />
-                          {person.company}
+                          {person.company} &middot; {person.batch}
                         </span>
                         <h3 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">{person.name}</h3>
-                        <p className="text-xs text-gray-300 font-body mt-0.5 line-clamp-1">{person.role}</p>
-
-                        <div className="mt-3 pt-2.5 border-t border-white/20 flex items-center justify-between text-[11px] font-mono-data text-gray-300">
-                          <span className="flex items-center gap-1 text-mint font-bold">
-                            <Sparkles className="w-3 h-3" /> Hover to reveal profile
-                          </span>
-                          <span className="text-gray-300 font-bold flex items-center gap-1">
-                            <Zap className="w-3 h-3 text-mint inline" /> Pixel Reveal
-                          </span>
-                        </div>
                       </div>
                     </div>
                   }
                   secondContent={
-                    <div className="w-full h-full bg-[#0C1A14] p-6 flex flex-col justify-between border border-mint/40 rounded-2xl text-left select-none overflow-hidden text-white shadow-2xl">
+                    <div className="w-full h-full bg-[#0C1A14] p-6 flex flex-col justify-between rounded-2xl text-left select-none overflow-hidden text-white shadow-2xl border-0 border-transparent outline-none" style={{ border: 'none', outline: 'none' }}>
                       <div className="space-y-3">
                         {/* Header Details */}
-                        <div className="flex items-center justify-between">
-                          <span className="px-3 py-1 rounded-full bg-mint/20 border border-mint/40 text-mint font-mono-data text-xs font-bold tracking-wider">
-                            {person.batch}
-                          </span>
+                        <div className="flex items-center justify-end">
                           <a
                             href={person.linkedin}
                             target="_blank"
@@ -249,20 +214,6 @@ export default function AlumniSection() {
               </div>
             ))}
           </motion.div>
-        </div>
-
-        {/* Footer Guidance & Counter Bar */}
-        <div className="relative z-20 flex items-center justify-between px-2 sm:px-4 text-xs font-mono-data text-gray-400">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-mint animate-pulse" />
-            <span className="font-bold text-gray-300">Scroll to explore PEC Hall of Fame</span>
-          </div>
-
-          <div className="hidden sm:flex items-center gap-3 font-bold text-mint">
-            <span>PEC E-SUMMIT &apos;26</span>
-            <span>•</span>
-            <span>06 DISTINGUISHED ALUMNI</span>
-          </div>
         </div>
       </div>
     </section>

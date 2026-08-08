@@ -1,30 +1,25 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Ticket, Zap } from 'lucide-react'
 
 export default function Vdo2Showcase() {
+  const [isHovered, setIsHovered] = useState(false)
   return (
     <section
       className="relative bg-[#040705] text-white py-24 px-4 sm:px-6 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-white/10"
       aria-label="Passes Showcase"
     >
       {/* ── High-Voltage Ambient Mesh Background Glows ───────────────────── */}
-      <div className="pointer-events-none absolute left-1/4 top-0 h-[500px] w-[500px] rounded-full bg-purple-600/20 blur-[140px]" />
-      <div className="pointer-events-none absolute right-1/4 bottom-0 h-[500px] w-[500px] rounded-full bg-pink-600/20 blur-[140px]" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-cyan-500/15 blur-[160px]" />
+      <div className="pointer-events-none absolute left-1/4 top-0 h-[500px] w-[500px] rounded-full bg-lime-500/20 blur-[140px]" />
+      <div className="pointer-events-none absolute right-1/4 bottom-0 h-[500px] w-[500px] rounded-full bg-emerald-700/20 blur-[140px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-green-400/10 blur-[160px]" />
 
       {/* Content Container */}
       <div className="relative z-10 max-w-6xl mx-auto flex flex-col items-center text-center">
-        {/* Badge */}
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 backdrop-blur-md">
-          <Zap size={14} className="text-yellow-400 fill-yellow-400" />
-          <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-white">
-            PEC SUMMIT 2026 PASSES
-          </span>
-        </div>
+
 
         {/* Headline — WHITE with High-Voltage Drop Shadow */}
         <h2
@@ -40,16 +35,33 @@ export default function Vdo2Showcase() {
         </p>
 
         {/* Pass Tier Cards Grid — Exact Scalloped Barcode Ticket Stubs */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl w-full mb-10 text-black">
+        <div 
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-5xl w-full mb-10 text-black"
+        >
           {/* Student Pass — Electric Blue/Purple Gradient */}
           <Link
             href="/passes"
-            className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-300 hover:-translate-y-2 select-none min-h-[440px]"
+            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-500 select-none min-h-[440px] ${
+              isHovered 
+                ? 'sm:translate-x-0 sm:rotate-0 sm:scale-100 sm:hover:scale-[1.05] z-10 sm:hover:z-30'
+                : 'sm:translate-x-[48px] sm:-rotate-6 sm:scale-[0.88] z-10'
+            }`}
             style={{
-              background: 'linear-gradient(165deg, #0284C7 0%, #2563EB 35%, #7C3AED 70%, #EC4899 100%)',
-              boxShadow: '0 15px 35px rgba(37,99,235,0.4)',
+              background: 'linear-gradient(165deg, #39FF14 0%, #00DD00 50%, #009900 100%)',
+              boxShadow: '0 15px 35px rgba(57,255,20,0.35)',
             }}
           >
+            {/* Subtle Textured Pattern Overlay */}
+            <div 
+              className="absolute inset-0 opacity-[0.16] pointer-events-none"
+              style={{
+                backgroundImage: 'radial-gradient(circle, #000 1.2px, transparent 1.2px), repeating-linear-gradient(45deg, #000, #000 1px, transparent 1px, transparent 12px)',
+                backgroundSize: '16px 16px, 12px 12px',
+              }}
+            />
+
             {/* Top Scalloped Teeth */}
             <div className="absolute left-0 right-0 -top-1.5 z-30 flex justify-between px-2">
               {[...Array(7)].map((_, i) => (
@@ -66,11 +78,16 @@ export default function Vdo2Showcase() {
             <div className="pointer-events-none absolute left-0 top-20 -translate-x-1/2 h-6 w-6 rounded-full bg-[#040705] z-30" />
             <div className="pointer-events-none absolute right-0 top-20 translate-x-1/2 h-6 w-6 rounded-full bg-[#040705] z-30" />
 
+            {/* Dotted Tear Line */}
+            <div className="absolute left-3 right-3 top-[91px] z-20 border-t-2 border-dashed border-black/15 pointer-events-none flex justify-center select-none">
+              <span className="font-mono-data text-[7px] text-black/40 px-2 -translate-y-1.5 uppercase font-bold tracking-widest bg-transparent">
+                cut here
+              </span>
+            </div>
+
             {/* Header */}
             <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
-              <div className="rounded bg-black px-2.5 py-1 text-white shadow-sm">
-                <span className="font-display text-xs font-black tracking-tighter">PEC SUMMIT</span>
-              </div>
+              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">PEC SUMMIT</span>
               <div className="flex items-center gap-1.5">
                 <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
                   STU-88742
@@ -112,12 +129,25 @@ export default function Vdo2Showcase() {
           {/* Founder & Pitch Pass — Reference Purple/Coral Gradient (Featured) */}
           <Link
             href="/passes"
-            className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-300 hover:-translate-y-2 select-none min-h-[440px]"
+            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-500 select-none min-h-[440px] ${
+              isHovered 
+                ? 'sm:translate-x-0 sm:rotate-0 sm:scale-100 sm:hover:scale-[1.05] z-10 sm:hover:z-30'
+                : 'sm:translate-x-0 sm:rotate-0 sm:scale-[1.04] z-20'
+            }`}
             style={{
-              background: 'linear-gradient(165deg, #7C3AED 0%, #C026D3 30%, #F43F5E 65%, #F97316 85%, #FBBF24 100%)',
-              boxShadow: '0 20px 40px rgba(244,63,94,0.4), 0 0 30px rgba(124,58,237,0.3)',
+              background: 'linear-gradient(165deg, #E2FF6E 0%, #BAEF4B 30%, #7FD420 65%, #4EAA0A 100%)',
+              boxShadow: '0 15px 35px rgba(186,239,75,0.35)',
             }}
           >
+            {/* Subtle Textured Pattern Overlay */}
+            <div 
+              className="absolute inset-0 opacity-[0.16] pointer-events-none"
+              style={{
+                backgroundImage: 'radial-gradient(circle, #000 1.2px, transparent 1.2px), repeating-linear-gradient(45deg, #000, #000 1px, transparent 1px, transparent 12px)',
+                backgroundSize: '16px 16px, 12px 12px',
+              }}
+            />
+
             {/* Top Scalloped Teeth */}
             <div className="absolute left-0 right-0 -top-1.5 z-30 flex justify-between px-2">
               {[...Array(7)].map((_, i) => (
@@ -134,11 +164,16 @@ export default function Vdo2Showcase() {
             <div className="pointer-events-none absolute left-0 top-20 -translate-x-1/2 h-6 w-6 rounded-full bg-[#040705] z-30" />
             <div className="pointer-events-none absolute right-0 top-20 translate-x-1/2 h-6 w-6 rounded-full bg-[#040705] z-30" />
 
+            {/* Dotted Tear Line */}
+            <div className="absolute left-3 right-3 top-[91px] z-20 border-t-2 border-dashed border-black/15 pointer-events-none flex justify-center select-none">
+              <span className="font-mono-data text-[7px] text-black/40 px-2 -translate-y-1.5 uppercase font-bold tracking-widest bg-transparent">
+                cut here
+              </span>
+            </div>
+
             {/* Header */}
             <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
-              <div className="rounded bg-black px-2.5 py-1 text-white shadow-sm">
-                <span className="font-display text-xs font-black tracking-tighter">PEC SUMMIT</span>
-              </div>
+              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">PEC SUMMIT</span>
               <div className="flex items-center gap-1.5">
                 <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
                   PITCH-087636
@@ -180,12 +215,25 @@ export default function Vdo2Showcase() {
           {/* VIP Pass — Golden Amber/Rose Gradient */}
           <Link
             href="/passes"
-            className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-300 hover:-translate-y-2 select-none min-h-[440px]"
+            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-500 select-none min-h-[440px] ${
+              isHovered 
+                ? 'sm:translate-x-0 sm:rotate-0 sm:scale-100 sm:hover:scale-[1.05] z-10 sm:hover:z-30'
+                : 'sm:translate-x-[-48px] sm:rotate-6 sm:scale-[0.88] z-10'
+            }`}
             style={{
-              background: 'linear-gradient(165deg, #D97706 0%, #F59E0B 35%, #F43F5E 70%, #9333EA 100%)',
-              boxShadow: '0 15px 35px rgba(217,119,6,0.4)',
+              background: 'linear-gradient(165deg, #FFFFFF 0%, #F0FFF4 40%, #CCFFD5 100%)',
+              boxShadow: '0 15px 35px rgba(204,255,213,0.5)',
             }}
           >
+            {/* Subtle Textured Pattern Overlay */}
+            <div 
+              className="absolute inset-0 opacity-[0.12] pointer-events-none"
+              style={{
+                backgroundImage: 'radial-gradient(circle, #000 1.2px, transparent 1.2px), repeating-linear-gradient(45deg, #000, #000 1px, transparent 1px, transparent 12px)',
+                backgroundSize: '16px 16px, 12px 12px',
+              }}
+            />
+
             {/* Top Scalloped Teeth */}
             <div className="absolute left-0 right-0 -top-1.5 z-30 flex justify-between px-2">
               {[...Array(7)].map((_, i) => (
@@ -202,11 +250,16 @@ export default function Vdo2Showcase() {
             <div className="pointer-events-none absolute left-0 top-20 -translate-x-1/2 h-6 w-6 rounded-full bg-[#040705] z-30" />
             <div className="pointer-events-none absolute right-0 top-20 translate-x-1/2 h-6 w-6 rounded-full bg-[#040705] z-30" />
 
+            {/* Dotted Tear Line */}
+            <div className="absolute left-3 right-3 top-[91px] z-20 border-t-2 border-dashed border-black/15 pointer-events-none flex justify-center select-none">
+              <span className="font-mono-data text-[7px] text-black/45 px-2 -translate-y-1.5 uppercase font-bold tracking-widest bg-transparent">
+                cut here
+              </span>
+            </div>
+
             {/* Header */}
             <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
-              <div className="rounded bg-black px-2.5 py-1 text-white shadow-sm">
-                <span className="font-display text-xs font-black tracking-tighter">PEC SUMMIT</span>
-              </div>
+              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">PEC SUMMIT</span>
               <div className="flex items-center gap-1.5">
                 <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
                   VIP-00109

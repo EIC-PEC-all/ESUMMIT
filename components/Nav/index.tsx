@@ -29,6 +29,72 @@ const SPONSOR_ITEMS = [
   ...SPONSORS.media.map((s) => ({ ...s, tier: 'Media Partner' })),
 ]
 
+function NavCountdown({ targetISO }: { targetISO: string }) {
+  const [timeLeft, setTimeLeft] = useState<{ days: string; hours: string; minutes: string; seconds: string } | null>(null)
+  const [isLive, setIsLive] = useState(false)
+
+  useEffect(() => {
+    let target = new Date(targetISO)
+    const now = Date.now()
+
+    if (target.getTime() <= now) {
+      target = new Date('2027-03-15T09:00:00+05:30')
+    }
+
+    const checkState = () => {
+      const curNow = Date.now()
+      const start = target.getTime()
+      const end = start + 2 * 24 * 60 * 60 * 1000 // 2 days duration
+      const live = curNow >= start && curNow <= end
+      setIsLive(live)
+
+      if (!live) {
+        const diff = start - curNow
+        if (diff > 0) {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+          const minutes = Math.floor((diff / (1000 * 60)) % 60)
+          const seconds = Math.floor((diff / 1000) % 60)
+          
+          const pad = (n: number) => String(n).padStart(2, '0')
+          setTimeLeft({
+            days: pad(days),
+            hours: pad(hours),
+            minutes: pad(minutes),
+            seconds: pad(seconds),
+          })
+        } else {
+          setTimeLeft({ days: '00', hours: '00', minutes: '00', seconds: '00' })
+        }
+      }
+    }
+
+    checkState()
+    const timer = setInterval(checkState, 1000)
+    return () => clearInterval(timer)
+  }, [targetISO])
+
+  if (isLive) {
+    return (
+      <div className="flex items-center gap-1.5 text-black select-none uppercase tracking-widest text-[9px] sm:text-xs">
+        <span className="relative flex h-2 w-2 shrink-0">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7ED321] opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-[#7ED321]" />
+        </span>
+        <span className="font-extrabold text-black">LIVE</span>
+      </div>
+    )
+  }
+
+  if (!timeLeft) return <span className="opacity-0">--:--:--</span>
+
+  return (
+    <span className="font-mono-data text-[9px] sm:text-[11px] tracking-wider text-black font-extrabold tabular-nums select-none uppercase whitespace-nowrap">
+      {timeLeft.days}D : {timeLeft.hours}H : {timeLeft.minutes}M : {timeLeft.seconds}S
+    </span>
+  )
+}
+
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -233,7 +299,6 @@ export default function Nav() {
       </header>
 
 
-
       {/* TOP SPONSOR MARQUEE BAR — Slides in from top when navbar hides on scroll down */}
       <div
         className={`fixed top-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-b border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 shadow-2xl transition-all duration-500 ease-out ${
@@ -242,9 +307,12 @@ export default function Nav() {
             : '-translate-y-full opacity-0 pointer-events-none'
         }`}
       >
-        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
+        <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-white pl-4 pr-3 border-r border-black/10 font-mono-data text-xs font-bold text-black shrink-0 select-none">
+          <NavCountdown targetISO={FEST_META.countdownTarget} />
+        </div>
+        <div className="absolute left-[125px] sm:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
-        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center">
+        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center pl-[135px] sm:pl-[165px]">
           {[...SPONSOR_ITEMS, ...SPONSOR_ITEMS, ...SPONSOR_ITEMS].map((item, i) => (
             <div
               key={`top-${item.id}-${i}`}
@@ -257,7 +325,7 @@ export default function Nav() {
           ))}
         </div>
       </div>
-
+ 
       {/* BOTTOM SPONSOR MARQUEE BAR — Sits at bottom initially & when scrolling up */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
@@ -266,9 +334,12 @@ export default function Nav() {
             : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >
-        <div className="absolute left-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
+        <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-white pl-4 pr-3 border-r border-black/10 font-mono-data text-xs font-bold text-black shrink-0 select-none">
+          <NavCountdown targetISO={FEST_META.countdownTarget} />
+        </div>
+        <div className="absolute left-[125px] sm:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
-        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center">
+        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center pl-[135px] sm:pl-[165px]">
           {[...SPONSOR_ITEMS, ...SPONSOR_ITEMS, ...SPONSOR_ITEMS].map((item, i) => (
             <div
               key={`bot-${item.id}-${i}`}
@@ -319,14 +390,6 @@ export default function Nav() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <button
-                      onClick={toggleTheme}
-                      className="w-10 h-10 rounded-xl bg-void text-mint font-bold flex items-center justify-center border border-void/30 hover:bg-black/90 transition-all cursor-pointer shadow-md"
-                      aria-label="Toggle Light/Dark Theme"
-                      title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-                    >
-                      {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-                    </button>
                     {/* High-Contrast Black Close Button */}
                     <button
                       onClick={() => setMenuOpen(false)}

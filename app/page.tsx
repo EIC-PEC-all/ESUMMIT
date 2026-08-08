@@ -1,6 +1,3 @@
-'use client'
-
-import { useState, useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 
@@ -17,22 +14,16 @@ const ScrollExpandLoader = dynamic(() => import('@/components/Common/ScrollExpan
 const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), { ssr: false })
 const EventPortfolioShowcase = dynamic(() => import('@/components/EventPortfolio'), { ssr: false })
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), { ssr: false })
-const Sponsors = dynamic(() => import('@/components/Sponsors'), { ssr: false })
-const FAQ = dynamic(() => import('@/components/FAQ'), { ssr: false })
-const Alumni = dynamic(() => import('@/components/Alumni'), { ssr: false })
+const Sponsors = dynamic(() => import('@/components/Sponsors'))
+const FAQ = dynamic(() => import('@/components/FAQ'))
+const Alumni = dynamic(() => import('@/components/Alumni'))
 const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false })
-const Footer = dynamic(() => import('@/components/Footer'), { ssr: false })
-const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.RegisterCTA), { ssr: false })
+const Footer = dynamic(() => import('@/components/Footer'))
+const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.RegisterCTA))
 
 export default function Home() {
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
   return (
-    <main id="main-content" className="bg-void" style={{ overflowX: 'clip' }} suppressHydrationWarning>
+    <main id="main-content" className="bg-void overflow-x-clip" suppressHydrationWarning>
       {/* Vantage Initial Page Loader (Auto Expands & Unmounts after 3.5s) */}
       <ScrollExpandLoader />
 

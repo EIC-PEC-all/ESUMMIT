@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
-  font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-family: var(--font-kanit), -apple-system, BlinkMacSystemFont, sans-serif !important;
 }
 
 .font-mono-data {
@@ -161,7 +161,7 @@ header {
 
 /* ─── Big Headings Font Rule (Kanit) ─── */
 h1, h2, h3 {
-  font-family: var(--font-kanit), var(--font-khaviax), sans-serif;
+  font-family: var(--font-kanit), sans-serif;
 }
 
 

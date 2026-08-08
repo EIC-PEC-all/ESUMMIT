@@ -71,6 +71,9 @@ const BORDERLESS_SPONSORS = [
 ]
 
 export default function Sponsors() {
+  const strategic = BORDERLESS_SPONSORS.filter(s => ['Google Cloud', 'AWS', 'Sequoia'].includes(s.name))
+  const ecosystem = BORDERLESS_SPONSORS.filter(s => !['Google Cloud', 'AWS', 'Sequoia'].includes(s.name))
+
   return (
     <section
       id="sponsors"
@@ -78,8 +81,8 @@ export default function Sponsors() {
       aria-labelledby="sponsors-heading"
     >
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* ── Two-Tone Headline Matching Reference Image ────────────────────── */}
-        <div className="text-center mb-20 sm:mb-24">
+        {/* Headline */}
+        <div className="text-center mb-20">
           <h2
             id="sponsors-heading"
             className="font-display font-black uppercase tracking-tight text-center leading-none"
@@ -93,23 +96,51 @@ export default function Sponsors() {
           </p>
         </div>
 
-        {/* ── Ultra-Clean Borderless Logo Grid (Exact Reference Image Style) ─── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-14 sm:gap-y-16 gap-x-10 sm:gap-x-16 md:gap-x-24 items-center justify-items-center max-w-5xl mx-auto my-6">
-          {BORDERLESS_SPONSORS.map((sponsor, idx) => (
+        {/* United Apple-Style Mesh Grid (Zero Gap) */}
+        <div className="grid grid-cols-2 sm:grid-cols-6 gap-[1px] bg-white/10 border border-white/10 rounded-3xl overflow-hidden max-w-5xl mx-auto shadow-2xl">
+          
+          {/* Strategic Partners (Top Row - Prominent) */}
+          {strategic.map((sponsor, idx) => (
             <motion.a
               key={sponsor.name}
               href={sponsor.url}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
-              className="group flex items-center justify-center p-2 transition-all duration-300 opacity-75 hover:opacity-100 hover:scale-105 select-none"
+              transition={{ duration: 0.5, delay: idx * 0.05 }}
+              className="col-span-2 sm:col-span-2 flex items-center justify-center p-10 sm:p-14 bg-[#091a12] hover:bg-[#0e271c] transition-colors duration-300 relative group"
+            >
+              {/* Subtle inner hover glow */}
+              <div className="absolute inset-0 bg-mint/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={sponsor.logoUrl}
+                alt={sponsor.name}
+                className={`h-9 sm:h-11 w-auto max-w-[150px] object-contain transition-all duration-300 group-hover:scale-105 ${
+                  sponsor.invert ? 'brightness-0 invert' : ''
+                }`}
+                loading="lazy"
+              />
+            </motion.a>
+          ))}
+
+          {/* Ecosystem Partners (Secondary Rows) */}
+          {ecosystem.map((sponsor, idx) => (
+            <motion.a
+              key={sponsor.name}
+              href={sponsor.url}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.04 }}
+              className="col-span-1 sm:col-span-2 last:col-span-2 sm:last:col-span-2 flex items-center justify-center p-8 sm:p-10 bg-[#07150e] hover:bg-[#0b2015] transition-colors duration-300 relative group"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={sponsor.logoUrl}
                 alt={sponsor.name}
-                className={`h-7 sm:h-9 md:h-10 w-auto max-w-[140px] sm:max-w-[160px] object-contain ${
+                className={`h-6 sm:h-7 w-auto max-w-[110px] object-contain opacity-50 group-hover:opacity-100 transition-all duration-300 group-hover:scale-105 ${
                   sponsor.invert ? 'brightness-0 invert' : ''
                 }`}
                 loading="lazy"

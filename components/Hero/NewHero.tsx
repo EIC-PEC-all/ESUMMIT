@@ -4,11 +4,10 @@ import React, { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Ticket, Calendar, MapPin, Sparkles, ArrowUpRight, ChevronDown } from 'lucide-react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import Countdown from './Countdown'
 import { FEST_META } from '@/lib/data'
 
-const TOTAL_RAW_FRAMES = 600
-const FRAME_STEP = 6 // Sample every 6th frame => 100 fast, lightweight frames
+const TOTAL_RAW_FRAMES = 260
+const FRAME_STEP = 3 // Sample every 3rd frame => ~86 fast, lightweight frames
 const FRAME_COUNT = Math.floor(TOTAL_RAW_FRAMES / FRAME_STEP)
 
 export default function NewHero() {
@@ -287,10 +286,7 @@ export default function NewHero() {
               </a>
             </div>
 
-            {/* Pure Minimalist Countdown Timer */}
-            <div className="flex w-full justify-center pt-1">
-              <Countdown targetISO={FEST_META.countdownTarget} hideHeader={true} />
-            </div>
+
           </div>
         </motion.div>
       </div>
