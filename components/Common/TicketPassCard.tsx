@@ -35,7 +35,7 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       whileHover={{ y: -10, rotate: pass.popular ? 0 : 0.5, scale: 1.02 }}
       onClick={() => onSelectPass(pass)}
-      className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[32px] p-6 text-black shadow-2xl transition-all duration-300 select-none min-h-[580px]"
+      className="group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[28px] p-5 text-black shadow-2xl transition-all duration-300 select-none min-h-[440px]"
       style={{
         background: pass.gradient,
         boxShadow: pass.popular
@@ -45,21 +45,21 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
     >
       {/* ── Scalloped Top Teeth Cutouts ───────────────────────────────────── */}
       <div className="absolute left-0 right-0 -top-2 z-30 flex justify-between px-3">
-        {[...Array(9)].map((_, i) => (
-          <div key={i} className="h-4 w-4 rounded-full bg-void" />
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className="h-4 w-4 rounded-full bg-[#040705]" />
         ))}
       </div>
 
       {/* ── Scalloped Bottom Teeth Cutouts ────────────────────────────────── */}
       <div className="absolute left-0 right-0 -bottom-2 z-30 flex justify-between px-3">
-        {[...Array(9)].map((_, i) => (
-          <div key={i} className="h-4 w-4 rounded-full bg-void" />
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className="h-4 w-4 rounded-full bg-[#040705]" />
         ))}
       </div>
 
       {/* ── Side Circular Notch Cutouts ────────────────────────────────────── */}
-      <div className="pointer-events-none absolute left-0 top-24 -translate-x-1/2 h-8 w-8 rounded-full bg-void z-30" />
-      <div className="pointer-events-none absolute right-0 top-24 translate-x-1/2 h-8 w-8 rounded-full bg-void z-30" />
+      <div className="pointer-events-none absolute left-0 top-24 -translate-x-1/2 h-7 w-7 rounded-full bg-[#040705] z-30" />
+      <div className="pointer-events-none absolute right-0 top-24 translate-x-1/2 h-7 w-7 rounded-full bg-[#040705] z-30" />
 
       {/* ── HEADER SECTION: LOGO BADGE & VERTICAL BARCODE ────────────────── */}
       <div className="flex items-start justify-between border-b border-black/15 pb-4 pt-2">

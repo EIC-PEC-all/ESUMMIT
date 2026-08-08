@@ -167,12 +167,12 @@ export default function PassesPage() {
       <div className="pointer-events-none absolute left-1/4 top-20 h-[600px] w-[600px] rounded-full bg-purple-600/15 blur-[160px]" />
       <div className="pointer-events-none absolute right-1/4 top-96 h-[600px] w-[600px] rounded-full bg-pink-600/15 blur-[160px]" />
 
-      {/* Hero Section */}
-      <section className="relative bg-[#040705] pt-32 pb-4">
+      {/* Unified Hero + Ticket Pass Cards Grid Section */}
+      <section className="relative bg-[#040705] pt-28 pb-16">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
-          <div className="mb-6 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between">
             <Link
               href="/"
               className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-gray-400 transition-colors hover:text-white"
@@ -188,15 +188,15 @@ export default function PassesPage() {
             </div>
           </div>
 
-          <div className="max-w-3xl">
-            <h1 className="mb-4 font-display text-4xl sm:text-6xl md:text-7xl font-black uppercase leading-[0.98] tracking-tight text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+          <div className="max-w-3xl mb-8">
+            <h1 className="mb-3 font-display text-4xl sm:text-6xl md:text-7xl font-black uppercase leading-[0.98] tracking-tight text-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]">
               SELECT YOUR <br />
               <span className="bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-amber-300 bg-clip-text text-transparent">
                 SUMMIT TICKET
               </span>
             </h1>
 
-            <p className="mb-6 max-w-xl font-body text-base sm:text-lg leading-relaxed text-gray-300">
+            <p className="mb-5 max-w-xl font-body text-base sm:text-lg leading-relaxed text-gray-300">
               Whether you are pitching your startup to top VCs, hacking overnight for ₹15L+ prize pools,
               or attending high-impact keynotes, claim your festival ticket pass now.
             </p>
@@ -223,43 +223,37 @@ export default function PassesPage() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Scalloped Barcode Ticket Pass Cards Grid */}
-      <section className="bg-[#040705] pt-6 pb-20">
-        <div className="section-container">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {/* Ticket Grid */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredPasses.map((pass) => (
               <TicketPassCard key={pass.id} pass={pass} onSelectPass={handleSelectPass} />
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Guarantee Banner */}
-      <section className="border-t border-b border-white/10 bg-void py-16">
-        <div className="section-container grid gap-8 text-center sm:grid-cols-3">
-          <div className="flex flex-col items-center">
-            <ShieldCheck size={32} className="mb-3 text-cyan-400" />
-            <h4 className="mb-1 font-body text-base font-bold text-white">Instant Digital E-Ticket</h4>
-            <p className="font-body text-xs text-gray-400 max-w-xs">
-              Receive your personalized scalloped barcode ticket &amp; QR code instantly upon booking.
-            </p>
-          </div>
-          <div className="flex flex-col items-center">
-            <Ticket size={32} className="mb-3 text-fuchsia-400" />
-            <h4 className="mb-1 font-body text-base font-bold text-white">Hostel &amp; Stay Assistance</h4>
-            <p className="font-body text-xs text-gray-400 max-w-xs">
-              Outstation attendees get priority hostel accommodation guidance on PEC campus.
-            </p>
-          </div>
-          <div className="flex flex-col items-center">
-            <Users size={32} className="mb-3 text-amber-400" />
-            <h4 className="mb-1 font-body text-base font-bold text-white">VC Matchmaking Portal</h4>
-            <p className="font-body text-xs text-gray-400 max-w-xs">
-              All pass holders get exclusive early access to the EIC digital networking portal.
-            </p>
+          {/* Inline Guarantee / Perks Strip */}
+          <div className="mt-16 border-t border-white/10 pt-10 grid gap-8 text-center sm:grid-cols-3">
+            <div className="flex flex-col items-center">
+              <ShieldCheck size={28} className="mb-2 text-cyan-400" />
+              <h4 className="mb-1 font-body text-sm font-bold text-white">Instant Digital E-Ticket</h4>
+              <p className="font-body text-xs text-gray-400 max-w-xs">
+                Receive your personalized scalloped barcode ticket &amp; QR code instantly upon booking.
+              </p>
+            </div>
+            <div className="flex flex-col items-center">
+              <Ticket size={28} className="mb-2 text-fuchsia-400" />
+              <h4 className="mb-1 font-body text-sm font-bold text-white">Hostel &amp; Stay Assistance</h4>
+              <p className="font-body text-xs text-gray-400 max-w-xs">
+                Outstation attendees get priority hostel accommodation guidance on PEC campus.
+              </p>
+            </div>
+            <div className="flex flex-col items-center">
+              <Users size={28} className="mb-2 text-amber-400" />
+              <h4 className="mb-1 font-body text-sm font-bold text-white">VC Matchmaking Portal</h4>
+              <p className="font-body text-xs text-gray-400 max-w-xs">
+                All pass holders get exclusive early access to the EIC digital networking portal.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -440,7 +434,7 @@ export default function PassesPage() {
         )}
       </AnimatePresence>
 
-      <Footer />
+      <Footer hideCTA={true} />
       <Concierge />
     </main>
   )
