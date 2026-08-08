@@ -28,7 +28,11 @@ export default function NewHero() {
 
   // Main hero content fades in at 0.12, STAYS FULLY VISIBLE & PINNED from 0.25 to 0.78, then fades out at 0.95
   const mainContentOpacity = useTransform(scrollYProgress, [0.12, 0.25, 0.78, 0.95], [0, 1, 1, 0])
-  const mainContentScale = useTransform(scrollYProgress, [0.12, 0.25, 0.78, 0.95], [0.95, 1, 1, 0.95])
+  const mainContentScale = useTransform(
+    scrollYProgress,
+    [0.12, 0.25, 0.78, 0.95],
+    [0.95, 1, 1, 0.95]
+  )
 
   // Soothing end-of-video blur & blackening overlay when video completes
   const endBlur = useTransform(scrollYProgress, [0.72, 0.96], ['blur(0px)', 'blur(24px)'])
@@ -162,26 +166,28 @@ export default function NewHero() {
   }, [])
 
   return (
-    <section ref={containerRef} className="relative h-[250vh] bg-void" aria-label="PEC E-Summit Hero">
-      
+    <section
+      ref={containerRef}
+      className="relative h-[250vh] bg-void"
+      aria-label="PEC E-Summit Hero"
+    >
       {/* Sticky Fullscreen Container — Pins Canvas and Content during entire scroll */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center z-0">
-        
+      <div className="sticky top-0 z-0 flex h-screen w-full items-center justify-center overflow-hidden">
         {/* 60fps 3D Rupee Video Canvas Frame Scrubber */}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        />
+        <canvas ref={canvasRef} className="absolute inset-0 z-0 h-full w-full object-cover" />
 
         {/* Ambient Dark Scrim Radial Gradient */}
         <div
-          className="absolute inset-0 z-1 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at center, rgba(7,11,8,0.45) 0%, rgba(7,11,8,0.88) 100%)' }}
+          className="z-1 pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgba(7,11,8,0.45) 0%, rgba(7,11,8,0.88) 100%)',
+          }}
         />
 
         {/* Soothing End-of-Video Blur & Blackening Layer */}
         <motion.div
-          className="absolute inset-0 z-2 pointer-events-none bg-void"
+          className="z-2 pointer-events-none absolute inset-0 bg-void"
           style={{
             opacity: endBlackenOpacity,
             filter: endBlur,
@@ -192,18 +198,18 @@ export default function NewHero() {
         {/* Initial Viewport Hero Banner Overlay */}
         <motion.div
           style={{ opacity: initialOpacity }}
-          className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-4 pointer-events-none"
+          className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-4 text-center"
         >
-          <h1 className="font-display text-6xl sm:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
-            E-SUMMIT <span className="text-mint italic">&apos;26</span>
+          <h1 className="font-display text-6xl font-black leading-none tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] sm:text-8xl lg:text-9xl">
+            E-SUMMIT <span className="italic text-mint">&apos;26</span>
           </h1>
 
-          <p className="font-mono-data text-xs sm:text-base text-gray-200 mt-4 tracking-widest uppercase max-w-md font-semibold drop-shadow-md">
+          <p className="mt-4 max-w-md font-mono-data text-xs font-semibold uppercase tracking-widest text-gray-200 drop-shadow-md sm:text-base">
             Chandigarh&apos;s Launchpad for Founders
           </p>
 
-          <div className="flex flex-col items-center gap-1.5 text-mint mt-10 animate-pulse">
-            <span className="font-mono-data text-[11px] uppercase tracking-widest font-bold">
+          <div className="mt-10 flex animate-pulse flex-col items-center gap-1.5 text-mint">
+            <span className="font-mono-data text-[11px] font-bold uppercase tracking-widest">
               Scroll to Explore &amp; Scrub Experience
             </span>
             <ChevronDown size={20} />
@@ -213,64 +219,73 @@ export default function NewHero() {
         {/* Pinned Main Hero Content Overlay — Stays 100% visible & centered throughout middle scroll range (0.25 -> 0.78) */}
         <motion.div
           style={{ opacity: mainContentOpacity, scale: mainContentScale }}
-          className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-auto"
+          className="pointer-events-auto absolute inset-0 z-20 flex flex-col items-center justify-center px-4 text-center sm:px-6"
         >
-          <div className="max-w-5xl mx-auto flex flex-col items-center text-center gap-6">
+          <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">
             {/* Cyber Glass Date & Location Badge */}
-            <div className="inline-flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 px-4 sm:px-6 py-2 rounded-full bg-[#07130F]/90 border border-mint/40 text-[11px] sm:text-xs font-mono-data uppercase tracking-wider backdrop-blur-2xl mb-2 group hover:border-mint transition-all">
-              <div className="flex items-center gap-2 text-mint font-bold">
+            <div className="border-mint/40 group mb-2 inline-flex flex-wrap items-center justify-center gap-2.5 rounded-full border bg-[#07130F]/90 px-4 py-2 font-mono-data text-[11px] uppercase tracking-wider backdrop-blur-2xl transition-all hover:border-mint sm:gap-4 sm:px-6 sm:text-xs">
+              <div className="flex items-center gap-2 font-bold text-mint">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-mint opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-mint" />
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
                 </span>
                 <Calendar size={13} strokeWidth={2} />
                 <span>{FEST_META.dates}</span>
               </div>
-              <span className="text-mint/40 font-bold hidden sm:inline">•</span>
-              <div className="flex items-center gap-1.5 text-gray-200 font-bold">
+              <span className="text-mint/40 hidden font-bold sm:inline">•</span>
+              <div className="flex items-center gap-1.5 font-bold text-gray-200">
                 <MapPin size={13} strokeWidth={2} className="text-mint" />
                 <span>{FEST_META.venue}</span>
               </div>
             </div>
 
             {/* Main Headline — Compact 2 Lines */}
-            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white leading-[1.05] drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] mb-2 max-w-3xl">
-              WHERE IDEAS RAISE <span className="text-mint">CAPITAL</span><br />
+            <h2 className="mb-2 max-w-3xl font-display text-2xl font-black uppercase leading-[1.05] tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] sm:text-4xl md:text-5xl">
+              WHERE IDEAS RAISE <span className="text-mint">CAPITAL</span>
+              <br />
               &amp; COMPOUND INTO <span className="text-mint">IMPACT</span>
             </h2>
 
             {/* Subtitle Paragraph */}
-            <p className="font-body text-xs sm:text-sm md:text-base text-gray-300 max-w-xl leading-relaxed font-normal mb-3 drop-shadow-md">
-              North India&apos;s premier stage for student builders, startup founders, and venture thinkers. Join 3,000+ attendees for pitches, keynotes, hackathons, and VC networking.
+            <p className="mb-3 max-w-xl font-body text-xs font-normal leading-relaxed text-gray-300 drop-shadow-md sm:text-sm md:text-base">
+              North India&apos;s premier stage for student builders, startup founders, and venture
+              thinkers. Join 3,000+ attendees for pitches, keynotes, hackathons, and VC networking.
             </p>
 
             {/* Action CTAs — Compact Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-3 w-full mb-1">
+            <div className="mb-1 flex w-full flex-wrap items-center justify-center gap-3">
               <Link
                 href="/passes"
-                className="group relative inline-flex items-center justify-center gap-2 px-6 h-11 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider bg-mint text-void overflow-hidden transition-transform hover:scale-105"
+                className="group relative inline-flex h-11 items-center justify-center gap-2 overflow-hidden rounded-full bg-mint px-6 font-mono-data text-xs font-bold uppercase tracking-wider text-void transition-transform hover:scale-105"
               >
                 <Ticket size={15} strokeWidth={1.5} />
                 <span>GET PASSES</span>
-                <ArrowUpRight size={15} strokeWidth={1.5} className="opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                <ArrowUpRight
+                  size={15}
+                  strokeWidth={1.5}
+                  className="opacity-70 transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100"
+                />
               </Link>
 
               <a
                 href="#schedule"
-                className="group relative inline-flex items-center justify-center gap-2 px-6 h-11 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider bg-panel/90 text-primary border border-border-subtle backdrop-blur-md overflow-hidden transition-all hover:border-mint hover:scale-105 shadow-md"
+                className="bg-panel/90 group relative inline-flex h-11 items-center justify-center gap-2 overflow-hidden rounded-full border border-border-subtle px-6 font-mono-data text-xs font-bold uppercase tracking-wider text-primary shadow-md backdrop-blur-md transition-all hover:scale-105 hover:border-mint"
               >
-                <Sparkles size={15} strokeWidth={1.5} className="text-mint group-hover:animate-pulse" />
+                <Sparkles
+                  size={15}
+                  strokeWidth={1.5}
+                  className="text-mint group-hover:animate-pulse"
+                />
                 <span>EXPLORE TRACKS</span>
               </a>
             </div>
 
             {/* Pure Minimalist Countdown Timer */}
-            <div className="w-full flex justify-center pt-1">
+            <div className="flex w-full justify-center pt-1">
               <Countdown targetISO={FEST_META.countdownTarget} hideHeader={true} />
             </div>
           </div>
         </motion.div>
-
       </div>
     </section>
   )

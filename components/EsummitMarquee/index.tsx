@@ -40,27 +40,21 @@ const LOOP_2 = [...ROW_2, ...ROW_2, ...ROW_2, ...ROW_2]
 function PhotoCard({ src }: { src: string }) {
   return (
     <div
-      className="relative shrink-0 rounded-2xl overflow-hidden group cursor-pointer"
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl"
       style={{ width: '400px', height: '250px' }}
     >
       <img
         src={src}
         alt="E-Summit event photo"
         loading="lazy"
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
       />
       {/* Green tint on hover */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-mint/10"
-      />
+      <div className="bg-mint/10 pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
       {/* Subtle vignette */}
-      <div
-        className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/40 via-transparent to-transparent"
-      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       {/* Green border glow on hover */}
-      <div
-        className="absolute inset-0 rounded-2xl pointer-events-none transition-all duration-300 opacity-0 group-hover:opacity-100 border border-mint/40 shadow-[inset_0_0_20px_rgba(80,227,194,0.2)]"
-      />
+      <div className="border-mint/40 pointer-events-none absolute inset-0 rounded-2xl border opacity-0 shadow-[inset_0_0_20px_rgba(80,227,194,0.2)] transition-all duration-300 group-hover:opacity-100" />
     </div>
   )
 }
@@ -91,7 +85,7 @@ function PhotoRow({
     >
       {/* Inner infinite-scroll strip */}
       <div
-        className="flex gap-4 w-max"
+        className="flex w-max gap-4"
         style={{
           animation: `${direction === 'right' ? 'marqueeScrollReverse' : 'marqueeScroll'} ${duration}s linear infinite`,
           willChange: 'transform',
@@ -128,7 +122,7 @@ export default function EsummitMarquee() {
     <section
       ref={sectionRef}
       id="esummit-marquee"
-      className="esummit-section overflow-hidden pt-20 pb-40 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 relative bg-void text-white"
+      className="esummit-section relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-mint pb-40 pt-20 text-void sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px]"
       aria-label="E-Summit moments"
     >
       {/* ── CSS keyframes ── */}

@@ -20,6 +20,7 @@ import dynamic from 'next/dynamic'
 
 import Nav from '@/components/Nav'
 import NewHero from '@/components/Hero/NewHero'
+import FlipFlopTransition from '@/components/Common/FlipFlopTransition'
 import EsummitMarquee from '@/components/EsummitMarquee'
 import EsummitAbout from '@/components/EsummitAbout'
 import Vdo2Showcase from '@/components/Vdo2Showcase'
@@ -42,7 +43,7 @@ import Footer, { RegisterCTA } from '@/components/Footer'
 const Timeline = dynamic(() => import('@/components/Timeline'), {
   ssr: false,
   loading: () => (
-    <div className="py-32 flex items-center justify-center section-container">
+    <div className="section-container flex items-center justify-center py-32">
       <span className="font-mono-data text-sm text-muted">Loading schedule…</span>
     </div>
   ),
@@ -74,6 +75,9 @@ export default function Home() {
 
       {/* ── 1. NewHero 60fps Frame Scrubbing ───────────────────────────── */}
       <NewHero />
+
+      {/* ── Flip-Flop 3D Slat Page Transition ──────────────────────────── */}
+      <FlipFlopTransition />
 
       {/* ── 2. Scroll-Parallax GIF Marquee ──────────────────────────────── */}
       <EsummitMarquee />
