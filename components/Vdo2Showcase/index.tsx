@@ -178,8 +178,8 @@ export default function Vdo2Showcase() {
         >
           {/* Headline */}
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-mint drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] mb-3"
-            style={{ fontSize: 'clamp(3rem, 12vw, 150px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] mb-3"
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
             PASSES
           </h2>

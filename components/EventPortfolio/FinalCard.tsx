@@ -41,7 +41,7 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
         </h2>
 
         <p className="text-xs sm:text-sm leading-relaxed text-neutral-400 line-clamp-2">
-          Discover corporate workshops, recruitment platforms, R&D conclaves, and high-stakes competitions at PEC E-Summit '26.
+          Discover corporate workshops, recruitment platforms, R&D conclaves, and high-stakes competitions at PEC E-Summit &apos;26.
         </p>
 
         {/* Highlight Stats */}

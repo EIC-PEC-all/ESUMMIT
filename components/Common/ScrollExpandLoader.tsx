@@ -4,12 +4,25 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+declare global {
+  interface Window {
+    __SCROLL_LOADER_ACTIVE__?: boolean
+  }
+}
+
 export default function ScrollExpandLoader() {
   const [isMounted, setIsMounted] = useState(false)
   const [stage, setStage] = useState<'loading' | 'expanding' | 'done'>('loading')
 
   useEffect(() => {
     setIsMounted(true)
+
+    // Set active state for loader on mount
+    if (typeof window !== 'undefined') {
+      window.__SCROLL_LOADER_ACTIVE__ = true
+      document.body.classList.add('loader-active')
+      window.dispatchEvent(new CustomEvent('scroll-loader-state', { detail: { active: true } }))
+    }
 
     // 100% Bulletproof scroll lock: Freeze body position & prevent default wheel/touch
     const preventDefault = (e: Event) => {
@@ -36,14 +49,24 @@ export default function ScrollExpandLoader() {
       window.scrollTo(0, 0)
     }
 
-    // Stage 1: Display centered portal window for 2.8 seconds
+    // Stage 1: Display centered portal window for 2.8 seconds, then begin expansion & reveal UI
     const timer1 = setTimeout(() => {
       setStage('expanding')
+      if (typeof window !== 'undefined') {
+        window.__SCROLL_LOADER_ACTIVE__ = false
+        document.body.classList.remove('loader-active')
+        window.dispatchEvent(new CustomEvent('scroll-loader-state', { detail: { active: false } }))
+      }
     }, 2800)
 
     // Stage 2: Complete expansion, unlock scroll, and unmount at 3.9 seconds
     const timer2 = setTimeout(() => {
       setStage('done')
+      if (typeof window !== 'undefined') {
+        window.__SCROLL_LOADER_ACTIVE__ = false
+        document.body.classList.remove('loader-active')
+        window.dispatchEvent(new CustomEvent('scroll-loader-state', { detail: { active: false } }))
+      }
       document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
       document.body.style.position = ''
@@ -57,6 +80,11 @@ export default function ScrollExpandLoader() {
     return () => {
       clearTimeout(timer1)
       clearTimeout(timer2)
+      if (typeof window !== 'undefined') {
+        window.__SCROLL_LOADER_ACTIVE__ = false
+        document.body.classList.remove('loader-active')
+        window.dispatchEvent(new CustomEvent('scroll-loader-state', { detail: { active: false } }))
+      }
       document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
       document.body.style.position = ''

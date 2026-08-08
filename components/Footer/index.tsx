@@ -150,8 +150,8 @@ export function RegisterCTA() {
             >
               <h2
                 id="footer-cta-heading"
-                className="mb-6 font-display font-black uppercase leading-none tracking-tight text-[var(--accent-mint)] drop-shadow-lg"
-                style={{ fontSize: 'clamp(3rem, 12vw, 150px)' }}
+                className="mb-6 font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-lg"
+                style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
               >
                 REGISTER
               </h2>

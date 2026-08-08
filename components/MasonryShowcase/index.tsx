@@ -236,7 +236,10 @@ export default function MasonryShowcase() {
           <span className="mb-2 block font-mono-data text-xs font-bold uppercase tracking-[0.35em] text-mint">
             PEC E-SUMMIT 2026
           </span>
-          <h2 className="font-display text-5xl font-black uppercase tracking-tight text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] sm:text-7xl md:text-8xl">
+          <h2
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+          >
             SUMMIT GALLERY
           </h2>
         </motion.div>

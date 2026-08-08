@@ -117,8 +117,8 @@ export default function AlumniSection() {
         {/* Header Section */}
         <div className="max-w-7xl mx-auto w-full mb-3 flex flex-col items-center text-center gap-1 z-10">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-[var(--accent-mint)] mb-1"
-            style={{ fontSize: 'clamp(2.5rem, 7vw, 95px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint mb-1"
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
             ALUMNI
           </h2>

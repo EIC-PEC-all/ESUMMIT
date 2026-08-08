@@ -169,10 +169,10 @@ export default function EsummitAbout() {
         <FadeIn delay={0.05}>
           <h2
             id="esummit-about-heading"
-            className="font-display font-black uppercase leading-none tracking-tight text-center text-[var(--accent-mint)] drop-shadow-lg"
-            style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-lg"
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
-            About
+            ABOUT
           </h2>
         </FadeIn>
 

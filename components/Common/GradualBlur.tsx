@@ -229,13 +229,13 @@ function GradualBlur(props: GradualBlurProps) {
     if (isVertical) {
       baseStyle.height = responsiveHeight
       baseStyle.width = responsiveWidth || '100%'
-      baseStyle[config.position] = 0
+      ;(baseStyle as Record<string, unknown>)[config.position] = 0
       baseStyle.left = 0
       baseStyle.right = 0
     } else if (isHorizontal) {
       baseStyle.width = responsiveWidth || responsiveHeight
       baseStyle.height = '100%'
-      baseStyle[config.position] = 0
+      ;(baseStyle as Record<string, unknown>)[config.position] = 0
       baseStyle.top = 0
       baseStyle.bottom = 0
     }
@@ -275,7 +275,7 @@ function GradualBlur(props: GradualBlurProps) {
   )
 }
 
-const GradualBlurMemo = React.memo(GradualBlur) as React.NamedExoticComponent<GradualBlurProps> & {
+const GradualBlurMemo = React.memo(GradualBlur) as unknown as React.NamedExoticComponent<GradualBlurProps> & {
   PRESETS: typeof PRESETS
   CURVE_FUNCTIONS: typeof CURVE_FUNCTIONS
 }

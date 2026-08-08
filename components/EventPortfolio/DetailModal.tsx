@@ -133,7 +133,7 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
           <div className="flex flex-wrap items-center justify-between border-t border-white/10 pt-5 gap-4">
             <div className="flex items-center gap-2 text-xs text-neutral-400">
               <span className="h-2 w-2 rounded-full bg-mint animate-ping" />
-              Official E-Summit '26 Portfolio Activity
+              Official E-Summit &apos;26 Portfolio Activity
             </div>
 
             <button
