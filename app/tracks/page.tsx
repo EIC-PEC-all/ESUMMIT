@@ -17,6 +17,7 @@ import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import Concierge from '@/components/Concierge'
 import CircuitBoard from '@/components/Hero/CircuitBoard'
+import EventPortfolioShowcase from '@/components/EventPortfolio'
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 
@@ -191,6 +192,9 @@ export default function TracksLandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ── Trionn-inspired Event Portfolio Horizontal Showcase ──────────── */}
+      <EventPortfolioShowcase />
 
       {/* Tracks Grid */}
       <section className="bg-void py-20">

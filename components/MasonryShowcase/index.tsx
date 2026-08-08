@@ -214,15 +214,15 @@ export default function MasonryShowcase() {
   return (
     <section
       ref={containerRef}
-      className="relative h-[280vh] border-b border-border-subtle bg-void"
+      className="relative h-[280vh] border-b border-white/10 bg-[#0D1812]"
     >
       {/* Pinned Full-Screen Sticky Viewport Container */}
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden bg-void">
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden bg-[#0D1812]">
         {/* ── TOP EDGE GRADIENT MASK ── */}
-        <div className="via-void/90 pointer-events-none absolute left-0 right-0 top-0 z-20 h-36 bg-gradient-to-b from-void to-transparent md:h-48" />
+        <div className="pointer-events-none absolute left-0 right-0 top-0 z-20 h-36 bg-gradient-to-b from-[#0D1812] via-[#0D1812]/90 to-transparent md:h-48" />
 
         {/* ── BOTTOM EDGE GRADIENT MASK ── */}
-        <div className="via-void/90 pointer-events-none absolute bottom-0 left-0 right-0 z-20 h-36 bg-gradient-to-t from-void to-transparent md:h-48" />
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 h-36 bg-gradient-to-t from-[#0D1812] via-[#0D1812]/90 to-transparent md:h-48" />
 
         {/* ── INTRO HEADLINE — Shows on enter, disappears after scroll ── */}
         <motion.div
@@ -236,7 +236,7 @@ export default function MasonryShowcase() {
           <span className="mb-2 block font-mono-data text-xs font-bold uppercase tracking-[0.35em] text-mint">
             PEC E-SUMMIT 2026
           </span>
-          <h2 className="font-display text-5xl font-black uppercase tracking-tight text-white drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] sm:text-7xl md:text-8xl">
+          <h2 className="font-display text-5xl font-black uppercase tracking-tight text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] sm:text-7xl md:text-8xl">
             SUMMIT GALLERY
           </h2>
         </motion.div>

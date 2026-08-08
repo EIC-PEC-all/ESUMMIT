@@ -13,12 +13,13 @@ import Magnetic from '@/components/Common/Magnetic'
 
 const NAV_ITEMS = [
   { label: 'HOME', code: '01', href: '/', sectionId: null },
-  { label: 'PASSES', code: '02', href: '/passes', sectionId: null },
-  { label: 'TRACKS', code: '03', href: '/tracks', sectionId: 'tracks' },
-  { label: 'SPEAKERS', code: '04', href: '/speakers', sectionId: 'speakers' },
-  { label: 'SCHEDULE', code: '05', href: '/schedule', sectionId: 'schedule' },
-  { label: 'SPONSORS', code: '06', href: '/sponsors', sectionId: 'sponsors' },
-  { label: 'FAQ', code: '07', href: '/faq', sectionId: 'faq' },
+  { label: 'PORTFOLIO', code: '02', href: '/portfolio', sectionId: 'event-portfolio' },
+  { label: 'PASSES', code: '03', href: '/passes', sectionId: null },
+  { label: 'TRACKS', code: '04', href: '/tracks', sectionId: 'tracks' },
+  { label: 'SPEAKERS', code: '05', href: '/speakers', sectionId: 'speakers' },
+  { label: 'SCHEDULE', code: '06', href: '/schedule', sectionId: 'schedule' },
+  { label: 'SPONSORS', code: '07', href: '/sponsors', sectionId: 'sponsors' },
+  { label: 'FAQ', code: '08', href: '/faq', sectionId: 'faq' },
 ]
 
 const SPONSOR_ITEMS = [
@@ -132,7 +133,7 @@ export default function Nav() {
   return (
     <>
       <header
-        className={`fixed z-50 transition-all duration-500 ease-out 
+        className={`fixed z-[2500] transition-all duration-500 ease-out 
           top-0 left-0 right-0 w-full rounded-none
           lg:top-4 lg:left-1/2 lg:w-[calc(100%-3rem)] lg:max-w-7xl lg:rounded-full
           bg-[#0A110E]/90 text-white backdrop-blur-2xl shadow-2xl border border-white/20
@@ -201,7 +202,7 @@ export default function Nav() {
 
       {/* TOP SPONSOR MARQUEE BAR — Slides in from top when navbar hides on scroll down */}
       <div
-        className={`fixed top-0 left-0 right-0 z-40 bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-b border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 shadow-2xl transition-all duration-500 ease-out ${
+        className={`fixed top-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-b border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 shadow-2xl transition-all duration-500 ease-out ${
           scrolled && scrollDirection === 'down' && !menuOpen
             ? 'translate-y-0 opacity-100'
             : '-translate-y-full opacity-0 pointer-events-none'
@@ -225,7 +226,7 @@ export default function Nav() {
 
       {/* BOTTOM SPONSOR MARQUEE BAR — Sits at bottom initially & when scrolling up */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-40 bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
+        className={`fixed bottom-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
           !scrolled || scrollDirection === 'up' || menuOpen
             ? 'translate-y-0 opacity-100'
             : 'translate-y-full opacity-0 pointer-events-none'

@@ -107,7 +107,7 @@ export default function AlumniSection() {
   const xTransform = useTransform(scrollYProgress, [0, 1], ['0%', '-65%'])
 
   return (
-    <section ref={containerRef} className="relative h-[180vh] bg-void text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10">
+    <section ref={containerRef} className="relative h-[180vh] bg-[#0D1812] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-white/10">
       {/* Background ambient lighting glows */}
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-[var(--accent-mint)]/5 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/3 right-10 w-[600px] h-[600px] bg-[#3B82F6]/5 rounded-full blur-[160px] pointer-events-none" />

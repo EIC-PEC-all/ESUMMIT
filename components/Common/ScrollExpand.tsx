@@ -110,9 +110,11 @@ export default function ScrollExpand({
     const ix = Math.max(0, (100 - w) / 2)
     const iy = Math.max(0, (100 - h) / 2)
     const r = c.startRadius + (c.endRadius - c.startRadius) * e
-    frame.style.clipPath = `inset(${iy}% ${ix}% ${iy}% ${ix}% round ${r}px)`
-
-    media.style.transform = `scale(${c.mediaZoom + (1 - c.mediaZoom) * e})`
+    if (c.mediaZoom !== 1) {
+      media.style.transform = `scale(${c.mediaZoom + (1 - c.mediaZoom) * e})`
+    } else {
+      media.style.transform = 'none'
+    }
 
     if (scrimRef.current) scrimRef.current.style.opacity = `${c.overlayScrim * e}`
 

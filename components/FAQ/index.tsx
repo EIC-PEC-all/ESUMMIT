@@ -71,7 +71,7 @@ export default function FAQ() {
   return (
     <section
       id="faq"
-      className="py-24 lg:py-32 relative bg-void text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 overflow-hidden"
+      className="py-24 lg:py-32 relative bg-[#0D1812] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 overflow-hidden border-t border-white/10"
       aria-labelledby="faq-heading"
     >
       <div className="section-container relative z-10">
