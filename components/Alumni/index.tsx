@@ -113,25 +113,25 @@ export default function AlumniSection() {
       <div className="absolute bottom-1/3 right-10 w-[600px] h-[600px] bg-[#3B82F6]/5 rounded-full blur-[160px] pointer-events-none" />
 
       {/* Sticky Fullscreen Container */}
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-start pt-16 md:pt-20 pb-6 px-4 md:px-12">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-12">
         {/* Header Section */}
-        <div className="max-w-7xl mx-auto w-full mb-3 flex flex-col items-center text-center gap-1 z-10">
+        <div className="max-w-3xl mx-auto w-full mb-6 sm:mb-8 flex flex-col items-center text-center gap-2 sm:gap-3 z-10">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint mb-1"
-            style={{ fontSize: 'clamp(2.5rem, 10vw, 160px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint"
+            style={{ fontSize: 'clamp(2.5rem, 9vw, 140px)' }}
           >
             ALUMNI
           </h2>
-          <p className="text-xs sm:text-sm text-gray-400 font-sans max-w-xl">
+          <p className="text-xs sm:text-sm md:text-base text-gray-300 font-sans max-w-xl leading-relaxed">
             Pioneers, founders, and leaders who emerged from PEC E-Cell to shape global technology and venture ecosystems.
           </p>
         </div>
 
         {/* Horizontal Motion Track */}
-        <div className="w-full overflow-hidden z-10 py-1 mt-1">
-          <motion.div style={{ x: xTransform }} className="flex gap-5 md:gap-7 w-max pl-4 md:pl-12 pr-12">
+        <div className="w-full overflow-hidden z-10 py-3 my-auto">
+          <motion.div style={{ x: xTransform }} className="flex gap-6 sm:gap-8 md:gap-10 w-max pl-4 sm:pl-8 md:pl-16 pr-16">
             {ALUMNI_DATA.map((person) => (
-              <div key={person.id} className="w-[260px] sm:w-[295px] shrink-0">
+              <div key={person.id} className="w-[270px] sm:w-[310px] md:w-[330px] shrink-0">
                 <PixelTransition
                   gridSize={10}
                   pixelColor="var(--accent-mint)"
