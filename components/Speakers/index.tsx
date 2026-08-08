@@ -22,14 +22,25 @@ const TILE_IMAGES = [
   'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&q=80&auto=format&fit=crop',
 ]
 
-const COLORS = ['#FF4D3D', '#3DD9FF', '#FF8C42', '#9B5CFF', '#7ED321', '#FFD700', '#FF4D3D', '#3DD9FF']
+const COLORS = [
+  '#FF4D3D',
+  '#3DD9FF',
+  '#FF8C42',
+  '#9B5CFF',
+  '#7ED321',
+  '#FFD700',
+  '#FF4D3D',
+  '#3DD9FF',
+]
 
 /** 3D Tilt Wheel — tiles orbiting a circle, ring tilts with mouse */
 function TiltWheel() {
   const containerRef = useRef<HTMLDivElement>(null)
   const angleRef = useRef(0)
   const rafRef = useRef<number>()
-  const [tiles, setTiles] = useState<{ angle: number; img: string; speaker: typeof SPEAKERS[0]; color: string }[]>([])
+  const [tiles, setTiles] = useState<
+    { angle: number; img: string; speaker: (typeof SPEAKERS)[0]; color: string }[]
+  >([])
 
   // Spring-damped mouse tilt
   const mouseX = useMotionValue(0)
@@ -43,7 +54,10 @@ function TiltWheel() {
   useEffect(() => {
     const unsubX = springX.on('change', setTiltX)
     const unsubY = springY.on('change', setTiltY)
-    return () => { unsubX(); unsubY() }
+    return () => {
+      unsubX()
+      unsubY()
+    }
   }, [springX, springY])
 
   // Build tile data
@@ -75,7 +89,9 @@ function TiltWheel() {
       rafRef.current = requestAnimationFrame(tick)
     }
     rafRef.current = requestAnimationFrame(tick)
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+    }
   }, [])
 
   // Mouse tracking for tilt
@@ -130,7 +146,7 @@ function TiltWheel() {
           return (
             <div
               key={tile.speaker.id}
-              className="absolute group"
+              className="group absolute"
               style={{
                 width: '160px',
                 height: '210px',
@@ -144,11 +160,12 @@ function TiltWheel() {
             >
               {/* Card */}
               <div
-                className="w-full h-full rounded-2xl overflow-hidden relative"
+                className="relative h-full w-full overflow-hidden rounded-2xl"
                 style={{
-                  boxShadow: depth > 0.85
-                    ? `0 0 0 2px ${tile.color}80, 0 8px 40px rgba(0,0,0,0.7), 0 0 24px ${tile.color}30`
-                    : '0 4px 20px rgba(0,0,0,0.6)',
+                  boxShadow:
+                    depth > 0.85
+                      ? `0 0 0 2px ${tile.color}80, 0 8px 40px rgba(0,0,0,0.7), 0 0 24px ${tile.color}30`
+                      : '0 4px 20px rgba(0,0,0,0.6)',
                   transition: 'box-shadow 0.3s',
                   transform: `scale(${scale})`,
                   transformOrigin: 'center bottom',
@@ -158,33 +175,46 @@ function TiltWheel() {
                 <img
                   src={tile.img}
                   alt={tile.speaker.name}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full object-cover"
                   draggable={false}
                 />
                 {/* Bottom gradient */}
                 <div
                   className="absolute inset-0"
-                  style={{ background: 'linear-gradient(0deg, rgba(7,11,8,0.95) 0%, rgba(7,11,8,0.3) 50%, transparent 100%)' }}
+                  style={{
+                    background:
+                      'linear-gradient(0deg, rgba(7,11,8,0.95) 0%, rgba(7,11,8,0.3) 50%, transparent 100%)',
+                  }}
                 />
                 {/* Glow border on front tile */}
                 {depth > 0.85 && (
                   <div
-                    className="absolute inset-0 rounded-2xl pointer-events-none"
+                    className="pointer-events-none absolute inset-0 rounded-2xl"
                     style={{ boxShadow: `0 0 0 2px ${tile.color}` }}
                   />
                 )}
                 {/* Speaker name + title */}
                 <div className="absolute bottom-0 left-0 right-0 p-3">
-                  <p className="font-bold text-xs text-white leading-tight" style={{ fontFamily: "'Kanit', sans-serif" }}>
+                  <p
+                    className="text-xs font-bold leading-tight text-white"
+                    style={{ fontFamily: "'Kanit', sans-serif" }}
+                  >
                     {tile.speaker.name}
                   </p>
-                  <p className="text-[10px] leading-tight mt-0.5" style={{ color: tile.color, fontFamily: "'Kanit', sans-serif" }}>
+                  <p
+                    className="mt-0.5 text-[10px] leading-tight"
+                    style={{ color: tile.color, fontFamily: "'Kanit', sans-serif" }}
+                  >
                     {tile.speaker.title.split(',')[0]}
                   </p>
                   {/* Track badge */}
                   <span
-                    className="inline-block mt-1.5 font-mono-data text-[8px] uppercase tracking-widest px-1.5 py-0.5 rounded font-bold"
-                    style={{ background: `${tile.color}22`, color: tile.color, border: `1px solid ${tile.color}44` }}
+                    className="mt-1.5 inline-block rounded px-1.5 py-0.5 font-mono-data text-[8px] font-bold uppercase tracking-widest"
+                    style={{
+                      background: `${tile.color}22`,
+                      color: tile.color,
+                      border: `1px solid ${tile.color}44`,
+                    }}
                   >
                     ⚡ {tile.speaker.track}
                   </span>
@@ -196,7 +226,7 @@ function TiltWheel() {
 
         {/* Orbit ring — decorative circle in 3D space */}
         <div
-          className="absolute rounded-full pointer-events-none"
+          className="pointer-events-none absolute rounded-full"
           style={{
             width: `${RADIUS * 2}px`,
             height: `${RADIUS * 2}px`,
@@ -211,14 +241,14 @@ function TiltWheel() {
 
       {/* Center label — sits in the middle of the wheel */}
       <div
-        className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10"
+        className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center"
         style={{ textAlign: 'center' }}
       >
-        <p className="font-mono-data text-[10px] uppercase tracking-[0.25em] text-[#7ED321] font-bold mb-2 opacity-70">
+        <p className="mb-2 font-mono-data text-[10px] font-bold uppercase tracking-[0.25em] text-[#7ED321] opacity-70">
           ⚡ Drag to explore
         </p>
         <h2
-          className="font-display font-black uppercase leading-none text-stroke-green select-none"
+          className="text-stroke-green select-none font-display font-black uppercase leading-none"
           style={{
             fontSize: 'clamp(48px, 7vw, 110px)',
             WebkitTextStroke: '1.5px rgba(126,211,33,0.6)',
@@ -227,14 +257,14 @@ function TiltWheel() {
             fontFamily: "'Kanit', sans-serif",
           }}
         >
-          VISION<br />ARIES
+          VISION
+          <br />
+          ARIES
         </h2>
       </div>
 
       {/* Hint: mouse instruction fade */}
-      <div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 font-mono-data text-[10px] uppercase tracking-widest text-[#8A9488] pointer-events-none"
-      >
+      <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 font-mono-data text-[10px] uppercase tracking-widest text-[#8A9488]">
         Move cursor to tilt · Auto-rotating
       </div>
     </div>
@@ -245,26 +275,26 @@ export default function Speakers() {
   return (
     <section
       id="speakers"
-      className="py-24 lg:py-32 relative bg-[#111A12] border-t border-b border-[#7ED321]/15 overflow-hidden"
+      className="relative overflow-hidden border-b border-t border-[#7ED321]/15 bg-[#111A12] py-24 lg:py-32"
       aria-labelledby="speakers-heading"
     >
       {/* Circuit overlay */}
       <CircuitBoard prefersReduced={false} />
-      <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
+      <div className="current-line-horizontal pointer-events-none absolute left-0 right-0 top-0" />
 
       <div className="section-container relative z-10">
         {/* Header row */}
         <motion.div
-          className="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-6"
+          className="mb-6 flex flex-col justify-between gap-6 sm:flex-row sm:items-end"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
+            <div className="mb-3 flex items-center gap-2">
+              <Zap size={14} className="fill-[#7ED321] text-[#7ED321]" />
+              <p className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-[#7ED321]">
                 Keynote Speakers &amp; Panelists
               </p>
             </div>
@@ -279,7 +309,7 @@ export default function Speakers() {
           </div>
           <Link
             href="/speakers"
-            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-[#7ED321] hover:text-white transition-colors border-b border-[#7ED321]/40 pb-1"
+            className="inline-flex items-center gap-2 border-b border-[#7ED321]/40 pb-1 font-mono-data text-xs uppercase tracking-wider text-[#7ED321] transition-colors hover:text-white"
           >
             View All Speakers &rarr;
           </Link>

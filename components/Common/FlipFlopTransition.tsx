@@ -37,7 +37,7 @@ interface CleanStripTransitionProps {
 function PhotoCard({ src }: { src: string }) {
   return (
     <div
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-void/20 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-void"
+      className="border-void/20 group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-void"
       style={{ width: '380px', height: '230px' }}
     >
       <img
@@ -56,13 +56,24 @@ function PhotoRow({
   images,
   duration,
   direction = 'left',
+  translateX,
+  opacity,
 }: {
   images: string[]
   duration: number
   direction?: 'left' | 'right'
+  translateX: any
+  opacity: any
 }) {
   return (
-    <div className="overflow-hidden">
+    <motion.div
+      className="overflow-hidden"
+      style={{
+        x: translateX,
+        opacity: opacity,
+        willChange: 'transform, opacity',
+      }}
+    >
       <div
         className="flex w-max gap-4"
         style={{
@@ -74,7 +85,7 @@ function PhotoRow({
           <PhotoCard key={i} src={src} />
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -91,8 +102,8 @@ function CleanStripSlat({
   const topPositionPercent = index * slatHeightPercent
 
   // Staggered scroll window per strip (top strips collapse first)
-  const startRange = (index / totalSlats) * 0.5 + 0.02
-  const endRange = startRange + 0.35
+  const startRange = (index / totalSlats) * 0.42 + 0.02
+  const endRange = startRange + 0.28
 
   // Collapsing Front Strip (Previous Dark Hero Section) — scaleY: 1 -> 0
   const collapseScaleY = useTransform(smoothProgress, [startRange, endRange], [1, 0])
@@ -102,7 +113,7 @@ function CleanStripSlat({
     [1, 1, 0]
   )
 
-  // Sleek Lime Laser Slice Line on the active collapsing border
+  // Sleek Lime Laser Slice Line on active collapsing border
   const laserOpacity = useTransform(
     smoothProgress,
     [startRange - 0.02, startRange + 0.05, endRange - 0.02, endRange + 0.02],
@@ -111,24 +122,24 @@ function CleanStripSlat({
 
   return (
     <div
-      className="absolute left-0 w-full overflow-hidden select-none pointer-events-none"
+      className="pointer-events-none absolute left-0 w-full select-none overflow-hidden"
       style={{
         top: `${topPositionPercent}%`,
         height: `calc(${slatHeightPercent}% + 1px)`, // +1px avoids subpixel gaps
       }}
     >
-      {/* ── COLLAPSING STRIP (Dark Hero Panel collapsing to reveal photo marquee beneath) ── */}
+      {/* ── COLLAPSING STRIP (Dark Hero Panel collapsing to reveal clean Lime bg) ── */}
       <motion.div
         className="absolute inset-0 bg-[#070b08]"
         style={{
           scaleY: collapseScaleY,
           opacity: collapseOpacity,
-          transformOrigin: 'top', // Collapses upward to reveal the Photo Marquee underneath
+          transformOrigin: 'top', // Collapses upward
           willChange: 'transform, opacity',
         }}
       >
         {/* Bottom edge shadow */}
-        <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-black/80 to-transparent" />
 
         {/* Dynamic Lime Laser Slice Line on active collapse edge */}
         <motion.div
@@ -149,12 +160,21 @@ export default function FlipFlopTransition({ slatCount = 10 }: CleanStripTransit
     offset: ['start 85%', 'end end'],
   })
 
-  // Smooth physics spring for responsive scroll feel
+  // Smooth physics spring for fluid responsive scroll feel
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 160,
     damping: 28,
     restDelta: 0.001,
   })
+
+  // Row 1 slides in from LEFT (-100vw -> 0vw) AFTER strip collapse completes (progress 0.45 -> 0.72)
+  const row1TranslateX = useTransform(smoothProgress, [0.45, 0.72], ['-100vw', '0vw'])
+
+  // Row 2 slides in from RIGHT (100vw -> 0vw) AFTER strip collapse completes (progress 0.50 -> 0.75)
+  const row2TranslateX = useTransform(smoothProgress, [0.5, 0.75], ['100vw', '0vw'])
+
+  // Opacity fade-in for rows as they slide in
+  const marqueeOpacity = useTransform(smoothProgress, [0.45, 0.65], [0, 1])
 
   const slats = Array.from({ length: slatCount }, (_, i) => i)
 
@@ -162,7 +182,7 @@ export default function FlipFlopTransition({ slatCount = 10 }: CleanStripTransit
     <section
       ref={containerRef}
       id="flip-flop-transition"
-      className="relative z-20 h-[170vh] bg-mint -mt-[180px] sm:-mt-[220px]"
+      className="relative z-20 -mt-[180px] h-[190vh] bg-mint sm:-mt-[220px]"
       aria-label="Strip collapse transition revealing marquee gallery"
     >
       {/* Marquee animation keyframes */}
@@ -177,19 +197,31 @@ export default function FlipFlopTransition({ slatCount = 10 }: CleanStripTransit
         }
       `}</style>
 
-      {/* Sticky Fullscreen Stage — Photo Marquee sitting on solid LIME stage */}
+      {/* Sticky Fullscreen Stage — Solid LIME Stage */}
       <div className="sticky top-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-mint">
         {/* Ambient Lime Lighting Glow */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.25)_0%,transparent_75%)]" />
 
-        {/* REVEALED LAYER (z-0): Photo Marquee Gallery on Lime Canvas */}
-        <div className="relative z-0 flex flex-col justify-center w-full gap-4 px-4 py-8">
-          <PhotoRow images={LOOP_1} duration={50} direction="left" />
-          <PhotoRow images={LOOP_2} duration={45} direction="right" />
+        {/* REVEALED LAYER (z-0): Photo Rows sliding in from Left & Right AFTER strip collapse */}
+        <div className="relative z-0 flex w-full flex-col justify-center gap-4 px-4 py-8">
+          <PhotoRow
+            images={LOOP_1}
+            duration={50}
+            direction="left"
+            translateX={row1TranslateX}
+            opacity={marqueeOpacity}
+          />
+          <PhotoRow
+            images={LOOP_2}
+            duration={45}
+            direction="right"
+            translateX={row2TranslateX}
+            opacity={marqueeOpacity}
+          />
         </div>
 
         {/* OVERLAY LAYER (z-10): Dark Slats Collapsing Top-to-Bottom on Scroll */}
-        <div className="absolute inset-0 z-10 select-none overflow-hidden pointer-events-none">
+        <div className="pointer-events-none absolute inset-0 z-10 select-none overflow-hidden">
           {slats.map((index) => (
             <CleanStripSlat
               key={index}

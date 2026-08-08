@@ -4,7 +4,18 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Instagram, Twitter, Linkedin, Send, Zap, Youtube, Facebook, Briefcase, Phone } from 'lucide-react'
+import {
+  ArrowRight,
+  Instagram,
+  Twitter,
+  Linkedin,
+  Send,
+  Zap,
+  Youtube,
+  Facebook,
+  Briefcase,
+  Phone,
+} from 'lucide-react'
 import toast from 'react-hot-toast'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -52,12 +63,12 @@ function EmailCapture() {
         className="flex items-center gap-3 py-4"
       >
         <div
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-[var(--accent-mint)]/20 border border-[var(--accent-mint)]/40 text-[var(--accent-mint)]"
+          className="bg-[var(--accent-mint)]/20 border-[var(--accent-mint)]/40 flex h-8 w-8 items-center justify-center rounded-full border text-[var(--accent-mint)]"
           aria-hidden="true"
         >
           <Send size={14} />
         </div>
-        <p className="font-mono-data text-sm text-[var(--accent-mint)] font-bold">
+        <p className="font-mono-data text-sm font-bold text-[var(--accent-mint)]">
           You&apos;re on the list. Watch your inbox.
         </p>
       </motion.div>
@@ -65,8 +76,10 @@ function EmailCapture() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 flex-wrap sm:flex-nowrap">
-      <label htmlFor="footer-email" className="sr-only">Email address</label>
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-2 sm:flex-nowrap">
+      <label htmlFor="footer-email" className="sr-only">
+        Email address
+      </label>
       <input
         id="footer-email"
         type="email"
@@ -74,7 +87,7 @@ function EmailCapture() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 font-body text-sm outline-none bg-[#1E2B12] border border-[#4E6527]/60 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:border-[#C8E696]"
+        className="flex-1 rounded-xl border border-[#4E6527]/60 bg-[#1E2B12] px-4 py-3 font-body text-sm text-white outline-none placeholder:text-gray-400 focus:border-[#C8E696]"
         aria-label="Enter your email to get PEC Summit updates"
       />
       <button
@@ -113,21 +126,19 @@ export function RegisterCTA() {
   return (
     <div
       id="register"
-      className="bg-[#0D2420] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 relative overflow-hidden"
+      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#0D2420] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px]"
       aria-labelledby="footer-cta-heading"
     >
       {/* Circuit board closing moment */}
       <CircuitBoard prefersReduced={false} />
 
       {/* Top Green Glow Line Accent */}
-      <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
+      <div className="current-line-horizontal pointer-events-none absolute left-0 right-0 top-0" />
 
       {/* Main CTA block */}
-      <div
-        className="py-24 lg:py-32 relative z-10"
-      >
+      <div className="relative z-10 py-24 lg:py-32">
         <div className="section-container">
-          <div className="max-w-4xl mx-auto flex flex-col items-center text-center">
+          <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -137,19 +148,20 @@ export function RegisterCTA() {
             >
               <h2
                 id="footer-cta-heading"
-                className="font-display font-black uppercase leading-none tracking-tight text-white drop-shadow-lg mb-6"
+                className="mb-6 font-display font-black uppercase leading-none tracking-tight text-white drop-shadow-lg"
                 style={{ fontSize: 'clamp(3rem, 12vw, 150px)' }}
               >
                 REGISTER
               </h2>
-              <p className="font-body text-base mb-8 max-w-lg leading-relaxed text-gray-200">
-                Early-bird passes are limited. Lock in your spot and be part of North India&apos;s premier entrepreneurship summit.
+              <p className="mb-8 max-w-lg font-body text-base leading-relaxed text-gray-200">
+                Early-bird passes are limited. Lock in your spot and be part of North India&apos;s
+                premier entrepreneurship summit.
               </p>
 
-              <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
+              <div className="mb-12 flex flex-wrap items-center justify-center gap-4">
                 <Link
                   href="/register"
-                  className="btn-green text-base py-4 px-10 rounded-full font-bold flex items-center gap-2 shadow-lg"
+                  className="btn-green flex items-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg"
                   id="footer-register-btn"
                   aria-label="Open PEC Summit Registration Dashboard"
                 >
@@ -158,7 +170,7 @@ export function RegisterCTA() {
                 </Link>
                 <a
                   href="mailto:info@ecellpec.in"
-                  className="px-8 py-4 rounded-full border border-white/40 text-white hover:bg-white/10 font-bold transition-all text-sm flex items-center"
+                  className="flex items-center rounded-full border border-white/40 px-8 py-4 text-sm font-bold text-white transition-all hover:bg-white/10"
                   id="footer-contact-btn"
                   aria-label="Contact E-Cell PEC"
                 >
@@ -180,19 +192,22 @@ export function RegisterCTA() {
 
 export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
   return (
-    <footer className="w-full">
+    <footer className="w-full bg-[#0D2420]">
       {!hideCTA && <RegisterCTA />}
 
       {/* Corporate EIC / PEC Footer */}
-      <div className="py-12 relative z-10 bg-[#0D2420] text-white border-t border-mint/20 shadow-inner">
+      <div className="border-mint/20 relative z-10 border-t bg-[#0D2420] py-12 text-white shadow-inner">
         <div className="section-container">
-          
           {/* Top Social Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between pb-8 border-b border-mint/20 mb-10 gap-4">
-            <p className="font-body text-gray-200 text-base font-medium">
+          <div className="border-mint/20 mb-10 flex flex-col items-center justify-between gap-4 border-b pb-8 sm:flex-row">
+            <p className="font-body text-base font-medium text-gray-200">
               Get connected with us on social networks:
             </p>
-            <div className="flex items-center gap-4 sm:gap-6" role="list" aria-label="Social media links">
+            <div
+              className="flex items-center gap-4 sm:gap-6"
+              role="list"
+              aria-label="Social media links"
+            >
               {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
                 <a
                   key={href}
@@ -201,7 +216,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   rel="noopener noreferrer"
                   aria-label={label}
                   role="listitem"
-                  className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#07130F] border border-mint/30 text-white hover:text-mint hover:border-mint transition-all shadow-sm hover:scale-105"
+                  className="border-mint/30 flex h-10 w-10 items-center justify-center rounded-xl border bg-[#07130F] text-white shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
                 >
                   <Icon size={18} aria-hidden="true" strokeWidth={1.5} />
                 </a>
@@ -210,38 +225,44 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
           </div>
 
           {/* 4 Column Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-16">
-            
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-4 lg:gap-16">
             {/* Column 1 & 2: Branding and Description */}
             <div className="md:col-span-2">
-              <div className="flex items-center gap-6 mb-6">
-                <Image 
-                  src="/pec-logo.png" 
-                  alt="Punjab Engineering College Logo" 
-                  width={120} 
-                  height={80} 
-                  className="object-contain brightness-120 drop-shadow-md"
+              <div className="mb-6 flex items-center gap-6">
+                <Image
+                  src="/pec-logo.png"
+                  alt="Punjab Engineering College Logo"
+                  width={120}
+                  height={80}
+                  className="brightness-120 object-contain drop-shadow-md"
                 />
-                <Image 
-                  src="/eic-logo.png" 
-                  alt="EIC Logo" 
-                  width={90} 
-                  height={90} 
-                  className="object-contain brightness-120 drop-shadow-md"
+                <Image
+                  src="/eic-logo.png"
+                  alt="EIC Logo"
+                  width={90}
+                  height={90}
+                  className="brightness-120 object-contain drop-shadow-md"
                 />
               </div>
-              <p className="font-body text-sm text-gray-300 leading-relaxed max-w-md">
-                Entrepreneurship and Incubation Cell at PEC operates under the Ministry of Education&apos;s Innovation Cell Programs since 2015. EIC Provides mentoring in entrepreneurship, achieving its goal of nurturing businesses.
+              <p className="max-w-md font-body text-sm leading-relaxed text-gray-300">
+                Entrepreneurship and Incubation Cell at PEC operates under the Ministry of
+                Education&apos;s Innovation Cell Programs since 2015. EIC Provides mentoring in
+                entrepreneurship, achieving its goal of nurturing businesses.
               </p>
             </div>
 
             {/* Column 3: Quick Links */}
             <div>
-              <h4 className="font-display text-xl font-bold uppercase tracking-wider text-white mb-6">Quick Links</h4>
+              <h4 className="mb-6 font-display text-xl font-bold uppercase tracking-wider text-white">
+                Quick Links
+              </h4>
               <ul className="space-y-3">
                 {QUICK_LINKS.map((link) => (
                   <li key={link.label}>
-                    <a href={link.href} className="font-body text-gray-200 hover:text-mint font-medium transition-colors text-sm">
+                    <a
+                      href={link.href}
+                      className="font-body text-sm font-medium text-gray-200 transition-colors hover:text-mint"
+                    >
                       {link.label}
                     </a>
                   </li>
@@ -251,41 +272,51 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
             {/* Column 4: Contact */}
             <div>
-              <h4 className="font-display text-xl font-bold uppercase tracking-wider text-white mb-6">Contact</h4>
-              <p className="font-body text-sm text-gray-300 mb-6 leading-relaxed">
+              <h4 className="mb-6 font-display text-xl font-bold uppercase tracking-wider text-white">
+                Contact
+              </h4>
+              <p className="mb-6 font-body text-sm leading-relaxed text-gray-300">
                 Entrepreneurship and Incubation Cell, Punjab Engineering College, Chandigarh 160012
               </p>
-              
+
               <div className="space-y-4">
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Briefcase size={16} className="text-mint shrink-0" />
-                    <span className="font-body text-sm font-bold text-mint">For Queries And Collaboration</span>
+                  <div className="mb-1 flex items-center gap-2">
+                    <Briefcase size={16} className="shrink-0 text-mint" />
+                    <span className="font-body text-sm font-bold text-mint">
+                      For Queries And Collaboration
+                    </span>
                   </div>
-                  <a href="mailto:eicpec@pec.edu.in" className="font-body text-sm text-gray-200 hover:text-mint font-medium hover:underline block pl-6">
+                  <a
+                    href="mailto:eicpec@pec.edu.in"
+                    className="block pl-6 font-body text-sm font-medium text-gray-200 hover:text-mint hover:underline"
+                  >
                     eicpec@pec.edu.in
                   </a>
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Phone size={16} className="text-mint shrink-0" />
-                    <span className="font-body text-sm font-bold text-mint">For General Contact</span>
+                  <div className="mb-1 flex items-center gap-2">
+                    <Phone size={16} className="shrink-0 text-mint" />
+                    <span className="font-body text-sm font-bold text-mint">
+                      For General Contact
+                    </span>
                   </div>
-                  <a href="mailto:info@ecellpec.in" className="font-body text-sm text-gray-200 hover:text-mint font-medium hover:underline block pl-6">
+                  <a
+                    href="mailto:info@ecellpec.in"
+                    className="block pl-6 font-body text-sm font-medium text-gray-200 hover:text-mint hover:underline"
+                  >
                     info@ecellpec.in
                   </a>
                 </div>
               </div>
             </div>
-
           </div>
 
           {/* Bottom copyright line */}
-          <div className="pt-10 border-t border-mint/20 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-300 gap-4 font-mono-data">
+          <div className="border-mint/20 flex flex-col items-center justify-between gap-4 border-t pt-10 font-mono-data text-xs text-gray-300 sm:flex-row">
             <p>© {new Date().getFullYear()} E-Cell PEC · Punjab Engineering College, Chandigarh</p>
-            <p className="text-mint font-bold">PEC E-Summit 2026</p>
+            <p className="font-bold text-mint">PEC E-Summit 2026</p>
           </div>
-
         </div>
       </div>
     </footer>

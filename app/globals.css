@@ -65,8 +65,7 @@ section,
 #sponsors,
 #schedule,
 #esummit-marquee,
-#esummit-about,
-footer {
+#esummit-about {
   min-height: 100dvh;
 }
 
