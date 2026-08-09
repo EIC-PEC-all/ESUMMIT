@@ -49,7 +49,7 @@ export default function ScrollExpandLoader() {
       window.scrollTo(0, 0)
     }
 
-    // Stage 1: Display centered portal window for 2.8 seconds, then begin expansion & reveal UI
+    // Stage 1: Loading phase (Progress bar fills over 2.0s), then begin expansion phase
     const timer1 = setTimeout(() => {
       setStage('expanding')
       if (typeof window !== 'undefined') {
@@ -57,9 +57,9 @@ export default function ScrollExpandLoader() {
         document.body.classList.remove('loader-active')
         window.dispatchEvent(new CustomEvent('scroll-loader-state', { detail: { active: false } }))
       }
-    }, 2800)
+    }, 2000)
 
-    // Stage 2: Complete expansion, unlock scroll, and unmount at 3.9 seconds
+    // Stage 2: Complete physical expansion (1.8s duration), unlock scroll, and unmount at 3.8s total
     const timer2 = setTimeout(() => {
       setStage('done')
       if (typeof window !== 'undefined') {
@@ -75,7 +75,7 @@ export default function ScrollExpandLoader() {
       window.removeEventListener('wheel', preventDefault)
       window.removeEventListener('touchmove', preventDefault)
       window.removeEventListener('keydown', preventKeys)
-    }, 3900)
+    }, 3800)
 
     return () => {
       clearTimeout(timer1)
@@ -103,8 +103,7 @@ export default function ScrollExpandLoader() {
       <motion.div
         key="loader-portal-overlay"
         initial={{ opacity: 1 }}
-        animate={{ opacity: stage === 'expanding' ? [1, 1, 0] : 1 }}
-        transition={{ duration: 1.1, ease: 'easeInOut', times: [0, 0.75, 1] }}
+        animate={{ opacity: 1 }}
         className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-auto overflow-hidden"
       >
         {/* Vantage Style Portal Aperture Window — Cutout revealing live site behind it */}
@@ -115,11 +114,11 @@ export default function ScrollExpandLoader() {
             borderRadius: '24px',
           }}
           animate={{
-            width: stage === 'expanding' ? '100vw' : '52vw',
-            height: stage === 'expanding' ? '100vh' : '60vh',
+            width: stage === 'expanding' ? '120vw' : '52vw',
+            height: stage === 'expanding' ? '120vh' : '60vh',
             borderRadius: stage === 'expanding' ? '0px' : '24px',
           }}
-          transition={{ duration: 0.95, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 1.8, ease: [0.76, 0, 0.24, 1] }}
           className="relative flex items-end justify-center border-2 border-black/30 bg-transparent transition-all"
           style={{
             boxShadow: '0 0 0 9999px #7ED321',
@@ -135,7 +134,11 @@ export default function ScrollExpandLoader() {
           />
 
           {/* Inner Vignette Shadow on Portal Window Frame */}
-          <div className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0_0_50px_rgba(0,0,0,0.6)]" />
+          <motion.div
+            animate={{ opacity: stage === 'expanding' ? 0 : 1 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 rounded-[inherit] pointer-events-none shadow-[inset_0_0_50px_rgba(0,0,0,0.6)]"
+          />
 
           {/* Bottom Progress Bar Only — Live E-SUMMIT '26 text shines naturally from NewHero behind it */}
           <motion.div
@@ -144,14 +147,14 @@ export default function ScrollExpandLoader() {
               opacity: stage === 'expanding' ? 0 : 1,
               y: stage === 'expanding' ? 20 : 0,
             }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
             className="relative z-10 mb-8 flex flex-col items-center gap-2 px-6 text-center"
           >
             <div className="w-48 h-1.5 bg-black/80 rounded-full overflow-hidden border border-white/20 p-[1px] shadow-lg">
               <motion.div
                 initial={{ width: '0%' }}
                 animate={{ width: '100%' }}
-                transition={{ duration: 2.8, ease: 'easeInOut' }}
+                transition={{ duration: 2.0, ease: 'easeInOut' }}
                 className="h-full bg-mint rounded-full shadow-[0_0_12px_#7ED321]"
               />
             </div>

@@ -181,11 +181,21 @@ const RAW_COL_4: CardItem[] = [
   },
 ]
 
+const RAW_COL_5: CardItem[] = [
+  ...RAW_COL_1.slice(4), ...RAW_COL_3.slice(0, 4)
+].map((item, i) => ({ ...item, id: `c5-${i}` }))
+
+const RAW_COL_6: CardItem[] = [
+  ...RAW_COL_2.slice(4), ...RAW_COL_4.slice(0, 4)
+].map((item, i) => ({ ...item, id: `c6-${i}` }))
+
 // Duplicate columns for continuous auto-scroll loop
 const COL_1 = [...RAW_COL_1, ...RAW_COL_1.map((item) => ({ ...item, id: `${item.id}-dup` }))]
 const COL_2 = [...RAW_COL_2, ...RAW_COL_2.map((item) => ({ ...item, id: `${item.id}-dup` }))]
 const COL_3 = [...RAW_COL_3, ...RAW_COL_3.map((item) => ({ ...item, id: `${item.id}-dup` }))]
 const COL_4 = [...RAW_COL_4, ...RAW_COL_4.map((item) => ({ ...item, id: `${item.id}-dup` }))]
+const COL_5 = [...RAW_COL_5, ...RAW_COL_5.map((item) => ({ ...item, id: `${item.id}-dup` }))]
+const COL_6 = [...RAW_COL_6, ...RAW_COL_6.map((item) => ({ ...item, id: `${item.id}-dup` }))]
 
 export default function MasonryShowcase() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -196,20 +206,22 @@ export default function MasonryShowcase() {
     offset: ['start start', 'end end'],
   })
 
-  // ── 1. Headline Fade Sequence (Enters visible, disappears after scrolling into section) ──
+  // ── 1. Headline Fade Sequence ──
   const headlineOpacity = useTransform(scrollYProgress, [0.02, 0.2], [1, 0])
   const headlineScale = useTransform(scrollYProgress, [0.02, 0.2], [1, 0.82])
   const headlineY = useTransform(scrollYProgress, [0.02, 0.2], ['0px', '-60px'])
 
-  // ── 2. Gallery Fade Sequence (Subtle 0.3 opacity behind title at start, 1.0 full opacity through section end) ──
+  // ── 2. Gallery Fade Sequence ──
   const galleryOpacity = useTransform(scrollYProgress, [0, 0.15, 1], [0.3, 1, 1])
   const galleryScale = useTransform(scrollYProgress, [0.85, 1], [1, 1])
 
-  // ── 3. Opposing Scroll Parallax Transforms ──
-  const colY_1 = useTransform(scrollYProgress, [0.15, 0.85], ['0px', '-400px'])
-  const colY_2 = useTransform(scrollYProgress, [0.15, 0.85], ['-400px', '0px'])
-  const colY_3 = useTransform(scrollYProgress, [0.15, 0.85], ['-50px', '-450px'])
-  const colY_4 = useTransform(scrollYProgress, [0.15, 0.85], ['-350px', '50px'])
+  // ── 3. Opposing Scroll Parallax Transforms (Faster) ──
+  const colY_1 = useTransform(scrollYProgress, [0.15, 0.85], ['0px', '-800px'])
+  const colY_2 = useTransform(scrollYProgress, [0.15, 0.85], ['-800px', '0px'])
+  const colY_3 = useTransform(scrollYProgress, [0.15, 0.85], ['-100px', '-900px'])
+  const colY_4 = useTransform(scrollYProgress, [0.15, 0.85], ['-700px', '100px'])
+  const colY_5 = useTransform(scrollYProgress, [0.15, 0.85], ['0px', '-750px'])
+  const colY_6 = useTransform(scrollYProgress, [0.15, 0.85], ['-650px', '150px'])
 
   return (
     <section
@@ -238,7 +250,7 @@ export default function MasonryShowcase() {
           </span>
           <h2
             className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+            style={{ fontSize: 'clamp(2.2rem, 10vw, 160px)' }}
           >
             SUMMIT GALLERY
           </h2>
@@ -250,12 +262,12 @@ export default function MasonryShowcase() {
             opacity: galleryOpacity,
             scale: galleryScale,
           }}
-          className="flex h-full w-full max-w-[1920px] items-center justify-center gap-3 overflow-hidden px-2 sm:gap-4 sm:px-4 md:gap-6 md:px-6"
+          className="flex h-full w-full max-w-[1920px] items-center justify-center gap-2 sm:gap-3 md:gap-4 overflow-hidden px-2 sm:px-4 md:px-6"
         >
-          {/* Column 1 — Auto Scroll UP + Scroll Parallax UP */}
+          {/* Column 1 — UP */}
           <motion.div
-            style={{ y: colY_1 }}
-            className="animate-auto-scroll-up flex flex-1 flex-col gap-3 will-change-transform sm:gap-4 md:gap-6"
+            style={{ y: colY_1, animationDuration: '25s' }}
+            className="animate-auto-scroll-up flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
           >
             {COL_1.map((item) => (
               <div
@@ -271,10 +283,10 @@ export default function MasonryShowcase() {
             ))}
           </motion.div>
 
-          {/* Column 2 — Auto Scroll DOWN + Scroll Parallax DOWN */}
+          {/* Column 2 — DOWN */}
           <motion.div
-            style={{ y: colY_2 }}
-            className="animate-auto-scroll-down flex flex-1 flex-col gap-3 will-change-transform sm:gap-4 md:gap-6"
+            style={{ y: colY_2, animationDuration: '30s' }}
+            className="animate-auto-scroll-down flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
           >
             {COL_2.map((item) => (
               <div
@@ -290,10 +302,10 @@ export default function MasonryShowcase() {
             ))}
           </motion.div>
 
-          {/* Column 3 — Auto Scroll UP + Scroll Parallax UP */}
+          {/* Column 3 — UP (Mobile, Tablet, Desktop) */}
           <motion.div
-            style={{ y: colY_3 }}
-            className="animate-auto-scroll-up hidden flex-1 flex-col gap-3 will-change-transform sm:flex sm:gap-4 md:gap-6"
+            style={{ y: colY_3, animationDuration: '22s' }}
+            className="animate-auto-scroll-up flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
           >
             {COL_3.map((item) => (
               <div
@@ -309,12 +321,50 @@ export default function MasonryShowcase() {
             ))}
           </motion.div>
 
-          {/* Column 4 — Auto Scroll DOWN + Scroll Parallax DOWN */}
+          {/* Column 4 — DOWN (Tablet & Desktop) */}
           <motion.div
-            style={{ y: colY_4 }}
-            className="animate-auto-scroll-down hidden flex-1 flex-col gap-3 will-change-transform sm:gap-4 md:flex md:gap-6"
+            style={{ y: colY_4, animationDuration: '28s' }}
+            className="animate-auto-scroll-down hidden flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform sm:flex"
           >
             {COL_4.map((item) => (
+              <div
+                key={item.id}
+                className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
+                style={{ height: item.height }}
+              >
+                <div
+                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style={{ backgroundImage: `url(${item.img})` }}
+                />
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Column 5 — UP (Desktop Only) */}
+          <motion.div
+            style={{ y: colY_5, animationDuration: '26s' }}
+            className="animate-auto-scroll-up hidden flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform md:flex"
+          >
+            {COL_5.map((item) => (
+              <div
+                key={item.id}
+                className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
+                style={{ height: item.height }}
+              >
+                <div
+                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                  style={{ backgroundImage: `url(${item.img})` }}
+                />
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Column 6 — DOWN (Desktop Only) */}
+          <motion.div
+            style={{ y: colY_6, animationDuration: '32s' }}
+            className="animate-auto-scroll-down hidden flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform md:flex"
+          >
+            {COL_6.map((item) => (
               <div
                 key={item.id}
                 className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"

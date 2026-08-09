@@ -4,11 +4,10 @@ import React, { useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { Ticket, Calendar, MapPin, Sparkles, ArrowUpRight, ChevronDown } from 'lucide-react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import Countdown from './Countdown'
 import { FEST_META } from '@/lib/data'
 
-const TOTAL_RAW_FRAMES = 600
-const FRAME_STEP = 6 // Sample every 6th frame => 100 fast, lightweight frames
+const TOTAL_RAW_FRAMES = 260
+const FRAME_STEP = 3 // Sample every 3rd frame => ~86 fast, lightweight frames
 const FRAME_COUNT = Math.floor(TOTAL_RAW_FRAMES / FRAME_STEP)
 
 export default function NewHero() {
@@ -207,16 +206,16 @@ export default function NewHero() {
           style={{ opacity: initialOpacity }}
           className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-4 text-center"
         >
-          <h1 className="font-display text-6xl font-black leading-none tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] sm:text-8xl lg:text-9xl">
+          <h1 className="font-display text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
             E-SUMMIT <span className="italic text-mint">&apos;26</span>
           </h1>
 
-          <p className="mt-4 max-w-md font-mono-data text-xs font-semibold uppercase tracking-widest text-gray-200 drop-shadow-md sm:text-base">
+          <p className="mt-4 max-w-md font-mono-data text-[11px] sm:text-sm md:text-base font-semibold uppercase tracking-widest text-gray-200 drop-shadow-md">
             Chandigarh&apos;s Launchpad for Founders
           </p>
 
           <div className="mt-10 flex animate-pulse flex-col items-center gap-1.5 text-mint">
-            <span className="font-mono-data text-[11px] font-bold uppercase tracking-widest">
+            <span className="font-mono-data text-[10px] sm:text-[11px] font-bold uppercase tracking-widest">
               Scroll to Explore &amp; Scrub Experience
             </span>
             <ChevronDown size={20} />
@@ -228,10 +227,10 @@ export default function NewHero() {
           style={{ opacity: mainContentOpacity, scale: mainContentScale }}
           className="pointer-events-auto absolute inset-0 z-20 flex flex-col items-center justify-center px-4 text-center sm:px-6"
         >
-          <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 text-center">
+          <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 sm:gap-6 text-center">
             {/* Cyber Glass Date & Location Badge */}
-            <div className="border-mint/40 group mb-2 inline-flex flex-wrap items-center justify-center gap-2.5 rounded-full border bg-[#07130F]/90 px-4 py-2 font-mono-data text-[11px] uppercase tracking-wider backdrop-blur-2xl transition-all hover:border-mint sm:gap-4 sm:px-6 sm:text-xs">
-              <div className="flex items-center gap-2 font-bold text-mint">
+            <div className="border-mint/40 group mb-1 sm:mb-2 inline-flex flex-wrap items-center justify-center gap-2 sm:gap-4 rounded-full border bg-[#07130F]/90 px-3.5 py-1.5 sm:px-6 sm:py-2 font-mono-data text-[10px] sm:text-xs uppercase tracking-wider backdrop-blur-2xl transition-all hover:border-mint">
+              <div className="flex items-center gap-1.5 sm:gap-2 font-bold text-mint">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
@@ -247,7 +246,7 @@ export default function NewHero() {
             </div>
 
             {/* Main Headline — Compact 2 Lines */}
-            <h2 className="mb-2 max-w-3xl font-display text-2xl font-black uppercase leading-[1.05] tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] sm:text-4xl md:text-5xl">
+            <h2 className="mb-1 sm:mb-2 max-w-3xl font-display text-xl sm:text-3xl md:text-5xl font-black uppercase leading-[1.08] tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
               WHERE IDEAS RAISE <span className="text-mint">CAPITAL</span>
               <br />
               &amp; COMPOUND INTO <span className="text-mint">IMPACT</span>
@@ -287,10 +286,7 @@ export default function NewHero() {
               </a>
             </div>
 
-            {/* Pure Minimalist Countdown Timer */}
-            <div className="flex w-full justify-center pt-1">
-              <Countdown targetISO={FEST_META.countdownTarget} hideHeader={true} />
-            </div>
+
           </div>
         </motion.div>
       </div>

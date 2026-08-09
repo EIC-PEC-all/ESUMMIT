@@ -197,7 +197,7 @@ export default function Concierge() {
       {/* Floating Concierge Action Pill */}
       <motion.button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-14 right-6 z-[2500] px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
+        className="fixed bottom-20 sm:bottom-14 right-4 sm:right-6 z-[2500] min-h-[44px] px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
         initial={{ opacity: 0, y: 20 }}
         animate={{
           opacity: isLoaderActive ? 0 : 1,
@@ -224,14 +224,14 @@ export default function Concierge() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-24 right-4 sm:right-8 left-auto z-[2500] w-[390px] max-w-[calc(100vw-32px)] rounded-3xl overflow-hidden flex flex-col shadow-2xl bg-[#0A1A17]/95 [.light_&]:bg-[#1E2B12]/95 backdrop-blur-2xl border border-mint/40"
-            style={{ height: '560px' }}
+            className="fixed bottom-32 sm:bottom-28 right-4 sm:right-8 left-auto z-[2500] w-[360px] max-w-[calc(100vw-32px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-[#1A3A0F] border-0"
+            style={{ height: 'min(480px, 72vh)' }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3.5 shrink-0 bg-white/5 border-b border-white/10">
+            <div className="flex items-center justify-between px-4 py-2.5 shrink-0 bg-[#B5F23D]/10 border-b border-[#B5F23D]/20">
               <div className="flex items-center gap-3">
                 <div className="relative w-9 h-9 rounded-2xl bg-mint/20 border border-mint/40 flex items-center justify-center">
                   <Bot size={18} className="text-mint" />
@@ -312,7 +312,7 @@ export default function Concierge() {
                             >
                               <div className="flex-1 min-w-0">
                                 <p className="font-mono-data text-[10px] text-mint font-bold">
-                                  [{session.day}] {session.time}
+                                  {session.day} • {session.time}
                                 </p>
                                 <p className="font-body text-xs font-bold text-white truncate">{session.title}</p>
                               </div>
@@ -421,7 +421,7 @@ export default function Concierge() {
                     >
                       <div>
                         <span className="font-mono-data text-[10px] uppercase text-[var(--accent-mint)] block mb-1 font-bold">
-                          [{session.day}] {session.time}
+                          {session.day} • {session.time}
                         </span>
                         <h4 className="font-body font-semibold text-sm text-white mb-1">{session.title}</h4>
                         <span className="font-mono-data text-[9px] uppercase px-2 py-0.5 rounded bg-panel text-muted">

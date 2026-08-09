@@ -55,12 +55,12 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
           </button>
 
           {/* Header Eyebrow */}
-          <div className="flex flex-wrap items-center gap-2.5 mb-3">
-            <span className="rounded-full bg-mint/15 border border-mint/30 px-3 py-1 text-xs font-semibold text-mint">
+          <div className="flex flex-wrap items-center gap-3 mb-3">
+            <span className="text-xs font-mono-data text-mint font-bold uppercase tracking-wider">
               {event.number} · {event.eyebrow}
             </span>
-            <span className="rounded-full bg-neutral-950 border border-white/10 px-3 py-1 text-xs font-medium text-neutral-400">
-              {event.category}
+            <span className="text-xs font-mono-data text-neutral-400 font-bold uppercase tracking-wider">
+              &middot; {event.category}
             </span>
           </div>
 

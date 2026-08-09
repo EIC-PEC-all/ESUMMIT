@@ -47,13 +47,12 @@ export default function EventPortfolioShowcase() {
       aria-label="Event Portfolio Showcase"
     >
       {/* Pinned Sticky Section during vertical scroll */}
-      <div className="sticky top-0 flex h-screen w-full flex-col justify-between overflow-hidden py-6">
-        
-        {/* Section Heading */}
-        <div className="relative z-20 w-full flex flex-col items-center justify-center px-4 pt-2 text-center">
-          <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-mint block mb-1">PROPOSED ACTIVITIES</span>
+      <div className="sticky top-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden">
+
+        {/* Big centered section title — matches site-wide pattern */}
+        <div className="pointer-events-none absolute top-16 left-0 right-0 flex justify-center z-20">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-lg"
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
             style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
             EVENTS
@@ -61,13 +60,12 @@ export default function EventPortfolioShowcase() {
         </div>
 
         {/* ── Main Horizontally Scrolling Track Container ── */}
-        <div className="relative z-10 flex h-full items-center">
+        <div className="relative z-10 flex w-full items-center pt-32 sm:pt-36">
           <motion.div
             ref={trackRef}
             style={{ x: xTranslate }}
             className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing"
           >
-            {/* 13 Project / Event Cards */}
             {filteredEvents.map((event, index) => (
               <Card
                 key={event.id}
@@ -78,24 +76,8 @@ export default function EventPortfolioShowcase() {
                 scrollProgress={smoothProgress}
               />
             ))}
-
-            {/* Final Target Card / CTA Slide */}
             <FinalCard onViewAll={() => setActiveCategory('All')} />
           </motion.div>
-        </div>
-
-        {/* ── Footer Guidance Bar ── */}
-        <div className="relative z-20 flex items-center justify-between px-8 text-xs text-neutral-400 font-medium">
-          <div className="flex items-center gap-2">
-            <span className="h-1.5 w-1.5 rounded-full bg-mint" />
-            <span>Scroll to explore timeline</span>
-          </div>
-
-          <div className="hidden sm:flex items-center gap-4 text-neutral-400">
-            <span>PEC E-SUMMIT &apos;26</span>
-            <span>·</span>
-            <span>PROPOSED PORTFOLIO</span>
-          </div>
         </div>
       </div>
 

@@ -22,6 +22,9 @@ function TimelineEventCard({
   onSelect: () => void
   index: number
 }) {
+  const timeNum = event.time.split(' ')[0]
+  const timeAmPm = event.time.split(' ')[1] || 'AM'
+
   return (
     <motion.div
       id={`schedule-row-${event.id}`}
@@ -30,71 +33,80 @@ function TimelineEventCard({
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
       onClick={onSelect}
-      className={`relative p-5 sm:p-6 rounded-2xl border transition-all duration-300 cursor-pointer group ${
+      className={`group relative p-4 rounded-2xl transition-all duration-300 cursor-pointer border border-transparent select-none ${
         isSelected
-          ? 'bg-[#0D2420] [.light_&]:bg-[#2A3C1A] border-mint [.light_&]:border-[#C8E696] shadow-xl translate-x-1'
-          : 'bg-[#061210]/90 [.light_&]:bg-[#18230F]/90 hover:bg-[#0D2420]/80 [.light_&]:hover:bg-[#202E14] border-mint/20 [.light_&]:border-[#4E6527]/50 shadow-md'
+          ? 'bg-[#0D2420]/30 shadow-lg'
+          : 'hover:bg-white/[0.02]'
       }`}
     >
-      {/* Top Gloss Line */}
-      <div
-        className={`absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl transition-opacity duration-300 ${
-          isSelected
-            ? 'bg-gradient-to-r from-mint via-white to-mint opacity-100'
-            : 'bg-gradient-to-r from-transparent via-mint/30 to-transparent opacity-0 group-hover:opacity-100'
-        }`}
-      />
-
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-        {/* Time Badge */}
-        <div className="flex items-center gap-1.5 font-mono-data text-xs text-mint [.light_&]:text-[#C8E696] font-bold tabular-nums">
-          <Clock size={13} className="text-mint [.light_&]:text-[#C8E696]" />
-          <span>{event.time}</span>
+      <div className="flex items-stretch gap-4">
+        {/* Left Column: Time Magazine Style */}
+        <div className="w-16 sm:w-20 shrink-0 flex flex-col justify-start text-left pt-0.5">
+          <span className="font-display text-xl sm:text-2xl font-black tracking-tighter text-white leading-none">
+            {timeNum}
+          </span>
+          <span className="font-mono-data text-[9px] uppercase tracking-widest text-mint mt-1">
+            {timeAmPm}
+          </span>
         </div>
 
-        {/* Type Badge */}
-        <span
-          className={`font-mono-data text-[10px] uppercase font-bold px-2.5 py-0.5 rounded border transition-colors ${
-            isSelected
-              ? 'bg-mint text-void border-mint [.light_&]:bg-[#C8E696] [.light_&]:text-[#0A110E] [.light_&]:border-[#C8E696]'
-              : 'bg-mint/15 text-mint border-mint/30 [.light_&]:bg-[#C8E696]/15 [.light_&]:text-[#C8E696] [.light_&]:border-[#C8E696]/30'
-          }`}
-        >
-          {event.type}
-        </span>
-      </div>
-
-      {/* Event Title — CRISP HIGH CONTRAST WHITE TEXT */}
-      <h3
-        className={`font-display text-xl sm:text-2xl mb-2 transition-colors ${
-          isSelected ? 'text-mint [.light_&]:text-[#C8E696] font-bold' : 'text-white font-bold group-hover:text-mint [.light_&]:group-hover:text-[#C8E696]'
-        }`}
-      >
-        {event.title}
-      </h3>
-
-      {/* Venue & Route Meta Footer */}
-      <div className="mt-3 pt-3 border-t border-mint/20 [.light_&]:border-[#4E6527]/40 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 font-mono-data text-xs text-gray-200">
-          <MapPin size={13} className="text-mint [.light_&]:text-[#C8E696] shrink-0" />
-          <span className="text-gray-200 font-medium">{event.venueName}</span>
+        {/* Middle Column: Vertical Line Thread */}
+        <div className="relative w-4 shrink-0 flex flex-col items-center">
+          {/* Thread Connector Dot */}
+          <div className={`h-2.5 w-2.5 rounded-full border-2 transition-all duration-300 mt-1.5 z-10 ${
+            isSelected 
+              ? 'bg-mint border-mint scale-125 shadow-[0_0_10px_#BAEF4B]' 
+              : 'bg-[#0D2420] border-white/20 group-hover:border-mint'
+          }`} />
+          {/* Thread Connector Line */}
+          <div className="absolute top-4 bottom-0 w-[1px] bg-white/10 group-hover:bg-mint/30 transition-colors" />
         </div>
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation()
-            onSelect()
-          }}
-          className={`inline-flex items-center gap-1 font-mono-data text-[11px] uppercase font-bold px-3 py-1.5 rounded-xl transition-all ${
-            isSelected
-              ? 'bg-mint text-void shadow-md [.light_&]:bg-[#C8E696] [.light_&]:text-[#0A110E]'
-              : 'bg-white/10 text-white border border-white/20 hover:bg-mint hover:text-void [.light_&]:hover:bg-[#C8E696] [.light_&]:hover:text-[#0A110E]'
-          }`}
-        >
-          <Navigation size={11} className={isSelected ? 'animate-bounce' : ''} />
-          <span>{isSelected ? 'Route Active' : 'View Path'}</span>
-          <span className="text-[10px] opacity-80">({event.walkTime})</span>
-        </button>
+        {/* Right Column: Details */}
+        <div className="flex-1 pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="min-w-0">
+            {/* Event Title */}
+            <h3 className={`font-display text-base sm:text-lg font-black uppercase leading-tight tracking-tight transition-colors ${
+              isSelected ? 'text-mint' : 'text-white group-hover:text-mint'
+            }`}>
+              {event.title}
+            </h3>
+
+            {/* Sub-details (Venue & Category Type) */}
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-[11px] font-mono-data text-gray-400">
+              <span className="flex items-center gap-1">
+                <MapPin size={11} className="text-mint shrink-0" />
+                <span className="text-gray-300 font-medium">{event.venueName}</span>
+              </span>
+              
+              <span className="text-white/20">&bull;</span>
+
+              <span className="flex items-center gap-1 font-bold text-mint/80 uppercase">
+                <span className="h-1 w-1 rounded-full bg-mint" />
+                {event.type}
+              </span>
+            </div>
+          </div>
+
+          {/* CTA Action */}
+          <div className="shrink-0 flex items-center">
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelect()
+              }}
+              className={`inline-flex items-center gap-1.5 font-mono-data text-[10px] uppercase font-bold px-3 py-1.5 rounded-lg transition-all ${
+                isSelected
+                  ? 'bg-mint text-void shadow-md'
+                  : 'bg-white/5 text-white border border-white/10 hover:bg-mint hover:text-void'
+              }`}
+            >
+              <Navigation size={10} className={isSelected ? 'animate-bounce' : ''} />
+              <span>{isSelected ? 'Active' : 'Route'}</span>
+              <span className="text-[9px] opacity-75">({event.walkTime})</span>
+            </button>
+          </div>
+        </div>
       </div>
     </motion.div>
   )

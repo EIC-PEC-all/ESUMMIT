@@ -146,80 +146,87 @@ function LeafletMapInner({
   const markersRef = useRef<Record<string, any>>({})
 
   useEffect(() => {
-    const L = typeof window !== 'undefined' ? (window as any).L : null
-    if (!mapContainerRef.current || mapInstanceRef.current || !L) return
+    if (!mapContainerRef.current || mapInstanceRef.current) return
 
-    const map = L.map(mapContainerRef.current, {
-      center: PEC_CENTER,
-      zoom: 16,
-      zoomControl: false,
-      scrollWheelZoom: false,
-      attributionControl: false,
-    })
+    // Dynamically import leaflet + CSS to avoid SSR issues
+    Promise.all([
+      import('leaflet'),
+      import('leaflet/dist/leaflet.css' as any),
+    ]).then(([{ default: L }]) => {
+      if (!mapContainerRef.current || mapInstanceRef.current) return
 
-    const tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    L.tileLayer(tileUrl, {
-      subdomains: 'abcd',
-      maxZoom: 19,
-    }).addTo(map)
+      const map = L.map(mapContainerRef.current, {
+        center: PEC_CENTER,
+        zoom: 16,
+        zoomControl: false,
+        scrollWheelZoom: false,
+        attributionControl: false,
+      })
 
-    mapInstanceRef.current = map
+      const tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      L.tileLayer(tileUrl, {
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map)
 
-    Object.entries(VENUE_COORDS).forEach(([vKey, vData]) => {
-      const customIcon = L.divIcon({
-        className: `highlights-marker-${vKey}`,
-        html: `
-          <div style="
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            cursor: pointer;
-          ">
+      mapInstanceRef.current = map
+
+      Object.entries(VENUE_COORDS).forEach(([vKey, vData]) => {
+        const customIcon = L.divIcon({
+          className: `highlights-marker-${vKey}`,
+          html: `
             <div style="
-              width: 32px;
-              height: 32px;
-              border-radius: 50%;
-              background: #7ED321;
-              border: 2.5px solid #ffffff;
-              box-shadow: 0 0 16px rgba(126, 211, 33, 0.7);
               display: flex;
               align-items: center;
               justify-content: center;
-              color: #040A07;
-              font-size: 14px;
-              font-weight: bold;
-              transition: all 0.3s ease;
+              position: relative;
+              cursor: pointer;
             ">
-              📍
+              <div style="
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: #0A110E;
+                border: 2.5px solid #7ED321;
+                box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #7ED321;
+                font-size: 14px;
+                font-weight: bold;
+                transition: all 0.3s ease;
+              ">
+                📍
+              </div>
             </div>
+          `,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16],
+        })
+
+        const marker = L.marker([vData.lat, vData.lng], { icon: customIcon }).addTo(map)
+
+        marker.bindPopup(`
+          <div style="padding: 6px; font-family: sans-serif; background: #07140F; color: #ffffff; border-radius: 8px;">
+            <h4 style="margin: 0 0 2px; font-size: 13px; font-weight: bold; color: #7ED321;">${vData.venueName}</h4>
+            <p style="margin: 0; font-size: 11px; color: #94A3B8;">${vData.building}</p>
           </div>
-        `,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16],
+        `)
+
+        marker.on('click', () => {
+          const matchingEv = dayEvents.find((e) => e.venueId === vKey)
+          if (matchingEv) {
+            onSelectEventId(matchingEv.id)
+          }
+        })
+
+        markersRef.current[vKey] = marker
       })
-
-      const marker = L.marker([vData.lat, vData.lng], { icon: customIcon }).addTo(map)
-
-      marker.bindPopup(`
-        <div style="padding: 6px; font-family: sans-serif; background: #07140F; color: #ffffff; border-radius: 8px;">
-          <h4 style="margin: 0 0 2px; font-size: 13px; font-weight: bold; color: #7ED321;">${vData.venueName}</h4>
-          <p style="margin: 0; font-size: 11px; color: #94A3B8;">${vData.building}</p>
-        </div>
-      `)
-
-      marker.on('click', () => {
-        const matchingEv = dayEvents.find((e) => e.venueId === vKey)
-        if (matchingEv) {
-          onSelectEventId(matchingEv.id)
-        }
-      })
-
-      markersRef.current[vKey] = marker
     })
 
     return () => {
-      map.remove()
+      mapInstanceRef.current?.remove()
       mapInstanceRef.current = null
     }
   }, [])
@@ -241,9 +248,20 @@ function LeafletMapInner({
   }, [selectedEvent, activeDayIndex])
 
   return (
-    <div className="relative h-full w-full bg-void">
-      {/* Borderless Leaflet map viewport */}
-      <div ref={mapContainerRef} className="h-full w-full z-10" />
+    <div className="relative h-full w-full bg-[#7ED321]">
+      <style>{`
+        .custom-lime-map {
+          background: #7ED321 !important;
+        }
+        .custom-lime-map .leaflet-tile {
+          filter: invert(1) grayscale(1) brightness(0.51) contrast(8) sepia(1) hue-rotate(45deg) saturate(4) !important;
+        }
+      `}</style>
+      {/* Map with lime-green tint via CSS filter */}
+      <div
+        ref={mapContainerRef}
+        className="h-full w-full z-10 custom-lime-map"
+      />
 
       {/* Floating Info Overlay */}
       <div className="absolute bottom-6 left-6 z-20 max-w-xs rounded-2xl border border-white/10 bg-[#07140F]/90 p-4 shadow-2xl backdrop-blur-md">
@@ -301,9 +319,9 @@ function HighlightCard({
 }) {
   return (
     <div
-      className={`sticky h-[80vh] ${index > 0 ? 'mt-[45vh]' : ''}`}
+      className={`sticky min-h-[70vh] max-h-[85vh] sm:h-[80vh] ${index > 0 ? 'mt-[35vh] sm:mt-[45vh]' : ''}`}
       style={{
-        top: index === 0 ? '7rem' : 'calc(7rem + 136px)',
+        top: index === 0 ? '5.5rem' : 'calc(5.5rem + 80px)',
         zIndex: 10 + index,
       }}
     >
@@ -333,46 +351,46 @@ function HighlightCard({
             <h3 className="mb-6 font-display text-xl font-bold text-white sm:text-2xl">
               {card.title}
             </h3>
-
-            {/* Events List */}
-            <div className="space-y-3">
+                       {/* Events List */}
+            <div className="space-y-1 px-1">
               {card.events.map((ev) => {
                 const isSelected = selectedEventId === ev.id
                 return (
                   <div
                     key={ev.id}
                     onClick={() => onSelectEvent(ev.id)}
-                    className={`group flex cursor-pointer items-center justify-between gap-3 rounded-xl border p-3.5 transition-all duration-200 ${
-                      isSelected
-                        ? 'border-[#7ED321] bg-[#7ED321]/15 shadow-[0_0_15px_rgba(126,211,33,0.25)]'
-                        : 'border-white/10 bg-[#040A07]/80 hover:border-[#7ED321]/40 hover:bg-[#07140F]'
+                    className={`group flex cursor-pointer items-center justify-between py-3.5 px-2 transition-all duration-200 border-b border-white/5 last:border-b-0 ${
+                      isSelected ? 'text-[#7ED321]' : ''
                     }`}
                   >
-                    <div className="flex min-w-0 items-center gap-3">
-                      <span className="shrink-0 font-mono-data text-xs font-bold text-[#7ED321]">
+                    {/* Left: Time and Title */}
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <span className={`shrink-0 font-mono-data text-xs font-semibold tracking-wider transition-colors ${
+                        isSelected ? 'text-[#7ED321]' : 'text-gray-400 group-hover:text-gray-300'
+                      }`}>
                         {ev.time}
                       </span>
+                      <span className="text-white/10 font-light text-xs shrink-0 select-none">|</span>
                       <span
-                        className={`truncate font-body text-xs sm:text-sm font-medium ${
-                          isSelected ? 'font-bold text-white' : 'text-gray-200 group-hover:text-white'
+                        className={`truncate font-body text-xs sm:text-sm font-medium transition-colors ${
+                          isSelected ? 'text-white font-bold' : 'text-gray-300 group-hover:text-white'
                         }`}
                       >
                         {ev.title}
                       </span>
                     </div>
 
-                    <div className="flex shrink-0 items-center gap-2">
+                    {/* Right: Venue */}
+                    <div className="flex shrink-0 items-center gap-2.5">
                       <span
-                        className={`rounded border font-mono-data text-[10px] px-2 py-0.5 ${
-                          isSelected
-                            ? 'border-[#7ED321] bg-[#7ED321] font-bold text-[#040A07]'
-                            : 'border-white/10 bg-white/5 text-gray-400'
+                        className={`font-mono-data text-[10px] uppercase font-bold tracking-wider transition-colors ${
+                          isSelected ? 'text-[#7ED321]' : 'text-gray-400 group-hover:text-gray-300'
                         }`}
                       >
                         {ev.tag}
                       </span>
                       <MapPin
-                        size={14}
+                        size={13}
                         className={`transition-colors ${
                           isSelected ? 'fill-[#7ED321] text-[#7ED321]' : 'text-gray-500 group-hover:text-[#7ED321]'
                         }`}
@@ -430,15 +448,15 @@ export default function EsummitHighlights() {
       ref={containerRef}
       className="esummit-section rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]
         -mt-10 sm:-mt-12 md:-mt-14 z-10 relative
-        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-void text-white"
+        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-[#060F0B] text-white"
       aria-labelledby="timeline-heading"
     >
       <h2
         id="timeline-heading"
         className="text-[var(--accent-mint)] font-display font-black uppercase leading-none tracking-tight text-center
-          mb-16 sm:mb-20 md:mb-24"
+          mb-12 sm:mb-20 md:mb-24"
         style={{
-          fontSize: 'clamp(3rem, 12vw, 160px)',
+          fontSize: 'clamp(2.2rem, 10vw, 160px)',
         }}
       >
         TIMELINE
@@ -446,8 +464,8 @@ export default function EsummitHighlights() {
 
       {/* 2-Column Responsive Layout */}
       <div className="relative flex flex-col lg:flex-row gap-8 items-start min-h-[150vh]">
-        {/* Left Column: Sticky Borderless Leaflet Map (50%) */}
-        <div className="w-full lg:w-1/2 h-[80vh] sticky top-28 z-30 overflow-hidden rounded-[32px]">
+        {/* Left Column: Leaflet Map (Responsive Card on mobile, Sticky 50% on desktop) */}
+        <div className="w-full lg:w-1/2 h-[320px] sm:h-[420px] lg:h-[80vh] relative lg:sticky lg:top-28 z-30 overflow-hidden rounded-[28px] sm:rounded-[32px]">
           <HighlightsCampusMap
             selectedEvent={selectedEvent}
             activeDayIndex={activeDayIndex}
@@ -457,7 +475,7 @@ export default function EsummitHighlights() {
           />
         </div>
 
-        {/* Right Column: Stacked Day Cards (50%) */}
+        {/* Right: Day Cards */}
         <div className="w-full lg:w-1/2 relative">
           {CARDS.map((card, index) => (
             <HighlightCard

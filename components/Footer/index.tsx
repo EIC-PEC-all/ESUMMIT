@@ -131,58 +131,109 @@ export function RegisterCTA() {
   return (
     <div
       id="register"
-      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#0D2420] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px]"
+      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#081C16] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#7ED321]/20 pt-28 pb-44 sm:pt-36 sm:pb-56 md:pb-64"
       aria-labelledby="footer-cta-heading"
     >
-      {/* Circuit board background accent */}
-      <CircuitBoard prefersReduced={false} />
+      {/* ── Lightweight Hardware-Accelerated Radial Mesh Glow (NO CPU Blur Filter) ── */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 opacity-40"
+        style={{
+          background:
+            'radial-gradient(circle at 50% 50%, rgba(126, 211, 33, 0.12) 0%, rgba(124, 58, 237, 0.08) 45%, transparent 70%)',
+        }}
+      />
 
-      {/* Main CTA block */}
-      <div className="relative z-10 py-20 lg:py-28">
-        <div className="section-container">
-          <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex w-full flex-col items-center text-center"
-            >
-              <h2
-                id="footer-cta-heading"
-                className="mb-6 font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-lg"
-                style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
-              >
-                REGISTER
-              </h2>
-
-              <p className="mb-10 max-w-lg font-body text-base leading-relaxed text-gray-200 sm:text-lg">
-                Early-bird passes are limited. Lock in your spot and be part of North India&apos;s premier entrepreneurship summit.
-              </p>
-
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                <Link
-                  href="/register"
-                  className="btn-green flex items-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105"
-                  id="footer-register-btn"
-                  aria-label="Open PEC Summit Registration Dashboard"
-                >
-                  <span>Register Now</span>
-                  <ArrowRight size={18} aria-hidden="true" />
-                </Link>
-
-                <a
-                  href="mailto:info@ecellpec.in"
-                  className="flex items-center rounded-full border border-white/40 px-8 py-4 text-base font-bold text-white transition-all hover:bg-white/10"
-                  id="footer-contact-btn"
-                  aria-label="Contact E-Cell PEC"
-                >
-                  <span>Contact Us</span>
-                </a>
-              </div>
-            </motion.div>
-          </div>
+      {/* ── Left 3D Perspective Geometric Glass Panel (Steep 3D Tilt) ───────────── */}
+      <motion.div
+        initial={{ opacity: 0, x: -220, rotateY: 42, rotateX: 12, rotateZ: -8, scale: 0.8 }}
+        whileInView={{ opacity: 1, x: 0, rotateY: 28, rotateX: 6, rotateZ: -4, scale: 0.9 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-none absolute -left-16 top-1/2 -translate-y-1/2 hidden xl:block w-[420px] h-[280px] rounded-[36px] border border-white/20 bg-[#0A140F]/90 p-6 shadow-2xl z-0 will-change-transform"
+        style={{
+          transformStyle: 'preserve-3d',
+          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15)',
+        }}
+      >
+        <div className="h-full w-full rounded-[24px] border border-white/10 bg-[#040705] relative overflow-hidden flex items-center justify-center">
+          <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#7ED321_1px,transparent_1px)] [background-size:16px_16px]" />
+          <div className="h-28 w-28 rounded-full border border-[#7ED321]/30 bg-[#7ED321]/10" />
+          <div className="h-16 w-16 rounded-2xl border border-white/20 bg-white/5" />
         </div>
+      </motion.div>
+
+      {/* ── Right 3D Perspective Geometric Glass Panel (Steep 3D Tilt) ──────────── */}
+      <motion.div
+        initial={{ opacity: 0, x: 220, rotateY: -42, rotateX: 12, rotateZ: 8, scale: 0.8 }}
+        whileInView={{ opacity: 1, x: 0, rotateY: -28, rotateX: 6, rotateZ: 4, scale: 0.9 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-none absolute -right-16 top-1/2 -translate-y-1/2 hidden xl:block w-[420px] h-[280px] rounded-[36px] border border-white/20 p-6 shadow-2xl z-0 will-change-transform"
+        style={{
+          transformStyle: 'preserve-3d',
+          background: 'linear-gradient(145deg, rgba(124,58,237,0.2) 0%, rgba(244,63,94,0.15) 50%, rgba(7,11,8,0.9) 100%)',
+          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15)',
+        }}
+      >
+        <div className="h-full w-full rounded-[24px] border border-white/15 bg-black/60 relative overflow-hidden flex items-center justify-center">
+          <div className="h-32 w-32 rounded-full border border-purple-500/30 bg-purple-500/15" />
+          <div className="h-20 w-20 rounded-full border border-pink-400/30 bg-pink-400/10" />
+        </div>
+      </motion.div>
+
+      {/* ── Center Content Block ──────────────────────────────────────────────── */}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center text-center"
+        >
+          {/* Top Pill Badge */}
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2">
+            <Sparkles size={14} className="text-yellow-400" />
+            <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-white">
+              PEC SUMMIT 2026 • MARCH 15-16
+            </span>
+          </div>
+
+          {/* Main Headline */}
+          <h2
+            id="footer-cta-heading"
+            className="mb-6 font-display font-black uppercase text-center text-mint leading-none tracking-tight drop-shadow-lg"
+            style={{ fontSize: 'clamp(3.5rem, 14vw, 180px)' }}
+          >
+            REGISTER
+          </h2>
+
+          {/* Subtitle */}
+          <p className="mb-10 max-w-xl font-body text-base sm:text-lg leading-relaxed text-gray-300">
+            Bring your startup to gallery scale — physical expo stalls, 24-hr hackathon arena, or pitch to top 50+ VCs &amp; Angels.
+          </p>
+
+          {/* Dual Pill CTA Pair */}
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <Link
+              href="/passes"
+              className="btn-green flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-xl transition-transform hover:scale-105"
+              id="footer-register-btn"
+              aria-label="Claim Delegate Pass for PEC Summit"
+            >
+              <span>Claim Delegate Pass</span>
+              <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+
+            <Link
+              href="/passes"
+              className="flex items-center justify-center rounded-full border border-white/30 bg-white/5 px-8 py-4 text-base font-bold text-white transition-colors hover:bg-white/15 hover:border-white"
+              id="footer-schedule-btn"
+              aria-label="Explore Full Summit Schedule"
+            >
+              <span>Explore Summit Passes</span>
+            </Link>
+          </div>
+        </motion.div>
       </div>
     </div>
   )

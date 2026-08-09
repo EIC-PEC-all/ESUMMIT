@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono, Kanit } from 'next/font/google'
-import localFont from 'next/font/local'
-import Script from 'next/script'
+import { Inter, Kanit } from 'next/font/google'
 import './globals.css'
 import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
 
@@ -12,21 +10,9 @@ const kanit = Kanit({
   display: 'swap',
 })
 
-const khaviax = localFont({
-  src: './fonts/Khaviax.otf',
-  variable: '--font-khaviax',
-  display: 'swap',
-})
-
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
-  display: 'swap',
-})
-
-const jetbrains = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-jetbrains',
   display: 'swap',
 })
 
@@ -64,18 +50,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="dark" className="dark" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        <Script
-          src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-          strategy="beforeInteractive"
-        />
-      </head>
       <body
-        className={`noise ${kanit.variable} ${khaviax.variable} ${inter.variable} ${jetbrains.variable} font-body text-primary bg-void`}
+        className={`noise ${kanit.variable} ${inter.variable} font-body text-primary bg-void`}
         suppressHydrationWarning
       >
         <SmoothScrollProvider>

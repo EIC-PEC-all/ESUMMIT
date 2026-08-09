@@ -3,7 +3,7 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Compass } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 interface FinalCardProps {
   onViewAll?: () => void
@@ -12,61 +12,47 @@ interface FinalCardProps {
 export function FinalCard({ onViewAll }: FinalCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
-      whileInView={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group relative flex w-[320px] sm:w-[380px] md:w-[420px] lg:w-[440px] shrink-0 flex-col justify-between rounded-2xl border border-mint/30 bg-[#0C120F] p-5 sm:p-6 transition-colors duration-200 hover:border-mint"
+      transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="group relative shrink-0 overflow-hidden rounded-2xl border border-mint/20 bg-[#0A0F0C] flex flex-col items-center justify-center text-center hover:border-mint/50 transition-colors duration-300"
+      style={{ width: 'clamp(200px, 22vw, 280px)', height: 'clamp(280px, 40vh, 380px)' }}
     >
-      {/* Top Header Row */}
-      <div className="relative z-10 flex items-center justify-between mb-3">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-mint">
-          Portfolio Archive
-        </span>
-        <span className="rounded-full border border-mint/30 bg-mint/10 px-2.5 py-0.5 text-[10px] font-medium text-mint">
-          Overview
-        </span>
-      </div>
+      {/* Background mint glow */}
+      <div className="absolute inset-0 bg-gradient-to-br from-mint/5 via-transparent to-transparent pointer-events-none" />
 
-      {/* 16:9 Aspect ratio preview block */}
-      <div className="relative z-10 my-2 w-full aspect-[16/9] rounded-xl border border-mint/20 bg-neutral-950 flex flex-col items-center justify-center p-4 text-center">
-        <Compass size={28} className="text-mint mb-2 animate-pulse" />
-        <span className="text-xs font-semibold text-white">Full Event Schedule</span>
-        <span className="text-[10px] text-neutral-400">13 Confirmed Track Activities</span>
-      </div>
+      {/* Large faded number */}
+      <span
+        className="absolute font-display font-black text-mint opacity-[0.03] select-none pointer-events-none leading-none"
+        style={{ fontSize: 'clamp(100px, 18vw, 160px)' }}
+        aria-hidden
+      >
+        ∞
+      </span>
 
-      {/* Main Text Section */}
-      <div className="relative z-10 mt-3 flex flex-col gap-2">
-        <h2 className="text-lg sm:text-xl font-bold tracking-tight text-white leading-snug">
-          Explore all <span className="text-mint">digital experiences</span> and events.
-        </h2>
-
-        <p className="text-xs sm:text-sm leading-relaxed text-neutral-400 line-clamp-2">
-          Discover corporate workshops, recruitment platforms, R&D conclaves, and high-stakes competitions at PEC E-Summit &apos;26.
-        </p>
-
-        {/* Highlight Stats */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-          <div className="rounded-md bg-neutral-950 border border-white/10 px-2 py-0.5 text-[11px] text-neutral-300">
-            <span className="text-mint font-bold">13+</span> Activities
-          </div>
-          <div className="rounded-md bg-neutral-950 border border-white/10 px-2 py-0.5 text-[11px] text-neutral-300">
-            <span className="text-mint font-bold">₹15L+</span> Prizes
-          </div>
+      <div className="relative z-10 flex flex-col items-center gap-5 px-6">
+        {/* Stats */}
+        <div className="flex flex-col items-center gap-1">
+          <span className="font-display text-4xl font-black text-mint">13+</span>
+          <span className="font-mono-data text-[10px] uppercase tracking-widest text-neutral-400">Events</span>
         </div>
-      </div>
 
-      {/* Action Button */}
-      <div className="relative z-10 border-t border-white/10 pt-3.5 mt-4">
+        <div className="h-px w-8 bg-mint/30" />
+
+        <div className="flex flex-col items-center gap-1">
+          <span className="font-display text-4xl font-black text-white">₹15L+</span>
+          <span className="font-mono-data text-[10px] uppercase tracking-widest text-neutral-400">In Prizes</span>
+        </div>
+
+        {/* CTA */}
         <a
           href="#tracks"
           onClick={onViewAll}
-          className="group/btn relative inline-flex w-full items-center justify-between rounded-xl border border-mint/40 bg-mint/10 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-mint transition-all duration-200 hover:bg-mint hover:text-black"
+          className="mt-2 inline-flex items-center gap-2 rounded-lg border border-mint/40 bg-mint/10 px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-mint transition-all duration-300 hover:bg-mint hover:text-black hover:border-mint group/btn"
         >
-          <span className="flex items-center gap-2">
-            <Compass size={16} />
-            View All Projects
-          </span>
-          <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-1" />
+          View All
+          <ArrowRight size={13} className="transition-transform group-hover/btn:translate-x-0.5" />
         </a>
       </div>
     </motion.div>
