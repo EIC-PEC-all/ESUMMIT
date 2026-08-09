@@ -303,3 +303,227 @@ export const FEST_CONTEXT: FestContext = {
   meta: FEST_META,
   stats: STATS,
 }
+
+// ─── Campus Navigation Data ───
+
+export interface CampusVenue {
+  id: string
+  name: string
+  building: string
+  coordinates: [number, number]
+  type: 'auditorium' | 'expo' | 'seminar' | 'admin' | 'lab' | 'social' | 'entrance'
+}
+
+export const CAMPUS_VENUES: Record<string, CampusVenue> = {
+  'main-auditorium': {
+    id: 'main-auditorium',
+    name: 'Main Auditorium (CCA)',
+    building: 'CCA Building',
+    coordinates: [76.78426071541261, 30.76551511053145],
+    type: 'auditorium',
+  },
+  'expo-hall': {
+    id: 'expo-hall',
+    name: 'Expo Hall (SPIC Centre)',
+    building: 'SPIC Centre',
+    coordinates: [76.78585010939216, 30.765833700196882],
+    type: 'expo',
+  },
+  'seminar-hall': {
+    id: 'seminar-hall',
+    name: 'Seminar Hall (NAB)',
+    building: 'NAB Building',
+    coordinates: [76.7861161958663, 30.768068775179547],
+    type: 'seminar',
+  },
+  'admin-block': {
+    id: 'admin-block',
+    name: 'Admin Block (Electrical Dept)',
+    building: 'Electrical Engineering Department',
+    coordinates: [76.78647612578088, 30.767251839321425],
+    type: 'admin',
+  },
+  'cse-block': {
+    id: 'cse-block',
+    name: 'CSE & ECE Block (Hackathon Lab)',
+    building: 'CSE & ECE Department',
+    coordinates: [76.78532031055364, 30.76782763758229],
+    type: 'lab',
+  },
+  'student-center': {
+    id: 'student-center',
+    name: 'Student Center (PEC Market)',
+    building: 'PEC Market Area',
+    coordinates: [76.78348530072951, 30.766326667038925],
+    type: 'social',
+  },
+  'main-gate': {
+    id: 'main-gate',
+    name: 'Main Gate (Gate 1)',
+    building: 'Campus Entrance - Gate 1',
+    coordinates: [76.78367500421939, 30.763153888145272],
+    type: 'entrance',
+  },
+  // ─── New Summit Activity Venues ───
+  'workshop-hall': {
+    id: 'workshop-hall',
+    name: 'Workshop Hall',
+    building: 'CCA Building (Upper Floor)',
+    coordinates: [76.7845, 30.7657],
+    type: 'seminar',
+  },
+  'job-fair-zone': {
+    id: 'job-fair-zone',
+    name: 'Job Fair Zone',
+    building: 'Expo Hall (SPIC Centre) - Hall B',
+    coordinates: [76.7856, 30.7656],
+    type: 'expo',
+  },
+  'rd-conclave-hall': {
+    id: 'rd-conclave-hall',
+    name: 'R&D Conclave Hall',
+    building: 'NAB Building - Conference Room',
+    coordinates: [76.7860, 30.7678],
+    type: 'seminar',
+  },
+  'ipl-auction-room': {
+    id: 'ipl-auction-room',
+    name: 'IPL Auction Room',
+    building: 'CCA Building - Seminar Room',
+    coordinates: [76.7843, 30.7653],
+    type: 'seminar',
+  },
+  'ignite-stage': {
+    id: 'ignite-stage',
+    name: 'Ignite Stage',
+    building: 'Main Auditorium (CCA)',
+    coordinates: [76.78426071541261, 30.76551511053145],
+    type: 'auditorium',
+  },
+  'treasure-hunt-start': {
+    id: 'treasure-hunt-start',
+    name: 'Treasure Hunt Start',
+    building: 'Student Center (PEC Market)',
+    coordinates: [76.78348530072951, 30.766326667038925],
+    type: 'social',
+  },
+  'baazar-zone': {
+    id: 'baazar-zone',
+    name: 'Baazar Marketplace',
+    building: 'PEC Market / Open Grounds',
+    coordinates: [76.7837, 30.7661],
+    type: 'social',
+  },
+  'quiz-hall': {
+    id: 'quiz-hall',
+    name: 'Quiz Hall',
+    building: 'Seminar Hall (NAB)',
+    coordinates: [76.7861161958663, 30.768068775179547],
+    type: 'seminar',
+  },
+  'funding-conclave-room': {
+    id: 'funding-conclave-room',
+    name: 'Funding Conclave Room',
+    building: 'Admin Block - Meeting Room',
+    coordinates: [76.7863, 30.7670],
+    type: 'admin',
+  },
+  'case-competition-room': {
+    id: 'case-competition-room',
+    name: 'Case Competition Room',
+    building: 'CSE & ECE Block - Seminar Room',
+    coordinates: [76.7852, 30.7676],
+    type: 'lab',
+  },
+} as const
+
+export interface CampusGraphNode {
+  coords: [number, number]
+  connections: string[]
+}
+
+export const CAMPUS_GRAPH = {
+  nodes: {
+    'main-gate': { coords: [76.78367500421939, 30.763153888145272], connections: ['main-auditorium', 'student-center', 'cse-block'] },
+    'main-auditorium': { coords: [76.78426071541261, 30.76551511053145], connections: ['main-gate', 'expo-hall', 'cse-block', 'admin-block', 'workshop-hall', 'ipl-auction-room'] },
+    'expo-hall': { coords: [76.78585010939216, 30.765833700196882], connections: ['main-auditorium', 'cse-block', 'seminar-hall', 'job-fair-zone'] },
+    'seminar-hall': { coords: [76.7861161958663, 30.768068775179547], connections: ['expo-hall', 'admin-block', 'cse-block', 'rd-conclave-hall', 'quiz-hall'] },
+    'cse-block': { coords: [76.78532031055364, 30.76782763758229], connections: ['main-gate', 'main-auditorium', 'expo-hall', 'seminar-hall', 'admin-block', 'case-competition-room'] },
+    'admin-block': { coords: [76.78647612578088, 30.767251839321425], connections: ['main-auditorium', 'cse-block', 'seminar-hall', 'funding-conclave-room'] },
+    'student-center': { coords: [76.78348530072951, 30.766326667038925], connections: ['main-gate', 'main-auditorium', 'treasure-hunt-start', 'baazar-zone'] },
+    // New venue connections
+    'workshop-hall': { coords: [76.7845, 30.7657], connections: ['main-auditorium', 'ipl-auction-room'] },
+    'job-fair-zone': { coords: [76.7856, 30.7656], connections: ['expo-hall'] },
+    'rd-conclave-hall': { coords: [76.7860, 30.7678], connections: ['seminar-hall', 'admin-block'] },
+    'ipl-auction-room': { coords: [76.7843, 30.7653], connections: ['main-auditorium', 'workshop-hall'] },
+    'ignite-stage': { coords: [76.78426071541261, 30.76551511053145], connections: ['main-auditorium'] },
+    'treasure-hunt-start': { coords: [76.78348530072951, 30.766326667038925], connections: ['student-center', 'baazar-zone'] },
+    'baazar-zone': { coords: [76.7837, 30.7661], connections: ['student-center', 'treasure-hunt-start'] },
+    'quiz-hall': { coords: [76.7861161958663, 30.768068775179547], connections: ['seminar-hall'] },
+    'funding-conclave-room': { coords: [76.7863, 30.7670], connections: ['admin-block'] },
+    'case-competition-room': { coords: [76.7852, 30.7676], connections: ['cse-block'] },
+  },
+  walkingSpeedMps: 1.4,
+} as const
+
+export interface DayEventVenue {
+  eventId: string
+  title: string
+  time: string
+  venue: keyof typeof CAMPUS_VENUES
+  venueName: string
+}
+
+export const DAY_EVENT_VENUES = {
+  day1: [
+    { eventId: 'd1-1', title: 'Registration & Welcome Kit', time: '09:00', venue: 'main-gate', venueName: 'Main Gate' },
+    { eventId: 'd1-2', title: 'Inaugural Ceremony & Keynote', time: '10:00', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd1-3', title: 'Panel: Fundraising in a Tough Climate', time: '11:00', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd1-4', title: 'Startup Expo Opens', time: '12:30', venue: 'expo-hall', venueName: 'Expo Hall' },
+    { eventId: 'd1-5', title: 'Lunch Break & Networking', time: '13:30', venue: 'student-center', venueName: 'Student Center' },
+    { eventId: 'd1-6', title: 'Pitch Competition — Round 1', time: '14:30', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd1-7', title: 'Panel: AI for Startups', time: '16:00', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd1-8', title: 'Hackathon Kickoff + Problem Statement', time: '17:30', venue: 'cse-block', venueName: 'CSE Block' },
+    { eventId: 'd1-9', title: 'Speed Networking Session', time: '19:00', venue: 'admin-block', venueName: 'Admin Block' },
+    { eventId: 'd1-10', title: 'Dinner & Evening Mixer', time: '20:00', venue: 'student-center', venueName: 'Student Center' },
+  ],
+  day2: [
+    { eventId: 'd2-1', title: 'Hackathon Mid-Check & Mentor Rotations', time: '09:00', venue: 'cse-block', venueName: 'CSE Block' },
+    { eventId: 'd2-2', title: 'Panel: Student-to-Founder Playbook', time: '10:00', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd2-3', title: 'Investor Open Hours', time: '11:30', venue: 'admin-block', venueName: 'Admin Block' },
+    { eventId: 'd2-4', title: 'Lunch Break', time: '12:30', venue: 'student-center', venueName: 'Student Center' },
+    { eventId: 'd2-5', title: 'Hackathon Final Presentations', time: '13:30', venue: 'cse-block', venueName: 'CSE Block' },
+    { eventId: 'd2-6', title: 'Pitch Competition — Finals', time: '15:00', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd2-7', title: 'Panel: Deep-Tech in India', time: '16:30', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd2-8', title: 'Awards Ceremony & Prize Distribution', time: '17:30', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd2-9', title: 'Closing Keynote', time: '18:30', venue: 'main-auditorium', venueName: 'Main Auditorium' },
+    { eventId: 'd2-10', title: 'Closing Mixer & Farewells', time: '19:30', venue: 'student-center', venueName: 'Student Center' },
+  ],
+} as const
+
+import type { Feature, Polygon } from 'geojson'
+
+// ... existing code ...
+
+export const CAMPUS_BOUNDARY: Feature<Polygon, { name: string }> = {
+  type: 'Feature',
+  properties: { name: 'PEC Campus' },
+  geometry: {
+    type: 'Polygon',
+    coordinates: [[
+      [76.78367500421939, 30.763153888145272],  // Gate 1
+      [76.78681662724883, 30.764815123201814],  // Gate 2
+      [76.7892356773224, 30.76606869191917],    // Gate 3
+      [76.78162384683229, 30.765836954550252],  // Vindhya Hostel (south-west)
+      [76.78289222147284, 30.76420886285879],   // Kurukshetra Hostel (west)
+      [76.78367500421939, 30.763153888145272]   // Back to Gate 1
+    ]],
+  },
+}
+
+export type DayKey = 'day1' | 'day2'
+export type VenueId = keyof typeof CAMPUS_VENUES
+export type DayEventVenues = typeof DAY_EVENT_VENUES[DayKey]
+
+// Re-export campus graph functions
+export { findShortestPath, getVenueCoordinates, getAllVenueCoordinates } from '@/components/EventsNavigation/campusGraph'

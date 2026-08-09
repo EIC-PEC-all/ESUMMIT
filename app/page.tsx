@@ -4,8 +4,8 @@
 //   1. EsummitHero        (creative full-viewport hero, Magnet + FadeIn)
 //   2. EsummitMarquee     (scroll-parallax GIF showcase rows)
 //   3. EsummitAbout       (char-by-char text reveal + 3D corner decor)
-//   4. EsummitTracks      (white bg, numbered events list)
-//   5. EsummitHighlights  (sticky card stacking — dark bg)
+//   4. EventsNavigation   (interactive campus map + day navigation)
+//   5. EsummitTracks      (white bg, numbered events list)
 //   6. StatBurst          (animated stats counter)
 //   7. Speakers           (speaker grid)
 //   8. Timeline           (GSAP scroll schedule)
@@ -25,7 +25,7 @@ import EsummitAbout from '@/components/EsummitAbout'
 import EsummitTracks from '@/components/EsummitTracks'
 
 // Dynamic (Framer Motion scroll hooks — better as client-only)
-const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), {
+const EventsNavigation = dynamic(() => import('@/components/EventsNavigation'), {
   ssr: false,
 })
 
@@ -49,7 +49,7 @@ const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false }
 
 export default function Home() {
   return (
-    <main style={{ overflowX: 'clip', background: '#070B08' }}>
+    <main style={{ background: '#070B08' }}>
       <Toaster
         position="top-center"
         gutter={8}
@@ -74,11 +74,11 @@ export default function Home() {
       {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
       <EsummitAbout />
 
-      {/* ── 4. Events — white bg, numbered list ─────────────────────────── */}
-      <EsummitTracks />
+      {/* ── 4. Events Navigation — interactive campus map ──────────────────── */}
+      <EventsNavigation />
 
-      {/* ── 5. Highlights — sticky card stack, dark bg ──────────────────── */}
-      <EsummitHighlights />
+      {/* ── 5. Events — white bg, numbered list ─────────────────────────── */}
+      <EsummitTracks />
 
       {/* ── 6. Stats counter ────────────────────────────────────────────── */}
       <StatBurst />

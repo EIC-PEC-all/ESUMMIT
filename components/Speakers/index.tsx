@@ -204,7 +204,7 @@ function TiltWheel() {
             top: `-${RADIUS}px`,
             border: '1px solid rgba(126,211,33,0.12)',
             transformStyle: 'preserve-3d',
-            rotateX: '90deg',
+            transform: 'rotateX(90deg)',
           }}
         />
       </div>
