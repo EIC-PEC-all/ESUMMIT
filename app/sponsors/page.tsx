@@ -19,52 +19,47 @@ export default function SponsorsLandingPage() {
     e.preventDefault()
     setSubmitted(true)
     toast.success('Sponsorship brochure requested! Our partnerships team will email you.', {
-      style: { background: '#0D140E', color: '#F5F5F0', border: '1px solid #7ED321' },
+      style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' },
     })
   }
 
   return (
-    <main className="min-h-screen bg-[#070B08] text-white">
+    <main className="min-h-screen bg-void text-white">
       <Toaster position="top-center" />
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[#7ED321]/20 overflow-hidden">
+      <section className="relative overflow-hidden border-b border-border-subtle bg-void pb-20 pt-36">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-[#8A9488] hover:text-[#7ED321] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted transition-colors hover:text-mint"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7ED321]/15 border border-[#7ED321]/30 mb-6">
-              <Sparkles size={14} className="text-[#7ED321]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[#7ED321] font-bold">
-                E-Summit 2026 Ecosystem Partners
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
               POWERED BY <br />
-              <span className="text-stroke-green">INDUSTRY LEADERS</span>
+              <span className="text-mint">INDUSTRY LEADERS</span>
             </h1>
 
-            <p className="font-body text-lg text-[#8A9488] max-w-xl leading-relaxed mb-8">
-              PEC Summit is brought to life with the generous backing of venture capitals, tech conglomerates, incubators, and media partners dedicated to fostering student innovation.
+            <p className="mb-8 max-w-xl font-body text-lg leading-relaxed text-secondary">
+              PEC Summit is brought to life with the generous backing of venture capitals, tech
+              conglomerates, incubators, and media partners dedicated to fostering student
+              innovation.
             </p>
 
             <button
-              onClick={() => { setModalOpen(true); setSubmitted(false) }}
-              className="btn-green text-sm px-8 py-3.5 font-bold flex items-center gap-2"
+              onClick={() => {
+                setModalOpen(true)
+                setSubmitted(false)
+              }}
+              className="btn-green flex items-center gap-2 px-8 py-3.5 text-sm font-bold"
             >
               <Handshake size={18} />
               Become a Sponsor / Partner
@@ -74,26 +69,37 @@ export default function SponsorsLandingPage() {
       </section>
 
       {/* Tier Sections */}
-      <section className="py-20 bg-[#111A12] space-y-16">
+      <section className="space-y-16 bg-void py-20">
         <div className="section-container">
           {/* Title Sponsor */}
           <div className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="font-mono-data text-xs uppercase tracking-widest text-[#7ED321] font-bold">Title Sponsor</span>
-              <div className="flex-1 h-px bg-[#7ED321]/20" />
+            <div className="mb-6 flex items-center gap-3">
+              <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-[var(--accent-mint)]">
+                Title Sponsor
+              </span>
+              <div className="bg-[var(--accent-mint)]/20 h-px flex-1" />
             </div>
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid gap-6 md:grid-cols-2">
               {SPONSORS.title.map((s) => (
                 <div
                   key={s.id}
-                  className="rounded-2xl p-8 bg-[#0D140E] border border-[#7ED321]/30 flex items-center justify-between glow-green"
+                  className="border-[var(--accent-mint)]/30 glow-green flex items-center justify-between rounded-2xl border bg-panel p-8"
                 >
                   <div>
-                    <span className="font-mono-data text-[10px] uppercase text-[#7ED321] mb-1 block font-bold">Presenting Partner</span>
+                    <span className="mb-1 block font-mono-data text-[10px] font-bold uppercase text-[var(--accent-mint)]">
+                      Presenting Partner
+                    </span>
                     <h3 className="font-display text-4xl text-white">{s.name}</h3>
-                    <p className="font-body text-xs text-[#8A9488] mt-2">Premier Venture Capital Partner backing student founders.</p>
+                    <p className="mt-2 font-body text-xs text-muted">
+                      Premier Venture Capital Partner backing student founders.
+                    </p>
                   </div>
-                  <a href={s.url} target="_blank" rel="noreferrer" className="p-3 rounded-xl bg-[#070B08] text-[#8A9488] hover:text-[#7ED321] border border-[#7ED321]/20">
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="border-[var(--accent-mint)]/20 rounded-xl border bg-void p-3 text-muted hover:text-[var(--accent-mint)]"
+                  >
                     <ExternalLink size={18} />
                   </a>
                 </div>
@@ -103,18 +109,25 @@ export default function SponsorsLandingPage() {
 
           {/* Gold Sponsors */}
           <div className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="font-mono-data text-xs uppercase tracking-widest text-[#7ED321] font-bold">Gold Partners</span>
-              <div className="flex-1 h-px bg-[#7ED321]/20" />
+            <div className="mb-6 flex items-center gap-3">
+              <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-[var(--accent-mint)]">
+                Gold Partners
+              </span>
+              <div className="bg-[var(--accent-mint)]/20 h-px flex-1" />
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {SPONSORS.gold.map((s) => (
                 <div
                   key={s.id}
-                  className="rounded-xl p-6 bg-[#0D140E] border border-[#7ED321]/20 flex items-center justify-between hover:border-[#7ED321] transition-colors group cursor-pointer"
+                  className="border-[var(--accent-mint)]/20 group flex cursor-pointer items-center justify-between rounded-xl border bg-panel p-6 transition-colors hover:border-[var(--accent-mint)]"
                 >
-                  <h4 className="font-body font-semibold text-lg text-white group-hover:text-[#7ED321] filter grayscale group-hover:grayscale-0 transition-all">{s.name}</h4>
-                  <ExternalLink size={16} className="text-[#8A9488] group-hover:text-[#7ED321]" />
+                  <h4 className="font-body text-lg font-semibold text-white grayscale filter transition-all group-hover:text-[var(--accent-mint)] group-hover:grayscale-0">
+                    {s.name}
+                  </h4>
+                  <ExternalLink
+                    size={16}
+                    className="text-muted group-hover:text-[var(--accent-mint)]"
+                  />
                 </div>
               ))}
             </div>
@@ -122,15 +135,17 @@ export default function SponsorsLandingPage() {
 
           {/* Silver Sponsors */}
           <div className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="font-mono-data text-xs uppercase tracking-widest text-[#8A9488]">Silver &amp; Tech Partners</span>
-              <div className="flex-1 h-px bg-[#7ED321]/15" />
+            <div className="mb-6 flex items-center gap-3">
+              <span className="font-mono-data text-xs uppercase tracking-widest text-muted">
+                Silver &amp; Tech Partners
+              </span>
+              <div className="bg-[var(--accent-mint)]/15 h-px flex-1" />
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
               {SPONSORS.silver.map((s) => (
                 <div
                   key={s.id}
-                  className="rounded-lg p-4 bg-[#0D140E] border border-[#7ED321]/15 text-center font-mono-data text-xs text-[#8A9488] hover:text-[#7ED321] hover:border-[#7ED321] filter grayscale hover:grayscale-0 transition-colors"
+                  className="border-[var(--accent-mint)]/15 rounded-lg border bg-panel p-4 text-center font-mono-data text-xs text-muted grayscale filter transition-colors hover:border-[var(--accent-mint)] hover:text-[var(--accent-mint)] hover:grayscale-0"
                 >
                   {s.name}
                 </div>
@@ -140,15 +155,17 @@ export default function SponsorsLandingPage() {
 
           {/* Media Partners */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="font-mono-data text-xs uppercase tracking-widest text-[#8A9488]">Media &amp; Outreach Partners</span>
-              <div className="flex-1 h-px bg-[#7ED321]/15" />
+            <div className="mb-6 flex items-center gap-3">
+              <span className="font-mono-data text-xs uppercase tracking-widest text-muted">
+                Media &amp; Outreach Partners
+              </span>
+              <div className="bg-[var(--accent-mint)]/15 h-px flex-1" />
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
               {SPONSORS.media.map((s) => (
                 <div
                   key={s.id}
-                  className="rounded-lg p-4 bg-[#0D140E] border border-[#7ED321]/15 text-center font-mono-data text-xs text-[#8A9488] hover:text-[#7ED321] hover:border-[#7ED321] filter grayscale hover:grayscale-0 transition-colors"
+                  className="border-[var(--accent-mint)]/15 rounded-lg border bg-panel p-4 text-center font-mono-data text-xs text-muted grayscale filter transition-colors hover:border-[var(--accent-mint)] hover:text-[var(--accent-mint)] hover:grayscale-0"
                 >
                   {s.name}
                 </div>
@@ -161,16 +178,16 @@ export default function SponsorsLandingPage() {
       {/* Sponsorship Proposal Modal */}
       <AnimatePresence>
         {modalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#070B08]/80 backdrop-blur-md">
+          <div className="bg-void/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg rounded-2xl p-8 bg-[#0D140E] border border-[#7ED321]/40 shadow-2xl relative"
+              className="border-[var(--accent-mint)]/40 relative w-full max-w-lg rounded-2xl border bg-panel p-8 shadow-2xl"
             >
               <button
                 onClick={() => setModalOpen(false)}
-                className="absolute top-6 right-6 p-2 rounded-lg text-[#8A9488] hover:text-white bg-[#070B08]"
+                className="absolute right-6 top-6 rounded-lg bg-void p-2 text-muted hover:text-white"
               >
                 <X size={18} />
               </button>
@@ -178,49 +195,63 @@ export default function SponsorsLandingPage() {
               {!submitted ? (
                 <>
                   <div className="mb-6">
-                    <span className="font-mono-data text-xs uppercase tracking-widest text-[#7ED321] font-bold">
+                    <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-[var(--accent-mint)]">
                       Partner With PEC Summit
                     </span>
-                    <h3 className="font-display text-3xl text-white mt-1">Request Sponsorship Deck</h3>
-                    <p className="font-body text-sm text-[#8A9488] mt-1">
-                      Reach 3,000+ student founders, engineers, and investors at North India&apos;s premier summit.
+                    <h3 className="mt-1 font-display text-3xl text-white">
+                      Request Sponsorship Deck
+                    </h3>
+                    <p className="mt-1 font-body text-sm text-muted">
+                      Reach 3,000+ student founders, engineers, and investors at North India&apos;s
+                      premier summit.
                     </p>
                   </div>
 
                   <form onSubmit={handleSubmitDeck} className="space-y-4">
                     <div>
-                      <label className="block font-mono-data text-xs text-[#8A9488] uppercase mb-1 font-bold">Company / Brand *</label>
+                      <label className="mb-1 block font-mono-data text-xs font-bold uppercase text-muted">
+                        Company / Brand *
+                      </label>
                       <input
                         type="text"
                         required
                         placeholder="e.g. Acme Ventures"
-                        className="w-full px-4 py-3 rounded-lg bg-[#070B08] border border-[#7ED321]/30 text-white font-body text-sm outline-none focus:border-[#7ED321]"
+                        className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
                       />
                     </div>
                     <div>
-                      <label className="block font-mono-data text-xs text-[#8A9488] uppercase mb-1 font-bold">Contact Email *</label>
+                      <label className="mb-1 block font-mono-data text-xs font-bold uppercase text-muted">
+                        Contact Email *
+                      </label>
                       <input
                         type="email"
                         required
                         placeholder="partnerships@acme.com"
-                        className="w-full px-4 py-3 rounded-lg bg-[#070B08] border border-[#7ED321]/30 text-white font-body text-sm outline-none focus:border-[#7ED321]"
+                        className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
                       />
                     </div>
-                    <button type="submit" className="w-full btn-green justify-center py-3.5 text-sm mt-4 font-bold">
+                    <button
+                      type="submit"
+                      className="btn-green mt-4 w-full justify-center py-3.5 text-sm font-bold"
+                    >
                       Download Brochure &amp; Get In Touch
                     </button>
                   </form>
                 </>
               ) : (
                 <div className="py-8 text-center">
-                  <div className="w-16 h-16 rounded-full bg-[#7ED321]/20 border border-[#7ED321] text-[#7ED321] flex items-center justify-center mx-auto mb-4">
+                  <div className="bg-[var(--accent-mint)]/20 mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--accent-mint)] text-[var(--accent-mint)]">
                     <CheckCircle2 size={32} />
                   </div>
-                  <h3 className="font-display text-3xl text-white mb-2">Brochure Requested!</h3>
-                  <p className="font-body text-sm text-[#8A9488] mb-6">
-                    Thank you! Our partnerships team at E-Cell PEC will email you the full deck shortly.
+                  <h3 className="mb-2 font-display text-3xl text-white">Brochure Requested!</h3>
+                  <p className="mb-6 font-body text-sm text-muted">
+                    Thank you! Our partnerships team at E-Cell PEC will email you the full deck
+                    shortly.
                   </p>
-                  <button onClick={() => setModalOpen(false)} className="btn-green px-8 py-3 font-bold">
+                  <button
+                    onClick={() => setModalOpen(false)}
+                    className="btn-green px-8 py-3 font-bold"
+                  >
                     Done
                   </button>
                 </div>

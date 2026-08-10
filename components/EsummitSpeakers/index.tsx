@@ -1,289 +1,493 @@
 'use client'
 // components/EsummitSpeakers/index.tsx
-// Dark sticky-stacking highlight cards — green/black theme.
-// Each card shows event info + featured speaker names.
+// Highlights section with borderless Leaflet campus map on the left and stacked Day 1 / Day 2 event lists on the right.
 
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useState, useRef, useEffect } from 'react'
+import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from 'framer-motion'
+import { MapPin, Navigation, X } from 'lucide-react'
+import dynamic from 'next/dynamic'
 
-// Ghost outline "Learn More" button
-function ViewButton() {
-  return (
-    <button
-      className="rounded-full border-2 font-medium uppercase tracking-widest transition-all duration-200
-        hover:bg-[#7ED321]/10 hover:shadow-[0_0_20px_rgba(126,211,33,0.3)]
-        px-6 py-2.5 sm:px-8 sm:py-3 text-xs sm:text-sm whitespace-nowrap"
-      style={{
-        borderColor: '#7ED321',
-        color: '#7ED321',
-        fontFamily: "'Kanit', sans-serif",
-      }}
-    >
-      Learn More
-    </button>
-  )
+interface EventItem {
+  id: string
+  time: string
+  title: string
+  tag: string
+  venueId: string
+  venueName: string
+  building: string
+  lat: number
+  lng: number
 }
 
-// Speaker avatar chip
-function SpeakerChip({
-  name,
-  title,
-  initials,
-  color,
-}: {
-  name: string
+interface DayCard {
+  num: string
+  day: string
+  date: string
   title: string
-  initials: string
-  color: string
+  events: EventItem[]
+}
+
+const VENUE_COORDS: Record<string, { venueName: string; building: string; lat: number; lng: number }> = {
+  main_stage: { venueName: 'Main Auditorium', building: 'Block A, Sector 12', lat: 30.7672, lng: 76.7874 },
+  expo_floor: { venueName: 'Exhibition Grounds', building: 'Central Quadrangle', lat: 30.7668, lng: 76.7869 },
+  pitch_room: { venueName: 'EIC Incubator Hall', building: 'Block B, 2nd Floor', lat: 30.7678, lng: 76.7862 },
+  hacker_lab: { venueName: 'Computer Center', building: 'IT Complex, 3rd Floor', lat: 30.7662, lng: 76.7878 },
+  vip_lounge: { venueName: 'PEC Club Lounge', building: 'North Lawn Pavilion', lat: 30.7682, lng: 76.7870 },
+}
+
+const CARDS: DayCard[] = [
+  {
+    num: '01',
+    day: 'DAY 01',
+    date: 'MARCH 15, 2026',
+    title: 'Inauguration & Pitch Arena',
+    events: [
+      {
+        id: 'd1-ev1',
+        time: '09:30 AM',
+        title: 'Grand Opening & Keynote Address',
+        tag: 'Main Stage',
+        venueId: 'main_stage',
+        ...VENUE_COORDS.main_stage,
+      },
+      {
+        id: 'd1-ev2',
+        time: '11:00 AM',
+        title: 'Startup Expo & Founder Alley Launch',
+        tag: 'Expo Floor',
+        venueId: 'expo_floor',
+        ...VENUE_COORDS.expo_floor,
+      },
+      {
+        id: 'd1-ev3',
+        time: '02:00 PM',
+        title: 'VC Pitch Arena: Qualifying Round',
+        tag: 'Pitch Room',
+        venueId: 'pitch_room',
+        ...VENUE_COORDS.pitch_room,
+      },
+      {
+        id: 'd1-ev4',
+        time: '05:00 PM',
+        title: '24-Hour National Hackathon Kickoff',
+        tag: 'Hacker Lab',
+        venueId: 'hacker_lab',
+        ...VENUE_COORDS.hacker_lab,
+      },
+      {
+        id: 'd1-ev5',
+        time: '08:00 PM',
+        title: 'VIP Investor & Founder Networking Dinner',
+        tag: 'VIP Lounge',
+        venueId: 'vip_lounge',
+        ...VENUE_COORDS.vip_lounge,
+      },
+    ],
+  },
+  {
+    num: '02',
+    day: 'DAY 02',
+    date: 'MARCH 16, 2026',
+    title: 'Hackathon Demos & Grand Finals',
+    events: [
+      {
+        id: 'd2-ev1',
+        time: '10:00 AM',
+        title: 'DeepTech & GenAI VC Masterclass',
+        tag: 'Auditorium',
+        venueId: 'main_stage',
+        ...VENUE_COORDS.main_stage,
+      },
+      {
+        id: 'd2-ev2',
+        time: '12:30 PM',
+        title: 'Hackathon Live Project Demos & Judging',
+        tag: 'Hacker Lab',
+        venueId: 'hacker_lab',
+        ...VENUE_COORDS.hacker_lab,
+      },
+      {
+        id: 'd2-ev3',
+        time: '03:00 PM',
+        title: 'Grand Pitch Finals (₹7.5L Pool)',
+        tag: 'Main Stage',
+        venueId: 'main_stage',
+        ...VENUE_COORDS.main_stage,
+      },
+      {
+        id: 'd2-ev4',
+        time: '05:30 PM',
+        title: 'Valedictory Keynote & Award Ceremony',
+        tag: 'Main Stage',
+        venueId: 'main_stage',
+        ...VENUE_COORDS.main_stage,
+      },
+    ],
+  },
+]
+
+const PEC_CENTER: [number, number] = [30.7673, 76.7871]
+
+function LeafletMapInner({
+  selectedEvent,
+  activeDayIndex,
+  dayEvents,
+  onClearSelection,
+  onSelectEventId,
+}: {
+  selectedEvent: EventItem | null
+  activeDayIndex: number
+  dayEvents: EventItem[]
+  onClearSelection: () => void
+  onSelectEventId: (id: string) => void
 }) {
+  const mapContainerRef = useRef<HTMLDivElement>(null)
+  const mapInstanceRef = useRef<any>(null)
+  const markersRef = useRef<Record<string, any>>({})
+
+  useEffect(() => {
+    if (!mapContainerRef.current || mapInstanceRef.current) return
+
+    // Dynamically import leaflet + CSS to avoid SSR issues
+    Promise.all([
+      import('leaflet'),
+      import('leaflet/dist/leaflet.css' as any),
+    ]).then(([{ default: L }]) => {
+      if (!mapContainerRef.current || mapInstanceRef.current) return
+
+      const map = L.map(mapContainerRef.current, {
+        center: PEC_CENTER,
+        zoom: 16,
+        zoomControl: false,
+        scrollWheelZoom: false,
+        attributionControl: false,
+      })
+
+      const tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      L.tileLayer(tileUrl, {
+        subdomains: 'abcd',
+        maxZoom: 19,
+      }).addTo(map)
+
+      mapInstanceRef.current = map
+
+      Object.entries(VENUE_COORDS).forEach(([vKey, vData]) => {
+        const customIcon = L.divIcon({
+          className: `highlights-marker-${vKey}`,
+          html: `
+            <div style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+              cursor: pointer;
+            ">
+              <div style="
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: #0A110E;
+                border: 2.5px solid #7ED321;
+                box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #7ED321;
+                font-size: 14px;
+                font-weight: bold;
+                transition: all 0.3s ease;
+              ">
+                📍
+              </div>
+            </div>
+          `,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16],
+        })
+
+        const marker = L.marker([vData.lat, vData.lng], { icon: customIcon }).addTo(map)
+
+        marker.bindPopup(`
+          <div style="padding: 6px; font-family: sans-serif; background: #07140F; color: #ffffff; border-radius: 8px;">
+            <h4 style="margin: 0 0 2px; font-size: 13px; font-weight: bold; color: #7ED321;">${vData.venueName}</h4>
+            <p style="margin: 0; font-size: 11px; color: #94A3B8;">${vData.building}</p>
+          </div>
+        `)
+
+        marker.on('click', () => {
+          const matchingEv = dayEvents.find((e) => e.venueId === vKey)
+          if (matchingEv) {
+            onSelectEventId(matchingEv.id)
+          }
+        })
+
+        markersRef.current[vKey] = marker
+      })
+    })
+
+    return () => {
+      mapInstanceRef.current?.remove()
+      mapInstanceRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    const map = mapInstanceRef.current
+    if (!map) return
+
+    if (selectedEvent) {
+      const loc = VENUE_COORDS[selectedEvent.venueId]
+      if (loc) {
+        map.flyTo([loc.lat, loc.lng], 17, { duration: 1.0, easeLinearity: 0.25 })
+        const marker = markersRef.current[selectedEvent.venueId]
+        if (marker) marker.openPopup()
+      }
+    } else {
+      map.flyTo(PEC_CENTER, 16, { duration: 1.0, easeLinearity: 0.25 })
+    }
+  }, [selectedEvent, activeDayIndex])
+
   return (
-    <div className="flex items-center gap-2.5 py-1.5 px-3 rounded-full"
-      style={{ background: 'rgba(126, 211, 33, 0.07)', border: '1px solid rgba(126, 211, 33, 0.18)' }}
-    >
-      {/* Avatar circle */}
+    <div className="relative h-full w-full bg-[#7ED321]">
+      <style>{`
+        .custom-lime-map {
+          background: #7ED321 !important;
+        }
+        .custom-lime-map .leaflet-tile {
+          filter: invert(1) grayscale(1) brightness(0.51) contrast(8) sepia(1) hue-rotate(45deg) saturate(4) !important;
+        }
+      `}</style>
+      {/* Map with lime-green tint via CSS filter */}
       <div
-        className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 font-bold text-[10px]"
-        style={{ background: color, color: '#070B08', fontFamily: "'Kanit', sans-serif" }}
-      >
-        {initials}
-      </div>
-      <div className="flex flex-col leading-tight">
-        <span
-          className="font-medium text-xs sm:text-sm whitespace-nowrap"
-          style={{ color: '#F5F5F0', fontFamily: "'Kanit', sans-serif" }}
-        >
-          {name}
-        </span>
-        <span
-          className="font-light text-[10px] sm:text-xs whitespace-nowrap"
-          style={{ color: '#7ED321', fontFamily: "'Kanit', sans-serif", opacity: 0.8 }}
-        >
-          {title}
-        </span>
+        ref={mapContainerRef}
+        className="h-full w-full z-10 custom-lime-map"
+      />
+
+      {/* Floating Info Overlay */}
+      <div className="absolute bottom-6 left-6 z-20 max-w-xs rounded-2xl border border-white/10 bg-[#07140F]/90 p-4 shadow-2xl backdrop-blur-md">
+        <div className="mb-1 flex items-center justify-between">
+          <span className="font-mono-data text-[10px] font-bold uppercase tracking-wider text-[#7ED321]">
+            {selectedEvent ? 'Selected Venue' : `Day 0${activeDayIndex + 1} Venues`}
+          </span>
+          {selectedEvent && (
+            <button
+              onClick={onClearSelection}
+              className="font-mono-data text-[9px] font-bold text-gray-300 underline hover:text-white"
+            >
+              Show All
+            </button>
+          )}
+        </div>
+
+        <h4 className="mb-0.5 font-display text-sm font-bold text-white">
+          {selectedEvent ? selectedEvent.venueName : 'PEC Campus, Sector 12'}
+        </h4>
+
+        <p className="mb-1 font-body text-xs text-gray-300">
+          {selectedEvent ? selectedEvent.title : 'Interactive Leaflet Campus Map'}
+        </p>
+
+        <p className="font-mono-data text-[10px] text-gray-400">
+          📍 {selectedEvent ? selectedEvent.building : 'Chandigarh 160012'}
+        </p>
       </div>
     </div>
   )
 }
 
-const CARDS = [
-  {
-    num: '01',
-    category: 'Pitch Competition',
-    name: 'Pitch Finals',
-    speakers: [
-      { name: 'Priya Nair', title: 'Partner, Surge Ventures', initials: 'PN', color: '#FF4D3D' },
-      { name: 'Sameer Khanna', title: 'Angel Investor', initials: 'SK', color: '#9B5CFF' },
-      { name: 'Ritu Sharma', title: 'Founder, GreenMile', initials: 'RS', color: '#FF4D3D' },
-    ],
-    images: {
-      col1Top:    'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=700&q=85&auto=format&fit=crop', // speaker on stage
-      col1Bottom: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=700&q=85&auto=format&fit=crop', // conference hall
-      col2:       'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=700&q=85&auto=format&fit=crop', // startup pitch
-    },
-  },
-  {
-    num: '02',
-    category: 'Hackathon',
-    name: '24-Hour Build',
-    speakers: [
-      { name: 'Arjun Mehta', title: 'Co-founder, Kira.ai', initials: 'AM', color: '#3DD9FF' },
-      { name: 'Kabir Singh', title: 'ex-Microsoft Research', initials: 'KS', color: '#9B5CFF' },
-    ],
-    images: {
-      col1Top:    'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=700&q=85&auto=format&fit=crop', // hackathon coding
-      col1Bottom: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=700&q=85&auto=format&fit=crop', // team coding
-      col2:       'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=700&q=85&auto=format&fit=crop', // hackathon team
-    },
-  },
-  {
-    num: '03',
-    category: 'Investor Networking',
-    name: 'Investor Meet',
-    speakers: [
-      { name: 'Vikram Bose', title: 'VP Product, Razorpay', initials: 'VB', color: '#3DD9FF' },
-      { name: 'Deepika Rangi', title: 'Head, Nasscom', initials: 'DR', color: '#FF8C42' },
-      { name: 'Ananya Joshi', title: 'Founder, MindBloom', initials: 'AJ', color: '#FF8C42' },
-    ],
-    images: {
-      col1Top:    'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=700&q=85&auto=format&fit=crop', // investor meeting
-      col1Bottom: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=700&q=85&auto=format&fit=crop', // panel discussion
-      col2:       'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=700&q=85&auto=format&fit=crop', // entrepreneur presenting
-    },
-  },
-]
-
-const TOTAL = CARDS.length
-const IMG_RADIUS = 'clamp(16px, 3vw, 36px)'
+const HighlightsCampusMap = dynamic(() => Promise.resolve(LeafletMapInner), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center bg-void font-mono-data text-xs text-gray-400">
+      Loading Leaflet Campus Map…
+    </div>
+  ),
+})
 
 function HighlightCard({
   card,
   index,
   scrollYProgress,
+  selectedEventId,
+  onSelectEvent,
 }: {
-  card: (typeof CARDS)[0]
+  card: DayCard
   index: number
   scrollYProgress: any
+  selectedEventId: string | null
+  onSelectEvent: (eventId: string) => void
 }) {
-  const targetScale = 1 - (TOTAL - 1 - index) * 0.03
-  const scale = useTransform(scrollYProgress, [index / TOTAL, 1], [1, targetScale])
-
   return (
     <div
-      className="h-[85vh] sticky"
-      style={{ top: `calc(${index * 28}px + 6rem)` }}
+      className={`sticky min-h-[70vh] max-h-[85vh] sm:h-[80vh] ${index > 0 ? 'mt-[35vh] sm:mt-[45vh]' : ''}`}
+      style={{
+        top: index === 0 ? '5.5rem' : 'calc(5.5rem + 80px)',
+        zIndex: 10 + index,
+      }}
     >
       <motion.div
-        className="w-full h-full rounded-[40px] sm:rounded-[50px] md:rounded-[60px]
-          border-2 p-4 sm:p-6 md:p-8 flex flex-col gap-3 sm:gap-4"
+        className="flex h-full w-full flex-col justify-between overflow-y-auto rounded-[32px] border-2 p-6 shadow-2xl sm:rounded-[40px] sm:p-8"
         style={{
-          borderColor: 'rgba(126, 211, 33, 0.4)',
-          background: '#0D140E',
-          boxShadow: '0 0 60px rgba(126, 211, 33, 0.05) inset',
-          scale,
-          originY: 0,
+          borderColor: 'rgba(126, 211, 33, 0.35)',
+          background: '#07130F',
         }}
       >
-        {/* ── Top row: number + name + button ── */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-baseline gap-4 sm:gap-6">
-            {/* Number */}
-            <span
-              className="font-black leading-none select-none"
-              style={{
-                fontFamily: "'Kanit', sans-serif",
-                fontSize: 'clamp(2.5rem, 8vw, 120px)',
-                lineHeight: 0.9,
-                color: '#7ED321',
-                textShadow: '0 0 40px rgba(126, 211, 33, 0.4)',
-              }}
-            >
-              {card.num}
-            </span>
-            {/* Category + name */}
-            <div className="flex flex-col">
-              <span
-                className="font-mono-data uppercase tracking-widest"
-                style={{
-                  color: '#7ED321',
-                  fontSize: 'clamp(0.6rem, 1vw, 0.85rem)',
-                  opacity: 0.7,
-                }}
-              >
-                {card.category}
-              </span>
-              <span
-                className="font-medium uppercase"
-                style={{
-                  color: '#F5F5F0',
-                  fontFamily: "'Kanit', sans-serif",
-                  fontSize: 'clamp(1rem, 2.2vw, 2.1rem)',
-                }}
-              >
-                {card.name}
+        <div>
+            {/* Card Header */}
+            <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-baseline gap-3">
+                <span className="font-display text-4xl font-black text-[#7ED321] sm:text-5xl">
+                  {card.day}
+                </span>
+                <span className="font-mono-data text-xs font-bold uppercase tracking-wider text-gray-400">
+                  {card.date}
+                </span>
+              </div>
+              <span className="rounded-full border border-[#7ED321]/30 bg-[#7ED321]/10 px-3 py-1 font-mono-data text-xs font-bold text-[#7ED321]">
+                Phase {card.num}
               </span>
             </div>
-          </div>
-          <ViewButton />
-        </div>
 
-        {/* ── Speaker chips row ── */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span
-            className="font-mono-data text-[10px] uppercase tracking-widest mr-1"
-            style={{ color: '#7ED321', opacity: 0.5 }}
-          >
-            Speakers:
-          </span>
-          {card.speakers.map((s) => (
-            <SpeakerChip
-              key={s.name}
-              name={s.name}
-              title={s.title}
-              initials={s.initials}
-              color={s.color}
-            />
-          ))}
-        </div>
+            <h3 className="mb-6 font-display text-xl font-bold text-white sm:text-2xl">
+              {card.title}
+            </h3>
+                       {/* Events List */}
+            <div className="space-y-1 px-1">
+              {card.events.map((ev) => {
+                const isSelected = selectedEventId === ev.id
+                return (
+                  <div
+                    key={ev.id}
+                    onClick={() => onSelectEvent(ev.id)}
+                    className={`group flex cursor-pointer items-center justify-between py-3.5 px-2 transition-all duration-200 border-b border-white/5 last:border-b-0 ${
+                      isSelected ? 'text-[#7ED321]' : ''
+                    }`}
+                  >
+                    {/* Left: Time and Title */}
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <span className={`shrink-0 font-mono-data text-xs font-semibold tracking-wider transition-colors ${
+                        isSelected ? 'text-[#7ED321]' : 'text-gray-400 group-hover:text-gray-300'
+                      }`}>
+                        {ev.time}
+                      </span>
+                      <span className="text-white/10 font-light text-xs shrink-0 select-none">|</span>
+                      <span
+                        className={`truncate font-body text-xs sm:text-sm font-medium transition-colors ${
+                          isSelected ? 'text-white font-bold' : 'text-gray-300 group-hover:text-white'
+                        }`}
+                      >
+                        {ev.title}
+                      </span>
+                    </div>
 
-        {/* ── Image grid ── */}
-        <div className="flex gap-3 sm:gap-4 flex-1 overflow-hidden">
-          {/* Left col — 40% — 2 stacked images */}
-          <div className="flex flex-col gap-3 sm:gap-4" style={{ width: '40%' }}>
-            <img
-              src={card.images.col1Top}
-              alt=""
-              loading="lazy"
-              className="w-full object-cover"
-              style={{ borderRadius: IMG_RADIUS, height: 'clamp(120px, 15vw, 210px)' }}
-            />
-            <img
-              src={card.images.col1Bottom}
-              alt=""
-              loading="lazy"
-              className="w-full object-cover flex-1"
-              style={{ borderRadius: IMG_RADIUS, height: 'clamp(140px, 20vw, 300px)' }}
-            />
+                    {/* Right: Venue */}
+                    <div className="flex shrink-0 items-center gap-2.5">
+                      <span
+                        className={`font-mono-data text-[10px] uppercase font-bold tracking-wider transition-colors ${
+                          isSelected ? 'text-[#7ED321]' : 'text-gray-400 group-hover:text-gray-300'
+                        }`}
+                      >
+                        {ev.tag}
+                      </span>
+                      <MapPin
+                        size={13}
+                        className={`transition-colors ${
+                          isSelected ? 'fill-[#7ED321] text-[#7ED321]' : 'text-gray-500 group-hover:text-[#7ED321]'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
-          {/* Right col — 60% — tall image */}
-          <div className="flex-1">
-            <img
-              src={card.images.col2}
-              alt=""
-              loading="lazy"
-              className="w-full h-full object-cover"
-              style={{ borderRadius: IMG_RADIUS }}
-            />
+
+          {/* Card Footer */}
+          <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4 font-mono-data text-xs text-gray-400">
+            <span>PEC Sector 12, Chandigarh</span>
+            <span className="text-[#7ED321]">Click event to inspect venue map</span>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
     </div>
   )
 }
 
 export default function EsummitHighlights() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
+  const [activeDayIndex, setActiveDayIndex] = useState(0)
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (latest < 0.5) {
+      if (activeDayIndex !== 0) setActiveDayIndex(0)
+    } else {
+      if (activeDayIndex !== 1) setActiveDayIndex(1)
+    }
+  })
+
+  const selectedEvent = selectedEventId
+    ? CARDS.flatMap((c) => c.events).find((e) => e.id === selectedEventId) || null
+    : null
+
+  const handleSelectEvent = (id: string) => {
+    if (selectedEventId === id) {
+      setSelectedEventId(null)
+    } else {
+      setSelectedEventId(id)
+    }
+  }
+
   return (
     <section
-      id="esummit-highlights"
+      id="timeline"
       ref={containerRef}
       className="esummit-section rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]
         -mt-10 sm:-mt-12 md:-mt-14 z-10 relative
-        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
-      style={{ background: '#070B08', fontFamily: "'Kanit', sans-serif" }}
-      aria-labelledby="highlights-heading"
+        px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32 bg-[#060F0B] text-white"
+      aria-labelledby="timeline-heading"
     >
-      {/* Green top divider */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(126,211,33,0.5) 50%, transparent)' }}
-      />
-
       <h2
-        id="highlights-heading"
-        className="hero-heading-green font-black uppercase leading-none tracking-tight text-center
-          mb-16 sm:mb-20 md:mb-24"
+        id="timeline-heading"
+        className="text-[var(--accent-mint)] font-display font-black uppercase leading-none tracking-tight text-center
+          mb-12 sm:mb-20 md:mb-24"
         style={{
-          fontFamily: "'Kanit', sans-serif",
-          fontSize: 'clamp(3rem, 12vw, 160px)',
+          fontSize: 'clamp(2.2rem, 10vw, 160px)',
         }}
       >
-        Highlights
+        TIMELINE
       </h2>
 
-      <div className="relative">
-        {CARDS.map((card, index) => (
-          <HighlightCard
-            key={card.num}
-            card={card}
-            index={index}
-            scrollYProgress={scrollYProgress}
+      {/* 2-Column Responsive Layout */}
+      <div className="relative flex flex-col lg:flex-row gap-8 items-start min-h-[150vh]">
+        {/* Left Column: Leaflet Map (Responsive Card on mobile, Sticky 50% on desktop) */}
+        <div className="w-full lg:w-1/2 h-[320px] sm:h-[420px] lg:h-[80vh] relative lg:sticky lg:top-28 z-30 overflow-hidden rounded-[28px] sm:rounded-[32px]">
+          <HighlightsCampusMap
+            selectedEvent={selectedEvent}
+            activeDayIndex={activeDayIndex}
+            dayEvents={CARDS[activeDayIndex]?.events || []}
+            onClearSelection={() => setSelectedEventId(null)}
+            onSelectEventId={handleSelectEvent}
           />
-        ))}
+        </div>
+
+        {/* Right: Day Cards */}
+        <div className="w-full lg:w-1/2 relative">
+          {CARDS.map((card, index) => (
+            <HighlightCard
+              key={card.num}
+              card={card}
+              index={index}
+              scrollYProgress={scrollYProgress}
+              selectedEventId={selectedEventId}
+              onSelectEvent={handleSelectEvent}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )

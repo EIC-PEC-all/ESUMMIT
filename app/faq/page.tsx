@@ -28,59 +28,50 @@ export default function FAQLandingPage() {
     if (!userQuestion.trim()) return
     setSubmitted(true)
     toast.success('Question submitted! Our team will respond to your email.', {
-      style: { background: '#0D140E', color: '#F5F5F0', border: '1px solid #7ED321' },
-      iconTheme: { primary: '#7ED321', secondary: '#070B08' },
+      style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' },
+      iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
     })
   }
 
   return (
-    <main className="min-h-screen bg-[#070B08] text-white">
+    <main className="min-h-screen bg-void text-white">
       <Toaster position="top-center" />
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[#7ED321]/20 overflow-hidden">
+      <section className="relative overflow-hidden border-b border-border-subtle bg-void pb-20 pt-36">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-[#8A9488] hover:text-[#7ED321] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted transition-colors hover:text-mint"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7ED321]/15 border border-[#7ED321]/30 mb-6">
-              <Sparkles size={14} className="text-[#7ED321]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[#7ED321] font-bold">
-                E-Summit Help &amp; FAQ Center
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
               FREQUENTLY ASKED <br />
-              <span className="text-stroke-green">QUESTIONS</span>
+              <span className="text-mint">QUESTIONS</span>
             </h1>
 
-            <p className="font-body text-lg text-[#8A9488] max-w-xl leading-relaxed mb-8">
-              Everything you need to know about passes, venue, accommodation, competition rules, and registration.
+            <p className="mb-8 max-w-xl font-body text-lg leading-relaxed text-secondary">
+              Everything you need to know about passes, venue, accommodation, competition rules, and
+              registration.
             </p>
 
             {/* Search Input */}
             <div className="relative max-w-xl">
-              <Search size={18} className="absolute left-4 top-4 text-[#8A9488]" />
+              <Search size={18} className="absolute left-4 top-4 text-muted" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search questions (e.g., tickets, hackathon, venue, hostel)..."
-                className="w-full pl-12 pr-4 py-3.5 rounded-xl bg-[#0D140E] border border-[#7ED321]/30 text-white font-body text-sm outline-none focus:border-[#7ED321]"
+                className="w-full rounded-xl border border-border-subtle bg-panel py-3.5 pl-12 pr-4 font-body text-sm text-white outline-none focus:border-mint"
               />
             </div>
           </div>
@@ -88,7 +79,7 @@ export default function FAQLandingPage() {
       </section>
 
       {/* Accordion Section */}
-      <section className="py-20 bg-[#111A12]">
+      <section className="bg-void py-20">
         <div className="section-container max-w-4xl">
           <div className="space-y-4">
             {filteredFaqs.map((faq) => {
@@ -96,28 +87,32 @@ export default function FAQLandingPage() {
               return (
                 <div
                   key={faq.id}
-                  className="rounded-xl border transition-all duration-300 overflow-hidden"
-                  style={{
-                    background: '#0D140E',
-                    borderColor: isOpen ? '#7ED321' : 'rgba(126,211,33,0.15)',
-                    boxShadow: isOpen ? '0 0 20px rgba(126,211,33,0.2)' : 'none',
-                  }}
+                  className={`overflow-hidden rounded-xl border bg-panel transition-all duration-300 ${
+                    isOpen
+                      ? 'border-mint shadow-[0_0_20px_rgba(126,211,33,0.2)]'
+                      : 'border-border-subtle'
+                  }`}
                 >
                   <button
                     onClick={() => setOpenId(isOpen ? null : faq.id)}
-                    className="w-full p-6 text-left flex items-center justify-between gap-4 font-body font-medium text-base text-white hover:text-[#7ED321] transition-colors"
+                    className="flex w-full items-center justify-between gap-4 p-6 text-left font-body text-base font-medium text-white transition-colors hover:text-[var(--accent-mint)]"
                   >
-                    <span className={isOpen ? 'text-[#7ED321] font-semibold' : ''}>{faq.question}</span>
+                    <span className={isOpen ? 'font-semibold text-[var(--accent-mint)]' : ''}>
+                      {faq.question}
+                    </span>
                     <motion.div
                       animate={{ rotate: isOpen ? 180 : 0 }}
                       transition={{ duration: 0.3 }}
-                      className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
                       style={{
                         background: isOpen ? 'rgba(126,211,33,0.2)' : 'rgba(7,11,8,0.8)',
-                        border: `1px solid ${isOpen ? '#7ED321' : 'rgba(126,211,33,0.2)'}`,
+                        border: `1px solid ${isOpen ? 'var(--accent-mint)' : 'rgba(126,211,33,0.2)'}`,
                       }}
                     >
-                      <ChevronDown size={16} className={isOpen ? 'text-[#7ED321]' : 'text-[#8A9488]'} />
+                      <ChevronDown
+                        size={16}
+                        className={isOpen ? 'text-[var(--accent-mint)]' : 'text-muted'}
+                      />
                     </motion.div>
                   </button>
 
@@ -130,8 +125,10 @@ export default function FAQLandingPage() {
                         transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                         style={{ overflow: 'hidden' }}
                       >
-                        <div className="px-6 pb-6 pt-2 border-t border-[#7ED321]/10">
-                          <p className="font-body text-sm text-[#8A9488] leading-relaxed">{faq.answer}</p>
+                        <div className="border-[var(--accent-mint)]/10 border-t px-6 pb-6 pt-2">
+                          <p className="font-body text-sm leading-relaxed text-muted">
+                            {faq.answer}
+                          </p>
                         </div>
                       </motion.div>
                     )}
@@ -142,28 +139,28 @@ export default function FAQLandingPage() {
           </div>
 
           {/* Ask Unanswered Question Form */}
-          <div className="mt-16 p-8 rounded-2xl bg-[#0D140E] border border-[#7ED321]/25">
-            <h3 className="font-display text-3xl text-white mb-2">Have an Unanswered Question?</h3>
-            <p className="font-body text-sm text-[#8A9488] mb-6">
+          <div className="border-[var(--accent-mint)]/25 mt-16 rounded-2xl border bg-panel p-8">
+            <h3 className="mb-2 font-display text-3xl text-white">Have an Unanswered Question?</h3>
+            <p className="mb-6 font-body text-sm text-muted">
               Ask directly or chat with our Fest Concierge agent (bottom right).
             </p>
 
             {!submitted ? (
-              <form onSubmit={handleAskQuestion} className="flex gap-3 flex-col sm:flex-row">
+              <form onSubmit={handleAskQuestion} className="flex flex-col gap-3 sm:flex-row">
                 <input
                   type="text"
                   required
                   value={userQuestion}
                   onChange={(e) => setUserQuestion(e.target.value)}
                   placeholder="Type your question here..."
-                  className="flex-1 px-4 py-3 rounded-xl bg-[#070B08] border border-[#7ED321]/30 text-white font-body text-sm outline-none focus:border-[#7ED321]"
+                  className="border-[var(--accent-mint)]/30 flex-1 rounded-xl border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
                 />
                 <button type="submit" className="btn-green shrink-0 justify-center font-bold">
                   <Send size={16} /> Submit Question
                 </button>
               </form>
             ) : (
-              <div className="p-4 rounded-xl bg-[#7ED321]/15 border border-[#7ED321]/30 text-[#7ED321] font-mono-data text-xs font-bold">
+              <div className="bg-[var(--accent-mint)]/15 border-[var(--accent-mint)]/30 rounded-xl border p-4 font-mono-data text-xs font-bold text-[var(--accent-mint)]">
                 ✓ Question submitted successfully! We&apos;ll notify you when an answer is posted.
               </div>
             )}

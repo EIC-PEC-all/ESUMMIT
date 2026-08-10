@@ -13,7 +13,7 @@ import Link from 'next/link'
 export default function SpeakersLandingPage() {
   const [search, setSearch] = useState('')
   const [selectedTrack, setSelectedTrack] = useState<string>('All')
-  const [activeSpeaker, setActiveSpeaker] = useState<typeof SPEAKERS[0] | null>(null)
+  const [activeSpeaker, setActiveSpeaker] = useState<(typeof SPEAKERS)[0] | null>(null)
 
   const filteredSpeakers = SPEAKERS.filter((spk) => {
     const matchesSearch =
@@ -25,53 +25,44 @@ export default function SpeakersLandingPage() {
   })
 
   return (
-    <main className="min-h-screen bg-[#070B08] text-white">
+    <main className="min-h-screen bg-void text-white">
       <Nav />
 
       {/* Hero */}
-      <section className="relative pt-36 pb-20 border-b border-[#7ED321]/20 overflow-hidden">
+      <section className="relative overflow-hidden border-b border-border-subtle bg-void pb-20 pt-36">
         <CircuitBoard prefersReduced={false} />
 
         <div className="section-container relative z-10">
           <div className="mb-6 flex items-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-[#8A9488] hover:text-[#7ED321] transition-colors"
+              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted transition-colors hover:text-mint"
             >
               <ArrowLeft size={14} /> Back to Home
             </Link>
           </div>
 
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#7ED321]/15 border border-[#7ED321]/30 mb-6">
-              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
-              <span className="font-mono-data text-xs uppercase tracking-wider text-[#7ED321]">
-                E-Summit 2026 Speaker Lineup
-              </span>
-            </div>
-
-            <h1
-              className="font-display leading-none mb-6"
-              style={{ fontSize: 'clamp(52px, 8vw, 110px)' }}
-            >
+            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
               VOICES THAT <br />
-              <span className="text-stroke-green">BUILD &amp; INVEST</span>
+              <span className="text-mint">BUILD &amp; INVEST</span>
             </h1>
 
-            <p className="font-body text-lg text-[#8A9488] max-w-xl leading-relaxed mb-8">
-              Hear from India&apos;s leading venture capitalists, unicorn co-founders, policy experts, and campus innovators sharing real, hard-hitting founder playbooks.
+            <p className="mb-8 max-w-xl font-body text-lg leading-relaxed text-secondary">
+              Hear from India&apos;s leading venture capitalists, unicorn co-founders, policy
+              experts, and campus innovators sharing real, hard-hitting founder playbooks.
             </p>
 
             {/* Search & Track Filters */}
-            <div className="flex flex-col sm:flex-row gap-4 max-w-2xl">
+            <div className="flex max-w-2xl flex-col gap-4 sm:flex-row">
               <div className="relative flex-1">
-                <Search size={16} className="absolute left-4 top-3.5 text-[#8A9488]" />
+                <Search size={16} className="absolute left-4 top-3.5 text-muted" />
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search speaker by name, company, or domain..."
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-[#0D140E] border border-[#7ED321]/30 text-white font-body text-sm outline-none focus:border-[#7ED321]"
+                  className="w-full rounded-xl border border-border-subtle bg-panel py-3 pl-11 pr-4 font-body text-sm text-white outline-none focus:border-mint"
                 />
               </div>
 
@@ -80,14 +71,11 @@ export default function SpeakersLandingPage() {
                   <button
                     key={tr}
                     onClick={() => setSelectedTrack(tr)}
-                    className="px-4 py-3 rounded-xl font-mono-data text-xs uppercase tracking-wider whitespace-nowrap transition-all duration-200"
-                    style={{
-                      background: selectedTrack === tr ? '#7ED321' : '#0D140E',
-                      color: selectedTrack === tr ? '#070B08' : '#8A9488',
-                      fontWeight: selectedTrack === tr ? 700 : 400,
-                      border: `1px solid ${selectedTrack === tr ? 'transparent' : 'rgba(126,211,33,0.2)'}`,
-                      boxShadow: selectedTrack === tr ? '0 0 15px rgba(126,211,33,0.4)' : 'none',
-                    }}
+                    className={`whitespace-nowrap rounded-xl px-4 py-3 font-mono-data text-xs uppercase tracking-wider transition-all duration-200 ${
+                      selectedTrack === tr
+                        ? 'bg-mint font-bold text-void shadow-[0_0_15px_rgba(126,211,33,0.4)]'
+                        : 'hover:border-mint/40 border border-border-subtle bg-panel text-secondary hover:text-white'
+                    }`}
                   >
                     {tr === 'All' ? 'All Sessions' : tr}
                   </button>
@@ -99,9 +87,9 @@ export default function SpeakersLandingPage() {
       </section>
 
       {/* Speakers Grid */}
-      <section className="py-20 bg-[#111A12]">
+      <section className="bg-void py-20">
         <div className="section-container">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {filteredSpeakers.map((spk) => (
               <motion.div
                 key={spk.id}
@@ -109,25 +97,25 @@ export default function SpeakersLandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => setActiveSpeaker(spk)}
-                className="group relative rounded-2xl p-6 bg-[#0D140E] border border-[#7ED321]/20 hover:border-[#7ED321] cursor-pointer transition-all duration-300 flex flex-col justify-between shadow-lg"
+                className="border-[var(--accent-mint)]/20 group relative flex cursor-pointer flex-col justify-between rounded-2xl border bg-panel p-6 shadow-lg transition-all duration-300 hover:border-[var(--accent-mint)]"
                 whileHover={{ y: -6, boxShadow: '0 0 25px rgba(126,211,33,0.3)' }}
               >
                 <div>
-                  <div className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 text-2xl font-display font-bold bg-[#070B08] border border-[#7ED321]/30 text-gray-400 group-hover:text-[#7ED321] group-hover:border-[#7ED321] group-hover:scale-105 filter grayscale group-hover:grayscale-0 transition-all">
+                  <div className="border-[var(--accent-mint)]/30 mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border bg-void font-display text-2xl font-bold text-gray-400 grayscale filter transition-all group-hover:scale-105 group-hover:border-[var(--accent-mint)] group-hover:text-[var(--accent-mint)] group-hover:grayscale-0">
                     {spk.initials}
                   </div>
 
-                  <span className="font-mono-data text-[9px] uppercase tracking-widest px-2.5 py-1 rounded-full inline-block mb-3 bg-[#070B08] text-[#7ED321] border border-[#7ED321]/30 font-bold">
+                  <span className="border-[var(--accent-mint)]/30 mb-3 inline-block rounded-full border bg-void px-2.5 py-1 font-mono-data text-[9px] font-bold uppercase tracking-widest text-[var(--accent-mint)]">
                     ⚡ {spk.track} Track
                   </span>
 
-                  <h3 className="font-body font-bold text-xl text-white group-hover:text-[#7ED321] transition-colors mb-1">
+                  <h3 className="mb-1 font-body text-xl font-bold text-white transition-colors group-hover:text-[var(--accent-mint)]">
                     {spk.name}
                   </h3>
-                  <p className="font-mono-data text-xs text-[#8A9488] leading-snug mb-4">{spk.title}</p>
+                  <p className="mb-4 font-mono-data text-xs leading-snug text-muted">{spk.title}</p>
                 </div>
 
-                <div className="pt-4 border-t border-[#7ED321]/15 flex items-center justify-between font-mono-data text-xs text-[#7ED321] group-hover:underline">
+                <div className="border-[var(--accent-mint)]/15 flex items-center justify-between border-t pt-4 font-mono-data text-xs text-[var(--accent-mint)] group-hover:underline">
                   <span>View Speaker Bio</span>
                   <MessageSquare size={14} />
                 </div>
@@ -140,41 +128,49 @@ export default function SpeakersLandingPage() {
       {/* Speaker Detail Modal */}
       <AnimatePresence>
         {activeSpeaker && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#070B08]/80 backdrop-blur-md">
+          <div className="bg-void/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg rounded-2xl p-8 bg-[#0D140E] border border-[#7ED321]/40 shadow-2xl relative"
+              className="border-[var(--accent-mint)]/40 relative w-full max-w-lg rounded-2xl border bg-panel p-8 shadow-2xl"
             >
               <button
                 onClick={() => setActiveSpeaker(null)}
-                className="absolute top-6 right-6 p-2 rounded-lg text-[#8A9488] hover:text-white bg-[#070B08]"
+                className="absolute right-6 top-6 rounded-lg bg-void p-2 text-muted hover:text-white"
               >
                 <X size={18} />
               </button>
 
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center font-display text-2xl font-bold bg-[#070B08] border border-[#7ED321] text-[#7ED321]">
+              <div className="mb-6 flex items-center gap-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[var(--accent-mint)] bg-void font-display text-2xl font-bold text-[var(--accent-mint)]">
                   {activeSpeaker.initials}
                 </div>
                 <div>
-                  <h3 className="font-body font-bold text-2xl text-white">{activeSpeaker.name}</h3>
-                  <p className="font-mono-data text-xs text-[#8A9488]">{activeSpeaker.title}</p>
+                  <h3 className="font-body text-2xl font-bold text-white">{activeSpeaker.name}</h3>
+                  <p className="font-mono-data text-xs text-muted">{activeSpeaker.title}</p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-[#070B08] border border-[#7ED321]/20 mb-6">
-                <h4 className="font-mono-data text-xs uppercase text-[#7ED321] mb-2 font-bold">⚡ Speaker Overview</h4>
-                <p className="font-body text-sm text-[#8A9488] leading-relaxed">{activeSpeaker.bio}</p>
+              <div className="border-[var(--accent-mint)]/20 mb-6 rounded-xl border bg-void p-4">
+                <h4 className="mb-2 font-mono-data text-xs font-bold uppercase text-[var(--accent-mint)]">
+                  ⚡ Speaker Overview
+                </h4>
+                <p className="font-body text-sm leading-relaxed text-muted">{activeSpeaker.bio}</p>
               </div>
 
               <div className="flex items-center justify-between">
                 <div className="flex gap-3">
-                  <a href="#" className="p-2 rounded-lg bg-[#070B08] border border-[#7ED321]/30 text-[#8A9488] hover:text-[#7ED321]">
+                  <a
+                    href="#"
+                    className="border-[var(--accent-mint)]/30 rounded-lg border bg-void p-2 text-muted hover:text-[var(--accent-mint)]"
+                  >
                     <Twitter size={16} />
                   </a>
-                  <a href="#" className="p-2 rounded-lg bg-[#070B08] border border-[#7ED321]/30 text-[#8A9488] hover:text-[#7ED321]">
+                  <a
+                    href="#"
+                    className="border-[var(--accent-mint)]/30 rounded-lg border bg-void p-2 text-muted hover:text-[var(--accent-mint)]"
+                  >
                     <Linkedin size={16} />
                   </a>
                 </div>

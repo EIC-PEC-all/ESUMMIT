@@ -1,7 +1,7 @@
 // lib/chatbot-tools.ts
 // Function definitions and implementations for the chatbot
 
-import { CAMPUS_VENUES, CAMPUS_GRAPH, findShortestPath, getVenueCoordinates, SCHEDULE, DAY_EVENT_VENUES } from '@/lib/data'
+import { CAMPUS_VENUES, CAMPUS_GRAPH, findShortestPath, getVenueCoordinates, SCHEDULE, DAY_EVENT_VENUES, SPEAKERS } from '@/lib/data'
 import type { CampusVenue } from '@/lib/data'
 
 // Tool function implementations
@@ -33,7 +33,7 @@ export async function scrollToSection(section: string): Promise<string> {
 export async function buildItinerary(
   day: 'day1' | 'day2' | 'all',
   topic?: string
-): Promise<{ title: string; sessions: Array<{ day: string; time: string; title: string; venue: string }> }> {
+): Promise<{ title: string; sessions: Array<{ id: string; day: string; time: string; title: string; type: string; track: string | null; venue: string }> }> {
   const topicLabel = topic ? topic.charAt(0).toUpperCase() + topic.slice(1) : 'Recommended'
   const dayLabel = day === 'day1' ? 'Day 1' : day === 'day2' ? 'Day 2' : '2-Day'
   
@@ -66,10 +66,13 @@ export async function buildItinerary(
   const sessions = events.map(event => {
     const venueInfo = allVenueEvents.find(de => de.eventId === event.id)
     return {
+      id: event.id,
       day: event.id.startsWith('d1') ? 'Day 1' : 'Day 2',
       time: event.time,
       title: event.title,
-      venue: venueInfo?.venueName || 'TBA'
+      type: event.type,
+      track: event.track ?? null,
+      venue: venueInfo?.venueName || 'TBA',
     }
   })
   
@@ -173,6 +176,39 @@ ${activity.description}
 **Status:** ${activity.status}
 
 *Note: All additional activities are subject to confirmation — venue, partner, format, and safety approvals pending. Registration opens after event-specific rules are published.*`
+}
+
+export async function getSpeakers(track?: string): Promise<string> {
+  let speakers = SPEAKERS
+  if (track) {
+    const trackLower = track.toLowerCase()
+    speakers = speakers.filter(s =>
+      s.track.toLowerCase().includes(trackLower) ||
+      s.title.toLowerCase().includes(trackLower)
+    )
+  }
+  if (speakers.length === 0) {
+    return `No speakers found${track ? ` for track "${track}"` : ''}. Available tracks: pitch, panels, expo, hackathon, networking.`
+  }
+  return speakers.map(s =>
+    `**${s.name}** — ${s.title}\n${s.bio.slice(0, 120)}…`
+  ).join('\n\n')
+}
+
+export async function subscribeEmail(email: string): Promise<string> {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    return `That doesn't look like a valid email address. Please try again.`
+  }
+  if (typeof window !== 'undefined') {
+    const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
+    if (existing.includes(email)) {
+      return `${email} is already on the E-Summit PEC updates list!`
+    }
+    existing.push(email)
+    localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
+  }
+  return `Done! **${email}** has been subscribed to E-Summit PEC 2026 updates.`
 }
 
 export async function getTreasureHuntStatus(teamId: string): Promise<string> {
@@ -408,9 +444,9 @@ export async function executeFunction(name: string, args: Record<string, any>): 
     case 'get_campus_route':
       return getCampusRoute(args.venueId, args.origin)
     case 'get_speakers':
-      return 'Speaker listing tool - would query speaker data'
+      return getSpeakers(args.track)
     case 'subscribe_email':
-      return 'Email subscription tool - would save to localStorage'
+      return subscribeEmail(args.email)
     default:
       return `Unknown function: ${name}`
   }

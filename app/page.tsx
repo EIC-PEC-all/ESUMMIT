@@ -1,104 +1,92 @@
-// app/page.tsx
-// PEC E-Summit 2026 — Full-fledged landing page
-// Section order:
-//   1. EsummitHero        (creative full-viewport hero, Magnet + FadeIn)
-//   2. EsummitMarquee     (scroll-parallax GIF showcase rows)
-//   3. EsummitAbout       (char-by-char text reveal + 3D corner decor)
-//   4. EventsNavigation   (interactive campus map + day navigation)
-//   5. EsummitTracks      (white bg, numbered events list)
-//   6. StatBurst          (animated stats counter)
-//   7. Speakers           (speaker grid)
-//   8. Timeline           (GSAP scroll schedule)
-//   9. Sponsors           (partner logos marquee)
-//  10. FAQ               (accordion)
-//  11. Footer             (register CTA + links)
-//  12. Concierge          (AI agent, floating)
-'use client'
-
 import { Toaster } from 'react-hot-toast'
 import dynamic from 'next/dynamic'
 
-// ── Creative landing sections ──────────────────────────────────────────────
-import EsummitHero from '@/components/EsummitHero'
-import EsummitMarquee from '@/components/EsummitMarquee'
+import Nav from '@/components/Nav'
+import NewHero from '@/components/Hero/NewHero'
+import FlipFlopTransition from '@/components/Common/FlipFlopTransition'
 import EsummitAbout from '@/components/EsummitAbout'
-import EsummitTracks from '@/components/EsummitTracks'
+import Vdo2Showcase from '@/components/Vdo2Showcase'
+import LimeTransitionBanner from '@/components/Common/LimeTransitionBanner'
+import LimeEdgeMasks from '@/components/Common/LimeEdgeMasks'
 
-// Dynamic (Framer Motion scroll hooks — better as client-only)
-const EventsNavigation = dynamic(() => import('@/components/EventsNavigation'), {
-  ssr: false,
-})
+const ScrollExpandLoader = dynamic(() => import('@/components/Common/ScrollExpandLoader'), { ssr: false })
 
-// ── Original detailed sections ─────────────────────────────────────────────
-import StatBurst from '@/components/StatBurst'
-import Speakers from '@/components/Speakers'
-import Sponsors from '@/components/Sponsors'
-import FAQ from '@/components/FAQ'
-import Footer from '@/components/Footer'
-
-const Timeline = dynamic(() => import('@/components/Timeline'), {
-  ssr: false,
-  loading: () => (
-    <div className="py-32 flex items-center justify-center section-container">
-      <span className="font-mono-data text-sm text-muted">Loading schedule…</span>
-    </div>
-  ),
-})
-
+const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), { ssr: false })
+const EventPortfolioShowcase = dynamic(() => import('@/components/EventPortfolio'), { ssr: false })
+const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), { ssr: false })
+const Sponsors = dynamic(() => import('@/components/Sponsors'))
+const FAQ = dynamic(() => import('@/components/FAQ'))
+const Alumni = dynamic(() => import('@/components/Alumni'))
 const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false })
+const Footer = dynamic(() => import('@/components/Footer'))
+const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.RegisterCTA))
 
 export default function Home() {
   return (
-    <main style={{ background: '#070B08' }}>
+    <main id="main-content" className="bg-void overflow-x-clip" suppressHydrationWarning>
+      {/* Vantage Initial Page Loader (Auto Expands & Unmounts after 3.5s) */}
+      <ScrollExpandLoader />
+
+      {/* ── Fixed Page Top & Bottom Boundary-to-Center Lime Tinted Edge Masks ── */}
+      <LimeEdgeMasks />
+
       <Toaster
         position="top-center"
         gutter={8}
         toastOptions={{
           duration: 4000,
           style: {
-            fontFamily: "'Kanit', sans-serif",
             fontSize: '0.875rem',
-            background: '#0D140E',
-            color: '#F5F5F0',
+            background: '#0A110E',
+            color: '#FFFFFF',
             border: '1px solid rgba(126, 211, 33, 0.2)',
           },
         }}
       />
 
-      {/* ── 1. Creative Hero ─────────────────────────────────────────────── */}
-      <EsummitHero />
+      {/* Navigation */}
+      <Nav />
 
-      {/* ── 2. Scroll-Parallax GIF Marquee ──────────────────────────────── */}
-      <EsummitMarquee />
+      {/* ── 1. NewHero 60fps Frame Scrubbing (100% Original & Untouched) ── */}
+      <NewHero />
+
+      {/* ── 2. Strip Collapse Transition Revealing Marquee Gallery ───── */}
+      <FlipFlopTransition />
 
       {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
       <EsummitAbout />
 
-      {/* ── 4. Events Navigation — interactive campus map ──────────────────── */}
-      <EventsNavigation />
+      {/* ── 3b. React Bits Masonry — 2x Viewport Height Scroll Parallax ───── */}
+      <MasonryShowcase />
 
-      {/* ── 5. Events — white bg, numbered list ─────────────────────────── */}
-      <EsummitTracks />
+      {/* ── Lime Transition Banner before Highlights ────────────────────── */}
+      <LimeTransitionBanner />
 
-      {/* ── 6. Stats counter ────────────────────────────────────────────── */}
-      <StatBurst />
+      {/* ── 4. Timeline / Highlights — sticky card stack, dark bg ─────────── */}
+      <EsummitHighlights />
 
-      {/* ── 7. Speakers grid ────────────────────────────────────────────── */}
-      <Speakers />
+      {/* ── Trionn-inspired Event Portfolio Horizontal Showcase ──────────── */}
+      <EventPortfolioShowcase />
 
-      {/* ── 8. Schedule / Timeline ──────────────────────────────────────── */}
-      <Timeline />
+      {/* ── 5. Market Surge Video Showcase (vdo2 frame scrubber) ───────── */}
+      <Vdo2Showcase />
 
-      {/* ── 9. Sponsors marquee ─────────────────────────────────────────── */}
+      {/* ── 6. Alumni — horizontal scroll with PixelTransition ───────────── */}
+      <Alumni />
+
+      {/* ── 10. Sponsors marquee ─────────────────────────────────────────── */}
       <Sponsors />
 
-      {/* ── 10. FAQ accordion ───────────────────────────────────────────── */}
+      {/* ── 11. Register CTA ────────────────────────────────────────────── */}
+      <RegisterCTA />
+
+      {/* ── 12. FAQ accordion ───────────────────────────────────────────── */}
       <FAQ />
 
-      {/* ── 11. Footer / CTA ────────────────────────────────────────────── */}
-      <Footer />
+      {/* ── 13. Corporate EIC Footer ────────────────────────────────────── */}
+      <Footer hideCTA={true} />
 
-      {/* ── 12. AI Concierge (floating) ─────────────────────────────────── */}
+      {/* ── 14. AI Concierge (floating) ─────────────────────────────────── */}
       <Concierge />
     </main>
   )

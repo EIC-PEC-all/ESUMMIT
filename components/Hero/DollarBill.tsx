@@ -41,15 +41,15 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
 
           {/* Glowing border gradient */}
           <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#7ED321" />
+            <stop offset="0%" stopColor="var(--accent-mint)" />
             <stop offset="50%" stopColor="#4A8A13" />
-            <stop offset="100%" stopColor="#7ED321" />
+            <stop offset="100%" stopColor="var(--accent-mint)" />
           </linearGradient>
 
           {/* Radial green spotlight */}
           <radialGradient id="centerSpot" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#7ED321" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#7ED321" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--accent-mint)" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="var(--accent-mint)" stopOpacity="0" />
           </radialGradient>
 
           {/* Guilloche pattern */}
@@ -57,14 +57,14 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
             <path
               d="M 0 10 Q 5 0 10 10 T 20 10"
               fill="none"
-              stroke="#7ED321"
+              stroke="var(--accent-mint)"
               strokeWidth="0.5"
               strokeOpacity="0.2"
             />
             <path
               d="M 10 0 Q 15 10 20 0 T 30 0"
               fill="none"
-              stroke="#7ED321"
+              stroke="var(--accent-mint)"
               strokeWidth="0.5"
               strokeOpacity="0.15"
             />
@@ -113,7 +113,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
           height="264"
           rx="6"
           fill="none"
-          stroke="#7ED321"
+          stroke="var(--accent-mint)"
           strokeWidth="1.5"
           strokeOpacity="0.8"
         />
@@ -124,7 +124,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
           height="252"
           rx="4"
           fill="none"
-          stroke="#7ED321"
+          stroke="var(--accent-mint)"
           strokeWidth="0.75"
           strokeDasharray="6 3"
           strokeOpacity="0.6"
@@ -143,7 +143,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
               cy={c.y - 4}
               r="22"
               fill="#08140B"
-              stroke="#7ED321"
+              stroke="var(--accent-mint)"
               strokeWidth="1.5"
             />
             <circle
@@ -151,7 +151,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
               cy={c.y - 4}
               r="18"
               fill="none"
-              stroke="#7ED321"
+              stroke="var(--accent-mint)"
               strokeWidth="0.5"
               strokeDasharray="2 2"
             />
@@ -159,7 +159,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
               x={c.x}
               y={c.y + 3}
               textAnchor="middle"
-              fill="#7ED321"
+              fill="var(--accent-mint)"
               fontSize="20"
               fontWeight="900"
               fontFamily="serif"
@@ -174,7 +174,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
           x="352.5"
           y="46"
           textAnchor="middle"
-          fill="#8A9488"
+          fill='#9CA3AF'
           fontSize="11"
           letterSpacing="4"
           fontWeight="bold"
@@ -187,7 +187,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
           x="352.5"
           y="68"
           textAnchor="middle"
-          fill="#F5F5F0"
+          fill='#FFFFFF'
           fontSize="20"
           letterSpacing="5"
           fontWeight="900"
@@ -201,7 +201,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
         <text
           x="120"
           y="95"
-          fill="#7ED321"
+          fill="var(--accent-mint)"
           fontSize="13"
           letterSpacing="2"
           fontWeight="bold"
@@ -214,7 +214,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
           x="585"
           y="95"
           textAnchor="end"
-          fill="#7ED321"
+          fill="var(--accent-mint)"
           fontSize="13"
           letterSpacing="2"
           fontWeight="bold"
@@ -232,7 +232,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
             rx="95"
             ry="75"
             fill="#09170D"
-            stroke="#7ED321"
+            stroke="var(--accent-mint)"
             strokeWidth="2.5"
           />
           <ellipse
@@ -241,23 +241,23 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
             rx="88"
             ry="68"
             fill="none"
-            stroke="#7ED321"
+            stroke="var(--accent-mint)"
             strokeWidth="1"
             strokeDasharray="4 2"
           />
 
           {/* Central Eagle / Money Symbol Artwork */}
-          <circle cx="0" cy="-6" r="42" fill="#0E2415" stroke="#7ED321" strokeWidth="1" />
+          <circle cx="0" cy="-6" r="42" fill="#0E2415" stroke="var(--accent-mint)" strokeWidth="1" />
           <path
             d="M -22 6 L 0 -28 L 22 6 L 10 6 L 0 -10 L -10 6 Z"
-            fill="#7ED321"
+            fill="var(--accent-mint)"
             opacity="0.95"
           />
           <text
             x="0"
             y="18"
             textAnchor="middle"
-            fill="#7ED321"
+            fill="var(--accent-mint)"
             fontSize="32"
             fontWeight="900"
             fontFamily="sans-serif"
@@ -270,7 +270,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
             x="0"
             y="56"
             textAnchor="middle"
-            fill="#F5F5F0"
+            fill='#FFFFFF'
             fontSize="10"
             letterSpacing="3"
             fontWeight="bold"
@@ -283,14 +283,14 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
         {/* Treasury Seals (Left & Right of Oval) */}
         {/* Left Seal: Great Seal Pyramid Motif */}
         <g transform="translate(160, 165)">
-          <circle cx="0" cy="0" r="32" fill="#08140B" stroke="#7ED321" strokeWidth="1.5" />
-          <polygon points="0,-18 20,16 -20,16" fill="none" stroke="#7ED321" strokeWidth="1.5" />
-          <circle cx="0" cy="-6" r="4" fill="#7ED321" />
+          <circle cx="0" cy="0" r="32" fill="#08140B" stroke="var(--accent-mint)" strokeWidth="1.5" />
+          <polygon points="0,-18 20,16 -20,16" fill="none" stroke="var(--accent-mint)" strokeWidth="1.5" />
+          <circle cx="0" cy="-6" r="4" fill="var(--accent-mint)" />
           <text
             x="0"
             y="26"
             textAnchor="middle"
-            fill="#8A9488"
+            fill='#9CA3AF'
             fontSize="7"
             letterSpacing="1"
             fontFamily="monospace"
@@ -301,18 +301,18 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
 
         {/* Right Seal: Treasury Shield */}
         <g transform="translate(545, 165)">
-          <circle cx="0" cy="0" r="32" fill="#08140B" stroke="#7ED321" strokeWidth="1.5" />
+          <circle cx="0" cy="0" r="32" fill="#08140B" stroke="var(--accent-mint)" strokeWidth="1.5" />
           <path
             d="M 0 -16 L 14 -8 L 14 6 Q 14 16 0 20 Q -14 16 -14 6 L -14 -8 Z"
             fill="none"
-            stroke="#7ED321"
+            stroke="var(--accent-mint)"
             strokeWidth="1.5"
           />
           <text
             x="0"
             y="4"
             textAnchor="middle"
-            fill="#7ED321"
+            fill="var(--accent-mint)"
             fontSize="12"
             fontWeight="bold"
           >
@@ -322,7 +322,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
             x="0"
             y="26"
             textAnchor="middle"
-            fill="#8A9488"
+            fill='#9CA3AF'
             fontSize="7"
             letterSpacing="1"
             fontFamily="monospace"
@@ -339,14 +339,14 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
           height="22"
           rx="4"
           fill="#071209"
-          stroke="#7ED321"
+          stroke="var(--accent-mint)"
           strokeWidth="1"
         />
         <text
           x="352.5"
           y="267"
           textAnchor="middle"
-          fill="#7ED321"
+          fill="var(--accent-mint)"
           fontSize="14"
           letterSpacing="6"
           fontWeight="900"
@@ -360,7 +360,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
           x="200"
           y="240"
           textAnchor="middle"
-          fill="#8A9488"
+          fill='#9CA3AF'
           fontSize="8"
           fontFamily="cursive"
         >
@@ -370,7 +370,7 @@ export default function DollarBill({ className = '', style = {}, variant = 'main
           x="505"
           y="240"
           textAnchor="middle"
-          fill="#8A9488"
+          fill='#9CA3AF'
           fontSize="8"
           fontFamily="cursive"
         >

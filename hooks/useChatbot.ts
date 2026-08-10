@@ -45,8 +45,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { buildSystemPrompt } from '@/lib/chatbot-context'
-import { executeFunction, TOOL_DEFINITIONS } from '@/lib/chatbot-tools'
+import { executeFunction } from '@/lib/chatbot-tools'
 import { getGroqClient, MODEL_FAST } from '@/lib/groq'
 import type { GroqMessage } from '@/lib/groq'
 import { localAnswer } from '@/lib/local-answers'
@@ -107,15 +106,15 @@ function makeWelcomeMessage(id: string): ChatMessage {
   return {
     id,
     role: 'assistant',
-    content: `Hey! I'm the **PEC Summit 2026 Official Assistant**. I can help you with:
+    content: `Hey! I'm the **E-Summit PEC 2026 Official Assistant** (E-Cell PEC). I can help you with:
 
 🗓️ **Schedule & Itineraries** — Build personalized day plans
-🎤 **Speakers** — Info on our 8 confirmed speakers  
-🗺️ **Campus Navigation** — Get walking routes to any venue
-🎪 **13 Additional Activities** — Workshops, Job Fair, IPL Auction, Treasure Hunt, Baazar, Quizzes, and more
+🎤 **Speakers** — Info on confirmed speakers
+🗺️ **Campus Navigation** — Walking routes to any venue
+🎪 **13 Additional Activities** — Workshops, Job Fair, IPL Auction, Treasure Hunt, and more
 ❓ **FAQs** — Tickets, venue, eligibility, accommodations
 
-What would you like to know?`,
+I only answer questions about E-Summit PEC 2026. What would you like to know?`,
     timestamp: new Date(),
   }
 }
@@ -333,10 +332,10 @@ export function useChatbot(options: UseChatbotOptions = {}) {
       const maxTokens = getTokenBudget(trimmed)
 
       const groq = getGroqClient()
-      const systemPrompt = buildSystemPrompt()
 
       // Start with the windowed history for the function-call loop
       let conversationMessages = messagesForGroq
+      let pendingItinerary: ChatMessage['itinerary'] | undefined
 
       // ── 8. Function-calling loop (max 2 iterations) ─────────────────────
       for (let iteration = 0; iteration < 2; iteration++) {
@@ -345,7 +344,7 @@ export function useChatbot(options: UseChatbotOptions = {}) {
         const result = await groq.generateContent(
           conversationMessages,
           tools,
-          systemPrompt,
+          undefined,
           maxTokens,
         )
 
@@ -359,6 +358,13 @@ export function useChatbot(options: UseChatbotOptions = {}) {
           let functionResult = ''
           try {
             functionResult = await executeFunction(functionCall.name, functionCall.args)
+            if (functionCall.name === 'build_itinerary') {
+              try {
+                pendingItinerary = JSON.parse(functionResult)
+              } catch {
+                // ignore parse errors — LLM will still get raw tool output
+              }
+            }
           } catch (err) {
             functionResult = `Error: ${err instanceof Error ? err.message : 'Unknown error'}`
           }
@@ -402,6 +408,7 @@ export function useChatbot(options: UseChatbotOptions = {}) {
           role: 'assistant',
           content: finalContent,
           timestamp: new Date(),
+          itinerary: pendingItinerary,
         }
         setMessages(prev => [...prev, finalMessage])
         break

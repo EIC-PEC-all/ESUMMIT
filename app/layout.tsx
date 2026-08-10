@@ -1,7 +1,20 @@
 import type { Metadata } from 'next'
+import { Inter, Kanit } from 'next/font/google'
 import './globals.css'
 import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
-import OpeningLoader from '@/components/Providers/OpeningLoader'
+
+const kanit = Kanit({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-kanit',
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'PEC Summit 2025 — E-Cell PEC, Chandigarh',
@@ -36,12 +49,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="noise">
+    <html lang="en" data-theme="dark" className="dark" suppressHydrationWarning>
+      <body
+        className={`noise ${kanit.variable} ${inter.variable} font-body text-primary bg-void`}
+        suppressHydrationWarning
+      >
         <SmoothScrollProvider>
-          <OpeningLoader>
-            {children}
-          </OpeningLoader>
+          {children}
         </SmoothScrollProvider>
       </body>
     </html>

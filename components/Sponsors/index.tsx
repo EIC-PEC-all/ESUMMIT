@@ -1,163 +1,167 @@
 'use client'
-// components/Sponsors/index.tsx
-// High-voltage Sponsors & Partners layout with Money/Fintech green theme styling
 
+import React from 'react'
 import { motion } from 'framer-motion'
-import { ExternalLink, Handshake, Zap, ShieldCheck } from 'lucide-react'
-import { SPONSORS } from '@/lib/data'
 import Link from 'next/link'
-import CircuitBoard from '../Hero/CircuitBoard'
+import { ArrowUpRight } from 'lucide-react'
+
+// ── Real High-Contrast Borderless Brand Logos ─────────────────────────────────
+const BORDERLESS_SPONSORS = [
+  {
+    name: 'Dribbble',
+    logoUrl: 'https://cdn.simpleicons.org/dribbble/white',
+    url: '#',
+  },
+  {
+    name: 'Zapier',
+    logoUrl: 'https://cdn.simpleicons.org/zapier/white',
+    url: '#',
+  },
+  {
+    name: 'Perplexity',
+    logoUrl: 'https://cdn.simpleicons.org/perplexity/white',
+    url: '#',
+  },
+  {
+    name: 'Cal.com',
+    logoUrl: 'https://cdn.simpleicons.org/caldotcom/white',
+    url: '#',
+  },
+  {
+    name: 'Mixpanel',
+    logoUrl: 'https://cdn.simpleicons.org/mixpanel/white',
+    url: '#',
+  },
+  {
+    name: 'Miro',
+    logoUrl: 'https://cdn.simpleicons.org/miro/white',
+    url: '#',
+  },
+  {
+    name: 'DoorDash',
+    logoUrl: 'https://cdn.simpleicons.org/doordash/white',
+    url: '#',
+  },
+  {
+    name: 'Sequoia',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sequoia_Capital_logo.svg',
+    invert: true,
+    url: '#',
+  },
+  {
+    name: 'Google Cloud',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg',
+    url: '#',
+  },
+  {
+    name: 'AWS',
+    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
+    url: '#',
+  },
+  {
+    name: 'GitHub',
+    logoUrl: 'https://cdn.simpleicons.org/github/white',
+    url: '#',
+  },
+  {
+    name: 'Solana',
+    logoUrl: 'https://cdn.simpleicons.org/solana/white',
+    url: '#',
+  },
+]
 
 export default function Sponsors() {
-  const titleAndGold = [...SPONSORS.title, ...SPONSORS.gold]
-  const silverAndMedia = [...SPONSORS.silver, ...SPONSORS.media]
-  const tickerItems = [...silverAndMedia, ...silverAndMedia, ...silverAndMedia, ...silverAndMedia]
+  const strategic = BORDERLESS_SPONSORS.filter(s => ['Google Cloud', 'AWS', 'Sequoia'].includes(s.name))
+  const ecosystem = BORDERLESS_SPONSORS.filter(s => !['Google Cloud', 'AWS', 'Sequoia'].includes(s.name))
 
   return (
     <section
       id="sponsors"
-      className="py-24 relative overflow-hidden bg-[#111A12] border-t border-b border-[#7ED321]/15"
+      className="relative bg-[#07150E] text-white py-24 sm:py-32 px-4 sm:px-6 md:px-12 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 md:-mt-14 z-10 border-t border-white/10"
       aria-labelledby="sponsors-heading"
     >
-      {/* Circuit pattern overlay */}
-      <CircuitBoard prefersReduced={false} />
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Headline */}
+        <div className="text-center mb-20">
+          <h2
+            id="sponsors-heading"
+            className="font-display font-black uppercase tracking-tight text-center leading-none"
+            style={{ fontSize: 'clamp(2.5rem, 8vw, 110px)' }}
+          >
+            <span className="text-mint">FUNDING </span>
+            <span className="text-white">PARTNERS</span>
+          </h2>
+          <p className="font-mono-data text-xs sm:text-sm text-gray-400 uppercase tracking-[0.25em] mt-4">
+            POWERED BY GLOBAL TECH &amp; VENTURE INSTITUTIONS
+          </p>
+        </div>
 
-      {/* Current Line Top Accent */}
-      <div className="absolute top-0 left-0 right-0 current-line-horizontal pointer-events-none" />
-
-      {/* Radial Background Glow */}
-      <div className="absolute -left-32 top-1/2 -translate-y-1/2 w-96 h-96 bg-[#7ED321]/10 rounded-full blur-[140px] pointer-events-none" />
-
-      <div className="section-container relative z-10">
-        {/* Header */}
-        <motion.div
-          className="mb-16 flex flex-col sm:flex-row sm:items-end justify-between gap-6"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <Zap size={14} className="text-[#7ED321] fill-[#7ED321]" />
-              <p className="font-mono-data text-xs uppercase tracking-[0.2em] text-[#7ED321] font-bold">
-                Ecosystem &amp; Capital Partners
-              </p>
-            </div>
-            <h2
-              id="sponsors-heading"
-              className="font-display leading-none"
-              style={{ fontSize: 'clamp(40px, 5vw, 72px)', color: 'var(--text-primary)' }}
+        {/* United Apple-Style Mesh Grid (Zero Gap) */}
+        <div className="grid grid-cols-2 sm:grid-cols-6 gap-[1px] bg-white/10 border border-white/10 rounded-3xl overflow-hidden max-w-5xl mx-auto shadow-2xl">
+          
+          {/* Strategic Partners (Top Row - Prominent) */}
+          {strategic.map((sponsor, idx) => (
+            <motion.a
+              key={sponsor.name}
+              href={sponsor.url}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.05 }}
+              className="col-span-2 sm:col-span-2 flex items-center justify-center p-10 sm:p-14 bg-[#091a12] hover:bg-[#0e271c] transition-colors duration-300 relative group"
             >
-              POWERED BY <br />
-              <span className="text-stroke-green">INDUSTRY LEADERS</span>
-            </h2>
-          </div>
+              {/* Subtle inner hover glow */}
+              <div className="absolute inset-0 bg-mint/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={sponsor.logoUrl}
+                alt={sponsor.name}
+                className={`h-9 sm:h-11 w-auto max-w-[150px] object-contain transition-all duration-300 group-hover:scale-105 ${
+                  sponsor.invert ? 'brightness-0 invert' : ''
+                }`}
+                loading="lazy"
+              />
+            </motion.a>
+          ))}
+
+          {/* Ecosystem Partners (Secondary Rows) */}
+          {ecosystem.map((sponsor, idx) => (
+            <motion.a
+              key={sponsor.name}
+              href={sponsor.url}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: idx * 0.04 }}
+              className="col-span-1 sm:col-span-2 last:col-span-2 sm:last:col-span-2 flex items-center justify-center p-8 sm:p-10 bg-[#07150e] hover:bg-[#0b2015] transition-colors duration-300 relative group"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={sponsor.logoUrl}
+                alt={sponsor.name}
+                className={`h-6 sm:h-7 w-auto max-w-[110px] object-contain opacity-50 group-hover:opacity-100 transition-all duration-300 group-hover:scale-105 ${
+                  sponsor.invert ? 'brightness-0 invert' : ''
+                }`}
+                loading="lazy"
+              />
+            </motion.a>
+          ))}
+        </div>
+
+        {/* ── Minimalist Partner CTA Link ──────────────────────────────────── */}
+        <div className="mt-20 sm:mt-24 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <p className="font-mono-data text-xs text-gray-400">
+            Interested in partnering with PEC Summit 2026?
+          </p>
 
           <Link
             href="/sponsors"
-            className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-wider text-[#7ED321] hover:text-white transition-colors border-b border-[#7ED321]/40 pb-1"
+            className="inline-flex items-center gap-1.5 font-mono-data text-xs font-bold uppercase tracking-widest text-mint hover:text-white transition-colors"
           >
-            View Full Partners Page &rarr;
+            Become a Partner <ArrowUpRight size={14} />
           </Link>
-        </motion.div>
-
-        {/* ── Title & Gold Partners Grid ── */}
-        <div className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="font-mono-data text-xs uppercase tracking-widest text-[#7ED321] font-bold flex items-center gap-1.5">
-              <ShieldCheck size={14} /> Premier &amp; Gold Partners
-            </span>
-            <div className="flex-1 h-px bg-gradient-to-r from-[#7ED321]/40 via-[#7ED321]/10 to-transparent" />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {titleAndGold.map((s, idx) => (
-              <motion.a
-                key={s.id}
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className="group relative rounded-2xl p-6 bg-[#0D140E] border border-[#7ED321]/20 hover:border-[#7ED321] transition-all duration-300 flex flex-col justify-between h-36 overflow-hidden shadow-lg"
-                whileHover={{ y: -4, boxShadow: '0 0 24px rgba(126,211,33,0.3)' }}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono-data text-[9px] uppercase tracking-widest text-[#7ED321] bg-[#7ED321]/10 px-2.5 py-0.5 rounded border border-[#7ED321]/30 font-bold">
-                    {s.id.startsWith('ts') ? 'Title Sponsor' : 'Gold Partner'}
-                  </span>
-                  <ExternalLink size={14} className="text-[#8A9488] group-hover:text-[#7ED321] transition-colors" />
-                </div>
-
-                <h3 className="font-display text-2xl text-white group-hover:text-[#7ED321] filter grayscale group-hover:grayscale-0 transition-all">
-                  {s.name}
-                </h3>
-              </motion.a>
-            ))}
-          </div>
         </div>
-      </div>
-
-      {/* ── Silver & Media Partners Fast Infinite Ticker Strip ── */}
-      <div className="mb-16 relative z-10">
-        <div className="flex items-center gap-3 section-container mb-6">
-          <span className="font-mono-data text-xs uppercase tracking-widest text-[#7ED321] font-bold">
-            ⚡ Silver &amp; Media Ecosystem Ticker
-          </span>
-          <div className="flex-1 h-px bg-gradient-to-r from-[#7ED321]/30 to-transparent" />
-        </div>
-
-        <div className="relative overflow-hidden py-5 bg-[#070B08]/90 border-t border-b border-[#7ED321]/20">
-          {/* Gradient Edge Masks */}
-          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-[#070B08] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-[#070B08] to-transparent z-10 pointer-events-none" />
-
-          {/* High-Velocity Marquee */}
-          <div className="flex whitespace-nowrap animate-marquee">
-            {tickerItems.map((s, idx) => (
-              <a
-                key={`${s.id}-${idx}`}
-                href={s.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-7 py-2.5 mx-3 rounded-xl bg-[#0D140E] border border-[#7ED321]/20 font-mono-data text-xs text-[#8A9488] hover:text-[#7ED321] hover:border-[#7ED321] filter grayscale group-hover:grayscale-0 transition-all shrink-0 shadow-md font-medium"
-              >
-                <span>{s.name}</span>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Prospective Sponsor CTA */}
-      <div className="section-container relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="p-8 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 bg-[#0D140E] border border-[#7ED321]/30 shadow-xl"
-        >
-          <div>
-            <p className="font-body font-bold text-lg mb-1 text-white flex items-center gap-2">
-              <Handshake size={20} className="text-[#7ED321]" />
-              Partner With PEC Summit 2026
-            </p>
-            <p className="font-body text-sm text-[#8A9488]">
-              Reach 3,000+ student founders, software engineers, and venture capital investors.
-            </p>
-          </div>
-          <Link
-            href="/sponsors"
-            className="btn-green shrink-0"
-            id="sponsor-cta-btn"
-          >
-            Become a Sponsor
-          </Link>
-        </motion.div>
       </div>
     </section>
   )
