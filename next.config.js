@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [],
+    remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },
   // Allow Three.js to work without SSR issues
   webpack: (config) => {

@@ -43,7 +43,7 @@ export default function EventPortfolioShowcase() {
     <section
       ref={containerRef}
       id="event-portfolio"
-      className="relative h-[480vh] w-full bg-[#0D1812] text-white"
+      className="relative h-[280vh] w-full bg-[#0D1812] text-white"
       aria-label="Event Portfolio Showcase"
     >
       {/* Pinned Sticky Section during vertical scroll */}
@@ -63,7 +63,7 @@ export default function EventPortfolioShowcase() {
         <div className="relative z-10 flex w-full items-center pt-32 sm:pt-36">
           <motion.div
             ref={trackRef}
-            style={{ x: xTranslate }}
+            style={{ x: xTranslate, willChange: 'transform' }}
             className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing"
           >
             {filteredEvents.map((event, index) => (

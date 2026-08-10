@@ -2,7 +2,6 @@
 'use client'
 
 import React from 'react'
-import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 
 interface FinalCardProps {
@@ -11,11 +10,7 @@ interface FinalCardProps {
 
 export function FinalCard({ onViewAll }: FinalCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+    <div
       className="group relative shrink-0 overflow-hidden rounded-2xl border border-mint/20 bg-[#0A0F0C] flex flex-col items-center justify-center text-center hover:border-mint/50 transition-colors duration-300"
       style={{ width: 'clamp(200px, 22vw, 280px)', height: 'clamp(280px, 40vh, 380px)' }}
     >
@@ -55,6 +50,6 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
           <ArrowRight size={13} className="transition-transform group-hover/btn:translate-x-0.5" />
         </a>
       </div>
-    </motion.div>
+    </div>
   )
 }

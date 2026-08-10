@@ -2,6 +2,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import { motion, MotionValue } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import { PortfolioEvent } from './data'
@@ -18,20 +19,19 @@ export function Card({ event, index, total, onSelect }: CardProps) {
   return (
     <motion.div
       onClick={() => onSelect(event)}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.45, delay: index * 0.04, ease: [0.25, 0.46, 0.45, 0.94] }}
       whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl"
       style={{ width: 'clamp(200px, 22vw, 280px)', height: 'clamp(280px, 40vh, 380px)' }}
     >
       {/* Full-bleed image */}
-      <img
+      <Image
         src={event.image}
         alt={event.title}
+        fill
+        sizes="(min-width: 1024px) 280px, 22vw"
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
       />
 
       {/* Bottom gradient scrim — primary text zone */}
@@ -72,7 +72,7 @@ export function Card({ event, index, total, onSelect }: CardProps) {
         </div>
 
         {/* Arrow CTA */}
-        <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-all duration-300 group-hover:bg-mint group-hover:border-mint group-hover:text-black">
+        <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/20 text-white transition-colors duration-300 group-hover:bg-mint group-hover:border-mint group-hover:text-black">
           <ArrowUpRight size={16} />
         </div>
       </div>

@@ -13,9 +13,9 @@ export default function Vdo2Showcase() {
       aria-label="Passes Showcase"
     >
       {/* ── High-Voltage Ambient Mesh Background Glows ───────────────────── */}
-      <div className="pointer-events-none absolute left-1/4 top-0 h-[500px] w-[500px] rounded-full bg-lime-500/20 blur-[140px]" />
-      <div className="pointer-events-none absolute right-1/4 bottom-0 h-[500px] w-[500px] rounded-full bg-emerald-700/20 blur-[140px]" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full bg-green-400/10 blur-[160px]" />
+      <div className="pointer-events-none absolute left-1/4 top-0 h-[500px] w-[500px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(132,204,22,0.18) 0%, rgba(132,204,22,0) 70%)' }} />
+      <div className="pointer-events-none absolute right-1/4 bottom-0 h-[500px] w-[500px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(4,120,87,0.18) 0%, rgba(4,120,87,0) 70%)' }} />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[400px] w-[400px] rounded-full" style={{ background: 'radial-gradient(circle, rgba(74,222,128,0.1) 0%, rgba(74,222,128,0) 70%)' }} />
 
       {/* Content Container */}
       <div className="relative z-10 max-w-6xl mx-auto flex flex-col items-center text-center">
@@ -43,7 +43,7 @@ export default function Vdo2Showcase() {
           {/* Student Pass — Electric Blue/Purple Gradient */}
           <Link
             href="/passes"
-            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-500 select-none min-h-[440px] ${
+            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-transform duration-500 select-none min-h-[440px] ${
               isHovered 
                 ? 'sm:translate-x-0 sm:rotate-0 sm:scale-100 sm:hover:scale-[1.05] z-10 sm:hover:z-30'
                 : 'sm:translate-x-[48px] sm:-rotate-6 sm:scale-[0.88] z-10'
@@ -129,7 +129,7 @@ export default function Vdo2Showcase() {
           {/* Founder & Pitch Pass — Reference Purple/Coral Gradient (Featured) */}
           <Link
             href="/passes"
-            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-500 select-none min-h-[440px] ${
+            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-transform duration-500 select-none min-h-[440px] ${
               isHovered 
                 ? 'sm:translate-x-0 sm:rotate-0 sm:scale-100 sm:hover:scale-[1.05] z-10 sm:hover:z-30'
                 : 'sm:translate-x-0 sm:rotate-0 sm:scale-[1.04] z-20'
@@ -215,7 +215,7 @@ export default function Vdo2Showcase() {
           {/* VIP Pass — Golden Amber/Rose Gradient */}
           <Link
             href="/passes"
-            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-all duration-500 select-none min-h-[440px] ${
+            className={`group relative flex flex-col justify-between cursor-pointer overflow-hidden rounded-[26px] p-5 text-black shadow-2xl transition-transform duration-500 select-none min-h-[440px] ${
               isHovered 
                 ? 'sm:translate-x-0 sm:rotate-0 sm:scale-100 sm:hover:scale-[1.05] z-10 sm:hover:z-30'
                 : 'sm:translate-x-[-48px] sm:rotate-6 sm:scale-[0.88] z-10'

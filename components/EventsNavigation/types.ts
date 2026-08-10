@@ -1,10 +1,5 @@
-export interface CampusVenue {
-  id: string
-  name: string
-  building: string
-  coordinates: [number, number]
-  type: 'auditorium' | 'expo' | 'seminar' | 'admin' | 'lab' | 'social' | 'entrance'
-}
+import type { CampusVenue } from '@/lib/data'
+export type { CampusVenue }
 
 export interface CampusGraphNode {
   coords: [number, number]
