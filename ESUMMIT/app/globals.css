@@ -1,0 +1,356 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
+  font-family: var(--font-kanit), -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.font-mono-data {
+  font-family: var(--font-jetbrains), 'JetBrains Mono', monospace !important;
+}
+
+:root {
+  --bg-void: #060B08;
+  --bg-deep: #060B08;
+  --bg-panel: #0B150E;
+  --bg-panel-alt: #0F1A12;
+
+  --accent-mint: #7ED321;
+  --accent-green: #7ED321;
+  --accent-green-dim: rgba(126, 211, 33, 0.15);
+  --accent-green-glow: rgba(126, 211, 33, 0.35);
+
+  --accent-blue: #3DD9FF;
+  --accent-coral: #FF4D3D;
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --muted: #64748B;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-panel: rgba(255, 255, 255, 0.12);
+  --border-glow: rgba(126, 211, 33, 0.3);
+
+  color-scheme: dark;
+}
+
+/* ─── Global Link Hover ─── */
+a:hover {
+  text-decoration: none;
+}
+
+@layer base {
+  *, ::before, ::after {
+    border-color: var(--border-subtle);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+/* ─── Section Layout ─── */
+section,
+.esummit-section,
+#faq,
+#sponsors,
+#schedule,
+#esummit-marquee,
+#esummit-about {
+  min-height: 100dvh;
+}
+
+#register {
+  min-height: auto !important;
+}
+
+/* Lenis smooth scrolling rules */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#main-content,
+header {
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 100vw;
+}
+
+@media (min-width: 1024px) {
+  body.drawer-open #main-content,
+  body.drawer-open header {
+    max-width: calc(100vw - 380px);
+  }
+}
+
+
+/* Scrollbar Styling — Sleek, subtle, zero horizontal bar leakage */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 0px;
+}
+::-webkit-scrollbar:horizontal {
+  display: none !important;
+  height: 0px !important;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Focus states */
+:focus-visible {
+  outline: 2px solid var(--accent-green);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(126, 211, 33, 0.3);
+  color: var(--text-primary);
+}
+
+/* ─── Big Headings Font Rule (Kanit) ─── */
+h1, h2, h3 {
+  font-family: var(--font-kanit), sans-serif;
+}
+
+
+.text-stroke-orange, .text-stroke-volt, .text-stroke-amber, .text-stroke-green {
+  color: var(--accent-mint);
+}
+
+/* ─── Gradient utilities ─── */
+.gradient-orange {
+  background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-blue) 100%);
+}
+.gradient-green {
+  background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-blue) 100%);
+}
+
+/* ─── Glass / Panel ─── */
+.glass {
+  background: rgba(13, 20, 14, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+/* ─── Glow effects ─── */
+.glow-orange, .glow-volt, .glow-amber, .glow-green {
+  box-shadow: 0 0 24px rgba(126, 211, 33, 0.5), 0 0 48px rgba(126, 211, 33, 0.2);
+}
+
+/* ─── Button base ─── */
+.btn-green, .btn-orange, .btn-volt, .btn-amber {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--accent-mint);
+  color: var(--bg-void);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  border: none;
+  border-radius: 9999px !important;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  overflow: hidden;
+  box-shadow: none !important;
+}
+.btn-green:hover, .btn-orange:hover {
+  transform: translateY(-1px);
+  box-shadow: none !important;
+}
+.btn-green:active, .btn-orange:active { transform: translateY(0); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 31px;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(245, 245, 240, 0.25);
+  border-radius: 9999px !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: none !important;
+}
+.btn-ghost:hover {
+  border-color: #7ED321;
+  color: #7ED321;
+  background: rgba(126, 211, 33, 0.08);
+}
+
+/* ─── Current Line Accent ─── */
+.current-line-horizontal {
+  display: none !important;
+}
+
+/* ─── Section layout ─── */
+.section-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (min-width: 768px) {
+  .section-container { padding: 0 48px; }
+}
+@media (min-width: 1024px) {
+  .section-container { padding: 0 64px; }
+}
+
+/* ─── Noise overlay ─── */
+.noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
+}
+
+/* ─── Card tilt & highlights ─── */
+.tilt-card {
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  transform-style: preserve-3d;
+}
+
+/* ─── Highlight pulse ─── */
+@keyframes highlightPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(126, 211, 33, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(126, 211, 33, 0.4), 0 0 28px rgba(126, 211, 33, 0.3); }
+}
+.highlight-active {
+  animation: highlightPulse 1.2s ease 3;
+}
+
+/* ─── Money ticker ─── */
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Bill float ─── */
+@keyframes billFloat {
+  0%, 100% { transform: translateY(0px) rotate(18deg); }
+  50% { transform: translateY(-16px) rotate(20deg); }
+}
+
+/* ─── Bill shimmer ─── */
+@keyframes shimmerSweep {
+  0% { background-position: -200% center; }
+  100% { background-position: 300% center; }
+}
+
+/* ─── Glow pulse ring ─── */
+@keyframes glowRing {
+  0%, 100% { box-shadow: 0 0 20px rgba(126,211,33,0.3), 0 0 40px rgba(126,211,33,0.1); }
+  50% { box-shadow: 0 0 40px rgba(126,211,33,0.55), 0 0 80px rgba(126,211,33,0.25); }
+}
+.glow-pulse {
+  animation: glowRing 3s ease-in-out infinite;
+}
+
+/* ─── Chromatic Aberration Glitch Keyframes ─── */
+@keyframes glitch-anim-1 {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(-1px, -1px); }
+  60% { transform: translate(1px, 1px); }
+  80% { transform: translate(-1px, 2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { transform: translate(0); }
+  20% { transform: translate(2px, -1px); }
+  40% { transform: translate(1px, 1px); }
+  60% { transform: translate(-1px, -1px); }
+  80% { transform: translate(1px, -20px); }
+  100% { transform: translate(0); }
+}
+
+/* ─── Continuous Vertical Auto-Scroll Animations ─── */
+@keyframes autoScrollUp {
+  0% { transform: translateY(0%); }
+  100% { transform: translateY(-25%); }
+}
+
+@keyframes autoScrollDown {
+  0% { transform: translateY(-25%); }
+  100% { transform: translateY(0%); }
+}
+
+.animate-auto-scroll-up {
+  animation: autoScrollUp 32s linear infinite;
+}
+
+.animate-auto-scroll-down {
+  animation: autoScrollDown 36s linear infinite;
+}
+
+.animate-auto-scroll-up:hover,
+.animate-auto-scroll-down:hover {
+  animation-play-state: paused;
+}
+
