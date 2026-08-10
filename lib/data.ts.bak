@@ -171,16 +171,19 @@ export const SPEAKERS = [
 export interface CampusVenue {
   id: string
   name: string
-  shortName: string
-  code: string
+  shortName?: string
+  code?: string
+  building?: string
   lat: number
   lng: number
-  x: number
-  y: number
-  description: string
-  color: string
-  points: [number, number][]
-  turns: string[]
+  x?: number
+  y?: number
+  description?: string
+  color?: string
+  points?: [number, number][]
+  turns?: string[]
+  coordinates: [number, number]
+  type: 'auditorium' | 'expo' | 'seminar' | 'admin' | 'lab' | 'social' | 'entrance'
 }
 
 export const CAMPUS_VENUES: Record<string, CampusVenue> = {
@@ -694,6 +697,136 @@ export const FEST_CONTEXT: FestContext = {
 
 // ─── Campus Navigation Data ───
 
+export interface CampusVenue {
+  id: string
+  name: string
+  building: string
+  coordinates: [number, number]
+  type: 'auditorium' | 'expo' | 'seminar' | 'admin' | 'lab' | 'social' | 'entrance'
+}
+
+export const CAMPUS_VENUES: Record<string, CampusVenue> = {
+  'main-auditorium': {
+    id: 'main-auditorium',
+    name: 'Main Auditorium (CCA)',
+    building: 'CCA Building',
+    coordinates: [76.78426071541261, 30.76551511053145],
+    type: 'auditorium',
+  },
+  'expo-hall': {
+    id: 'expo-hall',
+    name: 'Expo Hall (SPIC Centre)',
+    building: 'SPIC Centre',
+    coordinates: [76.78585010939216, 30.765833700196882],
+    type: 'expo',
+  },
+  'seminar-hall': {
+    id: 'seminar-hall',
+    name: 'Seminar Hall (NAB)',
+    building: 'NAB Building',
+    coordinates: [76.7861161958663, 30.768068775179547],
+    type: 'seminar',
+  },
+  'admin-block': {
+    id: 'admin-block',
+    name: 'Admin Block (Electrical Dept)',
+    building: 'Electrical Engineering Department',
+    coordinates: [76.78647612578088, 30.767251839321425],
+    type: 'admin',
+  },
+  'cse-block': {
+    id: 'cse-block',
+    name: 'CSE & ECE Block (Hackathon Lab)',
+    building: 'CSE & ECE Department',
+    coordinates: [76.78532031055364, 30.76782763758229],
+    type: 'lab',
+  },
+  'student-center': {
+    id: 'student-center',
+    name: 'Student Center (PEC Market)',
+    building: 'PEC Market Area',
+    coordinates: [76.78348530072951, 30.766326667038925],
+    type: 'social',
+  },
+  'main-gate': {
+    id: 'main-gate',
+    name: 'Main Gate (Gate 1)',
+    building: 'Campus Entrance - Gate 1',
+    coordinates: [76.78367500421939, 30.763153888145272],
+    type: 'entrance',
+  },
+  // ─── New Summit Activity Venues ───
+  'workshop-hall': {
+    id: 'workshop-hall',
+    name: 'Workshop Hall',
+    building: 'CCA Building (Upper Floor)',
+    coordinates: [76.7845, 30.7657],
+    type: 'seminar',
+  },
+  'job-fair-zone': {
+    id: 'job-fair-zone',
+    name: 'Job Fair Zone',
+    building: 'Expo Hall (SPIC Centre) - Hall B',
+    coordinates: [76.7856, 30.7656],
+    type: 'expo',
+  },
+  'rd-conclave-hall': {
+    id: 'rd-conclave-hall',
+    name: 'R&D Conclave Hall',
+    building: 'NAB Building - Conference Room',
+    coordinates: [76.7860, 30.7678],
+    type: 'seminar',
+  },
+  'ipl-auction-room': {
+    id: 'ipl-auction-room',
+    name: 'IPL Auction Room',
+    building: 'CCA Building - Seminar Room',
+    coordinates: [76.7843, 30.7653],
+    type: 'seminar',
+  },
+  'ignite-stage': {
+    id: 'ignite-stage',
+    name: 'Ignite Stage',
+    building: 'Main Auditorium (CCA)',
+    coordinates: [76.78426071541261, 30.76551511053145],
+    type: 'auditorium',
+  },
+  'treasure-hunt-start': {
+    id: 'treasure-hunt-start',
+    name: 'Treasure Hunt Start',
+    building: 'Student Center (PEC Market)',
+    coordinates: [76.78348530072951, 30.766326667038925],
+    type: 'social',
+  },
+  'baazar-zone': {
+    id: 'baazar-zone',
+    name: 'Baazar Marketplace',
+    building: 'PEC Market / Open Grounds',
+    coordinates: [76.7837, 30.7661],
+    type: 'social',
+  },
+  'quiz-hall': {
+    id: 'quiz-hall',
+    name: 'Quiz Hall',
+    building: 'Seminar Hall (NAB)',
+    coordinates: [76.7861161958663, 30.768068775179547],
+    type: 'seminar',
+  },
+  'funding-conclave-room': {
+    id: 'funding-conclave-room',
+    name: 'Funding Conclave Room',
+    building: 'Admin Block - Meeting Room',
+    coordinates: [76.7863, 30.7670],
+    type: 'admin',
+  },
+  'case-competition-room': {
+    id: 'case-competition-room',
+    name: 'Case Competition Room',
+    building: 'CSE & ECE Block - Seminar Room',
+    coordinates: [76.7852, 30.7676],
+    type: 'lab',
+  },
+} as const
 
 export interface CampusGraphNode {
   coords: [number, number]
