@@ -53,11 +53,12 @@ export default function Concierge() {
     return pathname === '/'
   })
   const [myPlan, setMyPlan] = useState<ItinerarySession[]>([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
       role: 'bot',
-      text: `Hey! I'm the Summit Agent. I can answer questions, scroll to sections, or **generate a personalized itinerary** for you. Ask me "Build my Day 1 plan" or "Recommend AI sessions"!`,
+      text: `Hey! I'm your E-Summit Guide. I can help you find sessions, navigate the venue, or **curate your personal itinerary**. Try asking "Show me Day 1 events" or "Which sessions are about AI?"!`,
       timestamp: new Date(),
       suggestedReplies: SUGGESTED_STARTERS.slice(0, 3),
     },
@@ -67,6 +68,15 @@ export default function Concierge() {
   const [unread, setUnread] = useState(0)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Hide when any modal (event detail, etc) is open
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsModalOpen(document.body.classList.contains('modal-open'))
+    })
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
+  }, [])
 
   // Listen to loader state updates
   useEffect(() => {
@@ -200,17 +210,17 @@ export default function Concierge() {
         className="fixed bottom-20 sm:bottom-14 right-4 sm:right-6 z-[2500] min-h-[44px] px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
         initial={{ opacity: 0, y: 20 }}
         animate={{
-          opacity: isLoaderActive ? 0 : 1,
-          y: isLoaderActive ? 20 : 0,
-          pointerEvents: isLoaderActive ? 'none' : 'auto',
+          opacity: isLoaderActive || isModalOpen ? 0 : 1,
+          y: isLoaderActive || isModalOpen ? 20 : 0,
+          pointerEvents: isLoaderActive || isModalOpen ? 'none' : 'auto',
         }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
         whileHover={{ scale: isLoaderActive ? 1 : 1.05 }}
         whileTap={{ scale: isLoaderActive ? 1 : 0.95 }}
-        aria-label="Open Summit AI Concierge Assistant"
+        aria-label="Open Summit Assistant"
       >
         <Bot size={18} />
-        <span className="hidden sm:inline">Ask AI Agent</span>
+        <span className="hidden sm:inline">Ask Assistant</span>
         {!open && (
           <motion.span
             className="w-2 h-2 rounded-full bg-void"
@@ -244,7 +254,7 @@ export default function Concierge() {
                   </p>
                   <p className="font-mono-data text-[10px] text-mint font-semibold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-mint inline-block" />
-                    <span>Official E-Cell Assistant</span>
+                    <span>Visitor Support</span>
                   </p>
                 </div>
               </div>
@@ -350,7 +360,7 @@ export default function Concierge() {
                   )}
                 </div>
               ))}
-              {isTyping && <p className="text-xs font-mono-data text-mint ml-8 animate-pulse">Agent is thinking...</p>}
+              {isTyping && <p className="text-xs font-mono-data text-mint ml-8 animate-pulse">Thinking...</p>}
               <div ref={bottomRef} />
             </div>
 

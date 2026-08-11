@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Ticket, Calendar, MapPin, Sparkles, ArrowUpRight, ChevronDown } from 'lucide-react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 import { FEST_META } from '@/lib/data'
 
 const TOTAL_RAW_FRAMES = 260
@@ -148,41 +148,28 @@ export default function NewHero() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Native scroll progress calculation to scrub canvas video frames
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return
-      const rect = containerRef.current.getBoundingClientRect()
-      const totalScrollable = rect.height - window.innerHeight
-      if (totalScrollable <= 0) return
+  // Use Framer Motion's scrollYProgress to scrub canvas video frames
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const frameIndex = Math.min(FRAME_COUNT - 1, Math.floor(latest * FRAME_COUNT))
 
-      const progress = Math.max(0, Math.min(1, -rect.top / totalScrollable))
-      const frameIndex = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT))
-
-      if (frameIndex !== currentFrameRef.current) {
-        currentFrameRef.current = frameIndex
-        requestAnimationFrame(() => renderFrame(frameIndex))
-      }
+    if (frameIndex !== currentFrameRef.current) {
+      currentFrameRef.current = frameIndex
+      requestAnimationFrame(() => renderFrame(frameIndex))
     }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  })
 
   return (
     <section
       ref={containerRef}
-      className="relative h-[210vh] bg-void"
+      className="relative h-[150vh] md:h-[210vh] bg-void"
       aria-label="PEC E-Summit Hero"
     >
       {/* Sticky Fullscreen Container — Pins Canvas and Content during entire scroll */}
       <div className="sticky top-0 z-0 flex h-screen w-full items-center justify-center overflow-hidden">
-        {/* 60fps 3D Rupee Video Canvas Frame Scrubber */}
-        <canvas ref={canvasRef} className="absolute inset-0 z-0 h-full w-full object-cover" />
-
-        {/* Ambient Dark Scrim Radial Gradient */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+        />{/* Ambient Dark Scrim Radial Gradient */}
         <div
           className="z-1 pointer-events-none absolute inset-0"
           style={{
@@ -206,20 +193,19 @@ export default function NewHero() {
           style={{ opacity: initialOpacity }}
           className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-4 text-center"
         >
-          <h1 className="font-display text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-none tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
-            E-SUMMIT <span className="italic text-mint">&apos;26</span>
+          {/* Subtle central dark burst for text contrast */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.6)_0%,transparent_40%)] sm:bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.4)_0%,transparent_50%)]" />
+
+          <h1 
+            className="relative font-display font-black leading-none tracking-tighter text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] flex items-baseline justify-center gap-2 sm:gap-4"
+            style={{ fontSize: 'clamp(2.5rem, 9.5vw, 8.5rem)' }}
+          >
+            E-SUMMIT <span className="text-mint">&apos;26</span>
           </h1>
 
-          <p className="mt-4 max-w-md font-mono-data text-[11px] sm:text-sm md:text-base font-semibold uppercase tracking-widest text-gray-200 drop-shadow-md">
+          <p className="relative mt-4 max-w-2xl font-mono-data text-sm sm:text-base md:text-lg font-bold uppercase tracking-widest text-white drop-shadow-[0_2px_15px_rgba(0,0,0,1)]">
             Chandigarh&apos;s Launchpad for Founders
           </p>
-
-          <div className="mt-10 flex animate-pulse flex-col items-center gap-1.5 text-mint">
-            <span className="font-mono-data text-[10px] sm:text-[11px] font-bold uppercase tracking-widest">
-              Scroll to Explore &amp; Scrub Experience
-            </span>
-            <ChevronDown size={20} />
-          </div>
         </motion.div>
 
         {/* Pinned Main Hero Content Overlay — Stays 100% visible & centered throughout middle scroll range (0.25 -> 0.78) */}
@@ -246,7 +232,10 @@ export default function NewHero() {
             </div>
 
             {/* Main Headline — Compact 2 Lines */}
-            <h2 className="mb-1 sm:mb-2 max-w-3xl font-display text-xl sm:text-3xl md:text-5xl font-black uppercase leading-[1.08] tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]">
+            <h2 
+              className="mb-1 sm:mb-2 max-w-3xl font-display font-black uppercase leading-[1.08] tracking-tight text-white drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]"
+              style={{ fontSize: 'clamp(1.25rem, 4.2vw, 3.25rem)' }}
+            >
               WHERE IDEAS RAISE <span className="text-mint">CAPITAL</span>
               <br />
               &amp; COMPOUND INTO <span className="text-mint">IMPACT</span>

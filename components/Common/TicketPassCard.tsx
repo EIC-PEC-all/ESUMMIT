@@ -123,7 +123,7 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
 
         <div>
           <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-black/60 block">
-            CABIN / ACCESS
+            PASS CATEGORY
           </span>
           <span className="font-mono-data text-xs font-bold uppercase text-black">
             {pass.cabinClass}
@@ -132,7 +132,7 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
 
         <div>
           <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-black/60 block">
-            PASSENGER TIER
+            DELEGATE TIER
           </span>
           <span className="font-mono-data text-xs font-bold uppercase text-black">
             {pass.passengerType}

@@ -15,7 +15,7 @@ function FAQItem({ faq, isOpen, onToggle }: {
 }) {
   return (
     <div
-      className="mb-4 rounded-2xl overflow-hidden transition-all duration-300 bg-[#07130F] border border-[#193B2F] hover:border-mint/50 shadow-md hover:scale-[1.01]"
+      className="mb-4 rounded-2xl overflow-hidden transition-all duration-300 bg-white/[0.03] border border-white/10 hover:border-white/20 shadow-md hover:scale-[1.01]"
     >
       <button
         id={`faq-btn-${faq.id}`}

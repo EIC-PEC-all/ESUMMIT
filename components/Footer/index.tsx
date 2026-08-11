@@ -190,14 +190,6 @@ export function RegisterCTA() {
           transition={{ duration: 0.5 }}
           className="flex flex-col items-center text-center"
         >
-          {/* Top Pill Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2">
-            <Sparkles size={14} className="text-yellow-400" />
-            <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-white">
-              PEC SUMMIT 2026 • MARCH 15-16
-            </span>
-          </div>
-
           {/* Main Headline */}
           <h2
             id="footer-cta-heading"
@@ -241,7 +233,7 @@ export function RegisterCTA() {
 
 export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
   return (
-    <footer className="w-full bg-[#0D2420]">
+    <footer id="footer" className="w-full bg-[#0D2420]">
       {!hideCTA && <RegisterCTA />}
 
       {/* Corporate EIC / PEC Footer */}
@@ -265,7 +257,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   rel="noopener noreferrer"
                   aria-label={label}
                   role="listitem"
-                  className="border-mint/30 flex h-10 w-10 items-center justify-center rounded-xl border bg-[#07130F] text-white shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
+                  className="border-mint/30 flex h-11 w-11 items-center justify-center rounded-xl border bg-[#07130F] text-white shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
                 >
                   <Icon size={18} aria-hidden="true" strokeWidth={1.5} />
                 </a>
@@ -310,7 +302,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="font-body text-sm font-medium text-gray-200 transition-colors hover:text-mint"
+                      className="inline-block py-2 sm:py-1 font-body text-sm font-medium text-gray-200 transition-colors hover:text-mint"
                     >
                       {link.label}
                     </a>
@@ -319,44 +311,45 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
               </ul>
             </div>
 
-            {/* Column 4: Contact */}
+            {/* Column 4: Contact & Team Leadership */}
             <div>
               <h4 className="mb-6 font-display text-xl font-bold uppercase tracking-wider text-white">
-                Contact
+                Contact Us
               </h4>
-              <p className="mb-6 font-body text-sm leading-relaxed text-gray-300">
-                Entrepreneurship and Incubation Cell, Punjab Engineering College, Chandigarh 160012
-              </p>
+              
+              {/* Address */}
+              <div className="mb-6">
+                <span className="font-body text-xs font-bold uppercase tracking-wider text-mint block mb-1">Visit Us At</span>
+                <p className="font-body text-xs leading-relaxed text-gray-300">
+                  Entrepreneurship & Incubation Cell - Incubator (Near Siemens Lab), Punjab Engineering College, Sector-12 (160012), Chandigarh
+                </p>
+              </div>
 
-              <div className="space-y-4">
-                <div>
-                  <div className="mb-1 flex items-center gap-2">
-                    <Briefcase size={16} className="shrink-0 text-mint" />
-                    <span className="font-body text-sm font-bold text-mint">
-                      For Queries And Collaboration
-                    </span>
-                  </div>
-                  <a
-                    href="mailto:eicpec@pec.edu.in"
-                    className="block pl-6 font-body text-sm font-medium text-gray-200 hover:text-mint hover:underline"
-                  >
-                    eicpec@pec.edu.in
-                  </a>
+              {/* Faculty Coordinators */}
+              <div className="mb-4 space-y-2">
+                <span className="font-body text-xs font-bold uppercase tracking-wider text-mint block">Faculty Coordinators</span>
+                <div className="text-xs text-gray-200">
+                  <p><strong className="text-white">Dr. Simranjit Singh:</strong> <a href="tel:+919872552898" className="hover:text-mint">+91 98725 52898</a></p>
+                  <p><strong className="text-white">Dr. Sudesh Rani:</strong> <a href="tel:+919876860085" className="hover:text-mint">+91 98768 60085</a></p>
                 </div>
-                <div>
-                  <div className="mb-1 flex items-center gap-2">
-                    <Phone size={16} className="shrink-0 text-mint" />
-                    <span className="font-body text-sm font-bold text-mint">
-                      For General Contact
-                    </span>
-                  </div>
-                  <a
-                    href="mailto:info@ecellpec.in"
-                    className="block pl-6 font-body text-sm font-medium text-gray-200 hover:text-mint hover:underline"
-                  >
-                    info@ecellpec.in
-                  </a>
+              </div>
+
+              {/* Student Leadership */}
+              <div className="mb-4 space-y-2">
+                <span className="font-body text-xs font-bold uppercase tracking-wider text-mint block">Student Conveners</span>
+                <div className="text-xs text-gray-200 space-y-1">
+                  <p><strong className="text-white">Simarpreet Kaur (Convener):</strong> <a href="tel:+918427146574" className="hover:text-mint">+91 84271 46574</a></p>
+                  <p><strong className="text-white">Shubham Mangal (Co-convener):</strong> <a href="tel:+917834975811" className="hover:text-mint">+91 78349 75811</a></p>
+                  <p><strong className="text-white">Vedansh Singh (Co-convener):</strong> <a href="tel:+918826873264" className="hover:text-mint">+91 88268 73264</a></p>
+                  <p><strong className="text-white">Japneet Pathania (Marketing):</strong> <a href="tel:+918544918700" className="hover:text-mint">+91 85449 18700</a></p>
                 </div>
+              </div>
+
+              {/* Email Links */}
+              <div className="pt-2 border-t border-white/10 space-y-1">
+                <span className="font-body text-xs font-bold uppercase tracking-wider text-mint block mb-1">Emails</span>
+                <a href="mailto:eicpec@pec.edu.in" className="block text-xs text-gray-300 hover:text-mint hover:underline">eicpec@pec.edu.in</a>
+                <a href="mailto:esummitpr.pec@gmail.com" className="block text-xs text-gray-300 hover:text-mint hover:underline">esummitpr.pec@gmail.com</a>
               </div>
             </div>
           </div>

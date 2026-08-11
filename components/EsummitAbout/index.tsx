@@ -181,7 +181,7 @@ export default function EsummitAbout() {
           text={ABOUT_TEXT}
           className="font-body font-medium text-center leading-relaxed max-w-[680px]"
           style={{
-            color: 'var(--text-secondary)',
+            color: '#D1D5DB',
             fontSize: 'clamp(0.95rem, 3.8vw, 1.35rem)',
           }}
         />

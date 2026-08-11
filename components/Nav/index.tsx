@@ -13,13 +13,13 @@ import Magnetic from '@/components/Common/Magnetic'
 
 const NAV_ITEMS = [
   { label: 'HOME', code: '01', href: '/', sectionId: null },
-  { label: 'PORTFOLIO', code: '02', href: '/portfolio', sectionId: 'event-portfolio' },
-  { label: 'PASSES', code: '03', href: '/passes', sectionId: null },
-  { label: 'TRACKS', code: '04', href: '/tracks', sectionId: 'tracks' },
-  { label: 'SPEAKERS', code: '05', href: '/speakers', sectionId: 'speakers' },
-  { label: 'SCHEDULE', code: '06', href: '/schedule', sectionId: 'schedule' },
-  { label: 'SPONSORS', code: '07', href: '/sponsors', sectionId: 'sponsors' },
-  { label: 'FAQ', code: '08', href: '/faq', sectionId: 'faq' },
+  { label: 'ABOUT', code: '02', href: '/#esummit-about', sectionId: 'esummit-about' },
+  { label: 'EVENTS', code: '03', href: '/#event-portfolio', sectionId: 'event-portfolio' },
+  { label: 'ALUMNI', code: '04', href: '/#alumni', sectionId: 'alumni' },
+  { label: 'SPEAKERS', code: '05', href: '/speakers', sectionId: null },
+  { label: 'SPONSORS', code: '06', href: '/#sponsors', sectionId: 'sponsors' },
+  { label: 'FAQ', code: '07', href: '/#faq', sectionId: 'faq' },
+  { label: 'REGISTER', code: '08', href: '/register', sectionId: null },
 ]
 
 const SPONSOR_ITEMS = [
@@ -76,12 +76,12 @@ function NavCountdown({ targetISO }: { targetISO: string }) {
 
   if (isLive) {
     return (
-      <div className="flex items-center gap-1.5 text-black select-none uppercase tracking-widest text-[9px] sm:text-xs">
+      <div className="flex items-center gap-1.5 text-mint select-none uppercase tracking-widest text-[9px] sm:text-xs">
         <span className="relative flex h-2 w-2 shrink-0">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7ED321] opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-[#7ED321]" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
         </span>
-        <span className="font-extrabold text-black">LIVE</span>
+        <span className="font-extrabold text-mint drop-shadow-[0_0_8px_rgba(126,211,33,0.8)]">LIVE</span>
       </div>
     )
   }
@@ -89,7 +89,7 @@ function NavCountdown({ targetISO }: { targetISO: string }) {
   if (!timeLeft) return <span className="opacity-0">--:--:--</span>
 
   return (
-    <span className="font-mono-data text-[9px] sm:text-[11px] tracking-wider text-black font-extrabold tabular-nums select-none uppercase whitespace-nowrap">
+    <span className="font-mono-data text-[9px] sm:text-[11px] tracking-wider text-mint font-extrabold tabular-nums select-none uppercase whitespace-nowrap drop-shadow-[0_0_8px_rgba(126,211,33,0.5)]">
       {timeLeft.days}D : {timeLeft.hours}H : {timeLeft.minutes}M : {timeLeft.seconds}S
     </span>
   )
@@ -100,6 +100,7 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const pathname = usePathname()
+  if (pathname === '/register' || pathname === '/speakers') return null
   const drawerRef = useRef<HTMLDivElement>(null)
   const [isLoaderActive, setIsLoaderActive] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
@@ -110,7 +111,9 @@ export default function Nav() {
     return pathname === '/'
   })
 
-  // Listen to loader state updates
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  // Listen to loader and modal state updates
   useEffect(() => {
     const checkState = () => {
       if (typeof window !== 'undefined') {
@@ -127,8 +130,16 @@ export default function Nav() {
     }
 
     window.addEventListener('scroll-loader-state', handleLoaderState)
+
+    const observer = new MutationObserver(() => {
+      setIsModalOpen(document.body.classList.contains('modal-open'))
+      checkState()
+    })
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+
     return () => {
       window.removeEventListener('scroll-loader-state', handleLoaderState)
+      observer.disconnect()
     }
   }, [])
 
@@ -191,11 +202,18 @@ export default function Nav() {
     }
   }, [menuOpen])
 
+  const headerButtonRef = useRef<HTMLButtonElement>(null)
+
   // Click-outside drawer listener
   useEffect(() => {
     if (!menuOpen) return
     const handleClickOutside = (e: MouseEvent) => {
-      if (drawerRef.current && !drawerRef.current.contains(e.target as Node)) {
+      if (
+        drawerRef.current &&
+        !drawerRef.current.contains(e.target as Node) &&
+        headerButtonRef.current &&
+        !headerButtonRef.current.contains(e.target as Node)
+      ) {
         setMenuOpen(false)
       }
     }
@@ -213,16 +231,36 @@ export default function Nav() {
     return () => document.removeEventListener('keydown', handleEscape)
   }, [menuOpen])
 
+  // Handle cross-page hash navigation on mount / route change
+  useEffect(() => {
+    if (pathname === '/' && typeof window !== 'undefined' && window.location.hash) {
+      const hashId = window.location.hash.replace('#', '')
+      if (hashId) {
+        const timer = setTimeout(() => {
+          const el = document.getElementById(hashId)
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }
+        }, 400)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [pathname])
+
   const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>, item: typeof NAV_ITEMS[0]) => {
+    setMenuOpen(false)
+    document.body.classList.remove('drawer-open')
+
+    if (item.label === 'HOME' && pathname === '/') {
+      e.preventDefault()
+      window.dispatchEvent(new CustomEvent('trigger-chevron-transition', { detail: { targetTop: true } }))
+      return
+    }
+
     if (pathname === '/' && item.sectionId) {
       e.preventDefault()
-      setMenuOpen(false)
-      const el = document.getElementById(item.sectionId)
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' })
-      }
-    } else {
-      setMenuOpen(false)
+      window.dispatchEvent(new CustomEvent('trigger-chevron-transition', { detail: { targetId: item.sectionId } }))
+      return
     }
   }
 
@@ -234,23 +272,23 @@ export default function Nav() {
     <>
       <header
         className={`fixed z-[2500] transition-all duration-500 ease-out 
-          top-0 left-0 right-0 w-full rounded-none
-          lg:top-4 lg:left-1/2 lg:w-[calc(100%-3rem)] lg:max-w-7xl lg:rounded-full
+          hidden
+          lg:block lg:top-4 lg:left-1/2 lg:w-[calc(100%-3rem)] lg:max-w-7xl lg:rounded-full
           bg-[#0A110E]/90 text-white backdrop-blur-2xl shadow-2xl border border-white/20
-          ${showHeader ? 'translate-y-0 opacity-100' : '-translate-y-[150%] opacity-0 pointer-events-none'} 
+          ${showHeader ? 'lg:translate-y-0 lg:opacity-100' : 'lg:-translate-y-[150%] lg:opacity-0 lg:pointer-events-none'} 
           ${menuOpen ? 'lg:-translate-x-[calc(50%+190px)]' : 'lg:-translate-x-1/2'}`}
       >
-        <div className="flex items-center justify-between h-14 sm:h-16 px-4 sm:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-16 px-6 sm:px-8">
           {/* Left: Logo */}
           <Link
             href="/"
-            className="font-display text-xl tracking-wider flex items-center gap-2 shrink-0 group"
+            className="font-display text-2xl tracking-wider flex items-center gap-2 shrink-0 group"
             aria-label="E-Summit '26 — Home"
           >
-            <div className="w-8 h-8 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center group-hover:border-mint transition-colors">
-              <Zap size={16} className="text-mint fill-mint" />
+            <div className="w-9 h-9 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center group-hover:border-mint transition-colors">
+              <Zap size={18} className="text-mint fill-mint" />
             </div>
-            <span className="font-bold text-white tracking-widest hidden sm:inline-block">E-SUMMIT</span>
+            <span className="font-black text-white tracking-widest hidden sm:inline-block">E-SUMMIT</span>
           </Link>
 
           {/* Center: Empty to push buttons to right */}
@@ -271,12 +309,12 @@ export default function Nav() {
                 </Magnetic>
                 <Magnetic strength={0.3}>
                   <Link
-                    href="/passes"
+                    href="/register"
                     className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider transition-all duration-200 bg-[#FFD700] text-black hover:bg-[#F5C400] border border-[#FFE033]"
                     id="nav-passes-btn"
                   >
                     <Ticket size={14} className="text-black stroke-[2.5]" />
-                    <span>PASSES</span>
+                    <span>REGISTER</span>
                   </Link>
                 </Magnetic>
               </>
@@ -285,6 +323,7 @@ export default function Nav() {
             {/* Hamburger Trigger Button */}
             <Magnetic strength={0.3}>
               <button
+                ref={headerButtonRef}
                 className="min-h-[44px] min-w-[44px] px-3 py-2 sm:px-4 sm:py-2 rounded-full text-white hover:text-mint bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center gap-2 font-mono-data text-xs font-bold uppercase tracking-wider cursor-pointer backdrop-blur-sm border border-white/20"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label={menuOpen ? "Close navigation sidebar" : "Open navigation sidebar"}
@@ -299,20 +338,23 @@ export default function Nav() {
       </header>
 
 
-      {/* TOP SPONSOR MARQUEE BAR — Slides in from top when navbar hides on scroll down */}
+      {/* TOP SPONSOR MARQUEE BAR — Always fixed on mobile top. On desktop: slides in when navbar hides */}
       <div
         className={`fixed top-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-b border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 shadow-2xl transition-all duration-500 ease-out ${
-          showTopMarquee
+          isModalOpen
+            ? '-translate-y-full opacity-0 pointer-events-none'
+            : showTopMarquee
             ? 'translate-y-0 opacity-100'
-            : '-translate-y-full opacity-0 pointer-events-none'
+            : 'lg:-translate-y-full lg:opacity-0 lg:pointer-events-none translate-y-0 opacity-100'
         }`}
       >
-        <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-white pl-4 pr-3 border-r border-black/10 font-mono-data text-xs font-bold text-black shrink-0 select-none">
+        {/* Countdown — desktop only */}
+        <div className="hidden sm:flex absolute left-0 top-0 bottom-0 z-20 items-center bg-[#07130F] [.light_&]:bg-[#1A2510] pl-4 pr-3 border-r border-mint/30 [.light_&]:border-[#4E6527]/40 shadow-[4px_0_15px_rgba(0,0,0,0.8)] shrink-0 select-none">
           <NavCountdown targetISO={FEST_META.countdownTarget} />
         </div>
-        <div className="absolute left-[125px] sm:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
+        <div className="absolute left-0 sm:left-[125px] md:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
-        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center pl-[135px] sm:pl-[165px]">
+        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center pl-4 sm:pl-[135px] md:pl-[165px]">
           {[...SPONSOR_ITEMS, ...SPONSOR_ITEMS, ...SPONSOR_ITEMS].map((item, i) => (
             <div
               key={`top-${item.id}-${i}`}
@@ -326,15 +368,15 @@ export default function Nav() {
         </div>
       </div>
  
-      {/* BOTTOM SPONSOR MARQUEE BAR — Sits at bottom initially & when scrolling up */}
+      {/* BOTTOM SPONSOR MARQUEE BAR — Desktop only. Mobile uses bottom nav instead. */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
+        className={`hidden lg:block fixed bottom-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
           showBottomMarquee
             ? 'translate-y-0 opacity-100'
             : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >
-        <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-white pl-4 pr-3 border-r border-black/10 font-mono-data text-xs font-bold text-black shrink-0 select-none">
+        <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-[#07130F] [.light_&]:bg-[#1A2510] pl-4 pr-3 border-r border-mint/30 [.light_&]:border-[#4E6527]/40 shadow-[4px_0_15px_rgba(0,0,0,0.8)] shrink-0 select-none">
           <NavCountdown targetISO={FEST_META.countdownTarget} />
         </div>
         <div className="absolute left-[125px] sm:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />

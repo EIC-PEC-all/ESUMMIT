@@ -97,7 +97,7 @@ export default function Sponsors() {
         </div>
 
         {/* United Apple-Style Mesh Grid (Zero Gap) */}
-        <div className="grid grid-cols-2 sm:grid-cols-6 gap-[1px] bg-white/10 border border-white/10 rounded-3xl overflow-hidden max-w-5xl mx-auto shadow-2xl">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-[1px] bg-white/10 border border-white/10 rounded-3xl overflow-hidden max-w-5xl mx-auto shadow-2xl">
           
           {/* Strategic Partners (Top Row - Prominent) */}
           {strategic.map((sponsor, idx) => (

@@ -185,19 +185,15 @@ function LeafletMapInner({
               <div style="
                 width: 32px;
                 height: 32px;
-                border-radius: 50%;
                 background: #0A110E;
-                border: 2.5px solid #7ED321;
-                box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+                border: 1.5px solid #7ED321;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 color: #7ED321;
-                font-size: 14px;
-                font-weight: bold;
                 transition: all 0.3s ease;
               ">
-                📍
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
               </div>
             </div>
           `,
@@ -208,9 +204,9 @@ function LeafletMapInner({
         const marker = L.marker([vData.lat, vData.lng], { icon: customIcon }).addTo(map)
 
         marker.bindPopup(`
-          <div style="padding: 6px; font-family: sans-serif; background: #07140F; color: #ffffff; border-radius: 8px;">
-            <h4 style="margin: 0 0 2px; font-size: 13px; font-weight: bold; color: #7ED321;">${vData.venueName}</h4>
-            <p style="margin: 0; font-size: 11px; color: #94A3B8;">${vData.building}</p>
+          <div style="padding: 12px 14px; font-family: 'JetBrains Mono', monospace; background: #0A110E; color: #ffffff;">
+            <h4 style="margin: 0 0 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #7ED321; letter-spacing: 0.05em;">${vData.venueName}</h4>
+            <p style="margin: 0; font-size: 10px; color: #94A3B8; text-transform: uppercase;">${vData.building}</p>
           </div>
         `)
 
@@ -256,6 +252,29 @@ function LeafletMapInner({
         .custom-lime-map .leaflet-tile {
           filter: invert(1) grayscale(1) brightness(0.51) contrast(8) sepia(1) hue-rotate(45deg) saturate(4) !important;
         }
+        
+        /* Brutalist Anti-vibecoded Popup Styles */
+        .custom-lime-map .leaflet-popup-content-wrapper {
+          background: #0A110E !important;
+          border-radius: 0px !important;
+          border: 1px solid rgba(126, 211, 33, 0.25) !important;
+          box-shadow: 0 15px 35px -10px rgba(0,0,0,0.9) !important;
+          padding: 0 !important;
+        }
+        .custom-lime-map .leaflet-popup-tip {
+          background: #0A110E !important;
+          border-bottom: 1px solid rgba(126, 211, 33, 0.25) !important;
+          border-right: 1px solid rgba(126, 211, 33, 0.25) !important;
+          box-shadow: none !important;
+        }
+        .custom-lime-map .leaflet-popup-content {
+          margin: 0 !important;
+        }
+        .custom-lime-map .leaflet-popup-close-button {
+          color: #94A3B8 !important;
+          padding: 4px !important;
+          font-family: monospace !important;
+        }
       `}</style>
       {/* Map with lime-green tint via CSS filter */}
       <div
@@ -263,33 +282,34 @@ function LeafletMapInner({
         className="h-full w-full z-10 custom-lime-map"
       />
 
-      {/* Floating Info Overlay */}
-      <div className="absolute bottom-6 left-6 z-20 max-w-xs rounded-2xl border border-white/10 bg-[#07140F]/90 p-4 shadow-2xl backdrop-blur-md">
-        <div className="mb-1 flex items-center justify-between">
-          <span className="font-mono-data text-[10px] font-bold uppercase tracking-wider text-[#7ED321]">
+      {/* Floating Info Overlay (Brutalist) */}
+      <div className="absolute bottom-6 left-6 right-6 sm:right-auto z-20 sm:w-80 bg-[#0A110E] p-5 shadow-[0_20px_40px_-15px_rgba(0,0,0,1)] border border-[rgba(255,255,255,0.05)] border-l-4 border-l-[#7ED321]">
+        <div className="mb-3 flex items-center justify-between">
+          <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-[#7ED321]">
             {selectedEvent ? 'Selected Venue' : `Day 0${activeDayIndex + 1} Venues`}
           </span>
           {selectedEvent && (
             <button
               onClick={onClearSelection}
-              className="font-mono-data text-[9px] font-bold text-gray-300 underline hover:text-white"
+              className="font-mono-data text-[9px] font-bold text-gray-400 hover:text-white transition-colors"
             >
-              Show All
+              [ CLEAR ]
             </button>
           )}
         </div>
 
-        <h4 className="mb-0.5 font-display text-sm font-bold text-white">
+        <h4 className="mb-1 font-display text-base font-black text-white uppercase tracking-tight">
           {selectedEvent ? selectedEvent.venueName : 'PEC Campus, Sector 12'}
         </h4>
 
-        <p className="mb-1 font-body text-xs text-gray-300">
+        <p className="mb-3 font-body text-xs text-gray-400 font-medium">
           {selectedEvent ? selectedEvent.title : 'Interactive Leaflet Campus Map'}
         </p>
 
-        <p className="font-mono-data text-[10px] text-gray-400">
-          📍 {selectedEvent ? selectedEvent.building : 'Chandigarh 160012'}
-        </p>
+        <div className="flex items-center gap-1.5 font-mono-data text-[9px] text-gray-500 font-bold tracking-wider uppercase">
+          <MapPin size={10} className="text-[#7ED321]" />
+          <span>{selectedEvent ? selectedEvent.building : 'Chandigarh 160012'}</span>
+        </div>
       </div>
     </div>
   )
@@ -319,7 +339,7 @@ function HighlightCard({
 }) {
   return (
     <div
-      className={`sticky min-h-[70vh] max-h-[85vh] sm:h-[80vh] ${index > 0 ? 'mt-[35vh] sm:mt-[45vh]' : ''}`}
+      className={`sticky h-auto min-h-[60vh] max-h-[85vh] sm:h-[80vh] ${index > 0 ? 'mt-[25vh] sm:mt-[45vh]' : ''}`}
       style={{
         top: index === 0 ? '5.5rem' : 'calc(5.5rem + 80px)',
         zIndex: 10 + index,
@@ -343,7 +363,7 @@ function HighlightCard({
                   {card.date}
                 </span>
               </div>
-              <span className="rounded-full border border-[#7ED321]/30 bg-[#7ED321]/10 px-3 py-1 font-mono-data text-xs font-bold text-[#7ED321]">
+              <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-[#7ED321]">
                 Phase {card.num}
               </span>
             </div>
@@ -359,42 +379,45 @@ function HighlightCard({
                   <div
                     key={ev.id}
                     onClick={() => onSelectEvent(ev.id)}
-                    className={`group flex cursor-pointer items-center justify-between py-3.5 px-2 transition-all duration-200 border-b border-white/5 last:border-b-0 ${
+                    className={`group flex cursor-pointer items-start py-3.5 px-2 transition-all duration-200 border-b border-white/5 last:border-b-0 ${
                       isSelected ? 'text-[#7ED321]' : ''
                     }`}
                   >
-                    {/* Left: Time and Title */}
-                    <div className="flex items-center gap-3.5 min-w-0">
-                      <span className={`shrink-0 font-mono-data text-xs font-semibold tracking-wider transition-colors ${
+                    <div className="flex items-start gap-3 sm:gap-4 min-w-0 w-full">
+                      {/* Left: Time */}
+                      <span className={`shrink-0 pt-0.5 font-mono-data text-xs font-semibold tracking-wider transition-colors ${
                         isSelected ? 'text-[#7ED321]' : 'text-gray-400 group-hover:text-gray-300'
                       }`}>
                         {ev.time}
                       </span>
-                      <span className="text-white/10 font-light text-xs shrink-0 select-none">|</span>
-                      <span
-                        className={`truncate font-body text-xs sm:text-sm font-medium transition-colors ${
-                          isSelected ? 'text-white font-bold' : 'text-gray-300 group-hover:text-white'
-                        }`}
-                      >
-                        {ev.title}
-                      </span>
-                    </div>
+                      
+                      {/* Right: Title & Venue */}
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full min-w-0 gap-1.5 sm:gap-4">
+                        <span
+                          className={`font-body text-sm sm:text-base font-medium transition-colors leading-snug ${
+                            isSelected ? 'text-white font-bold' : 'text-gray-300 group-hover:text-white'
+                          }`}
+                        >
+                          {ev.title}
+                        </span>
 
-                    {/* Right: Venue */}
-                    <div className="flex shrink-0 items-center gap-2.5">
-                      <span
-                        className={`font-mono-data text-[10px] uppercase font-bold tracking-wider transition-colors ${
-                          isSelected ? 'text-[#7ED321]' : 'text-gray-400 group-hover:text-gray-300'
-                        }`}
-                      >
-                        {ev.tag}
-                      </span>
-                      <MapPin
-                        size={13}
-                        className={`transition-colors ${
-                          isSelected ? 'fill-[#7ED321] text-[#7ED321]' : 'text-gray-500 group-hover:text-[#7ED321]'
-                        }`}
-                      />
+                        {/* Venue */}
+                        <div className="flex shrink-0 items-center gap-2">
+                          <span
+                            className={`font-mono-data text-[10px] uppercase font-bold tracking-wider transition-colors ${
+                              isSelected ? 'text-[#7ED321]' : 'text-gray-400 group-hover:text-gray-300'
+                            }`}
+                          >
+                            {ev.tag}
+                          </span>
+                          <MapPin
+                            size={12}
+                            className={`transition-colors ${
+                              isSelected ? 'fill-[#7ED321] text-[#7ED321]' : 'text-gray-500 group-hover:text-[#7ED321]'
+                            }`}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )

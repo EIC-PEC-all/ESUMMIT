@@ -23,8 +23,15 @@ export function Card({ event, index, total, onSelect }: CardProps) {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.45, delay: index * 0.04, ease: [0.25, 0.46, 0.45, 0.94] }}
       whileHover={{ y: -8, scale: 1.02 }}
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl"
-      style={{ width: 'clamp(200px, 22vw, 280px)', height: 'clamp(280px, 40vh, 380px)' }}
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onSelect(event)
+        }
+      }}
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl aspect-[4/3] bg-[#0B1712] focus-visible:ring-2 focus-visible:ring-mint focus:outline-none"
+      style={{ width: 'clamp(280px, 26vw, 380px)' }}
     >
       {/* Full-bleed image */}
       <img

@@ -1,7 +1,7 @@
 // components/EventPortfolio/index.tsx
 'use client'
 
-import React, { useRef, useState, useMemo } from 'react'
+import React, { useRef, useState, useMemo, useEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
 import { PORTFOLIO_EVENTS, PortfolioEvent } from './data'
 import { Card } from './Card'
@@ -14,6 +14,7 @@ export default function EventPortfolioShowcase() {
 
   const [selectedEvent, setSelectedEvent] = useState<PortfolioEvent | null>(null)
   const [activeCategory, setActiveCategory] = useState<string>('All')
+  const [scrollRange, setScrollRange] = useState(['0px', '0px'])
 
   const categories = useMemo(() => {
     return ['All', 'Industry Workshop', 'Recruitment', 'Deep Tech', 'Strategy', 'Keynotes']
@@ -37,13 +38,28 @@ export default function EventPortfolioShowcase() {
     restDelta: 0.001,
   })
 
-  const xTranslate = useTransform(smoothProgress, [0, 1], ['0%', '-86%'])
+  useEffect(() => {
+    const handleResize = () => {
+      if (trackRef.current) {
+        const scrollWidth = trackRef.current.scrollWidth
+        const viewportWidth = window.innerWidth
+        const maxScroll = Math.max(0, scrollWidth - viewportWidth)
+        setScrollRange(['0px', `-${maxScroll}px`])
+      }
+    }
+    handleResize()
+    setTimeout(handleResize, 100)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [filteredEvents])
+
+  const xTranslate = useTransform(smoothProgress, [0, 1], scrollRange)
 
   return (
     <section
       ref={containerRef}
       id="event-portfolio"
-      className="relative h-[480vh] w-full bg-[#0D1812] text-white"
+      className="relative h-[250vh] md:h-[480vh] w-full bg-[#081C16] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-[#7ED321]/20"
       aria-label="Event Portfolio Showcase"
     >
       {/* Pinned Sticky Section during vertical scroll */}
@@ -64,7 +80,7 @@ export default function EventPortfolioShowcase() {
           <motion.div
             ref={trackRef}
             style={{ x: xTranslate }}
-            className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing"
+            className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing w-full"
           >
             {filteredEvents.map((event, index) => (
               <Card

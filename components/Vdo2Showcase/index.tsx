@@ -9,6 +9,7 @@ export default function Vdo2Showcase() {
   const [isHovered, setIsHovered] = useState(false)
   return (
     <section
+      id="passes"
       className="relative bg-[#040705] text-white py-24 px-4 sm:px-6 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-white/10"
       aria-label="Passes Showcase"
     >
@@ -302,7 +303,7 @@ export default function Vdo2Showcase() {
         {/* Main CTA Link */}
         <Link
           href="/passes"
-          className="group relative inline-flex items-center justify-center gap-3 px-10 h-14 rounded-full font-mono-data text-xs font-black uppercase tracking-[0.2em] bg-white text-black overflow-hidden shadow-[0_0_35px_rgba(255,255,255,0.3)] transition-transform hover:scale-105"
+          className="group relative mt-8 sm:mt-4 inline-flex items-center justify-center gap-3 px-10 h-14 rounded-full font-mono-data text-xs font-black uppercase tracking-[0.2em] bg-white text-black overflow-hidden shadow-[0_0_35px_rgba(255,255,255,0.3)] transition-transform hover:scale-105"
         >
           <Ticket size={18} strokeWidth={2.5} />
           <span>EXPLORE ALL TICKET PERKS</span>

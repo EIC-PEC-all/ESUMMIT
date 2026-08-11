@@ -10,7 +10,6 @@ import LimeTransitionBanner from '@/components/Common/LimeTransitionBanner'
 import LimeEdgeMasks from '@/components/Common/LimeEdgeMasks'
 
 const ScrollExpandLoader = dynamic(() => import('@/components/Common/ScrollExpandLoader'), { ssr: false })
-
 const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), { ssr: false })
 const EventPortfolioShowcase = dynamic(() => import('@/components/EventPortfolio'), { ssr: false })
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), { ssr: false })
@@ -24,10 +23,10 @@ const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.Re
 export default function Home() {
   return (
     <main id="main-content" className="bg-void overflow-x-clip" suppressHydrationWarning>
-      {/* Vantage Initial Page Loader (Auto Expands & Unmounts after 3.5s) */}
+      {/* Vantage Initial Page Loader */}
       <ScrollExpandLoader />
 
-      {/* ── Fixed Page Top & Bottom Boundary-to-Center Lime Tinted Edge Masks ── */}
+      {/* Fixed Page Top & Bottom Boundary Edge Masks */}
       <LimeEdgeMasks />
 
       <Toaster
@@ -47,46 +46,44 @@ export default function Home() {
       {/* Navigation */}
       <Nav />
 
-      {/* ── 1. NewHero 60fps Frame Scrubbing (100% Original & Untouched) ── */}
+      {/* ── 1. HERO — Grand Entrance & Frame Scrubbing ── */}
       <NewHero />
 
-      {/* ── 2. Strip Collapse Transition Revealing Marquee Gallery ───── */}
+      {/* ── 2. LIME TRANSITION BANNER & FLIPFLOP MARQUEE — Immediately after Hero ── */}
+      <LimeTransitionBanner />
       <FlipFlopTransition />
 
-      {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
+      {/* ── 3. ABOUT — Mission, vision & core pillars ── */}
       <EsummitAbout />
 
-      {/* ── 3b. React Bits Masonry — 2x Viewport Height Scroll Parallax ───── */}
-      <MasonryShowcase />
-
-      {/* ── Lime Transition Banner before Highlights ────────────────────── */}
-      <LimeTransitionBanner />
-
-      {/* ── 4. Timeline / Highlights — sticky card stack, dark bg ─────────── */}
-      <EsummitHighlights />
-
-      {/* ── Trionn-inspired Event Portfolio Horizontal Showcase ──────────── */}
+      {/* ── 4. COMPETITIONS & TRACKS — Event portfolio ── */}
       <EventPortfolioShowcase />
 
-      {/* ── 5. Market Surge Video Showcase (vdo2 frame scrubber) ───────── */}
+      {/* ── 5. SPEAKERS — Keynote guests ── */}
+      <EsummitHighlights />
+
+      {/* ── 6. MASONRY GALLERY — 5-column vertical scroll gallery kept in place ── */}
+      <MasonryShowcase />
+
+      {/* ── 7. VIDEO SCRUBBER — Market surge video ── */}
       <Vdo2Showcase />
 
-      {/* ── 6. Alumni — horizontal scroll with PixelTransition ───────────── */}
+      {/* ── 8. ALUMNI — Wall of fame ── */}
       <Alumni />
 
-      {/* ── 10. Sponsors marquee ─────────────────────────────────────────── */}
+      {/* ── 9. SPONSORS — Ecosystem & title partners ── */}
       <Sponsors />
 
-      {/* ── 11. Register CTA ────────────────────────────────────────────── */}
+      {/* ── 10. REGISTER CTA — Conversion banner ── */}
       <RegisterCTA />
 
-      {/* ── 12. FAQ accordion ───────────────────────────────────────────── */}
+      {/* ── 11. FAQ — Attendee questions ── */}
       <FAQ />
 
-      {/* ── 13. Corporate EIC Footer ────────────────────────────────────── */}
+      {/* ── 12. FOOTER ── */}
       <Footer hideCTA={true} />
 
-      {/* ── 14. AI Concierge (floating) ─────────────────────────────────── */}
+      {/* Floating AI Concierge */}
       <Concierge />
     </main>
   )

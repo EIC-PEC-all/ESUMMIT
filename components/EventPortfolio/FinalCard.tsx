@@ -3,11 +3,16 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Trophy, Zap } from 'lucide-react'
 
 interface FinalCardProps {
   onViewAll?: () => void
 }
+
+const STATS = [
+  { value: '13+', label: 'EVENTS', Icon: Zap },
+  { value: '₹15L+', label: 'IN PRIZES', Icon: Trophy },
+]
 
 export function FinalCard({ onViewAll }: FinalCardProps) {
   return (
@@ -16,43 +21,69 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="group relative shrink-0 overflow-hidden rounded-2xl border border-mint/20 bg-[#0A0F0C] flex flex-col items-center justify-center text-center hover:border-mint/50 transition-colors duration-300"
-      style={{ width: 'clamp(200px, 22vw, 280px)', height: 'clamp(280px, 40vh, 380px)' }}
+      className="group relative shrink-0 overflow-hidden rounded-2xl aspect-[4/3] bg-[#070E0A] flex flex-col items-center justify-center text-center transition-colors duration-300"
+      style={{
+        width: 'clamp(280px, 26vw, 380px)',
+        border: '1px solid rgba(126,211,33,0.15)',
+        boxShadow: '0 0 60px rgba(126,211,33,0.06), inset 0 1px 0 rgba(126,211,33,0.08)',
+      }}
     >
-      {/* Background mint glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-mint/5 via-transparent to-transparent pointer-events-none" />
+      {/* Radial glow in center */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(126,211,33,0.07) 0%, transparent 70%)' }}
+      />
 
-      {/* Large faded number */}
+      {/* Faded ∞ watermark */}
       <span
-        className="absolute font-display font-black text-mint opacity-[0.03] select-none pointer-events-none leading-none"
-        style={{ fontSize: 'clamp(100px, 18vw, 160px)' }}
+        className="absolute font-display font-black text-mint select-none pointer-events-none leading-none"
+        style={{ fontSize: 'clamp(140px, 22vw, 200px)', opacity: 0.025, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
         aria-hidden
       >
         ∞
       </span>
 
-      <div className="relative z-10 flex flex-col items-center gap-5 px-6">
-        {/* Stats */}
-        <div className="flex flex-col items-center gap-1">
-          <span className="font-display text-4xl font-black text-mint">13+</span>
-          <span className="font-mono-data text-[10px] uppercase tracking-widest text-neutral-400">Events</span>
+      <div className="relative z-10 flex flex-col items-center gap-6 px-8 w-full">
+        {/* Stats row */}
+        <div className="flex items-stretch gap-0 w-full">
+          {STATS.map((stat, i) => (
+            <React.Fragment key={stat.label}>
+              <div className="flex-1 flex flex-col items-center gap-2 py-2">
+                <stat.Icon size={14} strokeWidth={1.5} className="text-mint/50" />
+                <span
+                  className="font-display font-black leading-none"
+                  style={{
+                    fontSize: 'clamp(2rem, 5vw, 2.75rem)',
+                    color: i === 0 ? '#7ED321' : '#FFFFFF',
+                  }}
+                >
+                  {stat.value}
+                </span>
+                <span className="font-mono-data text-[9px] uppercase tracking-[0.18em] text-neutral-500">
+                  {stat.label}
+                </span>
+              </div>
+
+              {/* Divider */}
+              {i < STATS.length - 1 && (
+                <div className="w-px self-stretch bg-mint/10 mx-1" />
+              )}
+            </React.Fragment>
+          ))}
         </div>
 
-        <div className="h-px w-8 bg-mint/30" />
-
-        <div className="flex flex-col items-center gap-1">
-          <span className="font-display text-4xl font-black text-white">₹15L+</span>
-          <span className="font-mono-data text-[10px] uppercase tracking-widest text-neutral-400">In Prizes</span>
-        </div>
+        {/* Separator */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-mint/20 to-transparent" />
 
         {/* CTA */}
         <a
           href="#tracks"
           onClick={onViewAll}
-          className="mt-2 inline-flex items-center gap-2 rounded-lg border border-mint/40 bg-mint/10 px-5 py-2 text-[11px] font-bold uppercase tracking-widest text-mint transition-all duration-300 hover:bg-mint hover:text-black hover:border-mint group/btn"
+          className="group/btn w-full flex items-center justify-center gap-2 py-3 rounded-xl font-mono-data text-[10px] font-black uppercase tracking-[0.2em] text-mint transition-all duration-300 hover:bg-mint hover:text-black"
+          style={{ border: '1px solid rgba(126,211,33,0.25)', background: 'rgba(126,211,33,0.06)' }}
         >
-          View All
-          <ArrowRight size={13} className="transition-transform group-hover/btn:translate-x-0.5" />
+          VIEW ALL EVENTS
+          <ArrowRight size={12} strokeWidth={2.5} className="transition-transform group-hover/btn:translate-x-0.5" />
         </a>
       </div>
     </motion.div>
