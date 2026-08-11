@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+.github
+*.log
+.env*.local
+.DS_Store
+diff.txt
+*.py

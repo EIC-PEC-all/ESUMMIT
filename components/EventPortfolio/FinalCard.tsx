@@ -86,6 +86,6 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
           <ArrowRight size={12} strokeWidth={2.5} className="transition-transform group-hover/btn:translate-x-0.5" />
         </a>
       </div>
-    </motion.div>
+    </div>
   )
 }

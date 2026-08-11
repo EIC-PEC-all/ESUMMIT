@@ -19,7 +19,6 @@ export interface ItinerarySession {
 export interface AgentResponse {
   text: string
   toast?: string
-  suggestedReplies?: string[]
   itinerary?: {
     title: string
     sessions: ItinerarySession[]
@@ -221,7 +220,6 @@ export async function getAgentResponse(
       return {
         text: `Here is a **${it.title}** curated for your preferences. You can click "Add to My Plan" on any session to save it to your persistent itinerary drawer!`,
         itinerary: it,
-        suggestedReplies: ['Build Day 1 plan', 'Show AI track', 'How do I register?'],
       }
     }
 
@@ -230,7 +228,6 @@ export async function getAgentResponse(
       scrollToSection(intent.section)
       return {
         text: `Taking you to the ${label} section now.`,
-        suggestedReplies: ['Build my itinerary', 'Who are the speakers?', 'When does it start?'],
       }
     }
 
@@ -239,7 +236,6 @@ export async function getAgentResponse(
       scrollToSection('tracks')
       return {
         text: `That's the **${intent.name}** — I've highlighted it for you. Want me to open the full details?`,
-        suggestedReplies: [`Tell me more about ${intent.name}`, 'Build my itinerary', 'What time does it start?'],
       }
     }
 
@@ -248,7 +244,6 @@ export async function getAgentResponse(
       const track = ctx.tracks.find((t) => t.id === intent.id)
       return {
         text: `Opening **${intent.name}**. ${track?.shortDesc ?? ''}`,
-        suggestedReplies: ['Build my itinerary', 'Who are the judges?', 'Get passes'],
       }
     }
 
@@ -265,13 +260,11 @@ export async function getAgentResponse(
           const list = allEvents.map((e) => `• [${e.day}] ${e.time} — ${e.title}`).join('\n')
           return {
             text: `Here are the **${intent.track}** sessions:\n${list}\n\nI've highlighted the first one in the schedule.`,
-            suggestedReplies: ['Build Day 1 plan', 'Build Day 2 plan', 'Show speakers'],
           }
         }
       }
       return {
         text: `**Day 1** kicks off at 09:00 with Registration & Ceremony. **Day 2** features hackathon final presentations & pitch finals. I've scrolled to the schedule section for you.`,
-        suggestedReplies: ['Build my itinerary', 'When is the pitch competition?', 'Show speakers'],
       }
     }
 
@@ -280,7 +273,6 @@ export async function getAgentResponse(
       const names = ctx.speakers.slice(0, 3).map((s) => `**${s.name}** (${s.title})`).join(', ')
       return {
         text: `We have ${ctx.speakers.length} confirmed speakers so far, including ${names}. Hover any card to view their full bio!`,
-        suggestedReplies: ['Build my itinerary', 'Show schedule', 'Get passes'],
       }
     }
 
@@ -288,7 +280,6 @@ export async function getAgentResponse(
       scrollToSection('sponsors')
       return {
         text: `PEC Summit is supported by premier partners across Title, Gold, and Silver tiers. Interested in sponsoring? Contact partnerships@ecellpec.in`,
-        suggestedReplies: ['Tell me about the fest', 'Build my itinerary', 'When does it start?'],
       }
     }
 
@@ -297,7 +288,6 @@ export async function getAgentResponse(
       if (!email) {
         return {
           text: `Sure! Share your email address and I'll add you to the PEC Summit updates list.`,
-          suggestedReplies: [],
         }
       }
       const result = subscribeEmail(email)
@@ -308,30 +298,19 @@ export async function getAgentResponse(
       scrollToSection('faq')
       return {
         text: `I've scrolled to the FAQ section. Venue: **PEC Campus, Sector 12, Chandigarh**. You can also ask me specific questions directly!`,
-        suggestedReplies: ['Build my itinerary', 'Is it free to attend?', 'Get passes'],
       }
     }
 
     case 'general_info': {
       return {
         text: `**PEC Summit** is E-Cell PEC's flagship entrepreneurship summit featuring 3,000+ attendees, 40+ speakers, ₹15L+ prize pool, and 2 days of pitches & hackathons. Dates: ${ctx.meta.dates}.`,
-        suggestedReplies: ['Build my itinerary', 'What tracks are there?', 'Get passes'],
       }
     }
 
     default: {
       return {
         text: `I'm the Summit Agent! I can answer questions, take you to sections, or **build a personalized itinerary** (try asking: "Build a Day 2 itinerary for AI"). What would you like to do?`,
-        suggestedReplies: ['Build my itinerary', 'When does it start?', 'Show speakers'],
       }
     }
   }
 }
-
-export const SUGGESTED_STARTERS = [
-  'Build my itinerary',
-  'What tracks are there?',
-  'When does it start?',
-  'Show me speakers',
-  'Tell me about the pitch competition',
-]

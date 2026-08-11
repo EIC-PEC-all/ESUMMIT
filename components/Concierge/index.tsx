@@ -1,26 +1,15 @@
 'use client'
 // components/Concierge/index.tsx
-// Floating Agentic Summit Agent + "My Plan" Persistent Itinerary Drawer (Money/Fintech Green Theme)
+// Floating E-Summit PEC AI Concierge + "My Plan" Persistent Itinerary Drawer
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Send, Bot, TrendingUp, ChevronDown, Calendar, Plus, Trash2, Bookmark, Check, Zap } from 'lucide-react'
+import { X, Send, Bot, TrendingUp, ChevronDown, Calendar, Plus, Trash2, Bookmark, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { usePathname } from 'next/navigation'
-import { getAgentResponse, SUGGESTED_STARTERS, type ItinerarySession } from './agent'
-import { FEST_CONTEXT } from '@/lib/data'
-
-interface Message {
-  id: string
-  role: 'user' | 'bot'
-  text: string
-  timestamp: Date
-  suggestedReplies?: string[]
-  itinerary?: {
-    title: string
-    sessions: ItinerarySession[]
-  }
-}
+import { useChatbot } from '@/hooks/useChatbot'
+import { emitAgentEvent } from '@/lib/events'
+import type { ItinerarySession } from './agent'
 
 function FormattedText({ text }: { text: string }) {
   const parts = text.split(/(\*\*.*?\*\*)/g)
@@ -54,18 +43,7 @@ export default function Concierge() {
   })
   const [myPlan, setMyPlan] = useState<ItinerarySession[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 'welcome',
-      role: 'bot',
-      text: `Hey! I'm your E-Summit Guide. I can help you find sessions, navigate the venue, or **curate your personal itinerary**. Try asking "Show me Day 1 events" or "Which sessions are about AI?"!`,
-      timestamp: new Date(),
-      suggestedReplies: SUGGESTED_STARTERS.slice(0, 3),
-    },
-  ])
   const [input, setInput] = useState('')
-  const [isTyping, setIsTyping] = useState(false)
-  const [unread, setUnread] = useState(0)
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -78,6 +56,45 @@ export default function Concierge() {
     return () => observer.disconnect()
   }, [])
 
+  const handleFunctionCall = useCallback((name: string, args: Record<string, unknown>) => {
+    if (name === 'scroll_to_section' && typeof args.section === 'string') {
+      const sectionMap: Record<string, string> = {
+        hero: 'esummit-hero',
+        about: 'esummit-about',
+        tracks: 'esummit-tracks',
+        speakers: 'speakers',
+        schedule: 'schedule',
+        sponsors: 'sponsors',
+        faq: 'faq',
+        register: 'register',
+        'events-navigation': 'events-navigation',
+      }
+      const targetId = sectionMap[args.section.toLowerCase()] || args.section
+      emitAgentEvent({ type: 'scrollToSection', payload: { id: targetId } })
+    }
+    if (name === 'highlight_activity_venue' && typeof args.activityId === 'string') {
+      window.dispatchEvent(new CustomEvent('conciergeHighlightVenue', { detail: { activityId: args.activityId } }))
+    }
+    if (name === 'get_campus_route') {
+      window.dispatchEvent(new CustomEvent('open-events-navigation'))
+    }
+  }, [])
+
+  const handleFunctionResult = useCallback((name: string, result: string) => {
+    if (name === 'subscribe_email' && result.includes('subscribed')) {
+      toast.success('Subscribed to E-Summit PEC updates!')
+    }
+    if (name === 'register_for_activity') {
+      toast.success('Registration interest recorded!')
+    }
+  }, [])
+
+  const { messages, isLoading, sendMessage } = useChatbot({
+    onFunctionCall: handleFunctionCall,
+    onFunctionResult: handleFunctionResult,
+  })
+
+  const visibleMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant')
   // Listen to loader state updates
   useEffect(() => {
     const checkState = () => {
@@ -110,9 +127,7 @@ export default function Concierge() {
   }, [])
 
   useEffect(() => {
-    const handleOpenPlan = () => {
-      setPlanOpen(true)
-    }
+    const handleOpenPlan = () => setPlanOpen(true)
     const handleOpenConcierge = () => {
       setOpen(true)
       setPlanOpen(true)
@@ -150,56 +165,18 @@ export default function Concierge() {
 
   useEffect(() => {
     if (open) {
-      setUnread(0)
       setTimeout(() => inputRef.current?.focus(), 150)
     }
   }, [open])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages, isTyping])
+  }, [messages, isLoading])
 
-  const sendMessage = async (userText: string) => {
-    if (!userText.trim()) return
-
-    const userMsg: Message = {
-      id: Date.now().toString(),
-      role: 'user',
-      text: userText,
-      timestamp: new Date(),
-    }
-
-    setMessages((prev) => [...prev, userMsg])
+  const handleSend = (text: string) => {
+    if (!text.trim() || isLoading) return
+    sendMessage(text)
     setInput('')
-    setIsTyping(true)
-
-    try {
-      const res = await getAgentResponse(userText, FEST_CONTEXT)
-      setIsTyping(false)
-
-      const botMsg: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'bot',
-        text: res.text,
-        timestamp: new Date(),
-        suggestedReplies: res.suggestedReplies,
-        itinerary: res.itinerary,
-      }
-
-      setMessages((prev) => [...prev, botMsg])
-      if (!open) setUnread((u) => u + 1)
-    } catch (err) {
-      setIsTyping(false)
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          role: 'bot',
-          text: 'Apologies, I encountered a temporary connection issue. How else can I assist with E-Summit 2026?',
-          timestamp: new Date(),
-        },
-      ])
-    }
   }
 
   return (
@@ -250,11 +227,15 @@ export default function Concierge() {
                 </div>
                 <div>
                   <p className="font-display font-bold text-sm text-white flex items-center gap-1.5">
-                    Summit AI Assistant
+                    E-Summit PEC Assistant
                   </p>
                   <p className="font-mono-data text-[10px] text-mint font-semibold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-mint inline-block" />
+<<<<<<< HEAD
                     <span>Visitor Support</span>
+=======
+                    <span>Powered by Groq · E-Cell PEC</span>
+>>>>>>> eic-all/main
                   </p>
                 </div>
               </div>
@@ -281,7 +262,7 @@ export default function Concierge() {
 
             {/* Messages Log */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 font-body text-sm scrollbar-thin">
-              {messages.map((msg) => (
+              {visibleMessages.map((msg) => (
                 <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                   <div className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                     {msg.role === 'user' ? (
@@ -301,7 +282,7 @@ export default function Concierge() {
                           : 'bg-white/10 border border-white/15 text-white rounded-bl-none shadow-md backdrop-blur-md'
                       }`}
                     >
-                      <FormattedText text={msg.text} />
+                      <FormattedText text={msg.content} />
                     </div>
                   </div>
 
@@ -327,7 +308,7 @@ export default function Concierge() {
                                 <p className="font-body text-xs font-bold text-white truncate">{session.title}</p>
                               </div>
                               <button
-                                onClick={() => addToPlan(session)}
+                                onClick={() => addToPlan(session as ItinerarySession)}
                                 className={`px-2.5 py-1 rounded-lg text-[10px] font-mono-data shrink-0 flex items-center gap-1 transition-all ${
                                   isInPlan
                                     ? 'bg-mint/20 text-mint border border-mint/40'
@@ -343,24 +324,13 @@ export default function Concierge() {
                       </div>
                     </div>
                   )}
-
-                  {/* Suggested Quick Replies */}
-                  {msg.role === 'bot' && msg.suggestedReplies && msg.id === messages[messages.length - 1].id && (
-                    <div className="flex flex-wrap gap-2 mt-3 ml-8">
-                      {msg.suggestedReplies.map((r) => (
-                        <button
-                          key={r}
-                          onClick={() => sendMessage(r)}
-                          className="px-3.5 py-1.5 rounded-full text-xs font-mono-data bg-white/10 hover:bg-mint hover:text-void text-white border border-white/20 transition-all font-semibold shadow-sm cursor-pointer"
-                        >
-                          {r}
-                        </button>
-                      ))}
-                    </div>
-                  )}
                 </div>
               ))}
+<<<<<<< HEAD
               {isTyping && <p className="text-xs font-mono-data text-mint ml-8 animate-pulse">Thinking...</p>}
+=======
+              {isLoading && <p className="text-xs font-mono-data text-mint ml-8 animate-pulse">Agent is thinking...</p>}
+>>>>>>> eic-all/main
               <div ref={bottomRef} />
             </div>
 
@@ -369,7 +339,7 @@ export default function Concierge() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault()
-                  sendMessage(input)
+                  handleSend(input)
                 }}
                 className="flex items-center gap-2 bg-black/40 border border-white/20 focus-within:border-mint rounded-2xl p-1.5 transition-all"
               >
@@ -378,12 +348,12 @@ export default function Concierge() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about schedule, tracks, or plan..."
+                  placeholder="Ask about E-Summit schedule, tracks, speakers..."
                   className="flex-1 bg-transparent px-3 py-1.5 text-xs sm:text-sm text-white placeholder:text-gray-400 outline-none font-body"
                 />
                 <button
                   type="submit"
-                  disabled={!input.trim() || isTyping}
+                  disabled={!input.trim() || isLoading}
                   className="w-9 h-9 rounded-xl bg-mint text-void font-bold flex items-center justify-center disabled:opacity-30 hover:scale-105 transition-all shrink-0 cursor-pointer"
                   aria-label="Send message"
                 >
@@ -421,7 +391,7 @@ export default function Concierge() {
                   <div className="py-16 text-center text-muted font-body text-sm">
                     <Calendar size={36} className="mx-auto mb-3 opacity-30 text-[var(--accent-mint)]" />
                     <p>Your plan is empty.</p>
-                    <p className="text-xs text-muted/70 mt-1">Ask Summit Agent in chat to build a custom itinerary for you!</p>
+                    <p className="text-xs text-muted/70 mt-1">Ask the E-Summit assistant to build a custom itinerary!</p>
                   </div>
                 ) : (
                   myPlan.map((session) => (

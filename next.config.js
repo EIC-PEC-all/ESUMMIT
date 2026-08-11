@@ -7,8 +7,9 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   images: {
-    domains: [],
+    remotePatterns: [{ protocol: 'https', hostname: 'images.unsplash.com' }],
   },
   // Allow Three.js to work without SSR issues
   webpack: (config) => {
