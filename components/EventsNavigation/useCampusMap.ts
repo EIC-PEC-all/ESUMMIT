@@ -108,7 +108,7 @@ export function useCampusMap({ containerRef, day, onMapLoad, onError }: UseCampu
         hideLayers.forEach(l => { if (map.getLayer(l)) map.setLayoutProperty(l, "visibility", "none") })
 
         const layers = map.getStyle()?.layers || []
-        layers.forEach(layer => {
+        layers.forEach((layer: any) => {
           if (layer.id.includes("road") && layer.type === "line") {
             map.setPaintProperty(layer.id, "line-color", layer.id.includes("major") || layer.id.includes("primary") ? "#222222" : "#1A1A1A")
           }
@@ -188,7 +188,7 @@ export function useCampusMap({ containerRef, day, onMapLoad, onError }: UseCampu
       return () => window.removeEventListener("conciergeHighlightVenue", handleHighlightVenue as EventListener)
     })
 
-    map.on("error", (e) => onError?.(e.error?.message || "Map error"))
+    map.on("error", (e: any) => onError?.(e.error?.message || "Map error"))
 
     return () => {
       if (routeAnimationRef.current) cancelAnimationFrame(routeAnimationRef.current)
@@ -209,7 +209,7 @@ export function useCampusMap({ containerRef, day, onMapLoad, onError }: UseCampu
     map.flyTo({
       center: venue.coordinates, zoom: 19.5, pitch: 65,
       bearing: map.getBearing() + 15, duration: 1800,
-      easing: (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2,
+      easing: (t: number) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2,
       essential: true,
     })
   }, [])
@@ -256,7 +256,7 @@ export function useCampusMap({ containerRef, day, onMapLoad, onError }: UseCampu
       pitch: 65,
       zoom: 19.5,
       duration: 1000,
-      easing: (t) => t, // Linear ease to avoid jerky tracking when updated frequently
+      easing: (t: number) => t, // Linear ease to avoid jerky tracking when updated frequently
     })
   }, [])
 
@@ -372,13 +372,13 @@ export function useCampusMap({ containerRef, day, onMapLoad, onError }: UseCampu
     if (!venue) return
 
     map.fitBounds(CAMPUS_BOUNDS as [[number, number], [number, number]], {
-      duration: 800, easing: (t) => 1 - Math.pow(1 - t, 3), padding: 50, essential: true,
+      duration: 800, easing: (t: number) => 1 - Math.pow(1 - t, 3), padding: 50, essential: true,
     })
     setTimeout(() => {
       map.flyTo({
         center: venue.coordinates, zoom: 19.5, pitch: 65,
         bearing: map.getBearing() + 15, duration: 1800,
-        easing: (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2,
+        easing: (t: number) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2,
         essential: true,
       })
     }, 600)

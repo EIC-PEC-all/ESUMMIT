@@ -231,11 +231,7 @@ export default function Concierge() {
                   </p>
                   <p className="font-mono-data text-[10px] text-mint font-semibold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-mint inline-block" />
-<<<<<<< HEAD
-                    <span>Visitor Support</span>
-=======
                     <span>Powered by Groq · E-Cell PEC</span>
->>>>>>> eic-all/main
                   </p>
                 </div>
               </div>
@@ -326,11 +322,7 @@ export default function Concierge() {
                   )}
                 </div>
               ))}
-<<<<<<< HEAD
-              {isTyping && <p className="text-xs font-mono-data text-mint ml-8 animate-pulse">Thinking...</p>}
-=======
               {isLoading && <p className="text-xs font-mono-data text-mint ml-8 animate-pulse">Agent is thinking...</p>}
->>>>>>> eic-all/main
               <div ref={bottomRef} />
             </div>
 
