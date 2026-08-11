@@ -1,4 +1,4 @@
-# ⚡ PEC E-Summit 2026 — High Voltage Entrepreneurship Summit
+# PEC E-Summit 2026 — High Voltage Entrepreneurship Summit
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.2.5-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
@@ -11,26 +11,9 @@
 > **The flagship entrepreneurship summit of E-Cell PEC, Chandigarh.**  
 > North India's premier high-voltage platform for student innovators, startup founders, venture builders, and angel investors.
 
-![Next.js](https://img.shields.io/badge/Next.js-14.2.5-black?style=flat-square&logo=next.js)
-![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.6-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
-![Framer Motion](https://img.shields.io/badge/Framer_Motion-11.3-0055FF?style=flat-square&logo=framer&logoColor=white)
-![Three.js](https://img.shields.io/badge/Three.js-0.166-black?style=flat-square&logo=three.js)
-![GSAP](https://img.shields.io/badge/GSAP-3.12-88CE02?style=flat-square&logo=greensock&logoColor=black)
-![CI](https://github.com/EIC-PEC-all/E-Summit-26/actions/workflows/ci.yml/badge.svg?style=flat-square)
-
 ---
 
-## Preview
-
-![Hero Section](public/readme-hero.png)
-
-![Highlights Section](public/readme-highlights.png)
-
----
-
-## 🌟 Overview
+## Overview
 
 **PEC Summit 2026** is an immersive, high-energy web platform engineered for North India's biggest student entrepreneurship festival hosted at **Punjab Engineering College (PEC), Chandigarh**. 
 
@@ -38,31 +21,31 @@ Designed with a bold **"Stock Market Bull Edition"** visual theme — featuring 
 
 ---
 
-## ✨ Key Features & Architectural Highlights
+## Key Features & Architectural Highlights
 
-### 🐂 Stock Market Bull Edition Hero (`components/EsummitHero`)
+### Stock Market Bull Edition Hero (`components/EsummitHero`)
 - **Live Simulated Ticker Strip**: Real-time ticker stream tracking startup indices, fundings, and stock-style market updates.
 - **Magnetic Micro-Interactions**: Physics-based magnetic hover effects on primary registration buttons powered by Framer Motion springs.
 - **Floating Market Badges**: Interactive 3D tilt, floating badges, and dynamic orbit rings background decor.
 
-### 🎭 Interactive 3D & Parallax Experience
+### Interactive 3D & Parallax Experience
 - **GSAP & Lenis Smooth Scroll**: Inertial, ultra-smooth scrolling architecture provided by `@studio-freight/lenis` integrated with GSAP `ScrollTrigger`.
 - **Scroll-Parallax Showcase Marquee (`components/EsummitMarquee`)**: Multi-row infinite horizontal text and visual showcases reacting dynamically to scroll position.
 - **3D Speaker Grid (`components/Speakers`)**: Interactive perspective cards with 3D tilt calculations, custom border highlights, and instant track filtering.
 - **Sticky Stacking Cards (`components/EsummitSpeakers`)**: Framer Motion scroll progress-driven depth stacking for highlight cards.
 
-### 🤖 AI Concierge Widget (`components/Concierge`)
+### AI Concierge Widget (`components/Concierge`)
 - **Floating Interactive Assistant**: Dedicated AI Concierge floating widget accessible on every page.
 - **Instant Summit Guidance**: Quick assistance for event timelines, track details, registration queries, pass pricing, and venue navigation.
 
-### 📊 Dynamic Stats & Live Components
+### Dynamic Stats & Live Components
 - **StatBurst Counter (`components/StatBurst`)**: Animated count-up triggers for key summit milestones (3000+ Attendees, 40+ Speakers, ₹15L+ Prize Pool).
 - **Event Timeline (`components/Timeline`)**: Interactive day-by-day and track-filtered schedule viewer with expandable session descriptions.
 - **Sponsors & Partners Marquee (`components/Sponsors`)**: Dynamic multi-tier sponsor showcase grid and continuous marquee.
 
 ---
 
-## 🎨 Design System & Visual Palette
+## Design System & Visual Palette
 
 | Token | Hex / Value | Application |
 | :--- | :--- | :--- |
@@ -76,14 +59,14 @@ Designed with a bold **"Stock Market Bull Edition"** visual theme — featuring 
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
-### **Core Framework & Runtime**
+### Core Framework & Runtime
 - **[Next.js 14.2.5](https://nextjs.org/)** (App Router architecture, React Server Components & Client Components)
 - **[React 18](https://reactjs.org/)** & **[TypeScript 5](https://www.typescriptlang.org/)**
 - **[Tailwind CSS 3.4](https://tailwindcss.com/)** with custom PostCSS utilities & custom theme tokens
 
-### **Animation & Graphics Engine**
+### Animation & Graphics Engine
 - **[Framer Motion 11](https://www.framer.com/motion/)**: Layout animations, spring physics, gestures, dynamic scroll hooks (`useScroll`, `useTransform`, `useSpring`).
 - **[GSAP 3.12](https://greensock.com/gsap/)**: ScrollTrigger timeline management & complex scroll parallax.
 - **[Three.js](https://threejs.org/) / [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) / [Drei](https://github.com/pmndrs/drei)**: 3D canvas visuals, custom geometry shaders, ambient space elements.
@@ -92,7 +75,7 @@ Designed with a bold **"Stock Market Bull Edition"** visual theme — featuring 
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```bash
 PEC-SUMMIT/
@@ -132,19 +115,19 @@ PEC-SUMMIT/
 
 ---
 
-## 🎪 Event Tracks & Highlights
+## Event Tracks & Highlights
 
 | Track | Category | Description |
 | :--- | :--- | :--- |
-| **🚀 Pitch Competition** | Founders Stage | Present startup decks to top VCs and angel investors for funding and mentorship. |
-| **💡 Panel Discussions** | Thought Leadership | Hard-hitting panels with founders, CXOs, and tech policy makers. |
-| **🏬 Startup Expo** | Show + Tell | 30+ student & early-stage startups showcasing live products to 3,000+ attendees. |
-| **⚡ 24-Hour Hackathon** | 24-Hr Build | Intensive 24-hour sprint in AI, Web3, Deep-Tech, and Climate Tech. |
-| **🤝 Networking Mixer** | Connect | Speed networking, 1-on-1 Investor Open Hours, and VIP social evening. |
+| **Pitch Competition** | Founders Stage | Present startup decks to top VCs and angel investors for funding and mentorship. |
+| **Panel Discussions** | Thought Leadership | Hard-hitting panels with founders, CXOs, and tech policy makers. |
+| **Startup Expo** | Show + Tell | 30+ student & early-stage startups showcasing live products to 3,000+ attendees. |
+| **24-Hour Hackathon** | 24-Hr Build | Intensive 24-hour sprint in AI, Web3, Deep-Tech, and Climate Tech. |
+| **Networking Mixer** | Connect | Speed networking, 1-on-1 Investor Open Hours, and VIP social evening. |
 
 ---
 
-## ⚡ Quick Start / Local Development
+## Quick Start / Local Development
 
 ### 1. Prerequisites
 - **Node.js**: `v18.x` or higher
@@ -179,7 +162,7 @@ npm run start
 
 ---
 
-## 🌐 Deployment
+## Deployment
 
 This application is ready for zero-config deployment on **[Vercel](https://vercel.com/)** or **[Firebase App Hosting](https://firebase.google.com/)**:
 
@@ -190,7 +173,7 @@ npx vercel
 
 ---
 
-## 🏢 Organized By
+## Organized By
 
 **E-Cell PEC (Entrepreneurship Cell)**  
 *Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh*
@@ -203,5 +186,5 @@ npx vercel
 ---
 
 <div align="center">
-  <sub>Built with ⚡ by E-Cell PEC Dev Team</sub>
+  <sub>Built by E-Cell PEC Dev Team</sub>
 </div>
