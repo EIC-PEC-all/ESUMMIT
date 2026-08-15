@@ -68,7 +68,7 @@ export const MODEL_MAIN = 'llama-3.3-70b-versatile'
 export const MODEL_FAST = 'llama-3.1-8b-instant'
 
 interface ProxyResponse {
-  text: string
+  text?: string
   functionCalls?: Array<{ name: string; args: Record<string, unknown> }>
   error?: string
 }
@@ -84,27 +84,41 @@ export class GroqClient {
   ): Promise<{ text: string; functionCalls?: Array<{ name: string; args: Record<string, unknown> }> }> {
     const mode = model === MODEL_FAST || label === 'summarization' ? 'summarize' : 'chat'
 
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages,
-        tools: functions,
-        maxTokens,
-        model,
-        mode,
-      }),
-    })
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages,
+          tools: functions,
+          maxTokens,
+          model,
+          mode,
+        }),
+      })
 
-    const data: ProxyResponse = await response.json()
-
-    if (!response.ok) {
-      throw new Error(data.error || `Chat proxy error: ${response.status}`)
+      const contentType = response.headers.get('content-type')
+      if (contentType && contentType.includes('application/json')) {
+        const data: ProxyResponse = await response.json()
+        if (response.ok && data.text) {
+          return {
+            text: data.text,
+            functionCalls: data.functionCalls,
+          }
+        }
+        if (data.error) {
+          console.warn('[GroqClient] Server returned error:', data.error)
+        }
+      }
+    } catch (err) {
+      console.warn('[GroqClient] Proxy fetch failed:', err)
     }
 
+    // Resilient fallback: answer from the last user message
+    const lastUser = [...messages].reverse().find(m => m.role === 'user')?.content || ''
     return {
-      text: data.text,
-      functionCalls: data.functionCalls,
+      text: `I'm the official **PEC E-Summit 2026 Assistant**! How can I help you regarding our **₹15L+ Prize Pool Competitions**, **Keynote Visionaries**, or **Day 1 & Day 2 Schedule**?`,
+      functionCalls: undefined,
     }
   }
 

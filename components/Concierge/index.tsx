@@ -222,7 +222,7 @@ export default function Concierge() {
                   </p>
                   <p className="font-mono-data text-[10px] text-mint font-semibold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-mint inline-block" />
-                    <span>Powered by Groq · E-Cell PEC</span>
+                    <span>Official AI Concierge · E-Cell PEC</span>
                   </p>
                 </div>
               </div>
