@@ -415,16 +415,15 @@ export function useChatbot(options: UseChatbotOptions = {}) {
       }
 
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to get response'
       if (!abortControllerRef.current?.signal.aborted) {
-        setError(message)
-        const errorMessage: ChatMessage = {
+        const localFallback = localAnswer(trimmed) || `I'm here to assist you with **PEC E-Summit 2026**! Ask me about our speaker lineup, registration passes, schedule, or pitch competitions.`
+        const fallbackMessage: ChatMessage = {
           id: generateId(),
           role: 'assistant',
-          content: `Sorry, I hit an error: ${message}. Please try again.`,
+          content: localFallback,
           timestamp: new Date(),
         }
-        setMessages(prev => [...prev, errorMessage])
+        setMessages(prev => [...prev, fallbackMessage])
       }
     } finally {
       if (isMountedRef.current) {
