@@ -1,19 +1,48 @@
 'use client'
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ExternalLink, CheckCircle2, ArrowLeft, Sparkles, Handshake, X } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ExternalLink, CheckCircle2, ArrowLeft, Handshake, X } from 'lucide-react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import Concierge from '@/components/Concierge'
 import CircuitBoard from '@/components/Hero/CircuitBoard'
-import { SPONSORS } from '@/lib/data'
+import { SPONSORS as DEFAULT_SPONSORS } from '@/lib/data'
+import { api } from '@/lib/api'
+import type { BackendSponsor } from '@/lib/api-types'
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 
 export default function SponsorsLandingPage() {
   const [modalOpen, setModalOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [sponsorsList, setSponsorsList] = useState<BackendSponsor[]>([])
+
+  useEffect(() => {
+    let mounted = true
+    api.getSponsors()
+      .then((data) => {
+        if (mounted && data && data.length > 0) {
+          setSponsorsList(data)
+        }
+      })
+      .catch(() => {
+        // Fallback
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const titleSponsors = sponsorsList.filter((s) => s.tier === 'title')
+  const goldSponsors = sponsorsList.filter((s) => s.tier === 'gold')
+  const silverSponsors = sponsorsList.filter((s) => s.tier === 'silver')
+  const mediaSponsors = sponsorsList.filter((s) => s.tier === 'media')
+
+  const activeTitle = titleSponsors.length > 0 ? titleSponsors : DEFAULT_SPONSORS.title
+  const activeGold = goldSponsors.length > 0 ? goldSponsors : DEFAULT_SPONSORS.gold
+  const activeSilver = silverSponsors.length > 0 ? silverSponsors : DEFAULT_SPONSORS.silver
+  const activeMedia = mediaSponsors.length > 0 ? mediaSponsors : DEFAULT_SPONSORS.media
 
   const handleSubmitDeck = (e: React.FormEvent) => {
     e.preventDefault()
@@ -80,7 +109,7 @@ export default function SponsorsLandingPage() {
               <div className="bg-[var(--accent-mint)]/20 h-px flex-1" />
             </div>
             <div className="grid gap-6 md:grid-cols-2">
-              {SPONSORS.title.map((s) => (
+              {activeTitle.map((s) => (
                 <div
                   key={s.id}
                   className="border-[var(--accent-mint)]/30 glow-green flex items-center justify-between rounded-2xl border bg-panel p-8"
@@ -91,17 +120,19 @@ export default function SponsorsLandingPage() {
                     </span>
                     <h3 className="font-display text-4xl text-white">{s.name}</h3>
                     <p className="mt-2 font-body text-xs text-muted">
-                      Premier Venture Capital Partner backing student founders.
+                      Premier Technology & Venture Partner backing student founders.
                     </p>
                   </div>
-                  <a
-                    href={s.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="border-[var(--accent-mint)]/20 rounded-xl border bg-void p-3 text-muted hover:text-[var(--accent-mint)]"
-                  >
-                    <ExternalLink size={18} />
-                  </a>
+                  {('websiteUrl' in s ? s.websiteUrl : s.url) ? (
+                    <a
+                      href={'websiteUrl' in s && s.websiteUrl ? s.websiteUrl : ('url' in s ? s.url : '#')}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="border-[var(--accent-mint)]/20 rounded-xl border bg-void p-3 text-muted hover:text-[var(--accent-mint)]"
+                    >
+                      <ExternalLink size={18} />
+                    </a>
+                  ) : null}
                 </div>
               ))}
             </div>
@@ -116,12 +147,12 @@ export default function SponsorsLandingPage() {
               <div className="bg-[var(--accent-mint)]/20 h-px flex-1" />
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {SPONSORS.gold.map((s) => (
+              {activeGold.map((s) => (
                 <div
                   key={s.id}
                   className="border-[var(--accent-mint)]/20 group flex cursor-pointer items-center justify-between rounded-xl border bg-panel p-6 transition-colors hover:border-[var(--accent-mint)]"
                 >
-                  <h4 className="font-body text-lg font-semibold text-white grayscale filter transition-all group-hover:text-[var(--accent-mint)] group-hover:grayscale-0">
+                  <h4 className="font-body text-lg font-semibold text-white transition-all group-hover:text-[var(--accent-mint)]">
                     {s.name}
                   </h4>
                   <ExternalLink
@@ -142,10 +173,10 @@ export default function SponsorsLandingPage() {
               <div className="bg-[var(--accent-mint)]/15 h-px flex-1" />
             </div>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-              {SPONSORS.silver.map((s) => (
+              {activeSilver.map((s) => (
                 <div
                   key={s.id}
-                  className="border-[var(--accent-mint)]/15 rounded-lg border bg-panel p-4 text-center font-mono-data text-xs text-muted grayscale filter transition-colors hover:border-[var(--accent-mint)] hover:text-[var(--accent-mint)] hover:grayscale-0"
+                  className="border-[var(--accent-mint)]/15 rounded-lg border bg-panel p-4 text-center font-mono-data text-xs text-muted transition-colors hover:border-[var(--accent-mint)] hover:text-[var(--accent-mint)]"
                 >
                   {s.name}
                 </div>
@@ -162,10 +193,10 @@ export default function SponsorsLandingPage() {
               <div className="bg-[var(--accent-mint)]/15 h-px flex-1" />
             </div>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-              {SPONSORS.media.map((s) => (
+              {activeMedia.map((s) => (
                 <div
                   key={s.id}
-                  className="border-[var(--accent-mint)]/15 rounded-lg border bg-panel p-4 text-center font-mono-data text-xs text-muted grayscale filter transition-colors hover:border-[var(--accent-mint)] hover:text-[var(--accent-mint)] hover:grayscale-0"
+                  className="border-[var(--accent-mint)]/15 rounded-lg border bg-panel p-4 text-center font-mono-data text-xs text-muted transition-colors hover:border-[var(--accent-mint)] hover:text-[var(--accent-mint)]"
                 >
                   {s.name}
                 </div>
