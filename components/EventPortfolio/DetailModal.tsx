@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, CheckCircle2, ArrowRight, Calendar, Sparkles, Users } from 'lucide-react'
+import { X, CheckCircle2, ArrowRight, Calendar, Sparkles, Users, Plus, ImagePlus } from 'lucide-react'
 import { PortfolioEvent } from './data'
 
 interface DetailModalProps {
@@ -24,6 +24,8 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
   }, [event])
 
   if (!event) return null
+
+  const hasImage = Boolean(event.image && !event.image.includes('unsplash.com'))
 
   return (
     <AnimatePresence>
@@ -70,13 +72,29 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
           </h2>
 
           {/* Event Media Banner */}
-          <div className="relative my-4 w-full aspect-[21/9] sm:aspect-[2.4/1] rounded-xl border border-white/10 overflow-hidden bg-neutral-950">
-            <img
-              src={event.image}
-              alt={event.title}
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0C120F] via-transparent to-transparent opacity-80" />
+          <div className="relative my-4 w-full aspect-[21/9] sm:aspect-[2.4/1] rounded-xl border border-white/10 overflow-hidden bg-neutral-950 flex items-center justify-center">
+            {hasImage ? (
+              <>
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0C120F] via-transparent to-transparent opacity-80" />
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center p-6 text-center space-y-2">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-mint/10 border border-mint/30 text-mint">
+                  <ImagePlus className="h-6 w-6" />
+                </div>
+                <span className="font-mono-data text-xs font-bold uppercase tracking-wider text-mint">
+                  Event Photo Slot #{event.number}
+                </span>
+                <span className="font-mono-data text-[10px] text-gray-400">
+                  Manage and insert photo from Admin CMS
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Partner Callout if exists */}

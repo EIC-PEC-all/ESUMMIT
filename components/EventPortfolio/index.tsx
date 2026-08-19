@@ -1,8 +1,8 @@
 // components/EventPortfolio/index.tsx
 'use client'
 
-import React, { useRef, useState, useMemo } from 'react'
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
+import React, { useRef, useState, useMemo, useEffect } from 'react'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { PORTFOLIO_EVENTS, PortfolioEvent } from './data'
 import { Card } from './Card'
 import { FinalCard } from './FinalCard'
@@ -14,17 +14,47 @@ export default function EventPortfolioShowcase() {
 
   const [selectedEvent, setSelectedEvent] = useState<PortfolioEvent | null>(null)
   const [activeCategory, setActiveCategory] = useState<string>('All')
+  const [eventMedia, setEventMedia] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    let mounted = true
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
+
+    fetch(`${apiUrl}/portfolio-events`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { eventId: string; imageUrl: string }[]) => {
+        if (mounted && Array.isArray(data)) {
+          const map: Record<string, string> = {}
+          data.forEach((d) => {
+            map[d.eventId] = d.imageUrl
+          })
+          setEventMedia(map)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const categories = useMemo(() => {
     return ['All', 'Industry Workshop', 'Recruitment', 'Deep Tech', 'Strategy', 'Keynotes']
   }, [])
 
+  const eventsWithMedia = useMemo(() => {
+    return PORTFOLIO_EVENTS.map((evt) => ({
+      ...evt,
+      image: eventMedia[evt.id] || eventMedia[evt.number] || '',
+    }))
+  }, [eventMedia])
+
   const filteredEvents = useMemo(() => {
-    if (activeCategory === 'All') return PORTFOLIO_EVENTS
-    return PORTFOLIO_EVENTS.filter(
+    if (activeCategory === 'All') return eventsWithMedia
+    return eventsWithMedia.filter(
       (e) => e.category.toLowerCase().includes(activeCategory.toLowerCase()) || activeCategory === 'All'
     )
-  }, [activeCategory])
+  }, [activeCategory, eventsWithMedia])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -49,7 +79,7 @@ export default function EventPortfolioShowcase() {
       {/* Pinned Sticky Section during vertical scroll */}
       <div className="sticky top-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden">
 
-        {/* Big centered section title — matches site-wide pattern */}
+        {/* Big centered section title */}
         <div className="pointer-events-none absolute top-16 left-0 right-0 flex justify-center z-20">
           <h2
             className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"

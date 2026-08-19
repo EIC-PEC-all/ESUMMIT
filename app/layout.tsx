@@ -6,15 +6,17 @@ import SessionProviderWrapper from '@/components/Providers/SessionProviderWrappe
 
 const kanit = Kanit({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['400', '600', '700', '800'],
   variable: '--font-kanit',
   display: 'swap',
+  preload: false,
 })
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+  preload: false,
 })
 
 export const metadata: Metadata = {

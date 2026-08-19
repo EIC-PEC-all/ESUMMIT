@@ -22,11 +22,10 @@ const NAV_ITEMS = [
   { label: 'FAQ', code: '08', href: '/faq', sectionId: 'faq' },
 ]
 
-const SPONSOR_ITEMS = [
-  ...SPONSORS.title.map((s) => ({ ...s, tier: 'Title Partner' })),
-  ...SPONSORS.gold.map((s) => ({ ...s, tier: 'Gold Sponsor' })),
-  ...SPONSORS.silver.map((s) => ({ ...s, tier: 'Ecosystem Partner' })),
-  ...SPONSORS.media.map((s) => ({ ...s, tier: 'Media Partner' })),
+const FALLBACK_TICKER = [
+  { id: 't1', name: 'PEC E-SUMMIT 2026', tier: 'OFFICIAL FESTIVAL' },
+  { id: 't2', name: 'NORTH INDIA PREMIER SUMMIT', tier: 'E-CELL PEC' },
+  { id: 't3', name: 'KEYNOTES • HACKATHON • EXPO', tier: 'MARCH 14-15' },
 ]
 
 function NavCountdown({ targetISO }: { targetISO: string }) {
@@ -109,6 +108,30 @@ export default function Nav() {
     }
     return pathname === '/'
   })
+  const [liveSponsors, setLiveSponsors] = useState<{ id: string; name: string; tier: string }[]>([])
+
+  useEffect(() => {
+    let mounted = true
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
+    fetch(`${apiUrl}/sponsors`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (mounted && Array.isArray(data) && data.length > 0) {
+          setLiveSponsors(
+            data.map((s) => ({
+              id: s.id,
+              name: s.name,
+              tier: `${s.tier.toUpperCase()} PARTNER`,
+            }))
+          )
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   // Listen to loader state updates
   useEffect(() => {
@@ -313,7 +336,7 @@ export default function Nav() {
         <div className="absolute left-[125px] sm:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center pl-[135px] sm:pl-[165px]">
-          {[...SPONSOR_ITEMS, ...SPONSOR_ITEMS, ...SPONSOR_ITEMS].map((item, i) => (
+          {[...(liveSponsors.length > 0 ? liveSponsors : FALLBACK_TICKER), ...(liveSponsors.length > 0 ? liveSponsors : FALLBACK_TICKER), ...(liveSponsors.length > 0 ? liveSponsors : FALLBACK_TICKER)].map((item, i) => (
             <div
               key={`top-${item.id}-${i}`}
               className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"
@@ -340,7 +363,7 @@ export default function Nav() {
         <div className="absolute left-[125px] sm:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center pl-[135px] sm:pl-[165px]">
-          {[...SPONSOR_ITEMS, ...SPONSOR_ITEMS, ...SPONSOR_ITEMS].map((item, i) => (
+          {[...(liveSponsors.length > 0 ? liveSponsors : FALLBACK_TICKER), ...(liveSponsors.length > 0 ? liveSponsors : FALLBACK_TICKER), ...(liveSponsors.length > 0 ? liveSponsors : FALLBACK_TICKER)].map((item, i) => (
             <div
               key={`bot-${item.id}-${i}`}
               className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"

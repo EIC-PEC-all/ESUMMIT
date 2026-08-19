@@ -1,204 +1,35 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
+import { Plus } from 'lucide-react'
 
-interface CardItem {
-  id: string
-  img: string
-  height: number
-}
-
-const RAW_COL_1: CardItem[] = [
-  {
-    id: 'c1-1',
-    img: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80',
-    height: 460,
-  },
-  {
-    id: 'c1-2',
-    img: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=800&q=80',
-    height: 340,
-  },
-  {
-    id: 'c1-3',
-    img: 'https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=80',
-    height: 500,
-  },
-  {
-    id: 'c1-4',
-    img: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=800&q=80',
-    height: 420,
-  },
-  {
-    id: 'c1-5',
-    img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
-    height: 480,
-  },
-  {
-    id: 'c1-6',
-    img: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=800&q=80',
-    height: 560,
-  },
-  {
-    id: 'c1-7',
-    img: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=800&q=80',
-    height: 360,
-  },
-  {
-    id: 'c1-8',
-    img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80',
-    height: 440,
-  },
-]
-
-const RAW_COL_2: CardItem[] = [
-  {
-    id: 'c2-1',
-    img: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80',
-    height: 360,
-  },
-  {
-    id: 'c2-2',
-    img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-    height: 480,
-  },
-  {
-    id: 'c2-3',
-    img: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80',
-    height: 400,
-  },
-  {
-    id: 'c2-4',
-    img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80',
-    height: 540,
-  },
-  {
-    id: 'c2-5',
-    img: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80',
-    height: 440,
-  },
-  {
-    id: 'c2-6',
-    img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80',
-    height: 500,
-  },
-  {
-    id: 'c2-7',
-    img: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80',
-    height: 420,
-  },
-  {
-    id: 'c2-8',
-    img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80',
-    height: 460,
-  },
-]
-
-const RAW_COL_3: CardItem[] = [
-  {
-    id: 'c3-1',
-    img: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=800&q=80',
-    height: 540,
-  },
-  {
-    id: 'c3-2',
-    img: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80',
-    height: 400,
-  },
-  {
-    id: 'c3-3',
-    img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80',
-    height: 460,
-  },
-  {
-    id: 'c3-4',
-    img: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80',
-    height: 500,
-  },
-  {
-    id: 'c3-5',
-    img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80',
-    height: 360,
-  },
-  {
-    id: 'c3-6',
-    img: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80',
-    height: 520,
-  },
-  {
-    id: 'c3-7',
-    img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80',
-    height: 440,
-  },
-  {
-    id: 'c3-8',
-    img: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80',
-    height: 480,
-  },
-]
-
-const RAW_COL_4: CardItem[] = [
-  {
-    id: 'c4-1',
-    img: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
-    height: 420,
-  },
-  {
-    id: 'c4-2',
-    img: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80',
-    height: 540,
-  },
-  {
-    id: 'c4-3',
-    img: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80',
-    height: 400,
-  },
-  {
-    id: 'c4-4',
-    img: 'https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=800&q=80',
-    height: 460,
-  },
-  {
-    id: 'c4-5',
-    img: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80',
-    height: 580,
-  },
-  {
-    id: 'c4-6',
-    img: 'https://images.unsplash.com/photo-1576085898323-218337e3e43c?auto=format&fit=crop&w=800&q=80',
-    height: 340,
-  },
-  {
-    id: 'c4-7',
-    img: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80',
-    height: 500,
-  },
-  {
-    id: 'c4-8',
-    img: 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80',
-    height: 420,
-  },
-]
-
-const RAW_COL_5: CardItem[] = [
-  ...RAW_COL_1.slice(4), ...RAW_COL_3.slice(0, 4)
-].map((item, i) => ({ ...item, id: `c5-${i}` }))
-
-const RAW_COL_6: CardItem[] = [
-  ...RAW_COL_2.slice(4), ...RAW_COL_4.slice(0, 4)
-].map((item, i) => ({ ...item, id: `c6-${i}` }))
-
-// Duplicate columns for continuous auto-scroll loop
-const COL_1 = [...RAW_COL_1, ...RAW_COL_1.map((item) => ({ ...item, id: `${item.id}-dup` }))]
-const COL_2 = [...RAW_COL_2, ...RAW_COL_2.map((item) => ({ ...item, id: `${item.id}-dup` }))]
-const COL_3 = [...RAW_COL_3, ...RAW_COL_3.map((item) => ({ ...item, id: `${item.id}-dup` }))]
-const COL_4 = [...RAW_COL_4, ...RAW_COL_4.map((item) => ({ ...item, id: `${item.id}-dup` }))]
-const COL_5 = [...RAW_COL_5, ...RAW_COL_5.map((item) => ({ ...item, id: `${item.id}-dup` }))]
-const COL_6 = [...RAW_COL_6, ...RAW_COL_6.map((item) => ({ ...item, id: `${item.id}-dup` }))]
+const DEFAULT_HEIGHTS_COL1 = [460, 340, 500, 420]
+const DEFAULT_HEIGHTS_COL2 = [360, 480, 400, 540]
+const DEFAULT_HEIGHTS_COL3 = [540, 400, 460, 500]
+const DEFAULT_HEIGHTS_COL4 = [420, 540, 400, 460]
 
 export default function MasonryShowcase() {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [galleryItems, setGalleryItems] = useState<{ id: string; imageUrl: string; slot?: number; title?: string }[]>([])
+
+  useEffect(() => {
+    let mounted = true
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
+
+    fetch(`${apiUrl}/gallery`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (mounted && Array.isArray(data) && data.length > 0) {
+          setGalleryItems(data)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   // Track scroll position through section container
   const { scrollYProgress } = useScroll({
@@ -215,13 +46,46 @@ export default function MasonryShowcase() {
   const galleryOpacity = useTransform(scrollYProgress, [0, 0.15, 1], [0.3, 1, 1])
   const galleryScale = useTransform(scrollYProgress, [0.85, 1], [1, 1])
 
-  // ── 3. Opposing Scroll Parallax Transforms (Faster) ──
+  // ── 3. Opposing Scroll Parallax Transforms ──
   const colY_1 = useTransform(scrollYProgress, [0.15, 0.85], ['0px', '-800px'])
   const colY_2 = useTransform(scrollYProgress, [0.15, 0.85], ['-800px', '0px'])
   const colY_3 = useTransform(scrollYProgress, [0.15, 0.85], ['-100px', '-900px'])
   const colY_4 = useTransform(scrollYProgress, [0.15, 0.85], ['-700px', '100px'])
-  const colY_5 = useTransform(scrollYProgress, [0.15, 0.85], ['0px', '-750px'])
-  const colY_6 = useTransform(scrollYProgress, [0.15, 0.85], ['-650px', '150px'])
+
+  const renderSlotCard = (slotNum: number, height: number) => {
+    const uploaded = galleryItems.find((g) => g.slot === slotNum) || galleryItems[slotNum - 1]
+
+    return (
+      <div
+        key={`slot-${slotNum}`}
+        className="group relative w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-[#7ED321]/30 bg-[#0B150E] shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:border-[#7ED321] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
+        style={{ height }}
+      >
+        {uploaded?.imageUrl ? (
+          <div
+            className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+            style={{ backgroundImage: `url(${uploaded.imageUrl})` }}
+          />
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center space-y-3 bg-[#0B150E] group-hover:bg-[#101F15] transition-colors">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7ED321]/15 border border-[#7ED321]/40 text-[#7ED321] group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(126,211,33,0.2)]">
+              <Plus className="h-7 w-7" />
+            </div>
+            <div className="space-y-1">
+              <span className="font-mono text-sm font-bold uppercase tracking-wider text-white group-hover:text-[#7ED321] transition-colors block">
+                + Insert Image
+              </span>
+              <p className="font-mono text-[10px] text-[#8A9488]">
+                Slot #{slotNum} &middot; Via Admin CMS
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#070B08]/80 via-transparent to-transparent opacity-60" />
+      </div>
+    )
+  }
 
   return (
     <section
@@ -269,18 +133,9 @@ export default function MasonryShowcase() {
             style={{ y: colY_1, animationDuration: '25s' }}
             className="animate-auto-scroll-up flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
           >
-            {COL_1.map((item) => (
-              <div
-                key={item.id}
-                className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
-                style={{ height: item.height }}
-              >
-                <div
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${item.img})` }}
-                />
-              </div>
-            ))}
+            {[1, 2, 3, 4, 1, 2, 3, 4].map((slot, i) =>
+              renderSlotCard(slot, DEFAULT_HEIGHTS_COL1[i % DEFAULT_HEIGHTS_COL1.length])
+            )}
           </motion.div>
 
           {/* Column 2 — DOWN */}
@@ -288,18 +143,9 @@ export default function MasonryShowcase() {
             style={{ y: colY_2, animationDuration: '30s' }}
             className="animate-auto-scroll-down flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
           >
-            {COL_2.map((item) => (
-              <div
-                key={item.id}
-                className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
-                style={{ height: item.height }}
-              >
-                <div
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${item.img})` }}
-                />
-              </div>
-            ))}
+            {[5, 6, 7, 8, 5, 6, 7, 8].map((slot, i) =>
+              renderSlotCard(slot, DEFAULT_HEIGHTS_COL2[i % DEFAULT_HEIGHTS_COL2.length])
+            )}
           </motion.div>
 
           {/* Column 3 — UP (Mobile, Tablet, Desktop) */}
@@ -307,18 +153,9 @@ export default function MasonryShowcase() {
             style={{ y: colY_3, animationDuration: '22s' }}
             className="animate-auto-scroll-up flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
           >
-            {COL_3.map((item) => (
-              <div
-                key={item.id}
-                className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
-                style={{ height: item.height }}
-              >
-                <div
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${item.img})` }}
-                />
-              </div>
-            ))}
+            {[9, 10, 11, 12, 9, 10, 11, 12].map((slot, i) =>
+              renderSlotCard(slot, DEFAULT_HEIGHTS_COL3[i % DEFAULT_HEIGHTS_COL3.length])
+            )}
           </motion.div>
 
           {/* Column 4 — DOWN (Tablet & Desktop) */}
@@ -326,56 +163,9 @@ export default function MasonryShowcase() {
             style={{ y: colY_4, animationDuration: '28s' }}
             className="animate-auto-scroll-down hidden flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform sm:flex"
           >
-            {COL_4.map((item) => (
-              <div
-                key={item.id}
-                className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
-                style={{ height: item.height }}
-              >
-                <div
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${item.img})` }}
-                />
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Column 5 — UP (Desktop Only) */}
-          <motion.div
-            style={{ y: colY_5, animationDuration: '26s' }}
-            className="animate-auto-scroll-up hidden flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform md:flex"
-          >
-            {COL_5.map((item) => (
-              <div
-                key={item.id}
-                className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
-                style={{ height: item.height }}
-              >
-                <div
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${item.img})` }}
-                />
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Column 6 — DOWN (Desktop Only) */}
-          <motion.div
-            style={{ y: colY_6, animationDuration: '32s' }}
-            className="animate-auto-scroll-down hidden flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform md:flex"
-          >
-            {COL_6.map((item) => (
-              <div
-                key={item.id}
-                className="hover:border-mint/60 group w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-panel shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
-                style={{ height: item.height }}
-              >
-                <div
-                  className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                  style={{ backgroundImage: `url(${item.img})` }}
-                />
-              </div>
-            ))}
+            {[13, 14, 15, 16, 13, 14, 15, 16].map((slot, i) =>
+              renderSlotCard(slot, DEFAULT_HEIGHTS_COL4[i % DEFAULT_HEIGHTS_COL4.length])
+            )}
           </motion.div>
         </motion.div>
       </div>

@@ -1,51 +1,41 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-
-// E-Summit photo gallery images
-const ALL_IMGS = [
-  // Row 1 — Keynotes, pitch competitions, tech stages
-  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1543269664-7eef42226a21?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=840&q=80&auto=format&fit=crop',
-  // Row 2 — Investor meets, networking, workshops, hackathon teams
-  'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1463453091185-61582044d556?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=840&q=80&auto=format&fit=crop',
-]
-
-const ROW_1 = ALL_IMGS.slice(0, 8)
-const ROW_2 = ALL_IMGS.slice(8)
-const LOOP_1 = [...ROW_1, ...ROW_1, ...ROW_1, ...ROW_1]
-const LOOP_2 = [...ROW_2, ...ROW_2, ...ROW_2, ...ROW_2]
+import { Plus, ImagePlus } from 'lucide-react'
 
 interface CleanStripTransitionProps {
   slatCount?: number
 }
 
-function PhotoCard({ src }: { src: string }) {
+function PhotoCard({ src, slotNum }: { src?: string; slotNum: number }) {
   return (
     <div
-      className="border-void/20 group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-void"
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-void/30 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-void bg-[#070B08]"
       style={{ width: '380px', height: '230px' }}
     >
-      <img
-        src={src}
-        alt="E-Summit event photo"
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
+      {src ? (
+        <img
+          src={src}
+          alt={`Summit photo slot ${slotNum}`}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      ) : (
+        <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center space-y-3 bg-[#0B150E] border-2 border-dashed border-[#7ED321]/40 rounded-2xl transition-all group-hover:border-[#7ED321] group-hover:bg-[#101F15]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#7ED321]/15 border border-[#7ED321]/40 text-[#7ED321] group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(126,211,33,0.2)]">
+            <Plus className="h-6 w-6" />
+          </div>
+          <div className="space-y-1">
+            <span className="font-mono text-sm font-bold uppercase tracking-wider text-white group-hover:text-[#7ED321] transition-colors block">
+              + Insert Image
+            </span>
+            <span className="font-mono text-[10px] text-[#8A9488] block">
+              Slot #{slotNum} &middot; Via Admin CMS
+            </span>
+          </div>
+        </div>
+      )}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       <div className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-void opacity-0 shadow-[0_0_20px_rgba(7,11,8,0.4)] transition-all duration-300 group-hover:opacity-100" />
     </div>
@@ -58,12 +48,14 @@ function PhotoRow({
   direction = 'left',
   translateX,
   opacity,
+  offset = 0,
 }: {
-  images: string[]
+  images: (string | undefined)[]
   duration: number
   direction?: 'left' | 'right'
   translateX: any
   opacity: any
+  offset?: number
 }) {
   return (
     <motion.div
@@ -82,7 +74,7 @@ function PhotoRow({
         }}
       >
         {images.map((src, i) => (
-          <PhotoCard key={i} src={src} />
+          <PhotoCard key={i} src={src} slotNum={(i % 8) + 1 + offset} />
         ))}
       </div>
     </motion.div>
@@ -153,6 +145,42 @@ function CleanStripSlat({
 
 export default function FlipFlopTransition({ slatCount = 10 }: CleanStripTransitionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [galleryImages, setGalleryImages] = useState<string[]>([])
+
+  useEffect(() => {
+    let mounted = true
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
+
+    fetch(`${apiUrl}/gallery`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { imageUrl: string; slot?: number }[]) => {
+        if (mounted && Array.isArray(data) && data.length > 0) {
+          const imgs: string[] = []
+          data.forEach((d) => {
+            if (d.slot && d.slot >= 1) {
+              imgs[d.slot - 1] = d.imageUrl
+            } else {
+              imgs.push(d.imageUrl)
+            }
+          })
+          setGalleryImages(imgs)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const row1 = galleryImages.slice(0, 8)
+  const row2 = galleryImages.slice(8, 16)
+
+  const loop1 = Array.from({ length: 8 }, (_, i) => row1[i] || undefined)
+  const loop2 = Array.from({ length: 8 }, (_, i) => row2[i] || undefined)
+
+  const fullLoop1 = [...loop1, ...loop1, ...loop1, ...loop1]
+  const fullLoop2 = [...loop2, ...loop2, ...loop2, ...loop2]
 
   // Track scroll progress within this transition section
   const { scrollYProgress } = useScroll({
@@ -205,18 +233,20 @@ export default function FlipFlopTransition({ slatCount = 10 }: CleanStripTransit
         {/* REVEALED LAYER (z-0): Photo Rows sliding in from Left & Right AFTER strip collapse */}
         <div className="relative z-0 flex w-full flex-col justify-center gap-4 px-4 py-8">
           <PhotoRow
-            images={LOOP_1}
+            images={fullLoop1}
             duration={50}
             direction="left"
             translateX={row1TranslateX}
             opacity={marqueeOpacity}
+            offset={0}
           />
           <PhotoRow
-            images={LOOP_2}
+            images={fullLoop2}
             duration={45}
             direction="right"
             translateX={row2TranslateX}
             opacity={marqueeOpacity}
+            offset={8}
           />
         </div>
 

@@ -1,47 +1,35 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-
-// E-Summit themed images (Tech, Pitch, Investors, Hackathons)
-const ALL_IMGS = [
-  // Row 1 — Keynotes, pitch competitions, tech stages
-  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1543269664-7eef42226a21?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1528605248644-14dd04022da1?w=840&q=80&auto=format&fit=crop',
-  // Row 2 — Investor meets, networking, workshops, hackathon teams
-  'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1463453091185-61582044d556?w=840&q=80&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=840&q=80&auto=format&fit=crop',
-]
-
-const ROW_1 = ALL_IMGS.slice(0, 8)
-const ROW_2 = ALL_IMGS.slice(8)
-const LOOP_1 = [...ROW_1, ...ROW_1, ...ROW_1, ...ROW_1]
-const LOOP_2 = [...ROW_2, ...ROW_2, ...ROW_2, ...ROW_2]
+import { ImagePlus } from 'lucide-react'
 
 /** Single image card with hover glow */
-function PhotoCard({ src }: { src: string }) {
+function PhotoCard({ src, slotNum }: { src?: string; slotNum: number }) {
   return (
     <div
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-void/20 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-void"
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-void/20 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-void bg-[#0B150E]"
       style={{ width: '400px', height: '250px' }}
     >
-      <img
-        src={src}
-        alt="E-Summit event photo"
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-      />
+      {src ? (
+        <img
+          src={src}
+          alt="E-Summit event photo"
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+      ) : (
+        <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center space-y-2 bg-gradient-to-b from-[#101F15] via-[#0B150E] to-[#07130F]">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-mint/10 border border-mint/30 text-mint">
+            <ImagePlus className="h-6 w-6" />
+          </div>
+          <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-mint">
+            SUMMIT PHOTO #{slotNum}
+          </span>
+          <span className="font-mono-data text-[10px] text-gray-400">
+            Upload from CMS Control Panel
+          </span>
+        </div>
+      )}
       {/* Subtle vignette */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       {/* Border glow on hover */}
@@ -57,12 +45,14 @@ function PhotoRow({
   visible,
   delay,
   direction = 'left',
+  offset = 0,
 }: {
-  images: string[]
+  images: (string | undefined)[]
   duration: number
   visible: boolean
   delay: number
   direction?: 'left' | 'right'
+  offset?: number
 }) {
   return (
     <div
@@ -83,7 +73,7 @@ function PhotoRow({
         }}
       >
         {images.map((src, i) => (
-          <PhotoCard key={i} src={src} />
+          <PhotoCard key={i} src={src} slotNum={(i % 8) + 1 + offset} />
         ))}
       </div>
     </div>
@@ -93,6 +83,34 @@ function PhotoRow({
 export default function EsummitMarquee() {
   const sectionRef = useRef<HTMLDivElement>(null)
   const [visible, setVisible] = useState(false)
+  const [galleryImages, setGalleryImages] = useState<string[]>([])
+
+  useEffect(() => {
+    let mounted = true
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
+
+    fetch(`${apiUrl}/gallery`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { imageUrl: string }[]) => {
+        if (mounted && Array.isArray(data) && data.length > 0) {
+          setGalleryImages(data.map((d) => d.imageUrl))
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const row1 = galleryImages.slice(0, 8)
+  const row2 = galleryImages.slice(8, 16)
+
+  const loop1 = Array.from({ length: 8 }, (_, i) => row1[i] || undefined)
+  const loop2 = Array.from({ length: 8 }, (_, i) => row2[i] || undefined)
+
+  const fullLoop1 = [...loop1, ...loop1, ...loop1, ...loop1]
+  const fullLoop2 = [...loop2, ...loop2, ...loop2, ...loop2]
 
   // Trigger entry animation ONLY when section is sufficiently scrolled past transition
   useEffect(() => {
@@ -130,12 +148,12 @@ export default function EsummitMarquee() {
 
       {/* ── Row 1: enters smoothly, scrolls LEFT ── */}
       <div className="mb-4">
-        <PhotoRow images={LOOP_1} duration={50} visible={visible} delay={0} direction="left" />
+        <PhotoRow images={fullLoop1} duration={50} visible={visible} delay={0} direction="left" offset={0} />
       </div>
 
       {/* ── Row 2: enters smoothly, scrolls RIGHT (opposite to Row 1) ── */}
       <div className="mt-4">
-        <PhotoRow images={LOOP_2} duration={45} visible={visible} delay={0.15} direction="right" />
+        <PhotoRow images={fullLoop2} duration={45} visible={visible} delay={0.15} direction="right" offset={8} />
       </div>
     </section>
   )
