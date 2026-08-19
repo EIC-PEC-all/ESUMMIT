@@ -34,12 +34,7 @@ function NavCountdown({ targetISO }: { targetISO: string }) {
   const [isLive, setIsLive] = useState(false)
 
   useEffect(() => {
-    let target = new Date(targetISO)
-    const now = Date.now()
-
-    if (target.getTime() <= now) {
-      target = new Date('2027-03-15T09:00:00+05:30')
-    }
+    const target = new Date(targetISO)
 
     const checkState = () => {
       const curNow = Date.now()
@@ -81,7 +76,7 @@ function NavCountdown({ targetISO }: { targetISO: string }) {
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
         </span>
-        <span className="font-extrabold text-mint drop-shadow-[0_0_8px_rgba(126,211,33,0.8)]">LIVE</span>
+        <span className="font-extrabold text-mint drop-shadow-[0_0_8px_rgba(0, 229, 153,0.8)]">LIVE</span>
       </div>
     )
   }
@@ -89,7 +84,7 @@ function NavCountdown({ targetISO }: { targetISO: string }) {
   if (!timeLeft) return <span className="opacity-0">--:--:--</span>
 
   return (
-    <span className="font-mono-data text-[9px] sm:text-[11px] tracking-wider text-mint font-extrabold tabular-nums select-none uppercase whitespace-nowrap drop-shadow-[0_0_8px_rgba(126,211,33,0.5)]">
+    <span className="font-mono-data text-[9px] sm:text-[11px] tracking-wider text-mint font-extrabold tabular-nums select-none uppercase whitespace-nowrap drop-shadow-[0_0_8px_rgba(0, 229, 153,0.5)]">
       {timeLeft.days}D : {timeLeft.hours}H : {timeLeft.minutes}M : {timeLeft.seconds}S
     </span>
   )
@@ -140,6 +135,42 @@ export default function Nav() {
     return () => {
       window.removeEventListener('scroll-loader-state', handleLoaderState)
       observer.disconnect()
+    }
+  }, [])
+
+  const [planCount, setPlanCount] = useState<number>(0)
+
+  // Track personal itinerary plan items count
+  useEffect(() => {
+    const updateCount = () => {
+      try {
+        const saved = localStorage.getItem('pec_summit_my_plan')
+        if (saved) {
+          const parsed = JSON.parse(saved)
+          setPlanCount(Array.isArray(parsed) ? parsed.length : 0)
+        } else {
+          setPlanCount(0)
+        }
+      } catch {
+        setPlanCount(0)
+      }
+    }
+
+    updateCount()
+    const handlePlanUpdated = (e: Event) => {
+      const custom = e as CustomEvent<number>
+      if (typeof custom.detail === 'number') {
+        setPlanCount(custom.detail)
+      } else {
+        updateCount()
+      }
+    }
+
+    window.addEventListener('pec_plan_updated', handlePlanUpdated)
+    window.addEventListener('storage', updateCount)
+    return () => {
+      window.removeEventListener('pec_plan_updated', handlePlanUpdated)
+      window.removeEventListener('storage', updateCount)
     }
   }, [])
 
@@ -264,56 +295,62 @@ export default function Nav() {
     }
   }
 
-  const showHeader = !isLoaderActive && (!scrolled || scrollDirection === 'up' || menuOpen)
-  const showTopMarquee = !isLoaderActive && scrolled && scrollDirection === 'down' && !menuOpen
-  const showBottomMarquee = !isLoaderActive && (!scrolled || scrollDirection === 'up' || menuOpen)
+  const showHeader = !isLoaderActive && !isModalOpen && (!scrolled || scrollDirection === 'up' || menuOpen)
+  const showTopMarquee = !isLoaderActive && !isModalOpen && scrolled && scrollDirection === 'down' && !menuOpen
+  const showBottomMarquee = !isLoaderActive && !isModalOpen && (!scrolled || scrollDirection === 'up' || menuOpen)
 
   return (
     <>
       <header
         className={`fixed z-[2500] transition-all duration-500 ease-out 
-          hidden
-          lg:block lg:top-4 lg:left-1/2 lg:w-[calc(100%-3rem)] lg:max-w-7xl lg:rounded-full
+          top-2 left-1/2 w-[calc(100%-1rem)] max-w-7xl rounded-full sm:top-4 sm:w-[calc(100%-2rem)] 
           bg-[#0A110E]/90 text-white backdrop-blur-2xl shadow-2xl border border-white/20
-          ${showHeader ? 'lg:translate-y-0 lg:opacity-100' : 'lg:-translate-y-[150%] lg:opacity-0 lg:pointer-events-none'} 
-          ${menuOpen ? 'lg:-translate-x-[calc(50%+190px)]' : 'lg:-translate-x-1/2'}`}
+          ${showHeader ? 'translate-y-0 opacity-100' : '-translate-y-[150%] opacity-0 pointer-events-none'} 
+          ${menuOpen 
+            ? 'lg:w-[calc(100%-380px-3rem)] -translate-x-1/2 lg:-translate-x-[calc(50%+190px)]' 
+            : 'lg:w-[calc(100%-3rem)] -translate-x-1/2'}`}
       >
-        <div className="flex items-center justify-between h-14 sm:h-16 px-6 sm:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-8">
           {/* Left: Logo */}
           <Link
             href="/"
-            className="font-display text-2xl tracking-wider flex items-center gap-2 shrink-0 group"
+            className="font-display text-xl sm:text-2xl tracking-wider flex items-center gap-1.5 sm:gap-2 shrink-0 group"
             aria-label="E-Summit '26 — Home"
           >
-            <div className="w-9 h-9 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center group-hover:border-mint transition-colors">
-              <Zap size={18} className="text-mint fill-mint" />
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center group-hover:border-mint transition-colors">
+              <Zap size={16} className="text-mint fill-mint sm:w-[18px] sm:h-[18px]" />
             </div>
-            <span className="font-black text-white tracking-widest hidden sm:inline-block">E-SUMMIT</span>
+            <span className="font-black tracking-widest text-gradient-white text-xs sm:text-base">E-SUMMIT</span>
           </Link>
 
           {/* Center: Empty to push buttons to right */}
           <div className="hidden lg:flex flex-1" />
 
           {/* Right: Buttons */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {!menuOpen && (
               <>
                 <Magnetic strength={0.3}>
                   <button
                     onClick={() => window.dispatchEvent(new Event('open-my-plan'))}
-                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-mono-data text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-white/10 text-white hover:text-mint hover:bg-white/20 border border-white/20"
+                    className="hidden md:inline-flex btn-dark-gradient h-[34px] sm:h-[36px] box-border items-center justify-center gap-1.5 px-3.5 sm:px-4 rounded-full font-mono-data text-[11px] sm:text-xs font-bold uppercase tracking-wider leading-none transition-all duration-200 cursor-pointer"
                     aria-label="Open My Plan"
                   >
-                    MY PLAN
+                    <span>MY PLAN</span>
+                    {planCount > 0 && (
+                      <span className="inline-flex items-center justify-center h-4 min-w-[16px] px-1 rounded-full bg-mint text-void font-mono-data text-[10px] font-black leading-none">
+                        {planCount}
+                      </span>
+                    )}
                   </button>
                 </Magnetic>
                 <Magnetic strength={0.3}>
                   <Link
                     href="/register"
-                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider transition-all duration-200 bg-[#FFD700] text-black hover:bg-[#F5C400] border border-[#FFE033]"
+                    className="btn-mint-gradient h-[34px] sm:h-[36px] box-border inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-6 rounded-full font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider leading-none transition-all duration-200 text-void cursor-pointer"
                     id="nav-passes-btn"
                   >
-                    <Ticket size={14} className="text-black stroke-[2.5]" />
+                    <Ticket size={13} className="text-void stroke-[2.5] sm:w-[14px] sm:h-[14px]" />
                     <span>REGISTER</span>
                   </Link>
                 </Magnetic>
@@ -324,12 +361,12 @@ export default function Nav() {
             <Magnetic strength={0.3}>
               <button
                 ref={headerButtonRef}
-                className="min-h-[44px] min-w-[44px] px-3 py-2 sm:px-4 sm:py-2 rounded-full text-white hover:text-mint bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center gap-2 font-mono-data text-xs font-bold uppercase tracking-wider cursor-pointer backdrop-blur-sm border border-white/20"
+                className="btn-dark-gradient h-[34px] sm:h-[36px] box-border inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider leading-none cursor-pointer"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label={menuOpen ? "Close navigation sidebar" : "Open navigation sidebar"}
                 aria-expanded={menuOpen}
               >
-                <Menu size={16} />
+                <Menu size={14} />
                 <span className="hidden sm:inline">{menuOpen ? 'CLOSE' : 'MENU'}</span>
               </button>
             </Magnetic>
@@ -338,14 +375,14 @@ export default function Nav() {
       </header>
 
 
-      {/* TOP SPONSOR MARQUEE BAR — Always fixed on mobile top. On desktop: slides in when navbar hides */}
+      {/* TOP SPONSOR MARQUEE BAR — Slides in when navbar hides */}
       <div
         className={`fixed top-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-b border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 shadow-2xl transition-all duration-500 ease-out ${
           isModalOpen
             ? '-translate-y-full opacity-0 pointer-events-none'
             : showTopMarquee
             ? 'translate-y-0 opacity-100'
-            : 'lg:-translate-y-full lg:opacity-0 lg:pointer-events-none translate-y-0 opacity-100'
+            : '-translate-y-full opacity-0 pointer-events-none'
         }`}
       >
         {/* Countdown — desktop only */}
@@ -361,16 +398,16 @@ export default function Nav() {
               className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"
             >
               <span className="text-mint [.light_&]:text-[#A0C868] font-bold">•</span>
-              <span className="text-white font-bold tracking-widest uppercase">{item.name}</span>
-              <span className="text-mint [.light_&]:text-[#C8E696] font-bold uppercase tracking-widest ml-1">{item.tier}</span>
+              <span className="font-bold tracking-widest uppercase text-gradient-white">{item.name}</span>
+              <span className="text-gradient-mint font-bold uppercase tracking-widest ml-1">{item.tier}</span>
             </div>
           ))}
         </div>
       </div>
  
-      {/* BOTTOM SPONSOR MARQUEE BAR — Desktop only. Mobile uses bottom nav instead. */}
+      {/* BOTTOM SPONSOR MARQUEE BAR */}
       <div
-        className={`hidden lg:block fixed bottom-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
+        className={`fixed bottom-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
           showBottomMarquee
             ? 'translate-y-0 opacity-100'
             : 'translate-y-full opacity-0 pointer-events-none'
@@ -388,8 +425,8 @@ export default function Nav() {
               className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"
             >
               <span className="text-mint [.light_&]:text-[#A0C868] font-bold">•</span>
-              <span className="text-white font-bold tracking-widest uppercase">{item.name}</span>
-              <span className="text-mint [.light_&]:text-[#C8E696] font-bold uppercase tracking-widest ml-1">{item.tier}</span>
+              <span className="font-bold tracking-widest uppercase text-gradient-white">{item.name}</span>
+              <span className="text-gradient-mint font-bold uppercase tracking-widest ml-1">{item.tier}</span>
             </div>
           ))}
         </div>
@@ -399,13 +436,13 @@ export default function Nav() {
       <AnimatePresence>
         {menuOpen && (
           <>
-            {/* Backdrop Overlay (Mobile only, no blur on desktop) */}
+            {/* Backdrop Overlay (All screens with 2xl glassmorphic blur) */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 bg-black/60 lg:hidden z-[2998]"
+              className="fixed inset-0 bg-black/85 backdrop-blur-2xl z-[11000]"
               aria-hidden="true"
               onClick={() => setMenuOpen(false)}
             />
@@ -417,7 +454,7 @@ export default function Nav() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[3000] bg-mint text-void shadow-[0_0_60px_rgba(126,211,33,0.4)] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto border-l-4 border-void"
+              className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[11001] bg-mint text-void shadow-[0_0_60px_rgba(0, 229, 153,0.4)] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto border-l-4 border-void"
               role="dialog"
               aria-label="Navigation Menu Drawer"
             >

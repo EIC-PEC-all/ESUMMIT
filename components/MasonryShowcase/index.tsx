@@ -3,7 +3,7 @@
 // 5-Column (Desktop) / 3-Column (Mobile) Infinite Vertical Marquee Gallery
 
 import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 
 interface CardItem {
   id: string
@@ -33,14 +33,8 @@ const PEC_GALLERY_IMAGES = [
   { img: '/gallery/pec_senate_hall.png', height: 230 },
 ]
 
-function shuffleArray<T>(array: T[]): T[] {
-  const arr = [...array]
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[arr[i], arr[j]] = [arr[j], arr[i]]
-  }
-  return arr
-}
+// Stable order — shuffled once at module load, not per-render
+const SHUFFLED_GALLERY = [...PEC_GALLERY_IMAGES].sort(() => Math.random() - 0.5)
 
 // Each column is its own self-contained infinite scroll strip
 function MarqueeColumn({
@@ -69,12 +63,14 @@ function MarqueeColumn({
         {items.map((item) => (
           <div
             key={item.id}
-            className="group w-full shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-[#0A1611] shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:border-mint/60 hover:shadow-[0_0_30px_rgba(126,211,33,0.25)]"
+            className="group w-full shrink-0 overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0A1611] transition-all duration-300 hover:border-white/20"
             style={{ height: item.height }}
           >
-            <div
-              className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-              style={{ backgroundImage: `url(${item.img})` }}
+            <img
+              src={item.img}
+              alt="E-Summit PEC event photo"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
             />
           </div>
         ))}
@@ -86,24 +82,22 @@ function MarqueeColumn({
 export default function MasonryShowcase() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [columns, setColumns] = useState<CardItem[][]>([])
+  const [isTitleVisible, setIsTitleVisible] = useState(true)
 
   useEffect(() => {
-    const shuffled = shuffleArray(PEC_GALLERY_IMAGES)
-    
     const updateColumns = () => {
       const colCount = window.innerWidth < 768 ? 3 : 5
       const cols: CardItem[][] = Array.from({ length: colCount }, () => [])
-      
-      shuffled.forEach((item, idx) => {
+
+      SHUFFLED_GALLERY.forEach((item, idx) => {
         cols[idx % colCount].push({ id: `${idx}`, ...item })
       })
-      
-      // Double each column so we can animate by -50% for a seamless loop
+
       const duplicatedCols = cols.map((col) => [
         ...col,
         ...col.map((item) => ({ ...item, id: `${item.id}-dup` })),
       ])
-      
+
       setColumns(duplicatedCols)
     }
 
@@ -112,25 +106,43 @@ export default function MasonryShowcase() {
     return () => window.removeEventListener('resize', updateColumns)
   }, [])
 
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress, scrollY } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  const headlineOpacity = useTransform(scrollYProgress, [0.02, 0.2], [1, 0])
-  const headlineScale = useTransform(scrollYProgress, [0.02, 0.2], [1, 0.88])
-  const headlineY = useTransform(scrollYProgress, [0.02, 0.2], ['0px', '-50px'])
+  useMotionValueEvent(scrollY, "change", (current) => {
+    const previous = scrollY.getPrevious()
+    if (previous === undefined) return
+    
+    // Check if we are inside the component's scroll area
+    const progress = scrollYProgress.get()
+    
+    // If we are at the very top of the section, always show
+    if (progress <= 0.02) {
+      setIsTitleVisible(true)
+      return
+    }
 
+    // Hide on scroll down, show on scroll up
+    if (current > previous && current - previous > 5) {
+      setIsTitleVisible(false)
+    } else if (current < previous && previous - current > 5) {
+      setIsTitleVisible(true)
+    }
+  })
+
+  // The gallery images still fade in based on absolute progress
   const galleryOpacity = useTransform(scrollYProgress, [0.05, 0.25], [0.15, 1])
 
-  // Alternating speeds so columns don't feel mechanical
-  const speeds = [28, 34, 26, 32, 30]
+  // Alternating slower speeds so columns scroll smoothly and gracefully
+  const speeds = [44, 52, 42, 50, 46]
 
   return (
     <section
       id="gallery"
       ref={containerRef}
-      className="relative h-[200vh] border-b border-[#7ED321]/20 bg-[#081C16] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10"
+      className="relative h-[200vh] border-b border-mint/20 bg-[#081C16] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10"
     >
       {/* Pinned sticky viewport */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#081C16]">
@@ -140,6 +152,7 @@ export default function MasonryShowcase() {
 
         {/* 5 self-contained marquee columns filling full screen height */}
         <motion.div 
+          initial={{ opacity: 0.15 }}
           style={{ opacity: galleryOpacity }}
           className="flex h-full w-full gap-3 px-3 sm:gap-4 sm:px-5 md:gap-5 md:px-8"
         >
@@ -148,21 +161,35 @@ export default function MasonryShowcase() {
               key={colIdx}
               items={colItems}
               direction={colIdx % 2 === 0 ? 'up' : 'down'}
-              speed={speeds[colIdx] ?? 30}
+              speed={speeds[colIdx] ?? 45}
             />
           ))}
         </motion.div>
 
-        {/* Headline overlay — fades out on scroll */}
+        {/* Ambient Overlay to dim images slightly so the title pops more */}
+        <motion.div 
+          initial={{ opacity: 1 }}
+          animate={{ opacity: isTitleVisible ? 1 : 0 }}
+          transition={{ duration: 0.6 }}
+          className="pointer-events-none absolute inset-0 z-20 bg-black/30" 
+        />
+
+        {/* Headline overlay — fades out on scroll down, reappears on scroll up */}
         <motion.div
-          style={{ opacity: headlineOpacity, scale: headlineScale, y: headlineY }}
+          initial={{ opacity: 1, scale: 1, y: '0px' }}
+          animate={{ 
+            opacity: isTitleVisible ? 1 : 0, 
+            scale: isTitleVisible ? 1 : 0.95, 
+            y: isTitleVisible ? 0 : -30 
+          }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center"
         >
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(2.5rem, 10vw, 160px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
+            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
           >
-            SUMMIT GALLERY
+            <span className="text-gradient-white">SUMMIT</span> <span className="text-gradient-mint">GALLERY</span>
           </h2>
         </motion.div>
       </div>

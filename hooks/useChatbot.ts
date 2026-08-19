@@ -108,11 +108,11 @@ function makeWelcomeMessage(id: string): ChatMessage {
     role: 'assistant',
     content: `Hey! I'm the **E-Summit PEC 2026 Official Assistant** (E-Cell PEC). I can help you with:
 
-🗓️ **Schedule & Itineraries** — Build personalized day plans
-🎤 **Speakers** — Info on confirmed speakers
-🗺️ **Campus Navigation** — Walking routes to any venue
-🎪 **13 Additional Activities** — Workshops, Job Fair, IPL Auction, Treasure Hunt, and more
-❓ **FAQs** — Tickets, venue, eligibility, accommodations
+- **Schedule & Itineraries** — Build personalized day plans
+- **Speakers** — Info on confirmed speakers
+- **Campus Navigation** — Walking routes to any venue
+- **13 Additional Activities** — Workshops, Job Fair, IPL Auction, Treasure Hunt, and more
+- **FAQs** — Tickets, venue, eligibility, accommodations
 
 I only answer questions about E-Summit PEC 2026. What would you like to know?`,
     timestamp: new Date(),
@@ -415,16 +415,15 @@ export function useChatbot(options: UseChatbotOptions = {}) {
       }
 
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to get response'
       if (!abortControllerRef.current?.signal.aborted) {
-        setError(message)
-        const errorMessage: ChatMessage = {
+        const localFallback = localAnswer(trimmed) || `I'm here to assist you with **PEC E-Summit 2026**! Ask me about our speaker lineup, registration passes, schedule, or pitch competitions.`
+        const fallbackMessage: ChatMessage = {
           id: generateId(),
           role: 'assistant',
-          content: `Sorry, I hit an error: ${message}. Please try again.`,
+          content: localFallback,
           timestamp: new Date(),
         }
-        setMessages(prev => [...prev, errorMessage])
+        setMessages(prev => [...prev, fallbackMessage])
       }
     } finally {
       if (isMountedRef.current) {

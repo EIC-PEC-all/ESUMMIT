@@ -154,13 +154,13 @@ export default function EsummitAbout() {
       {/* Decorative ambient green radial glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none z-0"
-        style={{ background: 'radial-gradient(circle, rgba(126,211,33,0.07) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(181,242,61,0.05) 0%, transparent 70%)' }}
       />
 
       {/* Top section divider line */}
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(126,211,33,0.4) 50%, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(181,242,61,0.3) 50%, transparent)' }}
       />
 
       {/* ── Central content ── */}
@@ -169,10 +169,10 @@ export default function EsummitAbout() {
         <FadeIn delay={0.05}>
           <h2
             id="esummit-about-heading"
-            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-lg"
-            style={{ fontSize: 'clamp(2.5rem, 10vw, 160px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center"
+            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
           >
-            ABOUT
+            <span className="text-gradient-mint">ABOUT</span>
           </h2>
         </FadeIn>
 
@@ -208,8 +208,8 @@ export default function EsummitAbout() {
                     <Icon size={24} />
                   </div>
 
-                  <h3 className="font-display font-bold text-lg text-primary uppercase mb-2">
-                    {pillar.title}
+                  <h3 className="font-display font-bold text-lg uppercase mb-2">
+                    <span className="text-gradient-white">{pillar.title}</span>
                   </h3>
 
                   <p className="font-body text-xs sm:text-sm text-secondary leading-relaxed">

@@ -16,9 +16,10 @@ const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), 
 const Sponsors = dynamic(() => import('@/components/Sponsors'))
 const FAQ = dynamic(() => import('@/components/FAQ'))
 const Alumni = dynamic(() => import('@/components/Alumni'))
-const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false })
 const Footer = dynamic(() => import('@/components/Footer'))
 const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.RegisterCTA))
+
+import { TOAST_STYLE } from '@/lib/constants'
 
 export default function Home() {
   return (
@@ -34,12 +35,7 @@ export default function Home() {
         gutter={8}
         toastOptions={{
           duration: 4000,
-          style: {
-            fontSize: '0.875rem',
-            background: '#0A110E',
-            color: '#FFFFFF',
-            border: '1px solid rgba(126, 211, 33, 0.2)',
-          },
+          style: TOAST_STYLE.style,
         }}
       />
 
@@ -82,9 +78,6 @@ export default function Home() {
 
       {/* ── 12. FOOTER ── */}
       <Footer hideCTA={true} />
-
-      {/* Floating AI Concierge */}
-      <Concierge />
     </main>
   )
 }

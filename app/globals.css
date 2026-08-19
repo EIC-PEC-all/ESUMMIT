@@ -16,10 +16,10 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
   --bg-panel: #0B150E;
   --bg-panel-alt: #0F1A12;
 
-  --accent-mint: #7ED321;
-  --accent-green: #7ED321;
-  --accent-green-dim: rgba(126, 211, 33, 0.15);
-  --accent-green-glow: rgba(126, 211, 33, 0.35);
+  --accent-mint: #B5F23D;
+  --accent-green: #B5F23D;
+  --accent-green-dim: rgba(181, 242, 61, 0.15);
+  --accent-green-glow: rgba(181, 242, 61, 0.35);
 
   --accent-blue: #3DD9FF;
   --accent-coral: #FF4D3D;
@@ -31,7 +31,7 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
 
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-panel: rgba(255, 255, 255, 0.12);
-  --border-glow: rgba(126, 211, 33, 0.3);
+  --border-glow: rgba(181, 242, 61, 0.3);
 
   color-scheme: dark;
 }
@@ -108,12 +108,8 @@ header {
   max-width: 100vw;
 }
 
-@media (min-width: 1024px) {
-  body.drawer-open #main-content,
-  body.drawer-open header {
-    max-width: calc(100vw - 380px);
-  }
-}
+
+
 
 
 /* Scrollbar Styling — Sleek, subtle, zero horizontal bar leakage */
@@ -155,7 +151,7 @@ header {
 
 /* Selection */
 ::selection {
-  background: rgba(126, 211, 33, 0.3);
+  background: rgba(181, 242, 61, 0.3);
   color: var(--text-primary);
 }
 
@@ -187,34 +183,114 @@ h1, h2, h3 {
 
 /* ─── Glow effects ─── */
 .glow-orange, .glow-volt, .glow-amber, .glow-green {
-  box-shadow: 0 0 24px rgba(126, 211, 33, 0.5), 0 0 48px rgba(126, 211, 33, 0.2);
+  box-shadow: 0 0 24px rgba(181, 242, 61, 0.5), 0 0 48px rgba(181, 242, 61, 0.2);
 }
 
-/* ─── Button base ─── */
-.btn-green, .btn-orange, .btn-volt, .btn-amber {
-  position: relative;
+/* ─── 3D Metallic Text Gradients ─── */
+.text-gradient-white {
+  background: linear-gradient(180deg, #FFFFFF 15%, #E2E8F0 60%, #94A3B8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.text-gradient-mint, .text-gradient-green {
+  background: linear-gradient(180deg, #F4FFD6 0%, var(--accent-mint) 65%, #82BD16 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.text-gradient-blue, .text-gradient-cyan {
+  background: linear-gradient(180deg, #E6F9FF 0%, var(--accent-blue) 65%, #0099DD 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.text-gradient-coral, .text-gradient-orange, .text-gradient-amber {
+  background: linear-gradient(180deg, #FFF0ED 0%, var(--accent-coral) 65%, #CC2616 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.text-gradient-gold, .text-gradient-yellow {
+  background: linear-gradient(180deg, #FFFEEB 0%, #FFD700 65%, #C7A008 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.text-gradient-silver {
+  background: linear-gradient(180deg, #F8FAFC 0%, #CBD5E1 65%, #64748B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* ─── Button base & Unified 3D Gradients ─── */
+.btn-green, .btn-orange, .btn-volt, .btn-amber, .btn-mint-gradient {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 14px 32px;
-  background: var(--accent-mint);
-  color: var(--bg-void);
-  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #D4FF66 0%, #B5F23D 60%, #9FE426 100%);
+  color: #060B08;
+  font-family: var(--font-jetbrains), monospace;
   font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.04em;
-  border: none;
-  border-radius: 9999px !important;
+  border: 1px solid #C4F850;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.15s ease;
+  transition: transform 0.15s ease, filter 0.15s ease;
   overflow: hidden;
-  box-shadow: none !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), 0 2px 8px rgba(0, 0, 0, 0.35);
 }
-.btn-green:hover, .btn-orange:hover {
+.btn-green:hover, .btn-orange:hover, .btn-volt:hover, .btn-amber:hover, .btn-mint-gradient:hover {
   transform: translateY(-1px);
-  box-shadow: none !important;
+  filter: brightness(1.05);
 }
-.btn-green:active, .btn-orange:active { transform: translateY(0); }
+.btn-green:active, .btn-orange:active, .btn-volt:active, .btn-amber:active, .btn-mint-gradient:active {
+  transform: translateY(0);
+}
+
+/* ─── Dark Button (Consistent 3D Style) ─── */
+.btn-dark-gradient {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 8px rgba(0, 0, 0, 0.4);
+  color: #FFFFFF;
+  transition: transform 0.15s ease, filter 0.15s ease, border-color 0.15s ease;
+}
+.btn-dark-gradient:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* ─── Yellow Button (Consistent 3D Style) ─── */
+.btn-yellow {
+  background: linear-gradient(180deg, #FFF399 0%, #FFD700 80%);
+  border: 1px solid #FFE033;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 4px 15px rgba(255, 215, 0, 0.4);
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.btn-yellow:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+/* ─── White Button (Consistent 3D Style) ─── */
+.btn-white, .btn-white-gradient {
+  background: linear-gradient(180deg, #FFFFFF 0%, #E4E4E7 100%);
+  border: 1px solid #E2E8F0;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 1), 0 2px 8px rgba(0, 0, 0, 0.3);
+  color: #0A110E;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.btn-white:hover, .btn-white-gradient:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.02);
+}
 
 .btn-ghost {
   display: inline-flex;
@@ -234,9 +310,9 @@ h1, h2, h3 {
   box-shadow: none !important;
 }
 .btn-ghost:hover {
-  border-color: #7ED321;
-  color: #7ED321;
-  background: rgba(126, 211, 33, 0.08);
+  border-color: #B5F23D;
+  color: #B5F23D;
+  background: rgba(181, 242, 61, 0.08);
 }
 
 /* ─── Current Line Accent ─── */
@@ -277,8 +353,8 @@ h1, h2, h3 {
 
 /* ─── Highlight pulse ─── */
 @keyframes highlightPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(126, 211, 33, 0); }
-  50% { box-shadow: 0 0 0 4px rgba(126, 211, 33, 0.4), 0 0 28px rgba(126, 211, 33, 0.3); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(181, 242, 61, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(181, 242, 61, 0.4), 0 0 28px rgba(181, 242, 61, 0.3); }
 }
 .highlight-active {
   animation: highlightPulse 1.2s ease 3;
@@ -304,8 +380,8 @@ h1, h2, h3 {
 
 /* ─── Glow pulse ring ─── */
 @keyframes glowRing {
-  0%, 100% { box-shadow: 0 0 20px rgba(126,211,33,0.3), 0 0 40px rgba(126,211,33,0.1); }
-  50% { box-shadow: 0 0 40px rgba(126,211,33,0.55), 0 0 80px rgba(126,211,33,0.25); }
+  0%, 100% { box-shadow: 0 0 20px rgba(181, 242, 61,0.3), 0 0 40px rgba(181, 242, 61,0.1); }
+  50% { box-shadow: 0 0 40px rgba(181, 242, 61,0.55), 0 0 80px rgba(181, 242, 61,0.25); }
 }
 .glow-pulse {
   animation: glowRing 3s ease-in-out infinite;
@@ -354,3 +430,16 @@ h1, h2, h3 {
   animation-play-state: paused;
 }
 
+/* ─── Global Heading Gradient (Subtle Lime) ─── */
+/* \u2500\u2500\u2500 Global Heading Gradient (Subtle Lime) \u2500\u2500\u2500 */
+/* Scoped to text elements only — SVG/icon currentColor is untouched */
+h1.text-mint, h2.text-mint, h3.text-mint, h4.text-mint,
+p.text-mint, span.text-mint, label.text-mint,
+a.text-mint, li.text-mint, strong.text-mint, em.text-mint,
+.font-display.text-mint {
+  color: var(--accent-mint);
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--accent-mint) 75%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

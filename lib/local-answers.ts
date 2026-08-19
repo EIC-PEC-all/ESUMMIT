@@ -34,7 +34,7 @@ const SCHEDULE_TEXT = `**Day 1 — March 15, 2026**
 • 18:30 Closing Keynote (Main Auditorium)
 • 19:30 Closing Mixer (Student Center)`
 
-const SPEAKERS_TEXT = `**PEC Summit 2026 Speakers (8 confirmed)**
+const SPEAKERS_TEXT = `**E-Summit 2026 Speakers (8 confirmed)**
 1. **Priya Nair** — Partner, Surge Ventures
 2. **Arjun Mehta** — Co-founder & CTO, Kira.ai
 3. **Deepika Rangi** — Head of Startup Ecosystem, Nasscom
@@ -69,7 +69,7 @@ Ask me to show you a walking route to any venue!`,
   {
     patterns: ['eligibility', 'who can', 'can i attend', 'student', 'college', 'graduate', 'professional'],
     answer: `**Eligibility**
-PEC Summit 2026 is open to:
+E-Summit 2026 is open to:
 • **Students** — from any college/university across India
 • **Startup Founders & Teams** — at any stage
 • **Professionals** — developers, investors, ecosystem builders
@@ -121,7 +121,7 @@ Want to exhibit at the Expo? Check registration details once they open!`,
   },
   {
     patterns: ['networking', 'speed networking', 'meet', 'connect'],
-    answer: `**Networking at PEC Summit**
+    answer: `**Networking at E-Summit**
 • **Speed Networking Session** — Day 1 at 19:00 (Admin Block)
 • **Evening Mixer** — Day 1 at 20:00 (Student Center)
 • **Investor Open Hours** — Day 2 at 11:30 (Admin Block)
@@ -159,7 +159,7 @@ For specific queries, you can also ask me directly — I'm connected to live eve
   },
   {
     patterns: ['hi', 'hello', 'hey', 'hii', 'helo', 'good morning', 'good evening', 'sup', 'wassup'],
-    answer: `Hey! 👋 I'm the **PEC Summit 2026 Official Assistant**. I can help you with:
+    answer: `Hey! 👋 I'm the **E-Summit 2026 Official Assistant**. I can help you with:
 
 🗓️ **Schedule** — Day-by-day agenda for March 15–16
 🎤 **Speakers** — Our 8 confirmed speakers
@@ -171,7 +171,7 @@ What would you like to know?`,
   },
   {
     patterns: ['track', 'panel', 'discussion', 'what tracks', 'what events'],
-    answer: `**PEC Summit 2026 — Main Tracks**
+    answer: `**E-Summit 2026 — Main Tracks**
 
 1. 🚀 **Pitch Competition** — Founders Stage (Main Auditorium)
 2. 💬 **Panel Discussions** — Thought Leadership: Fundraising, AI, Deep-Tech, Student-to-Founder

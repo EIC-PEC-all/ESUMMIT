@@ -145,7 +145,7 @@ export default function About() {
 
           <blockquote className="border-[var(--accent-mint)]/25 rounded-2xl border bg-panel p-6 font-body text-base italic leading-relaxed text-muted">
             &ldquo;Every venture in India&apos;s startup ecosystem started with a single bold idea.
-            PEC Summit is where high-growth founders and capital align.&rdquo;
+            E-Summit is where high-growth founders and capital align.&rdquo;
             <cite className="mt-3 block font-mono-data text-xs font-bold not-italic text-[var(--accent-mint)]">
               — E-Cell PEC Board
             </cite>

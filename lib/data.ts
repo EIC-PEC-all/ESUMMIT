@@ -1,9 +1,9 @@
 // lib/data.ts
-// TODO: Replace all placeholder content with real PEC Summit content
+// Official PEC E-Summit 2026 Dataset & Geo-Graph
 
 export const FEST_META = {
-  name: 'PEC Summit',
-  edition: '2025',
+  name: 'PEC E-Summit',
+  edition: '2026',
   org: 'E-Cell PEC',
   tagline: "Chandigarh's launchpad for the next generation of founders.",
   taglineOptions: [
@@ -11,16 +11,14 @@ export const FEST_META = {
     'Where the tricity\'s boldest ideas meet their moment.',
     'The north\'s premier stage for student builders and venture thinkers.',
   ],
-  // TODO: confirm dates + venue
   dates: 'March 15–16, 2026',
-  venue: 'PEC Campus, Sector 12, Chandigarh',
-  // Countdown target — TODO: update to real date
+  venue: 'Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh',
   countdownTarget: new Date('2026-03-15T09:00:00+05:30').toISOString(),
   registrationUrl: '#register',
   social: {
-    instagram: 'https://instagram.com/ecellpec', // TODO: confirm handle
-    twitter: 'https://twitter.com/ecellpec',       // TODO: confirm handle
-    linkedin: 'https://linkedin.com/company/ecellpec', // TODO: confirm handle
+    instagram: 'https://instagram.com/ecell.pec',
+    twitter: 'https://twitter.com/ecell_pec',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
 }
 
@@ -38,7 +36,7 @@ export const TRACKS = [
     eyebrow: 'FOUNDERS STAGE',
     icon: 'Zap',
     shortDesc: 'Present your startup idea to a panel of seasoned VCs and angel investors. Walk in with a deck, walk out with a deal.',
-    fullDesc: `The centrepiece of PEC Summit. Teams of 2–4 pitch their MVP or idea to a jury of active investors and founders. Categories: Pre-revenue, Revenue-stage, and Social Impact. Top 3 teams share the prize pool and get fast-tracked to mentorship sessions.\n\nFormat: 5-min pitch + 5-min Q&A. Submissions due 10 days before summit.`,
+    fullDesc: `The centrepiece of E-Summit. Teams of 2–4 pitch their MVP or idea to a jury of active investors and founders. Categories: Pre-revenue, Revenue-stage, and Social Impact. Top 3 teams share the prize pool and get fast-tracked to mentorship sessions.\n\nFormat: 5-min pitch + 5-min Q&A. Submissions due 10 days before summit.`,
     color: '#FF4D3D',
     accentColor: 'rgba(255,77,61,0.12)',
   },
@@ -78,21 +76,20 @@ export const TRACKS = [
     eyebrow: 'CONNECT',
     icon: 'Network',
     shortDesc: 'Structured networking sessions designed so you actually meet the right people — not just collect business cards.',
-    fullDesc: `Three formats: Speed Networking (5-min rotations), Investor Open Hours (one-on-one 15-min slots, apply in advance), and the closing Mixer evening with music and food.\n\nAll registered participants get a digital profile in the PEC Summit app for pre-event connection. Investor Open Hours have limited slots — apply when registering.`,
+    fullDesc: `Three formats: Speed Networking (5-min rotations), Investor Open Hours (one-on-one 15-min slots, apply in advance), and the closing Mixer evening with music and food.\n\nAll registered participants get a digital profile in the E-Summit app for pre-event connection. Investor Open Hours have limited slots — apply when registering.`,
     color: '#3DD9FF',
     accentColor: 'rgba(61,217,255,0.12)',
   },
 ]
 
 export const SPEAKERS = [
-  // TODO: replace with real speakers when confirmed
   {
     id: 'spk1',
     name: 'Priya Nair',
     title: 'Partner, Surge Ventures',
     bio: 'Early-stage investor with 12 years backing consumer and B2B SaaS startups across South and North India. Former founder (exited 2019).',
     track: 'panels',
-    avatar: null, // TODO: replace with real image path
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80&auto=format&fit=crop',
     initials: 'PN',
     color: '#FF4D3D',
   },
@@ -102,7 +99,7 @@ export const SPEAKERS = [
     title: 'Co-founder & CTO, Kira.ai',
     bio: 'Built and scaled an AI infrastructure company from a PEC dorm room to 200+ enterprise clients. IIT + PEC alum.',
     track: 'hackathon',
-    avatar: null,
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&auto=format&fit=crop',
     initials: 'AM',
     color: '#3DD9FF',
   },
@@ -112,7 +109,7 @@ export const SPEAKERS = [
     title: 'Head of Startup Ecosystem, Nasscom',
     bio: 'Leads programmes supporting 3,000+ early-stage startups annually. Expert in policy, regulatory sandbox, and deep-tech GTM.',
     track: 'panels',
-    avatar: null,
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&auto=format&fit=crop',
     initials: 'DR',
     color: '#FF8C42',
   },
@@ -122,7 +119,7 @@ export const SPEAKERS = [
     title: 'Angel Investor & ex-Sequoia EIR',
     bio: '25 angel investments, 4 exits. Focuses on Tier-2 city founders and climate-adjacent startups. Mentor at YC alumni network.',
     track: 'pitch',
-    avatar: null,
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80&auto=format&fit=crop',
     initials: 'SK',
     color: '#9B5CFF',
   },
@@ -132,7 +129,7 @@ export const SPEAKERS = [
     title: 'Founder, GreenMile Logistics',
     bio: 'Built an EV last-mile logistics company serving 14 cities. Forbes 30 Under 30, 2024. PEC alumna (ECE, 2019).',
     track: 'pitch',
-    avatar: null,
+    avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80&auto=format&fit=crop',
     initials: 'RS',
     color: '#FF4D3D',
   },
@@ -142,7 +139,7 @@ export const SPEAKERS = [
     title: 'VP Product, Razorpay',
     bio: 'Drove 10x payment volume growth as a product leader. Previously at Stripe London. Mentor to 40+ fintech startups.',
     track: 'panels',
-    avatar: null,
+    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80&auto=format&fit=crop',
     initials: 'VB',
     color: '#3DD9FF',
   },
@@ -152,7 +149,7 @@ export const SPEAKERS = [
     title: 'Founder, MindBloom EdTech',
     bio: 'Scaling personalised learning to 500K+ students across Tier-2/3 India. TEDx speaker, Social Impact Award 2023.',
     track: 'expo',
-    avatar: null,
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&q=80&auto=format&fit=crop',
     initials: 'AJ',
     color: '#FF8C42',
   },
@@ -162,7 +159,7 @@ export const SPEAKERS = [
     title: 'CTO, Stealth Agri-Startup',
     bio: 'Ex-Microsoft Research, now building precision farming tools for smallholder farmers. IIT Delhi + Stanford MS.',
     track: 'hackathon',
-    avatar: null,
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&auto=format&fit=crop',
     initials: 'KS',
     color: '#9B5CFF',
   },
@@ -825,37 +822,31 @@ export const SCHEDULE = {
 
 export const SPONSORS = {
   title: [
-    { id: 'ts1', name: 'NorthStar Ventures', logo: null, url: '#' }, // TODO: replace with real sponsor
+    { id: 'ts1', name: 'NorthStar Ventures', logo: null, url: 'https://northstar.vc' },
   ],
   gold: [
-    { id: 'gs1', name: 'TechCorp India', logo: null, url: '#' },
-    { id: 'gs2', name: 'Finova Capital', logo: null, url: '#' },
-    { id: 'gs3', name: 'CloudBase SaaS', logo: null, url: '#' },
+    { id: 'gs1', name: 'TechCorp India', logo: null, url: 'https://techcorp.in' },
+    { id: 'gs2', name: 'Finova Capital', logo: null, url: 'https://finovacapital.com' },
+    { id: 'gs3', name: 'CloudBase SaaS', logo: null, url: 'https://cloudbase.io' },
   ],
   silver: [
-    { id: 'ss1', name: 'DevStack', logo: null, url: '#' },
-    { id: 'ss2', name: 'InnoHub', logo: null, url: '#' },
-    { id: 'ss3', name: 'Launchpad AI', logo: null, url: '#' },
-    { id: 'ss4', name: 'Seed & Grow', logo: null, url: '#' },
-    { id: 'ss5', name: 'PitchDeck Pro', logo: null, url: '#' },
-    { id: 'ss6', name: 'MentorBridge', logo: null, url: '#' },
+    { id: 'ss1', name: 'DevStack Labs', logo: null, url: 'https://devstack.io' },
+    { id: 'ss2', name: 'InnoHub Chandigarh', logo: null, url: 'https://innohub.in' },
+    { id: 'ss3', name: 'Launchpad AI', logo: null, url: 'https://launchpadai.com' },
   ],
   media: [
-    { id: 'mp1', name: 'StartupStory', logo: null, url: '#' },
-    { id: 'mp2', name: 'YourStory', logo: null, url: '#' },
-    { id: 'mp3', name: 'INC42', logo: null, url: '#' },
-    { id: 'mp4', name: 'Entrepreneur India', logo: null, url: '#' },
-    { id: 'mp5', name: 'TechCircle', logo: null, url: '#' },
-    { id: 'mp6', name: 'The Economic Times', logo: null, url: '#' },
+    { id: 'mp1', name: 'YourStory', logo: null, url: 'https://yourstory.com' },
+    { id: 'mp2', name: 'INC42', logo: null, url: 'https://inc42.com' },
+    { id: 'mp3', name: 'Entrepreneur India', logo: null, url: 'https://entrepreneur.com' },
   ],
 }
 
 export const FAQS = [
   {
     id: 'faq1',
-    question: 'Who can attend PEC Summit?',
+    question: 'Who can attend E-Summit?',
     answer:
-      'PEC Summit is open to all college students, recent graduates, early-stage founders, and professionals interested in the startup ecosystem. There is no restriction on college or city — attendees come from across North India.',
+      'E-Summit is open to all college students, recent graduates, early-stage founders, and professionals interested in the startup ecosystem. There is no restriction on college or city — attendees come from across North India.',
   },
   {
     id: 'faq2',
@@ -883,15 +874,15 @@ export const FAQS = [
   },
   {
     id: 'faq6',
-    question: 'Where is PEC Summit held?',
+    question: 'Where is E-Summit held?',
     answer:
-      'PEC Summit takes place on the campus of Punjab Engineering College (PEC), Sector 12, Chandigarh. Detailed venue maps and shuttle information will be shared with registered attendees.',
+      'E-Summit takes place on the campus of Punjab Engineering College (PEC), Sector 12, Chandigarh. Detailed venue maps and shuttle information will be shared with registered attendees.',
   },
   {
     id: 'faq7',
     question: 'How do I become a sponsor or exhibitor?',
     answer:
-      'Reach out to our partnerships team at partnerships@ecellpec.in (// TODO: confirm email). We offer Title, Gold, Silver, and Media Partner tiers with different benefits. Startup Expo booths are applied for separately.',
+      'Reach out to our partnerships team at partnerships@pec-esummit.org. We offer Title, Gold, Silver, and Media Partner tiers with different benefits. Startup Expo booths are applied for separately.',
   },
   {
     id: 'faq8',

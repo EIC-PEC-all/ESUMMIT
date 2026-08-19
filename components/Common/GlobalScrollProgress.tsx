@@ -34,11 +34,35 @@ export default function GlobalScrollProgress() {
       },
       { rootMargin: '-20% 0px -40% 0px', threshold: 0 }
     )
-    SECTIONS.forEach(s => {
-      const el = document.getElementById(s.id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
+
+    const observedIds = new Set<string>()
+
+    const tryObserve = () => {
+      SECTIONS.forEach(s => {
+        if (!observedIds.has(s.id)) {
+          const el = document.getElementById(s.id)
+          if (el) {
+            observer.observe(el)
+            observedIds.add(s.id)
+          }
+        }
+      })
+    }
+
+    tryObserve()
+    
+    // Poll for dynamically loaded components
+    const interval = setInterval(() => {
+      tryObserve()
+      if (observedIds.size === SECTIONS.length) {
+        clearInterval(interval)
+      }
+    }, 500)
+
+    return () => {
+      clearInterval(interval)
+      observer.disconnect()
+    }
   }, [])
 
   const handleDashClick = (id: string) => {

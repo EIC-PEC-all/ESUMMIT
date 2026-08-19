@@ -30,7 +30,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'Forbes 30 Under 30 Tech',
     bio: 'Pioneered next-gen neural video models. Raised $120M from Sequoia & Andreessen Horowitz.',
     imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-2',
@@ -42,7 +42,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'Ex-Google Brain Lead',
     bio: 'Architected Stripe scale infrastructure processing over $500B annually across 40+ countries.',
     imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-3',
@@ -54,7 +54,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'PEC E-Cell Incubated',
     bio: 'Built real-time autonomous threat detection for Fortune 500 banks & enterprise clouds.',
     imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-4',
@@ -66,7 +66,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'Backed 4 Unicorns',
     bio: 'Early investor in AI, Web3 & deep-tech startups. Mentors PEC E-Cell startup cohorts.',
     imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-5',
@@ -78,7 +78,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'MIT Tech Review 35u35',
     bio: 'Directing product strategy for multimodal vision-language models & developer API suites.',
     imageUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-6',
@@ -90,7 +90,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'TechCrunch Disrupt Champion',
     bio: 'Pioneered electric autonomous freight logistics operating across major industrial corridors.',
     imageUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-7',
@@ -102,7 +102,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'NeurIPS Best Paper Award',
     bio: 'Published breakthrough work on reinforcement learning from human feedback. Core contributor to Gemini research team.',
     imageUrl: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-8',
@@ -114,7 +114,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'WHO Young Leader 2024',
     bio: 'Democratizing affordable diagnostics for Tier-2 & Tier-3 India using AI-powered mobile health kits.',
     imageUrl: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-9',
@@ -126,7 +126,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'IEEE Young Engineer of Year',
     bio: 'Led ground station software for global Starlink rollout, enabling broadband for 3M+ underserved users.',
     imageUrl: 'https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-10',
@@ -138,7 +138,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     achievement: 'G20 Young Climate Leader',
     bio: 'Building carbon credit infrastructure for SMEs across South & South-East Asia, backed by Tiger Global.',
     imageUrl: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80',
-    linkedin: 'https://linkedin.com',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
     id: 'alumni-11',
@@ -191,26 +191,26 @@ export default function AlumniSection() {
     <section
       id="alumni"
       ref={containerRef}
-      className="relative h-[380vh] bg-[#081C16] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-[#7ED321]/20"
+      className="relative h-[380vh] bg-[#081C16] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-mint/20"
     >
       {/* Sticky Fullscreen Container */}
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-start pt-16 sm:pt-20 pb-24 sm:pb-32 px-4 sm:px-8 md:px-12">
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center pt-20 pb-12 px-4 sm:px-8 md:px-12">
         {/* Header Section */}
         <div className="max-w-3xl mx-auto w-full flex flex-col items-center text-center z-10">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_4px_25px_rgba(126,211,33,0.35)]"
-            style={{ fontSize: 'clamp(2.5rem, 9vw, 140px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center"
+            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
           >
-            ALUMNI
+            <span className="text-gradient-mint">ALUMNI</span>
           </h2>
 
-          <p className="text-xs sm:text-sm md:text-base text-gray-300 font-body max-w-xl leading-relaxed mt-4">
+          <p className="text-xs sm:text-sm md:text-base text-gray-300 font-body max-w-xl leading-relaxed mt-2 sm:mt-4">
             Pioneers, founders, and venture leaders who emerged from PEC E-Cell to build tech giants and shape global ecosystems.
           </p>
         </div>
 
         {/* Horizontal Motion Track */}
-        <div className="w-full overflow-hidden z-10 py-4 mt-6 sm:mt-8 md:mt-10 mb-auto">
+        <div className="w-full z-10 py-4 mt-6 sm:mt-8 md:mt-12 shrink-0">
           <motion.div 
             ref={trackRef} 
             style={{ x: xMotion }} 
@@ -248,7 +248,9 @@ export default function AlumniSection() {
                           <Building2 className="w-3.5 h-3.5" />
                           {person.company} &middot; {person.batch}
                         </span>
-                        <h3 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">{person.name}</h3>
+                        <h3 className="text-xl sm:text-2xl font-bold font-display tracking-tight">
+                          <span className="text-gradient-white">{person.name}</span>
+                        </h3>
                         
                         {/* Mobile Tap Hint */}
                         <div className="mt-2 sm:hidden flex items-center gap-1.5 text-white/60 text-[10px] uppercase font-mono-data font-bold tracking-wider">
@@ -274,7 +276,9 @@ export default function AlumniSection() {
                         </div>
 
                         <div>
-                          <h3 className="text-xl sm:text-2xl font-bold font-display text-white tracking-tight">{person.name}</h3>
+                          <h3 className="text-xl sm:text-2xl font-bold font-display tracking-tight">
+                            <span className="text-gradient-white">{person.name}</span>
+                          </h3>
                           <div className="text-xs font-mono-data text-mint font-bold flex items-center gap-1.5 mt-1">
                             <Building2 className="w-3.5 h-3.5" />
                             {person.role} • {person.company}
@@ -283,7 +287,7 @@ export default function AlumniSection() {
 
                         {/* Valuation / Milestone Badge */}
                         {person.valuation && (
-                          <div className="px-3 py-2 rounded-xl bg-white/5 border border-mint/20 flex items-center gap-2 text-xs font-mono-data text-gray-200">
+                          <div className="px-3 py-2 rounded-xl bg-white/[0.08] border border-mint/40 flex items-center gap-2 text-xs font-mono-data text-gray-100">
                             <Award className="w-4 h-4 text-mint shrink-0" />
                             <span className="font-bold text-white">{person.valuation}</span>
                           </div>

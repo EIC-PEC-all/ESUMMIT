@@ -3,6 +3,7 @@ import { Inter, Kanit } from 'next/font/google'
 import './globals.css'
 import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
 import ChevronRouteTransition from '@/components/Common/ChevronRouteTransition'
+import SessionProviderWrapper from '@/components/Providers/SessionProviderWrapper'
 
 const kanit = Kanit({
   subsets: ['latin'],
@@ -48,11 +49,12 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  title: 'PEC Summit 2025 — E-Cell PEC, Chandigarh',
+  title: 'E-Summit 2026 — E-Cell PEC, Chandigarh',
   description:
-    'PEC Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, Chandigarh. Join North India\'s premier high-voltage platform for student innovators, startup founders, and venture builders.',
+    'E-Summit 2026 is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, Chandigarh. Join North India\'s premier high-voltage platform for student innovators, startup founders, and venture builders.',
   keywords: [
-    'PEC Summit',
+    'E-Summit 2026',
+    'E-Summit',
     'E-Cell PEC',
     'entrepreneurship summit',
     'startup fest',
@@ -62,17 +64,17 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'E-Cell PEC', url: 'https://esummit.pec.ac.in' }],
   openGraph: {
-    title: 'PEC Summit 2025 — High Voltage',
+    title: 'PEC E-Summit 2026 — March 15-16',
     description:
       'The flagship entrepreneurship summit of E-Cell PEC, Chandigarh. Pitches, panels, expo, hackathon, and VIP investor networking.',
     url: 'https://esummit.pec.ac.in',
-    siteName: 'PEC Summit 2025',
+    siteName: 'PEC E-Summit 2026',
     images: [
       {
-        url: '/readme-hero.png', // Assuming this high-quality asset exists in public/
+        url: '/readme-hero.png',
         width: 1200,
         height: 630,
-        alt: 'PEC E-Summit 2025 Hero Graphic',
+        alt: 'PEC E-Summit 2026 Official Banner',
       },
     ],
     locale: 'en_IN',
@@ -80,14 +82,14 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PEC Summit 2025',
+    title: 'PEC E-Summit 2026',
     description: "Build and launch at Chandigarh's premier student entrepreneurship summit.",
     images: ['/readme-hero.png'],
   },
 }
 
 import GlobalScrollProgress from '@/components/Common/GlobalScrollProgress'
-import MobileBottomNav from '@/components/Nav/MobileBottomNav'
+import Concierge from '@/components/Concierge'
 
 export default function RootLayout({
   children,
@@ -100,13 +102,17 @@ export default function RootLayout({
         className={`noise ${kanit.variable} ${inter.variable} font-body text-primary bg-void`}
         suppressHydrationWarning
       >
-        <GlobalScrollProgress />
-        <MobileBottomNav />
-        <SmoothScrollProvider>
-          <ChevronRouteTransition>
-            {children}
-          </ChevronRouteTransition>
-        </SmoothScrollProvider>
+        <SessionProviderWrapper>
+          <GlobalScrollProgress />
+          <SmoothScrollProvider>
+            <ChevronRouteTransition>
+              {children}
+            </ChevronRouteTransition>
+          </SmoothScrollProvider>
+        </SessionProviderWrapper>
+
+        {/* Floating AI Concierge — outside all wrappers so fixed positioning works */}
+        <Concierge />
       </body>
     </html>
   )

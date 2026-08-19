@@ -93,6 +93,7 @@ function CleanStripSlat({
     >
       <motion.div
         className="absolute inset-0 bg-[#070b08]"
+        initial={{ scaleY: 1, opacity: 1 }}
         style={{
           scaleY: collapseScaleY,
           opacity: collapseOpacity,
@@ -103,6 +104,7 @@ function CleanStripSlat({
         <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
         <motion.div
           className="absolute bottom-0 left-0 right-0 h-[2px] bg-mint shadow-[0_0_20px_#7ed321]"
+          initial={{ opacity: 0 }}
           style={{ opacity: laserOpacity }}
         />
       </motion.div>
@@ -173,7 +175,7 @@ export default function FlipFlopTransition({ slatCount = 10 }: { slatCount?: num
         {/* REVEALED LAYER: Dual Photo Marquee Rows sliding in from Left & Right on scroll */}
         <div className="relative z-0 flex flex-col justify-center w-full gap-4 px-4 py-8 overflow-hidden">
           {/* Row 1 — Slides in from LEFT on scroll */}
-          <motion.div style={{ x: row1X }} className="w-full overflow-hidden">
+          <motion.div initial={{ x: '-100vw' }} style={{ x: row1X }} className="w-full overflow-hidden">
             <div
               className="flex w-max gap-4"
               style={{
@@ -188,7 +190,7 @@ export default function FlipFlopTransition({ slatCount = 10 }: { slatCount?: num
           </motion.div>
 
           {/* Row 2 — Slides in from RIGHT on scroll */}
-          <motion.div style={{ x: row2X }} className="w-full overflow-hidden">
+          <motion.div initial={{ x: '100vw' }} style={{ x: row2X }} className="w-full overflow-hidden">
             <div
               className="flex w-max gap-4"
               style={{

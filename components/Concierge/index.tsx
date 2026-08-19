@@ -6,9 +6,9 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Send, Bot, TrendingUp, ChevronDown, Calendar, Plus, Trash2, Bookmark, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { usePathname } from 'next/navigation'
 import { useChatbot } from '@/hooks/useChatbot'
 import { emitAgentEvent } from '@/lib/events'
+import { TOAST_STYLE } from '@/lib/constants'
 import type { ItinerarySession } from './agent'
 
 function FormattedText({ text }: { text: string }) {
@@ -32,22 +32,13 @@ function FormattedText({ text }: { text: string }) {
 export default function Concierge() {
   const [open, setOpen] = useState(false)
   const [planOpen, setPlanOpen] = useState(false)
-  const pathname = usePathname()
-  const [isLoaderActive, setIsLoaderActive] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      if (window.__SCROLL_LOADER_ACTIVE__ === false) return false
-      if (window.__SCROLL_LOADER_ACTIVE__ === true || document.body.classList.contains('loader-active')) return true
-      return pathname === '/'
-    }
-    return pathname === '/'
-  })
   const [myPlan, setMyPlan] = useState<ItinerarySession[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  // Hide when any modal (event detail, etc) is open
+  // Hide floating action button when any modal (event detail, speaker, sponsor, etc) is open
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setIsModalOpen(document.body.classList.contains('modal-open'))
@@ -82,10 +73,10 @@ export default function Concierge() {
 
   const handleFunctionResult = useCallback((name: string, result: string) => {
     if (name === 'subscribe_email' && result.includes('subscribed')) {
-      toast.success('Subscribed to E-Summit PEC updates!')
+      toast.success('Subscribed to E-Summit PEC updates!', TOAST_STYLE)
     }
     if (name === 'register_for_activity') {
-      toast.success('Registration interest recorded!')
+      toast.success('Registration interest recorded!', TOAST_STYLE)
     }
   }, [])
 
@@ -95,34 +86,13 @@ export default function Concierge() {
   })
 
   const visibleMessages = messages.filter(m => m.role === 'user' || m.role === 'assistant')
-  // Listen to loader state updates
-  useEffect(() => {
-    const checkState = () => {
-      if (typeof window !== 'undefined') {
-        setIsLoaderActive(Boolean(window.__SCROLL_LOADER_ACTIVE__ || document.body.classList.contains('loader-active')))
-      }
-    }
-    checkState()
-
-    const handleLoaderState = (e: Event) => {
-      const customEvt = e as CustomEvent<{ active: boolean }>
-      if (customEvt.detail !== undefined) {
-        setIsLoaderActive(customEvt.detail.active)
-      }
-    }
-
-    window.addEventListener('scroll-loader-state', handleLoaderState)
-    return () => {
-      window.removeEventListener('scroll-loader-state', handleLoaderState)
-    }
-  }, [])
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem('pec_summit_my_plan')
       if (saved) setMyPlan(JSON.parse(saved))
-    } catch (e) {
-      console.error(e)
+    } catch {
+      // ignore
     }
   }, [])
 
@@ -145,8 +115,9 @@ export default function Concierge() {
     setMyPlan(newPlan)
     try {
       localStorage.setItem('pec_summit_my_plan', JSON.stringify(newPlan))
-    } catch (e) {
-      console.error(e)
+      window.dispatchEvent(new CustomEvent('pec_plan_updated', { detail: newPlan.length }))
+    } catch {
+      // ignore
     }
   }, [])
 
@@ -154,13 +125,13 @@ export default function Concierge() {
     if (myPlan.some((s) => s.id === session.id)) return
     const updated = [...myPlan, session]
     savePlan(updated)
-    toast.success(`Added "${session.title}" to My Plan!`)
+    toast.success(`Added "${session.title}" to My Plan!`, TOAST_STYLE)
   }
 
   const removeFromPlan = (sessionId: string) => {
     const updated = myPlan.filter((s) => s.id !== sessionId)
     savePlan(updated)
-    toast.success('Removed session from My Plan.')
+    toast.success('Removed session from My Plan.', TOAST_STYLE)
   }
 
   useEffect(() => {
@@ -184,26 +155,18 @@ export default function Concierge() {
       {/* Floating Concierge Action Pill */}
       <motion.button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-20 sm:bottom-14 right-4 sm:right-6 z-[2500] min-h-[44px] px-4 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-bold shadow-2xl flex items-center gap-2 hover:scale-105 transition-all"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{
-          opacity: isLoaderActive || isModalOpen ? 0 : 1,
-          y: isLoaderActive || isModalOpen ? 20 : 0,
-          pointerEvents: isLoaderActive || isModalOpen ? 'none' : 'auto',
-        }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        whileHover={{ scale: isLoaderActive ? 1 : 1.05 }}
-        whileTap={{ scale: isLoaderActive ? 1 : 0.95 }}
+        style={{ position: 'fixed' }}
+        className={`btn-mint-gradient !fixed bottom-14 right-3 sm:right-6 z-[10000] min-h-[40px] sm:min-h-[44px] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full font-mono-data text-xs font-bold text-void flex items-center gap-2 cursor-pointer transition-all duration-300 ${
+          isModalOpen ? 'opacity-0 scale-90 pointer-events-none' : 'opacity-100 scale-100 pointer-events-auto'
+        }`}
+        whileHover={{ scale: isModalOpen ? 0.9 : 1.05 }}
+        whileTap={{ scale: isModalOpen ? 0.9 : 0.95 }}
         aria-label="Open Summit Assistant"
       >
         <Bot size={18} />
         <span className="hidden sm:inline">Ask Assistant</span>
         {!open && (
-          <motion.span
-            className="w-2 h-2 rounded-full bg-void"
-            animate={{ opacity: [1, 0.3, 1] }}
-            transition={{ duration: 1.2, repeat: Infinity }}
-          />
+          <span className="w-2 h-2 rounded-full bg-void" />
         )}
       </motion.button>
 
@@ -211,7 +174,7 @@ export default function Concierge() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed bottom-32 sm:bottom-28 right-4 sm:right-8 left-auto z-[2500] w-[360px] max-w-[calc(100vw-32px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-[#1A3A0F] border-0"
+            className="fixed bottom-[136px] right-4 sm:right-6 left-auto z-[10000] w-[360px] max-w-[calc(100vw-32px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-gradient-to-b from-[#0D2218]/95 via-[#081710]/95 to-[#040A07]/95 border border-mint/30 backdrop-blur-2xl"
             style={{ height: 'min(480px, 72vh)' }}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -231,7 +194,7 @@ export default function Concierge() {
                   </p>
                   <p className="font-mono-data text-[10px] text-mint font-semibold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-mint inline-block" />
-                    <span>Powered by Groq · E-Cell PEC</span>
+                    <span>Official AI Concierge · E-Cell PEC</span>
                   </p>
                 </div>
               </div>
@@ -274,8 +237,8 @@ export default function Concierge() {
                     <div
                       className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed text-xs sm:text-sm ${
                         msg.role === 'user'
-                          ? 'bg-mint text-void font-bold rounded-br-none shadow-md'
-                          : 'bg-white/10 border border-white/15 text-white rounded-bl-none shadow-md backdrop-blur-md'
+                          ? 'bg-mint/15 text-mint border border-mint/30 rounded-br-none'
+                          : 'bg-white/[0.06] border border-white/10 text-white rounded-bl-none'
                       }`}
                     >
                       <FormattedText text={msg.content} />
@@ -284,7 +247,7 @@ export default function Concierge() {
 
                   {/* Render Inline Itinerary Card */}
                   {msg.itinerary && (
-                    <div className="mt-3 ml-8 w-[88%] rounded-2xl p-4 bg-white/5 border border-mint/40 shadow-xl space-y-3">
+                    <div className="mt-3 ml-8 w-[88%] rounded-2xl p-4 bg-white/[0.04] border border-white/10 space-y-3">
                       <div className="flex items-center gap-2 text-xs font-mono-data text-mint uppercase font-bold">
                         <Calendar size={14} />
                         <span>{msg.itinerary.title}</span>
@@ -357,18 +320,18 @@ export default function Concierge() {
         )}
       </AnimatePresence>
 
-      {/* Persistent "My Plan" Itinerary Drawer */}
+      {/* Persistent "My Plan" Itinerary Modal */}
       <AnimatePresence>
         {planOpen && (
-          <div className="fixed inset-0 z-50 flex justify-end bg-void/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[12000] flex items-center justify-center bg-black/85 backdrop-blur-2xl p-4 sm:p-6">
             <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-md bg-panel border-l border-[var(--accent-mint)]/40 h-full flex flex-col p-6 shadow-2xl relative"
+              className="w-full max-w-lg bg-gradient-to-b from-[#0C1A14] via-[#07120E] to-[#040A08] border border-mint/35 rounded-3xl flex flex-col p-6 shadow-[0_0_100px_rgba(0,0,0,0.95),inset_0_1px_1px_rgba(255,255,255,0.1)] relative max-h-[85vh]"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-[var(--accent-mint)]/30 mb-6">
+              <div className="flex items-center justify-between pb-4 border-b border-[var(--accent-mint)]/30 mb-6 shrink-0">
                 <div className="flex items-center gap-2">
                   <Bookmark size={18} className="text-[var(--accent-mint)] fill-[var(--accent-mint)]/20" />
                   <h3 className="font-display text-2xl text-white">My Personal Itinerary</h3>
@@ -380,10 +343,18 @@ export default function Concierge() {
 
               <div className="flex-1 overflow-y-auto space-y-3">
                 {myPlan.length === 0 ? (
-                  <div className="py-16 text-center text-muted font-body text-sm">
-                    <Calendar size={36} className="mx-auto mb-3 opacity-30 text-[var(--accent-mint)]" />
-                    <p>Your plan is empty.</p>
-                    <p className="text-xs text-muted/70 mt-1">Ask the E-Summit assistant to build a custom itinerary!</p>
+                  <div className="py-16 text-center flex flex-col items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center">
+                      <Calendar size={22} className="text-muted" />
+                    </div>
+                    <p className="font-mono-data text-xs font-bold text-white uppercase tracking-wider">No Sessions Saved</p>
+                    <p className="font-body text-xs text-muted max-w-[200px]">Ask the assistant to build a schedule and add sessions here.</p>
+                    <button
+                      onClick={() => { setPlanOpen(false); setOpen(true) }}
+                      className="mt-2 px-4 py-2 rounded-full bg-mint text-void text-xs font-mono-data font-bold uppercase tracking-wider"
+                    >
+                      Open Assistant
+                    </button>
                   </div>
                 ) : (
                   myPlan.map((session) => (

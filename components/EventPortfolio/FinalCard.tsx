@@ -24,14 +24,14 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
       className="group relative shrink-0 overflow-hidden rounded-2xl aspect-[4/3] bg-[#070E0A] flex flex-col items-center justify-center text-center transition-colors duration-300"
       style={{
         width: 'clamp(280px, 26vw, 380px)',
-        border: '1px solid rgba(126,211,33,0.15)',
-        boxShadow: '0 0 60px rgba(126,211,33,0.06), inset 0 1px 0 rgba(126,211,33,0.08)',
+        border: '1px solid rgba(181,242,61,0.15)',
+        boxShadow: '0 0 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(181,242,61,0.08)',
       }}
     >
       {/* Radial glow in center */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(126,211,33,0.07) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(181,242,61,0.05) 0%, transparent 70%)' }}
       />
 
       {/* Faded ∞ watermark */}
@@ -54,7 +54,7 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
                   className="font-display font-black leading-none"
                   style={{
                     fontSize: 'clamp(2rem, 5vw, 2.75rem)',
-                    color: i === 0 ? '#7ED321' : '#FFFFFF',
+                    color: i === 0 ? 'var(--accent-mint)' : '#FFFFFF',
                   }}
                 >
                   {stat.value}
@@ -80,7 +80,7 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
           href="#tracks"
           onClick={onViewAll}
           className="group/btn w-full flex items-center justify-center gap-2 py-3 rounded-xl font-mono-data text-[10px] font-black uppercase tracking-[0.2em] text-mint transition-all duration-300 hover:bg-mint hover:text-black"
-          style={{ border: '1px solid rgba(126,211,33,0.25)', background: 'rgba(126,211,33,0.06)' }}
+          style={{ border: '1px solid rgba(181,242,61,0.25)', background: 'rgba(181,242,61,0.06)' }}
         >
           VIEW ALL EVENTS
           <ArrowRight size={12} strokeWidth={2.5} className="transition-transform group-hover/btn:translate-x-0.5" />

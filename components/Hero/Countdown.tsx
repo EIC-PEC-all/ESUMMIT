@@ -1,6 +1,6 @@
 'use client'
 // components/Hero/Countdown.tsx
-// Futuristic Neon Cyber-Finance Live Countdown Timer for PEC Summit
+// Futuristic Neon Cyber-Finance Live Countdown Timer for E-Summit
 
 import { useEffect, useState } from 'react'
 

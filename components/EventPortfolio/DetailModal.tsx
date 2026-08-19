@@ -70,14 +70,14 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[6000] flex items-stretch sm:items-center justify-center p-0 sm:p-6">
-        {/* Frosted Glass Dark Backdrop — Softly reveals site background with glassmorphic blur */}
+      <div className="fixed inset-0 z-[99999] flex items-stretch sm:items-center justify-center p-0 sm:p-6">
+        {/* Deep Dark Glassmorphic Backdrop — Blurs whole page including navbar, Ask AI button, and marquee */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="absolute inset-0 bg-black/75 backdrop-blur-md"
+          className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
         />
 
         {/* Modal Window — Edge-to-edge on mobile, floating glassmorphic card on desktop */}
@@ -86,10 +86,10 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="relative z-10 w-full h-full sm:h-auto sm:max-w-xl lg:max-w-3xl sm:max-h-[85vh] overflow-hidden rounded-none sm:rounded-2xl bg-[#091410] border-0 sm:border sm:border-mint/20 shadow-[0_0_80px_rgba(0,0,0,0.8)] flex flex-col"
+          className="relative z-10 w-full h-full sm:h-auto sm:max-w-xl lg:max-w-3xl sm:max-h-[85vh] overflow-hidden rounded-none sm:rounded-3xl bg-gradient-to-b from-[#0C1A14] via-[#07120E] to-[#040A08] border-0 sm:border sm:border-mint/30 shadow-[0_0_100px_rgba(0,0,0,0.95),inset_0_1px_1px_rgba(255,255,255,0.1)] flex flex-col"
         >
           {/* Top Bar Header */}
-          <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-white/10 bg-[#07100D] shrink-0 pt-[max(0.8rem,env(safe-area-inset-top))]">
+          <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-mint/20 bg-[#060D0A]/90 shrink-0 pt-[max(0.8rem,env(safe-area-inset-top))]">
             <div className="flex items-center gap-2 min-w-0 pr-3">
               <span className="font-mono-data text-[11px] font-black text-mint px-2 py-0.5 rounded bg-mint/10 border border-mint/20 shrink-0">
                 {event.number}

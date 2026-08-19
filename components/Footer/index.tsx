@@ -25,10 +25,10 @@ import toast from 'react-hot-toast'
 import Image from 'next/image'
 import Link from 'next/link'
 import DynamicWeightHeading from '../DynamicWeightHeading'
-import CircuitBoard from '../Hero/CircuitBoard'
 import { ScrollGradientFill, GlitchText } from '@/components/Common/TextAnims'
 import StackedSlicedText from '@/components/ui/StackedSlicedText'
 import { FEST_META } from '@/lib/data'
+import { TOAST_STYLE } from '@/lib/constants'
 
 function EmailCapture() {
   const [email, setEmail] = useState('')
@@ -38,26 +38,20 @@ function EmailCapture() {
     e.preventDefault()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      toast.error('Please enter a valid email address.', {
-        style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' },
-      })
+      toast.error('Please enter a valid email address.', TOAST_STYLE)
       return
     }
-    const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
-    if (!existing.includes(email)) {
-      existing.push(email)
-      localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
+    try {
+      const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
+      if (!existing.includes(email)) {
+        existing.push(email)
+        localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
+      }
+    } catch {
+      // non-critical — continue
     }
     setSubmitted(true)
-    toast.success(`${email} — you're on the list!`, {
-      duration: 4000,
-      style: {
-        background: '#0A110E',
-        color: '#FFFFFF',
-        border: '1px solid var(--accent-mint)',
-      },
-      iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
-    })
+    toast.success(`${email} — you're on the list!`, { ...TOAST_STYLE, duration: 4000 })
   }
 
   if (submitted) {
@@ -92,14 +86,14 @@ function EmailCapture() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 rounded-xl border border-[#4E6527]/60 bg-[#1E2B12] px-4 py-3 font-body text-sm text-white outline-none placeholder:text-gray-400 focus:border-[#C8E696]"
-        aria-label="Enter your email to get PEC Summit updates"
+        className="flex-1 rounded-xl border border-[var(--accent-mint)]/30 bg-[#1E2B12] px-4 py-3 font-body text-sm text-white outline-none placeholder:text-gray-500 focus:border-[var(--accent-mint)]/60 transition-colors"
+        aria-label="Enter your email to get E-Summit updates"
       />
       <button
         type="submit"
         className="btn-green shrink-0"
         id="footer-subscribe-btn"
-        aria-label="Subscribe to PEC Summit updates"
+        aria-label="Subscribe to E-Summit updates"
       >
         Get Updates
         <ArrowRight size={16} aria-hidden="true" />
@@ -134,12 +128,12 @@ export function RegisterCTA() {
       className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#081C16] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#7ED321]/20 pt-28 pb-44 sm:pt-36 sm:pb-56 md:pb-64"
       aria-labelledby="footer-cta-heading"
     >
-      {/* ── Lightweight Hardware-Accelerated Radial Mesh Glow (NO CPU Blur Filter) ── */}
+      {/* Pure lime radial wash — no off-brand purple */}
       <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-40"
+        className="pointer-events-none absolute inset-0 z-0 opacity-30"
         style={{
           background:
-            'radial-gradient(circle at 50% 50%, rgba(126, 211, 33, 0.12) 0%, rgba(124, 58, 237, 0.08) 45%, transparent 70%)',
+            'radial-gradient(circle at 50% 50%, rgba(181, 242, 61, 0.10) 0%, transparent 65%)',
         }}
       />
 
@@ -155,31 +149,13 @@ export function RegisterCTA() {
           boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15)',
         }}
       >
-        <div className="h-full w-full rounded-[24px] border border-white/10 bg-[#040705] relative overflow-hidden flex items-center justify-center">
-          <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#7ED321_1px,transparent_1px)] [background-size:16px_16px]" />
-          <div className="h-28 w-28 rounded-full border border-[#7ED321]/30 bg-[#7ED321]/10" />
-          <div className="h-16 w-16 rounded-2xl border border-white/20 bg-white/5" />
+        <div className="h-full w-full rounded-[24px] border border-white/10 bg-[#040705] relative overflow-hidden flex items-center justify-center gap-4">
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#B5F23D_1px,transparent_1px)] [background-size:16px_16px]" />
+          <div className="h-20 w-20 rounded-2xl border border-mint/20 bg-mint/5" />
+          <div className="h-28 w-28 rounded-full border border-mint/15 bg-mint/[0.04]" />
         </div>
       </motion.div>
 
-      {/* ── Right 3D Perspective Geometric Glass Panel (Steep 3D Tilt) ──────────── */}
-      <motion.div
-        initial={{ opacity: 0, x: 220, rotateY: -42, rotateX: 12, rotateZ: 8, scale: 0.8 }}
-        whileInView={{ opacity: 1, x: 0, rotateY: -28, rotateX: 6, rotateZ: 4, scale: 0.9 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="pointer-events-none absolute -right-16 top-1/2 -translate-y-1/2 hidden xl:block w-[420px] h-[280px] rounded-[36px] border border-white/20 p-6 shadow-2xl z-0 will-change-transform"
-        style={{
-          transformStyle: 'preserve-3d',
-          background: 'linear-gradient(145deg, rgba(124,58,237,0.2) 0%, rgba(244,63,94,0.15) 50%, rgba(7,11,8,0.9) 100%)',
-          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15)',
-        }}
-      >
-        <div className="h-full w-full rounded-[24px] border border-white/15 bg-black/60 relative overflow-hidden flex items-center justify-center">
-          <div className="h-32 w-32 rounded-full border border-purple-500/30 bg-purple-500/15" />
-          <div className="h-20 w-20 rounded-full border border-pink-400/30 bg-pink-400/10" />
-        </div>
-      </motion.div>
 
       {/* ── Center Content Block ──────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
@@ -193,10 +169,10 @@ export function RegisterCTA() {
           {/* Main Headline */}
           <h2
             id="footer-cta-heading"
-            className="mb-6 font-display font-black uppercase text-center text-mint leading-none tracking-tight drop-shadow-lg"
-            style={{ fontSize: 'clamp(3.5rem, 14vw, 180px)' }}
+            className="mb-6 font-display font-black uppercase text-center leading-none tracking-tight"
+            style={{ fontSize: 'clamp(3rem, 12vw, 120px)' }}
           >
-            REGISTER
+            <span className="text-gradient-mint">REGISTER</span>
           </h2>
 
           {/* Subtitle */}
@@ -208,9 +184,9 @@ export function RegisterCTA() {
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/passes"
-              className="btn-green flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-xl transition-transform hover:scale-105"
+              className="btn-mint-gradient flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105"
               id="footer-register-btn"
-              aria-label="Claim Delegate Pass for PEC Summit"
+              aria-label="Claim Delegate Pass for E-Summit"
             >
               <span>Claim Delegate Pass</span>
               <ArrowRight size={18} aria-hidden="true" />
@@ -218,7 +194,7 @@ export function RegisterCTA() {
 
             <Link
               href="/passes"
-              className="flex items-center justify-center rounded-full border border-white/30 bg-white/5 px-8 py-4 text-base font-bold text-white transition-colors hover:bg-white/15 hover:border-white"
+              className="btn-dark-gradient flex items-center justify-center rounded-full px-8 py-4 text-base font-bold text-white transition-transform hover:scale-105"
               id="footer-schedule-btn"
               aria-label="Explore Full Summit Schedule"
             >

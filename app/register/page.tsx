@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
+import { TOAST_STYLE, generateBarcodeWidths } from '@/lib/constants'
 
 interface RegistrationRecord {
   id: string
@@ -61,7 +62,7 @@ const REGISTRATION_TYPES = [
   {
     id: 'ambassador',
     title: 'Campus Ambassador',
-    desc: 'Represent PEC Summit at your institution & unlock VIP delegate networking perks.',
+    desc: 'Represent E-Summit at your institution & unlock VIP delegate networking perks.',
     fee: 'FREE',
     badge: 'CA LEADER',
     icon: ShieldCheck,
@@ -120,17 +121,25 @@ export default function RegisterPage() {
 
   const handleCompleteRegistration = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.name || !formData.email) {
-      toast.error('Please enter your full name and email address.')
+    if (!formData.name.trim() || !formData.email.trim()) {
+      toast.error('Please enter your full name and email address.', TOAST_STYLE)
+      return
+    }
+    // Reject obviously empty or placeholder phone values
+    const phoneVal = formData.phone.trim()
+    const phoneOk = !phoneVal || /^[+\d][\d\s\-().]{7,}$/.test(phoneVal)
+    if (!phoneOk) {
+      toast.error('Please enter a valid phone number.', TOAST_STYLE)
       return
     }
 
+    const ticketId = `PEC-${Math.floor(100000 + Math.random() * 900000)}`
     const newRecord: RegistrationRecord = {
-      id: `PEC-${Math.floor(100000 + Math.random() * 900000)}`,
+      id: ticketId,
       name: formData.name,
       email: formData.email,
-      phone: formData.phone || '+91 98765 43210',
-      college: formData.college || 'Punjab Engineering College',
+      phone: phoneVal || 'Not provided',
+      college: formData.college.trim() || 'Punjab Engineering College',
       category: REGISTRATION_TYPES.find((t) => t.id === selectedType)?.title || 'Student Pass',
       tracks: selectedTracks.length > 0 ? selectedTracks : ['General Keynotes'],
       date: new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -142,159 +151,147 @@ export default function RegisterPage() {
     setCurrentBadge(newRecord)
     try {
       localStorage.setItem('pec_summit_registrations', JSON.stringify(updated))
-    } catch (err) {
-      console.warn('LocalStorage save failed:', err)
+    } catch {
+      // non-critical
     }
 
     setStep(4)
-    toast.success('Registration Confirmed! E-Badge Issued.', {
-      style: { background: '#07130F', color: '#FFFFFF', border: '1px solid rgba(255,255,255,0.15)' },
-      iconTheme: { primary: '#7ED321', secondary: '#040605' },
-    })
+    toast.success('Registration Confirmed! E-Badge Issued.', TOAST_STYLE)
   }
 
   const handleExportInstagramStory = () => {
-    try {
-      const canvas = document.createElement('canvas')
-      canvas.width = 1080
-      canvas.height = 1920
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return
+    const canvas = document.createElement('canvas')
+    canvas.width = 1080
+    canvas.height = 1920
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
 
-      // Dark Background Gradient
-      const bgGradient = ctx.createLinearGradient(0, 0, 0, 1920)
-      bgGradient.addColorStop(0, '#060B08')
-      bgGradient.addColorStop(0.5, '#0B1D15')
-      bgGradient.addColorStop(1, '#050907')
-      ctx.fillStyle = bgGradient
-      ctx.fillRect(0, 0, 1080, 1920)
+    // Background
+    const bgGradient = ctx.createLinearGradient(0, 0, 0, 1920)
+    bgGradient.addColorStop(0, '#060B08')
+    bgGradient.addColorStop(0.5, '#0B1D15')
+    bgGradient.addColorStop(1, '#050907')
+    ctx.fillStyle = bgGradient
+    ctx.fillRect(0, 0, 1080, 1920)
 
-      // Ambient Mint Glow
-      const glow = ctx.createRadialGradient(540, 960, 0, 540, 960, 600)
-      glow.addColorStop(0, 'rgba(126, 211, 33, 0.12)')
-      glow.addColorStop(1, 'rgba(0, 0, 0, 0)')
-      ctx.fillStyle = glow
-      ctx.fillRect(0, 0, 1080, 1920)
+    // Subtle lime glow (no neon)
+    const glow = ctx.createRadialGradient(540, 960, 0, 540, 960, 500)
+    glow.addColorStop(0, 'rgba(181, 242, 61, 0.08)')
+    glow.addColorStop(1, 'rgba(0, 0, 0, 0)')
+    ctx.fillStyle = glow
+    ctx.fillRect(0, 0, 1080, 1920)
 
-      // Header Text
-      ctx.textAlign = 'center'
-      ctx.fillStyle = '#7ED321'
-      ctx.font = 'bold 36px monospace'
-      ctx.fillText('PEC E-SUMMIT 2026', 540, 220)
+    ctx.textAlign = 'center'
+    ctx.fillStyle = '#B5F23D'
+    ctx.font = 'bold 36px monospace'
+    ctx.fillText('PEC E-SUMMIT 2026', 540, 220)
 
-      ctx.fillStyle = '#FFFFFF'
-      ctx.font = '900 84px sans-serif'
-      ctx.fillText('OFFICIAL DELEGATE', 540, 320)
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = '900 84px sans-serif'
+    ctx.fillText('OFFICIAL DELEGATE', 540, 320)
 
-      ctx.fillStyle = '#7ED321'
-      ctx.font = '900 84px sans-serif'
-      ctx.fillText('ACCESS PASS', 540, 410)
+    ctx.fillStyle = '#B5F23D'
+    ctx.font = '900 84px sans-serif'
+    ctx.fillText('ACCESS PASS', 540, 410)
 
-      // Glass Ticket Card
-      const cardX = 100
-      const cardY = 490
-      const cardW = 880
-      const cardH = 1080
+    const cardX = 100, cardY = 490, cardW = 880, cardH = 1080
 
-      ctx.save()
-      ctx.beginPath()
-      ctx.rect(cardX, cardY, cardW, cardH)
-      ctx.fillStyle = 'rgba(10, 24, 19, 0.85)'
-      ctx.fill()
-      ctx.lineWidth = 3
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)'
-      ctx.stroke()
-      ctx.restore()
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(cardX, cardY, cardW, cardH)
+    ctx.fillStyle = 'rgba(10, 24, 19, 0.85)'
+    ctx.fill()
+    ctx.lineWidth = 2
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)'
+    ctx.stroke()
+    ctx.restore()
 
-      // Category Pill
-      const categoryText = currentBadge?.category || 'DELEGATE PASS'
-      ctx.fillStyle = 'rgba(126, 211, 33, 0.15)'
-      ctx.strokeStyle = '#7ED321'
-      ctx.lineWidth = 2
-      ctx.beginPath()
-      ctx.rect(540 - 180, cardY + 60, 360, 60)
-      ctx.fill()
-      ctx.stroke()
+    const categoryText = currentBadge?.category || 'DELEGATE PASS'
+    ctx.fillStyle = 'rgba(181, 242, 61, 0.12)'
+    ctx.beginPath()
+    ctx.rect(540 - 180, cardY + 60, 360, 60)
+    ctx.fill()
+    ctx.strokeStyle = '#B5F23D'
+    ctx.lineWidth = 1.5
+    ctx.stroke()
 
-      ctx.fillStyle = '#7ED321'
-      ctx.font = 'bold 26px monospace'
-      ctx.fillText(categoryText.toUpperCase(), 540, cardY + 100)
+    ctx.fillStyle = '#B5F23D'
+    ctx.font = 'bold 26px monospace'
+    ctx.fillText(categoryText.toUpperCase(), 540, cardY + 100)
 
-      // Name & College
-      const nameText = (currentBadge?.name || formData.name || 'DELEGATE NAME').toUpperCase()
-      ctx.fillStyle = '#FFFFFF'
-      ctx.font = '900 68px sans-serif'
-      ctx.fillText(nameText, 540, cardY + 230)
+    const nameText = (currentBadge?.name || formData.name || 'DELEGATE NAME').toUpperCase()
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = '900 68px sans-serif'
+    ctx.fillText(nameText, 540, cardY + 230)
 
-      const collegeText = (currentBadge?.college || formData.college || 'PUNJAB ENGINEERING COLLEGE').toUpperCase()
-      ctx.fillStyle = '#A3A3A3'
-      ctx.font = 'bold 28px monospace'
-      ctx.fillText(collegeText, 540, cardY + 290)
+    const collegeText = (currentBadge?.college || formData.college || 'PUNJAB ENGINEERING COLLEGE').toUpperCase()
+    ctx.fillStyle = '#A3A3A3'
+    ctx.font = 'bold 28px monospace'
+    ctx.fillText(collegeText, 540, cardY + 290)
 
-      // Divider Line
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)'
-      ctx.lineWidth = 2
-      ctx.beginPath()
-      ctx.moveTo(160, cardY + 340)
-      ctx.lineTo(920, cardY + 340)
-      ctx.stroke()
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.10)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(160, cardY + 340)
+    ctx.lineTo(920, cardY + 340)
+    ctx.stroke()
 
-      // QR Code Image
-      const qrImg = new Image()
-      qrImg.crossOrigin = 'anonymous'
-      qrImg.src = currentBadge?.qrCodeData || `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=PEC-SUMMIT-${formData.email}`
-      qrImg.onload = () => {
-        ctx.fillStyle = '#FFFFFF'
-        ctx.fillRect(540 - 160, cardY + 390, 320, 320)
-        ctx.drawImage(qrImg, 540 - 140, cardY + 410, 280, 280)
-
-        ctx.fillStyle = '#7ED321'
-        ctx.font = 'bold 32px monospace'
-        ctx.fillText(currentBadge?.id || 'PEC-849201', 540, cardY + 760)
-
-        ctx.fillStyle = '#FFFFFF'
-        ctx.font = 'bold 28px sans-serif'
-        ctx.fillText('MARCH 15-16, 2026 • PEC CHANDIGARH', 540, cardY + 840)
-
-        ctx.fillStyle = '#7ED321'
-        ctx.font = 'bold 32px sans-serif'
-        ctx.fillText("I'M ATTENDING PEC E-SUMMIT '26!", 540, 1680)
-
-        ctx.fillStyle = '#A3A3A3'
-        ctx.font = 'bold 24px monospace'
-        ctx.fillText('JOIN ME AT ESUMMIT.PEC.AC.IN', 540, 1740)
-
-        const link = document.createElement('a')
-        link.download = `PEC_Summit_Story_Badge_${(currentBadge?.name || 'Delegate').replace(/\s+/g, '_')}.png`
-        link.href = canvas.toDataURL('image/png')
-        link.click()
-
-        toast.success('Instagram Story Badge (1080x1920) Downloaded!', {
-          style: { background: '#07130F', color: '#FFFFFF', border: '1px solid #7ED321' },
-          iconTheme: { primary: '#7ED321', secondary: '#040605' },
-        })
+    const drawAndExport = (qrDataUrl?: string) => {
+      if (qrDataUrl) {
+        const qrImg = new Image()
+        qrImg.onload = () => {
+          ctx.fillStyle = '#FFFFFF'
+          ctx.fillRect(540 - 160, cardY + 390, 320, 320)
+          ctx.drawImage(qrImg, 540 - 140, cardY + 410, 280, 280)
+          finishAndDownload()
+        }
+        qrImg.onerror = () => finishAndDownload() // QR server down — export without it
+        qrImg.crossOrigin = 'anonymous'
+        qrImg.src = qrDataUrl
+      } else {
+        finishAndDownload()
       }
-    } catch (err) {
-      console.error('Failed to generate story badge:', err)
-      toast.error('Failed to generate image. Please try again.')
     }
+
+    const finishAndDownload = () => {
+      const ticketId = currentBadge?.id || 'PEC-000000'
+      ctx.fillStyle = '#B5F23D'
+      ctx.font = 'bold 32px monospace'
+      ctx.fillText(ticketId, 540, cardY + 760)
+
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = 'bold 28px sans-serif'
+      ctx.fillText('MARCH 15-16, 2026 • PEC CHANDIGARH', 540, cardY + 840)
+
+      ctx.fillStyle = '#B5F23D'
+      ctx.font = 'bold 32px sans-serif'
+      ctx.fillText("I'M ATTENDING PEC E-SUMMIT '26!", 540, 1680)
+
+      ctx.fillStyle = '#A3A3A3'
+      ctx.font = 'bold 24px monospace'
+      ctx.fillText('JOIN ME AT ESUMMIT.PEC.AC.IN', 540, 1740)
+
+      const link = document.createElement('a')
+      link.download = `PEC_Summit_Story_${(currentBadge?.name || 'Delegate').replace(/\s+/g, '_')}.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+      toast.success('Instagram Story Badge Downloaded!', TOAST_STYLE)
+    }
+
+    const qrSrc = currentBadge?.qrCodeData
+      || `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=PEC-SUMMIT-${formData.email}`
+    drawAndExport(qrSrc)
   }
 
   return (
     <main className="min-h-screen bg-[#060B08] text-white flex flex-col justify-center items-center p-4 sm:p-6 md:p-8">
       <Toaster position="top-center" />
 
-      {/* Ambient background glows */}
-      <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute top-1/4 left-1/3 w-[700px] h-[700px] bg-mint/[0.05] rounded-full blur-[160px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[#3DD9FF]/[0.04] rounded-full blur-[140px]" />
-      </div>
-
       {/* Large Full-Width Bento Modal Window with Subtle Border */}
-      <div className="relative z-10 w-full max-w-[96%] xl:max-w-7xl 2xl:max-w-[1500px] rounded-3xl border border-white/10 bg-[#0A1813]/90 backdrop-blur-2xl p-6 sm:p-10 md:p-12 shadow-2xl overflow-hidden my-auto">
+      <div className="relative z-10 w-full max-w-[96%] xl:max-w-7xl 2xl:max-w-[1500px] rounded-3xl border border-white/[0.06] bg-[#0A1813]/90 backdrop-blur-2xl p-5 sm:p-10 md:p-12 shadow-2xl overflow-hidden my-auto">
         
         {/* Top Header: Nav Back & Tab Switcher */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
           <Link
             href="/"
             className="inline-flex items-center gap-2 font-mono-data text-xs sm:text-sm uppercase tracking-widest text-neutral-400 hover:text-white transition-colors group"
@@ -303,23 +300,23 @@ export default function RegisterPage() {
             <span className="font-bold">Return to Main Website</span>
           </Link>
 
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/40 p-1.5">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 rounded-2xl sm:rounded-full border border-white/10 bg-black/40 p-1.5 w-full sm:w-auto">
             <button
               onClick={() => { setActiveTab('new'); setStep(1) }}
-              className={`rounded-full px-5 py-2 font-mono-data text-xs font-black uppercase tracking-wider transition-all ${
+              className={`rounded-xl sm:rounded-full px-5 py-2.5 sm:py-2 font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all flex-1 ${
                 activeTab === 'new'
-                  ? 'bg-white/15 text-white shadow-md'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-white/10 text-white border border-white/10'
+                  : 'text-neutral-400 hover:text-white border border-transparent'
               }`}
             >
               + New Registration
             </button>
             <button
               onClick={() => setActiveTab('dashboard')}
-              className={`flex items-center gap-2 rounded-full px-5 py-2 font-mono-data text-xs font-black uppercase tracking-wider transition-all ${
+              className={`flex items-center justify-center gap-2 rounded-xl sm:rounded-full px-5 py-2.5 sm:py-2 font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all flex-1 ${
                 activeTab === 'dashboard'
-                  ? 'bg-white/15 text-white shadow-md'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-white/10 text-white border border-white/10'
+                  : 'text-neutral-400 hover:text-white border border-transparent'
               }`}
             >
               <Ticket size={14} />
@@ -338,15 +335,15 @@ export default function RegisterPage() {
               exit={{ opacity: 0, y: -12 }}
               className="space-y-6"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="font-display text-3xl sm:text-4xl font-black uppercase text-white tracking-tight">
-                    YOUR VERIFIED PASSES
+                  <h2 className="font-display text-3xl sm:text-4xl font-black uppercase text-white tracking-tight leading-none">
+                    YOUR VERIFIED <br className="sm:hidden" /> PASSES
                   </h2>
                 </div>
                 <button
                   onClick={() => { setActiveTab('new'); setStep(1) }}
-                  className="rounded-full bg-mint px-6 py-2.5 text-xs font-bold uppercase tracking-wider text-black hover:bg-white transition-colors"
+                  className="rounded-full bg-mint px-6 py-3 text-xs font-bold uppercase tracking-wider text-black hover:bg-white transition-colors w-full sm:w-auto shadow-lg"
                 >
                   + Issue Another Pass
                 </button>
@@ -374,11 +371,11 @@ export default function RegisterPage() {
                       className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 flex flex-col justify-between hover:border-white/20 transition-colors shadow-lg"
                     >
                       <div>
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 font-mono-data text-[10px] font-bold uppercase tracking-wider text-white">
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                          <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 font-mono-data text-[10px] font-bold uppercase tracking-wider text-white max-w-full truncate">
                             {rec.category}
                           </span>
-                          <span className="font-mono-data text-xs font-bold text-neutral-400">{rec.id}</span>
+                          <span className="font-mono-data text-xs font-bold text-neutral-400 shrink-0">{rec.id}</span>
                         </div>
                         <h3 className="font-display text-2xl font-bold text-white mb-1">{rec.name}</h3>
                         <p className="font-mono-data text-xs text-neutral-400">{rec.college}</p>
@@ -409,9 +406,8 @@ export default function RegisterPage() {
               {/* LEFT COLUMN: Main Branding & Stepper (4 cols) */}
               <div className="lg:col-span-4 flex flex-col justify-between space-y-8 pr-0 lg:pr-4 border-r-0 lg:border-r border-white/10">
                 <div>
-                  <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black uppercase text-white leading-tight tracking-tight mb-4">
-                    DELEGATE <br />
-                    <span className="text-mint">REGISTRATION</span>
+                  <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black uppercase leading-tight tracking-tight mb-4 text-balance">
+                    <span className="text-gradient-white">DELEGATE</span> <span className="text-gradient-mint">REGISTRATION</span>
                   </h1>
                   <p className="font-body text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-sm">
                     Complete your registration in 3 simple steps to instantly issue your official digital delegate pass with check-in QR code.
@@ -602,14 +598,16 @@ export default function RegisterPage() {
 
                           <div className="grid gap-4 sm:grid-cols-2">
                             <div>
-                              <label className="block font-mono-data text-xs font-bold uppercase text-neutral-400 mb-1.5">
+                              <label className="block font-mono-data text-xs font-bold uppercase text-neutral-400 mb-1.5" htmlFor="reg-phone">
                                 Phone Number
                               </label>
                               <input
+                                id="reg-phone"
                                 type="tel"
                                 value={formData.phone}
                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                placeholder="+91 98765 43210"
+                                placeholder="+91 XXXXX XXXXX"
+                                pattern="[+\d][\d\s\-().]{7,}"
                                 className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 font-body text-sm text-white outline-none focus:border-white/30 transition-colors"
                               />
                             </div>
@@ -734,57 +732,95 @@ export default function RegisterPage() {
                           </div>
                         </div>
 
-                        {/* Digital Badge Ticket Container */}
-                        <div className="rounded-3xl border border-white/15 bg-black/60 p-6 sm:p-8 shadow-2xl space-y-6">
-                          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                            <div className="flex items-center gap-2">
-                              <Zap size={18} className="fill-mint text-mint" />
-                              <span className="font-display text-lg font-black text-white">PEC SUMMIT 2026</span>
-                            </div>
-                            <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 font-mono-data text-xs font-bold uppercase text-white">
-                              {currentBadge?.category || 'DELEGATE'}
-                            </span>
-                          </div>
+                        {/* Digital Premium Badge Ticket Container */}
+                        <div className="relative rounded-3xl border border-white/[0.08] bg-[#0A1813] shadow-2xl overflow-hidden group">
+                          {/* Grain & Glow Overlays */}
+                          <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+                          
+                          <div className="flex flex-col sm:flex-row relative z-10">
+                            {/* Left Side: Details */}
+                            <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between relative">
+                              <div className="flex flex-wrap items-start justify-between gap-3 mb-8 sm:mb-12">
+                                <div className="flex items-center gap-2 shrink-0">
+                                  <div className="bg-mint text-black p-1.5 rounded-lg">
+                                    <Zap size={20} className="fill-black" />
+                                  </div>
+                                  <div className="flex flex-col leading-none">
+                                    <span className="font-display text-xl sm:text-2xl font-black text-white tracking-tight uppercase">E-SUMMIT</span>
+                                    <span className="font-mono-data text-[9px] sm:text-[10px] font-bold text-mint tracking-[0.2em] mt-0.5">MARCH 2026</span>
+                                  </div>
+                                </div>
+                                <span className="rounded-full border border-mint/20 bg-mint/5 px-3 py-1 font-mono-data text-[10px] font-bold uppercase text-mint tracking-wider shrink-0">
+                                  {currentBadge?.category || 'DELEGATE'}
+                                </span>
+                              </div>
 
-                          <div className="flex items-center justify-between gap-6">
-                            <div>
-                              <span className="font-mono-data text-xs text-neutral-400 uppercase tracking-widest block mb-1">
-                                DELEGATE NAME
-                              </span>
-                              <h3 className="font-display text-3xl font-black text-white">
-                                {currentBadge?.name || formData.name}
-                              </h3>
-                              <p className="font-mono-data text-xs text-mint font-bold mt-1">
-                                {currentBadge?.college || formData.college || 'PEC Chandigarh'}
-                              </p>
+                              <div className="mt-auto min-w-0">
+                                <span className="font-mono-data text-[10px] sm:text-xs text-neutral-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                  <User size={12} className="text-mint" /> DELEGATE DETAILS
+                                </span>
+                                <h3 className="font-display text-3xl sm:text-4xl font-black text-white break-words leading-none mb-3 uppercase tracking-tight">
+                                  {currentBadge?.name || formData.name || 'DELEGATE'}
+                                </h3>
+                                <p className="font-mono-data text-xs sm:text-sm text-neutral-300 flex items-center gap-2">
+                                  <ShieldCheck size={14} className="text-neutral-500" />
+                                  {currentBadge?.college || formData.college || 'PEC Chandigarh'}
+                                </p>
+                              </div>
                             </div>
-                            <div className="h-24 w-24 bg-white p-1.5 rounded-xl shrink-0 flex items-center justify-center">
-                              <img
-                                src={currentBadge?.qrCodeData || `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=PEC-SUMMIT-${formData.email}`}
-                                alt="Check-in QR"
-                                className="h-full w-full object-contain"
-                              />
+
+                            {/* Perforated Divider */}
+                            <div className="hidden sm:flex flex-col justify-between items-center py-4 relative z-20">
+                              <div className="w-[1px] h-full border-l-2 border-dashed border-white/10" />
+                              {/* Semi-circle cutouts matching parent background */}
+                              <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-5 h-5 bg-[#0A1813] rounded-full border border-white/20" />
+                              <div className="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-5 h-5 bg-[#0A1813] rounded-full border border-white/20" />
+                            </div>
+                            
+                            {/* Mobile Horizontal Divider */}
+                            <div className="sm:hidden w-full h-[1px] border-t-2 border-dashed border-white/10 relative z-20 my-2">
+                              <div className="absolute left-[-10px] top-1/2 -translate-y-1/2 w-5 h-5 bg-[#0A1813] rounded-full border border-white/20" />
+                              <div className="absolute right-[-10px] top-1/2 -translate-y-1/2 w-5 h-5 bg-[#0A1813] rounded-full border border-white/20" />
+                            </div>
+
+                            {/* Right Side: QR & ID */}
+                            <div className="p-6 sm:p-8 flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-6 sm:w-64 shrink-0 bg-white/[0.02]">
+                              <div className="h-28 w-28 sm:h-36 sm:w-36 bg-white p-2 sm:p-2.5 rounded-2xl shrink-0 flex items-center justify-center shadow-lg transition-transform hover:scale-105 duration-300 ring-4 ring-white/5">
+                                <img
+                                  src={currentBadge?.qrCodeData || `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=PEC-SUMMIT-${formData.email || 'USER'}`}
+                                  alt="Check-in QR"
+                                  className="h-full w-full object-contain mix-blend-multiply"
+                                />
+                              </div>
+                              <div className="flex flex-col items-end sm:items-center text-right sm:text-center w-full mt-0 sm:mt-2">
+                                <span className="font-mono-data text-[10px] text-neutral-500 uppercase tracking-widest mb-1.5 block">PASS ID</span>
+                                <span className="font-mono-data text-sm sm:text-base font-black text-white tracking-widest bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 w-full text-center">
+                                  {currentBadge?.id || 'PEC-000000'}
+                                </span>
+                                {/* Stylized Barcode effect for desktop */}
+                                <div className="hidden sm:block mt-5 w-full h-8 opacity-30 bg-[repeating-linear-gradient(90deg,#fff,#fff_2px,transparent_2px,transparent_5px,#fff_5px,#fff_6px,transparent_6px,transparent_10px)]" />
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-end gap-3">
+                      <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-end gap-3 w-full">
                         <button
                           onClick={handleExportInstagramStory}
-                          className="rounded-full bg-mint px-7 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-black hover:bg-white transition-colors flex items-center gap-2 shadow-lg"
+                          className="w-full sm:w-auto justify-center rounded-full bg-mint px-7 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-black hover:bg-white transition-colors flex items-center gap-2 shadow-lg"
                         >
                           <Sparkles size={16} /> Export Story Badge (1080x1920)
                         </button>
                         <button
                           onClick={() => window.print()}
-                          className="rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white hover:border-white transition-colors flex items-center gap-2"
+                          className="w-full sm:w-auto justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white hover:border-white transition-colors flex items-center gap-2"
                         >
                           <Download size={16} /> Print Pass
                         </button>
                         <button
                           onClick={() => { setActiveTab('dashboard'); setStep(1) }}
-                          className="rounded-full border border-white/15 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-300 hover:border-white transition-colors"
+                          className="w-full sm:w-auto justify-center rounded-full border border-white/15 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-300 hover:border-white transition-colors"
                         >
                           View Saved Passes
                         </button>

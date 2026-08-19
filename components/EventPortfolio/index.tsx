@@ -68,10 +68,10 @@ export default function EventPortfolioShowcase() {
         {/* Big centered section title — matches site-wide pattern */}
         <div className="pointer-events-none absolute top-16 left-0 right-0 flex justify-center z-20">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
+            style={{ fontSize: 'clamp(3.5rem, 10vw, 96px)' }}
           >
-            EVENTS
+            <span className="text-gradient-mint">EVENTS</span>
           </h2>
         </div>
 
@@ -79,6 +79,7 @@ export default function EventPortfolioShowcase() {
         <div className="relative z-10 flex w-full items-center pt-32 sm:pt-36">
           <motion.div
             ref={trackRef}
+            initial={{ x: '0px' }}
             style={{ x: xTranslate, willChange: 'transform' }}
             className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing w-full"
           >

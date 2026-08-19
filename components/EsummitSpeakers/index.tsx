@@ -244,10 +244,10 @@ function LeafletMapInner({
   }, [selectedEvent, activeDayIndex])
 
   return (
-    <div className="relative h-full w-full bg-[#7ED321]">
+    <div className="relative h-full w-full bg-[#B5F23D]">
       <style>{`
         .custom-lime-map {
-          background: #7ED321 !important;
+          background: #B5F23D !important;
         }
         .custom-lime-map .leaflet-tile {
           filter: invert(1) grayscale(1) brightness(0.51) contrast(8) sepia(1) hue-rotate(45deg) saturate(4) !important;
@@ -257,14 +257,14 @@ function LeafletMapInner({
         .custom-lime-map .leaflet-popup-content-wrapper {
           background: #0A110E !important;
           border-radius: 0px !important;
-          border: 1px solid rgba(126, 211, 33, 0.25) !important;
+          border: 1px solid rgba(181, 242, 61, 0.3) !important;
           box-shadow: 0 15px 35px -10px rgba(0,0,0,0.9) !important;
           padding: 0 !important;
         }
         .custom-lime-map .leaflet-popup-tip {
           background: #0A110E !important;
-          border-bottom: 1px solid rgba(126, 211, 33, 0.25) !important;
-          border-right: 1px solid rgba(126, 211, 33, 0.25) !important;
+          border-bottom: 1px solid rgba(181, 242, 61, 0.3) !important;
+          border-right: 1px solid rgba(181, 242, 61, 0.3) !important;
           box-shadow: none !important;
         }
         .custom-lime-map .leaflet-popup-content {
@@ -283,9 +283,9 @@ function LeafletMapInner({
       />
 
       {/* Floating Info Overlay (Brutalist) */}
-      <div className="absolute bottom-6 left-6 right-6 sm:right-auto z-20 sm:w-80 bg-[#0A110E] p-5 shadow-[0_20px_40px_-15px_rgba(0,0,0,1)] border border-[rgba(255,255,255,0.05)] border-l-4 border-l-[#7ED321]">
+      <div className="absolute bottom-6 left-6 right-6 sm:right-auto z-20 sm:w-80 bg-[#0A110E] p-5 shadow-[0_20px_40px_-15px_rgba(0,0,0,1)] border border-[rgba(255,255,255,0.05)] border-l-4 border-l-mint">
         <div className="mb-3 flex items-center justify-between">
-          <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-[#7ED321]">
+          <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-mint">
             {selectedEvent ? 'Selected Venue' : `Day 0${activeDayIndex + 1} Venues`}
           </span>
           {selectedEvent && (
@@ -339,16 +339,17 @@ function HighlightCard({
 }) {
   return (
     <div
-      className={`sticky h-auto min-h-[60vh] max-h-[85vh] sm:h-[80vh] ${index > 0 ? 'mt-[25vh] sm:mt-[45vh]' : ''}`}
+      className={`w-full lg:sticky ${index > 0 ? 'mt-8 lg:mt-[45vh]' : ''}`}
       style={{
-        top: index === 0 ? '5.5rem' : 'calc(5.5rem + 80px)',
+        top: index === 0 ? '5.5rem' : 'calc(5.5rem + 40px)', // Stack slightly lower for second card
         zIndex: 10 + index,
       }}
     >
       <motion.div
-        className="flex h-full w-full flex-col justify-between overflow-y-auto rounded-[32px] border-2 p-6 shadow-2xl sm:rounded-[40px] sm:p-8"
+        className="flex w-full flex-col justify-between rounded-[32px] border-2 p-6 shadow-2xl sm:rounded-[40px] sm:p-8
+                   h-auto lg:h-[calc(100dvh-5.5rem-90px)] lg:overflow-y-auto"
         style={{
-          borderColor: 'rgba(126, 211, 33, 0.35)',
+          borderColor: 'rgba(181, 242, 61, 0.35)',
           background: '#07130F',
         }}
       >
@@ -356,20 +357,20 @@ function HighlightCard({
             {/* Card Header */}
             <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-baseline gap-3">
-                <span className="font-display text-4xl font-black text-[#7ED321] sm:text-5xl">
+                <span className="font-display text-4xl font-black text-gradient-mint sm:text-5xl">
                   {card.day}
                 </span>
                 <span className="font-mono-data text-xs font-bold uppercase tracking-wider text-gray-400">
                   {card.date}
                 </span>
               </div>
-              <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-[#7ED321]">
+              <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-mint">
                 Phase {card.num}
               </span>
             </div>
 
-            <h3 className="mb-6 font-display text-xl font-bold text-white sm:text-2xl">
-              {card.title}
+            <h3 className="mb-6 font-display text-xl font-bold sm:text-2xl">
+              <span className="text-gradient-white">{card.title}</span>
             </h3>
                        {/* Events List */}
             <div className="space-y-1 px-1">
@@ -476,13 +477,12 @@ export default function EsummitHighlights() {
     >
       <h2
         id="timeline-heading"
-        className="text-[var(--accent-mint)] font-display font-black uppercase leading-none tracking-tight text-center
-          mb-12 sm:mb-20 md:mb-24"
+        className="font-display font-black uppercase leading-none tracking-tight text-center mb-12 sm:mb-20 md:mb-24"
         style={{
-          fontSize: 'clamp(2.2rem, 10vw, 160px)',
+          fontSize: 'clamp(2.2rem, 8vw, 96px)',
         }}
       >
-        TIMELINE
+        <span className="text-gradient-mint">TIMELINE</span>
       </h2>
 
       {/* 2-Column Responsive Layout */}
