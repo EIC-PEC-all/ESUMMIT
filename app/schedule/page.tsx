@@ -1,6 +1,6 @@
-// app/schedule/page.tsx — redirects to homepage event section
-import { redirect } from 'next/navigation'
+'use client'
 
+// app/schedule/page.tsx — redirects to homepage event section
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Clock, Bookmark, ArrowLeft } from 'lucide-react'

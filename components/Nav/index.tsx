@@ -95,7 +95,6 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const pathname = usePathname()
-  if (pathname === '/register' || pathname === '/speakers') return null
   const drawerRef = useRef<HTMLDivElement>(null)
   const [isLoaderActive, setIsLoaderActive] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
@@ -298,6 +297,8 @@ export default function Nav() {
   const showHeader = !isLoaderActive && !isModalOpen && (!scrolled || scrollDirection === 'up' || menuOpen)
   const showTopMarquee = !isLoaderActive && !isModalOpen && scrolled && scrollDirection === 'down' && !menuOpen
   const showBottomMarquee = !isLoaderActive && !isModalOpen && (!scrolled || scrollDirection === 'up' || menuOpen)
+
+  if (pathname === '/register' || pathname === '/speakers') return null
 
   return (
     <>
