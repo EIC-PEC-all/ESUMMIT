@@ -1,0 +1,18 @@
+{
+  "name": "E-SUMMIT '26",
+  "short_name": "E-SUMMIT",
+  "description": "Chandigarh's Launchpad for Founders",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07130F",
+  "theme_color": "#07130F",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/eic-logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

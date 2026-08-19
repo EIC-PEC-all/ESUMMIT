@@ -13,18 +13,29 @@ declare global {
 export default function ScrollExpandLoader() {
   const [isMounted, setIsMounted] = useState(false)
   const [stage, setStage] = useState<'loading' | 'expanding' | 'done'>('loading')
+  const [initialDims, setInitialDims] = useState({ width: '52vw', height: '60vh' })
 
   useEffect(() => {
     setIsMounted(true)
 
-    // Set active state for loader on mount
     if (typeof window !== 'undefined') {
       window.__SCROLL_LOADER_ACTIVE__ = true
       document.body.classList.add('loader-active')
       window.dispatchEvent(new CustomEvent('scroll-loader-state', { detail: { active: true } }))
     }
 
-    // 100% Bulletproof scroll lock: Freeze body position & prevent default wheel/touch
+    const updateDims = () => {
+      if (window.innerWidth < 640) {
+        setInitialDims({ width: '88vw', height: '52vh' })
+      } else if (window.innerWidth < 1024) {
+        setInitialDims({ width: '78vw', height: '58vh' })
+      } else {
+        setInitialDims({ width: '70vw', height: '65vh' })
+      }
+    }
+    updateDims()
+    window.addEventListener('resize', updateDims)
+
     const preventDefault = (e: Event) => {
       e.preventDefault()
     }
@@ -39,7 +50,6 @@ export default function ScrollExpandLoader() {
     window.addEventListener('touchmove', preventDefault, { passive: false })
     window.addEventListener('keydown', preventKeys, { passive: false })
 
-    // Save initial scroll position and lock body completely
     document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
     document.body.style.position = 'fixed'
@@ -49,24 +59,23 @@ export default function ScrollExpandLoader() {
       window.scrollTo(0, 0)
     }
 
-    // Stage 1: Loading phase (Progress bar fills over 2.0s), then begin expansion phase
+    // Stage 1: Wait for 2.0s progress bar, then expand
     const timer1 = setTimeout(() => {
       setStage('expanding')
+    }, 1800)
+
+    // Stage 1.5: Tell the Navbar to fade in *after* the expansion has almost finished
+    const timer1_5 = setTimeout(() => {
       if (typeof window !== 'undefined') {
         window.__SCROLL_LOADER_ACTIVE__ = false
         document.body.classList.remove('loader-active')
         window.dispatchEvent(new CustomEvent('scroll-loader-state', { detail: { active: false } }))
       }
-    }, 2000)
+    }, 3000)
 
-    // Stage 2: Complete physical expansion (1.8s duration), unlock scroll, and unmount at 3.8s total
+    // Stage 2: Complete expansion and unlock scroll
     const timer2 = setTimeout(() => {
       setStage('done')
-      if (typeof window !== 'undefined') {
-        window.__SCROLL_LOADER_ACTIVE__ = false
-        document.body.classList.remove('loader-active')
-        window.dispatchEvent(new CustomEvent('scroll-loader-state', { detail: { active: false } }))
-      }
       document.documentElement.style.overflow = ''
       document.body.style.overflow = ''
       document.body.style.position = ''
@@ -75,11 +84,13 @@ export default function ScrollExpandLoader() {
       window.removeEventListener('wheel', preventDefault)
       window.removeEventListener('touchmove', preventDefault)
       window.removeEventListener('keydown', preventKeys)
-    }, 3800)
+    }, 3600)
 
     return () => {
       clearTimeout(timer1)
+      clearTimeout(timer1_5)
       clearTimeout(timer2)
+      window.removeEventListener('resize', updateDims)
       if (typeof window !== 'undefined') {
         window.__SCROLL_LOADER_ACTIVE__ = false
         document.body.classList.remove('loader-active')
@@ -104,18 +115,18 @@ export default function ScrollExpandLoader() {
         key="loader-portal-overlay"
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-auto overflow-hidden"
+        className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-auto overflow-hidden"
       >
         {/* Vantage Style Portal Aperture Window — Cutout revealing live site behind it */}
         <motion.div
           initial={{
-            width: '52vw',
-            height: '60vh',
+            width: initialDims.width,
+            height: initialDims.height,
             borderRadius: '24px',
           }}
           animate={{
-            width: stage === 'expanding' ? '120vw' : '52vw',
-            height: stage === 'expanding' ? '120vh' : '60vh',
+            width: stage === 'expanding' ? '120vw' : initialDims.width,
+            height: stage === 'expanding' ? '120vh' : initialDims.height,
             borderRadius: stage === 'expanding' ? '0px' : '24px',
           }}
           transition={{ duration: 1.8, ease: [0.76, 0, 0.24, 1] }}

@@ -31,5 +31,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# temporary & scratch files
 diff.txt
+*.bak
+mobile-screenshot.png
 .gstack/

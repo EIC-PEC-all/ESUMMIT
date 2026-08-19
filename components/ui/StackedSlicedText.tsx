@@ -39,6 +39,7 @@ function SliceLayer({
 
   return (
     <motion.div
+      initial={{ height: '0vw', opacity: 0 }}
       style={{
         height: heightTransform,
         opacity: opacityTransform,

@@ -41,30 +41,45 @@ interface ApiFetchOptions extends Omit<RequestInit, 'body'> {
   /** Auto-stringified and sent with a JSON content-type. */
   json?: unknown
   body?: BodyInit
+  /** Request timeout in ms (defaults to 15000ms). */
+  timeoutMs?: number
 }
 
 export async function apiFetch<T>(
   path: string,
   opts: ApiFetchOptions = {},
 ): Promise<T> {
-  const { accessToken, json, headers, ...rest } = opts
+  const { accessToken, json, headers, timeoutMs = 15000, signal, ...rest } = opts
 
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...rest,
-    headers: {
-      ...(json !== undefined ? { 'Content-Type': 'application/json' } : {}),
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-      ...headers,
-    },
-    body: json !== undefined ? JSON.stringify(json) : rest.body,
-  })
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
 
-  const payload = res.headers.get('content-type')?.includes('application/json')
-    ? await res.json().catch(() => null)
-    : null
+  // Merge caller's signal with our timeout signal if provided
+  if (signal) {
+    signal.addEventListener('abort', () => controller.abort())
+  }
 
-  if (!res.ok) throw new ApiError(res.status, payload)
-  return payload as T
+  try {
+    const res = await fetch(`${API_BASE}${path}`, {
+      ...rest,
+      signal: controller.signal,
+      headers: {
+        ...(json !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+        ...headers,
+      },
+      body: json !== undefined ? JSON.stringify(json) : rest.body,
+    })
+
+    const payload = res.headers.get('content-type')?.includes('application/json')
+      ? await res.json().catch(() => null)
+      : null
+
+    if (!res.ok) throw new ApiError(res.status, payload)
+    return payload as T
+  } finally {
+    clearTimeout(timeoutId)
+  }
 }
 
 export const api = {

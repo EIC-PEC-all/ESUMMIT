@@ -42,24 +42,24 @@ export function Header({
               E-SUMMIT
               <span className="text-neutral-500 font-normal text-xs">|</span>
               <span className="text-xs uppercase tracking-widest text-neutral-400 font-medium hidden sm:inline">
-                EVENT PORTFOLIO
+                EVENT SCHEDULE
               </span>
             </span>
           </a>
         </div>
 
-        {/* Center: Dynamic Category Pills */}
-        <div className="hidden lg:flex items-center gap-1.5 rounded-full bg-neutral-950 border border-white/10 p-1">
+        {/* Center: Dynamic Category Tab Switcher (Flat minimal tabs) */}
+        <div className="hidden lg:flex items-center gap-6">
           {categories.map((cat) => {
             const isActive = activeCategory === cat
             return (
               <button
                 key={cat}
                 onClick={() => onCategorySelect(cat)}
-                className={`rounded-full px-3.5 py-1 text-xs font-medium transition-colors ${
-                  isActive
-                    ? 'bg-emerald-400 text-neutral-950 font-semibold'
-                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
+                className={`relative py-1.5 font-mono-data text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all hover:text-white border-b-2 ${
+                  isActive 
+                    ? 'text-emerald-400 border-emerald-400' 
+                    : 'text-neutral-400 border-transparent'
                 }`}
               >
                 {cat}

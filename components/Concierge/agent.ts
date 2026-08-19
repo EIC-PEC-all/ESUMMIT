@@ -69,8 +69,8 @@ function subscribeEmail(email: string): { message: string; toast: string } {
   existing.push(email)
   localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
   return {
-    message: `Done! ${email} has been added to the PEC Summit updates list.`,
-    toast: `✓ ${email} subscribed to PEC Summit updates`,
+    message: `Done! ${email} has been added to the E-Summit updates list.`,
+    toast: `✓ ${email} subscribed to E-Summit updates`,
   }
 }
 
@@ -199,7 +199,7 @@ function matchIntent(msg: string, ctx: FestContext): Intent {
   if (/(faq|question|how do i|can i|eligible|who can)/i.test(m)) return { type: 'faq_query' }
 
   // General info
-  if (/(what is|about|overview|tell me about|pec summit|ecell)/i.test(m)) return { type: 'general_info' }
+  if (/(what is|about|overview|tell me about|e-summit|ecell)/i.test(m)) return { type: 'general_info' }
 
   return { type: 'unknown' }
 }
@@ -279,7 +279,7 @@ export async function getAgentResponse(
     case 'sponsor_query': {
       scrollToSection('sponsors')
       return {
-        text: `PEC Summit is supported by premier partners across Title, Gold, and Silver tiers. Interested in sponsoring? Contact partnerships@ecellpec.in`,
+        text: `E-Summit is supported by premier partners across Title, Gold, and Silver tiers. Interested in sponsoring? Contact partnerships@ecellpec.in`,
       }
     }
 
@@ -287,7 +287,7 @@ export async function getAgentResponse(
       const email = intent.email
       if (!email) {
         return {
-          text: `Sure! Share your email address and I'll add you to the PEC Summit updates list.`,
+          text: `Sure! Share your email address and I'll add you to the E-Summit updates list.`,
         }
       }
       const result = subscribeEmail(email)
@@ -303,7 +303,7 @@ export async function getAgentResponse(
 
     case 'general_info': {
       return {
-        text: `**PEC Summit** is E-Cell PEC's flagship entrepreneurship summit featuring 3,000+ attendees, 40+ speakers, ₹15L+ prize pool, and 2 days of pitches & hackathons. Dates: ${ctx.meta.dates}.`,
+        text: `**E-Summit** is E-Cell PEC's flagship entrepreneurship summit featuring 3,000+ attendees, 40+ speakers, ₹15L+ prize pool, and 2 days of pitches & hackathons. Dates: ${ctx.meta.dates}.`,
       }
     }
 

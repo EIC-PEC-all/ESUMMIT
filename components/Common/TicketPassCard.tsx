@@ -65,7 +65,7 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
       <div className="flex items-start justify-between border-b border-black/15 pb-4 pt-2">
         {/* Solid Black Logo Badge */}
         <div className="rounded-lg bg-black px-4 py-2 text-white shadow-md">
-          <span className="font-display text-lg font-black tracking-tighter">PEC SUMMIT</span>
+          <span className="font-display text-lg font-black tracking-tighter">E-SUMMIT</span>
         </div>
 
         {/* Top Right Barcode Strip + Serial Number */}
@@ -94,7 +94,7 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
 
         <div className="my-3 flex items-center justify-between border-y border-black/20 py-2">
           <span className="font-display text-xs font-bold tracking-widest text-black uppercase">
-            PEC SUMMIT ***
+            E-SUMMIT ***
           </span>
           <span className="font-mono-data text-xs font-bold text-black">2026</span>
         </div>
@@ -123,7 +123,7 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
 
         <div>
           <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-black/60 block">
-            CABIN / ACCESS
+            PASS CATEGORY
           </span>
           <span className="font-mono-data text-xs font-bold uppercase text-black">
             {pass.cabinClass}
@@ -132,7 +132,7 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
 
         <div>
           <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-black/60 block">
-            PASSENGER TIER
+            DELEGATE TIER
           </span>
           <span className="font-mono-data text-xs font-bold uppercase text-black">
             {pass.passengerType}
@@ -151,12 +151,8 @@ export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardPro
 
       {/* ── BOTTOM FULL-WIDTH BARCODE STRIP ───────────────────────────────── */}
       <div className="mt-2 pt-3 border-t border-black/20 flex flex-col items-center">
-        <div className="w-full flex h-14 items-center justify-between bg-white/95 p-2 rounded-xl border border-black/30 shadow-inner overflow-hidden">
-          {[3, 1, 2, 4, 1, 2, 1, 3, 1, 2, 4, 1, 3, 2, 1, 2, 4, 1, 2, 1, 3, 1, 4, 2, 1, 3, 2].map(
-            (w, idx) => (
-              <div key={idx} className="h-full bg-black" style={{ width: `${w * 1.5}px` }} />
-            )
-          )}
+        <div className="w-full h-14 rounded-xl border border-black/30 shadow-inner overflow-hidden bg-white/95 p-2">
+          <div className="w-full h-full" style={{ background: 'repeating-linear-gradient(90deg, #000 0px, #000 3px, transparent 3px, transparent 6px, #000 6px, #000 7px, transparent 7px, transparent 11px, #000 11px, #000 15px, transparent 15px, transparent 18px)' }} />
         </div>
 
         {/* CTA Label */}

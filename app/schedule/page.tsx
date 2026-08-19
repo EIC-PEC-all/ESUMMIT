@@ -1,5 +1,6 @@
 'use client'
 
+// app/schedule/page.tsx — redirects to homepage event section
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Clock, Bookmark, ArrowLeft } from 'lucide-react'
@@ -89,9 +90,9 @@ export default function ScheduleLandingPage() {
           </div>
 
           <div className="max-w-3xl">
-            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
-              SUMMIT <br />
-              <span className="text-mint">TIMETABLE</span>
+            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight">
+              <span className="text-gradient-white">SUMMIT</span> <br />
+              <span className="text-gradient-mint">TIMETABLE</span>
             </h1>
 
             <p className="mb-8 max-w-xl font-body text-lg leading-relaxed text-secondary">
@@ -100,14 +101,16 @@ export default function ScheduleLandingPage() {
             </p>
 
             {/* Day Selector */}
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4" role="tablist" aria-label="Summit Days">
               {(['day1', 'day2'] as const).map((dayKey) => (
                 <button
                   key={dayKey}
+                  role="tab"
+                  aria-selected={activeDay === dayKey}
                   onClick={() => setActiveDay(dayKey)}
                   className={`rounded-xl px-6 py-3 font-mono-data text-xs uppercase tracking-wider transition-all duration-200 ${
                     activeDay === dayKey
-                      ? 'bg-mint font-bold text-void shadow-[0_0_20px_rgba(126,211,33,0.4)]'
+                      ? 'bg-mint font-bold text-void border border-mint/80'
                       : 'hover:border-mint/40 border border-border-subtle bg-panel text-secondary hover:text-white'
                   }`}
                 >
@@ -129,15 +132,17 @@ export default function ScheduleLandingPage() {
       <section className="bg-void py-20">
         <div className="section-container max-w-3xl">
           {/* Type Filter Pills */}
-          <div className="mb-10 flex gap-2 overflow-x-auto pb-4">
+          <div className="mb-10 flex gap-2 overflow-x-auto pb-4" role="tablist" aria-label="Session Type Filters">
             {['all', 'keynote', 'panel', 'competition', 'hackathon', 'networking', 'expo'].map(
               (t) => (
                 <button
                   key={t}
+                  role="tab"
+                  aria-selected={filterType === t}
                   onClick={() => setFilterType(t)}
                   className={`whitespace-nowrap rounded-xl px-4 py-2 font-mono-data text-xs uppercase tracking-wider transition-all duration-150 ${
                     filterType === t
-                      ? 'bg-mint font-bold text-void shadow-[0_0_15px_rgba(126,211,33,0.3)]'
+                      ? 'bg-mint font-bold text-void border border-mint/80'
                       : 'hover:border-mint/40 border border-border-subtle bg-panel text-secondary hover:text-white'
                   }`}
                 >
@@ -220,3 +225,4 @@ export default function ScheduleLandingPage() {
     </main>
   )
 }
+

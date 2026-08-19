@@ -39,10 +39,10 @@ function TimelineEventCard({
           : 'hover:bg-white/[0.02]'
       }`}
     >
-      <div className="flex items-stretch gap-4">
-        {/* Left Column: Time Magazine Style */}
-        <div className="w-16 sm:w-20 shrink-0 flex flex-col justify-start text-left pt-0.5">
-          <span className="font-display text-xl sm:text-2xl font-black tracking-tighter text-white leading-none">
+      <div className="flex items-stretch gap-3 sm:gap-4">
+        {/* Left Column: Time Magazine Style (Desktop Only) */}
+        <div className="hidden sm:flex w-20 shrink-0 flex-col justify-start text-left pt-0.5">
+          <span className="font-display text-2xl font-black tracking-tighter text-white leading-none">
             {timeNum}
           </span>
           <span className="font-mono-data text-[9px] uppercase tracking-widest text-mint mt-1">
@@ -65,6 +65,16 @@ function TimelineEventCard({
         {/* Right Column: Details */}
         <div className="flex-1 pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="min-w-0">
+            {/* Mobile Time (Visible only on small screens) */}
+            <div className="sm:hidden flex items-baseline gap-1 mb-1.5 text-left pt-0.5">
+              <span className="font-display text-xl font-black tracking-tighter text-white leading-none">
+                {timeNum}
+              </span>
+              <span className="font-mono-data text-[9px] uppercase tracking-widest text-mint">
+                {timeAmPm}
+              </span>
+            </div>
+
             {/* Event Title */}
             <h3 className={`font-display text-base sm:text-lg font-black uppercase leading-tight tracking-tight transition-colors ${
               isSelected ? 'text-mint' : 'text-white group-hover:text-mint'

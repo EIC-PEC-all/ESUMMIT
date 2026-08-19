@@ -122,13 +122,6 @@ export default function About() {
 
       <div className="section-container relative z-10">
         <div className="max-w-4xl">
-          <div className="mb-6 flex items-center gap-2">
-            <Zap size={14} className="fill-[var(--accent-mint)] text-[var(--accent-mint)]" />
-            <p className="font-mono-data text-xs font-bold uppercase tracking-[0.25em] text-[var(--accent-mint)]">
-              Official E-Cell PEC Platform
-            </p>
-          </div>
-
           <h2
             id="about-heading"
             className="mb-10 font-display leading-none"
@@ -152,7 +145,7 @@ export default function About() {
 
           <blockquote className="border-[var(--accent-mint)]/25 rounded-2xl border bg-panel p-6 font-body text-base italic leading-relaxed text-muted">
             &ldquo;Every venture in India&apos;s startup ecosystem started with a single bold idea.
-            PEC Summit is where high-growth founders and capital align.&rdquo;
+            E-Summit is where high-growth founders and capital align.&rdquo;
             <cite className="mt-3 block font-mono-data text-xs font-bold not-italic text-[var(--accent-mint)]">
               — E-Cell PEC Board
             </cite>

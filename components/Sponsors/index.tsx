@@ -86,10 +86,10 @@ export default function Sponsors() {
           <h2
             id="sponsors-heading"
             className="font-display font-black uppercase tracking-tight text-center leading-none"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 110px)' }}
+            style={{ fontSize: 'clamp(2rem, 7vw, 88px)' }}
           >
-            <span className="text-mint">FUNDING </span>
-            <span className="text-white">PARTNERS</span>
+            <span className="text-gradient-mint">FUNDING </span>
+            <span className="text-gradient-white">PARTNERS</span>
           </h2>
           <p className="font-mono-data text-xs sm:text-sm text-gray-400 uppercase tracking-[0.25em] mt-4">
             POWERED BY GLOBAL TECH &amp; VENTURE INSTITUTIONS
@@ -97,7 +97,7 @@ export default function Sponsors() {
         </div>
 
         {/* United Apple-Style Mesh Grid (Zero Gap) */}
-        <div className="grid grid-cols-2 sm:grid-cols-6 gap-[1px] bg-white/10 border border-white/10 rounded-3xl overflow-hidden max-w-5xl mx-auto shadow-2xl">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-[1px] bg-white/10 border border-white/10 rounded-3xl overflow-hidden max-w-5xl mx-auto shadow-2xl">
           
           {/* Strategic Partners (Top Row - Prominent) */}
           {strategic.map((sponsor, idx) => (
@@ -108,11 +108,8 @@ export default function Sponsors() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.05 }}
-              className="col-span-2 sm:col-span-2 flex items-center justify-center p-10 sm:p-14 bg-[#091a12] hover:bg-[#0e271c] transition-colors duration-300 relative group"
+              className="col-span-1 sm:col-span-2 flex items-center justify-center p-10 sm:p-14 bg-[#091a12] hover:bg-[#0e271c] transition-colors duration-300 relative group"
             >
-              {/* Subtle inner hover glow */}
-              <div className="absolute inset-0 bg-mint/[0.01] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={sponsor.logoUrl}
@@ -140,7 +137,7 @@ export default function Sponsors() {
               <img
                 src={sponsor.logoUrl}
                 alt={sponsor.name}
-                className={`h-6 sm:h-7 w-auto max-w-[110px] object-contain opacity-50 group-hover:opacity-100 transition-all duration-300 group-hover:scale-105 ${
+                className={`h-6 sm:h-7 w-auto max-w-[110px] object-contain opacity-70 group-hover:opacity-100 transition-all duration-300 group-hover:scale-105 ${
                   sponsor.invert ? 'brightness-0 invert' : ''
                 }`}
                 loading="lazy"
@@ -152,7 +149,7 @@ export default function Sponsors() {
         {/* ── Minimalist Partner CTA Link ──────────────────────────────────── */}
         <div className="mt-20 sm:mt-24 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
           <p className="font-mono-data text-xs text-gray-400">
-            Interested in partnering with PEC Summit 2026?
+            Interested in partnering with E-Summit 2026?
           </p>
 
           <Link

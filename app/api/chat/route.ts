@@ -9,6 +9,35 @@ import { localAnswer } from '@/lib/local-answers'
 
 export const runtime = 'nodejs'
 
+// Simple IP-based sliding window rate limiter: max 30 requests per minute per IP
+const RATE_LIMIT_WINDOW_MS = 60 * 1000
+const MAX_REQUESTS_PER_WINDOW = 30
+const ipRequestHistory = new Map<string, number[]>()
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now()
+  const timestamps = ipRequestHistory.get(ip) || []
+  const windowStart = now - RATE_LIMIT_WINDOW_MS
+  const recent = timestamps.filter((t) => t > windowStart)
+  
+  if (recent.length >= MAX_REQUESTS_PER_WINDOW) {
+    return false
+  }
+
+  recent.push(now)
+  ipRequestHistory.set(ip, recent)
+  
+  // Clean up stale entries periodically
+  if (ipRequestHistory.size > 2000) {
+    ipRequestHistory.forEach((list: number[], key: string) => {
+      if (list.every((t: number) => t <= windowStart)) {
+        ipRequestHistory.delete(key)
+      }
+    })
+  }
+  return true
+}
+
 interface ChatRequestBody {
   messages: GroqMessage[]
   tools?: GroqFunction[]
@@ -24,6 +53,14 @@ function isValidMessage(msg: unknown): msg is GroqMessage {
 }
 
 export async function POST(request: NextRequest) {
+  const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
+  if (!checkRateLimit(clientIp)) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please wait a minute before chatting again.' },
+      { status: 429 }
+    )
+  }
+
   let body: ChatRequestBody
   try {
     body = await request.json()

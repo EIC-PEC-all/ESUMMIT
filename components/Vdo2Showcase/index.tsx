@@ -9,6 +9,7 @@ export default function Vdo2Showcase() {
   const [isHovered, setIsHovered] = useState(false)
   return (
     <section
+      id="passes"
       className="relative bg-[#040705] text-white py-24 px-4 sm:px-6 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-white/10"
       aria-label="Passes Showcase"
     >
@@ -21,12 +22,12 @@ export default function Vdo2Showcase() {
       <div className="relative z-10 max-w-6xl mx-auto flex flex-col items-center text-center">
 
 
-        {/* Headline — WHITE with High-Voltage Drop Shadow */}
+        {/* Headline — 3D Metallic Gradient */}
         <h2
-          className="font-display font-black uppercase leading-none tracking-tight text-center text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.4)] mb-4"
-          style={{ fontSize: 'clamp(3rem, 11vw, 150px)' }}
+          className="font-display font-black uppercase leading-none tracking-tight text-center drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] mb-4"
+          style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
         >
-          PASSES
+          <span className="text-gradient-mint">PASSES</span>
         </h2>
 
         {/* Subtitle */}
@@ -87,7 +88,7 @@ export default function Vdo2Showcase() {
 
             {/* Header */}
             <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
-              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">PEC SUMMIT</span>
+              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">E-SUMMIT</span>
               <div className="flex items-center gap-1.5">
                 <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
                   STU-88742
@@ -118,10 +119,8 @@ export default function Vdo2Showcase() {
                 <span>MARCH 15-16</span>
                 <span>GENERAL ACCESS</span>
               </div>
-              <div className="w-full flex h-9 items-center justify-between bg-white/90 p-1 rounded-lg border border-black/20 overflow-hidden">
-                {[2, 1, 3, 1, 4, 1, 2, 1, 3, 2, 1, 4, 1, 2, 3, 1, 2].map((w, idx) => (
-                  <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
-                ))}
+              <div className="w-full h-9 rounded-lg border border-black/20 overflow-hidden bg-white/90 p-1">
+                <div className="w-full h-full" style={{ background: 'repeating-linear-gradient(90deg, #000 0px, #000 2px, transparent 2px, transparent 5px, #000 5px, #000 8px, transparent 8px, transparent 11px, #000 11px, #000 12px, transparent 12px, transparent 16px)' }} />
               </div>
             </div>
           </Link>
@@ -173,7 +172,7 @@ export default function Vdo2Showcase() {
 
             {/* Header */}
             <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
-              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">PEC SUMMIT</span>
+              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">E-SUMMIT</span>
               <div className="flex items-center gap-1.5">
                 <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
                   PITCH-087636
@@ -204,10 +203,8 @@ export default function Vdo2Showcase() {
                 <span>MARCH 15-16</span>
                 <span>PITCH ARENA</span>
               </div>
-              <div className="w-full flex h-9 items-center justify-between bg-white/90 p-1 rounded-lg border border-black/20 overflow-hidden">
-                {[2, 1, 3, 1, 4, 1, 2, 1, 3, 2, 1, 4, 1, 2, 3, 1, 2].map((w, idx) => (
-                  <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
-                ))}
+              <div className="w-full h-9 rounded-lg border border-black/20 overflow-hidden bg-white/90 p-1">
+                <div className="w-full h-full" style={{ background: 'repeating-linear-gradient(90deg, #000 0px, #000 3px, transparent 3px, transparent 6px, #000 6px, #000 7px, transparent 7px, transparent 10px, #000 10px, #000 14px, transparent 14px, transparent 17px)' }} />
               </div>
             </div>
           </Link>
@@ -259,7 +256,7 @@ export default function Vdo2Showcase() {
 
             {/* Header */}
             <div className="flex items-start justify-between border-b border-black/20 pb-3 pt-1">
-              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">PEC SUMMIT</span>
+              <span className="font-display text-xs font-black tracking-tighter text-black uppercase">E-SUMMIT</span>
               <div className="flex items-center gap-1.5">
                 <span className="font-mono-data text-[8px] font-bold text-black/80 [writing-mode:vertical-lr] rotate-180">
                   VIP-00109
@@ -290,10 +287,8 @@ export default function Vdo2Showcase() {
                 <span>MARCH 15-16</span>
                 <span>VIP LOUNGE</span>
               </div>
-              <div className="w-full flex h-9 items-center justify-between bg-white/90 p-1 rounded-lg border border-black/20 overflow-hidden">
-                {[2, 1, 3, 1, 4, 1, 2, 1, 3, 2, 1, 4, 1, 2, 3, 1, 2].map((w, idx) => (
-                  <div key={idx} className="h-full bg-black" style={{ width: `${w}px` }} />
-                ))}
+              <div className="w-full h-9 rounded-lg border border-black/20 overflow-hidden bg-white/90 p-1">
+                <div className="w-full h-full" style={{ background: 'repeating-linear-gradient(90deg, #000 0px, #000 1px, transparent 1px, transparent 4px, #000 4px, #000 6px, transparent 6px, transparent 8px, #000 8px, #000 11px, transparent 11px, transparent 15px)' }} />
               </div>
             </div>
           </Link>
@@ -302,7 +297,7 @@ export default function Vdo2Showcase() {
         {/* Main CTA Link */}
         <Link
           href="/passes"
-          className="group relative inline-flex items-center justify-center gap-3 px-10 h-14 rounded-full font-mono-data text-xs font-black uppercase tracking-[0.2em] bg-white text-black overflow-hidden shadow-[0_0_35px_rgba(255,255,255,0.3)] transition-transform hover:scale-105"
+          className="group relative mt-8 sm:mt-4 inline-flex items-center justify-center gap-3 px-10 h-14 rounded-full font-mono-data text-xs font-black uppercase tracking-[0.2em] bg-white text-black overflow-hidden shadow-lg hover:shadow-xl transition-all hover:brightness-105"
         >
           <Ticket size={18} strokeWidth={2.5} />
           <span>EXPLORE ALL TICKET PERKS</span>

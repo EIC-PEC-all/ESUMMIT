@@ -39,7 +39,7 @@ export default function KineticText({
       y: 0,
       rotateX: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 14,
         stiffness: 220,
       },

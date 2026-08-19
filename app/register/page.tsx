@@ -1,6 +1,6 @@
 'use client'
 // app/register/page.tsx
-// Standalone Dedicated Registration Dashboard & Digital E-Badge Generator (Money/Fintech Theme)
+// Executive Bento Registration Portal with Story Badge Exporter
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -8,26 +8,19 @@ import {
   Zap,
   Check,
   ArrowLeft,
-  ArrowRight,
   User,
-  Mail,
-  Phone,
-  Building,
-  Calendar,
-  QrCode,
-  ShieldCheck,
   Ticket,
   Download,
   Sparkles,
   CheckCircle2,
-  Bookmark,
+  ChevronRight,
+  ShieldCheck,
+  Calendar,
+  MapPin,
 } from 'lucide-react'
-import Nav from '@/components/Nav'
-import Footer from '@/components/Footer'
-import Concierge from '@/components/Concierge'
-import CircuitBoard from '@/components/Hero/CircuitBoard'
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
+import { TOAST_STYLE, generateBarcodeWidths } from '@/lib/constants'
 
 interface RegistrationRecord {
   id: string
@@ -44,45 +37,52 @@ interface RegistrationRecord {
 const REGISTRATION_TYPES = [
   {
     id: 'student',
-    title: 'Student General Registration',
-    desc: 'Access to keynotes, panels, and open expo floor for college students.',
-    fee: 'FREE / ₹0',
+    title: 'Student Pass',
+    desc: 'Access to all keynote addresses, panel discussions, and open startup expo floor for 2 full days.',
+    fee: 'FREE',
     badge: 'GENERAL DELEGATE',
     icon: User,
   },
   {
     id: 'founder',
     title: 'Startup Founder & Pitcher',
-    desc: 'Entry for early-stage founders to pitch to VCs and exhibit at Expo.',
+    desc: 'Pitch directly to VCs & angel networks, physical expo stall, and VC matchmaking lounge.',
     fee: '₹799 / Team',
     badge: 'PITCH DELEGATE',
-    icon: Ticket,
+    icon: Zap,
   },
   {
     id: 'hackathon',
     title: 'Hackathon Builder',
-    desc: '24-hour hackathon entry with all-night meals & developer credits.',
+    desc: '24-hour hackathon entry with overnight developer arena, meals, and cloud credits.',
     fee: '₹199 / Hacker',
     badge: 'HACKER DELEGATE',
-    icon: Zap,
+    icon: Sparkles,
   },
   {
     id: 'ambassador',
     title: 'Campus Ambassador',
-    desc: 'Represent PEC Summit at your college & earn exclusive VIP perks.',
-    fee: 'FREE / Ambassador',
+    desc: 'Represent E-Summit at your institution & unlock VIP delegate networking perks.',
+    fee: 'FREE',
     badge: 'CA LEADER',
-    icon: Sparkles,
+    icon: ShieldCheck,
   },
 ]
 
 const INTEREST_TRACKS = [
   'Artificial Intelligence & ML',
-  'Fintech & Payments',
+  'Fintech & Financial Systems',
   'Pitch Competition (₹7.5L Pool)',
   '24-Hour Hackathon (₹5.0L Pool)',
   'DeepTech & Hardware',
   'Web3 & Open Source',
+]
+
+const STEPS = [
+  { num: 1, label: 'Select Pass' },
+  { num: 2, label: 'Delegate Details' },
+  { num: 3, label: 'Track Preferences' },
+  { num: 4, label: 'Digital E-Badge' },
 ]
 
 export default function RegisterPage() {
@@ -98,20 +98,15 @@ export default function RegisterPage() {
     email: '',
     phone: '',
     college: '',
-    gradYear: '2026',
-    city: 'Chandigarh',
   })
 
-  // Load existing registrations from localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem('pec_summit_registrations')
       if (saved) {
         const parsed = JSON.parse(saved)
         setMyRegistrations(parsed)
-        if (parsed.length > 0) {
-          setActiveTab('dashboard')
-        }
+        if (parsed.length > 0) setActiveTab('dashboard')
       }
     } catch (e) {
       console.warn('Failed to load registrations:', e)
@@ -119,34 +114,36 @@ export default function RegisterPage() {
   }, [])
 
   const handleTrackToggle = (track: string) => {
-    if (selectedTracks.includes(track)) {
-      setSelectedTracks(selectedTracks.filter((t) => t !== track))
-    } else {
-      setSelectedTracks([...selectedTracks, track])
-    }
+    setSelectedTracks((prev) =>
+      prev.includes(track) ? prev.filter((t) => t !== track) : [...prev, track]
+    )
   }
 
   const handleCompleteRegistration = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.name || !formData.email) {
-      toast.error('Please fill in your name and email.')
+    if (!formData.name.trim() || !formData.email.trim()) {
+      toast.error('Please enter your full name and email address.', TOAST_STYLE)
+      return
+    }
+    // Reject obviously empty or placeholder phone values
+    const phoneVal = formData.phone.trim()
+    const phoneOk = !phoneVal || /^[+\d][\d\s\-().]{7,}$/.test(phoneVal)
+    if (!phoneOk) {
+      toast.error('Please enter a valid phone number.', TOAST_STYLE)
       return
     }
 
+    const ticketId = `PEC-${Math.floor(100000 + Math.random() * 900000)}`
     const newRecord: RegistrationRecord = {
-      id: `PEC-${Math.floor(100000 + Math.random() * 900000)}`,
+      id: ticketId,
       name: formData.name,
       email: formData.email,
-      phone: formData.phone || '+91 98765 43210',
-      college: formData.college || 'Punjab Engineering College',
-      category: REGISTRATION_TYPES.find((t) => t.id === selectedType)?.title || 'General Student',
+      phone: phoneVal || 'Not provided',
+      college: formData.college.trim() || 'Punjab Engineering College',
+      category: REGISTRATION_TYPES.find((t) => t.id === selectedType)?.title || 'Student Pass',
       tracks: selectedTracks.length > 0 ? selectedTracks : ['General Keynotes'],
-      date: new Date().toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }),
-      qrCodeData: `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=PEC-SUMMIT-2026-${formData.email}`,
+      date: new Date().toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }),
+      qrCodeData: `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=PEC-SUMMIT-2026-${encodeURIComponent(formData.email)}`,
     }
 
     const updated = [newRecord, ...myRegistrations]
@@ -154,485 +151,688 @@ export default function RegisterPage() {
     setCurrentBadge(newRecord)
     try {
       localStorage.setItem('pec_summit_registrations', JSON.stringify(updated))
-    } catch (err) {
-      console.warn('LocalStorage save failed:', err)
+    } catch {
+      // non-critical
     }
 
     setStep(4)
-    toast.success('Registration Complete! E-Badge Generated.', {
-      style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' },
-      iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
-    })
+    toast.success('Registration Confirmed! E-Badge Issued.', TOAST_STYLE)
+  }
+
+  const handleExportInstagramStory = () => {
+    const canvas = document.createElement('canvas')
+    canvas.width = 1080
+    canvas.height = 1920
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    // Background
+    const bgGradient = ctx.createLinearGradient(0, 0, 0, 1920)
+    bgGradient.addColorStop(0, '#060B08')
+    bgGradient.addColorStop(0.5, '#0B1D15')
+    bgGradient.addColorStop(1, '#050907')
+    ctx.fillStyle = bgGradient
+    ctx.fillRect(0, 0, 1080, 1920)
+
+    // Subtle lime glow (no neon)
+    const glow = ctx.createRadialGradient(540, 960, 0, 540, 960, 500)
+    glow.addColorStop(0, 'rgba(181, 242, 61, 0.08)')
+    glow.addColorStop(1, 'rgba(0, 0, 0, 0)')
+    ctx.fillStyle = glow
+    ctx.fillRect(0, 0, 1080, 1920)
+
+    ctx.textAlign = 'center'
+    ctx.fillStyle = '#B5F23D'
+    ctx.font = 'bold 36px monospace'
+    ctx.fillText('PEC E-SUMMIT 2026', 540, 220)
+
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = '900 84px sans-serif'
+    ctx.fillText('OFFICIAL DELEGATE', 540, 320)
+
+    ctx.fillStyle = '#B5F23D'
+    ctx.font = '900 84px sans-serif'
+    ctx.fillText('ACCESS PASS', 540, 410)
+
+    const cardX = 100, cardY = 490, cardW = 880, cardH = 1080
+
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(cardX, cardY, cardW, cardH)
+    ctx.fillStyle = 'rgba(10, 24, 19, 0.85)'
+    ctx.fill()
+    ctx.lineWidth = 2
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)'
+    ctx.stroke()
+    ctx.restore()
+
+    const categoryText = currentBadge?.category || 'DELEGATE PASS'
+    ctx.fillStyle = 'rgba(181, 242, 61, 0.12)'
+    ctx.beginPath()
+    ctx.rect(540 - 180, cardY + 60, 360, 60)
+    ctx.fill()
+    ctx.strokeStyle = '#B5F23D'
+    ctx.lineWidth = 1.5
+    ctx.stroke()
+
+    ctx.fillStyle = '#B5F23D'
+    ctx.font = 'bold 26px monospace'
+    ctx.fillText(categoryText.toUpperCase(), 540, cardY + 100)
+
+    const nameText = (currentBadge?.name || formData.name || 'DELEGATE NAME').toUpperCase()
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = '900 68px sans-serif'
+    ctx.fillText(nameText, 540, cardY + 230)
+
+    const collegeText = (currentBadge?.college || formData.college || 'PUNJAB ENGINEERING COLLEGE').toUpperCase()
+    ctx.fillStyle = '#A3A3A3'
+    ctx.font = 'bold 28px monospace'
+    ctx.fillText(collegeText, 540, cardY + 290)
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.10)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(160, cardY + 340)
+    ctx.lineTo(920, cardY + 340)
+    ctx.stroke()
+
+    const drawAndExport = (qrDataUrl?: string) => {
+      if (qrDataUrl) {
+        const qrImg = new Image()
+        qrImg.onload = () => {
+          ctx.fillStyle = '#FFFFFF'
+          ctx.fillRect(540 - 160, cardY + 390, 320, 320)
+          ctx.drawImage(qrImg, 540 - 140, cardY + 410, 280, 280)
+          finishAndDownload()
+        }
+        qrImg.onerror = () => finishAndDownload() // QR server down — export without it
+        qrImg.crossOrigin = 'anonymous'
+        qrImg.src = qrDataUrl
+      } else {
+        finishAndDownload()
+      }
+    }
+
+    const finishAndDownload = () => {
+      const ticketId = currentBadge?.id || 'PEC-000000'
+      ctx.fillStyle = '#B5F23D'
+      ctx.font = 'bold 32px monospace'
+      ctx.fillText(ticketId, 540, cardY + 760)
+
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = 'bold 28px sans-serif'
+      ctx.fillText('MARCH 15-16, 2026 • PEC CHANDIGARH', 540, cardY + 840)
+
+      ctx.fillStyle = '#B5F23D'
+      ctx.font = 'bold 32px sans-serif'
+      ctx.fillText("I'M ATTENDING PEC E-SUMMIT '26!", 540, 1680)
+
+      ctx.fillStyle = '#A3A3A3'
+      ctx.font = 'bold 24px monospace'
+      ctx.fillText('JOIN ME AT ESUMMIT.PEC.AC.IN', 540, 1740)
+
+      const link = document.createElement('a')
+      link.download = `PEC_Summit_Story_${(currentBadge?.name || 'Delegate').replace(/\s+/g, '_')}.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+      toast.success('Instagram Story Badge Downloaded!', TOAST_STYLE)
+    }
+
+    const qrSrc = currentBadge?.qrCodeData
+      || `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=PEC-SUMMIT-${formData.email}`
+    drawAndExport(qrSrc)
   }
 
   return (
-    <main className="min-h-screen bg-void text-white">
+    <main className="min-h-screen bg-[#060B08] text-white flex flex-col justify-center items-center p-4 sm:p-6 md:p-8">
       <Toaster position="top-center" />
-      <Nav />
 
-      {/* Header Banner */}
-      <section className="relative overflow-hidden border-b border-border-subtle bg-void pb-16 pt-36">
-        <CircuitBoard prefersReduced={false} />
+      {/* Large Full-Width Bento Modal Window with Subtle Border */}
+      <div className="relative z-10 w-full max-w-[96%] xl:max-w-7xl 2xl:max-w-[1500px] rounded-3xl border border-white/[0.06] bg-[#0A1813]/90 backdrop-blur-2xl p-5 sm:p-10 md:p-12 shadow-2xl overflow-hidden my-auto">
+        
+        {/* Top Header: Nav Back & Tab Switcher */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-white/10">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 font-mono-data text-xs sm:text-sm uppercase tracking-widest text-neutral-400 hover:text-white transition-colors group"
+          >
+            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+            <span className="font-bold">Return to Main Website</span>
+          </Link>
 
-        <div className="section-container relative z-10">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 font-mono-data text-xs uppercase tracking-widest text-muted transition-colors hover:text-mint"
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 rounded-2xl sm:rounded-full border border-white/10 bg-black/40 p-1.5 w-full sm:w-auto">
+            <button
+              onClick={() => { setActiveTab('new'); setStep(1) }}
+              className={`rounded-xl sm:rounded-full px-5 py-2.5 sm:py-2 font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all flex-1 ${
+                activeTab === 'new'
+                  ? 'bg-white/10 text-white border border-white/10'
+                  : 'text-neutral-400 hover:text-white border border-transparent'
+              }`}
             >
-              <ArrowLeft size={14} /> Back to Home
-            </Link>
-
-            {/* Dashboard Tab Switcher */}
-            <div className="flex items-center gap-2 rounded-xl border border-border-subtle bg-panel p-1">
-              <button
-                onClick={() => setActiveTab('new')}
-                className={`rounded-lg px-4 py-2 font-mono-data text-xs uppercase tracking-wider transition-all ${
-                  activeTab === 'new'
-                    ? 'bg-mint font-bold text-void shadow-[0_0_12px_rgba(126,211,33,0.3)]'
-                    : 'text-secondary hover:text-white'
-                }`}
-              >
-                + New Registration
-              </button>
-              <button
-                onClick={() => setActiveTab('dashboard')}
-                className={`flex items-center gap-1.5 rounded-lg px-4 py-2 font-mono-data text-xs uppercase tracking-wider transition-all ${
-                  activeTab === 'dashboard'
-                    ? 'bg-mint font-bold text-void shadow-[0_0_12px_rgba(126,211,33,0.3)]'
-                    : 'text-secondary hover:text-white'
-                }`}
-              >
-                <Ticket size={13} /> My E-Badges ({myRegistrations.length})
-              </button>
-            </div>
-          </div>
-
-          <div className="max-w-3xl">
-            <h1 className="mb-4 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
-              REGISTRATION <br />
-              <span className="text-mint">DASHBOARD</span>
-            </h1>
-            <p className="max-w-xl font-body text-base leading-relaxed text-secondary">
-              Complete your delegate pass registration, select your tracks, and instantly generate
-              your digital E-Badge with check-in QR code.
-            </p>
+              + New Registration
+            </button>
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={`flex items-center justify-center gap-2 rounded-xl sm:rounded-full px-5 py-2.5 sm:py-2 font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider transition-all flex-1 ${
+                activeTab === 'dashboard'
+                  ? 'bg-white/10 text-white border border-white/10'
+                  : 'text-neutral-400 hover:text-white border border-transparent'
+              }`}
+            >
+              <Ticket size={14} />
+              <span>My Saved Passes ({myRegistrations.length})</span>
+            </button>
           </div>
         </div>
-      </section>
 
-      {/* Main Content Area */}
-      <section className="bg-void py-16">
-        <div className="section-container">
+        <AnimatePresence mode="wait">
           {activeTab === 'dashboard' ? (
-            /* ── MY REGISTRATIONS DASHBOARD TAB ── */
-            <div className="mx-auto max-w-4xl">
-              <div className="mb-8 flex items-center justify-between">
-                <h2 className="font-display text-3xl text-white">Your Booked E-Badges</h2>
+            /* ── MY PASSES DASHBOARD ── */
+            <motion.div
+              key="dashboard"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              className="space-y-6"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="font-display text-3xl sm:text-4xl font-black uppercase text-white tracking-tight leading-none">
+                    YOUR VERIFIED <br className="sm:hidden" /> PASSES
+                  </h2>
+                </div>
                 <button
-                  onClick={() => {
-                    setActiveTab('new')
-                    setStep(1)
-                  }}
-                  className="btn-green px-4 py-2.5 text-xs font-bold"
+                  onClick={() => { setActiveTab('new'); setStep(1) }}
+                  className="rounded-full bg-mint px-6 py-3 text-xs font-bold uppercase tracking-wider text-black hover:bg-white transition-colors w-full sm:w-auto shadow-lg"
                 >
-                  + Register Another Pass
+                  + Issue Another Pass
                 </button>
               </div>
 
               {myRegistrations.length === 0 ? (
-                <div className="border-[var(--accent-mint)]/30 rounded-2xl border bg-panel p-16 text-center">
-                  <Ticket size={48} className="mx-auto mb-4 text-[var(--accent-mint)] opacity-40" />
-                  <h3 className="mb-2 font-display text-2xl text-white">No Registrations Found</h3>
-                  <p className="mb-6 font-body text-sm text-muted">
-                    You haven&apos;t completed any registrations yet. Fill out the registration form
-                    to generate your digital badge.
+                <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-16 text-center max-w-md mx-auto">
+                  <Ticket size={48} className="mx-auto mb-4 text-neutral-500" />
+                  <h3 className="font-display text-2xl font-black uppercase text-white mb-2">No Active Passes</h3>
+                  <p className="font-body text-xs text-neutral-400 mb-6">
+                    Register below to generate your digital E-Badge with QR check-in credentials.
                   </p>
-                  <button onClick={() => setActiveTab('new')} className="btn-green font-bold">
+                  <button
+                    onClick={() => setActiveTab('new')}
+                    className="rounded-full bg-mint px-8 py-3 text-xs font-bold uppercase tracking-wider text-black hover:bg-white transition-colors"
+                  >
                     Start Registration
                   </button>
                 </div>
               ) : (
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {myRegistrations.map((rec) => (
                     <div
                       key={rec.id}
-                      className="border-[var(--accent-mint)]/30 group relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-panel p-6 shadow-xl"
+                      className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 flex flex-col justify-between hover:border-white/20 transition-colors shadow-lg"
                     >
-                      <div className="mb-4 flex items-center justify-between">
-                        <span className="bg-[var(--accent-mint)]/15 border-[var(--accent-mint)]/30 rounded border px-2.5 py-1 font-mono-data text-[10px] font-bold uppercase tracking-widest text-[var(--accent-mint)]">
-                          {rec.category}
-                        </span>
-                        <span className="font-mono-data text-xs font-bold text-[var(--accent-mint)]">
-                          {rec.id}
-                        </span>
-                      </div>
-
-                      <div className="mb-6">
-                        <h3 className="mb-1 font-body text-2xl font-bold text-white">{rec.name}</h3>
-                        <p className="mb-2 font-mono-data text-xs text-muted">{rec.college}</p>
-                        <p className="font-mono-data text-xs text-muted">{rec.email}</p>
-                      </div>
-
-                      {/* QR Code */}
-                      <div className="border-[var(--accent-mint)]/20 flex items-center justify-between border-t pt-4">
-                        <div className="font-mono-data text-xs text-muted">
-                          <span>Registered: {rec.date}</span>
-                          <span className="mt-1 block font-bold text-[var(--accent-mint)]">
-                            Status: Confirmed
+                      <div>
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                          <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1 font-mono-data text-[10px] font-bold uppercase tracking-wider text-white max-w-full truncate">
+                            {rec.category}
                           </span>
+                          <span className="font-mono-data text-xs font-bold text-neutral-400 shrink-0">{rec.id}</span>
                         </div>
+                        <h3 className="font-display text-2xl font-bold text-white mb-1">{rec.name}</h3>
+                        <p className="font-mono-data text-xs text-neutral-400">{rec.college}</p>
+                      </div>
+                      <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                        <span className="font-mono-data text-xs font-bold text-mint">● Confirmed Delegate</span>
                         <button
-                          onClick={() => {
-                            setCurrentBadge(rec)
-                            setActiveTab('new')
-                            setStep(4)
-                          }}
-                          className="border-[var(--accent-mint)]/40 rounded-lg border bg-void px-3 py-1.5 font-mono-data text-xs font-bold text-[var(--accent-mint)] transition-all hover:bg-[var(--accent-mint)] hover:text-void"
+                          onClick={() => { setCurrentBadge(rec); setActiveTab('new'); setStep(4) }}
+                          className="font-mono-data text-xs font-bold text-neutral-300 hover:text-white flex items-center gap-1 transition-colors"
                         >
-                          View E-Badge &rarr;
+                          View E-Badge <ChevronRight size={14} />
                         </button>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
-            </div>
+            </motion.div>
           ) : (
-            /* ── NEW REGISTRATION WIZARD TAB ── */
-            <div className="mx-auto max-w-3xl">
-              {/* Stepper Header */}
-              <div className="border-[var(--accent-mint)]/20 mb-10 flex items-center justify-between border-b pb-6">
-                {[
-                  { num: 1, label: 'Select Pass' },
-                  { num: 2, label: 'Personal Info' },
-                  { num: 3, label: 'Track Interests' },
-                  { num: 4, label: 'Digital E-Badge' },
-                ].map((s) => (
-                  <div key={s.num} className="flex items-center gap-2">
-                    <div
-                      className={`flex h-8 w-8 items-center justify-center rounded-full font-mono-data text-xs font-bold transition-all ${
-                        step === s.num
-                          ? 'bg-[var(--accent-mint)] text-void shadow-[0_0_15px_rgba(126,211,33,0.5)]'
-                          : step > s.num
-                            ? 'bg-[var(--accent-mint)]/20 border border-[var(--accent-mint)] text-[var(--accent-mint)]'
-                            : 'border-[var(--accent-mint)]/20 border bg-panel text-muted'
-                      }`}
-                    >
-                      {step > s.num ? <Check size={14} /> : s.num}
-                    </div>
-                    <span className="hidden font-mono-data text-xs uppercase text-muted sm:inline">
-                      {s.label}
-                    </span>
+            /* ── SPLIT BENTO REGISTRATION FLOW ── */
+            <motion.div
+              key="wizard"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch"
+            >
+              {/* LEFT COLUMN: Main Branding & Stepper (4 cols) */}
+              <div className="lg:col-span-4 flex flex-col justify-between space-y-8 pr-0 lg:pr-4 border-r-0 lg:border-r border-white/10">
+                <div>
+                  <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black uppercase leading-tight tracking-tight mb-4 text-balance">
+                    <span className="text-gradient-white">DELEGATE</span> <span className="text-gradient-mint">REGISTRATION</span>
+                  </h1>
+                  <p className="font-body text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-sm">
+                    Complete your registration in 3 simple steps to instantly issue your official digital delegate pass with check-in QR code.
+                  </p>
+                </div>
+
+                {/* Vertical Stepper List with Clean Left Accent */}
+                <div className="space-y-3 py-2">
+                  {STEPS.map((s) => {
+                    const isActive = step === s.num
+                    const isDone = step > s.num
+                    return (
+                      <div
+                        key={s.num}
+                        className={`flex items-center gap-4 p-3.5 sm:p-4 rounded-2xl transition-all ${
+                          isActive
+                            ? 'bg-white/[0.08] text-white font-bold border-l-2 border-mint'
+                            : isDone
+                            ? 'text-neutral-300'
+                            : 'text-neutral-500'
+                        }`}
+                      >
+                        <div
+                          className={`h-7 w-7 rounded-xl flex items-center justify-center font-mono-data text-xs font-bold shrink-0 ${
+                            isActive
+                              ? 'bg-mint text-black'
+                              : isDone
+                              ? 'bg-white/10 text-white'
+                              : 'bg-white/5 text-neutral-500'
+                          }`}
+                        >
+                          {isDone ? <Check size={14} /> : s.num}
+                        </div>
+                        <span className="font-mono-data text-xs sm:text-sm font-bold uppercase tracking-wider">
+                          {s.label}
+                        </span>
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {/* Summit Venue Info */}
+                <div className="rounded-2xl border border-white/10 bg-black/40 p-4 font-mono-data text-xs space-y-2 text-neutral-400">
+                  <div className="flex items-center gap-2">
+                    <Calendar size={15} className="text-white shrink-0" />
+                    <span>March 15–16, 2026 (2-Day Summit)</span>
                   </div>
-                ))}
+                  <div className="flex items-center gap-2">
+                    <MapPin size={15} className="text-white shrink-0" />
+                    <span>Punjab Engineering College, Sector 12</span>
+                  </div>
+                </div>
               </div>
 
-              {/* Step 1: Select Type */}
-              {step === 1 && (
-                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-                  <h2 className="mb-2 font-display text-3xl text-white">
-                    Step 1: Choose Delegate Category
-                  </h2>
-                  <p className="mb-8 font-body text-sm text-muted">
-                    Select your primary registration pass type for PEC Summit 2026.
-                  </p>
+              {/* RIGHT COLUMN: Dynamic Step Panel (8 cols) */}
+              <div className="lg:col-span-8 flex flex-col justify-between min-h-[460px]">
+                <AnimatePresence mode="wait">
+                  {/* ── STEP 1: PASS SELECTION ── */}
+                  {step === 1 && (
+                    <motion.div
+                      key="s1"
+                      initial={{ opacity: 0, x: 16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -16 }}
+                      className="space-y-6 flex-1 flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="mb-4">
+                          <h2 className="font-display text-2xl sm:text-3xl font-black uppercase text-white">
+                            Choose Pass Category
+                          </h2>
+                          <p className="font-body text-xs sm:text-sm text-neutral-400 mt-1">
+                            Select your primary pass tier to continue.
+                          </p>
+                        </div>
 
-                  <div className="mb-8 grid gap-4 sm:grid-cols-2">
-                    {REGISTRATION_TYPES.map((type) => {
-                      const isSelected = selectedType === type.id
-                      const Icon = type.icon
-                      return (
-                        <div
-                          key={type.id}
-                          onClick={() => setSelectedType(type.id)}
-                          className={`flex cursor-pointer flex-col justify-between rounded-2xl border p-6 transition-all duration-200 ${
-                            isSelected
-                              ? 'border-[var(--accent-mint)] bg-panel shadow-[0_0_20px_rgba(126,211,33,0.3)]'
-                              : 'border-[var(--accent-mint)]/20 hover:border-[var(--accent-mint)]/50 bg-panel'
-                          }`}
-                        >
-                          <div>
-                            <div className="mb-4 flex items-center justify-between">
-                              <div className="border-[var(--accent-mint)]/30 flex h-10 w-10 items-center justify-center rounded-xl border bg-void text-[var(--accent-mint)]">
-                                <Icon size={20} />
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          {REGISTRATION_TYPES.map((type) => {
+                            const isSelected = selectedType === type.id
+                            const Icon = type.icon
+                            return (
+                              <div
+                                key={type.id}
+                                onClick={() => setSelectedType(type.id)}
+                                className={`cursor-pointer rounded-2xl border p-5 sm:p-6 transition-all flex flex-col justify-between min-h-[160px] ${
+                                  isSelected
+                                    ? 'border-white/20 bg-mint/[0.06] shadow-md'
+                                    : 'border-white/10 bg-white/[0.02] hover:border-white/20'
+                                }`}
+                              >
+                                <div>
+                                  <div className="flex items-center justify-between mb-3">
+                                    <div
+                                      className={`h-10 w-10 rounded-xl flex items-center justify-center border ${
+                                        isSelected
+                                          ? 'border-white/20 bg-mint/20 text-mint'
+                                          : 'border-white/10 bg-white/5 text-neutral-400'
+                                      }`}
+                                    >
+                                      <Icon size={18} />
+                                    </div>
+                                    <span
+                                      className={`font-mono-data text-xs sm:text-sm font-bold ${
+                                        isSelected ? 'text-white' : 'text-neutral-400'
+                                      }`}
+                                    >
+                                      {type.fee}
+                                    </span>
+                                  </div>
+                                  <h3 className="font-display text-lg sm:text-xl font-bold uppercase text-white mb-1">
+                                    {type.title}
+                                  </h3>
+                                  <p className="font-body text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                                    {type.desc}
+                                  </p>
+                                </div>
                               </div>
-                              <span className="font-mono-data text-xs font-bold text-[var(--accent-mint)]">
-                                {type.fee}
-                              </span>
-                            </div>
+                            )
+                          })}
+                        </div>
+                      </div>
 
-                            <h3 className="mb-1 font-body text-lg font-bold text-white">
-                              {type.title}
-                            </h3>
-                            <p className="mb-4 font-body text-xs leading-relaxed text-muted">
-                              {type.desc}
+                      <div className="pt-6 border-t border-white/10 flex justify-end">
+                        <button
+                          onClick={() => setStep(2)}
+                          className="rounded-full bg-mint px-9 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-black hover:bg-white transition-colors flex items-center gap-2 shadow-lg"
+                        >
+                          <span>Continue to Personal Info</span>
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* ── STEP 2: DELEGATE DETAILS ── */}
+                  {step === 2 && (
+                    <motion.div
+                      key="s2"
+                      initial={{ opacity: 0, x: 16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -16 }}
+                      className="space-y-6 flex-1 flex flex-col justify-between"
+                    >
+                      <div>
+                        <h2 className="font-display text-2xl sm:text-3xl font-black uppercase text-white mb-1">
+                          Delegate Information
+                        </h2>
+                        <p className="font-body text-xs sm:text-sm text-neutral-400 mb-6">
+                          Enter your details exactly as they should be printed on your pass.
+                        </p>
+
+                        <form
+                          id="reg-form"
+                          onSubmit={(e) => {
+                            e.preventDefault()
+                            setStep(3)
+                          }}
+                          className="space-y-4"
+                        >
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div>
+                              <label className="block font-mono-data text-xs font-bold uppercase text-neutral-400 mb-1.5">
+                                Full Name *
+                              </label>
+                              <input
+                                type="text"
+                                required
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                placeholder="e.g. Ananya Sharma"
+                                className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 font-body text-sm text-white outline-none focus:border-white/30 transition-colors"
+                              />
+                            </div>
+                            <div>
+                              <label className="block font-mono-data text-xs font-bold uppercase text-neutral-400 mb-1.5">
+                                Email Address *
+                              </label>
+                              <input
+                                type="email"
+                                required
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                placeholder="ananya@example.com"
+                                className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 font-body text-sm text-white outline-none focus:border-white/30 transition-colors"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <div>
+                              <label className="block font-mono-data text-xs font-bold uppercase text-neutral-400 mb-1.5" htmlFor="reg-phone">
+                                Phone Number
+                              </label>
+                              <input
+                                id="reg-phone"
+                                type="tel"
+                                value={formData.phone}
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                placeholder="+91 XXXXX XXXXX"
+                                pattern="[+\d][\d\s\-().]{7,}"
+                                className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 font-body text-sm text-white outline-none focus:border-white/30 transition-colors"
+                              />
+                            </div>
+                            <div>
+                              <label className="block font-mono-data text-xs font-bold uppercase text-neutral-400 mb-1.5">
+                                College / Institution
+                              </label>
+                              <input
+                                type="text"
+                                value={formData.college}
+                                onChange={(e) => setFormData({ ...formData, college: e.target.value })}
+                                placeholder="Punjab Engineering College"
+                                className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 font-body text-sm text-white outline-none focus:border-white/30 transition-colors"
+                              />
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+
+                      <div className="pt-6 border-t border-white/10 flex items-center justify-between">
+                        <button
+                          type="button"
+                          onClick={() => setStep(1)}
+                          className="rounded-full border border-white/15 px-6 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-300 hover:border-white transition-colors"
+                        >
+                          &larr; Back
+                        </button>
+                        <button
+                          type="submit"
+                          form="reg-form"
+                          className="rounded-full bg-mint px-9 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-black hover:bg-white transition-colors flex items-center gap-2 shadow-lg"
+                        >
+                          <span>Next: Select Tracks</span>
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* ── STEP 3: TRACK SELECTION ── */}
+                  {step === 3 && (
+                    <motion.div
+                      key="s3"
+                      initial={{ opacity: 0, x: 16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -16 }}
+                      className="space-y-6 flex-1 flex flex-col justify-between"
+                    >
+                      <div>
+                        <h2 className="font-display text-2xl sm:text-3xl font-black uppercase text-white mb-1">
+                          Track Preferences
+                        </h2>
+                        <p className="font-body text-xs sm:text-sm text-neutral-400 mb-6">
+                          Select the event tracks you plan to participate in.
+                        </p>
+
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          {INTEREST_TRACKS.map((t) => {
+                            const isSelected = selectedTracks.includes(t)
+                            return (
+                              <div
+                                key={t}
+                                onClick={() => handleTrackToggle(t)}
+                                className={`cursor-pointer rounded-2xl border p-4 flex items-center justify-between text-xs sm:text-sm font-body transition-all ${
+                                  isSelected
+                                    ? 'border-white/20 bg-mint/[0.06] text-white font-bold shadow-md'
+                                    : 'border-white/10 bg-white/[0.02] text-neutral-300 hover:border-white/20'
+                                }`}
+                              >
+                                <span>{t}</span>
+                                <div
+                                  className={`h-5 w-5 rounded-full border flex items-center justify-center ${
+                                    isSelected ? 'border-white/20 bg-mint text-black' : 'border-white/20'
+                                  }`}
+                                >
+                                  {isSelected && <Check size={12} />}
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t border-white/10 flex items-center justify-between">
+                        <button
+                          onClick={() => setStep(2)}
+                          className="rounded-full border border-white/15 px-6 py-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-300 hover:border-white transition-colors"
+                        >
+                          &larr; Back
+                        </button>
+                        <button
+                          onClick={handleCompleteRegistration}
+                          className="rounded-full bg-mint px-9 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-black hover:bg-white transition-colors flex items-center gap-2 shadow-lg"
+                        >
+                          <span>Issue Digital E-Badge</span>
+                          <ChevronRight size={16} />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* ── STEP 4: DIGITAL E-BADGE ISSUED ── */}
+                  {step === 4 && (
+                    <motion.div
+                      key="s4"
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="space-y-6 flex-1 flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center gap-4 mb-6">
+                          <div className="h-12 w-12 rounded-full bg-mint/20 border border-mint/40 text-mint flex items-center justify-center shrink-0">
+                            <CheckCircle2 size={24} />
+                          </div>
+                          <div>
+                            <h2 className="font-display text-2xl sm:text-3xl font-black uppercase text-white">
+                              E-Badge Confirmed
+                            </h2>
+                            <p className="font-body text-xs sm:text-sm text-neutral-400">
+                              Your official delegate pass has been issued for PEC E-Summit 2026.
                             </p>
                           </div>
-
-                          <span className="font-mono-data text-[10px] font-bold uppercase tracking-widest text-[var(--accent-mint)]">
-                            Badge: {type.badge}
-                          </span>
                         </div>
-                      )
-                    })}
-                  </div>
 
-                  <button
-                    onClick={() => setStep(2)}
-                    className="btn-green w-full justify-center py-4 font-bold"
-                  >
-                    Continue to Personal Info &rarr;
-                  </button>
-                </motion.div>
-              )}
+                        {/* Digital Premium Badge Ticket Container */}
+                        <div className="relative rounded-3xl border border-white/[0.08] bg-[#0A1813] shadow-2xl overflow-hidden group">
+                          {/* Grain & Glow Overlays */}
+                          <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+                          
+                          <div className="flex flex-col sm:flex-row relative z-10">
+                            {/* Left Side: Details */}
+                            <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between relative">
+                              <div className="flex flex-wrap items-start justify-between gap-3 mb-8 sm:mb-12">
+                                <div className="flex items-center gap-2 shrink-0">
+                                  <div className="bg-mint text-black p-1.5 rounded-lg">
+                                    <Zap size={20} className="fill-black" />
+                                  </div>
+                                  <div className="flex flex-col leading-none">
+                                    <span className="font-display text-xl sm:text-2xl font-black text-white tracking-tight uppercase">E-SUMMIT</span>
+                                    <span className="font-mono-data text-[9px] sm:text-[10px] font-bold text-mint tracking-[0.2em] mt-0.5">MARCH 2026</span>
+                                  </div>
+                                </div>
+                                <span className="rounded-full border border-mint/20 bg-mint/5 px-3 py-1 font-mono-data text-[10px] font-bold uppercase text-mint tracking-wider shrink-0">
+                                  {currentBadge?.category || 'DELEGATE'}
+                                </span>
+                              </div>
 
-              {/* Step 2: Personal Info */}
-              {step === 2 && (
-                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-                  <h2 className="mb-2 font-display text-3xl text-white">
-                    Step 2: Delegate Information
-                  </h2>
-                  <p className="mb-8 font-body text-sm text-muted">
-                    Enter details to be printed on your official digital summit pass.
-                  </p>
+                              <div className="mt-auto min-w-0">
+                                <span className="font-mono-data text-[10px] sm:text-xs text-neutral-400 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                  <User size={12} className="text-mint" /> DELEGATE DETAILS
+                                </span>
+                                <h3 className="font-display text-3xl sm:text-4xl font-black text-white break-words leading-none mb-3 uppercase tracking-tight">
+                                  {currentBadge?.name || formData.name || 'DELEGATE'}
+                                </h3>
+                                <p className="font-mono-data text-xs sm:text-sm text-neutral-300 flex items-center gap-2">
+                                  <ShieldCheck size={14} className="text-neutral-500" />
+                                  {currentBadge?.college || formData.college || 'PEC Chandigarh'}
+                                </p>
+                              </div>
+                            </div>
 
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault()
-                      setStep(3)
-                    }}
-                    className="mb-8 space-y-4"
-                  >
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className="mb-1 block font-mono-data text-xs font-bold uppercase text-muted">
-                          Full Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="e.g. Ananya Sharma"
-                          className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-panel px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1 block font-mono-data text-xs font-bold uppercase text-muted">
-                          Email Address *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          placeholder="ananya@example.com"
-                          className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-panel px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
-                        />
-                      </div>
-                    </div>
+                            {/* Perforated Divider */}
+                            <div className="hidden sm:flex flex-col justify-between items-center py-4 relative z-20">
+                              <div className="w-[1px] h-full border-l-2 border-dashed border-white/10" />
+                              {/* Semi-circle cutouts matching parent background */}
+                              <div className="absolute top-[-10px] left-1/2 -translate-x-1/2 w-5 h-5 bg-[#0A1813] rounded-full border border-white/20" />
+                              <div className="absolute bottom-[-10px] left-1/2 -translate-x-1/2 w-5 h-5 bg-[#0A1813] rounded-full border border-white/20" />
+                            </div>
+                            
+                            {/* Mobile Horizontal Divider */}
+                            <div className="sm:hidden w-full h-[1px] border-t-2 border-dashed border-white/10 relative z-20 my-2">
+                              <div className="absolute left-[-10px] top-1/2 -translate-y-1/2 w-5 h-5 bg-[#0A1813] rounded-full border border-white/20" />
+                              <div className="absolute right-[-10px] top-1/2 -translate-y-1/2 w-5 h-5 bg-[#0A1813] rounded-full border border-white/20" />
+                            </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className="mb-1 block font-mono-data text-xs font-bold uppercase text-muted">
-                          Phone Number
-                        </label>
-                        <input
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+91 98765 43210"
-                          className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-panel px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
-                        />
-                      </div>
-                      <div>
-                        <label className="mb-1 block font-mono-data text-xs font-bold uppercase text-muted">
-                          College / Institution
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.college}
-                          onChange={(e) => setFormData({ ...formData, college: e.target.value })}
-                          placeholder="Punjab Engineering College"
-                          className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-panel px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex gap-4 pt-4">
-                      <button
-                        type="button"
-                        onClick={() => setStep(1)}
-                        className="btn-ghost flex-1 justify-center"
-                      >
-                        &larr; Back
-                      </button>
-                      <button type="submit" className="btn-green flex-1 justify-center font-bold">
-                        Continue to Tracks &rarr;
-                      </button>
-                    </div>
-                  </form>
-                </motion.div>
-              )}
-
-              {/* Step 3: Select Tracks */}
-              {step === 3 && (
-                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-                  <h2 className="mb-2 font-display text-3xl text-white">Step 3: Track Interests</h2>
-                  <p className="mb-8 font-body text-sm text-muted">
-                    Select sessions and competitions you plan to participate in.
-                  </p>
-
-                  <div className="mb-8 grid gap-3 sm:grid-cols-2">
-                    {INTEREST_TRACKS.map((t) => {
-                      const isSelected = selectedTracks.includes(t)
-                      return (
-                        <div
-                          key={t}
-                          onClick={() => handleTrackToggle(t)}
-                          className={`flex cursor-pointer items-center justify-between rounded-xl border p-4 font-body text-sm transition-all ${
-                            isSelected
-                              ? 'border-[var(--accent-mint)] bg-panel font-bold text-[var(--accent-mint)]'
-                              : 'border-[var(--accent-mint)]/20 bg-panel text-gray-300'
-                          }`}
-                        >
-                          <span>{t}</span>
-                          <div
-                            className={`flex h-5 w-5 items-center justify-center rounded-full border ${
-                              isSelected
-                                ? 'border-[var(--accent-mint)] bg-[var(--accent-mint)] text-void'
-                                : 'border-[var(--accent-mint)]/30'
-                            }`}
-                          >
-                            {isSelected && <Check size={12} />}
+                            {/* Right Side: QR & ID */}
+                            <div className="p-6 sm:p-8 flex flex-row sm:flex-col items-center justify-between sm:justify-center gap-6 sm:w-64 shrink-0 bg-white/[0.02]">
+                              <div className="h-28 w-28 sm:h-36 sm:w-36 bg-white p-2 sm:p-2.5 rounded-2xl shrink-0 flex items-center justify-center shadow-lg transition-transform hover:scale-105 duration-300 ring-4 ring-white/5">
+                                <img
+                                  src={currentBadge?.qrCodeData || `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=PEC-SUMMIT-${formData.email || 'USER'}`}
+                                  alt="Check-in QR"
+                                  className="h-full w-full object-contain mix-blend-multiply"
+                                />
+                              </div>
+                              <div className="flex flex-col items-end sm:items-center text-right sm:text-center w-full mt-0 sm:mt-2">
+                                <span className="font-mono-data text-[10px] text-neutral-500 uppercase tracking-widest mb-1.5 block">PASS ID</span>
+                                <span className="font-mono-data text-sm sm:text-base font-black text-white tracking-widest bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 w-full text-center">
+                                  {currentBadge?.id || 'PEC-000000'}
+                                </span>
+                                {/* Stylized Barcode effect for desktop */}
+                                <div className="hidden sm:block mt-5 w-full h-8 opacity-30 bg-[repeating-linear-gradient(90deg,#fff,#fff_2px,transparent_2px,transparent_5px,#fff_5px,#fff_6px,transparent_6px,transparent_10px)]" />
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      )
-                    })}
-                  </div>
-
-                  <div className="flex gap-4">
-                    <button onClick={() => setStep(2)} className="btn-ghost flex-1 justify-center">
-                      &larr; Back
-                    </button>
-                    <button
-                      onClick={handleCompleteRegistration}
-                      className="btn-green flex-1 justify-center py-4 font-bold"
-                    >
-                      Generate Digital E-Badge &rarr;
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Step 4: Digital E-Badge Card */}
-              {step === 4 && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                >
-                  <div className="mb-8 text-center">
-                    <div className="bg-[var(--accent-mint)]/20 mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full border border-[var(--accent-mint)] text-[var(--accent-mint)]">
-                      <CheckCircle2 size={36} />
-                    </div>
-                    <h2 className="font-display text-4xl text-white">E-Badge Generated!</h2>
-                    <p className="font-body text-sm text-muted">
-                      Your official PEC Summit 2026 digital delegate pass is active.
-                    </p>
-                  </div>
-
-                  {/* Digital Badge Ticket Container */}
-                  <div className="relative mx-auto mb-8 max-w-md overflow-hidden rounded-3xl border-2 border-[var(--accent-mint)] bg-panel p-8 shadow-[0_0_40px_rgba(126,211,33,0.3)]">
-                    <div className="absolute left-0 right-0 top-0 h-2 bg-gradient-to-r from-[var(--accent-mint)] via-[#3DD9FF] to-[var(--accent-mint)]" />
-
-                    {/* Badge Top Header */}
-                    <div className="border-[var(--accent-mint)]/20 mb-6 flex items-center justify-between border-b pb-4">
-                      <div className="flex items-center gap-2">
-                        <Zap
-                          size={18}
-                          className="fill-[var(--accent-mint)] text-[var(--accent-mint)]"
-                        />
-                        <span className="font-display text-xl text-white">PEC SUMMIT 2026</span>
-                      </div>
-                      <span className="bg-[var(--accent-mint)]/20 border-[var(--accent-mint)]/40 rounded border px-2.5 py-1 font-mono-data text-[10px] font-bold uppercase tracking-widest text-[var(--accent-mint)]">
-                        {currentBadge?.category || 'DELEGATE'}
-                      </span>
-                    </div>
-
-                    {/* Delegate Main Details */}
-                    <div className="mb-6">
-                      <p className="mb-1 font-mono-data text-xs uppercase text-muted">
-                        Delegate Name
-                      </p>
-                      <h3 className="mb-2 font-body text-3xl font-extrabold text-white">
-                        {currentBadge?.name || formData.name}
-                      </h3>
-                      <p className="font-mono-data text-xs font-bold text-[var(--accent-mint)]">
-                        {currentBadge?.college || formData.college}
-                      </p>
-                    </div>
-
-                    {/* QR Code Section */}
-                    <div className="border-[var(--accent-mint)]/30 mb-6 flex items-center justify-between gap-4 rounded-2xl border bg-void p-4">
-                      <div>
-                        <p className="mb-1 font-mono-data text-[10px] uppercase text-muted">
-                          Pass ID
-                        </p>
-                        <p className="mb-2 font-mono-data text-sm font-bold text-white">
-                          {currentBadge?.id || 'PEC-984210'}
-                        </p>
-                        <p className="font-mono-data text-[10px] text-[var(--accent-mint)]">
-                          Valid for March 15–16, 2026
-                        </p>
                       </div>
 
-                      <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-white p-1.5">
-                        {/* QR Code graphic */}
-                        <img
-                          src={
-                            currentBadge?.qrCodeData ||
-                            `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=PEC-SUMMIT-${formData.email}`
-                          }
-                          alt="Delegate QR Check-in Code"
-                          className="h-full w-full object-contain"
-                        />
+                      <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-end gap-3 w-full">
+                        <button
+                          onClick={handleExportInstagramStory}
+                          className="w-full sm:w-auto justify-center rounded-full bg-mint px-7 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-black hover:bg-white transition-colors flex items-center gap-2 shadow-lg"
+                        >
+                          <Sparkles size={16} /> Export Story Badge (1080x1920)
+                        </button>
+                        <button
+                          onClick={() => window.print()}
+                          className="w-full sm:w-auto justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-white hover:border-white transition-colors flex items-center gap-2"
+                        >
+                          <Download size={16} /> Print Pass
+                        </button>
+                        <button
+                          onClick={() => { setActiveTab('dashboard'); setStep(1) }}
+                          className="w-full sm:w-auto justify-center rounded-full border border-white/15 px-6 py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-neutral-300 hover:border-white transition-colors"
+                        >
+                          View Saved Passes
+                        </button>
                       </div>
-                    </div>
-
-                    {/* Track Badges */}
-                    <div className="border-[var(--accent-mint)]/20 flex items-center justify-between border-t pt-4 font-mono-data text-xs text-muted">
-                      <span>Venue: PEC Sector 12</span>
-                      <span className="font-bold text-[var(--accent-mint)]">Status: Active</span>
-                    </div>
-                  </div>
-
-                  <div className="mx-auto flex max-w-md flex-wrap gap-4">
-                    <button
-                      onClick={() => window.print()}
-                      className="btn-green flex-1 justify-center py-3.5 text-sm font-bold"
-                    >
-                      <Download size={16} /> Print / Save E-Badge
-                    </button>
-                    <button
-                      onClick={() => {
-                        setActiveTab('dashboard')
-                        setStep(1)
-                      }}
-                      className="btn-ghost flex-1 justify-center"
-                    >
-                      Go to Dashboard
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
           )}
-        </div>
-      </section>
-
-      <Footer />
-      <Concierge />
+        </AnimatePresence>
+      </div>
     </main>
   )
 }

@@ -1,7 +1,7 @@
 // components/EventPortfolio/index.tsx
 'use client'
 
-import React, { useRef, useState, useMemo } from 'react'
+import React, { useRef, useState, useMemo, useEffect } from 'react'
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
 import { PORTFOLIO_EVENTS, PortfolioEvent } from './data'
 import { Card } from './Card'
@@ -14,6 +14,7 @@ export default function EventPortfolioShowcase() {
 
   const [selectedEvent, setSelectedEvent] = useState<PortfolioEvent | null>(null)
   const [activeCategory, setActiveCategory] = useState<string>('All')
+  const [scrollRange, setScrollRange] = useState(['0px', '0px'])
 
   const categories = useMemo(() => {
     return ['All', 'Industry Workshop', 'Recruitment', 'Deep Tech', 'Strategy', 'Keynotes']
@@ -37,13 +38,28 @@ export default function EventPortfolioShowcase() {
     restDelta: 0.001,
   })
 
-  const xTranslate = useTransform(smoothProgress, [0, 1], ['0%', '-86%'])
+  useEffect(() => {
+    const handleResize = () => {
+      if (trackRef.current) {
+        const scrollWidth = trackRef.current.scrollWidth
+        const viewportWidth = window.innerWidth
+        const maxScroll = Math.max(0, scrollWidth - viewportWidth)
+        setScrollRange(['0px', `-${maxScroll}px`])
+      }
+    }
+    handleResize()
+    setTimeout(handleResize, 100)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [filteredEvents])
+
+  const xTranslate = useTransform(smoothProgress, [0, 1], scrollRange)
 
   return (
     <section
       ref={containerRef}
       id="event-portfolio"
-      className="relative h-[280vh] w-full bg-[#0D1812] text-white"
+      className="relative h-[250vh] md:h-[480vh] w-full bg-[#081C16] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-[#7ED321]/20"
       aria-label="Event Portfolio Showcase"
     >
       {/* Pinned Sticky Section during vertical scroll */}
@@ -52,10 +68,10 @@ export default function EventPortfolioShowcase() {
         {/* Big centered section title — matches site-wide pattern */}
         <div className="pointer-events-none absolute top-16 left-0 right-0 flex justify-center z-20">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
+            style={{ fontSize: 'clamp(3.5rem, 10vw, 96px)' }}
           >
-            EVENTS
+            <span className="text-gradient-mint">EVENTS</span>
           </h2>
         </div>
 
@@ -63,8 +79,9 @@ export default function EventPortfolioShowcase() {
         <div className="relative z-10 flex w-full items-center pt-32 sm:pt-36">
           <motion.div
             ref={trackRef}
+            initial={{ x: '0px' }}
             style={{ x: xTranslate, willChange: 'transform' }}
-            className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing"
+            className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing w-full"
           >
             {filteredEvents.map((event, index) => (
               <Card

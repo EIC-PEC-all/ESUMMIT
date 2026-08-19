@@ -62,9 +62,9 @@ export default function SpeakersLandingPage() {
           </div>
 
           <div className="max-w-3xl">
-            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
-              VOICES THAT <br />
-              <span className="text-mint">BUILD &amp; INVEST</span>
+            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight">
+              <span className="text-gradient-white">VOICES THAT</span> <br />
+              <span className="text-gradient-mint">BUILD &amp; INVEST</span>
             </h1>
 
             <p className="mb-8 max-w-xl font-body text-lg leading-relaxed text-secondary">
@@ -85,14 +85,16 @@ export default function SpeakersLandingPage() {
                 />
               </div>
 
-              <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
+              <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0" role="tablist" aria-label="Speaker tracks">
                 {['All', 'panels', 'pitch', 'hackathon', 'expo'].map((tr) => (
                   <button
                     key={tr}
+                    role="tab"
+                    aria-selected={selectedTrack === tr}
                     onClick={() => setSelectedTrack(tr)}
                     className={`whitespace-nowrap rounded-xl px-4 py-3 font-mono-data text-xs uppercase tracking-wider transition-all duration-200 ${
                       selectedTrack === tr
-                        ? 'bg-mint font-bold text-void shadow-[0_0_15px_rgba(126,211,33,0.4)]'
+                        ? 'bg-mint font-bold text-void border border-mint/80'
                         : 'hover:border-mint/40 border border-border-subtle bg-panel text-secondary hover:text-white'
                     }`}
                   >
@@ -116,8 +118,8 @@ export default function SpeakersLandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => setActiveSpeaker(spk)}
-                className="border-[var(--accent-mint)]/20 group relative flex cursor-pointer flex-col justify-between rounded-2xl border bg-panel p-6 shadow-lg transition-all duration-300 hover:border-[var(--accent-mint)]"
-                whileHover={{ y: -6, boxShadow: '0 0 25px rgba(126,211,33,0.3)' }}
+                className="border-[var(--accent-mint)]/20 group relative flex cursor-pointer flex-col justify-between rounded-2xl border bg-panel p-6 shadow-md transition-all duration-300 hover:border-[var(--accent-mint)] hover:bg-white/[0.04]"
+                whileHover={{ y: -4 }}
               >
                 <div>
                   <div 
@@ -150,16 +152,17 @@ export default function SpeakersLandingPage() {
       {/* Speaker Detail Modal */}
       <AnimatePresence>
         {activeSpeaker && (
-          <div className="bg-void/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
+          <div className="fixed inset-0 z-[12000] flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl" role="dialog" aria-modal="true" aria-labelledby="speaker-modal-title">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="border-[var(--accent-mint)]/40 relative w-full max-w-lg rounded-2xl border bg-panel p-8 shadow-2xl"
+              className="relative w-full max-w-lg rounded-3xl border border-mint/30 bg-gradient-to-b from-[#0C1A14] via-[#07120E] to-[#040A08] p-8 shadow-[0_0_100px_rgba(0,0,0,0.95),inset_0_1px_1px_rgba(255,255,255,0.1)]"
             >
               <button
                 onClick={() => setActiveSpeaker(null)}
-                className="absolute right-6 top-6 rounded-lg bg-void p-2 text-muted hover:text-white"
+                aria-label="Close speaker profile"
+                className="absolute right-6 top-6 rounded-lg bg-void p-2 text-muted hover:text-white transition-colors"
               >
                 <X size={18} />
               </button>
@@ -169,7 +172,7 @@ export default function SpeakersLandingPage() {
                   {activeSpeaker.initials || activeSpeaker.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="font-body text-2xl font-bold text-white">{activeSpeaker.name}</h3>
+                  <h3 id="speaker-modal-title" className="font-body text-2xl font-bold text-white">{activeSpeaker.name}</h3>
                   <p className="font-mono-data text-xs text-muted">{activeSpeaker.title}</p>
                 </div>
               </div>
@@ -184,14 +187,20 @@ export default function SpeakersLandingPage() {
               <div className="flex items-center justify-between">
                 <div className="flex gap-3">
                   <a
-                    href="#"
-                    className="border-[var(--accent-mint)]/30 rounded-lg border bg-void p-2 text-muted hover:text-[var(--accent-mint)]"
+                    href="https://twitter.com/ecell_pec"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="E-Cell PEC Twitter Profile"
+                    className="border-[var(--accent-mint)]/30 rounded-lg border bg-void p-2 text-muted hover:text-[var(--accent-mint)] transition-colors"
                   >
                     <Twitter size={16} />
                   </a>
                   <a
-                    href="#"
-                    className="border-[var(--accent-mint)]/30 rounded-lg border bg-void p-2 text-muted hover:text-[var(--accent-mint)]"
+                    href="https://linkedin.com/company/ecell-pec"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="E-Cell PEC LinkedIn Profile"
+                    className="border-[var(--accent-mint)]/30 rounded-lg border bg-void p-2 text-muted hover:text-[var(--accent-mint)] transition-colors"
                   >
                     <Linkedin size={16} />
                   </a>
