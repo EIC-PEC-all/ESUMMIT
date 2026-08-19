@@ -4,7 +4,7 @@
 import React from 'react'
 import Image from 'next/image'
 import { motion, MotionValue } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Plus } from 'lucide-react'
 import { PortfolioEvent } from './data'
 
 interface CardProps {
@@ -16,36 +16,44 @@ interface CardProps {
 }
 
 export function Card({ event, index, total, onSelect }: CardProps) {
+  const hasImage = Boolean(event.image && !event.image.includes('unsplash.com'))
+
   return (
     <motion.div
       onClick={() => onSelect(event)}
       whileHover={{ y: -8, scale: 1.02 }}
       transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onSelect(event)
-        }
-      }}
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl aspect-[4/3] bg-[#0B1712] focus-visible:ring-2 focus-visible:ring-mint focus:outline-none"
-      style={{ width: 'clamp(280px, 26vw, 380px)' }}
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-[#7ED321]/30 bg-[#0B150E] transition-all hover:border-[#7ED321] hover:shadow-[0_0_30px_rgba(126,211,33,0.3)]"
+      style={{ width: 'clamp(200px, 22vw, 280px)', height: 'clamp(280px, 40vh, 380px)' }}
     >
-      {/* Full-bleed image */}
-      <Image
-        src={event.image}
-        alt={event.title}
-        fill
-        sizes="(min-width: 1024px) 280px, 22vw"
-        loading="lazy"
-        className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-      />
+      {/* If real uploaded image is present */}
+      {hasImage ? (
+        <Image
+          src={event.image}
+          alt={event.title}
+          fill
+          sizes="(min-width: 1024px) 280px, 22vw"
+          loading="lazy"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+        />
+      ) : (
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center space-y-3 bg-[#0B150E] group-hover:bg-[#101F15] transition-colors">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#7ED321]/15 border border-[#7ED321]/40 text-[#7ED321] group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(126,211,33,0.2)]">
+            <Plus className="h-6 w-6" />
+          </div>
+          <div className="space-y-1">
+            <span className="font-mono text-sm font-bold uppercase tracking-wider text-white group-hover:text-[#7ED321] transition-colors block">
+              + Insert Image
+            </span>
+            <span className="font-mono text-[10px] text-[#8A9488] block">
+              Event #{event.number} &middot; Via Admin CMS
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Bottom gradient scrim — primary text zone */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-
-      {/* Subtle top vignette so category pill reads cleanly */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent h-1/3" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none" />
 
       {/* Index number — large faded watermark */}
       <span
@@ -56,11 +64,9 @@ export function Card({ event, index, total, onSelect }: CardProps) {
         {String(index + 1).padStart(2, '0')}
       </span>
 
-
-
       {/* Top-left: index counter */}
       <div className="absolute top-3 left-3 z-10">
-        <span className="font-mono-data text-[10px] font-bold text-white/40">
+        <span className="font-mono-data text-[10px] font-bold text-white/50 bg-black/60 px-2 py-0.5 rounded-full">
           {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
         </span>
       </div>
@@ -69,7 +75,7 @@ export function Card({ event, index, total, onSelect }: CardProps) {
       <div className="absolute bottom-0 left-0 right-0 z-10 p-4 flex items-end justify-between gap-3">
         <div className="flex flex-col gap-0.5 min-w-0">
           {/* Eyebrow */}
-          <span className="font-mono-data text-[9px] font-bold uppercase tracking-[0.2em] text-mint/80 truncate">
+          <span className="font-mono-data text-[9px] font-bold uppercase tracking-[0.2em] text-mint/90 truncate">
             {event.eyebrow}
           </span>
           {/* Event name */}
@@ -83,9 +89,6 @@ export function Card({ event, index, total, onSelect }: CardProps) {
           <ArrowUpRight size={16} />
         </div>
       </div>
-
-      {/* Mint border reveal on hover */}
-      <div className="absolute inset-0 rounded-2xl border border-mint/0 group-hover:border-mint/40 transition-colors duration-300 pointer-events-none" />
     </motion.div>
   )
 }

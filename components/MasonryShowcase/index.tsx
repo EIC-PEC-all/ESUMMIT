@@ -1,196 +1,172 @@
 'use client'
-// components/MasonryShowcase/index.tsx
-// 5-Column (Desktop) / 3-Column (Mobile) Infinite Vertical Marquee Gallery
 
 import { useRef, useState, useEffect } from 'react'
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { Plus } from 'lucide-react'
 
-interface CardItem {
-  id: string
-  img: string
-  height: number
-}
-
-const PEC_GALLERY_IMAGES = [
-  { img: '/gallery/pec_admin_building.jpg', height: 260 },
-  { img: '/gallery/pec_centenary_hall.jpg', height: 220 },
-  { img: '/gallery/pec_mig21.jpg', height: 280 },
-  { img: '/gallery/pec_aerial_night.jpg', height: 240 },
-  { img: '/gallery/pec_auditorium_facade.jpg', height: 260 },
-  { img: '/gallery/pec_iaf_helicopter.jpg', height: 250 },
-  { img: '/gallery/pec_pitch.jpg', height: 260 },
-  { img: '/gallery/pec_team.png', height: 210 },
-  { img: '/gallery/pec_group.png', height: 290 },
-  { img: '/gallery/pec_auditorium.png', height: 240 },
-  { img: '/gallery/pec_startup_fair.png', height: 300 },
-  { img: '/gallery/pec_senate_roundtable.png', height: 200 },
-  { img: '/gallery/pec_keynote_speaker.png', height: 270 },
-  { img: '/gallery/pec_innovation_stage.png', height: 230 },
-  { img: '/gallery/pec_pitch_table.png', height: 230 },
-  { img: '/gallery/pec_investor_poster.png', height: 260 },
-  { img: '/gallery/pec_funding_conclave.png', height: 280 },
-  { img: '/gallery/pec_lawn_mosaic.png', height: 240 },
-  { img: '/gallery/pec_senate_hall.png', height: 230 },
-]
-
-// Stable order — shuffled once at module load, not per-render
-const SHUFFLED_GALLERY = [...PEC_GALLERY_IMAGES].sort(() => Math.random() - 0.5)
-
-// Each column is its own self-contained infinite scroll strip
-function MarqueeColumn({
-  items,
-  direction,
-  speed,
-}: {
-  items: CardItem[]
-  direction: 'up' | 'down'
-  speed: number
-}) {
-  return (
-    <div className="relative flex-1 overflow-hidden">
-      <motion.div
-        className="flex flex-col gap-3"
-        animate={{
-          y: direction === 'up' ? ['0%', '-50%'] : ['-50%', '0%'],
-        }}
-        transition={{
-          duration: speed,
-          ease: 'linear',
-          repeat: Infinity,
-          repeatType: 'loop',
-        }}
-      >
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="group w-full shrink-0 overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0A1611] transition-all duration-300 hover:border-white/20"
-            style={{ height: item.height }}
-          >
-            <img
-              src={item.img}
-              alt="E-Summit PEC event photo"
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-          </div>
-        ))}
-      </motion.div>
-    </div>
-  )
-}
+const DEFAULT_HEIGHTS_COL1 = [460, 340, 500, 420]
+const DEFAULT_HEIGHTS_COL2 = [360, 480, 400, 540]
+const DEFAULT_HEIGHTS_COL3 = [540, 400, 460, 500]
+const DEFAULT_HEIGHTS_COL4 = [420, 540, 400, 460]
 
 export default function MasonryShowcase() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [columns, setColumns] = useState<CardItem[][]>([])
-  const [isTitleVisible, setIsTitleVisible] = useState(true)
+  const [galleryItems, setGalleryItems] = useState<{ id: string; imageUrl: string; slot?: number; title?: string }[]>([])
 
   useEffect(() => {
-    const updateColumns = () => {
-      const colCount = window.innerWidth < 768 ? 3 : 5
-      const cols: CardItem[][] = Array.from({ length: colCount }, () => [])
+    let mounted = true
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
 
-      SHUFFLED_GALLERY.forEach((item, idx) => {
-        cols[idx % colCount].push({ id: `${idx}`, ...item })
+    fetch(`${apiUrl}/gallery`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (mounted && Array.isArray(data) && data.length > 0) {
+          setGalleryItems(data)
+        }
       })
+      .catch(() => {})
 
-      const duplicatedCols = cols.map((col) => [
-        ...col,
-        ...col.map((item) => ({ ...item, id: `${item.id}-dup` })),
-      ])
-
-      setColumns(duplicatedCols)
+    return () => {
+      mounted = false
     }
-
-    updateColumns()
-    window.addEventListener('resize', updateColumns)
-    return () => window.removeEventListener('resize', updateColumns)
   }, [])
 
-  const { scrollYProgress, scrollY } = useScroll({
+  // Track scroll position through section container
+  const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   })
 
-  useMotionValueEvent(scrollY, "change", (current) => {
-    const previous = scrollY.getPrevious()
-    if (previous === undefined) return
-    
-    // Check if we are inside the component's scroll area
-    const progress = scrollYProgress.get()
-    
-    // If we are at the very top of the section, always show
-    if (progress <= 0.02) {
-      setIsTitleVisible(true)
-      return
-    }
+  // ── 1. Headline Fade Sequence ──
+  const headlineOpacity = useTransform(scrollYProgress, [0.02, 0.2], [1, 0])
+  const headlineScale = useTransform(scrollYProgress, [0.02, 0.2], [1, 0.82])
+  const headlineY = useTransform(scrollYProgress, [0.02, 0.2], ['0px', '-60px'])
 
-    // Hide on scroll down, show on scroll up
-    if (current > previous && current - previous > 5) {
-      setIsTitleVisible(false)
-    } else if (current < previous && previous - current > 5) {
-      setIsTitleVisible(true)
-    }
-  })
+  // ── 2. Gallery Fade Sequence ──
+  const galleryOpacity = useTransform(scrollYProgress, [0, 0.15, 1], [0.3, 1, 1])
+  const galleryScale = useTransform(scrollYProgress, [0.85, 1], [1, 1])
 
-  // The gallery images still fade in based on absolute progress
-  const galleryOpacity = useTransform(scrollYProgress, [0.05, 0.25], [0.15, 1])
+  // ── 3. Opposing Scroll Parallax Transforms ──
+  const colY_1 = useTransform(scrollYProgress, [0.15, 0.85], ['0px', '-800px'])
+  const colY_2 = useTransform(scrollYProgress, [0.15, 0.85], ['-800px', '0px'])
+  const colY_3 = useTransform(scrollYProgress, [0.15, 0.85], ['-100px', '-900px'])
+  const colY_4 = useTransform(scrollYProgress, [0.15, 0.85], ['-700px', '100px'])
 
-  // Alternating slower speeds so columns scroll smoothly and gracefully
-  const speeds = [44, 52, 42, 50, 46]
+  const renderSlotCard = (slotNum: number, height: number) => {
+    const uploaded = galleryItems.find((g) => g.slot === slotNum) || galleryItems[slotNum - 1]
+
+    return (
+      <div
+        key={`slot-${slotNum}`}
+        className="group relative w-full shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-dashed border-[#7ED321]/30 bg-[#0B150E] shadow-2xl transition-all duration-300 hover:scale-[0.98] hover:border-[#7ED321] hover:shadow-[0_0_30px_rgba(126,211,33,0.35)]"
+        style={{ height }}
+      >
+        {uploaded?.imageUrl ? (
+          <div
+            className="h-full w-full bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+            style={{ backgroundImage: `url(${uploaded.imageUrl})` }}
+          />
+        ) : (
+          <div className="flex h-full w-full flex-col items-center justify-center p-6 text-center space-y-3 bg-[#0B150E] group-hover:bg-[#101F15] transition-colors">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#7ED321]/15 border border-[#7ED321]/40 text-[#7ED321] group-hover:scale-110 transition-transform shadow-[0_0_20px_rgba(126,211,33,0.2)]">
+              <Plus className="h-7 w-7" />
+            </div>
+            <div className="space-y-1">
+              <span className="font-mono text-sm font-bold uppercase tracking-wider text-white group-hover:text-[#7ED321] transition-colors block">
+                + Insert Image
+              </span>
+              <p className="font-mono text-[10px] text-[#8A9488]">
+                Slot #{slotNum} &middot; Via Admin CMS
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#070B08]/80 via-transparent to-transparent opacity-60" />
+      </div>
+    )
+  }
 
   return (
     <section
-      id="gallery"
       ref={containerRef}
-      className="relative h-[200vh] border-b border-mint/20 bg-[#081C16] rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10"
+      className="relative h-[280vh] border-b border-white/10 bg-[#0D1812]"
     >
-      {/* Pinned sticky viewport */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[#081C16]">
-        {/* Top & bottom gradient masks */}
-        <div className="pointer-events-none absolute left-0 right-0 top-0 z-20 h-32 bg-gradient-to-b from-[#081C16] via-[#081C16]/80 to-transparent" />
-        <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 h-32 bg-gradient-to-t from-[#081C16] via-[#081C16]/80 to-transparent" />
+      {/* Pinned Full-Screen Sticky Viewport Container */}
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden bg-[#0D1812]">
+        {/* ── TOP EDGE GRADIENT MASK ── */}
+        <div className="pointer-events-none absolute left-0 right-0 top-0 z-20 h-36 bg-gradient-to-b from-[#0D1812] via-[#0D1812]/90 to-transparent md:h-48" />
 
-        {/* 5 self-contained marquee columns filling full screen height */}
-        <motion.div 
-          initial={{ opacity: 0.15 }}
-          style={{ opacity: galleryOpacity }}
-          className="flex h-full w-full gap-3 px-3 sm:gap-4 sm:px-5 md:gap-5 md:px-8"
+        {/* ── BOTTOM EDGE GRADIENT MASK ── */}
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 h-36 bg-gradient-to-t from-[#0D1812] via-[#0D1812]/90 to-transparent md:h-48" />
+
+        {/* ── INTRO HEADLINE — Shows on enter, disappears after scroll ── */}
+        <motion.div
+          style={{
+            opacity: headlineOpacity,
+            scale: headlineScale,
+            y: headlineY,
+          }}
+          className="pointer-events-none absolute z-30 px-4 text-center"
         >
-          {columns.map((colItems, colIdx) => (
-            <MarqueeColumn
-              key={colIdx}
-              items={colItems}
-              direction={colIdx % 2 === 0 ? 'up' : 'down'}
-              speed={speeds[colIdx] ?? 45}
-            />
-          ))}
+          <span className="mb-2 block font-mono-data text-xs font-bold uppercase tracking-[0.35em] text-mint">
+            PEC E-SUMMIT 2026
+          </span>
+          <h2
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
+            style={{ fontSize: 'clamp(2.2rem, 10vw, 160px)' }}
+          >
+            SUMMIT GALLERY
+          </h2>
         </motion.div>
 
-        {/* Ambient Overlay to dim images slightly so the title pops more */}
-        <motion.div 
-          initial={{ opacity: 1 }}
-          animate={{ opacity: isTitleVisible ? 1 : 0 }}
-          transition={{ duration: 0.6 }}
-          className="pointer-events-none absolute inset-0 z-20 bg-black/30" 
-        />
-
-        {/* Headline overlay — fades out on scroll down, reappears on scroll up */}
+        {/* ── PURE FULL-SCREEN OPPOSING AUTO-SCROLL & PARALLAX GALLERY ── */}
         <motion.div
-          initial={{ opacity: 1, scale: 1, y: '0px' }}
-          animate={{ 
-            opacity: isTitleVisible ? 1 : 0, 
-            scale: isTitleVisible ? 1 : 0.95, 
-            y: isTitleVisible ? 0 : -30 
+          style={{
+            opacity: galleryOpacity,
+            scale: galleryScale,
           }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center"
+          className="flex h-full w-full max-w-[1920px] items-center justify-center gap-2 sm:gap-3 md:gap-4 overflow-hidden px-2 sm:px-4 md:px-6"
         >
-          <h2
-            className="font-display font-black uppercase leading-none tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
+          {/* Column 1 — UP */}
+          <motion.div
+            style={{ y: colY_1, animationDuration: '25s' }}
+            className="animate-auto-scroll-up flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
           >
-            <span className="text-gradient-white">SUMMIT</span> <span className="text-gradient-mint">GALLERY</span>
-          </h2>
+            {[1, 2, 3, 4, 1, 2, 3, 4].map((slot, i) =>
+              renderSlotCard(slot, DEFAULT_HEIGHTS_COL1[i % DEFAULT_HEIGHTS_COL1.length])
+            )}
+          </motion.div>
+
+          {/* Column 2 — DOWN */}
+          <motion.div
+            style={{ y: colY_2, animationDuration: '30s' }}
+            className="animate-auto-scroll-down flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
+          >
+            {[5, 6, 7, 8, 5, 6, 7, 8].map((slot, i) =>
+              renderSlotCard(slot, DEFAULT_HEIGHTS_COL2[i % DEFAULT_HEIGHTS_COL2.length])
+            )}
+          </motion.div>
+
+          {/* Column 3 — UP (Mobile, Tablet, Desktop) */}
+          <motion.div
+            style={{ y: colY_3, animationDuration: '22s' }}
+            className="animate-auto-scroll-up flex flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform"
+          >
+            {[9, 10, 11, 12, 9, 10, 11, 12].map((slot, i) =>
+              renderSlotCard(slot, DEFAULT_HEIGHTS_COL3[i % DEFAULT_HEIGHTS_COL3.length])
+            )}
+          </motion.div>
+
+          {/* Column 4 — DOWN (Tablet & Desktop) */}
+          <motion.div
+            style={{ y: colY_4, animationDuration: '28s' }}
+            className="animate-auto-scroll-down hidden flex-1 flex-col gap-2 sm:gap-3 md:gap-4 will-change-transform sm:flex"
+          >
+            {[13, 14, 15, 16, 13, 14, 15, 16].map((slot, i) =>
+              renderSlotCard(slot, DEFAULT_HEIGHTS_COL4[i % DEFAULT_HEIGHTS_COL4.length])
+            )}
+          </motion.div>
         </motion.div>
       </div>
     </section>

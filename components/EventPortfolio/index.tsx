@@ -2,7 +2,7 @@
 'use client'
 
 import React, { useRef, useState, useMemo, useEffect } from 'react'
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { PORTFOLIO_EVENTS, PortfolioEvent } from './data'
 import { Card } from './Card'
 import { FinalCard } from './FinalCard'
@@ -14,18 +14,47 @@ export default function EventPortfolioShowcase() {
 
   const [selectedEvent, setSelectedEvent] = useState<PortfolioEvent | null>(null)
   const [activeCategory, setActiveCategory] = useState<string>('All')
-  const [scrollRange, setScrollRange] = useState(['0px', '0px'])
+  const [eventMedia, setEventMedia] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    let mounted = true
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
+
+    fetch(`${apiUrl}/portfolio-events`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { eventId: string; imageUrl: string }[]) => {
+        if (mounted && Array.isArray(data)) {
+          const map: Record<string, string> = {}
+          data.forEach((d) => {
+            map[d.eventId] = d.imageUrl
+          })
+          setEventMedia(map)
+        }
+      })
+      .catch(() => {})
+
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const categories = useMemo(() => {
     return ['All', 'Industry Workshop', 'Recruitment', 'Deep Tech', 'Strategy', 'Keynotes']
   }, [])
 
+  const eventsWithMedia = useMemo(() => {
+    return PORTFOLIO_EVENTS.map((evt) => ({
+      ...evt,
+      image: eventMedia[evt.id] || eventMedia[evt.number] || '',
+    }))
+  }, [eventMedia])
+
   const filteredEvents = useMemo(() => {
-    if (activeCategory === 'All') return PORTFOLIO_EVENTS
-    return PORTFOLIO_EVENTS.filter(
+    if (activeCategory === 'All') return eventsWithMedia
+    return eventsWithMedia.filter(
       (e) => e.category.toLowerCase().includes(activeCategory.toLowerCase()) || activeCategory === 'All'
     )
-  }, [activeCategory])
+  }, [activeCategory, eventsWithMedia])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -38,40 +67,25 @@ export default function EventPortfolioShowcase() {
     restDelta: 0.001,
   })
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (trackRef.current) {
-        const scrollWidth = trackRef.current.scrollWidth
-        const viewportWidth = window.innerWidth
-        const maxScroll = Math.max(0, scrollWidth - viewportWidth)
-        setScrollRange(['0px', `-${maxScroll}px`])
-      }
-    }
-    handleResize()
-    setTimeout(handleResize, 100)
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [filteredEvents])
-
-  const xTranslate = useTransform(smoothProgress, [0, 1], scrollRange)
+  const xTranslate = useTransform(smoothProgress, [0, 1], ['0%', '-86%'])
 
   return (
     <section
       ref={containerRef}
       id="event-portfolio"
-      className="relative h-[250vh] md:h-[480vh] w-full bg-[#081C16] text-white rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 border-t border-[#7ED321]/20"
+      className="relative h-[280vh] w-full bg-[#0D1812] text-white"
       aria-label="Event Portfolio Showcase"
     >
       {/* Pinned Sticky Section during vertical scroll */}
       <div className="sticky top-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden">
 
-        {/* Big centered section title — matches site-wide pattern */}
+        {/* Big centered section title */}
         <div className="pointer-events-none absolute top-16 left-0 right-0 flex justify-center z-20">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-center drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(3.5rem, 10vw, 96px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
-            <span className="text-gradient-mint">EVENTS</span>
+            EVENTS
           </h2>
         </div>
 
@@ -79,9 +93,8 @@ export default function EventPortfolioShowcase() {
         <div className="relative z-10 flex w-full items-center pt-32 sm:pt-36">
           <motion.div
             ref={trackRef}
-            initial={{ x: '0px' }}
             style={{ x: xTranslate, willChange: 'transform' }}
-            className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing w-full"
+            className="flex items-center gap-6 sm:gap-8 px-6 sm:px-12 md:px-16 cursor-grab active:cursor-grabbing"
           >
             {filteredEvents.map((event, index) => (
               <Card

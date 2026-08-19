@@ -6,6 +6,7 @@
 
 import { emitAgentEvent } from '@/lib/events'
 import type { FestContext } from '@/lib/data'
+import { api } from '@/lib/api'
 
 export interface ItinerarySession {
   id: string
@@ -69,8 +70,8 @@ function subscribeEmail(email: string): { message: string; toast: string } {
   existing.push(email)
   localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
   return {
-    message: `Done! ${email} has been added to the E-Summit updates list.`,
-    toast: `✓ ${email} subscribed to E-Summit updates`,
+    message: `Done! ${email} has been added to the PEC Summit updates list.`,
+    toast: `✓ ${email} subscribed to PEC Summit updates`,
   }
 }
 
@@ -199,7 +200,7 @@ function matchIntent(msg: string, ctx: FestContext): Intent {
   if (/(faq|question|how do i|can i|eligible|who can)/i.test(m)) return { type: 'faq_query' }
 
   // General info
-  if (/(what is|about|overview|tell me about|e-summit|ecell)/i.test(m)) return { type: 'general_info' }
+  if (/(what is|about|overview|tell me about|pec summit|ecell)/i.test(m)) return { type: 'general_info' }
 
   return { type: 'unknown' }
 }
@@ -210,9 +211,24 @@ export async function getAgentResponse(
   userMessage: string,
   ctx: FestContext
 ): Promise<AgentResponse> {
-  await new Promise((r) => setTimeout(r, 500 + Math.random() * 300))
-
   const intent = matchIntent(userMessage, ctx)
+
+  // For general queries, try backend RAG first
+  if (intent.type === 'unknown' || intent.type === 'general_info' || intent.type === 'faq_query') {
+    try {
+      const backendRes = await api.chatConcierge(userMessage)
+      if (backendRes && backendRes.answer) {
+        if (backendRes.action && backendRes.action.type === 'scrollToSection' && typeof backendRes.action.payload?.id === 'string') {
+          scrollToSection(backendRes.action.payload.id)
+        }
+        return {
+          text: backendRes.answer,
+        }
+      }
+    } catch {
+      // Backend offline -> fall back to local intent handler
+    }
+  }
 
   switch (intent.type) {
     case 'itinerary': {
@@ -279,7 +295,7 @@ export async function getAgentResponse(
     case 'sponsor_query': {
       scrollToSection('sponsors')
       return {
-        text: `E-Summit is supported by premier partners across Title, Gold, and Silver tiers. Interested in sponsoring? Contact partnerships@ecellpec.in`,
+        text: `PEC Summit is supported by premier partners across Title, Gold, and Silver tiers. Interested in sponsoring? Contact partnerships@ecellpec.in`,
       }
     }
 
@@ -287,7 +303,7 @@ export async function getAgentResponse(
       const email = intent.email
       if (!email) {
         return {
-          text: `Sure! Share your email address and I'll add you to the E-Summit updates list.`,
+          text: `Sure! Share your email address and I'll add you to the PEC Summit updates list.`,
         }
       }
       const result = subscribeEmail(email)
@@ -303,7 +319,7 @@ export async function getAgentResponse(
 
     case 'general_info': {
       return {
-        text: `**E-Summit** is E-Cell PEC's flagship entrepreneurship summit featuring 3,000+ attendees, 40+ speakers, ₹15L+ prize pool, and 2 days of pitches & hackathons. Dates: ${ctx.meta.dates}.`,
+        text: `**PEC Summit** is E-Cell PEC's flagship entrepreneurship summit featuring 3,000+ attendees, 40+ speakers, ₹15L+ prize pool, and 2 days of pitches & hackathons. Dates: ${ctx.meta.dates}.`,
       }
     }
 

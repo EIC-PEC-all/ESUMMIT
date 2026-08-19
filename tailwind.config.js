@@ -4,6 +4,7 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -45,8 +46,8 @@ module.exports = {
         'mono-data': ['var(--font-jetbrains)', 'monospace'],
       },
       animation: {
-        'marquee': 'marquee 32s linear infinite',
-        'marquee2': 'marquee2 32s linear infinite',
+        'marquee': 'marquee 12s linear infinite',
+        'marquee2': 'marquee2 12s linear infinite',
       },
       keyframes: {
         marquee: {

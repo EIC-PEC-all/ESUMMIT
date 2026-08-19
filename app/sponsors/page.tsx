@@ -12,7 +12,6 @@ import { api } from '@/lib/api'
 import type { BackendSponsor } from '@/lib/api-types'
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
-import { TOAST_STYLE } from '@/lib/constants'
 
 export default function SponsorsLandingPage() {
   const [modalOpen, setModalOpen] = useState(false)
@@ -48,7 +47,9 @@ export default function SponsorsLandingPage() {
   const handleSubmitDeck = (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitted(true)
-    toast.success('Sponsorship brochure requested! Our partnerships team will email you.', TOAST_STYLE)
+    toast.success('Sponsorship brochure requested! Our partnerships team will email you.', {
+      style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' },
+    })
   }
 
   return (
@@ -71,13 +72,13 @@ export default function SponsorsLandingPage() {
           </div>
 
           <div className="max-w-3xl">
-            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight">
-              <span className="text-gradient-white">POWERED BY</span> <br />
-              <span className="text-gradient-mint">INDUSTRY LEADERS</span>
+            <h1 className="mb-6 font-display text-3xl sm:text-6xl md:text-7xl font-extrabold leading-[1.05] tracking-tight text-white">
+              POWERED BY <br />
+              <span className="text-mint">INDUSTRY LEADERS</span>
             </h1>
 
             <p className="mb-8 max-w-xl font-body text-lg leading-relaxed text-secondary">
-              E-Summit is brought to life with the generous backing of venture capitals, tech
+              PEC Summit is brought to life with the generous backing of venture capitals, tech
               conglomerates, incubators, and media partners dedicated to fostering student
               innovation.
             </p>
@@ -87,7 +88,7 @@ export default function SponsorsLandingPage() {
                 setModalOpen(true)
                 setSubmitted(false)
               }}
-              className="btn-mint-gradient flex items-center gap-2 px-8 py-3.5 text-sm font-bold cursor-pointer"
+              className="btn-green flex items-center gap-2 px-8 py-3.5 text-sm font-bold"
             >
               <Handshake size={18} />
               Become a Sponsor / Partner
@@ -111,7 +112,7 @@ export default function SponsorsLandingPage() {
               {activeTitle.map((s) => (
                 <div
                   key={s.id}
-                  className="border-[var(--accent-mint)]/30 flex items-center justify-between rounded-2xl border bg-panel p-8 shadow-md hover:border-[var(--accent-mint)]/60 transition-colors"
+                  className="border-[var(--accent-mint)]/30 glow-green flex items-center justify-between rounded-2xl border bg-panel p-8"
                 >
                   <div>
                     <span className="mb-1 block font-mono-data text-[10px] font-bold uppercase text-[var(--accent-mint)]">
@@ -208,17 +209,16 @@ export default function SponsorsLandingPage() {
       {/* Sponsorship Proposal Modal */}
       <AnimatePresence>
         {modalOpen && (
-          <div className="fixed inset-0 z-[12000] flex items-center justify-center p-4 bg-black/85 backdrop-blur-2xl" role="dialog" aria-modal="true" aria-labelledby="sponsor-modal-title">
+          <div className="bg-void/80 fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-lg rounded-3xl border border-mint/30 bg-gradient-to-b from-[#0C1A14] via-[#07120E] to-[#040A08] p-8 shadow-[0_0_100px_rgba(0,0,0,0.95),inset_0_1px_1px_rgba(255,255,255,0.1)]"
+              className="border-[var(--accent-mint)]/40 relative w-full max-w-lg rounded-2xl border bg-panel p-8 shadow-2xl"
             >
               <button
                 onClick={() => setModalOpen(false)}
-                aria-label="Close sponsorship request form"
-                className="absolute right-6 top-6 rounded-lg bg-void p-2 text-muted hover:text-white transition-colors"
+                className="absolute right-6 top-6 rounded-lg bg-void p-2 text-muted hover:text-white"
               >
                 <X size={18} />
               </button>
@@ -227,9 +227,9 @@ export default function SponsorsLandingPage() {
                 <>
                   <div className="mb-6">
                     <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-[var(--accent-mint)]">
-                      Partner With E-Summit
+                      Partner With PEC Summit
                     </span>
-                    <h3 id="sponsor-modal-title" className="mt-1 font-display text-3xl text-white">
+                    <h3 className="mt-1 font-display text-3xl text-white">
                       Request Sponsorship Deck
                     </h3>
                     <p className="mt-1 font-body text-sm text-muted">

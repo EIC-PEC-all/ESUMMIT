@@ -78,16 +78,19 @@ export default function PecLeafletMap({
             <div style="
               width: ${isSelected ? '36px' : '28px'};
               height: ${isSelected ? '36px' : '28px'};
-              background: ${isSelected ? 'var(--accent-mint)' : '#0A110E'};
-              border: 1.5px solid ${isSelected ? '#ffffff' : 'var(--accent-mint)'};
+              border-radius: 50%;
+              background: ${isSelected ? 'var(--accent-mint)' : venue.color || '#059669'};
+              border: 3px solid ${isSelected ? '#ffffff' : 'rgba(255,255,255,0.8)'};
+              box-shadow: 0 4px 14px rgba(0,0,0,0.4);
               display: flex;
               align-items: center;
               justify-content: center;
-              color: ${isSelected ? '#0A110E' : 'var(--accent-mint)'};
+              color: #ffffff;
               font-weight: bold;
+              font-size: 11px;
               transition: all 0.3s ease;
             ">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+              📍
             </div>
           </div>
         `,
@@ -98,9 +101,9 @@ export default function PecLeafletMap({
       const marker = L.marker([venue.lat, venue.lng], { icon: customIcon }).addTo(map)
 
       marker.bindPopup(`
-        <div style="padding: 12px 14px; font-family: 'JetBrains Mono', monospace; background: #0A110E; color: #ffffff;">
-          <h4 style="margin: 0 0 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: var(--accent-mint); letter-spacing: 0.05em;">${venue.name}</h4>
-          <p style="margin: 0; font-size: 10px; color: #94A3B8; text-transform: uppercase;">${venue.description}</p>
+        <div style="padding: 4px; font-family: sans-serif;">
+          <h4 style="margin: 0 0 4px; font-size: 14px; font-weight: bold; color: #0F172A;">${venue.name}</h4>
+          <p style="margin: 0; font-size: 12px; color: #475569;">${venue.description}</p>
         </div>
       `)
 
@@ -140,39 +143,14 @@ export default function PecLeafletMap({
   }, [selectedEvent])
 
   return (
-    <div className="relative w-full h-[520px] sm:h-[600px] lg:h-[640px] rounded-none overflow-hidden border border-border-subtle shadow-none bg-void pec-map-wrapper">
-      <style>{`
-        /* Brutalist Anti-vibecoded Popup Styles for Timeline Map */
-        .pec-map-wrapper .leaflet-popup-content-wrapper {
-          background: #0A110E !important;
-          border-radius: 0px !important;
-          border: 1px solid rgba(126, 211, 33, 0.25) !important;
-          box-shadow: 0 15px 35px -10px rgba(0,0,0,0.9) !important;
-          padding: 0 !important;
-        }
-        .pec-map-wrapper .leaflet-popup-tip {
-          background: #0A110E !important;
-          border-bottom: 1px solid rgba(126, 211, 33, 0.25) !important;
-          border-right: 1px solid rgba(126, 211, 33, 0.25) !important;
-          box-shadow: none !important;
-        }
-        .pec-map-wrapper .leaflet-popup-content {
-          margin: 0 !important;
-        }
-        .pec-map-wrapper .leaflet-popup-close-button {
-          color: #94A3B8 !important;
-          padding: 4px !important;
-          font-family: monospace !important;
-        }
-      `}</style>
-      
+    <div className="relative w-full h-[520px] sm:h-[600px] lg:h-[640px] rounded-3xl overflow-hidden border border-border-subtle shadow-2xl bg-void">
       {/* Map Container */}
       <div ref={mapContainerRef} className="w-full h-full z-10" />
 
       {/* Floating Header Banner */}
-      <div className="absolute top-4 left-4 z-20 px-4 py-3 rounded-none bg-[#0A110E] border-l-4 border-l-mint border-y border-r border-[rgba(255,255,255,0.05)] text-[10px] font-mono-data font-bold text-primary flex items-center gap-3 shadow-[0_15px_30px_-10px_rgba(0,0,0,1)] uppercase tracking-wider">
-        <span className="w-2.5 h-2.5 bg-mint animate-pulse" />
-        <span>PEC Campus Map — Sector 12</span>
+      <div className="absolute top-4 left-4 z-20 px-4 py-2 rounded-xl bg-panel/90 border border-border-subtle backdrop-blur-md text-xs font-mono-data font-bold text-primary flex items-center gap-2 shadow-lg">
+        <span className="w-2.5 h-2.5 rounded-full bg-mint animate-pulse" />
+        <span>PEC Campus Map — Sector 12, Chandigarh</span>
       </div>
 
       {/* Floating Reset Button */}
@@ -181,9 +159,9 @@ export default function PecLeafletMap({
           onSelectEvent(null)
           mapInstanceRef.current?.flyTo(PEC_CENTER, 16)
         }}
-        className="absolute bottom-4 right-4 z-20 px-4 py-2.5 rounded-none bg-[#0A110E] border border-[rgba(255,255,255,0.05)] text-[10px] font-mono-data font-bold text-secondary hover:text-mint hover:border-mint/50 transition-colors shadow-[0_15px_30px_-10px_rgba(0,0,0,1)] uppercase tracking-wider"
+        className="absolute bottom-4 right-4 z-20 px-3 py-2 rounded-xl bg-panel/90 border border-border-subtle text-xs font-mono-data font-bold text-secondary hover:text-mint transition-colors shadow-lg"
       >
-        [ Reset Center ]
+        Reset Center
       </button>
     </div>
   )

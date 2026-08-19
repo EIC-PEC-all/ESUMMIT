@@ -20,38 +20,54 @@ import {
   Sparkles,
   CheckCircle2,
   ChevronRight,
+  Loader2,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Image from 'next/image'
 import Link from 'next/link'
 import DynamicWeightHeading from '../DynamicWeightHeading'
+import CircuitBoard from '../Hero/CircuitBoard'
 import { ScrollGradientFill, GlitchText } from '@/components/Common/TextAnims'
 import StackedSlicedText from '@/components/ui/StackedSlicedText'
 import { FEST_META } from '@/lib/data'
-import { TOAST_STYLE } from '@/lib/constants'
+import { api, ApiError } from '@/lib/api'
 
 function EmailCapture() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
-      toast.error('Please enter a valid email address.', TOAST_STYLE)
+      toast.error('Please enter a valid email address.', {
+        style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' },
+      })
       return
     }
+
+    setIsSubmitting(true)
     try {
-      const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
-      if (!existing.includes(email)) {
-        existing.push(email)
-        localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
-      }
-    } catch {
-      // non-critical — continue
+      const res = await api.subscribe(email)
+      setSubmitted(true)
+      toast.success(res.message || `${email} — you're on the list!`, {
+        duration: 4000,
+        style: {
+          background: '#0A110E',
+          color: '#FFFFFF',
+          border: '1px solid var(--accent-mint)',
+        },
+        iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
+      })
+    } catch (err) {
+      toast.error(
+        err instanceof ApiError ? err.message : 'Could not subscribe right now. Please try again.',
+        { style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' } },
+      )
+    } finally {
+      setIsSubmitting(false)
     }
-    setSubmitted(true)
-    toast.success(`${email} — you're on the list!`, { ...TOAST_STYLE, duration: 4000 })
   }
 
   if (submitted) {
@@ -86,17 +102,25 @@ function EmailCapture() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 rounded-xl border border-[var(--accent-mint)]/30 bg-[#1E2B12] px-4 py-3 font-body text-sm text-white outline-none placeholder:text-gray-500 focus:border-[var(--accent-mint)]/60 transition-colors"
-        aria-label="Enter your email to get E-Summit updates"
+        disabled={isSubmitting}
+        className="flex-1 rounded-xl border border-[#4E6527]/60 bg-[#1E2B12] px-4 py-3 font-body text-sm text-white outline-none placeholder:text-gray-400 focus:border-[#C8E696] disabled:opacity-60"
+        aria-label="Enter your email to get PEC Summit updates"
       />
       <button
         type="submit"
-        className="btn-green shrink-0"
+        disabled={isSubmitting}
+        className="btn-green shrink-0 disabled:opacity-60"
         id="footer-subscribe-btn"
-        aria-label="Subscribe to E-Summit updates"
+        aria-label="Subscribe to PEC Summit updates"
       >
-        Get Updates
-        <ArrowRight size={16} aria-hidden="true" />
+        {isSubmitting ? (
+          <Loader2 size={16} aria-hidden="true" className="animate-spin" />
+        ) : (
+          <>
+            Get Updates
+            <ArrowRight size={16} aria-hidden="true" />
+          </>
+        )}
       </button>
     </form>
   )
@@ -128,12 +152,12 @@ export function RegisterCTA() {
       className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#081C16] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#7ED321]/20 pt-28 pb-44 sm:pt-36 sm:pb-56 md:pb-64"
       aria-labelledby="footer-cta-heading"
     >
-      {/* Pure lime radial wash — no off-brand purple */}
+      {/* ── Lightweight Hardware-Accelerated Radial Mesh Glow (NO CPU Blur Filter) ── */}
       <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-30"
+        className="pointer-events-none absolute inset-0 z-0 opacity-40"
         style={{
           background:
-            'radial-gradient(circle at 50% 50%, rgba(181, 242, 61, 0.10) 0%, transparent 65%)',
+            'radial-gradient(circle at 50% 50%, rgba(126, 211, 33, 0.12) 0%, rgba(124, 58, 237, 0.08) 45%, transparent 70%)',
         }}
       />
 
@@ -149,13 +173,31 @@ export function RegisterCTA() {
           boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15)',
         }}
       >
-        <div className="h-full w-full rounded-[24px] border border-white/10 bg-[#040705] relative overflow-hidden flex items-center justify-center gap-4">
-          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#B5F23D_1px,transparent_1px)] [background-size:16px_16px]" />
-          <div className="h-20 w-20 rounded-2xl border border-mint/20 bg-mint/5" />
-          <div className="h-28 w-28 rounded-full border border-mint/15 bg-mint/[0.04]" />
+        <div className="h-full w-full rounded-[24px] border border-white/10 bg-[#040705] relative overflow-hidden flex items-center justify-center">
+          <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#7ED321_1px,transparent_1px)] [background-size:16px_16px]" />
+          <div className="h-28 w-28 rounded-full border border-[#7ED321]/30 bg-[#7ED321]/10" />
+          <div className="h-16 w-16 rounded-2xl border border-white/20 bg-white/5" />
         </div>
       </motion.div>
 
+      {/* ── Right 3D Perspective Geometric Glass Panel (Steep 3D Tilt) ──────────── */}
+      <motion.div
+        initial={{ opacity: 0, x: 220, rotateY: -42, rotateX: 12, rotateZ: 8, scale: 0.8 }}
+        whileInView={{ opacity: 1, x: 0, rotateY: -28, rotateX: 6, rotateZ: 4, scale: 0.9 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-none absolute -right-16 top-1/2 -translate-y-1/2 hidden xl:block w-[420px] h-[280px] rounded-[36px] border border-white/20 p-6 shadow-2xl z-0 will-change-transform"
+        style={{
+          transformStyle: 'preserve-3d',
+          background: 'linear-gradient(145deg, rgba(124,58,237,0.2) 0%, rgba(244,63,94,0.15) 50%, rgba(7,11,8,0.9) 100%)',
+          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.15)',
+        }}
+      >
+        <div className="h-full w-full rounded-[24px] border border-white/15 bg-black/60 relative overflow-hidden flex items-center justify-center">
+          <div className="h-32 w-32 rounded-full border border-purple-500/30 bg-purple-500/15" />
+          <div className="h-20 w-20 rounded-full border border-pink-400/30 bg-pink-400/10" />
+        </div>
+      </motion.div>
 
       {/* ── Center Content Block ──────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
@@ -166,13 +208,21 @@ export function RegisterCTA() {
           transition={{ duration: 0.5 }}
           className="flex flex-col items-center text-center"
         >
+          {/* Top Pill Badge */}
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-5 py-2">
+            <Sparkles size={14} className="text-yellow-400" />
+            <span className="font-mono-data text-xs font-bold uppercase tracking-widest text-white">
+              PEC SUMMIT 2026 • MARCH 15-16
+            </span>
+          </div>
+
           {/* Main Headline */}
           <h2
             id="footer-cta-heading"
-            className="mb-6 font-display font-black uppercase text-center leading-none tracking-tight"
-            style={{ fontSize: 'clamp(3rem, 12vw, 120px)' }}
+            className="mb-6 font-display font-black uppercase text-center text-mint leading-none tracking-tight drop-shadow-lg"
+            style={{ fontSize: 'clamp(3.5rem, 14vw, 180px)' }}
           >
-            <span className="text-gradient-mint">REGISTER</span>
+            REGISTER
           </h2>
 
           {/* Subtitle */}
@@ -184,9 +234,9 @@ export function RegisterCTA() {
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/passes"
-              className="btn-mint-gradient flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105"
+              className="btn-green flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-xl transition-transform hover:scale-105"
               id="footer-register-btn"
-              aria-label="Claim Delegate Pass for E-Summit"
+              aria-label="Claim Delegate Pass for PEC Summit"
             >
               <span>Claim Delegate Pass</span>
               <ArrowRight size={18} aria-hidden="true" />
@@ -194,7 +244,7 @@ export function RegisterCTA() {
 
             <Link
               href="/passes"
-              className="btn-dark-gradient flex items-center justify-center rounded-full px-8 py-4 text-base font-bold text-white transition-transform hover:scale-105"
+              className="flex items-center justify-center rounded-full border border-white/30 bg-white/5 px-8 py-4 text-base font-bold text-white transition-colors hover:bg-white/15 hover:border-white"
               id="footer-schedule-btn"
               aria-label="Explore Full Summit Schedule"
             >
@@ -209,7 +259,7 @@ export function RegisterCTA() {
 
 export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
   return (
-    <footer id="footer" className="w-full bg-[#0D2420]">
+    <footer className="w-full bg-[#0D2420]">
       {!hideCTA && <RegisterCTA />}
 
       {/* Corporate EIC / PEC Footer */}
@@ -233,7 +283,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   rel="noopener noreferrer"
                   aria-label={label}
                   role="listitem"
-                  className="border-mint/30 flex h-11 w-11 items-center justify-center rounded-xl border bg-[#07130F] text-white shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
+                  className="border-mint/30 flex h-10 w-10 items-center justify-center rounded-xl border bg-[#07130F] text-white shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
                 >
                   <Icon size={18} aria-hidden="true" strokeWidth={1.5} />
                 </a>
@@ -278,7 +328,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="inline-block py-2 sm:py-1 font-body text-sm font-medium text-gray-200 transition-colors hover:text-mint"
+                      className="font-body text-sm font-medium text-gray-200 transition-colors hover:text-mint"
                     >
                       {link.label}
                     </a>
@@ -287,45 +337,44 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
               </ul>
             </div>
 
-            {/* Column 4: Contact & Team Leadership */}
+            {/* Column 4: Contact */}
             <div>
               <h4 className="mb-6 font-display text-xl font-bold uppercase tracking-wider text-white">
-                Contact Us
+                Contact
               </h4>
-              
-              {/* Address */}
-              <div className="mb-6">
-                <span className="font-body text-xs font-bold uppercase tracking-wider text-mint block mb-1">Visit Us At</span>
-                <p className="font-body text-xs leading-relaxed text-gray-300">
-                  Entrepreneurship & Incubation Cell - Incubator (Near Siemens Lab), Punjab Engineering College, Sector-12 (160012), Chandigarh
-                </p>
-              </div>
+              <p className="mb-6 font-body text-sm leading-relaxed text-gray-300">
+                Entrepreneurship and Incubation Cell, Punjab Engineering College, Chandigarh 160012
+              </p>
 
-              {/* Faculty Coordinators */}
-              <div className="mb-4 space-y-2">
-                <span className="font-body text-xs font-bold uppercase tracking-wider text-mint block">Faculty Coordinators</span>
-                <div className="text-xs text-gray-200">
-                  <p><strong className="text-white">Dr. Simranjit Singh:</strong> <a href="tel:+919872552898" className="hover:text-mint">+91 98725 52898</a></p>
-                  <p><strong className="text-white">Dr. Sudesh Rani:</strong> <a href="tel:+919876860085" className="hover:text-mint">+91 98768 60085</a></p>
+              <div className="space-y-4">
+                <div>
+                  <div className="mb-1 flex items-center gap-2">
+                    <Briefcase size={16} className="shrink-0 text-mint" />
+                    <span className="font-body text-sm font-bold text-mint">
+                      For Queries And Collaboration
+                    </span>
+                  </div>
+                  <a
+                    href="mailto:eicpec@pec.edu.in"
+                    className="block pl-6 font-body text-sm font-medium text-gray-200 hover:text-mint hover:underline"
+                  >
+                    eicpec@pec.edu.in
+                  </a>
                 </div>
-              </div>
-
-              {/* Student Leadership */}
-              <div className="mb-4 space-y-2">
-                <span className="font-body text-xs font-bold uppercase tracking-wider text-mint block">Student Conveners</span>
-                <div className="text-xs text-gray-200 space-y-1">
-                  <p><strong className="text-white">Simarpreet Kaur (Convener):</strong> <a href="tel:+918427146574" className="hover:text-mint">+91 84271 46574</a></p>
-                  <p><strong className="text-white">Shubham Mangal (Co-convener):</strong> <a href="tel:+917834975811" className="hover:text-mint">+91 78349 75811</a></p>
-                  <p><strong className="text-white">Vedansh Singh (Co-convener):</strong> <a href="tel:+918826873264" className="hover:text-mint">+91 88268 73264</a></p>
-                  <p><strong className="text-white">Japneet Pathania (Marketing):</strong> <a href="tel:+918544918700" className="hover:text-mint">+91 85449 18700</a></p>
+                <div>
+                  <div className="mb-1 flex items-center gap-2">
+                    <Phone size={16} className="shrink-0 text-mint" />
+                    <span className="font-body text-sm font-bold text-mint">
+                      For General Contact
+                    </span>
+                  </div>
+                  <a
+                    href="mailto:info@ecellpec.in"
+                    className="block pl-6 font-body text-sm font-medium text-gray-200 hover:text-mint hover:underline"
+                  >
+                    info@ecellpec.in
+                  </a>
                 </div>
-              </div>
-
-              {/* Email Links */}
-              <div className="pt-2 border-t border-white/10 space-y-1">
-                <span className="font-body text-xs font-bold uppercase tracking-wider text-mint block mb-1">Emails</span>
-                <a href="mailto:eicpec@pec.edu.in" className="block text-xs text-gray-300 hover:text-mint hover:underline">eicpec@pec.edu.in</a>
-                <a href="mailto:esummitpr.pec@gmail.com" className="block text-xs text-gray-300 hover:text-mint hover:underline">esummitpr.pec@gmail.com</a>
               </div>
             </div>
           </div>

@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Zap } from 'lucide-react'
 import { FAQS } from '@/lib/data'
+import CircuitBoard from '../Hero/CircuitBoard'
 
 function FAQItem({ faq, isOpen, onToggle }: {
   faq: typeof FAQS[0]
@@ -14,7 +15,7 @@ function FAQItem({ faq, isOpen, onToggle }: {
 }) {
   return (
     <div
-      className="mb-4 rounded-2xl overflow-hidden transition-colors duration-300 bg-white/[0.03] border border-white/10 hover:border-white/[0.18]"
+      className="mb-4 rounded-2xl overflow-hidden transition-all duration-300 bg-[#07130F] border border-[#193B2F] hover:border-mint/50 shadow-md hover:scale-[1.01]"
     >
       <button
         id={`faq-btn-${faq.id}`}
@@ -78,10 +79,10 @@ export default function FAQ() {
         <div className="mb-12 flex flex-col items-center justify-center text-center">
           <h2
             id="faq-heading"
-            className="font-display font-black uppercase leading-none tracking-tight text-center mb-4"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center text-mint mb-4"
+            style={{ fontSize: 'clamp(3.5rem, 12vw, 160px)' }}
           >
-            <span className="text-gradient-mint">FAQ</span>
+            FAQ
           </h2>
           <p className="font-body text-sm sm:text-base leading-relaxed text-gray-300 max-w-lg">
             If you don&apos;t find your answer here, our Concierge agent (bottom right) can assist — or email us directly at{' '}

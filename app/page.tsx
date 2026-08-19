@@ -10,24 +10,24 @@ import LimeTransitionBanner from '@/components/Common/LimeTransitionBanner'
 import LimeEdgeMasks from '@/components/Common/LimeEdgeMasks'
 
 const ScrollExpandLoader = dynamic(() => import('@/components/Common/ScrollExpandLoader'), { ssr: false })
+
 const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), { ssr: false })
 const EventPortfolioShowcase = dynamic(() => import('@/components/EventPortfolio'), { ssr: false })
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), { ssr: false })
 const Sponsors = dynamic(() => import('@/components/Sponsors'))
 const FAQ = dynamic(() => import('@/components/FAQ'))
 const Alumni = dynamic(() => import('@/components/Alumni'))
+const Concierge = dynamic(() => import('@/components/Concierge'), { ssr: false })
 const Footer = dynamic(() => import('@/components/Footer'))
 const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.RegisterCTA))
-
-import { TOAST_STYLE } from '@/lib/constants'
 
 export default function Home() {
   return (
     <main id="main-content" className="bg-void overflow-x-clip" suppressHydrationWarning>
-      {/* Vantage Initial Page Loader */}
+      {/* Vantage Initial Page Loader (Auto Expands & Unmounts after 3.5s) */}
       <ScrollExpandLoader />
 
-      {/* Fixed Page Top & Bottom Boundary Edge Masks */}
+      {/* ── Fixed Page Top & Bottom Boundary-to-Center Lime Tinted Edge Masks ── */}
       <LimeEdgeMasks />
 
       <Toaster
@@ -35,49 +35,59 @@ export default function Home() {
         gutter={8}
         toastOptions={{
           duration: 4000,
-          style: TOAST_STYLE.style,
+          style: {
+            fontSize: '0.875rem',
+            background: '#0A110E',
+            color: '#FFFFFF',
+            border: '1px solid rgba(126, 211, 33, 0.2)',
+          },
         }}
       />
 
       {/* Navigation */}
       <Nav />
 
-      {/* ── 1. HERO — Grand Entrance & Frame Scrubbing ── */}
+      {/* ── 1. NewHero 60fps Frame Scrubbing (100% Original & Untouched) ── */}
       <NewHero />
 
-      {/* ── 2. LIME TRANSITION BANNER & FLIPFLOP MARQUEE — Immediately after Hero ── */}
-      <LimeTransitionBanner />
+      {/* ── 2. Strip Collapse Transition Revealing Marquee Gallery ───── */}
       <FlipFlopTransition />
 
-      {/* ── 3. ABOUT — Mission, vision & core pillars ── */}
+      {/* ── 3. About — char-by-char reveal + 3D decor ───────────────────── */}
       <EsummitAbout />
 
-      {/* ── 4. COMPETITIONS & TRACKS — Event portfolio ── */}
-      <EventPortfolioShowcase />
-
-      {/* ── 5. SPEAKERS — Keynote guests ── */}
-      <EsummitHighlights />
-
-      {/* ── 6. MASONRY GALLERY — 5-column vertical scroll gallery kept in place ── */}
+      {/* ── 3b. React Bits Masonry — 2x Viewport Height Scroll Parallax ───── */}
       <MasonryShowcase />
 
-      {/* ── 7. VIDEO SCRUBBER — Market surge video ── */}
+      {/* ── Lime Transition Banner before Highlights ────────────────────── */}
+      <LimeTransitionBanner />
+
+      {/* ── 4. Timeline / Highlights — sticky card stack, dark bg ─────────── */}
+      <EsummitHighlights />
+
+      {/* ── Trionn-inspired Event Portfolio Horizontal Showcase ──────────── */}
+      <EventPortfolioShowcase />
+
+      {/* ── 5. Market Surge Video Showcase (vdo2 frame scrubber) ───────── */}
       <Vdo2Showcase />
 
-      {/* ── 8. ALUMNI — Wall of fame ── */}
+      {/* ── 6. Alumni — horizontal scroll with PixelTransition ───────────── */}
       <Alumni />
 
-      {/* ── 9. SPONSORS — Ecosystem & title partners ── */}
+      {/* ── 10. Sponsors marquee ─────────────────────────────────────────── */}
       <Sponsors />
 
-      {/* ── 10. REGISTER CTA — Conversion banner ── */}
+      {/* ── 11. Register CTA ────────────────────────────────────────────── */}
       <RegisterCTA />
 
-      {/* ── 11. FAQ — Attendee questions ── */}
+      {/* ── 12. FAQ accordion ───────────────────────────────────────────── */}
       <FAQ />
 
-      {/* ── 12. FOOTER ── */}
+      {/* ── 13. Corporate EIC Footer ────────────────────────────────────── */}
       <Footer hideCTA={true} />
+
+      {/* ── 14. AI Concierge (floating) ─────────────────────────────────── */}
+      <Concierge />
     </main>
   )
 }
