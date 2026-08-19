@@ -41,7 +41,6 @@ export default function AnimatedText({ text, className, style }: AnimatedTextPro
             <motion.span
               aria-hidden
               className="absolute inset-0"
-              initial={{ opacity: 0.2 }}
               style={{ opacity }}
             >
               {char}

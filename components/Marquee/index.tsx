@@ -18,7 +18,7 @@ export default function Marquee() {
       <div className="mb-3 flex items-center justify-center gap-2">
         <Zap size={12} className="fill-[var(--accent-mint)] text-[var(--accent-mint)]" />
         <span className="font-mono-data text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--accent-mint)]">
-          Summit Partners &amp; Sponsors
+          Official Partners &amp; Ecosystem
         </span>
       </div>
 

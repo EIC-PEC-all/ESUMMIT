@@ -108,11 +108,11 @@ function makeWelcomeMessage(id: string): ChatMessage {
     role: 'assistant',
     content: `Hey! I'm the **E-Summit PEC 2026 Official Assistant** (E-Cell PEC). I can help you with:
 
-- **Schedule & Itineraries** — Build personalized day plans
-- **Speakers** — Info on confirmed speakers
-- **Campus Navigation** — Walking routes to any venue
-- **13 Additional Activities** — Workshops, Job Fair, IPL Auction, Treasure Hunt, and more
-- **FAQs** — Tickets, venue, eligibility, accommodations
+🗓️ **Schedule & Itineraries** — Build personalized day plans
+🎤 **Speakers** — Info on confirmed speakers
+🗺️ **Campus Navigation** — Walking routes to any venue
+🎪 **13 Additional Activities** — Workshops, Job Fair, IPL Auction, Treasure Hunt, and more
+❓ **FAQs** — Tickets, venue, eligibility, accommodations
 
 I only answer questions about E-Summit PEC 2026. What would you like to know?`,
     timestamp: new Date(),

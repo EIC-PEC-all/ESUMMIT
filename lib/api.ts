@@ -41,45 +41,30 @@ interface ApiFetchOptions extends Omit<RequestInit, 'body'> {
   /** Auto-stringified and sent with a JSON content-type. */
   json?: unknown
   body?: BodyInit
-  /** Request timeout in ms (defaults to 15000ms). */
-  timeoutMs?: number
 }
 
 export async function apiFetch<T>(
   path: string,
   opts: ApiFetchOptions = {},
 ): Promise<T> {
-  const { accessToken, json, headers, timeoutMs = 15000, signal, ...rest } = opts
+  const { accessToken, json, headers, ...rest } = opts
 
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs)
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...rest,
+    headers: {
+      ...(json !== undefined ? { 'Content-Type': 'application/json' } : {}),
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+      ...headers,
+    },
+    body: json !== undefined ? JSON.stringify(json) : rest.body,
+  })
 
-  // Merge caller's signal with our timeout signal if provided
-  if (signal) {
-    signal.addEventListener('abort', () => controller.abort())
-  }
+  const payload = res.headers.get('content-type')?.includes('application/json')
+    ? await res.json().catch(() => null)
+    : null
 
-  try {
-    const res = await fetch(`${API_BASE}${path}`, {
-      ...rest,
-      signal: controller.signal,
-      headers: {
-        ...(json !== undefined ? { 'Content-Type': 'application/json' } : {}),
-        ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-        ...headers,
-      },
-      body: json !== undefined ? JSON.stringify(json) : rest.body,
-    })
-
-    const payload = res.headers.get('content-type')?.includes('application/json')
-      ? await res.json().catch(() => null)
-      : null
-
-    if (!res.ok) throw new ApiError(res.status, payload)
-    return payload as T
-  } finally {
-    clearTimeout(timeoutId)
-  }
+  if (!res.ok) throw new ApiError(res.status, payload)
+  return payload as T
 }
 
 export const api = {
@@ -126,5 +111,51 @@ export const api = {
     apiFetch<SubscribeResponse>('/subscribers', {
       method: 'POST',
       json: { email },
+    }),
+
+  // ── Teams & Competitions ──
+  createTeam: (dto: import('./api-types').CreateTeamDto, accessToken: string) =>
+    apiFetch<import('./api-types').Team>('/teams/create', {
+      method: 'POST',
+      accessToken,
+      json: dto,
+    }),
+
+  joinTeam: (dto: import('./api-types').JoinTeamDto, accessToken: string) =>
+    apiFetch<import('./api-types').Team>('/teams/join', {
+      method: 'POST',
+      accessToken,
+      json: dto,
+    }),
+
+  getMyTeams: (accessToken: string) =>
+    apiFetch<import('./api-types').Team[]>('/teams/my-teams', {
+      accessToken,
+    }),
+
+  getLeaderboard: (type: import('./api-types').CompetitionType) =>
+    apiFetch<import('./api-types').Team[]>(`/teams/leaderboard/${type}`),
+
+  getTeam: (teamId: string, accessToken?: string) =>
+    apiFetch<import('./api-types').Team>(`/teams/${teamId}`, {
+      accessToken,
+    }),
+
+  submitProject: (
+    teamId: string,
+    dto: import('./api-types').SubmitProjectDto,
+    accessToken: string,
+  ) =>
+    apiFetch<import('./api-types').Submission>(`/teams/${teamId}/submit`, {
+      method: 'POST',
+      accessToken,
+      json: dto,
+    }),
+
+  // ── Concierge ──
+  chatConcierge: (message: string, history?: Array<{ role: string; content: string }>) =>
+    apiFetch<import('./api-types').ConciergeChatResponse>('/concierge/chat', {
+      method: 'POST',
+      json: { message, history: history || [] },
     }),
 }

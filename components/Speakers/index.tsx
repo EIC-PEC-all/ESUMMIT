@@ -245,7 +245,7 @@ function TiltWheel() {
         style={{ textAlign: 'center' }}
       >
         <p className="mb-2 font-mono-data text-[10px] font-bold uppercase tracking-[0.25em] text-[#7ED321] opacity-70">
-          Drag to explore
+          ⚡ Drag to explore
         </p>
         <h2
           className="text-stroke-green select-none font-display font-black uppercase leading-none"
@@ -292,6 +292,12 @@ export default function Speakers() {
           transition={{ duration: 0.7 }}
         >
           <div>
+            <div className="mb-3 flex items-center gap-2">
+              <Zap size={14} className="fill-[#7ED321] text-[#7ED321]" />
+              <p className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-[#7ED321]">
+                Keynote Speakers &amp; Panelists
+              </p>
+            </div>
             <h2
               id="speakers-heading"
               className="font-display leading-none"

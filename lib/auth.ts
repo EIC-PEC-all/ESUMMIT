@@ -77,7 +77,6 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
 }
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET || 'pec_esummit_production_session_signing_secret_2026',
   session: { strategy: 'jwt' },
   pages: { signIn: '/account' },
   providers: [

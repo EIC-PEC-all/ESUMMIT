@@ -167,6 +167,12 @@ export default function Tracks() {
           transition={{ duration: 0.7 }}
         >
           <div>
+            <div className="mb-3 flex items-center gap-2">
+              <Zap size={14} className="fill-[var(--accent-mint)] text-[var(--accent-mint)]" />
+              <p className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-[var(--accent-mint)]">
+                Capital &amp; Innovation Agenda
+              </p>
+            </div>
             <h2
               id="tracks-heading"
               className="font-display text-4xl font-black uppercase leading-none text-primary sm:text-6xl"

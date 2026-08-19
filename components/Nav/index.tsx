@@ -13,13 +13,13 @@ import Magnetic from '@/components/Common/Magnetic'
 
 const NAV_ITEMS = [
   { label: 'HOME', code: '01', href: '/', sectionId: null },
-  { label: 'ABOUT', code: '02', href: '/#esummit-about', sectionId: 'esummit-about' },
-  { label: 'EVENTS', code: '03', href: '/#event-portfolio', sectionId: 'event-portfolio' },
-  { label: 'ALUMNI', code: '04', href: '/#alumni', sectionId: 'alumni' },
-  { label: 'SPEAKERS', code: '05', href: '/speakers', sectionId: null },
-  { label: 'SPONSORS', code: '06', href: '/#sponsors', sectionId: 'sponsors' },
-  { label: 'FAQ', code: '07', href: '/#faq', sectionId: 'faq' },
-  { label: 'REGISTER', code: '08', href: '/register', sectionId: null },
+  { label: 'PORTFOLIO', code: '02', href: '/portfolio', sectionId: 'event-portfolio' },
+  { label: 'PASSES', code: '03', href: '/passes', sectionId: null },
+  { label: 'TRACKS', code: '04', href: '/tracks', sectionId: 'tracks' },
+  { label: 'SPEAKERS', code: '05', href: '/speakers', sectionId: 'speakers' },
+  { label: 'SCHEDULE', code: '06', href: '/schedule', sectionId: 'schedule' },
+  { label: 'SPONSORS', code: '07', href: '/sponsors', sectionId: 'sponsors' },
+  { label: 'FAQ', code: '08', href: '/faq', sectionId: 'faq' },
 ]
 
 const SPONSOR_ITEMS = [
@@ -34,7 +34,12 @@ function NavCountdown({ targetISO }: { targetISO: string }) {
   const [isLive, setIsLive] = useState(false)
 
   useEffect(() => {
-    const target = new Date(targetISO)
+    let target = new Date(targetISO)
+    const now = Date.now()
+
+    if (target.getTime() <= now) {
+      target = new Date('2027-03-15T09:00:00+05:30')
+    }
 
     const checkState = () => {
       const curNow = Date.now()
@@ -71,12 +76,12 @@ function NavCountdown({ targetISO }: { targetISO: string }) {
 
   if (isLive) {
     return (
-      <div className="flex items-center gap-1.5 text-mint select-none uppercase tracking-widest text-[9px] sm:text-xs">
+      <div className="flex items-center gap-1.5 text-black select-none uppercase tracking-widest text-[9px] sm:text-xs">
         <span className="relative flex h-2 w-2 shrink-0">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7ED321] opacity-75" />
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-[#7ED321]" />
         </span>
-        <span className="font-extrabold text-mint drop-shadow-[0_0_8px_rgba(0, 229, 153,0.8)]">LIVE</span>
+        <span className="font-extrabold text-black">LIVE</span>
       </div>
     )
   }
@@ -84,7 +89,7 @@ function NavCountdown({ targetISO }: { targetISO: string }) {
   if (!timeLeft) return <span className="opacity-0">--:--:--</span>
 
   return (
-    <span className="font-mono-data text-[9px] sm:text-[11px] tracking-wider text-mint font-extrabold tabular-nums select-none uppercase whitespace-nowrap drop-shadow-[0_0_8px_rgba(0, 229, 153,0.5)]">
+    <span className="font-mono-data text-[9px] sm:text-[11px] tracking-wider text-black font-extrabold tabular-nums select-none uppercase whitespace-nowrap">
       {timeLeft.days}D : {timeLeft.hours}H : {timeLeft.minutes}M : {timeLeft.seconds}S
     </span>
   )
@@ -105,9 +110,7 @@ export default function Nav() {
     return pathname === '/'
   })
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  // Listen to loader and modal state updates
+  // Listen to loader state updates
   useEffect(() => {
     const checkState = () => {
       if (typeof window !== 'undefined') {
@@ -124,52 +127,8 @@ export default function Nav() {
     }
 
     window.addEventListener('scroll-loader-state', handleLoaderState)
-
-    const observer = new MutationObserver(() => {
-      setIsModalOpen(document.body.classList.contains('modal-open'))
-      checkState()
-    })
-    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] })
-
     return () => {
       window.removeEventListener('scroll-loader-state', handleLoaderState)
-      observer.disconnect()
-    }
-  }, [])
-
-  const [planCount, setPlanCount] = useState<number>(0)
-
-  // Track personal itinerary plan items count
-  useEffect(() => {
-    const updateCount = () => {
-      try {
-        const saved = localStorage.getItem('pec_summit_my_plan')
-        if (saved) {
-          const parsed = JSON.parse(saved)
-          setPlanCount(Array.isArray(parsed) ? parsed.length : 0)
-        } else {
-          setPlanCount(0)
-        }
-      } catch {
-        setPlanCount(0)
-      }
-    }
-
-    updateCount()
-    const handlePlanUpdated = (e: Event) => {
-      const custom = e as CustomEvent<number>
-      if (typeof custom.detail === 'number') {
-        setPlanCount(custom.detail)
-      } else {
-        updateCount()
-      }
-    }
-
-    window.addEventListener('pec_plan_updated', handlePlanUpdated)
-    window.addEventListener('storage', updateCount)
-    return () => {
-      window.removeEventListener('pec_plan_updated', handlePlanUpdated)
-      window.removeEventListener('storage', updateCount)
     }
   }, [])
 
@@ -232,18 +191,11 @@ export default function Nav() {
     }
   }, [menuOpen])
 
-  const headerButtonRef = useRef<HTMLButtonElement>(null)
-
   // Click-outside drawer listener
   useEffect(() => {
     if (!menuOpen) return
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        drawerRef.current &&
-        !drawerRef.current.contains(e.target as Node) &&
-        headerButtonRef.current &&
-        !headerButtonRef.current.contains(e.target as Node)
-      ) {
+      if (drawerRef.current && !drawerRef.current.contains(e.target as Node)) {
         setMenuOpen(false)
       }
     }
@@ -261,98 +213,70 @@ export default function Nav() {
     return () => document.removeEventListener('keydown', handleEscape)
   }, [menuOpen])
 
-  // Handle cross-page hash navigation on mount / route change
-  useEffect(() => {
-    if (pathname === '/' && typeof window !== 'undefined' && window.location.hash) {
-      const hashId = window.location.hash.replace('#', '')
-      if (hashId) {
-        const timer = setTimeout(() => {
-          const el = document.getElementById(hashId)
-          if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          }
-        }, 400)
-        return () => clearTimeout(timer)
-      }
-    }
-  }, [pathname])
-
   const handleItemClick = (e: React.MouseEvent<HTMLAnchorElement>, item: typeof NAV_ITEMS[0]) => {
-    setMenuOpen(false)
-    document.body.classList.remove('drawer-open')
-
-    if (item.label === 'HOME' && pathname === '/') {
-      e.preventDefault()
-      window.dispatchEvent(new CustomEvent('trigger-chevron-transition', { detail: { targetTop: true } }))
-      return
-    }
-
     if (pathname === '/' && item.sectionId) {
       e.preventDefault()
-      window.dispatchEvent(new CustomEvent('trigger-chevron-transition', { detail: { targetId: item.sectionId } }))
-      return
+      setMenuOpen(false)
+      const el = document.getElementById(item.sectionId)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    } else {
+      setMenuOpen(false)
     }
   }
 
-  const showHeader = !isLoaderActive && !isModalOpen && (!scrolled || scrollDirection === 'up' || menuOpen)
-  const showTopMarquee = !isLoaderActive && !isModalOpen && scrolled && scrollDirection === 'down' && !menuOpen
-  const showBottomMarquee = !isLoaderActive && !isModalOpen && (!scrolled || scrollDirection === 'up' || menuOpen)
-
-  if (pathname === '/register' || pathname === '/speakers') return null
+  const showHeader = !isLoaderActive && (!scrolled || scrollDirection === 'up' || menuOpen)
+  const showTopMarquee = !isLoaderActive && scrolled && scrollDirection === 'down' && !menuOpen
+  const showBottomMarquee = !isLoaderActive && (!scrolled || scrollDirection === 'up' || menuOpen)
 
   return (
     <>
       <header
         className={`fixed z-[2500] transition-all duration-500 ease-out 
-          top-2 left-1/2 w-[calc(100%-1rem)] max-w-7xl rounded-full sm:top-4 sm:w-[calc(100%-2rem)] 
+          top-0 left-0 right-0 w-full rounded-none
+          lg:top-4 lg:left-1/2 lg:w-[calc(100%-3rem)] lg:max-w-7xl lg:rounded-full
           bg-[#0A110E]/90 text-white backdrop-blur-2xl shadow-2xl border border-white/20
           ${showHeader ? 'translate-y-0 opacity-100' : '-translate-y-[150%] opacity-0 pointer-events-none'} 
-          ${menuOpen 
-            ? 'lg:w-[calc(100%-380px-3rem)] -translate-x-1/2 lg:-translate-x-[calc(50%+190px)]' 
-            : 'lg:w-[calc(100%-3rem)] -translate-x-1/2'}`}
+          ${menuOpen ? 'lg:-translate-x-[calc(50%+190px)]' : 'lg:-translate-x-1/2'}`}
       >
-        <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16 px-4 sm:px-6">
           {/* Left: Logo */}
           <Link
             href="/"
-            className="font-display text-xl sm:text-2xl tracking-wider flex items-center gap-1.5 sm:gap-2 shrink-0 group"
+            className="font-display text-xl tracking-wider flex items-center gap-2 shrink-0 group"
             aria-label="E-Summit '26 — Home"
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center group-hover:border-mint transition-colors">
-              <Zap size={16} className="text-mint fill-mint sm:w-[18px] sm:h-[18px]" />
+            <div className="w-8 h-8 rounded-full bg-mint/20 border border-mint/40 flex items-center justify-center group-hover:border-mint transition-colors">
+              <Zap size={16} className="text-mint fill-mint" />
             </div>
-            <span className="font-black tracking-widest text-gradient-white text-xs sm:text-base">E-SUMMIT</span>
+            <span className="font-bold text-white tracking-widest hidden sm:inline-block">E-SUMMIT</span>
           </Link>
 
           {/* Center: Empty to push buttons to right */}
           <div className="hidden lg:flex flex-1" />
 
           {/* Right: Buttons */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             {!menuOpen && (
               <>
                 <Magnetic strength={0.3}>
                   <button
                     onClick={() => window.dispatchEvent(new Event('open-my-plan'))}
-                    className="hidden md:inline-flex btn-dark-gradient h-[34px] sm:h-[36px] box-border items-center justify-center gap-1.5 px-3.5 sm:px-4 rounded-full font-mono-data text-[11px] sm:text-xs font-bold uppercase tracking-wider leading-none transition-all duration-200 cursor-pointer"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-mono-data text-xs font-semibold uppercase tracking-wider transition-all duration-200 bg-white/10 text-white hover:text-mint hover:bg-white/20 border border-white/20"
                     aria-label="Open My Plan"
                   >
-                    <span>MY PLAN</span>
-                    {planCount > 0 && (
-                      <span className="inline-flex items-center justify-center h-4 min-w-[16px] px-1 rounded-full bg-mint text-void font-mono-data text-[10px] font-black leading-none">
-                        {planCount}
-                      </span>
-                    )}
+                    MY PLAN
                   </button>
                 </Magnetic>
                 <Magnetic strength={0.3}>
                   <Link
-                    href="/register"
-                    className="btn-mint-gradient h-[34px] sm:h-[36px] box-border inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-6 rounded-full font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider leading-none transition-all duration-200 text-void cursor-pointer"
+                    href="/passes"
+                    className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider transition-all duration-200 bg-[#FFD700] text-black hover:bg-[#F5C400] border border-[#FFE033]"
                     id="nav-passes-btn"
                   >
-                    <Ticket size={13} className="text-void stroke-[2.5] sm:w-[14px] sm:h-[14px]" />
-                    <span>REGISTER</span>
+                    <Ticket size={14} className="text-black stroke-[2.5]" />
+                    <span>PASSES</span>
                   </Link>
                 </Magnetic>
               </>
@@ -361,13 +285,12 @@ export default function Nav() {
             {/* Hamburger Trigger Button */}
             <Magnetic strength={0.3}>
               <button
-                ref={headerButtonRef}
-                className="btn-dark-gradient h-[34px] sm:h-[36px] box-border inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider leading-none cursor-pointer"
+                className="min-h-[44px] min-w-[44px] px-3 py-2 sm:px-4 sm:py-2 rounded-full text-white hover:text-mint bg-white/10 hover:bg-white/20 transition-all flex items-center justify-center gap-2 font-mono-data text-xs font-bold uppercase tracking-wider cursor-pointer backdrop-blur-sm border border-white/20"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label={menuOpen ? "Close navigation sidebar" : "Open navigation sidebar"}
                 aria-expanded={menuOpen}
               >
-                <Menu size={14} />
+                <Menu size={16} />
                 <span className="hidden sm:inline">{menuOpen ? 'CLOSE' : 'MENU'}</span>
               </button>
             </Magnetic>
@@ -376,37 +299,34 @@ export default function Nav() {
       </header>
 
 
-      {/* TOP SPONSOR MARQUEE BAR — Slides in when navbar hides */}
+      {/* TOP SPONSOR MARQUEE BAR — Slides in from top when navbar hides on scroll down */}
       <div
         className={`fixed top-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-b border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 shadow-2xl transition-all duration-500 ease-out ${
-          isModalOpen
-            ? '-translate-y-full opacity-0 pointer-events-none'
-            : showTopMarquee
+          showTopMarquee
             ? 'translate-y-0 opacity-100'
             : '-translate-y-full opacity-0 pointer-events-none'
         }`}
       >
-        {/* Countdown — desktop only */}
-        <div className="hidden sm:flex absolute left-0 top-0 bottom-0 z-20 items-center bg-[#07130F] [.light_&]:bg-[#1A2510] pl-4 pr-3 border-r border-mint/30 [.light_&]:border-[#4E6527]/40 shadow-[4px_0_15px_rgba(0,0,0,0.8)] shrink-0 select-none">
+        <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-white pl-4 pr-3 border-r border-black/10 font-mono-data text-xs font-bold text-black shrink-0 select-none">
           <NavCountdown targetISO={FEST_META.countdownTarget} />
         </div>
-        <div className="absolute left-0 sm:left-[125px] md:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
+        <div className="absolute left-[125px] sm:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
         <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-l from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
-        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center pl-4 sm:pl-[135px] md:pl-[165px]">
+        <div className="flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center pl-[135px] sm:pl-[165px]">
           {[...SPONSOR_ITEMS, ...SPONSOR_ITEMS, ...SPONSOR_ITEMS].map((item, i) => (
             <div
               key={`top-${item.id}-${i}`}
               className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"
             >
               <span className="text-mint [.light_&]:text-[#A0C868] font-bold">•</span>
-              <span className="font-bold tracking-widest uppercase text-gradient-white">{item.name}</span>
-              <span className="text-gradient-mint font-bold uppercase tracking-widest ml-1">{item.tier}</span>
+              <span className="text-white font-bold tracking-widest uppercase">{item.name}</span>
+              <span className="text-mint [.light_&]:text-[#C8E696] font-bold uppercase tracking-widest ml-1">{item.tier}</span>
             </div>
           ))}
         </div>
       </div>
  
-      {/* BOTTOM SPONSOR MARQUEE BAR */}
+      {/* BOTTOM SPONSOR MARQUEE BAR — Sits at bottom initially & when scrolling up */}
       <div
         className={`fixed bottom-0 left-0 right-0 z-[2500] bg-[#0A1A17] [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md border-t border-mint/20 [.light_&]:border-[#4E6527]/50 py-2.5 pb-[max(0.6rem,env(safe-area-inset-bottom))] shadow-2xl transition-all duration-500 ease-out ${
           showBottomMarquee
@@ -414,7 +334,7 @@ export default function Nav() {
             : 'translate-y-full opacity-0 pointer-events-none'
         }`}
       >
-        <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-[#07130F] [.light_&]:bg-[#1A2510] pl-4 pr-3 border-r border-mint/30 [.light_&]:border-[#4E6527]/40 shadow-[4px_0_15px_rgba(0,0,0,0.8)] shrink-0 select-none">
+        <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center bg-white pl-4 pr-3 border-r border-black/10 font-mono-data text-xs font-bold text-black shrink-0 select-none">
           <NavCountdown targetISO={FEST_META.countdownTarget} />
         </div>
         <div className="absolute left-[125px] sm:left-[155px] top-0 bottom-0 w-16 z-10 pointer-events-none bg-gradient-to-r from-[#0A1A17] [.light_&]:from-[#2A3B18] to-transparent" />
@@ -426,8 +346,8 @@ export default function Nav() {
               className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"
             >
               <span className="text-mint [.light_&]:text-[#A0C868] font-bold">•</span>
-              <span className="font-bold tracking-widest uppercase text-gradient-white">{item.name}</span>
-              <span className="text-gradient-mint font-bold uppercase tracking-widest ml-1">{item.tier}</span>
+              <span className="text-white font-bold tracking-widest uppercase">{item.name}</span>
+              <span className="text-mint [.light_&]:text-[#C8E696] font-bold uppercase tracking-widest ml-1">{item.tier}</span>
             </div>
           ))}
         </div>
@@ -437,13 +357,13 @@ export default function Nav() {
       <AnimatePresence>
         {menuOpen && (
           <>
-            {/* Backdrop Overlay (All screens with 2xl glassmorphic blur) */}
+            {/* Backdrop Overlay (Mobile only, no blur on desktop) */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 bg-black/85 backdrop-blur-2xl z-[11000]"
+              className="fixed inset-0 bg-black/60 lg:hidden z-[2998]"
               aria-hidden="true"
               onClick={() => setMenuOpen(false)}
             />
@@ -455,7 +375,7 @@ export default function Nav() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[11001] bg-mint text-void shadow-[0_0_60px_rgba(0, 229, 153,0.4)] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto border-l-4 border-void"
+              className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[3000] bg-mint text-void shadow-[0_0_60px_rgba(126,211,33,0.4)] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto border-l-4 border-void"
               role="dialog"
               aria-label="Navigation Menu Drawer"
             >

@@ -21,15 +21,8 @@ export function Card({ event, index, total, onSelect }: CardProps) {
       onClick={() => onSelect(event)}
       whileHover={{ y: -8, scale: 1.02 }}
       transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          onSelect(event)
-        }
-      }}
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl aspect-[4/3] bg-[#0B1712] focus-visible:ring-2 focus-visible:ring-mint focus:outline-none"
-      style={{ width: 'clamp(280px, 26vw, 380px)' }}
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl"
+      style={{ width: 'clamp(200px, 22vw, 280px)', height: 'clamp(280px, 40vh, 380px)' }}
     >
       {/* Full-bleed image */}
       <Image

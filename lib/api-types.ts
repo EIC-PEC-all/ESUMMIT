@@ -166,3 +166,85 @@ export interface SubscribeResponse {
   success: boolean
   message: string
 }
+
+export type CompetitionType = 'PITCH_COMPETITION' | 'HACKATHON'
+
+export interface TeamMember {
+  id: string
+  userId: string
+  role: string
+  user: {
+    name: string
+    email: string
+    college: string | null
+  }
+}
+
+export interface Submission {
+  id: string
+  teamId: string
+  title: string
+  description: string
+  repoUrl: string | null
+  demoUrl: string | null
+  deckPdfUrl: string | null
+  submittedAt: string
+}
+
+export interface Score {
+  id: string
+  teamId: string
+  judgeId: string
+  innovation: number
+  execution: number
+  marketSize: number
+  presentation: number
+  comments: string | null
+  createdAt: string
+  judge?: {
+    name: string
+    email: string
+  }
+}
+
+export interface Team {
+  id: string
+  name: string
+  code: string
+  type: CompetitionType
+  trackName: string
+  leaderId: string
+  members: TeamMember[]
+  submission?: Submission | null
+  scores: Score[]
+  createdAt: string
+  averageScore?: number
+  totalScore?: number
+}
+
+export interface CreateTeamDto {
+  name: string
+  type: CompetitionType
+  trackName: string
+}
+
+export interface JoinTeamDto {
+  code: string
+}
+
+export interface SubmitProjectDto {
+  title: string
+  description: string
+  repoUrl?: string
+  demoUrl?: string
+  deckPdfUrl?: string
+}
+
+export interface ConciergeChatResponse {
+  answer: string
+  action?: {
+    type: string
+    payload: Record<string, any>
+  }
+  sources?: string[]
+}

@@ -45,8 +45,8 @@ module.exports = {
         'mono-data': ['var(--font-jetbrains)', 'monospace'],
       },
       animation: {
-        'marquee': 'marquee 32s linear infinite',
-        'marquee2': 'marquee2 32s linear infinite',
+        'marquee': 'marquee 12s linear infinite',
+        'marquee2': 'marquee2 12s linear infinite',
       },
       keyframes: {
         marquee: {
