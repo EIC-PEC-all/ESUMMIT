@@ -37,3 +37,4 @@ diff.txt
 *.bak
 mobile-screenshot.png
 .gstack/
+node_modules
