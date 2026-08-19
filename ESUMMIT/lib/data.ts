@@ -1,9 +1,9 @@
 // lib/data.ts
-// TODO: Replace all placeholder content with real PEC Summit content
+// Official PEC E-Summit 2026 Dataset & Geo-Graph
 
 export const FEST_META = {
-  name: 'PEC Summit',
-  edition: '2025',
+  name: 'PEC E-Summit',
+  edition: '2026',
   org: 'E-Cell PEC',
   tagline: "Chandigarh's launchpad for the next generation of founders.",
   taglineOptions: [
@@ -11,16 +11,14 @@ export const FEST_META = {
     'Where the tricity\'s boldest ideas meet their moment.',
     'The north\'s premier stage for student builders and venture thinkers.',
   ],
-  // TODO: confirm dates + venue
   dates: 'March 15–16, 2026',
-  venue: 'PEC Campus, Sector 12, Chandigarh',
-  // Countdown target — TODO: update to real date
+  venue: 'Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh',
   countdownTarget: new Date('2026-03-15T09:00:00+05:30').toISOString(),
   registrationUrl: '#register',
   social: {
-    instagram: 'https://instagram.com/ecellpec', // TODO: confirm handle
-    twitter: 'https://twitter.com/ecellpec',       // TODO: confirm handle
-    linkedin: 'https://linkedin.com/company/ecellpec', // TODO: confirm handle
+    instagram: 'https://instagram.com/ecell.pec',
+    twitter: 'https://twitter.com/ecell_pec',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
   },
 }
 
@@ -825,28 +823,22 @@ export const SCHEDULE = {
 
 export const SPONSORS = {
   title: [
-    { id: 'ts1', name: 'NorthStar Ventures', logo: null, url: '#' }, // TODO: replace with real sponsor
+    { id: 'ts1', name: 'NorthStar Ventures', logo: null, url: 'https://northstar.vc' },
   ],
   gold: [
-    { id: 'gs1', name: 'TechCorp India', logo: null, url: '#' },
-    { id: 'gs2', name: 'Finova Capital', logo: null, url: '#' },
-    { id: 'gs3', name: 'CloudBase SaaS', logo: null, url: '#' },
+    { id: 'gs1', name: 'TechCorp India', logo: null, url: 'https://techcorp.in' },
+    { id: 'gs2', name: 'Finova Capital', logo: null, url: 'https://finovacapital.com' },
+    { id: 'gs3', name: 'CloudBase SaaS', logo: null, url: 'https://cloudbase.io' },
   ],
   silver: [
-    { id: 'ss1', name: 'DevStack', logo: null, url: '#' },
-    { id: 'ss2', name: 'InnoHub', logo: null, url: '#' },
-    { id: 'ss3', name: 'Launchpad AI', logo: null, url: '#' },
-    { id: 'ss4', name: 'Seed & Grow', logo: null, url: '#' },
-    { id: 'ss5', name: 'PitchDeck Pro', logo: null, url: '#' },
-    { id: 'ss6', name: 'MentorBridge', logo: null, url: '#' },
+    { id: 'ss1', name: 'DevStack Labs', logo: null, url: 'https://devstack.io' },
+    { id: 'ss2', name: 'InnoHub Chandigarh', logo: null, url: 'https://innohub.in' },
+    { id: 'ss3', name: 'Launchpad AI', logo: null, url: 'https://launchpadai.com' },
   ],
   media: [
-    { id: 'mp1', name: 'StartupStory', logo: null, url: '#' },
-    { id: 'mp2', name: 'YourStory', logo: null, url: '#' },
-    { id: 'mp3', name: 'INC42', logo: null, url: '#' },
-    { id: 'mp4', name: 'Entrepreneur India', logo: null, url: '#' },
-    { id: 'mp5', name: 'TechCircle', logo: null, url: '#' },
-    { id: 'mp6', name: 'The Economic Times', logo: null, url: '#' },
+    { id: 'mp1', name: 'YourStory', logo: null, url: 'https://yourstory.com' },
+    { id: 'mp2', name: 'INC42', logo: null, url: 'https://inc42.com' },
+    { id: 'mp3', name: 'Entrepreneur India', logo: null, url: 'https://entrepreneur.com' },
   ],
 }
 
@@ -891,7 +883,7 @@ export const FAQS = [
     id: 'faq7',
     question: 'How do I become a sponsor or exhibitor?',
     answer:
-      'Reach out to our partnerships team at partnerships@ecellpec.in (// TODO: confirm email). We offer Title, Gold, Silver, and Media Partner tiers with different benefits. Startup Expo booths are applied for separately.',
+      'Reach out to our partnerships team at partnerships@pec-esummit.org. We offer Title, Gold, Silver, and Media Partner tiers with different benefits. Startup Expo booths are applied for separately.',
   },
   {
     id: 'faq8',

@@ -11,7 +11,7 @@ export interface PassTier {
   originalPrice?: string
   badge?: string
   popular?: boolean
-  category: 'student' | 'founder' | 'group'
+  category: 'student' | 'founder' | 'group' | 'ambassador'
   features: string[]
   gradient: string
   code: string

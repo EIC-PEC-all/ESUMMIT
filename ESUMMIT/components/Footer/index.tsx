@@ -20,6 +20,7 @@ import {
   Sparkles,
   CheckCircle2,
   ChevronRight,
+  Loader2,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Image from 'next/image'
@@ -29,12 +30,14 @@ import CircuitBoard from '../Hero/CircuitBoard'
 import { ScrollGradientFill, GlitchText } from '@/components/Common/TextAnims'
 import StackedSlicedText from '@/components/ui/StackedSlicedText'
 import { FEST_META } from '@/lib/data'
+import { api, ApiError } from '@/lib/api'
 
 function EmailCapture() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) {
@@ -43,21 +46,28 @@ function EmailCapture() {
       })
       return
     }
-    const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
-    if (!existing.includes(email)) {
-      existing.push(email)
-      localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
+
+    setIsSubmitting(true)
+    try {
+      const res = await api.subscribe(email)
+      setSubmitted(true)
+      toast.success(res.message || `${email} — you're on the list!`, {
+        duration: 4000,
+        style: {
+          background: '#0A110E',
+          color: '#FFFFFF',
+          border: '1px solid var(--accent-mint)',
+        },
+        iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
+      })
+    } catch (err) {
+      toast.error(
+        err instanceof ApiError ? err.message : 'Could not subscribe right now. Please try again.',
+        { style: { background: '#0A110E', color: '#FFFFFF', border: '1px solid var(--accent-mint)' } },
+      )
+    } finally {
+      setIsSubmitting(false)
     }
-    setSubmitted(true)
-    toast.success(`${email} — you're on the list!`, {
-      duration: 4000,
-      style: {
-        background: '#0A110E',
-        color: '#FFFFFF',
-        border: '1px solid var(--accent-mint)',
-      },
-      iconTheme: { primary: 'var(--accent-mint)', secondary: '#040605' },
-    })
   }
 
   if (submitted) {
@@ -92,17 +102,25 @@ function EmailCapture() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 rounded-xl border border-[#4E6527]/60 bg-[#1E2B12] px-4 py-3 font-body text-sm text-white outline-none placeholder:text-gray-400 focus:border-[#C8E696]"
+        disabled={isSubmitting}
+        className="flex-1 rounded-xl border border-[#4E6527]/60 bg-[#1E2B12] px-4 py-3 font-body text-sm text-white outline-none placeholder:text-gray-400 focus:border-[#C8E696] disabled:opacity-60"
         aria-label="Enter your email to get PEC Summit updates"
       />
       <button
         type="submit"
-        className="btn-green shrink-0"
+        disabled={isSubmitting}
+        className="btn-green shrink-0 disabled:opacity-60"
         id="footer-subscribe-btn"
         aria-label="Subscribe to PEC Summit updates"
       >
-        Get Updates
-        <ArrowRight size={16} aria-hidden="true" />
+        {isSubmitting ? (
+          <Loader2 size={16} aria-hidden="true" className="animate-spin" />
+        ) : (
+          <>
+            Get Updates
+            <ArrowRight size={16} aria-hidden="true" />
+          </>
+        )}
       </button>
     </form>
   )

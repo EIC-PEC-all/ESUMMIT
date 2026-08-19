@@ -6,6 +6,7 @@
 
 import { emitAgentEvent } from '@/lib/events'
 import type { FestContext } from '@/lib/data'
+import { api } from '@/lib/api'
 
 export interface ItinerarySession {
   id: string
@@ -210,9 +211,24 @@ export async function getAgentResponse(
   userMessage: string,
   ctx: FestContext
 ): Promise<AgentResponse> {
-  await new Promise((r) => setTimeout(r, 500 + Math.random() * 300))
-
   const intent = matchIntent(userMessage, ctx)
+
+  // For general queries, try backend RAG first
+  if (intent.type === 'unknown' || intent.type === 'general_info' || intent.type === 'faq_query') {
+    try {
+      const backendRes = await api.chatConcierge(userMessage)
+      if (backendRes && backendRes.answer) {
+        if (backendRes.action && backendRes.action.type === 'scrollToSection' && typeof backendRes.action.payload?.id === 'string') {
+          scrollToSection(backendRes.action.payload.id)
+        }
+        return {
+          text: backendRes.answer,
+        }
+      }
+    } catch {
+      // Backend offline -> fall back to local intent handler
+    }
+  }
 
   switch (intent.type) {
     case 'itinerary': {

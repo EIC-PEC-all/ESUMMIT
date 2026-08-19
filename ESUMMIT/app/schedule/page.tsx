@@ -1,13 +1,15 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Calendar, Clock, Bookmark, ArrowLeft, Zap } from 'lucide-react'
+import { Clock, Bookmark, ArrowLeft } from 'lucide-react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import Concierge from '@/components/Concierge'
 import CircuitBoard from '@/components/Hero/CircuitBoard'
-import { SCHEDULE } from '@/lib/data'
+import { SCHEDULE as DEFAULT_SCHEDULE } from '@/lib/data'
+import { api } from '@/lib/api'
+import type { BackendEvent } from '@/lib/api-types'
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 
@@ -15,8 +17,23 @@ export default function ScheduleLandingPage() {
   const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1')
   const [bookmarks, setBookmarks] = useState<string[]>([])
   const [filterType, setFilterType] = useState<string>('all')
+  const [liveEvents, setLiveEvents] = useState<BackendEvent[]>([])
 
-  const currentDay = SCHEDULE[activeDay]
+  useEffect(() => {
+    let mounted = true
+    api.getEvents()
+      .then((data) => {
+        if (mounted && data && data.length > 0) {
+          setLiveEvents(data)
+        }
+      })
+      .catch(() => {
+        // Fallback
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const toggleBookmark = (id: string, title: string) => {
     if (bookmarks.includes(id)) {
@@ -34,8 +51,22 @@ export default function ScheduleLandingPage() {
     }
   }
 
-  const filteredEvents = currentDay.events.filter(
-    (ev) => filterType === 'all' || ev.type === filterType
+  // If live events exist from backend, use them for the active day (1 or 2)
+  const dayNumber = activeDay === 'day1' ? 1 : 2
+  const dayLiveEvents = liveEvents.filter((ev) => ev.day === dayNumber)
+  
+  const displayEvents = dayLiveEvents.length > 0 
+    ? dayLiveEvents.map((ev) => ({
+        id: ev.id,
+        time: `${ev.startTime} - ${ev.endTime}`,
+        title: ev.title,
+        track: ev.track,
+        type: ev.type,
+      }))
+    : DEFAULT_SCHEDULE[activeDay].events
+
+  const filteredEvents = displayEvents.filter(
+    (ev) => filterType === 'all' || ev.type.toLowerCase() === filterType.toLowerCase()
   )
 
   return (
@@ -80,7 +111,7 @@ export default function ScheduleLandingPage() {
                       : 'hover:border-mint/40 border border-border-subtle bg-panel text-secondary hover:text-white'
                   }`}
                 >
-                  {SCHEDULE[dayKey].label} — {SCHEDULE[dayKey].date}
+                  {DEFAULT_SCHEDULE[dayKey].label} — {DEFAULT_SCHEDULE[dayKey].date}
                 </button>
               ))}
 

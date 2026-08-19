@@ -1,25 +1,44 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Twitter, Linkedin, ArrowLeft, X, MessageSquare, Zap } from 'lucide-react'
+import { Search, Twitter, Linkedin, ArrowLeft, X, MessageSquare } from 'lucide-react'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 import Concierge from '@/components/Concierge'
 import CircuitBoard from '@/components/Hero/CircuitBoard'
-import { SPEAKERS } from '@/lib/data'
+import { SPEAKERS as DEFAULT_SPEAKERS } from '@/lib/data'
+import { api } from '@/lib/api'
+import type { BackendSpeaker } from '@/lib/api-types'
 import Link from 'next/link'
 
 export default function SpeakersLandingPage() {
+  const [speakers, setSpeakers] = useState<BackendSpeaker[]>(DEFAULT_SPEAKERS as unknown as BackendSpeaker[])
   const [search, setSearch] = useState('')
   const [selectedTrack, setSelectedTrack] = useState<string>('All')
-  const [activeSpeaker, setActiveSpeaker] = useState<(typeof SPEAKERS)[0] | null>(null)
+  const [activeSpeaker, setActiveSpeaker] = useState<BackendSpeaker | null>(null)
 
-  const filteredSpeakers = SPEAKERS.filter((spk) => {
+  useEffect(() => {
+    let mounted = true
+    api.getSpeakers()
+      .then((data) => {
+        if (mounted && data && data.length > 0) {
+          setSpeakers(data)
+        }
+      })
+      .catch(() => {
+        // Fallback to default
+      })
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const filteredSpeakers = speakers.filter((spk) => {
     const matchesSearch =
       spk.name.toLowerCase().includes(search.toLowerCase()) ||
       spk.title.toLowerCase().includes(search.toLowerCase()) ||
-      spk.bio.toLowerCase().includes(search.toLowerCase())
+      (spk.bio && spk.bio.toLowerCase().includes(search.toLowerCase()))
     const matchesTrack = selectedTrack === 'All' || spk.track === selectedTrack
     return matchesSearch && matchesTrack
   })
@@ -101,12 +120,15 @@ export default function SpeakersLandingPage() {
                 whileHover={{ y: -6, boxShadow: '0 0 25px rgba(126,211,33,0.3)' }}
               >
                 <div>
-                  <div className="border-[var(--accent-mint)]/30 mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border bg-void font-display text-2xl font-bold text-gray-400 grayscale filter transition-all group-hover:scale-105 group-hover:border-[var(--accent-mint)] group-hover:text-[var(--accent-mint)] group-hover:grayscale-0">
-                    {spk.initials}
+                  <div 
+                    className="border-[var(--accent-mint)]/30 mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border bg-void font-display text-2xl font-bold transition-all group-hover:scale-105 group-hover:border-[var(--accent-mint)]"
+                    style={{ color: spk.color || 'var(--accent-mint)' }}
+                  >
+                    {spk.initials || spk.name.slice(0, 2).toUpperCase()}
                   </div>
 
                   <span className="border-[var(--accent-mint)]/30 mb-3 inline-block rounded-full border bg-void px-2.5 py-1 font-mono-data text-[9px] font-bold uppercase tracking-widest text-[var(--accent-mint)]">
-                    ⚡ {spk.track} Track
+                    ⚡ {spk.track || 'Keynote'} Track
                   </span>
 
                   <h3 className="mb-1 font-body text-xl font-bold text-white transition-colors group-hover:text-[var(--accent-mint)]">
@@ -144,7 +166,7 @@ export default function SpeakersLandingPage() {
 
               <div className="mb-6 flex items-center gap-4">
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[var(--accent-mint)] bg-void font-display text-2xl font-bold text-[var(--accent-mint)]">
-                  {activeSpeaker.initials}
+                  {activeSpeaker.initials || activeSpeaker.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
                   <h3 className="font-body text-2xl font-bold text-white">{activeSpeaker.name}</h3>

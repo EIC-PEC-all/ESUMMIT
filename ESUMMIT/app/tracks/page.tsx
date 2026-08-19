@@ -129,6 +129,10 @@ export default function TracksLandingPage() {
   >('All')
   const [selectedTrack, setSelectedTrack] = useState<(typeof DETAILED_TRACK_DATA)[0] | null>(null)
   const [registered, setRegistered] = useState(false)
+  // NOTE: there is no backend endpoint for track-specific registration (only
+  // /registrations/create for whole delegate passes). This form is a no-op —
+  // inputs are bound to state purely so entered text isn't silently dropped.
+  const [trackForm, setTrackForm] = useState({ name: '', email: '' })
 
   const filteredTracks = DETAILED_TRACK_DATA.filter(
     (t) => activeCategory === 'All' || t.category === activeCategory
@@ -263,6 +267,7 @@ export default function TracksLandingPage() {
                     onClick={() => {
                       setSelectedTrack(track)
                       setRegistered(false)
+                      setTrackForm({ name: '', email: '' })
                     }}
                     className="btn-ghost w-full justify-center rounded-xl py-3.5 font-body text-sm font-semibold hover:border-[var(--accent-mint)] hover:text-[var(--accent-mint)]"
                   >
@@ -327,37 +332,23 @@ export default function TracksLandingPage() {
                     </div>
                   </div>
 
-                  <form onSubmit={handleRegisterTrack} className="space-y-4">
-                    <div>
-                      <label className="mb-1 block font-mono-data text-xs font-bold uppercase text-muted">
-                        Team Lead Name *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Enter full name"
-                        className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-1 block font-mono-data text-xs font-bold uppercase text-muted">
-                        Email Address *
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="team@startup.com"
-                        className="border-[var(--accent-mint)]/30 w-full rounded-lg border bg-void px-4 py-3 font-body text-sm text-white outline-none focus:border-[var(--accent-mint)]"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="btn-green mt-4 w-full justify-center py-3.5 text-sm font-bold"
+                  <div className="space-y-3 pt-2">
+                    <Link
+                      href={selectedTrack.id === 'hackathon' || selectedTrack.id === 'pitch' ? '/account' : '/passes'}
+                      className="btn-green flex w-full items-center justify-center gap-2 py-3.5 text-sm font-bold text-center"
                     >
-                      Submit Track Registration
-                    </button>
-                  </form>
+                      {selectedTrack.id === 'hackathon' || selectedTrack.id === 'pitch'
+                        ? 'Go to Team Portal / Manage Team'
+                        : 'Claim Delegate Pass for Track'}
+                    </Link>
+
+                    <Link
+                      href="/passes"
+                      className="flex w-full items-center justify-center rounded-xl border border-white/20 bg-void py-3 font-mono-data text-xs font-bold text-white hover:bg-white/10 text-center"
+                    >
+                      Explore All Summit Passes &amp; Tickets
+                    </Link>
+                  </div>
                 </>
               ) : (
                 <div className="py-8 text-center">

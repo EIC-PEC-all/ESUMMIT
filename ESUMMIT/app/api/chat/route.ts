@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { buildSystemPrompt, buildEventContext } from '@/lib/chatbot-context'
 import { getGroqServerClient, MODEL_FAST, MODEL_MAIN } from '@/lib/groq-server'
 import type { GroqFunction, GroqMessage } from '@/lib/groq'
+import { localAnswer } from '@/lib/local-answers'
 
 export const runtime = 'nodejs'
 
@@ -23,13 +24,6 @@ function isValidMessage(msg: unknown): msg is GroqMessage {
 }
 
 export async function POST(request: NextRequest) {
-  if (!process.env.GROQ_API_KEY) {
-    return NextResponse.json(
-      { error: 'Chat service is not configured. Set GROQ_API_KEY on the server.' },
-      { status: 503 },
-    )
-  }
-
   let body: ChatRequestBody
   try {
     body = await request.json()
@@ -47,30 +41,46 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid message format' }, { status: 400 })
   }
 
+  const lastUserMessage = [...messages].reverse().find((m) => m.role === 'user')?.content || ''
+
   // Cap history size to prevent abuse
   const windowedMessages = messages.slice(-12)
 
-  try {
-    const groq = getGroqServerClient()
-    const eventContext = buildEventContext()
-    const systemPrompt = buildSystemPrompt(eventContext)
+  // 1. If GROQ_API_KEY is configured on the server, use Groq Llama 3.3 / 3.1
+  const groqApiKey = process.env.GROQ_API_KEY
 
-    const resolvedModel =
-      model ||
-      (mode === 'summarize' ? MODEL_FAST : MODEL_MAIN)
+  if (groqApiKey && groqApiKey !== 'your_groq_api_key_here' && groqApiKey.startsWith('gsk_')) {
+    try {
+      const groq = getGroqServerClient()
+      const eventContext = buildEventContext()
+      const systemPrompt = buildSystemPrompt(eventContext)
 
-    const result = await groq.generateContent(
-      windowedMessages,
-      tools,
-      systemPrompt,
-      maxTokens,
-      resolvedModel,
-    )
+      const resolvedModel =
+        model ||
+        (mode === 'summarize' ? MODEL_FAST : MODEL_MAIN)
 
-    return NextResponse.json(result)
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Chat request failed'
-    console.error('[api/chat]', message)
-    return NextResponse.json({ error: message }, { status: 502 })
+      const result = await groq.generateContent(
+        windowedMessages,
+        tools,
+        systemPrompt,
+        maxTokens,
+        resolvedModel,
+      )
+
+      return NextResponse.json(result)
+    } catch (error) {
+      console.warn('[api/chat] Groq upstream failed, falling back to local assistant:', error)
+    }
   }
+
+  // 2. Intelligent Festival Intelligence Fallback (handles all summit queries without failure)
+  const local = localAnswer(lastUserMessage)
+  if (local) {
+    return NextResponse.json({ text: local })
+  }
+
+  // General fallback response
+  return NextResponse.json({
+    text: `I'm the official **PEC E-Summit 2026 Assistant**! Ask me anything about our keynote speakers, Day 1 & Day 2 schedule, the ₹15L+ prize pool Pitch Competition & Hackathon, or campus navigation directions at Punjab Engineering College!`,
+  })
 }

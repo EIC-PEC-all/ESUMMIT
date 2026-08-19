@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Kanit } from 'next/font/google'
 import './globals.css'
 import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
+import SessionProviderWrapper from '@/components/Providers/SessionProviderWrapper'
 
 const kanit = Kanit({
   subsets: ['latin'],
@@ -54,9 +55,11 @@ export default function RootLayout({
         className={`noise ${kanit.variable} ${inter.variable} font-body text-primary bg-void`}
         suppressHydrationWarning
       >
-        <SmoothScrollProvider>
-          {children}
-        </SmoothScrollProvider>
+        <SessionProviderWrapper>
+          <SmoothScrollProvider>
+            {children}
+          </SmoothScrollProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   )
