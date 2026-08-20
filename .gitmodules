@@ -1,0 +1,3 @@
+[submodule "E_Summit_Backend"]
+	path = E_Summit_Backend
+	url = https://github.com/EIC-PEC-all/E_Summit_Backend.git
