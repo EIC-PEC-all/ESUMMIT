@@ -149,7 +149,7 @@ export async function GET(req: NextRequest) {
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <div style={{ fontSize: 20, fontWeight: 800, color: '#FFFFFF' }}>
-                MARCH 15–16, 2026
+                SEPTEMBER 26–27, 2026
               </div>
               <div style={{ fontSize: 16, color: '#9CA3AF' }}>
                 Sector 12, Chandigarh • EIC PEC

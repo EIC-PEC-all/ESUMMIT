@@ -1,4 +1,4 @@
-import mapboxgl from 'mapbox-gl'
+
 
 export const MAPBOX_CONFIG = {
   accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN || '',

@@ -17,20 +17,16 @@ export default function HeroIntroTitle({ opacity, visibility }: HeroIntroTitlePr
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.75)_0%,rgba(0,0,0,0.3)_40%,transparent_70%)] sm:bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.5)_0%,transparent_60%)] pointer-events-none" />
       <h1
-        className="relative font-display font-black leading-none tracking-tighter drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] flex flex-wrap items-baseline justify-center gap-2 sm:gap-4 w-full px-4"
-        style={{ fontSize: 'clamp(2rem, 10vw, 8.5rem)' }}
+        className="relative font-display font-black leading-none tracking-tighter drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] flex items-baseline justify-center whitespace-nowrap w-full px-4 select-none"
+        style={{ fontSize: 'clamp(2.5rem, 8vw, 6.5rem)' }}
       >
-        <span className="text-gradient-white">E-SUMMIT</span>{' '}
-        <span className="text-gradient-mint">&apos;26</span>
+        <span className="text-gradient-white">E-SUMMIT</span>
+        <span className="text-gradient-mint ml-1 sm:ml-2">&apos;26</span>
       </h1>
       <p
-        className="relative mt-3 sm:mt-4 w-full max-w-[90vw] font-mono-data text-[10px] sm:text-sm md:text-base font-bold uppercase tracking-[0.15em] sm:tracking-widest text-white/80 drop-shadow-[0_4px_20px_rgba(0,0,0,1)] text-center animate-fade-in"
+        className="relative mt-3 sm:mt-5 w-full max-w-xl font-mono-data text-[11px] sm:text-sm md:text-base font-bold uppercase tracking-[0.18em] sm:tracking-[0.25em] text-white/80 drop-shadow-[0_4px_20px_rgba(0,0,0,1)] text-center animate-fade-in"
       >
-        Chandigarh&apos;s Launchpad <span className="hidden sm:inline">for Founders</span>
-        <span className="inline sm:hidden">
-          <br />
-          for Founders
-        </span>
+        Chandigarh&apos;s Launchpad for Founders
       </p>
     </motion.div>
   )

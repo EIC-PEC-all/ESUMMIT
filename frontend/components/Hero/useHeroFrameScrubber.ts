@@ -22,6 +22,19 @@ export interface FrameManifest {
 export const getRawFrameNum = (i: number) => Math.min(TOTAL_RAW_FRAMES, i * FRAME_STEP + 1)
 export const padFrame = (n: number) => String(n).padStart(4, '0')
 
+const isLowEndDevice = () => {
+  if (typeof navigator === 'undefined') return false
+  const mem = (navigator as any).deviceMemory
+  const cores = navigator.hardwareConcurrency
+  return (mem && mem <= 4) || (cores && cores <= 4)
+}
+
+const isUltraLowEndDevice = () => {
+  if (typeof navigator === 'undefined') return false
+  const mem = (navigator as any).deviceMemory
+  return mem && mem <= 2
+}
+
 export function useHeroFrameScrubber({
   containerRef,
   canvasRef,
@@ -66,7 +79,7 @@ export function useHeroFrameScrubber({
       if (!ctxRef.current) {
         ctxRef.current = canvas.getContext('2d', { alpha: true })
         if (ctxRef.current) {
-          ctxRef.current.imageSmoothingEnabled = true
+          ctxRef.current.imageSmoothingEnabled = !isLowEndDevice()
           ctxRef.current.imageSmoothingQuality = window.innerWidth < 768 ? 'low' : 'high'
         }
       }
@@ -107,6 +120,7 @@ export function useHeroFrameScrubber({
 
   // IntersectionObserver
   useEffect(() => {
+    if (isUltraLowEndDevice()) return
     const target = containerRef.current
     if (!target) return
 
@@ -128,6 +142,7 @@ export function useHeroFrameScrubber({
 
   // Worker initialization with bitmaprenderer (Chromium / Firefox, Safari routes to stable RAF 2D pipeline)
   useEffect(() => {
+    if (isUltraLowEndDevice()) return
     const isMobileUserAgent =
       typeof navigator !== 'undefined' && /android|iphone|ipad|ipod/i.test(navigator.userAgent)
     const isSafari =
@@ -160,7 +175,8 @@ export function useHeroFrameScrubber({
       .then((r) => r.json())
       .then((manifest: FrameManifest) => {
         const isAndroid = /android/i.test(navigator.userAgent)
-        const dpr = Math.min(window.devicePixelRatio || 1, isAndroid ? 1.15 : 1.5)
+        let dpr = Math.min(window.devicePixelRatio || 1, isAndroid ? 1.15 : 1.5)
+        if (isLowEndDevice()) dpr = Math.min(dpr, 1.0)
         const w = Math.min(2560, Math.round(window.innerWidth * dpr))
         const h = Math.min(1440, Math.round(window.innerHeight * dpr))
         const isMobile = window.innerWidth < 768
@@ -184,6 +200,7 @@ export function useHeroFrameScrubber({
 
   // Fallback Sprite Sheet & Manifest Loader (Safari, iOS, Mobile, Non-Worker fallback)
   useEffect(() => {
+    if (isUltraLowEndDevice()) return
     const isMobileUserAgent =
       typeof navigator !== 'undefined' && /android|iphone|ipad|ipod/i.test(navigator.userAgent)
     const isSafari =
@@ -250,10 +267,12 @@ export function useHeroFrameScrubber({
 
   // Resize handler
   useEffect(() => {
+    if (isUltraLowEndDevice()) return
     const handleResize = () => {
       const isAndroid = /android/i.test(navigator.userAgent)
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-      const dpr = Math.min(window.devicePixelRatio || 1, isAndroid || isSafari ? 1.25 : 1.5)
+      let dpr = Math.min(window.devicePixelRatio || 1, isAndroid || isSafari ? 1.25 : 1.5)
+      if (isLowEndDevice()) dpr = Math.min(dpr, 1.0)
       const w = Math.min(2560, Math.round(window.innerWidth * dpr))
       const h = Math.min(1440, Math.round(window.innerHeight * dpr))
       dimensionsRef.current = { w, h }
@@ -277,12 +296,15 @@ export function useHeroFrameScrubber({
 
   // Direct 1:1 frame dispatch loop
   useEffect(() => {
+    if (isUltraLowEndDevice()) return
     const isMobile = window.innerWidth < 768
 
     const tick = () => {
       if (isVisibleRef.current) {
         let frame = Math.round(targetFrameRef.current)
-        if (isMobile) {
+        if (isLowEndDevice()) {
+          frame = Math.round(frame / 4) * 4
+        } else if (isMobile) {
           frame = Math.round(frame / 2) * 2
         }
 

@@ -36,18 +36,13 @@ export default function PecLeafletMap({
       scrollWheelZoom: true,
     })
 
-    const isLight =
-      document.documentElement.getAttribute('data-theme') === 'light' ||
-      document.documentElement.classList.contains('light')
-    const tileUrl = isLight
-      ? 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
     L.tileLayer(tileUrl, {
       attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 19,
+      className: 'osm-dark-tiles'
     }).addTo(map)
 
     mapInstanceRef.current = map

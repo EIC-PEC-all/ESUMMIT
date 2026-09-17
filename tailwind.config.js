@@ -38,8 +38,9 @@ module.exports = {
         glow: 'var(--border-glow)',
       },
       fontFamily: {
-        display: ['Kanit', 'var(--font-kanit)', 'sans-serif'],
-        kanit: ['Kanit', 'sans-serif'],
+        display: ['var(--font-tamrin)', 'Tamrin', 'sans-serif'],
+        tamrin: ['var(--font-tamrin)', 'Tamrin', 'sans-serif'],
+        kanit: ['var(--font-tamrin)', 'Tamrin', 'sans-serif'],
         body: ['var(--font-inter)', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'monospace'],
         'mono-data': ['var(--font-jetbrains)', 'monospace'],

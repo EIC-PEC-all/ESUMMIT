@@ -154,7 +154,7 @@ export function EventListPanel({
 
               <p
                 className="text-white text-[11px] font-semibold truncate mb-2"
-                style={{ fontFamily: "'Kanit', sans-serif" }}
+                style={{ fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif" }}
               >
                 {selectedEvent.title}
               </p>
@@ -164,7 +164,7 @@ export function EventListPanel({
                   <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>
                     Distance
                   </span>
-                  <span style={{ fontFamily: "'Kanit', sans-serif", fontSize: 14, color: '#39FF14', fontWeight: 700 }}>
+                  <span style={{ fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif", fontSize: 14, color: '#39FF14', fontWeight: 700 }}>
                     {route.distance < 1000
                       ? `${Math.round(route.distance)} m`
                       : `${(route.distance / 1000).toFixed(1)} km`}
@@ -180,7 +180,7 @@ export function EventListPanel({
                   <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>
                     Walk
                   </span>
-                  <span style={{ fontFamily: "'Kanit', sans-serif", fontSize: 14, color: '#00FF88', fontWeight: 700 }}>
+                  <span style={{ fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif", fontSize: 14, color: '#00FF88', fontWeight: 700 }}>
                     {Math.round(route.duration / 60)} min
                   </span>
                 </div>
@@ -191,7 +191,7 @@ export function EventListPanel({
                 onClick={onToggleNavigation}
                 className="w-full mt-3 py-2 rounded-[8px] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                 style={{
-                  fontFamily: "'Kanit', sans-serif",
+                  fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
                   background: isNavigating ? 'transparent' : '#39FF14',
                   color: isNavigating ? '#FF4D3D' : '#050505',
                   border: isNavigating ? '1px solid rgba(255,77,61,0.3)' : 'none',

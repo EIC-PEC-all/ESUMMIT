@@ -69,7 +69,7 @@ function MarqueeColumn({
           <div
             key={item.id}
             className="group relative w-full shrink-0 overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0A1611] transition-transform duration-300 hover:border-white/20"
-            style={{ height: `${item.height}px`, willChange: 'transform', transform: 'translateZ(0)' }}
+            style={{ height: `${item.height}px` }}
           >
             <BlurImage
               src={item.img}
@@ -130,26 +130,35 @@ export default function MasonryShowcase() {
     offset: ['start start', 'end end'],
   })
 
-  useMotionValueEvent(scrollY, "change", (current) => {
+  const titleVisibleRef = useRef(true)
+  const titleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Throttled title show/hide — only update React state at most once per 120ms
+  useMotionValueEvent(scrollY, 'change', (current) => {
     const previous = scrollY.getPrevious()
     if (previous === undefined) return
-    
-    // Check if we are inside the component's scroll area
+
     const progress = scrollYProgress.get()
-    
-    // If we are at the very top of the section, always show
     if (progress <= 0.02) {
-      setIsTitleVisible(true)
+      if (!isTitleVisible) setIsTitleVisible(true)
       return
     }
 
-    // Hide on scroll down, show on scroll up
-    if (current > previous && current - previous > 5) {
-      setIsTitleVisible(false)
-    } else if (current < previous && previous - current > 5) {
-      setIsTitleVisible(true)
-    }
+    const movingDown = current > previous && current - previous > 5
+    const movingUp   = current < previous && previous - current > 5
+    if (!movingDown && !movingUp) return
+
+    const next = !movingDown
+    if (next === titleVisibleRef.current) return
+    titleVisibleRef.current = next
+
+    if (titleTimerRef.current) clearTimeout(titleTimerRef.current)
+    titleTimerRef.current = setTimeout(() => setIsTitleVisible(next), 0)
   })
+
+  useEffect(() => () => {
+    if (titleTimerRef.current) clearTimeout(titleTimerRef.current)
+  }, [])
 
   // The gallery images still fade in based on absolute progress
   const galleryOpacity = useTransform(scrollYProgress, [0.05, 0.25], [0.15, 1])
@@ -164,7 +173,7 @@ export default function MasonryShowcase() {
       className="relative h-[200vh] border-b border-mint/20 bg-section-2 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10"
     >
       {/* Pinned sticky viewport */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-section-2">
+      <div className="sticky top-0 h-screen w-full overflow-hidden" style={{ background: 'var(--bg-section-2, #0d1f15)' }}>
         {/* Top & bottom gradient masks */}
         <div 
           className="pointer-events-none absolute left-0 right-0 top-0 z-20 h-32" 
@@ -211,8 +220,8 @@ export default function MasonryShowcase() {
           className="pointer-events-none absolute inset-0 z-30 flex flex-col items-center justify-center px-4 text-center"
         >
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] select-none"
+            style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
           >
             <span className="text-gradient-white">SUMMIT</span> <span className="text-gradient-mint">GALLERY</span>
           </h2>

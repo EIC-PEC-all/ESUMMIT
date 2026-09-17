@@ -63,9 +63,9 @@ export interface GroqResponse {
 }
 
 /** Main conversational model — routed server-side. */
-export const MODEL_MAIN = 'llama-3.3-70b-versatile'
+export const MODEL_MAIN = 'qwen/qwen3.8-27b'
 /** Fast cheap model for summarization — routed server-side. */
-export const MODEL_FAST = 'llama-3.1-8b-instant'
+export const MODEL_FAST = 'openai/gpt-oss-120b'
 
 interface ProxyResponse {
   text?: string

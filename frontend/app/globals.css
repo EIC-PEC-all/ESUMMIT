@@ -3,11 +3,15 @@
 @tailwind utilities;
 
 h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
-  font-family: var(--font-kanit), -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-family: var(--font-kanit), 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .font-mono-data {
   font-family: var(--font-jetbrains), 'JetBrains Mono', monospace !important;
+  text-rendering: optimizeLegibility;
 }
 
 :root {
@@ -41,7 +45,7 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-kanit {
 }
 
 
-/* ─── Global Link Hover ─── */
+/* â”€â”€â”€ Global Link Hover â”€â”€â”€ */
 a:hover {
   text-decoration: none;
 }
@@ -64,7 +68,7 @@ html {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ─── Section Layout ─── */
+/* â”€â”€â”€ Section Layout â”€â”€â”€ */
 section,
 .esummit-section,
 #faq,
@@ -120,7 +124,7 @@ header {
 
 
 
-/* Scrollbar Styling — Sleek, subtle, zero horizontal bar leakage */
+/* Scrollbar Styling â€” Sleek, subtle, zero horizontal bar leakage */
 ::-webkit-scrollbar {
   width: 6px;
   height: 0px;
@@ -163,9 +167,9 @@ header {
   color: var(--text-primary);
 }
 
-/* ─── Big Headings Font Rule (Kanit) ─── */
+/* â”€â”€â”€ Big Headings Font Rule (Kanit) â”€â”€â”€ */
 h1, h2, h3 {
-  font-family: var(--font-kanit), sans-serif;
+  font-family: var(--font-kanit), 'Kanit', sans-serif;
 }
 
 
@@ -173,7 +177,7 @@ h1, h2, h3 {
   color: var(--accent-mint);
 }
 
-/* ─── Gradient utilities ─── */
+/* â”€â”€â”€ Gradient utilities â”€â”€â”€ */
 .gradient-orange {
   background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-blue) 100%);
 }
@@ -181,7 +185,7 @@ h1, h2, h3 {
   background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-blue) 100%);
 }
 
-/* ─── Glass / Panel ─── */
+/* â”€â”€â”€ Glass / Panel â”€â”€â”€ */
 .glass {
   background: rgba(13, 20, 14, 0.85);
   backdrop-filter: blur(16px);
@@ -189,12 +193,12 @@ h1, h2, h3 {
   border: 1px solid var(--border-subtle);
 }
 
-/* ─── Glow effects ─── */
+/* â”€â”€â”€ Glow effects â”€â”€â”€ */
 .glow-orange, .glow-volt, .glow-amber, .glow-green {
   box-shadow: 0 0 24px rgba(181, 242, 61, 0.5), 0 0 48px rgba(181, 242, 61, 0.2);
 }
 
-/* ─── 3D Metallic Text Gradients ─── */
+/* â”€â”€â”€ 3D Metallic Text Gradients â”€â”€â”€ */
 .text-gradient-white {
   background: linear-gradient(180deg, #FFFFFF 15%, #E2E8F0 60%, #94A3B8 100%);
   -webkit-background-clip: text;
@@ -255,7 +259,7 @@ h1, h2, h3 {
   transform: translateZ(0);
 }
 
-/* ─── Button base & Unified 3D Gradients ─── */
+/* â”€â”€â”€ Button base & Unified 3D Gradients â”€â”€â”€ */
 .btn-green, .btn-orange, .btn-volt, .btn-amber, .btn-mint-gradient {
   display: inline-flex;
   align-items: center;
@@ -279,7 +283,7 @@ h1, h2, h3 {
   transform: translateY(0);
 }
 
-/* ─── Dark Button (Consistent 3D Style) ─── */
+/* â”€â”€â”€ Dark Button (Consistent 3D Style) â”€â”€â”€ */
 .btn-dark-gradient {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -293,7 +297,7 @@ h1, h2, h3 {
   border-color: rgba(255, 255, 255, 0.35);
 }
 
-/* ─── Yellow Button (Consistent 3D Style) ─── */
+/* â”€â”€â”€ Yellow Button (Consistent 3D Style) â”€â”€â”€ */
 .btn-yellow {
   background: linear-gradient(180deg, #FFF399 0%, #FFD700 80%);
   border: 1px solid #FFE033;
@@ -305,7 +309,7 @@ h1, h2, h3 {
   filter: brightness(1.05);
 }
 
-/* ─── White Button (Consistent 3D Style) ─── */
+/* â”€â”€â”€ White Button (Consistent 3D Style) â”€â”€â”€ */
 .btn-white, .btn-white-gradient {
   background: linear-gradient(180deg, #FFFFFF 0%, #E4E4E7 100%);
   border: 1px solid #E2E8F0;
@@ -341,12 +345,12 @@ h1, h2, h3 {
   background: rgba(181, 242, 61, 0.08);
 }
 
-/* ─── Current Line Accent ─── */
+/* â”€â”€â”€ Current Line Accent â”€â”€â”€ */
 .current-line-horizontal {
   display: none !important;
 }
 
-/* ─── Section layout ─── */
+/* â”€â”€â”€ Section layout â”€â”€â”€ */
 .section-container {
   max-width: 1280px;
   margin: 0 auto;
@@ -360,7 +364,7 @@ h1, h2, h3 {
   .section-container { padding: 0 64px; }
 }
 
-/* ─── Noise overlay ─── */
+/* â”€â”€â”€ Noise overlay â”€â”€â”€ */
 .noise::before {
   content: '';
   position: fixed;
@@ -371,13 +375,13 @@ h1, h2, h3 {
   opacity: 0.35;
 }
 
-/* ─── Card tilt & highlights ─── */
+/* â”€â”€â”€ Card tilt & highlights â”€â”€â”€ */
 .tilt-card {
   transition: transform 0.1s ease, box-shadow 0.2s ease;
   transform-style: preserve-3d;
 }
 
-/* ─── Highlight pulse ─── */
+/* â”€â”€â”€ Highlight pulse â”€â”€â”€ */
 @keyframes highlightPulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(181, 242, 61, 0); }
   50% { box-shadow: 0 0 0 4px rgba(181, 242, 61, 0.4), 0 0 28px rgba(181, 242, 61, 0.3); }
@@ -386,25 +390,25 @@ h1, h2, h3 {
   animation: highlightPulse 1.2s ease 3;
 }
 
-/* ─── Money ticker ─── */
+/* â”€â”€â”€ Money ticker â”€â”€â”€ */
 @keyframes tickerScroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-/* ─── Bill float ─── */
+/* â”€â”€â”€ Bill float â”€â”€â”€ */
 @keyframes billFloat {
   0%, 100% { transform: translateY(0px) rotate(18deg); }
   50% { transform: translateY(-16px) rotate(20deg); }
 }
 
-/* ─── Bill shimmer ─── */
+/* â”€â”€â”€ Bill shimmer â”€â”€â”€ */
 @keyframes shimmerSweep {
   0% { background-position: -200% center; }
   100% { background-position: 300% center; }
 }
 
-/* ─── Glow pulse ring ─── */
+/* â”€â”€â”€ Glow pulse ring â”€â”€â”€ */
 @keyframes glowRing {
   0%, 100% { box-shadow: 0 0 20px rgba(181, 242, 61,0.3), 0 0 40px rgba(181, 242, 61,0.1); }
   50% { box-shadow: 0 0 40px rgba(181, 242, 61,0.55), 0 0 80px rgba(181, 242, 61,0.25); }
@@ -413,7 +417,7 @@ h1, h2, h3 {
   animation: glowRing 3s ease-in-out infinite;
 }
 
-/* ─── Chromatic Aberration Glitch Keyframes ─── */
+/* â”€â”€â”€ Chromatic Aberration Glitch Keyframes â”€â”€â”€ */
 @keyframes glitch-anim-1 {
   0% { transform: translate(0); }
   20% { transform: translate(-2px, 1px); }
@@ -432,7 +436,7 @@ h1, h2, h3 {
   100% { transform: translate(0); }
 }
 
-/* ─── Continuous Vertical Auto-Scroll Animations ─── */
+/* â”€â”€â”€ Continuous Vertical Auto-Scroll Animations â”€â”€â”€ */
 @keyframes autoScrollUp {
   0% { transform: translateY(0%); }
   100% { transform: translateY(-25%); }
@@ -456,9 +460,9 @@ h1, h2, h3 {
   animation-play-state: paused;
 }
 
-/* ─── Global Heading Gradient (Subtle Lime) ─── */
+/* â”€â”€â”€ Global Heading Gradient (Subtle Lime) â”€â”€â”€ */
 /* \u2500\u2500\u2500 Global Heading Gradient (Subtle Lime) \u2500\u2500\u2500 */
-/* Scoped to text elements only — SVG/icon currentColor is untouched */
+/* Scoped to text elements only â€” SVG/icon currentColor is untouched */
 h1.text-mint, h2.text-mint, h3.text-mint, h4.text-mint,
 p.text-mint, span.text-mint, label.text-mint,
 a.text-mint, li.text-mint, strong.text-mint, em.text-mint,
@@ -528,3 +532,9 @@ a.text-mint, li.text-mint, strong.text-mint, em.text-mint,
   animation: marquee 32s linear infinite !important;
   will-change: transform;
 }
+
+/* OSM Dark Mode Tiles */
+.osm-dark-tiles {
+  filter: invert(100%) hue-rotate(180deg) brightness(75%) contrast(110%) sepia(20%) hue-rotate(45deg) !important;
+}
+

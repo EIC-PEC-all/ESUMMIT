@@ -35,7 +35,7 @@ export const CARDS: DayCard[] = [
   {
     num: '01',
     day: 'DAY 01',
-    date: 'MARCH 15, 2026',
+    date: 'SEPTEMBER 26, 2026',
     title: 'Inauguration & Pitch Arena',
     events: [
       {
@@ -83,7 +83,7 @@ export const CARDS: DayCard[] = [
   {
     num: '02',
     day: 'DAY 02',
-    date: 'MARCH 16, 2026',
+    date: 'SEPTEMBER 27, 2026',
     title: 'Hackathon Demos & Grand Finals',
     events: [
       {

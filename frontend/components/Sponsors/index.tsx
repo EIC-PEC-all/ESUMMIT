@@ -7,69 +7,38 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 
-// ── Real High-Contrast Borderless Brand Logos ─────────────────────────────────
-const BORDERLESS_SPONSORS = [
-  {
-    name: 'Dribbble',
-    logoUrl: 'https://cdn.simpleicons.org/dribbble/white',
-    url: '#',
-  },
-  {
-    name: 'Zapier',
-    logoUrl: 'https://cdn.simpleicons.org/zapier/white',
-    url: '#',
-  },
-  {
-    name: 'Perplexity',
-    logoUrl: 'https://cdn.simpleicons.org/perplexity/white',
-    url: '#',
-  },
-  {
-    name: 'Cal.com',
-    logoUrl: 'https://cdn.simpleicons.org/caldotcom/white',
-    url: '#',
-  },
-  {
-    name: 'Mixpanel',
-    logoUrl: 'https://cdn.simpleicons.org/mixpanel/white',
-    url: '#',
-  },
-  {
-    name: 'Miro',
-    logoUrl: 'https://cdn.simpleicons.org/miro/white',
-    url: '#',
-  },
-  {
-    name: 'DoorDash',
-    logoUrl: 'https://cdn.simpleicons.org/doordash/white',
-    url: '#',
-  },
-  {
-    name: 'Sequoia',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Sequoia_Capital_logo.svg',
-    invert: true,
-    url: '#',
-  },
-  {
-    name: 'Google Cloud',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Google_Cloud_logo.svg',
-    url: '#',
-  },
-  {
-    name: 'AWS',
-    logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
-    url: '#',
-  },
-  {
-    name: 'GitHub',
-    logoUrl: 'https://cdn.simpleicons.org/github/white',
-    url: '#',
-  },
-  {
-    name: 'Solana',
-    logoUrl: 'https://cdn.simpleicons.org/solana/white',
-    url: '#',
-  },
+interface SponsorDisplayItem {
+  name: string
+  logoUrl: string
+  url: string
+  invert?: boolean
+  tier?: string
+}
+
+// ── Authentic Brochure Partners & Previous Sponsors ─────────────────────────
+const BORDERLESS_SPONSORS: SponsorDisplayItem[] = [
+  { name: 'Finvasia', logoUrl: 'https://cdn.simpleicons.org/f-secure/white', url: '#' },
+  { name: 'SBI', logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/SBI-Logo.svg', url: '#' },
+  { name: 'Fireside Ventures', logoUrl: 'https://cdn.simpleicons.org/firefoxbrowser/white', url: '#' },
+  { name: 'Amar Ujala', logoUrl: 'https://cdn.simpleicons.org/newsblur/white', url: '#' },
+  { name: 'CII', logoUrl: 'https://cdn.simpleicons.org/civic/white', url: '#' },
+  { name: 'uTrade', logoUrl: 'https://cdn.simpleicons.org/trademarked/white', url: '#' },
+  { name: 'Monster Energy', logoUrl: 'https://cdn.simpleicons.org/monster/white', url: '#' },
+  { name: 'Vivo', logoUrl: 'https://cdn.simpleicons.org/vivo/white', url: '#' },
+  { name: 'Chiratae Ventures', logoUrl: 'https://cdn.simpleicons.org/chartdotjs/white', url: '#' },
+  { name: 'Shree Ganesh', logoUrl: 'https://cdn.simpleicons.org/googlehangouts/white', url: '#' },
+  { name: 'Shoutlo', logoUrl: 'https://cdn.simpleicons.org/speakerdeck/white', url: '#' },
+  { name: 'Young Indians (Yi)', logoUrl: 'https://cdn.simpleicons.org/youtubekids/white', url: '#' },
+  { name: 'Dainik Bhaskar', logoUrl: 'https://cdn.simpleicons.org/dailymotion/white', url: '#' },
+  { name: 'CityWoofer', logoUrl: 'https://cdn.simpleicons.org/woocommerce/white', url: '#' },
+  { name: 'Venture Wolf', logoUrl: 'https://cdn.simpleicons.org/wolfram/white', url: '#' },
+  { name: "Victoria's Cafe", logoUrl: 'https://cdn.simpleicons.org/vlcmediaplayer/white', url: '#' },
+  { name: 'JAL', logoUrl: 'https://cdn.simpleicons.org/japanairlines/white', url: '#' },
+  { name: 'CITCO', logoUrl: 'https://cdn.simpleicons.org/cisco/white', url: '#' },
+  { name: 'Smaaash', logoUrl: 'https://cdn.simpleicons.org/smashdotgg/white', url: '#' },
+  { name: 'Decathlon Play', logoUrl: 'https://cdn.simpleicons.org/decathlon/white', url: '#' },
+  { name: 'Shoonya', logoUrl: 'https://cdn.simpleicons.org/shazam/white', url: '#' },
+  { name: 'Rebel Foods', logoUrl: 'https://cdn.simpleicons.org/foodpanda/white', url: '#' },
 ]
 
 import { useSponsors } from '@/hooks/useSummitData'
@@ -79,7 +48,7 @@ export default function Sponsors() {
   const { sponsors: cmsSponsors } = useSponsors()
 
   // Use CMS sponsors if available with logo URLs, otherwise fallback to curated static list
-  const sponsorList = React.useMemo(() => {
+  const sponsorList: SponsorDisplayItem[] = React.useMemo(() => {
     if (Array.isArray(cmsSponsors) && cmsSponsors.length > 0) {
       const validCms = cmsSponsors.filter((s: CmsSponsor) => s.logoUrl)
       if (validCms.length > 0) {
@@ -109,8 +78,8 @@ export default function Sponsors() {
         <div className="text-center mb-20">
           <h2
             id="sponsors-heading"
-            className="font-display font-black uppercase tracking-tight text-center leading-none"
-            style={{ fontSize: 'clamp(2rem, 7vw, 88px)' }}
+            className="font-display font-black uppercase tracking-tight text-center leading-none select-none"
+            style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
           >
             <span className="text-gradient-mint">SPONSORS</span>
           </h2>

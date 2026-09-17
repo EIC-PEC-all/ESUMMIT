@@ -11,9 +11,9 @@ export const FEST_META = {
     'Where the tricity\'s boldest ideas meet their moment.',
     'The north\'s premier stage for student builders and venture thinkers.',
   ],
-  dates: 'March 15–16, 2026',
+  dates: 'September 26–27, 2026',
   venue: 'Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh',
-  countdownTarget: new Date('2026-03-15T09:00:00+05:30').toISOString(),
+  countdownTarget: new Date('2026-09-26T09:00:00+05:30').toISOString(),
   registrationUrl: '#register',
   social: {
     instagram: 'https://instagram.com/ecell.pec',
@@ -22,11 +22,21 @@ export const FEST_META = {
   },
 }
 
-export const STATS = [
-  { label: 'Attendees', value: 3000, suffix: '+', id: 'attendees' },
-  { label: 'Speakers', value: 40, suffix: '+', id: 'speakers' },
-  { label: 'Prize Pool', value: 15, suffix: 'L+', prefix: '₹', id: 'prize' },
-  { label: 'Past Editions', value: 7, suffix: '', id: 'editions' },
+export interface StatItem {
+  label: string
+  value: number
+  suffix: string
+  id: string
+  prefix?: string
+}
+
+export const STATS: StatItem[] = [
+  { label: 'Total Footfall', value: 2000, suffix: '+', id: 'footfall', prefix: '' },
+  { label: 'Startups Attended', value: 100, suffix: '+', id: 'startups', prefix: '' },
+  { label: 'Workshops Conducted', value: 50, suffix: '+', id: 'workshops', prefix: '' },
+  { label: 'Speaker Sessions', value: 30, suffix: '+', id: 'speakers', prefix: '' },
+  { label: 'Event Participation', value: 5000, suffix: '+', id: 'participation', prefix: '' },
+  { label: 'Alumni Support', value: 1000, suffix: '+', id: 'alumni', prefix: '' },
 ]
 
 export const TRACKS = [
@@ -85,62 +95,62 @@ export const TRACKS = [
 export const SPEAKERS = [
   {
     id: 'spk1',
-    name: 'Peyush Bansal',
-    title: 'Co-Founder & CEO, Lenskart',
-    bio: 'Pioneered omnichannel D2C eyewear retail across Asia. Angel investor in 50+ high-growth technology and consumer startups.',
+    name: 'Sandeep Jain',
+    title: 'Founder, GeeksforGeeks',
+    bio: 'Pioneered computer science education in India, scaling GeeksforGeeks into a global coding powerhouse empowering millions.',
     track: 'panels',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&auto=format&fit=crop',
-    initials: 'PB',
-    color: '#FF4D3D',
+    initials: 'SJ',
+    color: '#7ED321',
   },
   {
     id: 'spk2',
-    name: 'Anupam Mittal',
-    title: 'Founder & CEO, People Group',
-    bio: 'Consumer internet pioneer (Shaadi.com, Makaan.com) and prolific angel investor backing over 200+ ventures across India.',
+    name: 'Saurabh Munjal',
+    title: 'Co-Founder & CEO, Lahori Zeera',
+    bio: 'Revolutionized ethnic beverages across India, scaling Lahori Zeera with nationwide FMCG retail distribution.',
     track: 'pitch',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80&auto=format&fit=crop',
-    initials: 'AM',
+    initials: 'SM',
     color: '#3DD9FF',
   },
   {
     id: 'spk3',
-    name: 'Dr. Ritesh Malik',
-    title: 'Founder, Innov8 Coworking',
-    bio: 'Serial entrepreneur and healthcare innovator. Scaled Innov8 to acquisition by OYO and actively mentors early-stage student founders.',
+    name: 'Aditi Bhutia Madan',
+    title: 'Founder, Momo Mami',
+    bio: 'Shark Tank India pioneer and chef-entrepreneur scaling BluePine Foods and frozen gourmet cuisine pan-India.',
     track: 'panels',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&auto=format&fit=crop',
-    initials: 'RM',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80&auto=format&fit=crop',
+    initials: 'AM',
     color: '#FF8C42',
   },
   {
     id: 'spk4',
-    name: 'Upasana Taku',
-    title: 'Co-Founder & COO, MobiKwik',
-    bio: 'Fintech pioneer leading digital payments infrastructure, credit distribution, and financial inclusion for 140M+ registered users.',
+    name: 'Aseem Ghavri',
+    title: 'Co-Founder, Third Unicorn',
+    bio: 'Serial entrepreneur and fintech builder co-founding Third Unicorn alongside Ashneer Grover.',
     track: 'pitch',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80&auto=format&fit=crop',
-    initials: 'UT',
+    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80&auto=format&fit=crop',
+    initials: 'AG',
     color: '#9B5CFF',
   },
   {
     id: 'spk5',
-    name: 'Gajendra Jangid',
-    title: 'Co-Founder & CMO, CARS24',
-    bio: 'PEC Alumnus who scaled CARS24 to a global auto-tech unicorn operating across India, Australia, Thailand, and the UAE.',
-    track: 'pitch',
-    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80&auto=format&fit=crop',
-    initials: 'GJ',
+    name: 'Varun Singla',
+    title: 'Founder, Gate Smashers',
+    bio: 'India’s foremost computer science educator mentoring over 1.5M+ engineers across core technology topics.',
+    track: 'panels',
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&auto=format&fit=crop',
+    initials: 'VS',
     color: '#FF4D3D',
   },
   {
     id: 'spk6',
-    name: 'Kunwar Sachdev',
-    title: 'Founder, Su-Kam Power Systems',
-    bio: 'PEC Alumnus and solar renewable energy pioneer with multiple patents in power electronics and clean energy storage.',
+    name: 'Sarvjeet Singh',
+    title: 'Founder, Finvasia',
+    bio: 'Multinational fintech leader and creator of Shoonya zero-brokerage trading ecosystem.',
     track: 'expo',
-    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&auto=format&fit=crop',
-    initials: 'KS',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&auto=format&fit=crop',
+    initials: 'SS',
     color: '#3DD9FF',
   },
 ]
@@ -568,7 +578,7 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
 export const SCHEDULE = {
   day1: {
     label: 'Day 1',
-    date: 'March 15, 2026',
+    date: 'September 26, 2026',
     events: [
       {
         id: 'd1-1',
@@ -684,7 +694,7 @@ export const SCHEDULE = {
   },
   day2: {
     label: 'Day 2',
-    date: 'March 16, 2026',
+    date: 'September 27, 2026',
     events: [
       {
         id: 'd2-1',

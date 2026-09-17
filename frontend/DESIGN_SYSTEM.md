@@ -46,13 +46,12 @@ Three font families are configured. All are loaded in `app/layout.tsx` and expos
 
 | Font | Variable | Tailwind Alias | Usage |
 |---|---|---|---|
-| Kanit (Google) | `--font-kanit` | `font-display` / `font-kanit` | Big headings, section titles (`h1`, `h2`, `h3`) |
-| Khaviax (local OTF) | `--font-khaviax` | `font-display` fallback | Display fallback |
+| Tamrin (local OTF) | `--font-tamrin` | `font-display` / `font-tamrin` / `font-kanit` | Big headings, section titles (`h1`, `h2`, `h3`) |
 | Inter (Google) | `--font-inter` | `font-body` | Body text, paragraphs, buttons |
 | JetBrains Mono (Google) | `--font-jetbrains` | `font-mono` | Data labels, stat numbers, code, badges |
 
 **Scale notes:**
-- Big headings (`h1`, `h2`, `h3`): `Kanit`, weight 700–900, `font-display`
+- Big headings (`h1`, `h2`, `h3`): `Tamrin`, `font-display`
 - Data / badge text: `font-mono`, uppercase, `letter-spacing: 0.15em`
 - Body: `font-body`, weight 400–600
 

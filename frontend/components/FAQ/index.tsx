@@ -84,8 +84,8 @@ export default function FAQ() {
         <div className="mb-12 flex flex-col items-center justify-center text-center">
           <h2
             id="faq-heading"
-            className="font-display font-black uppercase leading-none tracking-tight text-center mb-4"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center mb-4 select-none"
+            style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
           >
             <span className="text-gradient-mint">FAQ</span>
           </h2>

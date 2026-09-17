@@ -1,7 +1,7 @@
 'use client'
 // components/EsummitHero/index.tsx
 // Premium E-Summit Hero — Stock Market Bull Edition
-// Dark #070B08 bg · Volt-green var(--accent-mint) accents · Kanit font
+// Dark #070B08 bg · Volt-green var(--accent-mint) accents · Tamrin font
 // Features: live ticker strip · floating market badges · orbit ring · magnetic bull
 
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
@@ -87,7 +87,7 @@ function Sparkline() {
 
 export default function EsummitHero() {
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'March 15–16, 2026'
+  const summitDates = data?.siteConfig?.summitDates || 'September 26–27, 2026'
   const [hovered, setHovered] = useState(false)
   const [mounted, setMounted] = useState(false)
 

@@ -125,7 +125,7 @@ export function NavigationCard({ day, index, scrollYProgress }: NavigationCardPr
             <span
               className="font-black leading-none select-none"
               style={{
-                fontFamily: "'Kanit', sans-serif",
+                fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
                 fontSize: 'clamp(2.5rem, 8vw, 120px)',
                 lineHeight: 0.9,
                 color: '#39FF14',
@@ -151,7 +151,7 @@ export function NavigationCard({ day, index, scrollYProgress }: NavigationCardPr
                 className="font-medium uppercase"
                 style={{
                   color: '#F5F5F0',
-                  fontFamily: "'Kanit', sans-serif",
+                  fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
                   fontSize: 'clamp(1rem, 2.2vw, 2.1rem)',
                 }}
               >
@@ -206,7 +206,7 @@ export function NavigationCard({ day, index, scrollYProgress }: NavigationCardPr
                 onClick={getCurrentLocation}
                 className="px-6 py-3 rounded-xl text-[#050505] font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-2"
                 style={{
-                  fontFamily: "'Kanit', sans-serif",
+                  fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
                   background: '#39FF14',
                   boxShadow: '0 0 24px rgba(57,255,20,0.5)',
                 }}

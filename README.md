@@ -27,9 +27,9 @@ graph TD
 
 | Service | Port | Directory | Tech Stack | Role |
 | :--- | :---: | :--- | :--- | :--- |
-| **Public Experience Portal** | `3000` | `ESUMMIT/` | Next.js 14, React 18, Tailwind, Framer Motion, Lenis | Public landing page, tracks, 3D speaker roster, dynamic pass checkout, AI Concierge |
-| **Operations & Command Center** | `3001` | `admin_dashboard/` | Next.js 16, Turbopack, Tailwind, Lucide, WebRTC | Volunteer Gate Scanner, Jury Pitch Rubrics, CMS Manager, CA Leaderboard |
-| **Production API & Engine** | `4000` | `E_Summit_Backend/` | NestJS 10, Prisma 6, PostgreSQL, Argon2id, JWT | RESTful API, HMAC QR tickets, Razorpay webhooks, RBAC authorization |
+| **Public Experience Portal** | `3000` | `frontend/` | Next.js 14, React 18, Tailwind, Framer Motion, Lenis | Public landing page, tracks, 3D speaker roster, dynamic pass checkout, AI Concierge |
+| **Operations & Command Center** | `3001` | `admin/` | Next.js App Router, Tailwind, Lucide, WebRTC | Volunteer Gate Scanner, Jury Pitch Rubrics, CMS Manager, CA Leaderboard |
+| **Production API & Engine** | `4000` | `backend/` | NestJS 10, Prisma 6, PostgreSQL, Argon2id, JWT | RESTful API, HMAC QR tickets, Razorpay webhooks, RBAC authorization |
 
 ---
 
@@ -53,7 +53,7 @@ graph TD
 ### 4. Design System
 - **Theme Palette**: Obsidian Void (`#060B08`), Radiant Volt Green (`#7ED321`), Crimson Flame (`#FF4D3D`), and Cyan Spark (`#3DD9FF`).
 - **Animations**: Uses GSAP ScrollTrigger timelines and Lenis for inertial smooth scrolling.
-- **Typography**: Kanit for headings, Inter for body text, and JetBrains Mono for data displays.
+- **Typography**: Tamrin for headings, Inter for body text, and JetBrains Mono for data displays.
 
 ---
 
@@ -80,39 +80,27 @@ Backend API & Security:
 ## Project Structure
 
 ```text
-PEC-SUMMIT/
-├── app/                        # Next.js 14 App Router routes & layouts
-│   ├── faq/                    # FAQ page route
-│   ├── passes/                 # Pass tiers & pricing page route
-│   ├── register/               # Registration & entry forms route
-│   ├── schedule/               # Full event timeline & schedule route
-│   ├── speakers/               # Speaker line-up page route
-│   ├── sponsors/               # Sponsor ecosystem page route
-│   ├── tracks/                 # Event tracks detail page route
-│   ├── globals.css             # Global Tailwind directives, fonts, noise overlay
-│   ├── layout.tsx              # Root layout with SmoothScroll & Session Providers
-│   └── page.tsx                # Main landing page composition
-├── components/                 # Component Library
-│   ├── Concierge/              # Floating AI Assistant Component
-│   ├── EsummitAbout/           # About section
-│   ├── EsummitHero/            # Hero section with live ticker
-│   ├── EsummitMarquee/         # Horizontal text and visual showcase
-│   ├── EsummitSpeakers/        # Highlighted speaker cards
-│   ├── EsummitTracks/          # Event tracks list & details
-│   ├── FAQ/                    # Expandable FAQ accordion
-│   ├── Footer/                 # Footer navigation links
-│   ├── Nav/                    # Header navigation & mobile drawer
-│   ├── Providers/              # Context providers
-│   ├── Speakers/               # 3D interactive speaker cards grid
-│   ├── Sponsors/               # Partner & sponsor logo marquee
-│   ├── StatBurst/              # Animated stats counter
-│   ├── Timeline/               # Interactive day schedule timeline
-│   └── ui/                     # Reusable atomic UI components
-├── hooks/                      # Custom React Hooks
-├── lib/                        # Data stores, metadata & API integrations
-│   ├── api.ts                  # Backend API fetching utilities
-│   └── data.ts                 # Festival metadata, tracks, speakers, FAQ data
-└── public/                     # Static assets, logos, icons, PWA manifest
+E-SUMMIT/
+├── frontend/                   # Public Experience Portal (Next.js 14)
+│   ├── app/                    # Next.js App Router routes & layouts
+│   ├── components/             # Reusable UI components & 3D canvases
+│   ├── hooks/                  # Custom React hooks
+│   ├── lib/                    # API integrations and utilities
+│   └── public/                 # Static assets, logos, models
+├── backend/                    # Production API & Engine (NestJS 10)
+│   ├── src/                    # API modules, controllers, and services
+│   ├── prisma/                 # Database schema and migrations
+│   ├── scripts/                # Database seeding and utility scripts
+│   └── test/                   # E2E and unit testing suites
+├── admin/                      # Operations & Command Center (Next.js)
+│   ├── app/                    # Admin dashboard routes and layouts
+│   ├── components/             # Admin-specific UI components
+│   └── lib/                    # Shared administrative utilities
+├── nginx/                      # Reverse proxy and load balancing configuration
+├── DESIGN_SYSTEM.md            # Typography, colors, and UI principles
+├── DEVOPS.md                   # Deployment and CI/CD documentation
+├── docker-compose.yml          # Production Docker orchestration
+└── docker-compose.dev.yml      # Local development Docker orchestration
 ```
 
 ---
@@ -129,6 +117,29 @@ PEC-SUMMIT/
 
 ---
 
+## Docker & Local Orchestration
+
+The entire platform can be orchestrated using Docker Compose for simplified local development and production deployments.
+
+### Local Development Environment
+We provide a `docker-compose.dev.yml` that mounts your local volumes for hot-reloading across the frontend, backend, and admin panels.
+
+```bash
+# Start the complete stack in development mode
+docker-compose -f docker-compose.dev.yml up --build
+```
+
+### Production Environment
+The production configuration (`docker-compose.yml`) utilizes `nginx` as a reverse proxy, builds optimized static images for Next.js, and runs NestJS in production mode.
+
+```bash
+# Start the production stack
+docker-compose up --build -d
+```
+For advanced deployment instructions, CI/CD pipelines, and infrastructure details, refer to [DEVOPS.md](./DEVOPS.md). For UI guidelines, please refer to [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md).
+
+---
+
 ## Getting Started Locally
 
 ### 1. Prerequisites
@@ -142,7 +153,7 @@ PEC-SUMMIT/
 
 ```bash
 # Navigate to backend directory
-cd E_Summit_Backend
+cd backend
 
 # Install dependencies
 npm install
@@ -164,7 +175,7 @@ npm run start:dev
 
 ```bash
 # Navigate to public frontend directory
-cd ../ESUMMIT
+cd ../frontend
 
 # Install dependencies
 npm install --legacy-peer-deps
@@ -186,13 +197,13 @@ npm run dev
 
 ```bash
 # Navigate to admin dashboard directory
-cd ../E_Summit_Backend/admin_dashboard
+cd ../admin
 
 # Install dependencies
 npm install
 
 # Configure environment
-cp .env.local.example .env.local
+# Make sure to create and populate a .env.local file with necessary keys
 
 # Start admin dashboard (Port 3001)
 npm run dev
@@ -219,7 +230,7 @@ All pre-seeded demo accounts share the password **`PecSummit@2026`**:
 
 ```bash
 # Run all backend unit & integration test suites
-cd E_Summit_Backend
+cd backend
 npm test
 
 # Run tests in watch mode

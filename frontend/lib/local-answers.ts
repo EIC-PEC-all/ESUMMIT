@@ -10,39 +10,48 @@
 
 // ── Static knowledge base ────────────────────────────────────────────────────
 
-const SCHEDULE_TEXT = `**Day 1 — March 15, 2026**
-• 09:00 Registration & Welcome Kit (Main Gate)
+const SCHEDULE_TEXT = `**Day 1 — September 26, 2026**
+• 09:00 Registration & Welcome Kit (Main Gate Plaza)
 • 10:00 Inaugural Ceremony & Keynote (Main Auditorium)
-• 11:00 Panel: Fundraising in a Tough Climate (Main Auditorium)
-• 12:30 Startup Expo Opens (Expo Hall)
+• 11:00 Startup Expo & Founder Alley Launch (Exhibition Grounds)
+• 12:30 Expert Sessions & Workshops (Senate Hall)
 • 13:30 Lunch & Networking (Student Center)
-• 14:30 Pitch Competition Round 1 (Main Auditorium)
-• 16:00 Panel: AI for Startups (Main Auditorium)
-• 17:30 Hackathon Kickoff (CSE Block)
-• 19:00 Speed Networking (Admin Block)
-• 20:00 Dinner & Evening Mixer (Student Center)
+• 14:30 VC Pitch Arena: Qualifying Round (Incubator Hall)
+• 16:00 Panel: Scaling Tech Platforms (Main Auditorium)
+• 17:30 24-Hour National Hackathon Kickoff (Computer Center)
+• 19:00 Speed Networking & E-Bazaar (Central Quadrangle)
+• 20:00 VIP Investor & Founder Networking Dinner (PEC Club Lounge)
 
-**Day 2 — March 16, 2026**
-• 09:00 Hackathon Mid-Check & Mentor Rotations (CSE Block)
-• 10:00 Panel: Student-to-Founder Playbook (Main Auditorium)
-• 11:30 Investor Open Hours (Admin Block)
-• 12:30 Lunch (Student Center)
-• 13:30 Hackathon Final Presentations (CSE Block)
-• 15:00 Pitch Competition Finals (Main Auditorium)
-• 16:30 Panel: Deep-Tech in India (Main Auditorium)
-• 17:30 Awards Ceremony (Main Auditorium)
-• 18:30 Closing Keynote (Main Auditorium)
-• 19:30 Closing Mixer (Student Center)`
+**Day 2 — September 27, 2026**
+• 09:00 Hackathon Mid-Check & Mentor Rotations (Computer Center)
+• 10:00 DeepTech & GenAI Masterclass (Main Auditorium)
+• 11:30 Talent Fair & Dealroom Pitches (Admin Block)
+• 12:30 Lunch Break (Student Center)
+• 13:30 Hackathon Live Project Demos & Judging (Computer Center)
+• 15:00 Grand Pitch Finals (Main Auditorium)
+• 16:30 Women Founders + Alumni Connect (Senate Hall)
+• 17:30 Valedictory Keynote & Award Ceremony (Main Auditorium)
+• 19:30 Stand-up Comedy & Closing Celebration (Main Auditorium)`
 
-const SPEAKERS_TEXT = `**E-Summit 2026 Speakers (8 confirmed)**
-1. **Priya Nair** — Partner, Surge Ventures
-2. **Arjun Mehta** — Co-founder & CTO, Kira.ai
-3. **Deepika Rangi** — Head of Startup Ecosystem, Nasscom
-4. **Sameer Khanna** — Angel Investor & ex-Sequoia EIR
-5. **Ritu Sharma** — Founder, GreenMile Logistics
-6. **Vikram Bose** — VP Product, Razorpay
-7. **Ananya Joshi** — Founder, MindBloom EdTech
-8. **Kabir Singh** — CTO, Stealth Agri-Startup`
+const SPEAKERS_TEXT = `**E-Summit 2026 Speakers**
+1. **Sandeep Jain** — Founder, GeeksforGeeks
+2. **Saurabh Munjal** — Co-Founder & CEO, Lahori Zeera
+3. **Aditi Bhutia Madan** — Founder, Momo Mami (Shark Tank India)
+4. **Sourabh Goyal** — Founder, SuccessBrew
+5. **Mandeep Kaur Tangra** — Founder, SimbaQuartz
+6. **Aahan Khurma** — Co-Founder & CEO, Wellversed
+7. **Drishti Kharbanda** — Founder, Bake Cosmetics
+8. **Aseem Ghavri** — Co-Founder, Third Unicorn
+9. **Varun Singla** — Founder, Gate Smashers
+10. **Sarvjeet Singh** — Founder, Finvasia & Shoonya
+11. **Paresh Gupta** — Founder, CUETPro / GSEC
+12. **Sharad Sagar** — Founder & CEO, Dexterity Global
+13. **Paritosh Anand** — Founder, WeSmile / Believe Clothing
+14. **Aditya Arora** — Android Lead, SAP & Angel Investor
+15. **Nandu Nandkishore** — Former Global CEO, Nestlé Nutrition
+16. **Daksh Sethi** — Founder & CEO, Guby Rogers
+17. **Hardik Banga** — Co-Founder, Adsworm
+18. **Rupinder Singh** — Founder, Bio House`
 
 const FAQ_BANK: Array<{ patterns: string[]; answer: string }> = [
   {
@@ -161,7 +170,7 @@ For specific queries, you can also ask me directly — I'm connected to live eve
     patterns: ['hi', 'hello', 'hey', 'hii', 'helo', 'good morning', 'good evening', 'sup', 'wassup'],
     answer: `Hello! I am the **E-Summit 2026 Official Assistant**. I can help you with:
 
-• **Schedule** — Day-by-day agenda for March 15–16
+• **Schedule** — Day-by-day agenda for September 26–27
 • **Speakers** — Our confirmed speakers
 • **Campus Navigation** — Walking routes to any venue
 • **Activities** — Hackathon, Pitch Competition, Job Fair, and more
@@ -181,7 +190,61 @@ What would you like to know?`,
 
 Plus **13 additional activities** including Job Fair, R&D Conclave, IPL Auction, BizQuiz, Treasure Hunt, Baazar and more!`,
   },
+  {
+    patterns: ['alumni', 'notable alumni', 'kalpana', 'chawla', 'padmasree', 'warrior', 'satish dhawan', 'gajendra', 'cars24'],
+    answer: `**Notable PEC Alumni**
+• **Kalpana Chawla** — NASA Astronaut, first Indian-origin woman in space (PEC '82)
+• **Padmasree Warrior** — Former CTO Cisco & Motorola, now CEO Fable (PEC '82)
+• **Satish Dhawan** — Former Chairman, ISRO (PEC '38)
+• **Steve Sanghi** — Executive Chairman, Microchip Technology (PEC '75)
+• **Gajendra Jangid** — Co-Founder & CMO, CARS24 ($3.3B unicorn, PEC '05)
+• **Jaspal Bhatti** — Iconic satirist, Padma Bhushan Awardee (PEC '78)
+
+Ask me about any specific alumni!`,
+  },
+  {
+    patterns: ['sponsor', 'partner', 'finvasia', 'google cloud', 'github', 'supported by'],
+    answer: `**Summit Partners & Sponsors**
+• **Event Partner**: Google Cloud & GitHub (Hackathon)
+• **Finance Partner**: Finvasia & Shoonya
+• **Investor Network**: Chandigarh Angels Network
+• **Career Partner**: PEC Training & Placement Cell
+• **Community Partner**: CII & Young Indians
+
+Interested in sponsorship? Reach out at ecellpec@gmail.com`,
+  },
+  {
+    patterns: ['events', 'what can i do', 'activities', 'all events', 'list'],
+    answer: `**All Events at E-Summit 2026**
+1. E-Summit Hackathon (24-Hour)
+2. Talent Fair — Internship & Job Fair
+3. Funding Conclave
+4. IPL Auction Strategy Challenge
+5. Build & Pitch Competition
+6. E-Bazaar (Startup Flea Market)
+7. Game of Brands & Biz Quiz
+8. Startup Expo + Science Fair
+
+Plus: Women Founders Connect, Campus Treasure Hunt, Stand-up Comedy & E-Sports, and more!`,
+  },
+  {
+    patterns: ['thank', 'thanks', 'bye', 'goodbye', 'see you', 'that\'s all', 'awesome', 'great', 'perfect'],
+    answer: `You're welcome! Feel free to ask anything else about E-Summit 2026. See you at PEC on **September 26–27**! 🚀`,
+  },
+  {
+    patterns: ['register', 'sign up', 'how to register', 'how to join', 'apply'],
+    answer: `**How to Register**
+
+1. Click **"Register Now"** on this website (top navigation)
+2. Sign in with your Google account
+3. Select your pass type (Student / Professional)
+4. Choose the events you want to attend
+5. Complete payment (if applicable)
+
+Registration for competitions (Hackathon, Pitch) has separate eligibility — check the event details page!`,
+  },
 ]
+
 
 // ── Normalizer ────────────────────────────────────────────────────────────────
 

@@ -26,6 +26,30 @@ interface AlumniMember {
 
 const ALUMNI_DATA: AlumniMember[] = [
   {
+    id: 'alumni-0a',
+    name: 'Kalpana Chawla',
+    batch: "PEC '82",
+    role: 'Astronaut & Aerospace Pioneer',
+    company: 'NASA',
+    valuation: 'Congressional Space Medal of Honor',
+    achievement: 'First Indian-Born Woman in Space',
+    bio: 'Pioneering astronaut and aeronautical engineer who inspired generations of innovators and space explorers worldwide.',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412303/esummit/gallery/pec_aerial_night.png',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
+  },
+  {
+    id: 'alumni-0b',
+    name: 'Satish Dhawan',
+    batch: "PEC '38",
+    role: 'Former Chairman',
+    company: 'ISRO',
+    valuation: 'Father of Indian Fluid Dynamics',
+    achievement: 'Architect of India’s Space Program',
+    bio: 'Legendary aerospace scientist who spearheaded India’s indigenous space launch vehicle and satellite programs.',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412307/esummit/gallery/pec_auditorium_facade.png',
+    linkedin: 'https://linkedin.com/company/ecell-pec',
+  },
+  {
     id: 'alumni-1',
     name: 'Gajendra Jangid',
     batch: "PEC '05",
@@ -34,7 +58,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     valuation: '$3.3B Unicorn',
     achievement: 'Forbes Global Entrepreneur',
     bio: 'Pioneered auto-tech logistics in India, scaling CARS24 from a seed idea to a multi-billion dollar international marketplace.',
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412326/esummit/gallery/pec_pitch.jpg',
     linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
@@ -46,7 +70,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     valuation: 'Fortune Most Powerful Women',
     achievement: 'Microsoft & Spotify Board Member',
     bio: 'Global technology icon. Served as Chief Technology Officer at Cisco and Motorola, currently leading digital reading platform Fable.',
-    imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412321/esummit/gallery/pec_keynote_speaker.png',
     linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
@@ -58,7 +82,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     valuation: '$40B+ Nasdaq Giant',
     achievement: 'Semiconductor Executive of the Decade',
     bio: 'Transformed Microchip Technology from near-bankruptcy into a global semiconductor leader with 30+ consecutive years of profitability.',
-    imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412327/esummit/gallery/pec_pitch_table.png',
     linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
@@ -70,7 +94,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     valuation: 'Solar Man of India',
     achievement: 'Ernst & Young Entrepreneur of the Year',
     bio: 'Revolutionized power backup and solar renewable systems across South Asia, Africa, and the Middle East.',
-    imageUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412302/esummit/gallery/pec_admin_building.png',
     linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
@@ -82,7 +106,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     valuation: 'Angel Investor in 80+ Startups',
     achievement: 'Forbes 30 Under 30 Asia',
     bio: 'Doctor turned serial entrepreneur and startup ecosystem builder. Scaled Innov8 to exit and actively mentors student founders across India.',
-    imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412331/esummit/gallery/pec_senate_roundtable.png',
     linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
@@ -94,7 +118,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     valuation: 'Padma Bhushan Awardee',
     achievement: 'PEC Electrical Engineering Alum',
     bio: 'Legendary satirist, filmmaker, and cultural icon who pioneered independent broadcast television and creative media production in India.',
-    imageUrl: 'https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412309/esummit/gallery/pec_centenary_hall.png',
     linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
@@ -106,7 +130,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     valuation: 'National Academy of Engineering',
     achievement: 'Distinguished Academic Leader',
     bio: 'Renowned researcher in thermal sciences and space shuttle heat-shield physics. Led UCLA Engineering to top-tier global research ranking.',
-    imageUrl: 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412317/esummit/gallery/pec_innovation_stage.png',
     linkedin: 'https://linkedin.com/company/ecell-pec',
   },
   {
@@ -118,7 +142,7 @@ const ALUMNI_DATA: AlumniMember[] = [
     valuation: 'Automotive Industry Titan',
     achievement: 'Pioneer of Auto Tier-1 in India',
     bio: 'Pioneered precision automotive component manufacturing in India, building a conglomerate of 19 companies partnering with global OEMs.',
-    imageUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=800&q=80',
+    imageUrl: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1787412333/esummit/gallery/pec_startup_fair.png',
     linkedin: 'https://linkedin.com/company/ecell-pec',
   },
 ]
@@ -190,8 +214,8 @@ export default function AlumniSection() {
         {/* Header Section */}
         <div className="max-w-3xl mx-auto w-full flex flex-col items-center text-center z-10">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-center"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center select-none"
+            style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
           >
             <span className="text-gradient-mint">ALUMNI</span>
           </h2>
@@ -206,12 +230,12 @@ export default function AlumniSection() {
           <motion.div 
             ref={trackRef} 
             style={{ x: xMotion }} 
-            className="flex gap-4 sm:gap-5 md:gap-6 w-max pl-4 sm:pl-8 md:pl-16 pr-16"
+            className="flex gap-3 sm:gap-5 md:gap-6 w-max pl-3 md:pl-16 pr-8 md:pr-16"
           >
             {displayData.map((person, idx) => (
               <div 
                 key={person.id} 
-                className="w-[230px] sm:w-[270px] md:w-[290px] shrink-0 snap-center rounded-2xl focus-within:ring-2 focus-within:ring-mint outline-none"
+                className="w-[180px] sm:w-[260px] md:w-[290px] shrink-0 snap-center rounded-2xl focus-within:ring-2 focus-within:ring-mint outline-none"
                 tabIndex={0}
               >
                 <PixelTransition
@@ -254,50 +278,58 @@ export default function AlumniSection() {
                     </div>
                   }
                   secondContent={
-                    <div className="w-full h-full bg-[#0C1A14] p-6 flex flex-col justify-between rounded-2xl text-left select-none overflow-hidden text-white shadow-2xl border-0 border-transparent outline-none" style={{ border: 'none', outline: 'none' }}>
-                      <div className="space-y-3">
-                        {/* Header Details */}
-                        <div className="flex items-center justify-end">
+                    <div className="w-full h-full bg-[#0A110D] p-6 flex flex-col justify-between rounded-2xl text-left select-none text-white shadow-2xl relative border border-white/5 outline-none" style={{ border: '1px solid rgba(255,255,255,0.05)', outline: 'none' }}>
+                      
+                      {/* Top Section */}
+                      <div className="flex flex-col gap-4 relative z-10">
+                        {/* Name & LinkedIn Row */}
+                        <div className="flex items-start justify-between gap-3">
+                          <h3 className="text-2xl font-bold font-display tracking-tight text-white leading-tight">
+                            {person.name}
+                          </h3>
                           <a
                             href={person.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-white/10 hover:bg-mint text-white hover:text-void transition-all border border-white/20 shrink-0 cursor-pointer"
+                            className="w-9 h-9 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#B5F23D] text-white/70 hover:text-black transition-all border border-white/10 shrink-0 cursor-pointer"
                             title={`${person.name}'s LinkedIn Profile`}
                             aria-label={`${person.name}'s LinkedIn Profile`}
                           >
-                            <Linkedin className="w-4 h-4" />
+                            <Linkedin size={15} strokeWidth={2} />
                           </a>
                         </div>
 
-                        <div>
-                          <h3 className="text-xl sm:text-2xl font-bold font-display tracking-tight">
-                            <span className="text-gradient-white">{person.name}</span>
-                          </h3>
-                          <div className="text-xs font-mono-data text-mint font-bold flex items-center gap-1.5 mt-1">
-                            <Building2 className="w-3.5 h-3.5" />
-                            {person.role} • {person.company}
-                          </div>
+                        {/* Role & Company */}
+                        <div className="flex items-start gap-2 text-neutral-400">
+                          <Building2 size={14} strokeWidth={2} className="text-[#B5F23D] shrink-0 mt-0.5" />
+                          <span className="text-[10px] font-mono-data uppercase tracking-wider leading-relaxed">
+                            {person.role} <span className="mx-1 opacity-50">•</span> <span className="text-white/90 font-bold">{person.company}</span>
+                          </span>
                         </div>
 
-                        {/* Valuation / Milestone Badge */}
+                        {/* Milestone Badge */}
                         {person.valuation && (
-                          <div className="px-3 py-2 rounded-xl bg-white/[0.08] border border-mint/40 flex items-center gap-2 text-xs font-mono-data text-gray-100">
-                            <Award className="w-4 h-4 text-mint shrink-0" />
-                            <span className="font-bold text-white">{person.valuation}</span>
+                          <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-start gap-2.5">
+                            <Award size={16} strokeWidth={2} className="text-[#B5F23D] shrink-0 mt-0.5" />
+                            <span className="text-[11px] font-mono-data font-bold tracking-wider text-white uppercase leading-snug">
+                              {person.valuation}
+                            </span>
                           </div>
                         )}
 
                         {/* Bio */}
-                        <p className="text-xs text-gray-300 leading-relaxed font-body line-clamp-3">{person.bio}</p>
+                        <p className="text-xs text-neutral-400 leading-relaxed font-body line-clamp-3">
+                          {person.bio}
+                        </p>
                       </div>
 
-                      {/* Footer Badge */}
-                      <div className="pt-3 border-t border-mint/30 flex items-center justify-between text-xs">
-                        <span className="text-[11px] font-mono-data font-bold text-mint uppercase tracking-wider flex items-center gap-1.5">
-                          <Award className="w-3.5 h-3.5" /> {person.achievement}
+                      {/* Footer Badge (Pushed to bottom properly) */}
+                      <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between relative z-10">
+                        <span className="text-[10px] font-mono-data font-bold text-[#B5F23D] uppercase tracking-[0.15em] flex items-center gap-2 truncate pr-2">
+                          <Sparkles size={14} strokeWidth={2} className="shrink-0" /> 
+                          <span className="truncate">{person.achievement}</span>
                         </span>
-                        <ExternalLink className="w-3.5 h-3.5 text-gray-300" />
+                        <ExternalLink size={14} strokeWidth={2} className="shrink-0 text-neutral-500" />
                       </div>
                     </div>
                   }

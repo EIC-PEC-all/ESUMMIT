@@ -38,8 +38,8 @@ module.exports = {
         glow: 'var(--border-glow)',
       },
       fontFamily: {
-        display: ['Kanit', 'var(--font-kanit)', 'sans-serif'],
-        kanit: ['Kanit', 'sans-serif'],
+        display: ['var(--font-kanit)', 'Kanit', 'sans-serif'],
+        kanit: ['var(--font-kanit)', 'Kanit', 'sans-serif'],
         body: ['var(--font-inter)', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'monospace'],
         'mono-data': ['var(--font-jetbrains)', 'monospace'],

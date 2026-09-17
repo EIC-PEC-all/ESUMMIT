@@ -146,7 +146,7 @@ export async function GET(request: NextRequest) {
                 DATE &amp; VENUE
               </span>
               <span style={{ fontSize: '16px', fontWeight: 600, color: '#E5E7EB' }}>
-                MARCH 15–16, 2026 • PEC CHANDIGARH
+                SEPTEMBER 26–27, 2026 • PEC CHANDIGARH
               </span>
             </div>
 

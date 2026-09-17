@@ -35,15 +35,14 @@ export default function LeafletMapInner({
         const map = L.map(mapContainerRef.current!, {
           center: PEC_CENTER,
           zoom: 16,
-          zoomControl: false,
-          scrollWheelZoom: false,
           attributionControl: false,
         })
 
-        const tileUrl = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         L.tileLayer(tileUrl, {
-          subdomains: 'abcd',
+          attribution: '&copy; OpenStreetMap contributors',
           maxZoom: 19,
+          className: 'osm-dark-tiles'
         }).addTo(map)
 
         mapInstanceRef.current = map
@@ -199,13 +198,6 @@ export default function LeafletMapInner({
     <div className="relative h-full w-full bg-[#0B1410]">
       <style>{`
         .custom-lime-map { background: #0B1410 !important; }
-        .custom-lime-map .leaflet-tile {
-          -webkit-filter: invert(1) grayscale(1) brightness(0.55) contrast(6) sepia(1) hue-rotate(45deg) saturate(3.5) !important;
-          filter: invert(1) grayscale(1) brightness(0.55) contrast(6) sepia(1) hue-rotate(45deg) saturate(3.5) !important;
-          transform: translate3d(0, 0, 0);
-          -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-        }
         .custom-lime-map .leaflet-popup-content-wrapper {
           background: #0A110E !important;
           border-radius: 0px !important;

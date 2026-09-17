@@ -41,7 +41,7 @@ export default function EsummitHighlights() {
 
   const { scheduleItems } = useSchedule()
   const { data: summitBundle } = useSummitData()
-  const globalDates = summitBundle?.siteConfig?.summitDates || 'MARCH 15–16, 2026'
+  const globalDates = summitBundle?.siteConfig?.summitDates || 'SEPTEMBER 26–27, 2026'
 
   // Transform CMS schedule items into DayCard format
   const cmsCards: DayCard[] = useMemo(() => {
@@ -118,8 +118,8 @@ export default function EsummitHighlights() {
     >
       <h2
         id="timeline-heading"
-        className="font-display font-black uppercase leading-none tracking-tight text-center mb-12 sm:mb-20 md:mb-24"
-        style={{ fontSize: 'clamp(2.2rem, 8vw, 96px)' }}
+        className="font-display font-black uppercase leading-none tracking-tight text-center mb-12 sm:mb-20 md:mb-24 select-none"
+        style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
       >
         <span className="text-gradient-mint">TIMELINE</span>
       </h2>

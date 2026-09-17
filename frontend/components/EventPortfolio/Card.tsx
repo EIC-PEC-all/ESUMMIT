@@ -49,8 +49,8 @@ export function Card({ event, index, total, onSelect }: CardProps) {
 
       {/* Index number — large faded watermark */}
       <span
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display font-black text-white/[0.06] select-none pointer-events-none leading-none"
-        style={{ fontSize: 'clamp(80px, 15vw, 140px)' }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display font-black text-white/[0.03] select-none pointer-events-none leading-none"
+        style={{ fontSize: 'clamp(60px, 12vw, 110px)' }}
         aria-hidden
       >
         {String(index + 1).padStart(2, '0')}
@@ -66,21 +66,21 @@ export function Card({ event, index, total, onSelect }: CardProps) {
       </div>
 
       {/* Bottom content zone */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 p-4 flex items-end justify-between gap-3">
-        <div className="flex flex-col gap-0.5 min-w-0">
+      <div className="absolute bottom-0 left-0 right-0 z-10 p-5 flex items-end justify-between gap-4">
+        <div className="flex flex-col gap-1.5 flex-1 min-w-0 pr-2">
           {/* Eyebrow */}
-          <span className="font-mono-data text-[9px] font-bold uppercase tracking-[0.2em] text-mint/80 truncate">
+          <span className="font-mono-data text-[10px] font-bold uppercase tracking-widest text-mint/90 truncate">
             {event.eyebrow}
           </span>
           {/* Event name */}
-          <h3 className="font-display text-lg font-black uppercase leading-tight tracking-tight text-white group-hover:text-mint transition-colors duration-300 line-clamp-2">
+          <h3 className="font-display text-lg font-semibold uppercase leading-snug tracking-normal text-white group-hover:text-mint transition-colors duration-300 line-clamp-2">
             {event.title}
           </h3>
         </div>
 
         {/* Arrow CTA */}
-        <div className="shrink-0 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/20 text-white transition-colors duration-300 group-hover:bg-mint group-hover:border-mint group-hover:text-black">
-          <ArrowUpRight size={16} />
+        <div className="shrink-0 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white transition-all duration-300 group-hover:bg-mint group-hover:border-mint group-hover:text-black shadow-lg">
+          <ArrowUpRight size={18} strokeWidth={2} />
         </div>
       </div>
 

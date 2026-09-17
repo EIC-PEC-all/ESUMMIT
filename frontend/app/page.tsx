@@ -6,7 +6,7 @@ import NewHero from '@/components/Hero/NewHero'
 import LimeTransitionBanner from '@/components/Common/LimeTransitionBanner'
 import LimeEdgeMasks from '@/components/Common/LimeEdgeMasks'
 import ScrollExpandLoader from '@/components/Common/ScrollExpandLoader'
-
+import LazySection from '@/components/Common/LazySection'
 // ── Below-the-fold sections loaded asynchronously to protect initial critical bundle ──
 const FlipFlopTransition = dynamic(() => import('@/components/Common/FlipFlopTransition'), { ssr: false })
 const EsummitAbout = dynamic(() => import('@/components/EsummitAbout'), { ssr: false })
@@ -51,34 +51,54 @@ export default function Home() {
       <FlipFlopTransition />
 
       {/* ── 3. ABOUT — Mission, vision & core pillars ── */}
-      <EsummitAbout />
+      <LazySection minHeight="800px">
+        <EsummitAbout />
+      </LazySection>
 
       {/* ── 4. COMPETITIONS & TRACKS — Event portfolio ── */}
-      <EventPortfolioShowcase />
+      <LazySection minHeight="1200px">
+        <EventPortfolioShowcase />
+      </LazySection>
 
       {/* ── 5. SPEAKERS — Keynote guests ── */}
-      <EsummitHighlights />
+      <LazySection minHeight="900px">
+        <EsummitHighlights />
+      </LazySection>
 
       {/* ── 6. MASONRY GALLERY — 5-column vertical scroll gallery kept in place ── */}
-      <MasonryShowcase />
+      <LazySection minHeight="1000px">
+        <MasonryShowcase />
+      </LazySection>
 
       {/* ── 7. VIDEO SCRUBBER — Market surge video ── */}
-      <Vdo2Showcase />
+      <LazySection minHeight="800px">
+        <Vdo2Showcase />
+      </LazySection>
 
       {/* ── 8. ALUMNI — Wall of fame ── */}
-      <Alumni />
+      <LazySection minHeight="800px">
+        <Alumni />
+      </LazySection>
 
       {/* ── 9. SPONSORS — Ecosystem & title partners ── */}
-      <Sponsors />
+      <LazySection minHeight="1000px">
+        <Sponsors />
+      </LazySection>
 
       {/* ── 10. REGISTER CTA — Conversion banner ── */}
-      <RegisterCTA />
+      <LazySection minHeight="400px">
+        <RegisterCTA />
+      </LazySection>
 
       {/* ── 11. FAQ — Attendee questions ── */}
-      <FAQ />
+      <LazySection minHeight="800px">
+        <FAQ />
+      </LazySection>
 
       {/* ── 12. FOOTER ── */}
-      <Footer hideCTA={true} />
+      <LazySection minHeight="600px">
+        <Footer hideCTA={true} />
+      </LazySection>
     </main>
   )
 }

@@ -61,7 +61,7 @@ export default function NewHero() {
         <canvas
           ref={canvasRef}
           className="absolute inset-0 z-0 h-full w-full"
-          style={{ willChange: 'transform', transform: 'translate3d(0,0,0)', touchAction: 'pan-y' }}
+          style={{ transform: 'translate3d(0,0,0)', touchAction: 'pan-y' }}
         />
 
         {/* Scrim Overlay */}

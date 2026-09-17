@@ -130,7 +130,7 @@ export default function RegisterClient() {
   const { user, loginWithEmail, registerWithEmail, loginWithGoogle, resetPassword, logout } =
     useAuth()
   const { data: cmsData } = useSummitData()
-  const summitDates = cmsData?.siteConfig?.summitDates || 'March 15-16, 2026'
+  const summitDates = cmsData?.siteConfig?.summitDates || 'September 26–27, 2026'
 
   const [view, setView] = useState<'catalog' | 'checkout' | 'success' | 'passes' | 'auth'>('catalog')
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login')
@@ -702,9 +702,10 @@ export default function RegisterClient() {
                   type="button"
                   onClick={() => logout()}
                   title="Sign Out"
-                  className="p-0.5 rounded hover:bg-red-500/20 text-neutral-400 hover:text-red-400 transition-colors shrink-0"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 px-2.5 py-1 text-xs font-semibold text-red-400 hover:text-red-300 transition-all shrink-0 whitespace-nowrap"
                 >
-                  <LogOut size={12} />
+                  <LogOut size={12} className="shrink-0" />
+                  <span className="hidden sm:inline">Sign Out</span>
                 </button>
               </div>
             ) : (

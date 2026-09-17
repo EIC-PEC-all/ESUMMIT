@@ -129,7 +129,7 @@ export default function Timeline() {
   const [activeDay, setActiveDay] = useState<'day1' | 'day2'>('day1')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const { data: summitBundle } = useSummitData()
-  const globalDates = summitBundle?.siteConfig?.summitDates || 'MARCH 15–16, 2026'
+  const globalDates = summitBundle?.siteConfig?.summitDates || 'SEPTEMBER 26–27, 2026'
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<'both' | 'map' | 'list'>('both')
   const [dynamicSchedule, setDynamicSchedule] = useState<{
@@ -253,8 +253,8 @@ export default function Timeline() {
         >
           <h2
             id="schedule-heading"
-            className="font-display font-black uppercase leading-none tracking-tight text-mint drop-shadow-lg mb-2"
-            style={{ fontSize: 'clamp(3rem, 12vw, 150px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-mint drop-shadow-lg mb-2 select-none"
+            style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
           >
             TIMELINE
           </h2>

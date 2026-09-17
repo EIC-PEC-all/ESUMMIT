@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
-import { Inter, Kanit, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono, Kanit } from 'next/font/google'
 import './globals.css'
 import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
 import ChevronRouteTransition from '@/components/Common/ChevronRouteTransition'
@@ -16,8 +16,8 @@ const AnnouncementBanner = dynamic(
 )
 
 const kanit = Kanit({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
-  weight: ['400', '600', '700', '900'],
   variable: '--font-kanit',
   display: 'swap',
 })
@@ -83,7 +83,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'E-Cell PEC', url: 'https://esummit.pec.ac.in' }],
   openGraph: {
-    title: 'PEC E-Summit 2026 — March 15-16',
+    title: 'PEC E-Summit 2026 — September 26–27',
     description:
       'The flagship entrepreneurship summit of E-Cell PEC, Chandigarh. Pitches, panels, expo, hackathon, and VIP investor networking.',
     url: 'https://esummit.pec.ac.in',

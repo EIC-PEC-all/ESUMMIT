@@ -8,7 +8,7 @@ import { useSummitData } from '@/hooks/useSummitData'
 
 export default function Vdo2Showcase() {
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'MARCH 15-16'
+  const summitDates = data?.siteConfig?.summitDates || 'SEPTEMBER 26–27'
   const [isHovered, setIsHovered] = useState(false)
   return (
     <section
@@ -27,8 +27,8 @@ export default function Vdo2Showcase() {
 
         {/* Headline — 3D Metallic Gradient */}
         <h2
-          className="font-display font-black uppercase leading-none tracking-tight text-center drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] mb-4"
-          style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
+          className="font-display font-black uppercase leading-none tracking-tight text-center drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] mb-4 select-none"
+          style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
         >
           <span className="text-gradient-mint">PASSES</span>
         </h2>

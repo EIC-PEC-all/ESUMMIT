@@ -3,8 +3,8 @@
 
 import type { GroqFunction, GroqMessage, GroqRequest, GroqResponse } from './groq'
 
-export const MODEL_MAIN = 'llama-3.3-70b-versatile'
-export const MODEL_FAST = 'llama-3.1-8b-instant'
+export const MODEL_MAIN = 'qwen/qwen3.8-27b'
+export const MODEL_FAST = 'openai/gpt-oss-120b'
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 const MAX_RETRIES = 2

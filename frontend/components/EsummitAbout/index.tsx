@@ -11,7 +11,7 @@ import { Rocket, ShieldCheck, Users } from 'lucide-react'
 import { useSummitData } from '@/hooks/useSummitData'
 
 const ABOUT_TEXT =
-  'PEC E-Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, bringing together 3,000+ student founders, seasoned venture capitalists, and technology leaders. From competitive pitching and an overnight hackathon to curated investor roundtables — it is North India\'s premier launchpad where ideas meet capital and build the future. Join us March 15–16, 2026.'
+  'PEC E-Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, bringing together student founders, seasoned venture capitalists, and technology leaders. From competitive pitching and a 24-hour hackathon to curated investor roundtables — it is North India\'s premier launchpad where ideas meet capital and build the future. Join us September 26–27, 2026.'
 
 const PILLARS = [
   {
@@ -177,7 +177,7 @@ function GeometricNodesCanvas() {
 
 export default function EsummitAbout() {
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'March 15–16, 2026'
+  const summitDates = data?.siteConfig?.summitDates || 'September 26–27, 2026'
   const dynamicAboutText = `PEC E-Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, bringing together 3,000+ student founders, seasoned venture capitalists, and technology leaders. From competitive pitching and an overnight hackathon to curated investor roundtables — it is North India's premier launchpad where ideas meet capital and build the future. Join us ${summitDates}.`
 
   const handleSpotlight = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -215,8 +215,8 @@ export default function EsummitAbout() {
         <FadeIn delay={0.05}>
           <h2
             id="esummit-about-heading"
-            className="font-display font-black uppercase leading-none tracking-tight text-center"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 96px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center select-none"
+            style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
           >
             <span className="text-gradient-mint">ABOUT</span>
           </h2>

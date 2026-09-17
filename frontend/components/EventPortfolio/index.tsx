@@ -10,6 +10,8 @@ import { DetailModal } from './DetailModal'
 import { useSummitData } from '@/hooks/useSummitData'
 import type { CmsEvent } from '@/lib/api-types'
 
+const MAX_VISIBLE_EVENTS = 8
+
 export default function EventPortfolioShowcase() {
   const containerRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -18,7 +20,7 @@ export default function EventPortfolioShowcase() {
   const events: PortfolioEvent[] = useMemo(() => {
     const cmsEvents = Array.isArray(data?.events) ? data.events : []
     const portfolioMedia = Array.isArray(data?.portfolioMedia) ? data.portfolioMedia : []
-    const baseEvents = cmsEvents.length > 0 ? cmsEvents : PORTFOLIO_EVENTS
+    const baseEvents = (cmsEvents.length > 0 ? cmsEvents : PORTFOLIO_EVENTS).slice(0, MAX_VISIBLE_EVENTS)
 
     return baseEvents.map((e, idx) => {
       const numStr = e.number || `0${idx + 1}`.slice(-2)
@@ -115,8 +117,8 @@ export default function EventPortfolioShowcase() {
         {/* Big centered section title — matches site-wide pattern */}
         <div className="pointer-events-none absolute top-16 left-0 right-0 flex justify-center z-20">
           <h2
-            className="font-display font-black uppercase leading-none tracking-tight text-center drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)]"
-            style={{ fontSize: 'clamp(3.5rem, 10vw, 96px)' }}
+            className="font-display font-black uppercase leading-none tracking-tight text-center drop-shadow-[0_10px_35px_rgba(0,0,0,0.95)] select-none"
+            style={{ fontSize: 'clamp(2rem, 6vw, 4.5rem)' }}
           >
             <span className="text-gradient-mint">EVENTS</span>
           </h2>

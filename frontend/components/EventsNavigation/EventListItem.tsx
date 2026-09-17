@@ -95,7 +95,7 @@ export function EventListItem({ event, isSelected, distance, duration, onClick }
         <div className="flex-1 min-w-0">
           <motion.p
             className="text-[12px] font-semibold truncate leading-tight"
-            style={{ fontFamily: "'Kanit', sans-serif" }}
+            style={{ fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif" }}
             animate={isSelected ? { color: '#ffffff' } : { color: 'rgba(255,255,255,0.6)' }}
             transition={{ duration: 0.3 }}
           >

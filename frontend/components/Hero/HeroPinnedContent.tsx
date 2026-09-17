@@ -34,14 +34,17 @@ export default function HeroPinnedContent({
     >
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 sm:gap-6 text-center">
         <h2
-          className="mb-1 sm:mb-2 max-w-3xl font-display font-black uppercase leading-[1.08] tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)]"
-          style={{ fontSize: 'clamp(1.25rem, 4.2vw, 3.25rem)' }}
+          className="mb-2 max-w-4xl font-display font-black uppercase leading-[1.12] sm:leading-[1.18] tracking-tight drop-shadow-[0_4px_30px_rgba(0,0,0,0.9)] text-center text-balance select-none"
+          style={{ fontSize: 'clamp(1.35rem, 3.4vw, 2.85rem)' }}
         >
-          <span className="text-gradient-white">WHERE IDEAS MEET</span>{' '}
-          <span className="text-gradient-mint">CAPITAL</span>
-          <br />
-          <span className="text-gradient-white">&amp; BUILD THE</span>{' '}
-          <span className="text-gradient-mint">FUTURE</span>
+          <span className="inline-block whitespace-normal sm:whitespace-nowrap">
+            <span className="text-gradient-white">WHERE IDEAS MEET </span>
+            <span className="text-gradient-mint">CAPITAL</span>
+          </span>
+          <span className="inline-block ml-1.5 sm:ml-3 whitespace-normal sm:whitespace-nowrap">
+            <span className="text-gradient-white">&amp; BUILD THE </span>
+            <span className="text-gradient-mint">FUTURE</span>
+          </span>
         </h2>
 
         <p className="mb-3 max-w-xl font-body text-xs font-normal leading-relaxed text-gray-300 drop-shadow-md sm:text-sm md:text-base">

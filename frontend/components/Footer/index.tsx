@@ -148,111 +148,53 @@ export function RegisterCTA() {
         }}
       />
 
-      {/* ── Left 3D Perspective Cyber Blue Delegate Card ───────────── */}
+      {/* ── Left 3D Perspective Delegate Card (Minimal Emerald) ───────────── */}
       <motion.div
         initial={{ opacity: 0, x: -180, rotateY: 36, rotateX: 10, rotateZ: -6, scale: 0.85 }}
         whileInView={{ opacity: 1, x: 0, rotateY: 24, rotateX: 6, rotateZ: -3, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="pointer-events-none absolute -left-12 2xl:left-6 top-1/2 -translate-y-1/2 hidden xl:block w-[380px] h-[250px] rounded-[28px] border border-cyan-400/30 bg-gradient-to-br from-[#0c2438]/95 via-[#061624]/95 to-[#020b12]/95 p-5 shadow-2xl z-0 will-change-transform"
+        className="pointer-events-none absolute -left-12 2xl:left-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col justify-between w-[360px] h-[220px] rounded-[24px] border border-emerald-500/20 bg-gradient-to-br from-[#0a2016]/95 to-[#030a07]/95 p-6 shadow-2xl z-0 will-change-transform"
         style={{
           transformStyle: 'preserve-3d',
-          boxShadow: '0 30px 60px -12px rgba(6, 182, 212, 0.25), inset 0 1px 1px rgba(255,255,255,0.2)',
+          boxShadow: '0 30px 60px -12px rgba(16, 185, 129, 0.15), inset 0 1px 1px rgba(255,255,255,0.1)',
         }}
       >
-        <div className="h-full w-full rounded-[20px] border border-cyan-500/20 bg-[#040f1a]/80 p-4 flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
-          {/* Ambient Glow */}
-          <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-cyan-500/20 blur-2xl pointer-events-none" />
-
-          {/* Card Top Header */}
-          <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2.5">
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
-              <span className="font-display text-xs font-black tracking-widest text-cyan-200">E-SUMMIT &apos;26</span>
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-[10px] font-mono-data font-bold text-cyan-300">
-              ALL-ACCESS
-            </span>
-          </div>
-
-          {/* Card Chip & Name */}
-          <div className="flex items-center justify-between my-auto">
-            <div>
-              <span className="text-[10px] font-mono-data uppercase tracking-wider text-cyan-400/80 block">FOUNDER PASS</span>
-              <span className="text-lg font-display font-black text-white tracking-tight">VIP DELEGATE</span>
-              <span className="text-[11px] text-cyan-200/70 block mt-0.5">PEC Chandigarh • March 15–16</span>
-            </div>
-            {/* Holographic Chip */}
-            <div className="w-11 h-9 rounded-lg bg-gradient-to-tr from-amber-400/30 via-cyan-300/40 to-amber-200/30 border border-cyan-300/40 flex items-center justify-center p-1 relative overflow-hidden shadow-inner">
-              <div className="w-full h-0.5 bg-cyan-400/60" />
-            </div>
-          </div>
-
-          {/* Card Barcode Footer */}
-          <div className="flex items-center justify-between pt-2 border-t border-cyan-500/20">
-            <span className="text-[10px] font-mono-data text-cyan-400 tracking-wider">#PEC26-FNDR-0891</span>
-            <div className="flex items-center gap-1 h-3 opacity-60">
-              <div className="w-1 h-full bg-cyan-300" />
-              <div className="w-0.5 h-full bg-cyan-300" />
-              <div className="w-1.5 h-full bg-cyan-300" />
-              <div className="w-0.5 h-full bg-cyan-300" />
-              <div className="w-1 h-full bg-cyan-300" />
-            </div>
-          </div>
+        <div className="flex items-center justify-between">
+          <span className="font-display text-sm font-bold tracking-wider text-emerald-200">E-SUMMIT &apos;26</span>
+          <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-bold text-emerald-300 tracking-wide uppercase">
+            All-Access
+          </span>
+        </div>
+        <div>
+          <span className="text-xs uppercase tracking-widest text-emerald-400/60 block mb-1">Founder Pass</span>
+          <span className="text-2xl font-display font-black text-white tracking-tight">VIP DELEGATE</span>
+          <span className="text-xs text-emerald-200/50 block mt-1">PEC Chandigarh • Sept 26–27</span>
         </div>
       </motion.div>
 
-      {/* ── Right 3D Perspective Crimson Red Builder Card ───────────── */}
+      {/* ── Right 3D Perspective Attendee Card (Minimal Lime) ───────────── */}
       <motion.div
         initial={{ opacity: 0, x: 180, rotateY: -36, rotateX: 10, rotateZ: 6, scale: 0.85 }}
         whileInView={{ opacity: 1, x: 0, rotateY: -24, rotateX: 6, rotateZ: 3, scale: 1 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="pointer-events-none absolute -right-12 2xl:right-6 top-1/2 -translate-y-1/2 hidden xl:block w-[380px] h-[250px] rounded-[28px] border border-rose-500/30 bg-gradient-to-bl from-[#340f16]/95 via-[#1e070c]/95 to-[#0d0205]/95 p-5 shadow-2xl z-0 will-change-transform"
+        className="pointer-events-none absolute -right-12 2xl:right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col justify-between w-[360px] h-[220px] rounded-[24px] border border-[#B5F23D]/20 bg-gradient-to-bl from-[#1c280b]/95 to-[#080d03]/95 p-6 shadow-2xl z-0 will-change-transform"
         style={{
           transformStyle: 'preserve-3d',
-          boxShadow: '0 30px 60px -12px rgba(244, 63, 94, 0.25), inset 0 1px 1px rgba(255,255,255,0.2)',
+          boxShadow: '0 30px 60px -12px rgba(181, 242, 61, 0.15), inset 0 1px 1px rgba(255,255,255,0.1)',
         }}
       >
-        <div className="h-full w-full rounded-[20px] border border-rose-500/20 bg-[#160408]/80 p-4 flex flex-col justify-between relative overflow-hidden backdrop-blur-md">
-          {/* Ambient Glow */}
-          <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-rose-500/20 blur-2xl pointer-events-none" />
-
-          {/* Card Top Header */}
-          <div className="flex items-center justify-between border-b border-rose-500/20 pb-2.5">
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-[0_0_8px_#f43f5e]" />
-              <span className="font-display text-xs font-black tracking-widest text-rose-200">E-SUMMIT &apos;26</span>
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full bg-rose-500/15 border border-rose-400/30 text-[10px] font-mono-data font-bold text-rose-300">
-              BUILDER TIER
-            </span>
-          </div>
-
-          {/* Card Chip & Name */}
-          <div className="flex items-center justify-between my-auto">
-            <div>
-              <span className="text-[10px] font-mono-data uppercase tracking-wider text-rose-400/80 block">HACKATHON PASS</span>
-              <span className="text-lg font-display font-black text-white tracking-tight">HACKER PASS</span>
-              <span className="text-[11px] text-rose-200/70 block mt-0.5">₹15L+ Prize Pool • CSE Block</span>
-            </div>
-            {/* Holographic Chip */}
-            <div className="w-11 h-9 rounded-lg bg-gradient-to-tr from-amber-400/30 via-rose-400/40 to-amber-200/30 border border-rose-300/40 flex items-center justify-center p-1 relative overflow-hidden shadow-inner">
-              <div className="w-full h-0.5 bg-rose-400/60" />
-            </div>
-          </div>
-
-          {/* Card Barcode Footer */}
-          <div className="flex items-center justify-between pt-2 border-t border-rose-500/20">
-            <span className="text-[10px] font-mono-data text-rose-400 tracking-wider">#PEC26-BLDR-4481</span>
-            <div className="flex items-center gap-1 h-3 opacity-60">
-              <div className="w-1.5 h-full bg-rose-300" />
-              <div className="w-0.5 h-full bg-rose-300" />
-              <div className="w-1 h-full bg-rose-300" />
-              <div className="w-0.5 h-full bg-rose-300" />
-              <div className="w-1 h-full bg-rose-300" />
-            </div>
-          </div>
+        <div className="flex items-center justify-between">
+          <span className="font-display text-sm font-bold tracking-wider text-[#B5F23D]/80">E-SUMMIT &apos;26</span>
+          <span className="px-3 py-1 rounded-full bg-[#B5F23D]/10 border border-[#B5F23D]/20 text-[10px] font-bold text-[#B5F23D] tracking-wide uppercase">
+            Standard
+          </span>
+        </div>
+        <div>
+          <span className="text-xs uppercase tracking-widest text-[#B5F23D]/60 block mb-1">General Access</span>
+          <span className="text-2xl font-display font-black text-white tracking-tight">ATTENDEE PASS</span>
+          <span className="text-xs text-[#B5F23D]/50 block mt-1">Full 2-Day Event Access</span>
         </div>
       </motion.div>
 
@@ -269,8 +211,8 @@ export function RegisterCTA() {
           {/* Main Headline */}
           <h2
             id="footer-cta-heading"
-            className="mb-6 font-display font-black uppercase text-center leading-none tracking-tight"
-            style={{ fontSize: 'clamp(3rem, 12vw, 120px)' }}
+            className="mb-6 font-display font-black uppercase text-center leading-none tracking-tight select-none"
+            style={{ fontSize: 'clamp(2rem, 6.5vw, 5rem)' }}
           >
             <span className="text-gradient-mint">REGISTER</span>
           </h2>
@@ -469,27 +411,15 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                 </span>
                 <div className="space-y-1 text-xs sm:text-sm">
                   <div className="flex items-center justify-between gap-2 py-0.5 border-b border-white/[0.05]">
-                    <span className="font-body text-gray-200 font-medium">Simarpreet Kaur</span>
-                    <a href="tel:+918427146574" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
-                      +91 84271 46574
-                    </a>
-                  </div>
-                  <div className="flex items-center justify-between gap-2 py-0.5 border-b border-white/[0.05]">
-                    <span className="font-body text-gray-200 font-medium">Shubham Mangal</span>
-                    <a href="tel:+917834975811" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
-                      +91 78349 75811
-                    </a>
-                  </div>
-                  <div className="flex items-center justify-between gap-2 py-0.5 border-b border-white/[0.05]">
-                    <span className="font-body text-gray-200 font-medium">Vedansh Singh</span>
-                    <a href="tel:+918826873264" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
-                      +91 88268 73264
+                    <span className="font-body text-gray-200 font-medium">Vansh Gupta</span>
+                    <a href="tel:+919041309108" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
+                      +91 90413 09108
                     </a>
                   </div>
                   <div className="flex items-center justify-between gap-2 py-0.5">
-                    <span className="font-body text-gray-200 font-medium">Japneet Pathania</span>
-                    <a href="tel:+918544918700" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
-                      +91 85449 18700
+                    <span className="font-body text-gray-200 font-medium">Bhrigu Verma</span>
+                    <a href="tel:+919478335331" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
+                      +91 94783 35331
                     </a>
                   </div>
                 </div>

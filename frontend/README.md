@@ -53,7 +53,7 @@ graph TD
 ### 4. Design System
 - **Theme Palette**: Obsidian Void (`#060B08`), Radiant Volt Green (`#7ED321`), Crimson Flame (`#FF4D3D`), and Cyan Spark (`#3DD9FF`).
 - **Animations**: Uses GSAP ScrollTrigger timelines and Lenis for inertial smooth scrolling.
-- **Typography**: Kanit for headings, Inter for body text, and JetBrains Mono for data displays.
+- **Typography**: Tamrin for headings, Inter for body text, and JetBrains Mono for data displays.
 
 ---
 

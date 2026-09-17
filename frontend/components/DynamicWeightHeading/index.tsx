@@ -210,7 +210,7 @@ const INTER_VARIABLE_FONT_FACE = `
 }
 `
 
-const VARIABLE_FONT_STACK = 'Kanit, sans-serif'
+const VARIABLE_FONT_STACK = "var(--font-tamrin), 'Tamrin', sans-serif"
 
 const MAX_REACH = 800
 

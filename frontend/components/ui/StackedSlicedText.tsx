@@ -49,7 +49,7 @@ function SliceLayer({
       <span
         className="inline-block uppercase tracking-tighter text-[11vw] sm:text-[11.5vw] lg:text-[12vw] leading-[0.76] text-white select-none pointer-events-none whitespace-nowrap transform -translate-y-[1%]"
         style={{
-          fontFamily: 'Kanit, sans-serif',
+          fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
           fontWeight: 900,
         }}
         aria-hidden="true"
@@ -82,7 +82,7 @@ export default function StackedSlicedText({
           <span
             className="inline-block uppercase tracking-tighter text-[11vw] sm:text-[11.5vw] lg:text-[12vw] leading-[0.76] text-white select-none whitespace-nowrap"
             style={{
-              fontFamily: 'Kanit, sans-serif',
+              fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
               fontWeight: 900,
             }}
           >
