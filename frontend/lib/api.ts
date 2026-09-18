@@ -65,6 +65,7 @@ export async function apiFetch<T>(
 
   try {
     const res = await fetch(`${API_BASE}${path}`, {
+      cache: 'no-store',
       ...rest,
       signal: controller.signal,
       headers: {
@@ -92,6 +93,7 @@ export const api = {
   getSiteConfig: () => apiFetch<SiteConfig>('/cms/site-config'),
 
   // ── CMS Content ──
+  // EVENTS
   getEvents: (day?: number, type?: string) => {
     const params = new URLSearchParams()
     if (day !== undefined) params.set('day', String(day))
@@ -99,18 +101,48 @@ export const api = {
     const qs = params.toString()
     return apiFetch<CmsEvent[]>(`/events${qs ? `?${qs}` : ''}`)
   },
+  createEvent: (data: Partial<CmsEvent>, accessToken: string) => apiFetch<CmsEvent>('/events', { method: 'POST', json: data, accessToken }),
+  updateEvent: (id: string, data: Partial<CmsEvent>, accessToken: string) => apiFetch<CmsEvent>(`/events/${id}`, { method: 'PATCH', json: data, accessToken }),
+  deleteEvent: (id: string, accessToken: string) => apiFetch<void>(`/events/${id}`, { method: 'DELETE', accessToken }),
+
+  // SCHEDULE
   getSchedule: (day?: number) => {
     const params = new URLSearchParams()
     if (day !== undefined) params.set('day', String(day))
     const qs = params.toString()
     return apiFetch<CmsScheduleItem[]>(`/cms/schedule${qs ? `?${qs}` : ''}`)
   },
-  getSpeakers: () => apiFetch<CmsSpeaker[]>('/speakers'),
+  createScheduleItem: (data: Partial<CmsScheduleItem>, accessToken: string) => apiFetch<CmsScheduleItem>('/cms/schedule', { method: 'POST', json: data, accessToken }),
+  updateScheduleItem: (id: string, data: Partial<CmsScheduleItem>, accessToken: string) => apiFetch<CmsScheduleItem>(`/cms/schedule/${id}`, { method: 'PATCH', json: data, accessToken }),
+  deleteScheduleItem: (id: string, accessToken: string) => apiFetch<void>(`/cms/schedule/${id}`, { method: 'DELETE', accessToken }),
 
+  // SPEAKERS
+  getSpeakers: () => apiFetch<CmsSpeaker[]>('/speakers'),
+  createSpeaker: (data: Partial<CmsSpeaker>, accessToken: string) => apiFetch<CmsSpeaker>('/speakers', { method: 'POST', json: data, accessToken }),
+  updateSpeaker: (id: string, data: Partial<CmsSpeaker>, accessToken: string) => apiFetch<CmsSpeaker>(`/speakers/${id}`, { method: 'PATCH', json: data, accessToken }),
+  deleteSpeaker: (id: string, accessToken: string) => apiFetch<void>(`/speakers/${id}`, { method: 'DELETE', accessToken }),
+
+  // SPONSORS
   getSponsors: () => apiFetch<CmsSponsor[]>('/sponsors'),
+  createSponsor: (data: Partial<CmsSponsor>, accessToken: string) => apiFetch<CmsSponsor>('/sponsors', { method: 'POST', json: data, accessToken }),
+  updateSponsor: (id: string, data: Partial<CmsSponsor>, accessToken: string) => apiFetch<CmsSponsor>(`/sponsors/${id}`, { method: 'PATCH', json: data, accessToken }),
+  deleteSponsor: (id: string, accessToken: string) => apiFetch<void>(`/sponsors/${id}`, { method: 'DELETE', accessToken }),
+
+  // ALUMNI
   getAlumni: () => apiFetch<CmsAlumni[]>('/alumni'),
+  createAlumni: (data: Partial<CmsAlumni>, accessToken: string) => apiFetch<CmsAlumni>('/alumni', { method: 'POST', json: data, accessToken }),
+  updateAlumni: (id: string, data: Partial<CmsAlumni>, accessToken: string) => apiFetch<CmsAlumni>(`/alumni/${id}`, { method: 'PATCH', json: data, accessToken }),
+  deleteAlumni: (id: string, accessToken: string) => apiFetch<void>(`/alumni/${id}`, { method: 'DELETE', accessToken }),
+
+  // FAQS
   getFaqs: (category?: string) =>
     apiFetch<CmsFaq[]>(`/cms/faqs${category ? `?category=${category}` : ''}`),
+  createFaq: (data: Partial<CmsFaq>, accessToken: string) => apiFetch<CmsFaq>('/cms/faqs', { method: 'POST', json: data, accessToken }),
+  updateFaq: (id: string, data: Partial<CmsFaq>, accessToken: string) => apiFetch<CmsFaq>(`/cms/faqs/${id}`, { method: 'PATCH', json: data, accessToken }),
+  deleteFaq: (id: string, accessToken: string) => apiFetch<void>(`/cms/faqs/${id}`, { method: 'DELETE', accessToken }),
+
+  // SITE CONFIG
+  updateSiteConfig: (data: Partial<SiteConfig>, accessToken: string) => apiFetch<SiteConfig>('/cms/site-config', { method: 'PATCH', json: data, accessToken }),
 
   // ── Registrations & Passes ──
   getPassTypes: () => apiFetch<PassCatalogEntry[]>('/registrations/types'),

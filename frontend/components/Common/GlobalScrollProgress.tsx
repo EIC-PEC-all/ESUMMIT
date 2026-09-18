@@ -92,32 +92,30 @@ export default function GlobalScrollProgress() {
             <AnimatePresence>
               {isHovered && (
                 <motion.span
-                  key="tooltip"
                   initial={{ opacity: 0, x: 8 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 8 }}
-                  transition={{ duration: 0.15, ease: 'easeOut' }}
-                  className="mr-3 font-mono-data text-[9px] font-black tracking-widest whitespace-nowrap text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)] pointer-events-none"
+                  transition={{ duration: 0.15 }}
+                  className="absolute right-8 text-[9px] font-mono tracking-widest uppercase px-2 py-0.5 rounded pointer-events-none whitespace-nowrap bg-black/80 text-white/90 border border-white/10 backdrop-blur-sm"
                 >
                   {section.name}
                 </motion.span>
               )}
             </AnimatePresence>
 
-            {/* Dash Bar — generous touch/click target */}
+            {/* Dash indicator with dynamic states */}
             <motion.div
               animate={{
-                width: 24,
-                height: isActive ? 4 : 2,
+                width: isActive ? 24 : isHovered ? 16 : 8,
                 backgroundColor: isActive
-                  ? '#7ED321'
+                  ? '#10b981' // emerald
                   : isHovered
-                  ? 'rgba(255,255,255,0.85)'
-                  : 'rgba(255,255,255,0.25)',
-                boxShadow: isActive ? '0 0 12px rgba(126,211,33,0.8)' : 'none',
-                borderRadius: 2,
+                  ? 'rgba(255, 255, 255, 0.8)'
+                  : 'rgba(255, 255, 255, 0.25)',
+                opacity: isActive ? 1 : isHovered ? 0.9 : 0.4,
               }}
-              transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="h-[2px] rounded-full"
             />
           </button>
         )

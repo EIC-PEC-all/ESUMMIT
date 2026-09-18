@@ -28,8 +28,7 @@ export function Card({ event, index, total, onSelect }: CardProps) {
           onSelect(event)
         }
       }}
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl aspect-[4/3] bg-[#0B1712] focus-visible:ring-2 focus-visible:ring-mint focus:outline-none"
-      style={{ width: 'clamp(280px, 26vw, 380px)' }}
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl aspect-[4/3] bg-[#0B1712] focus-visible:ring-2 focus-visible:ring-mint focus:outline-none w-[85vw] sm:w-[320px] md:w-[380px] lg:w-[420px]"
     >
       {/* Full-bleed image with progressive blur loading */}
       <BlurImage

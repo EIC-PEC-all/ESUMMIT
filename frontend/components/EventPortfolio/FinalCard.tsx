@@ -16,9 +16,8 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="group relative shrink-0 overflow-hidden rounded-2xl bg-[#0A110D] flex flex-col justify-between transition-all duration-300 aspect-[4/3] border border-white/10"
+      className="group relative shrink-0 overflow-hidden rounded-2xl bg-[#0A110D] flex flex-col justify-between transition-all duration-300 aspect-[4/3] border border-white/10 w-[85vw] sm:w-[320px] md:w-[380px] lg:w-[420px]"
       style={{
-        width: 'clamp(280px, 26vw, 380px)',
         boxShadow: '0 20px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
       }}
     >

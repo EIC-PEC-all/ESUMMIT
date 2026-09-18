@@ -191,11 +191,11 @@ export function useSummitData(): UseSummitDataReturn {
 
   const sanitizedData: CmsBundle = {
     siteConfig: (data && data.siteConfig) || STATIC_FALLBACK.siteConfig,
-    events: Array.isArray(data?.events) && data.events.length > 0 ? data.events : STATIC_FALLBACK.events,
-    speakers: Array.isArray(data?.speakers) && data.speakers.length > 0 ? data.speakers : STATIC_FALLBACK.speakers,
-    sponsors: Array.isArray(data?.sponsors) && data.sponsors.length > 0 ? data.sponsors : STATIC_FALLBACK.sponsors,
-    alumni: Array.isArray(data?.alumni) && data.alumni.length > 0 ? data.alumni : STATIC_FALLBACK.alumni,
-    faqs: Array.isArray(data?.faqs) && data.faqs.length > 0 ? data.faqs : STATIC_FALLBACK.faqs,
+    events: Array.isArray(data?.events) ? data.events : STATIC_FALLBACK.events,
+    speakers: Array.isArray(data?.speakers) ? data.speakers : STATIC_FALLBACK.speakers,
+    sponsors: Array.isArray(data?.sponsors) ? data.sponsors : STATIC_FALLBACK.sponsors,
+    alumni: Array.isArray(data?.alumni) ? data.alumni : STATIC_FALLBACK.alumni,
+    faqs: Array.isArray(data?.faqs) ? data.faqs : STATIC_FALLBACK.faqs,
     scheduleItems: Array.isArray(data?.scheduleItems) ? data.scheduleItems : STATIC_FALLBACK.scheduleItems,
     gallery: Array.isArray(data?.gallery) ? data.gallery : STATIC_FALLBACK.gallery,
   }

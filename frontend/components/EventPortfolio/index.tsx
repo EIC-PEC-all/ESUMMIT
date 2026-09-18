@@ -125,7 +125,7 @@ export default function EventPortfolioShowcase() {
         </div>
 
         {/* ── Main Horizontally Scrolling Track Container ── */}
-        <div className="relative z-10 flex w-full items-center pt-32 sm:pt-36">
+        <div className="relative z-10 flex w-full items-center pt-12 sm:pt-20 md:pt-32">
           <motion.div
             ref={trackRef}
             style={{ x: xMotion, willChange: 'transform' }}

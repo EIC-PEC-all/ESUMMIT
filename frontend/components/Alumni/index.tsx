@@ -235,7 +235,7 @@ export default function AlumniSection() {
             {displayData.map((person, idx) => (
               <div 
                 key={person.id} 
-                className="w-[180px] sm:w-[260px] md:w-[290px] shrink-0 snap-center rounded-2xl focus-within:ring-2 focus-within:ring-mint outline-none"
+                className="w-[85vw] max-w-[320px] sm:w-[280px] md:w-[320px] lg:w-[360px] shrink-0 snap-center rounded-2xl focus-within:ring-2 focus-within:ring-mint outline-none"
                 tabIndex={0}
               >
                 <PixelTransition
