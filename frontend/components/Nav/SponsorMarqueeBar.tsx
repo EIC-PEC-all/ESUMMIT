@@ -68,7 +68,7 @@ export default function SponsorMarqueeBar({
 
       {/* Ticker Track */}
       <div
-        className={`flex whitespace-nowrap animate-marquee hover:[animation-play-state:paused] items-center ${
+        className={`flex whitespace-nowrap animate-[marquee_50s_linear_infinite] md:animate-marquee hover:[animation-play-state:paused] items-center ${
           isTop ? 'pl-4 sm:pl-[135px] md:pl-[165px]' : 'pl-[135px] sm:pl-[165px]'
         }`}
       >

@@ -106,9 +106,12 @@ export default function ChevronRouteTransition({ children }: { children: React.R
       setTimeout(() => {
         if (customEvt.detail?.targetTop) {
           window.scrollTo({ top: 0, behavior: 'auto' })
+          window.history.pushState(null, '', window.location.pathname)
         } else if (customEvt.detail?.targetId) {
-          const el = document.getElementById(customEvt.detail.targetId)
-          if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' })
+          // Setting the hash forces a native browser scroll jump. 
+          // Since the screen is fully covered by the chevron right now, the jump is hidden.
+          // This completely bypasses iOS Safari's async scroll-blocking protections.
+          window.location.hash = `#${customEvt.detail.targetId}`
         }
         setPhase('exit')
       }, 450)
