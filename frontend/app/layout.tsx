@@ -9,11 +9,7 @@ import GlobalScrollProgress from '@/components/Common/GlobalScrollProgress'
 import Concierge from '@/components/Concierge'
 import { AuthProvider } from '@/context/AuthContext'
 import ServiceWorkerCleanup from '@/components/Common/ServiceWorkerCleanup'
-
-const AnnouncementBanner = dynamic(
-  () => import('@/components/Common/AnnouncementBanner'),
-  { ssr: false }
-)
+import AnnouncementBanner from '@/components/Common/AnnouncementBanner'
 
 const kanit = Kanit({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],

@@ -53,9 +53,19 @@ jobs:
     needs: validate
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    env:
+      VPS_HOST: ${{ secrets.VPS_HOST }}
     steps:
+      - name: Check VPS Configuration
+        run: |
+          if [ -z "$VPS_HOST" ]; then
+            echo "VPS_HOST secret is not configured in GitHub Secrets. Skipping VPS deployment."
+          else
+            echo "VPS_HOST is configured. Proceeding with deployment."
+          fi
+
       - name: Deploy to VPS via SSH
-        if: ${{ secrets.VPS_HOST != '' }}
+        if: env.VPS_HOST != ''
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
