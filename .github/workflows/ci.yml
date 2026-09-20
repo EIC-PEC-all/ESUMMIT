@@ -14,8 +14,13 @@ jobs:
   backend-checks:
     name: Backend (NestJS + Prisma)
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: "mongodb://localhost:27017/esummit?replicaSet=rs0"
+      JWT_SECRET: "dummy_jwt_secret_for_ci_build_test_1234567890"
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -33,6 +38,8 @@ jobs:
   frontend-checks:
     name: Frontend (Next.js 14)
     runs-on: ubuntu-latest
+    env:
+      NEXTAUTH_SECRET: "dummy_secret_for_ci_build_test_1234567890"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -49,8 +56,13 @@ jobs:
   admin-checks:
     name: Admin CMS (Next.js 16)
     runs-on: ubuntu-latest
+    env:
+      AUTH_SECRET: "dummy_secret_for_ci_build_test_1234567890"
+      NEXT_PUBLIC_API_BASE_URL: "http://localhost:4000/api/v1"
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - uses: actions/setup-node@v4
         with:
           node-version: 20

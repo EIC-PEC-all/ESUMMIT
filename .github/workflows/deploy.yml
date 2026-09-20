@@ -13,15 +13,19 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Verify Backend Build
         working-directory: ./backend
+        env:
+          DATABASE_URL: "mongodb://localhost:27017/esummit?replicaSet=rs0"
+          JWT_SECRET: "dummy_jwt_secret_for_ci_build_test_1234567890"
         run: |
           npm ci
           npx prisma generate
@@ -29,12 +33,17 @@ jobs:
 
       - name: Verify Frontend Build
         working-directory: ./frontend
+        env:
+          NEXTAUTH_SECRET: "dummy_secret_for_ci_build_test_1234567890"
         run: |
           npm ci
           npm run build
 
       - name: Verify Admin Build
         working-directory: ./admin
+        env:
+          AUTH_SECRET: "dummy_secret_for_ci_build_test_1234567890"
+          NEXT_PUBLIC_API_BASE_URL: "http://localhost:4000/api/v1"
         run: |
           npm ci
           npm run build
@@ -60,6 +69,7 @@ jobs:
             
             git fetch origin main
             git reset --hard origin/main
+            git submodule update --init --recursive
             
             docker compose up --build -d --remove-orphans
             
