@@ -52,7 +52,7 @@ jobs:
     name: Deploy to VPS
     needs: validate
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && secrets.VPS_HOST != ''
     steps:
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
