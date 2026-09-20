@@ -141,8 +141,8 @@ This repository contains submodules for `admin` and `backend`. Clone with the `-
 
 ```bash
 # Clone with submodules
-git clone --recursive https://github.com/EIC-PEC/E-Summit-26.git
-cd E-Summit-26
+git clone --recursive https://github.com/EIC-PEC-all/ESUMMIT.git
+cd ESUMMIT
 
 # If already cloned without --recursive:
 git submodule update --init --recursive
