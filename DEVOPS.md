@@ -13,7 +13,7 @@ This document contains the end-to-end operational guide, deployment workflows, e
    [ VPS Server (Nginx) ]
      |-- Port 80/443 (SSL termination via Certbot)
      |
-     +---> localhost:3000 -> Frontend Container (Next.js 14)
+     +---> localhost:3000 -> Frontend Container (Next.js 15)
      +---> localhost:3001 -> Admin Dashboard Container (Next.js 16)
      +---> localhost:4000 -> Backend API Container (NestJS)
                                   |
