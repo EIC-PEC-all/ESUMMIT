@@ -133,7 +133,12 @@ export default function Nav() {
       const hashId = window.location.hash.replace('#', '')
       if (hashId) {
         const timer = setTimeout(() => {
-          document.getElementById(hashId)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          const el = document.getElementById(hashId)
+          if (el) {
+            const headerOffset = 70
+            const y = el.getBoundingClientRect().top + window.pageYOffset - headerOffset
+            window.scrollTo({ top: y, behavior: 'smooth' })
+          }
         }, 400)
         return () => clearTimeout(timer)
       }

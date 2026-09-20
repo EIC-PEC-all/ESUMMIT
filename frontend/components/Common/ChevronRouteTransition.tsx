@@ -99,19 +99,31 @@ export default function ChevronRouteTransition({ children }: { children: React.R
 
   // 3. Support same-page anchor link transitions triggered by Nav
   useEffect(() => {
+    const scrollToTarget = (targetId: string) => {
+      const el = document.getElementById(targetId)
+      if (el) {
+        const headerOffset = 70
+        const y = el.getBoundingClientRect().top + window.pageYOffset - headerOffset
+        window.scrollTo({ top: y, behavior: 'instant' as ScrollBehavior })
+        return true
+      }
+      return false
+    }
+
     const handleCustomTrigger = (e: Event) => {
       const customEvt = e as CustomEvent<{ targetId?: string; targetTop?: boolean }>
       setPhase('enter')
 
       setTimeout(() => {
         if (customEvt.detail?.targetTop) {
-          window.scrollTo({ top: 0, behavior: 'auto' })
+          window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
           window.history.pushState(null, '', window.location.pathname)
         } else if (customEvt.detail?.targetId) {
-          // Setting the hash forces a native browser scroll jump. 
-          // Since the screen is fully covered by the chevron right now, the jump is hidden.
-          // This completely bypasses iOS Safari's async scroll-blocking protections.
-          window.location.hash = `#${customEvt.detail.targetId}`
+          const id = customEvt.detail.targetId
+          if (!scrollToTarget(id)) {
+            setTimeout(() => scrollToTarget(id), 100)
+          }
+          window.history.pushState(null, '', `#${id}`)
         }
         setPhase('exit')
       }, 450)
