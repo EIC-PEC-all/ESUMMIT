@@ -127,23 +127,45 @@ export default function Nav() {
     return () => document.body.classList.remove('drawer-open')
   }, [menuOpen])
 
-  // Cross-page hash navigation
+  // Cross-page and initial hash navigation
   useEffect(() => {
-    if (pathname === '/' && typeof window !== 'undefined' && window.location.hash) {
-      const hashId = window.location.hash.replace('#', '')
-      if (hashId) {
-        const timer = setTimeout(() => {
-          const el = document.getElementById(hashId)
-          if (el) {
-            const headerOffset = 70
-            const y = el.getBoundingClientRect().top + window.pageYOffset - headerOffset
-            window.scrollTo({ top: y, behavior: 'smooth' })
+    if (pathname === '/' && typeof window !== 'undefined') {
+      const scrollToHash = () => {
+        if (!window.location.hash) return
+        const hashId = window.location.hash.replace('#', '')
+        if (!hashId) return
+        const el = document.getElementById(hashId)
+        if (el) {
+          const headerOffset = 70
+          const y = el.getBoundingClientRect().top + window.pageYOffset - headerOffset
+          window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+        }
+      }
+
+      if (window.location.hash) {
+        if (isLoaderActive) {
+          const handleLoaderFinished = (e: Event) => {
+            const customEvt = e as CustomEvent<{ active: boolean }>
+            if (customEvt.detail?.active === false) {
+              setTimeout(scrollToHash, 250)
+            }
           }
-        }, 400)
-        return () => clearTimeout(timer)
+          window.addEventListener('scroll-loader-state', handleLoaderFinished, { once: true })
+        } else {
+          const timer = setTimeout(scrollToHash, 150)
+          return () => clearTimeout(timer)
+        }
+      }
+
+      const handleHashChange = () => {
+        setTimeout(scrollToHash, 50)
+      }
+      window.addEventListener('hashchange', handleHashChange)
+      return () => {
+        window.removeEventListener('hashchange', handleHashChange)
       }
     }
-  }, [pathname])
+  }, [pathname, isLoaderActive])
 
   const handleItemClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {

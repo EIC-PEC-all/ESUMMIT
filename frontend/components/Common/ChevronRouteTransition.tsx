@@ -49,7 +49,10 @@ export default function ChevronRouteTransition({ children }: { children: React.R
             const el = document.getElementById(hashId)
             if (el) {
               e.preventDefault()
-              el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              const headerOffset = 70
+              const y = el.getBoundingClientRect().top + window.pageYOffset - headerOffset
+              window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' })
+              window.history.pushState(null, '', targetUrl.hash)
             }
           }
           return
