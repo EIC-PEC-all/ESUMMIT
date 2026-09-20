@@ -67,16 +67,36 @@ jobs:
             
             cd ~/E-SUMMIT || cd /var/www/esummit || cd /app/esummit
             
+            PREV_COMMIT=$(git rev-parse HEAD)
+            echo "Current deployment commit: $PREV_COMMIT"
+            
             git fetch origin main
             git reset --hard origin/main
             git submodule update --init --recursive
             
+            echo "Building and restarting production containers..."
             docker compose up --build -d --remove-orphans
             
+            echo "Verifying backend health..."
+            HEALTHY=0
+            for i in {1..5}; do
+              sleep 4
+              if curl -sf http://localhost:4000/api/v1/health; then
+                HEALTHY=1
+                echo "Health check passed on attempt $i."
+                break
+              fi
+              echo "Waiting for health check attempt $i/5..."
+            done
+            
+            if [ $HEALTHY -eq 0 ]; then
+              echo "Health check failed! Triggering automated rollback to $PREV_COMMIT..."
+              git reset --hard $PREV_COMMIT
+              git submodule update --init --recursive
+              docker compose up --build -d --remove-orphans
+              echo "Successfully rolled back to $PREV_COMMIT."
+              exit 1
+            fi
+            
             docker image prune -f
-            
-            echo "Verifying service health..."
-            sleep 5
-            curl -f http://localhost:4000/api/v1/health || (echo "Backend Health Check Failed!" && exit 1)
-            
             echo "E-Summit Successfully Deployed to Production."
