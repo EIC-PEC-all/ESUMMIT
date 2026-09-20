@@ -79,13 +79,13 @@ export default function HeroPinnedContent({
               <span>WATCH TEASER</span>
             </a>
           ) : (
-            <a
+            <Link
               href="/#event-portfolio"
               className="btn-dark-gradient group relative inline-flex h-11 items-center justify-center gap-2 overflow-hidden rounded-full px-6 font-mono-data text-xs font-bold uppercase tracking-wider text-primary backdrop-blur-md transition-all hover:scale-105 hover:border-mint"
             >
               <Sparkles size={15} strokeWidth={1.5} className="text-mint group-hover:animate-pulse" />
               <span>EXPLORE TRACKS</span>
-            </a>
+            </Link>
           )}
         </div>
       </div>

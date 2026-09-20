@@ -2,6 +2,7 @@
 'use client'
 
 import React from 'react'
+import Link from 'next/link'
 import { motion, MotionValue, useTransform } from 'framer-motion'
 import { Sparkles, ArrowRight, SlidersHorizontal } from 'lucide-react'
 
@@ -31,7 +32,7 @@ export function Header({
         
         {/* Left: Brand Logo & Title */}
         <div className="flex items-center gap-3">
-          <a
+          <Link
             href="/"
             className="group flex items-center gap-2.5 text-base font-bold tracking-tight text-white transition-colors hover:text-emerald-400"
           >
@@ -45,7 +46,7 @@ export function Header({
                 EVENT SCHEDULE
               </span>
             </span>
-          </a>
+          </Link>
         </div>
 
         {/* Center: Dynamic Category Tab Switcher (Flat minimal tabs) */}
