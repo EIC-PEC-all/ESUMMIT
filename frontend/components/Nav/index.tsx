@@ -11,13 +11,17 @@ import NavMobileDrawer, { NavItem } from './NavMobileDrawer'
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'HOME', code: '01', href: '/', sectionId: null },
-  { label: 'ABOUT', code: '02', href: '/#esummit-about', sectionId: 'esummit-about' },
-  { label: 'EVENTS', code: '03', href: '/#event-portfolio', sectionId: 'event-portfolio' },
-  { label: 'TIMELINE', code: '04', href: '/#timeline', sectionId: 'timeline' },
-  { label: 'ALUMNI', code: '05', href: '/#alumni', sectionId: 'alumni' },
-  { label: 'SPONSORS', code: '06', href: '/#sponsors', sectionId: 'sponsors' },
-  { label: 'FAQ', code: '07', href: '/#faq', sectionId: 'faq' },
-  { label: 'REGISTER', code: '08', href: '/register', sectionId: null },
+  { label: 'ABOUT', code: '02', href: '/about', sectionId: null },
+  { label: 'EVENTS', code: '03', href: '/events', sectionId: null },
+  { label: 'TIMELINE', code: '04', href: '/timeline', sectionId: null },
+  { label: 'SPEAKERS', code: '05', href: '/speakers', sectionId: null },
+  { label: 'GALLERY', code: '06', href: '/gallery', sectionId: null },
+  { label: 'ALUMNI', code: '07', href: '/alumni', sectionId: null },
+  { label: 'SPONSORS', code: '08', href: '/sponsors', sectionId: null },
+  { label: 'FAQ', code: '09', href: '/faq', sectionId: null },
+  { label: 'PASSES', code: '10', href: '/passes', sectionId: null },
+  { label: 'REGISTER', code: '11', href: '/register', sectionId: null },
+  { label: 'MY PROFILE', code: '12', href: '/profile', sectionId: null },
 ]
 
 export default function Nav() {
@@ -177,11 +181,6 @@ export default function Nav() {
         window.dispatchEvent(new CustomEvent('trigger-chevron-transition', { detail: { targetTop: true } }))
         return
       }
-
-      if (pathname === '/' && item.sectionId) {
-        e.preventDefault()
-        window.dispatchEvent(new CustomEvent('trigger-chevron-transition', { detail: { targetId: item.sectionId } }))
-      }
     },
     [pathname]
   )
@@ -199,7 +198,7 @@ export default function Nav() {
     [isLoaderActive, isModalOpen, scrolled, scrollDirection, menuOpen]
   )
 
-  if (pathname === '/register' || pathname === '/speakers') return null
+  if (pathname === '/register') return null
 
   return (
     <>

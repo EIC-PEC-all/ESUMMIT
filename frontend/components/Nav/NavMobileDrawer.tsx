@@ -114,18 +114,17 @@ export default function NavMobileDrawer({
               {/* Navigation Links */}
               <nav className="flex flex-col gap-3" aria-label="Sidebar navigation">
                 {navItems.map((item) => {
-                  const targetHref = pathname === '/' && item.sectionId ? `#${item.sectionId}` : item.href
                   const isActive = pathname === item.href
 
                   return (
                     <Link
                       key={item.label}
-                      href={targetHref}
+                      href={item.href}
                       onClick={(e) => onItemClick(e, item)}
                       className="group flex items-baseline justify-between py-2 border-b border-void/15 transition-all"
                     >
                       <span
-                        className={`font-display text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight transition-colors ${
+                        className={`font-display text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight transition-colors ${
                           isActive
                             ? 'text-void underline decoration-void decoration-4 underline-offset-8'
                             : 'text-void/80 group-hover:text-void group-hover:underline decoration-void/50 underline-offset-4'

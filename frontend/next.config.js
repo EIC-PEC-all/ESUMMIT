@@ -42,13 +42,9 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      { source: '/schedule', destination: '/#schedule', permanent: true },
-      { source: '/speakers', destination: '/#speakers', permanent: true },
-      { source: '/sponsors', destination: '/#sponsors', permanent: true },
-      { source: '/faq', destination: '/#faq', permanent: true },
-      { source: '/portfolio', destination: '/#event-portfolio', permanent: true },
-      { source: '/tracks', destination: '/#event-portfolio', permanent: true },
-      { source: '/passes', destination: '/register', permanent: true },
+      { source: '/schedule', destination: '/timeline', permanent: true },
+      { source: '/portfolio', destination: '/events', permanent: true },
+      { source: '/tracks', destination: '/events', permanent: true },
     ]
   },
   // Allow Three.js to work without SSR issues

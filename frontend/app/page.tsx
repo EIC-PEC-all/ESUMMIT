@@ -14,11 +14,12 @@ const FlipFlopTransition = dynamic(() => import('@/components/Common/FlipFlopTra
 const EsummitAbout = dynamic(() => import('@/components/EsummitAbout'), { ssr: false })
 const EventPortfolioShowcase = dynamic(() => import('@/components/EventPortfolio'), { ssr: false })
 const EsummitHighlights = dynamic(() => import('@/components/EsummitSpeakers'), { ssr: false })
+const Speakers = dynamic(() => import('@/components/Speakers'), { ssr: false })
 const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), { ssr: false })
 const Vdo2Showcase = dynamic(() => import('@/components/Vdo2Showcase'), { ssr: false })
 const Alumni = dynamic(() => import('@/components/Alumni'), { ssr: false })
 const Sponsors = dynamic(() => import('@/components/Sponsors'), { ssr: false })
-const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.RegisterCTA), { ssr: false })
+const RegisterCTA = dynamic(() => import('@/components/RegisterCTA'), { ssr: false })
 const FAQ = dynamic(() => import('@/components/FAQ'), { ssr: false })
 const Footer = dynamic(() => import('@/components/Footer'), { ssr: false })
 
@@ -58,8 +59,11 @@ export default function Home() {
       {/* ── 4. COMPETITIONS & TRACKS — Event portfolio ── */}
       <EventPortfolioShowcase />
 
-      {/* ── 5. SPEAKERS — Keynote guests ── */}
+      {/* ── 5. TIMELINE — Summit highlights, agenda & campus map ── */}
       <EsummitHighlights />
+
+      {/* ── 6. SPEAKERS — Keynotes, founders, and investors ── */}
+      <Speakers />
 
       {/* ── 6. MASONRY GALLERY — 5-column vertical scroll gallery kept in place ── */}
       <MasonryShowcase />
@@ -80,7 +84,7 @@ export default function Home() {
       <FAQ />
 
       {/* ── 12. FOOTER ── */}
-      <Footer hideCTA={true} />
+      <Footer />
     </main>
   )
 }

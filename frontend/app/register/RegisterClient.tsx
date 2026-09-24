@@ -231,14 +231,48 @@ export default function RegisterClient() {
     fetchRegistrations()
   }, [fetchRegistrations])
 
+  const isPassOwned = useCallback(
+    (tier: PassTier) => {
+      return myRegistrations.some((reg) => {
+        const cat = (reg.category || '').toLowerCase()
+        const idLower = tier.id.toLowerCase()
+        const titleLower = tier.title.toLowerCase()
+        if (cat.includes(idLower) || cat.includes(titleLower)) return true
+        if (idLower === 'student' && cat.includes('student')) return true
+        if (idLower === 'hackathon' && cat.includes('hack')) return true
+        if (idLower === 'founder' && (cat.includes('pitch') || cat.includes('founder'))) return true
+        if (idLower === 'ambassador' && cat.includes('ambassador')) return true
+        return false
+      })
+    },
+    [myRegistrations]
+  )
+
+  // Auto-switch to available unowned tier if current selection is already owned
+  useEffect(() => {
+    if (myRegistrations.length > 0) {
+      const currentTier = PASS_TIERS.find((p) => p.id === selectedPassId)
+      if (currentTier && isPassOwned(currentTier)) {
+        const availableTier = PASS_TIERS.find((p) => !isPassOwned(p))
+        if (availableTier) {
+          setSelectedPassId(availableTier.id)
+        }
+      }
+    }
+  }, [myRegistrations, selectedPassId, isPassOwned])
+
   const selectedTier = PASS_TIERS.find((p) => p.id === selectedPassId) || PASS_TIERS[0]
   const basePrice = selectedTier.fee
   const discountAmount = Math.round((basePrice * discountPercent) / 100)
   const finalPrice = Math.max(0, basePrice - discountAmount)
 
   const handlePassChange = (newPassId: string) => {
-    setSelectedPassId(newPassId)
     const tier = PASS_TIERS.find((p) => p.id === newPassId)
+    if (tier && isPassOwned(tier)) {
+      toast.error(`You have already claimed or purchased the ${tier.title}. You cannot purchase it again.`, TOAST_STYLE)
+      return
+    }
+    setSelectedPassId(newPassId)
     if (tier?.defaultEventId && !selectedEventIds.includes(tier.defaultEventId)) {
       setSelectedEventIds((prev) => [...prev, tier.defaultEventId!])
     }
@@ -327,6 +361,10 @@ export default function RegisterClient() {
       setView('auth')
       return
     }
+    if (selectedTier && isPassOwned(selectedTier)) {
+      toast.error(`You already have an active ${selectedTier.title} in your profile! Check your Profile page.`, TOAST_STYLE)
+      return
+    }
     if (!formData.name.trim()) {
       toast.error('Please enter your full name.', TOAST_STYLE)
       return
@@ -341,6 +379,11 @@ export default function RegisterClient() {
 
   // Complete Order
   const handleCompleteOrder = async () => {
+    if (selectedTier && isPassOwned(selectedTier)) {
+      toast.error(`You have already purchased the ${selectedTier.title}. Each delegate can only have one pass of this type.`, TOAST_STYLE)
+      return
+    }
+
     setIsSubmitting(true)
     const toastId = toast.loading('Securing your pass...', TOAST_STYLE)
 
@@ -961,25 +1004,54 @@ export default function RegisterClient() {
                     <span className="text-[11px] text-neutral-500">All passes include summit ID &amp; kit</span>
                   </div>
 
+                  {/* Existing Pass Alert Banner */}
+                  {myRegistrations.length > 0 && (
+                    <div className="rounded-lg border border-emerald-500/20 bg-emerald-950/20 px-3.5 py-2.5 flex items-center justify-between text-xs text-emerald-300">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
+                        <span>You currently have <strong>{myRegistrations.length}</strong> active summit pass{myRegistrations.length > 1 ? 'es' : ''} linked to your account.</span>
+                      </div>
+                      <Link
+                        href="/profile"
+                        className="underline font-bold text-emerald-200 hover:text-white shrink-0 ml-2"
+                      >
+                        View Profile &rarr;
+                      </Link>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                     {PASS_TIERS.map((tier) => {
                       const isSelected = selectedPassId === tier.id
+                      const isOwned = isPassOwned(tier)
 
                       return (
                         <div
                           key={tier.id}
-                          onClick={() => handlePassChange(tier.id)}
-                          className={`relative cursor-pointer rounded-lg border p-3.5 transition-all flex flex-col justify-between gap-3 ${
-                            isSelected
-                              ? 'border-mint bg-[#182A23] shadow-sm'
-                              : 'border-white/10 bg-[#13221C] hover:border-white/20 hover:bg-[#182A23]'
+                          onClick={() => {
+                            if (isOwned) {
+                              toast.error(`You have already purchased the ${tier.title}. You cannot buy it again.`, TOAST_STYLE)
+                              return
+                            }
+                            handlePassChange(tier.id)
+                          }}
+                          className={`relative rounded-lg border p-3.5 transition-all flex flex-col justify-between gap-3 ${
+                            isOwned
+                              ? 'border-emerald-500/40 bg-emerald-950/20 opacity-80 cursor-not-allowed'
+                              : isSelected
+                              ? 'border-mint bg-[#182A23] shadow-sm cursor-pointer'
+                              : 'border-white/10 bg-[#13221C] hover:border-white/20 hover:bg-[#182A23] cursor-pointer'
                           }`}
                         >
-                          {tier.popular && (
+                          {isOwned ? (
+                            <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded bg-emerald-400 text-void text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                              <Check size={9} strokeWidth={3} /> OWNED
+                            </span>
+                          ) : tier.popular ? (
                             <span className="absolute -top-2 right-2 px-1.5 py-0.2 rounded bg-mint text-void text-[9px] font-bold uppercase tracking-wider">
                               Popular
                             </span>
-                          )}
+                          ) : null}
 
                           <div className="space-y-1">
                             <div className="flex items-center justify-between">
@@ -988,12 +1060,14 @@ export default function RegisterClient() {
                               </span>
                               <div
                                 className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                                  isSelected
+                                  isOwned
+                                    ? 'border-emerald-400 bg-emerald-400 text-void'
+                                    : isSelected
                                     ? 'border-mint bg-mint text-void'
                                     : 'border-white/20'
                                 }`}
                               >
-                                {isSelected && <Check size={10} strokeWidth={3} />}
+                                {(isOwned || isSelected) && <Check size={10} strokeWidth={3} />}
                               </div>
                             </div>
 
@@ -1007,13 +1081,19 @@ export default function RegisterClient() {
                           </div>
 
                           <div className="pt-2 border-t border-white/5 flex items-baseline justify-between">
-                            <span className="text-[10px] text-neutral-500">Registration Fee</span>
+                            <span className="text-[10px] text-neutral-500">
+                              {isOwned ? 'Status' : 'Registration Fee'}
+                            </span>
                             <span
                               className={`text-sm font-bold font-mono ${
-                                tier.fee === 0 ? 'text-mint' : 'text-white'
+                                isOwned
+                                  ? 'text-emerald-400 text-[11px]'
+                                  : tier.fee === 0
+                                  ? 'text-mint'
+                                  : 'text-white'
                               }`}
                             >
-                              {tier.fee === 0 ? 'FREE' : tier.feeLabel}
+                              {isOwned ? 'CLAIMED' : tier.fee === 0 ? 'FREE' : tier.feeLabel}
                             </span>
                           </div>
                         </div>
