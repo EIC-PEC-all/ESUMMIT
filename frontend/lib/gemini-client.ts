@@ -100,9 +100,9 @@ export class GeminiClient {
       const contentType = response.headers.get('content-type')
       if (contentType && contentType.includes('application/json')) {
         const data: ProxyResponse = await response.json()
-        if (response.ok && data.text) {
+        if (response.ok && (typeof data.text === 'string' || data.functionCalls)) {
           return {
-            text: data.text,
+            text: data.text || '',
             functionCalls: data.functionCalls,
           }
         }
