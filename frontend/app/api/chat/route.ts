@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
   const lastUserMessage = [...messages].reverse().find((m) => m.role === 'user')?.content || ''
 
   // Cap history size to prevent abuse
-  const windowedMessages = messages.slice(-12)
+  const windowedMessages = messages.slice(-24)
 
   // 1. Check for Gemini keys and use them for generation
   const geminiApiKeys = process.env.GEMINI_API_KEYS

@@ -5,6 +5,7 @@ import { useScroll, useMotionValueEvent } from 'framer-motion'
 import { usePathname } from 'next/navigation'
 import { FEST_META } from '@/lib/data'
 import { useSiteConfig } from '@/hooks/useSummitData'
+import { Download, Bot, Sparkles } from 'lucide-react'
 import NavHeader from './NavHeader'
 import SponsorMarqueeBar from './SponsorMarqueeBar'
 import NavMobileDrawer, { NavItem } from './NavMobileDrawer'
@@ -213,10 +214,20 @@ export default function Nav() {
     return !scrolled || scrollDirection === 'up'
   }, [isLoaderActive, isModalOpen, menuOpen, isHomePage, isHeroIntro, scrollDirection, scrolled])
 
-  const showTopMarquee = false
+  const showTopMarquee = useMemo(
+    () => {
+      if (isLoaderActive || isModalOpen || menuOpen) return false
+      return scrolled && scrollDirection === 'down'
+    },
+    [isLoaderActive, isModalOpen, menuOpen, scrolled, scrollDirection]
+  )
 
   const showBottomMarquee = useMemo(
-    () => !isLoaderActive && !isModalOpen && (!scrolled || scrollDirection === 'up' || menuOpen),
+    () => {
+      if (isLoaderActive || isModalOpen) return false
+      if (menuOpen) return true
+      return !scrolled || scrollDirection === 'up'
+    },
     [isLoaderActive, isModalOpen, scrolled, scrollDirection, menuOpen]
   )
 
@@ -243,6 +254,35 @@ export default function Nav() {
         visible={showBottomMarquee}
         countdownTarget={countdownTarget}
       />
+
+      {/* Mobile Bottom Action Bar (Visible when scrolling down on mobile) */}
+      <div className={`fixed sm:hidden bottom-0 left-0 right-0 z-[2500] bg-[#07130F]/80 backdrop-blur-2xl border-t border-white/10 rounded-t-[24px] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-all duration-500 ease-out shadow-[0_-8px_30px_rgba(0,0,0,0.5)] ${
+        showTopMarquee ? 'translate-y-0 opacity-100' : 'translate-y-[150%] opacity-0 pointer-events-none'
+      }`}>
+        <div className="flex items-center gap-3">
+          <a
+            href="/e-summit-brochure.pdf"
+            target="_blank"
+            className="flex-1 flex items-center justify-center gap-2 rounded-full bg-white/10 border border-white/10 py-3.5 shadow-md text-white font-mono-data text-[11px] font-bold tracking-wider uppercase active:scale-[0.98] transition-transform"
+          >
+            <Download size={16} className="text-mint" />
+            <span>DOWNLOAD BROCHURE</span>
+          </a>
+          
+          <button
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('toggle-concierge'))
+              }
+            }}
+            className="w-[48px] h-[48px] shrink-0 rounded-full bg-white text-black flex items-center justify-center shadow-md active:scale-[0.95] transition-transform relative"
+            aria-label="Open AI Assistant"
+          >
+            <Sparkles size={20} strokeWidth={2.5} />
+            <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-mint border border-white animate-pulse" />
+          </button>
+        </div>
+      </div>
 
       <NavMobileDrawer
         isOpen={menuOpen}

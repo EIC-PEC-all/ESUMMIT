@@ -509,7 +509,7 @@ a.text-mint, li.text-mint, strong.text-mint, em.text-mint,
   }
 
   .fixed-marquee {
-    transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    transition: right 0.4s cubic-bezier(0.25, 1, 0.5, 1), transform 0.5s ease-out, opacity 0.5s ease-out !important;
     right: 0 !important;
   }
   body.drawer-open .fixed-marquee {

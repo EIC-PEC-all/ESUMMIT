@@ -117,12 +117,17 @@ export default function Concierge() {
       setOpen(true)
       setPlanOpen(true)
     }
+    const handleToggleConcierge = () => {
+      setOpen((prev) => !prev)
+    }
 
     window.addEventListener('open-my-plan', handleOpenPlan)
     window.addEventListener('open-concierge', handleOpenConcierge)
+    window.addEventListener('toggle-concierge', handleToggleConcierge)
     return () => {
       window.removeEventListener('open-my-plan', handleOpenPlan)
       window.removeEventListener('open-concierge', handleOpenConcierge)
+      window.removeEventListener('toggle-concierge', handleToggleConcierge)
     }
   }, [])
 
@@ -168,6 +173,16 @@ export default function Concierge() {
     }
   }, [open])
 
+  // Lock body scroll when any modal is open to ensure chat log is scrollable on mobile
+  useEffect(() => {
+    if (open || planOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [open, planOpen])
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isLoading])
@@ -190,7 +205,7 @@ export default function Concierge() {
           // Drop below loader (z-9999) while it's active so it's physically behind the overlay
           zIndex: isLoaderActive ? 9000 : 10000,
         }}
-        className={`bg-mint !fixed bottom-14 right-3 sm:right-6 w-[52px] h-[52px] rounded-full text-void flex items-center justify-center cursor-pointer transition-all duration-400 shadow-[0_8px_30px_rgba(0,245,212,0.25)] border border-[#5CFFE7] hover:brightness-110 hover:shadow-[0_8px_40px_rgba(0,245,212,0.4)] ${
+        className={`hidden sm:flex bg-mint !fixed bottom-14 right-3 sm:right-6 w-[52px] h-[52px] rounded-full text-void items-center justify-center cursor-pointer transition-all duration-400 shadow-[0_8px_30px_rgba(0,245,212,0.25)] border border-[#5CFFE7] hover:brightness-110 hover:shadow-[0_8px_40px_rgba(0,245,212,0.4)] ${
           isHidden ? 'opacity-0 scale-75 pointer-events-none translate-y-4' : 'opacity-100 scale-100 pointer-events-auto translate-y-0'
         }`}
         whileHover={{ scale: isHidden ? 0.75 : 1.05, y: -2 }}
@@ -210,8 +225,9 @@ export default function Concierge() {
             role="dialog"
             aria-modal="true"
             aria-label="E-Summit PEC AI Assistant"
-            className="fixed bottom-[100px] sm:bottom-[108px] right-3 sm:right-6 left-auto z-[10000] w-[360px] max-w-[calc(100vw-24px)] rounded-2xl overflow-hidden flex flex-col shadow-2xl bg-gradient-to-b from-[#0D2218]/95 via-[#081710]/95 to-[#040A07]/95 border border-mint/30 backdrop-blur-2xl"
-            style={{ height: 'min(480px, 72vh)' }}
+            className="fixed z-[10000] flex flex-col shadow-2xl bg-gradient-to-b from-[#0D2218]/95 via-[#081710]/95 to-[#040A07]/95 backdrop-blur-2xl overflow-hidden
+                       inset-0 rounded-none border-0
+                       sm:top-auto sm:left-auto sm:bottom-[108px] sm:right-6 sm:w-[360px] sm:h-[min(480px,72vh)] sm:rounded-2xl sm:border sm:border-mint/30"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.95 }}
@@ -256,7 +272,7 @@ export default function Concierge() {
             </div>
 
             {/* Messages Log */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 font-body text-sm scrollbar-thin">
+            <div className="flex-1 overflow-y-auto overscroll-contain px-4 py-4 space-y-4 font-body text-sm scrollbar-thin">
               {visibleMessages.map((msg) => (
                 <div key={msg.id} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                   <div className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>

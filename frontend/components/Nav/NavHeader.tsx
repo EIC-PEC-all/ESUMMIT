@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, Ticket } from 'lucide-react'
+import { Menu, Ticket, Download } from 'lucide-react'
 import Magnetic from '@/components/Common/Magnetic'
 import { prefetchRegister } from '@/lib/prefetch'
 
@@ -58,6 +58,17 @@ export default function NavHeader({
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {!menuOpen && (
             <>
+              <Magnetic strength={0.3}>
+                <a
+                  href="/e-summit-brochure.pdf"
+                  target="_blank"
+                  className="hidden sm:inline-flex btn-dark-gradient min-h-[40px] sm:min-h-[44px] h-10 sm:h-11 box-border items-center justify-center gap-1.5 px-4 sm:px-6 rounded-full font-mono-data text-[11px] sm:text-xs font-bold uppercase tracking-wider leading-none transition-all duration-200 text-white cursor-pointer hover:border-mint"
+                  aria-label="Download E-Summit Brochure"
+                >
+                  <Download size={14} className="text-mint" />
+                  <span>BROCHURE</span>
+                </a>
+              </Magnetic>
 
               <Magnetic strength={0.3}>
                 <Link

@@ -59,14 +59,14 @@ import { getTokenBudget, SUMMARY_MAX_TOKENS } from '@/lib/token-budget'
  * Older messages stay in UI state but are never sent to the API.
  * 6 messages = 3 full conversation turns (user + assistant × 3).
  */
-const HISTORY_WINDOW = 6
+const HISTORY_WINDOW = 16
 
 /**
  * When visible message count exceeds this threshold, auto-summarize the
  * oldest half of the history to keep the window lean.
  * (Welcome message + threshold messages before summarizing.)
  */
-const SUMMARIZE_THRESHOLD = 14
+const SUMMARIZE_THRESHOLD = 24
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -129,6 +129,12 @@ export function useChatbot(options: UseChatbotOptions = {}) {
   const abortControllerRef = useRef<AbortController | null>(null)
   const isMountedRef = useRef(true)
   const messageIdCounter = useRef(0)
+  const messagesRef = useRef<ChatMessage[]>([])
+
+  // Keep ref in sync with state for callbacks
+  useEffect(() => {
+    messagesRef.current = messages
+  }, [messages])
 
   // ── In-session response cache ──────────────────────────────────────────────
   // Key: normalized user message text
@@ -145,13 +151,34 @@ export function useChatbot(options: UseChatbotOptions = {}) {
 
   const generateId = () => `msg-${Date.now()}-${++messageIdCounter.current}`
 
-  // ── Initialize with welcome message ───────────────────────────────────────
+  // ── Initialize & Restore History ──────────────────────────────────────────
   useEffect(() => {
-    if (messages.length === 0) {
-      setMessages([makeWelcomeMessage(generateId())])
+    try {
+      const saved = sessionStorage.getItem('pec_chatbot_history')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          const hydrated = parsed.map(m => ({ ...m, timestamp: new Date(m.timestamp) }))
+          setMessages(hydrated)
+          return
+        }
+      }
+    } catch {
+      // ignore
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setMessages([makeWelcomeMessage(generateId())])
   }, [])
+
+  // ── Persist History ───────────────────────────────────────────────────────
+  useEffect(() => {
+    if (messages.length > 0) {
+      try {
+        sessionStorage.setItem('pec_chatbot_history', JSON.stringify(messages))
+      } catch {
+        // ignore
+      }
+    }
+  }, [messages])
 
   // ── History windowing helper ───────────────────────────────────────────────
   /**
@@ -290,29 +317,14 @@ export function useChatbot(options: UseChatbotOptions = {}) {
     setIsLoading(true)
     setError(null)
 
-    // ── 3. Try local answer (no Gemini call) ──────────────────────────────────
-    const local = localAnswer(trimmed)
-    if (local) {
-      // Cache the local answer too (helps when user re-asks)
-      responseCache.current.set(cacheKey, local)
-      const botMsg: ChatMessage = { id: generateId(), role: 'assistant', content: local, timestamp: new Date() }
-      setMessages(prev => [...prev, botMsg])
-      setIsLoading(false)
-      return
-    }
-
     // ── 4. Auto-summarize if history is getting long ────────────────────────
     // We read messages from the state snapshot captured at call time (closure),
     // then update state if summarization ran.
     abortControllerRef.current = new AbortController()
 
     try {
-      // Get the current messages snapshot and possibly compress history
-      let currentMessages: ChatMessage[] = []
-      setMessages(prev => {
-        currentMessages = prev
-        return prev
-      })
+      // Get the current messages snapshot from the ref
+      let currentMessages = [...messagesRef.current]
 
       // Run summarization if needed (async, uses cheap model)
       const maybeCompressed = await maybeSummarize(currentMessages)

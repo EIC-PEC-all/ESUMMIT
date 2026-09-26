@@ -30,7 +30,7 @@ export default function HeroIntroTitle({ opacity, visibility }: HeroIntroTitlePr
           height={290}
           priority
           fetchPriority="high"
-          className="w-full max-w-[320px] xs:max-w-[400px] sm:max-w-[540px] md:max-w-[680px] lg:max-w-[800px] h-auto object-contain drop-shadow-[0_0_35px_rgba(0,245,212,0.4)] drop-shadow-[0_12px_40px_rgba(0,0,0,0.95)]"
+          className="w-full max-w-[280px] xs:max-w-[340px] sm:max-w-[540px] md:max-w-[680px] lg:max-w-[800px] h-auto object-contain drop-shadow-[0_0_35px_rgba(0,245,212,0.4)] drop-shadow-[0_12px_40px_rgba(0,0,0,0.95)]"
         />
       </div>
     </motion.div>

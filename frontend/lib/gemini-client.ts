@@ -107,18 +107,13 @@ export class GeminiClient {
           }
         }
         if (data.error) {
-          console.warn('[GeminiClient] Server returned error:', data.error)
+          throw new Error(data.error)
         }
       }
+      throw new Error(`Failed to generate content: HTTP ${response.status}`)
     } catch (err) {
       console.warn('[GeminiClient] Proxy fetch failed:', err)
-    }
-
-    // Resilient fallback: answer from the last user message
-    const lastUser = [...messages].reverse().find(m => m.role === 'user')?.content || ''
-    return {
-      text: `I'm the official **PEC E-Summit 2026 Assistant**! How can I help you regarding our **₹15L+ Prize Pool Competitions**, **Keynote Visionaries**, or **Day 1 & Day 2 Schedule**?`,
-      functionCalls: undefined,
+      throw err // Let the caller (useChatbot) catch and use localAnswer
     }
   }
 

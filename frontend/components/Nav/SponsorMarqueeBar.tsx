@@ -33,9 +33,9 @@ export default function SponsorMarqueeBar({
 
   return (
     <div
-      className={`fixed left-0 right-0 fixed-marquee z-[2500] bg-section-1 [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md py-2.5 shadow-2xl transition-all duration-500 ease-out ${
+      className={`fixed left-0 right-0 fixed-marquee z-[4000] bg-section-1 [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md py-2.5 shadow-2xl transition-all duration-500 ease-out ${
         isTop
-          ? `top-(--announcement-height,0px) border-b border-mint/20 [.light_&]:border-[#4E6527]/50 ${
+          ? `top-0 border-b border-mint/20 [.light_&]:border-[#4E6527]/50 ${
               visible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
             }`
           : `bottom-0 border-t border-mint/20 [.light_&]:border-[#4E6527]/50 pb-[max(0.6rem,env(safe-area-inset-bottom))] ${
