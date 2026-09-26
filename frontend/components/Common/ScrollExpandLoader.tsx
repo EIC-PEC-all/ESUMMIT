@@ -12,19 +12,7 @@ export default function ScrollExpandLoader() {
   const [stage, setStage] = useState<'loading' | 'expanding' | 'done'>('loading')
 
   useEffect(() => {
-    if (sessionStorage.getItem('pec_summit_initial_loader_done')) {
-      setStage('done')
-      // If there is a hash in the URL, wait a tick and scroll to it
-      if (window.location.hash) {
-        setTimeout(() => {
-          const el = document.getElementById(window.location.hash.substring(1))
-          if (el) el.scrollIntoView({ behavior: 'smooth' })
-        }, 100)
-      }
-      return
-    }
 
-    sessionStorage.setItem('pec_summit_initial_loader_done', 'true')
 
     // In React 18 StrictMode (dev only), effects run twice: mount → cleanup → remount.
     // Without this flag the cleanup's DOM teardown called setStage('done') on the
