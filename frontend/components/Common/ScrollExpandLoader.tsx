@@ -12,8 +12,17 @@ export default function ScrollExpandLoader() {
   const [stage, setStage] = useState<'loading' | 'expanding' | 'done'>('loading')
 
   useEffect(() => {
-
-
+    if (typeof window !== 'undefined' && window.__SCROLL_LOADER_ACTIVE__ === false) {
+      // If we already completed the loader this session (persists on client nav, resets on F5)
+      setStage('done')
+      if (window.location.hash) {
+        setTimeout(() => {
+          const el = document.getElementById(window.location.hash.substring(1))
+          if (el) el.scrollIntoView({ behavior: 'smooth' })
+        }, 100)
+      }
+      return
+    }
     // In React 18 StrictMode (dev only), effects run twice: mount → cleanup → remount.
     // Without this flag the cleanup's DOM teardown called setStage('done') on the
     // first invocation, flashing the loader away before the real run could start.
