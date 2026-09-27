@@ -30,31 +30,21 @@ const PREVIOUS_SPEAKERS = [
   { name: 'Kailash Nath', role: 'AVP-Seed at Chiratae Ventures', image: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1/esummit/speakers/21.jpg' },
 ]
 
-const PREVIOUS_INVESTORS = [
-  { name: 'Anmol Jamwal', role: 'Angel Investor Soonicorn Ventures & India Accelerator' },
-  { name: 'Ajay Gupta', role: 'Angel Investor Angel Bay Network' },
-  { name: 'CA Atul Gupta', role: 'Independent Director Poonawalla Fincorp' },
-  { name: 'Govind Preet Singh', role: 'Serial Entrepreneur Chandigarh\'s Angel Network' },
-  { name: 'Sanjeev Bhavnani', role: 'Serial Entrepreneur Founder & CEO, Mentorpreneur' },
-  { name: 'Manu Seth', role: 'CEO/Co-Founder & Director Neemli Naturals' },
-  { name: 'Vineet Khurana', role: 'Advisory Board, Chandigarh Angel Network | CEO, SACC India' },
-]
-
-function SpeakerCard({ person, isInvestor = false }: { person: any; isInvestor?: boolean }) {
+function SpeakerCard({ person }: { person: any }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      className="bg-[#0A1813] border border-white/10 hover:border-mint/50 rounded-3xl overflow-hidden transition-all duration-300 group shadow-lg"
+      className="bg-[#0B1512] border border-white/10 hover:border-mint/40 rounded-2xl overflow-hidden transition-colors duration-300 group"
     >
-      <div className="relative w-full aspect-[4/5] bg-[#06120E] overflow-hidden">
+      <div className="relative w-full aspect-[4/5] bg-[#070E0C] overflow-hidden">
         {person.image ? (
           <BlurImage
             src={person.image}
             alt={person.name}
             fill
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-white/5">
@@ -82,13 +72,13 @@ export default function SpeakersList() {
   return (
     <>
       <PageBanner 
-        title="SPEAKERS & INVESTORS" 
+        title="SPEAKERS" 
         subtitle="AT E-SUMMIT '26" 
       />
-      <section className="relative min-h-screen bg-section-1 text-white pt-12 pb-24 px-4 sm:px-8 lg:px-12 z-10">
+      <section className="relative min-h-screen bg-section-1 text-white pt-12 pb-32 sm:pb-40 px-4 sm:px-8 lg:px-12 z-10">
 
       {/* --- Previous Speakers --- */}
-      <div className="max-w-7xl mx-auto w-full mb-20">
+      <div className="max-w-7xl mx-auto w-full mb-24 sm:mb-28">
         <div className="flex items-center gap-4 mb-10">
           <h2 className="font-display text-2xl sm:text-3xl font-bold uppercase tracking-wider text-white">
             Previous Speakers
@@ -103,34 +93,22 @@ export default function SpeakersList() {
         </div>
       </div>
 
-      {/* --- Previous Investors --- */}
-      <div className="max-w-7xl mx-auto w-full">
-        <div className="flex items-center gap-4 mb-10">
-          <h2 className="font-display text-2xl sm:text-3xl font-bold uppercase tracking-wider text-white">
-            Previous Investors
-          </h2>
-          <div className="flex-1 h-px bg-gradient-to-r from-white/20 to-transparent" />
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {PREVIOUS_INVESTORS.map((investor, idx) => (
-            <SpeakerCard key={idx} person={investor} isInvestor />
-          ))}
-        </div>
-      </div>
-
       {/* --- E-Summit '26 Speakers (Coming Soon) --- */}
-      <div className="max-w-7xl mx-auto w-full mt-24">
-        <div className="flex flex-col items-center justify-center text-center space-y-6 py-20 border border-white/10 rounded-3xl bg-[#0A1813]/50">
-          <Sparkles className="text-mint w-12 h-12 mb-2 opacity-80" />
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-wider text-white">
-            E-Summit '26 <span className="text-mint">Speakers</span>
-          </h2>
-          <p className="text-neutral-400 max-w-lg mx-auto font-mono-data text-sm tracking-widest uppercase">
-            Curating a stellar lineup of visionary founders, investors, and industry leaders.
-          </p>
-          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-mint/30 bg-mint/10 text-mint font-bold uppercase tracking-widest mt-4">
-            <span className="w-2 h-2 rounded-full bg-mint animate-pulse" />
+      <div className="max-w-7xl mx-auto w-full mt-16 sm:mt-20 mb-12">
+        <div className="rounded-2xl border border-white/10 bg-[#0B1512] p-8 sm:p-14 text-center flex flex-col items-center justify-center space-y-5">
+          <Sparkles className="text-mint w-8 h-8 opacity-80" />
+          
+          <div className="space-y-2">
+            <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-white">
+              E-Summit '26 <span className="text-mint">Speakers</span>
+            </h2>
+            <p className="text-neutral-400 max-w-md mx-auto font-mono-data text-xs sm:text-sm tracking-wider uppercase">
+              Curating a stellar lineup of visionary founders, investors, and industry leaders.
+            </p>
+          </div>
+
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-mint/30 bg-mint/10 text-mint font-mono-data text-xs font-bold uppercase tracking-wider mt-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-mint" />
             Coming Soon
           </div>
         </div>
