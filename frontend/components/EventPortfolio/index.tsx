@@ -83,7 +83,7 @@ export default function EventPortfolioShowcase() {
       />
       <section
         id="event-portfolio"
-        className={`relative w-full bg-section-2 text-white transition-all pt-12 sm:pt-16 md:pt-20 pb-24 ${
+        className={`relative w-full bg-section-2 text-white transition-all pt-12 sm:pt-16 md:pt-20 pb-20 sm:pb-24 ${
           selectedEvent ? 'z-[12000]' : 'z-10'
         }`}
         aria-label="Event Portfolio Showcase"

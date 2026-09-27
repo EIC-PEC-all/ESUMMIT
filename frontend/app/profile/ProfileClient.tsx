@@ -16,16 +16,7 @@ import {
 import toast, { Toaster } from 'react-hot-toast'
 import NavHeader from '@/components/Nav/NavHeader'
 import { useSummitData } from '@/hooks/useSummitData'
-
-const TOAST_STYLE = {
-  style: {
-    background: '#13221C',
-    color: '#ffffff',
-    border: '1px solid rgba(74, 222, 128, 0.2)',
-    fontSize: '12px',
-    borderRadius: '16px',
-  },
-}
+import { TOAST_STYLE } from '@/lib/constants'
 
 export default function ProfileClient() {
   const { user, logout, loading: authLoading } = useAuth()
@@ -82,12 +73,6 @@ export default function ProfileClient() {
     }
   }
 
-  const handleExportInstagramStory = () => {
-    toast.success('Downloading story badge...', TOAST_STYLE)
-    setTimeout(() => {
-      window.open('/api/og/pass?tier=ALL+ACCESS+DELEGATE+PASS', '_blank')
-    }, 500)
-  }
 
   if (authLoading || loading) {
     return (
@@ -240,13 +225,13 @@ export default function ProfileClient() {
 
               {/* Action Buttons */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                <button
-                  onClick={handleExportInstagramStory}
+                <Link
+                  href="/register"
                   className="py-2.5 px-3 rounded-full bg-mint hover:bg-white text-void text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
                 >
                   <Sparkles size={14} />
                   <span>Story Badge</span>
-                </button>
+                </Link>
                 <button
                   onClick={() => window.print()}
                   className="py-2.5 px-3 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"

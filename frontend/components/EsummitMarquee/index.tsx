@@ -133,7 +133,7 @@ export default function EsummitMarquee() {
     <section
       ref={sectionRef}
       id="esummit-marquee"
-      className="esummit-section relative z-10 -mt-24 sm:-mt-28 md:-mt-32 overflow-hidden rounded-t-[40px] bg-[#081C16] pb-32 pt-16 sm:pt-20 text-white sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#00F5D4]/20"
+      className="esummit-section relative z-10 -mt-24 sm:-mt-28 md:-mt-32 overflow-hidden rounded-t-[40px] bg-[#081C16] pb-20 sm:pb-24 pt-16 sm:pt-20 text-white sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#00F5D4]/20"
       aria-label="E-Summit moments"
     >
       <style>{`

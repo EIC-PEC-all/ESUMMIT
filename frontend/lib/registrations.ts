@@ -203,6 +203,17 @@ export const updateRegistrationRecord = async (
   ticketId: string,
   updates: Partial<RegistrationRecord>
 ): Promise<RegistrationRecord | null> => {
+  // Sync to backend if possible
+  try {
+    await fetch(`${API_URL}/registrations/${ticketId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates),
+    })
+  } catch {
+    // Non-fatal — local update will still apply
+  }
+
   const currentList = getLocalRegistrations()
   let updatedRecord: RegistrationRecord | null = null
 
@@ -223,6 +234,13 @@ export const updateRegistrationRecord = async (
 
 // ── DELETE ──
 export const deleteRegistrationRecord = async (ticketId: string): Promise<boolean> => {
+  // Attempt backend delete first
+  try {
+    await fetch(`${API_URL}/registrations/${ticketId}`, { method: 'DELETE' })
+  } catch {
+    // Non-fatal — remove from local cache regardless
+  }
+
   const currentList = getLocalRegistrations()
   const filtered = currentList.filter((item) => item.id !== ticketId)
   saveLocalRegistrations(filtered)

@@ -17,7 +17,7 @@ const HighlightsCampusMap = dynamic(() => import('./LeafletMapInner'), {
   ),
 })
 
-export default function EsummitHighlights() {
+export default function EsummitSchedule() {
   const containerRef = useRef<HTMLDivElement>(null)
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null)
   const [activeDayIndex, setActiveDayIndex] = useState(0)

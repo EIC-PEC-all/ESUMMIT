@@ -28,16 +28,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
-const TOAST_STYLE = {
-  style: {
-    background: '#13221C',
-    color: '#ffffff',
-    border: '1px solid rgba(74, 222, 128, 0.2)',
-    fontSize: '12px',
-    borderRadius: '8px',
-  },
-}
 import { useAuth } from '@/context/AuthContext'
+import { TOAST_STYLE } from '@/lib/constants'
 import {
   RegistrationRecord,
   createRegistrationRecord,
@@ -48,6 +40,36 @@ import {
 
 import { MASTER_EVENTS, EventItem } from '@/data/summitData'
 import { useSummitData } from '@/hooks/useSummitData'
+
+// Maps tier.title → backend passType — must mirror PASS_TYPE_MAP in registrations.ts
+const PASS_TITLE_TO_TYPE: Record<string, string> = {
+  'Student Pass': 'STUDENT_GENERAL',
+  'Hackathon Pass': 'HACKATHON_BUILDER',
+  'Pitch Pass': 'FOUNDER_PITCH',
+  'Ambassador': 'CAMPUS_AMBASSADOR',
+}
+
+// Normalise a stored category string to its canonical backend type
+const normaliseCategory = (cat: string): string => {
+  const BACKEND_MAP: Record<string, string> = {
+    'STUDENT_GENERAL': 'STUDENT_GENERAL',
+    'HACKATHON_BUILDER': 'HACKATHON_BUILDER',
+    'FOUNDER_PITCH': 'FOUNDER_PITCH',
+    'CAMPUS_AMBASSADOR': 'CAMPUS_AMBASSADOR',
+    'Student Pass': 'STUDENT_GENERAL',
+    'Student Delegate Pass': 'STUDENT_GENERAL',
+    'Student Delegate': 'STUDENT_GENERAL',
+    'Hackathon Pass': 'HACKATHON_BUILDER',
+    '24-Hour Hackathon Pass': 'HACKATHON_BUILDER',
+    'Pitch Pass': 'FOUNDER_PITCH',
+    'Startup Pitch Pass': 'FOUNDER_PITCH',
+    'Founder Pass': 'FOUNDER_PITCH',
+    'Ambassador': 'CAMPUS_AMBASSADOR',
+    'Campus Ambassador Pass': 'CAMPUS_AMBASSADOR',
+    'Campus Ambassador': 'CAMPUS_AMBASSADOR',
+  }
+  return BACKEND_MAP[cat] ?? cat
+}
 
 export interface PassTier {
   id: string
@@ -304,21 +326,10 @@ export default function RegisterClient() {
         }
       }
     } catch {
-      // Fallback local coupon check
+      // Backend unreachable — coupon validation not possible offline
     }
 
-    if (code === 'EARLYBIRD' || code === 'PECFAM' || code === 'FREEPASS') {
-      setDiscountPercent(100)
-      toast.success('Coupon Applied: 100% Discount!', TOAST_STYLE)
-    } else if (code === 'STUDENT50') {
-      setDiscountPercent(50)
-      toast.success('Coupon Applied: 50% Discount!', TOAST_STYLE)
-    } else if (code === 'SUMMIT20') {
-      setDiscountPercent(20)
-      toast.success('Coupon Applied: 20% Discount!', TOAST_STYLE)
-    } else {
-      toast.error('Invalid or expired coupon code.', TOAST_STYLE)
-    }
+    toast.error('Invalid or expired coupon code.', TOAST_STYLE)
   }
 
   // Handle proceed to checkout
@@ -506,7 +517,7 @@ export default function RegisterClient() {
     setAuthLoading(false)
     if (res.success) {
       toast.success('Welcome back!', TOAST_STYLE)
-      router.push('/profile')
+      setView('catalog')
     } else {
       toast.error(res.error || 'Invalid credentials.', TOAST_STYLE)
     }
@@ -518,7 +529,7 @@ export default function RegisterClient() {
     setAuthLoading(false)
     if (res.success) {
       toast.success('Signed in with Google!', TOAST_STYLE)
-      router.push('/profile')
+      setView('catalog')
     } else {
       toast.error(res.error || 'Google sign-in failed.', TOAST_STYLE)
     }
@@ -973,7 +984,9 @@ export default function RegisterClient() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                     {PASS_TIERS.map((tier) => {
                       const isSelected = selectedPassId === tier.id
-                      const isAlreadyOwned = myRegistrations.some(r => r.category === tier.title)
+                      const isAlreadyOwned = myRegistrations.some(
+                        r => normaliseCategory(r.category) === PASS_TITLE_TO_TYPE[tier.title]
+                      )
 
                       return (
                         <div

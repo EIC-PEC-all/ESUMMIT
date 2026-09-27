@@ -18,14 +18,12 @@ export default function Sponsors() {
         className="relative bg-section-1 text-white pt-12 pb-20 sm:pb-24 px-4 sm:px-6 md:px-12 overflow-hidden z-10 scroll-mt-20 sm:scroll-mt-24"
         aria-labelledby="sponsors-heading"
       >
-        <div className="max-w-3xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10">
 
         {/* Coming Soon Glassmorphic Showcase */}
         <div
           className="relative rounded-3xl bg-[#071711]/90 border border-mint/20 p-6 sm:p-8 md:p-10 text-center shadow-2xl overflow-hidden backdrop-blur-xl"
         >
-          {/* Subtle Ambient Glow */}
-          <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-40 bg-mint/10 rounded-full blur-3xl pointer-events-none" />
 
           {/* Status Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-mint/10 border border-mint/30 text-mint font-mono-data text-[10px] font-bold uppercase tracking-wider mb-4 shadow-sm">
@@ -109,7 +107,7 @@ export default function Sponsors() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-7xl mx-auto">
             {[
               { role: 'PRESENTING PARTNER', desc: 'Summit-wide association and highest-visibility integration.' },
               { role: 'PROGRAMME PARTNER', desc: 'Own a defined property such as capital, talent or workshops.' },

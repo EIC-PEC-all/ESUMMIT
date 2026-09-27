@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Linkedin, Sparkles } from 'lucide-react'
 import BlurImage from '@/components/ui/BlurImage'
+import PageBanner from '@/components/Common/PageBanner'
 
 const PREVIOUS_SPEAKERS = [
   { name: 'Sandeep Jain', role: 'Founder, GeeksforGeeks', image: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1/esummit/speakers/1.jpg' },
@@ -66,7 +67,6 @@ function SpeakerCard({ person }: { person: any }) {
   )
 }
 
-import PageBanner from '@/components/Common/PageBanner'
 
 export default function SpeakersList() {
   return (
@@ -75,7 +75,7 @@ export default function SpeakersList() {
         title="SPEAKERS" 
         subtitle="AT E-SUMMIT '26" 
       />
-      <section className="relative min-h-screen bg-section-1 text-white pt-12 pb-32 sm:pb-40 px-4 sm:px-8 lg:px-12 z-10">
+      <section id="speakers" className="relative min-h-screen bg-section-1 text-white pt-12 pb-20 sm:pb-24 px-4 sm:px-8 lg:px-12 z-10">
 
       {/* --- Previous Speakers --- */}
       <div className="max-w-7xl mx-auto w-full mb-24 sm:mb-28">

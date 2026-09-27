@@ -83,7 +83,7 @@ export default function FAQ() {
       />
       <section
         id="faq"
-        className="pt-12 pb-24 lg:pb-32 relative bg-section-1 text-white z-10 overflow-hidden"
+        className="pt-12 pb-20 sm:pb-24 relative bg-section-1 text-white z-10 overflow-hidden"
         aria-labelledby="faq-heading"
       >
         <div className="section-container relative z-10">
@@ -96,7 +96,7 @@ export default function FAQ() {
             </p>
           </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
 
           {/* Right: Accordion */}
           <motion.div

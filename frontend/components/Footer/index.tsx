@@ -179,7 +179,7 @@ export function RegisterCTA() {
           {/* Dual Pill CTA Pair */}
           <div className="flex flex-wrap items-center justify-center gap-4">
             <Link
-              href="/passes"
+              href="/register"
               onMouseEnter={prefetchRegister}
               onTouchStart={prefetchRegister}
               onFocus={prefetchRegister}
@@ -192,7 +192,7 @@ export function RegisterCTA() {
             </Link>
 
             <Link
-              href="/passes"
+              href="/register"
               onMouseEnter={prefetchRegister}
               onTouchStart={prefetchRegister}
               onFocus={prefetchRegister}
