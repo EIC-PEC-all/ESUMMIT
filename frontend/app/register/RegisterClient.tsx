@@ -329,6 +329,13 @@ export default function RegisterClient() {
       setView('auth')
       return
     }
+    
+    const isAlreadyOwned = myRegistrations.some(r => r.category === selectedTier.title)
+    if (isAlreadyOwned) {
+      toast.error(`You have already claimed the ${selectedTier.title}.`, TOAST_STYLE)
+      return
+    }
+
     if (!formData.name.trim()) {
       toast.error('Please enter your full name.', TOAST_STYLE)
       return
@@ -966,20 +973,32 @@ export default function RegisterClient() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
                     {PASS_TIERS.map((tier) => {
                       const isSelected = selectedPassId === tier.id
+                      const isAlreadyOwned = myRegistrations.some(r => r.category === tier.title)
 
                       return (
                         <div
                           key={tier.id}
-                          onClick={() => handlePassChange(tier.id)}
-                          className={`relative cursor-pointer rounded-lg border p-3.5 transition-all flex flex-col justify-between gap-3 ${
-                            isSelected
-                              ? 'border-mint bg-[#182A23] shadow-sm'
-                              : 'border-white/10 bg-[#13221C] hover:border-white/20 hover:bg-[#182A23]'
+                          onClick={() => {
+                            if (!isAlreadyOwned) {
+                              handlePassChange(tier.id)
+                            }
+                          }}
+                          className={`relative rounded-lg border p-3.5 transition-all flex flex-col justify-between gap-3 ${
+                            isAlreadyOwned
+                              ? 'border-mint/20 bg-mint/5 opacity-80 cursor-not-allowed'
+                              : isSelected
+                                ? 'border-mint bg-[#182A23] shadow-sm cursor-pointer'
+                                : 'border-white/10 bg-[#13221C] hover:border-white/20 hover:bg-[#182A23] cursor-pointer'
                           }`}
                         >
-                          {tier.popular && (
+                          {tier.popular && !isAlreadyOwned && (
                             <span className="absolute -top-2 right-2 px-1.5 py-0.2 rounded bg-mint text-void text-[9px] font-bold uppercase tracking-wider">
                               Popular
+                            </span>
+                          )}
+                          {isAlreadyOwned && (
+                            <span className="absolute -top-2 right-2 px-1.5 py-0.2 rounded bg-white/20 text-white text-[9px] font-bold uppercase tracking-wider">
+                              Owned
                             </span>
                           )}
 
@@ -990,12 +1009,14 @@ export default function RegisterClient() {
                               </span>
                               <div
                                 className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                                  isSelected
-                                    ? 'border-mint bg-mint text-void'
-                                    : 'border-white/20'
+                                  isAlreadyOwned
+                                    ? 'border-mint bg-mint/20 text-mint'
+                                    : isSelected
+                                      ? 'border-mint bg-mint text-void'
+                                      : 'border-white/20'
                                 }`}
                               >
-                                {isSelected && <Check size={10} strokeWidth={3} />}
+                                {(isSelected || isAlreadyOwned) && <Check size={10} strokeWidth={3} />}
                               </div>
                             </div>
 
@@ -1009,13 +1030,17 @@ export default function RegisterClient() {
                           </div>
 
                           <div className="pt-2 border-t border-white/5 flex items-baseline justify-between">
-                            <span className="text-[10px] text-neutral-500">Registration Fee</span>
+                            <span className="text-[10px] text-neutral-500">
+                              {isAlreadyOwned ? 'Status' : 'Registration Fee'}
+                            </span>
                             <span
                               className={`text-sm font-bold font-mono ${
-                                tier.fee === 0 ? 'text-mint' : 'text-white'
+                                isAlreadyOwned 
+                                  ? 'text-mint' 
+                                  : tier.fee === 0 ? 'text-mint' : 'text-white'
                               }`}
                             >
-                              {tier.fee === 0 ? 'FREE' : tier.feeLabel}
+                              {isAlreadyOwned ? 'PURCHASED' : tier.fee === 0 ? 'FREE' : tier.feeLabel}
                             </span>
                           </div>
                         </div>
