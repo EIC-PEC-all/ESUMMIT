@@ -100,7 +100,7 @@ export default function SpeakersList() {
           
           <div className="space-y-2">
             <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-white">
-              E-Summit '26 <span className="text-mint">Speakers</span>
+              E-Summit &apos;26 <span className="text-mint">Speakers</span>
             </h2>
             <p className="text-neutral-400 max-w-md mx-auto font-mono-data text-xs sm:text-sm tracking-wider uppercase">
               Curating a stellar lineup of visionary founders, investors, and industry leaders.
