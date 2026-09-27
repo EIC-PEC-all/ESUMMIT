@@ -119,6 +119,23 @@ export default function SpeakersList() {
         </div>
       </div>
 
+      {/* --- E-Summit '26 Speakers (Coming Soon) --- */}
+      <div className="max-w-7xl mx-auto w-full mt-24">
+        <div className="flex flex-col items-center justify-center text-center space-y-6 py-20 border border-white/10 rounded-3xl bg-[#0A1813]/50">
+          <Sparkles className="text-mint w-12 h-12 mb-2 opacity-80" />
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold uppercase tracking-wider text-white">
+            E-Summit '26 <span className="text-mint">Speakers</span>
+          </h2>
+          <p className="text-neutral-400 max-w-lg mx-auto font-mono-data text-sm tracking-widest uppercase">
+            Curating a stellar lineup of visionary founders, investors, and industry leaders.
+          </p>
+          <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-mint/30 bg-mint/10 text-mint font-bold uppercase tracking-widest mt-4">
+            <span className="w-2 h-2 rounded-full bg-mint animate-pulse" />
+            Coming Soon
+          </div>
+        </div>
+      </div>
+
     </section>
     </>
   )
