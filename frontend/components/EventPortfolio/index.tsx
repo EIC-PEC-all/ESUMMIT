@@ -5,7 +5,6 @@ import React, { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PORTFOLIO_EVENTS, PortfolioEvent } from './data'
 import { Card } from './Card'
-import { FinalCard } from './FinalCard'
 import { DetailModal } from './DetailModal'
 import { useSummitData } from '@/hooks/useSummitData'
 import type { CmsEvent } from '@/lib/api-types'
@@ -106,7 +105,6 @@ export default function EventPortfolioShowcase() {
               onSelect={(evt) => setSelectedEvent(evt)}
             />
           ))}
-          <FinalCard onViewAll={() => setActiveCategory('All')} />
         </div>
       </div>
 

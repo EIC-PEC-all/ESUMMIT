@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { FEST_META } from '@/lib/data'
 import { useSiteConfig } from '@/hooks/useSummitData'
 import { Download, Bot, Sparkles } from 'lucide-react'
+import { useAuth } from '@/context/AuthContext'
 import NavHeader from './NavHeader'
 import SponsorMarqueeBar from './SponsorMarqueeBar'
 import NavMobileDrawer, { NavItem } from './NavMobileDrawer'
@@ -42,6 +43,38 @@ export default function Nav() {
   })
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [planCount, setPlanCount] = useState<number>(0)
+
+  const { user } = useAuth()
+  const [hasStoredPasses, setHasStoredPasses] = useState(false)
+
+  useEffect(() => {
+    const checkPasses = () => {
+      try {
+        const saved = localStorage.getItem('pec_summit_registrations')
+        if (saved && JSON.parse(saved).length > 0) {
+          setHasStoredPasses(true)
+        } else {
+          setHasStoredPasses(false)
+        }
+      } catch {
+        setHasStoredPasses(false)
+      }
+    }
+    checkPasses()
+    window.addEventListener('storage', checkPasses)
+    return () => window.removeEventListener('storage', checkPasses)
+  }, [])
+
+  const isRegistered = Boolean(user || hasStoredPasses)
+
+  const dynamicNavItems = useMemo(() => {
+    if (!isRegistered) return NAV_ITEMS
+    return NAV_ITEMS.map((item) =>
+      item.label === 'REGISTER'
+        ? { label: 'PROFILE', code: '10', href: '/profile', sectionId: null }
+        : item
+    )
+  }, [isRegistered])
 
   const { siteConfig } = useSiteConfig()
   const countdownTarget = siteConfig?.stats?.countdownTarget || FEST_META.countdownTarget
@@ -239,6 +272,7 @@ export default function Nav() {
         showHeader={showHeader}
         menuOpen={menuOpen}
         planCount={planCount}
+        isRegistered={isRegistered}
         onToggleMenu={() => setMenuOpen((prev) => !prev)}
         headerButtonRef={headerButtonRef}
       />
@@ -288,7 +322,7 @@ export default function Nav() {
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
         pathname={pathname}
-        navItems={NAV_ITEMS}
+        navItems={dynamicNavItems}
         onItemClick={handleItemClick}
       />
     </>

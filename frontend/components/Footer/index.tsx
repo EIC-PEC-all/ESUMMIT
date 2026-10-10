@@ -176,31 +176,19 @@ export function RegisterCTA() {
             Join 3,000+ builders, founders, and investors at Punjab Engineering College. Secure your summit pass for keynote sessions, hackathons, and pitch tracks.
           </p>
 
-          {/* Dual Pill CTA Pair */}
-          <div className="flex flex-wrap items-center justify-center gap-4">
+          {/* Single Primary Pill CTA */}
+          <div className="flex items-center justify-center">
             <Link
               href="/register"
               onMouseEnter={prefetchRegister}
               onTouchStart={prefetchRegister}
               onFocus={prefetchRegister}
-              className="btn-mint-gradient flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105"
+              className="btn-mint-gradient flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105 cursor-pointer"
               id="footer-register-btn"
               aria-label="Claim Your Pass for E-Summit"
             >
               <span>Claim Your Pass</span>
               <ArrowRight size={18} aria-hidden="true" />
-            </Link>
-
-            <Link
-              href="/register"
-              onMouseEnter={prefetchRegister}
-              onTouchStart={prefetchRegister}
-              onFocus={prefetchRegister}
-              className="btn-dark-gradient flex items-center justify-center rounded-full px-8 py-4 text-base font-bold text-white transition-transform hover:scale-105"
-              id="footer-schedule-btn"
-              aria-label="Explore Full Summit Schedule"
-            >
-              <span>Explore Summit Passes</span>
             </Link>
           </div>
         </motion.div>

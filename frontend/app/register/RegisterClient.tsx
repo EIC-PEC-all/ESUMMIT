@@ -23,6 +23,7 @@ import {
   Terminal,
   Briefcase,
   Award,
+  AlertCircle,
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -168,6 +169,7 @@ export default function RegisterClient() {
   const [currentBadge, setCurrentBadge] = useState<RegistrationRecord | null>(null)
   const [editingPass, setEditingPass] = useState<RegistrationRecord | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
   const [authLoading, setAuthLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -362,6 +364,7 @@ export default function RegisterClient() {
   // Complete Order
   const handleCompleteOrder = async () => {
     setIsSubmitting(true)
+    setPaymentError(null)
     const toastId = toast.loading('Securing your pass...', TOAST_STYLE)
 
     try {
@@ -428,13 +431,29 @@ export default function RegisterClient() {
             ondismiss: function () {
               setIsSubmitting(false)
               toast.dismiss(toastId)
+              setPaymentError('Payment was cancelled. You have not been charged.')
               toast.error('Payment cancelled.', TOAST_STYLE)
             },
           },
         }
 
         const rzp = new (window as any).Razorpay(options)
-        rzp.open()
+
+        rzp.on('payment.failed', function (response: any) {
+          setIsSubmitting(false)
+          toast.dismiss(toastId)
+          const desc = response?.error?.description || response?.error?.reason || 'Transaction could not be completed.'
+          setPaymentError(`Payment Failed: ${desc}`)
+          toast.error(`Payment failed: ${desc}`, TOAST_STYLE)
+        })
+
+        try {
+          rzp.open()
+        } catch (e) {
+          setIsSubmitting(false)
+          setPaymentError('Failed to launch payment interface. Please try again.')
+        }
+
         toast.dismiss(toastId)
         return
       }
@@ -442,10 +461,12 @@ export default function RegisterClient() {
       // Free Pass
       await finalizeSuccessfulBooking(undefined)
       toast.dismiss(toastId)
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
       toast.dismiss(toastId)
-      toast.error('Booking failed. Please try again.', TOAST_STYLE)
+      const errorMsg = err?.message || 'Booking failed. Please try again.'
+      setPaymentError(errorMsg)
+      toast.error(errorMsg, TOAST_STYLE)
       setIsSubmitting(false)
     }
   }
@@ -1370,12 +1391,23 @@ export default function RegisterClient() {
                       </div>
                     </div>
 
+                    {/* Payment Failure / Cancellation Banner */}
+                    {paymentError && (
+                      <div className="p-3 rounded-lg bg-red-500/15 border border-red-500/30 text-red-200 text-xs flex items-start gap-2.5 my-2.5">
+                        <AlertCircle size={15} className="text-red-400 shrink-0 mt-0.5" />
+                        <div className="flex-1">
+                          <p className="font-bold text-red-300">Payment Unsuccessful</p>
+                          <p className="text-[11px] text-red-200/90 mt-0.5 leading-relaxed">{paymentError}</p>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Submit / Pay Button */}
                     <button
                       type="button"
                       disabled={isSubmitting}
                       onClick={handleCompleteOrder}
-                      className="w-full py-2.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50"
+                      className="w-full py-2.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-md"
                     >
                       {isSubmitting ? (
                         <span>Processing...</span>
@@ -1383,6 +1415,11 @@ export default function RegisterClient() {
                         <>
                           <CheckCircle2 size={14} />
                           <span>Confirm Free Registration</span>
+                        </>
+                      ) : paymentError ? (
+                        <>
+                          <CreditCard size={14} />
+                          <span>Retry Payment: Pay ₹{finalPrice}</span>
                         </>
                       ) : (
                         <>

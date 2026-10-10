@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const SECTIONS = [
-  { id: 'esummit-hero', name: 'HERO' },
+  { id: 'esummit-hero', name: 'HOME' },
   { id: 'flip-flop-transition', name: 'WELCOME' },
   { id: 'esummit-about', name: 'ABOUT' },
   { id: 'alumni', name: 'ALUMNI' },
@@ -13,6 +14,7 @@ const SECTIONS = [
 ]
 
 export default function GlobalScrollProgress() {
+  const pathname = usePathname()
   const [activeIndex, setActiveIndex] = useState(0)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
@@ -65,6 +67,11 @@ export default function GlobalScrollProgress() {
     } else {
       window.dispatchEvent(new CustomEvent('trigger-chevron-transition', { detail: { targetId: id } }))
     }
+  }
+
+  // Show side scroll indicators exclusively on the landing page
+  if (pathname !== '/') {
+    return null
   }
 
   return (

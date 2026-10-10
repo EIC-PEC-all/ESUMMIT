@@ -33,9 +33,8 @@ export default function ProfileClient() {
   const summitDates = data?.siteConfig?.summitDates || 'MARCH 19 - 21'
 
   const fetchRegistrations = useCallback(async () => {
-    if (!user) return
     try {
-      const records = await getUserRegistrations(user.uid)
+      const records = await getUserRegistrations(user?.uid)
       setMyRegistrations(records)
     } catch (err) {
       console.error('Failed to fetch user registrations', err)
@@ -47,7 +46,9 @@ export default function ProfileClient() {
 
   useEffect(() => {
     if (authLoading) return
-    if (!user) {
+    const local = typeof window !== 'undefined' ? localStorage.getItem('pec_summit_registrations') : null
+    const hasLocal = local && JSON.parse(local).length > 0
+    if (!user && !hasLocal) {
       router.push('/register')
       return
     }
@@ -133,7 +134,7 @@ export default function ProfileClient() {
               Attendee Profile
             </h1>
             <p className="text-sm text-neutral-400">
-              Welcome back, <span className="text-white font-bold">{user?.displayName || 'Delegate'}</span>!
+              Welcome back, <span className="text-white font-bold">{user?.displayName || myRegistrations[0]?.name || 'Delegate'}</span>!
             </p>
           </div>
         </div>

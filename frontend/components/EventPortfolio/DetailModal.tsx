@@ -4,7 +4,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Bookmark, Check, Layers, Layout, Users, ShieldCheck, ExternalLink } from 'lucide-react'
+import { X, Layers, Layout, Users, ShieldCheck, ExternalLink } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { PortfolioEvent } from './data'
 
@@ -242,26 +242,21 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
                 href={registerLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-1.5 h-11 px-3 rounded-xl bg-mint text-[#040806] font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:bg-[#8ee430] transition-colors whitespace-nowrap"
+                className="w-full flex items-center justify-center gap-1.5 h-11 px-4 rounded-xl bg-mint text-[#040806] font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:bg-[#8ee430] transition-colors whitespace-nowrap cursor-pointer shadow-md"
               >
                 <span>Register on Unstop</span>
                 <ExternalLink size={14} className="shrink-0" />
               </a>
             ) : (
-              <div className="flex-1" />
+              <a
+                href="/register"
+                onClick={onClose}
+                className="w-full flex items-center justify-center gap-1.5 h-11 px-4 rounded-xl bg-mint text-[#040806] font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:bg-[#8ee430] transition-colors whitespace-nowrap cursor-pointer shadow-md"
+              >
+                <span>Claim Pass for this Event</span>
+                <ExternalLink size={14} className="shrink-0" />
+              </a>
             )}
-
-            <button
-              onClick={toggleSchedule}
-              title={isSaved ? 'Remove from Schedule' : 'Save Event'}
-              className={`flex items-center justify-center h-11 w-11 rounded-xl transition-all shrink-0 border ${
-                isSaved
-                  ? 'bg-mint/15 border-mint text-mint'
-                  : 'bg-white/5 border-white/15 text-white hover:border-mint/50 hover:text-mint'
-              }`}
-            >
-              {isSaved ? <Check size={18} /> : <Bookmark size={18} />}
-            </button>
           </div>
         </motion.div>
       </div>
