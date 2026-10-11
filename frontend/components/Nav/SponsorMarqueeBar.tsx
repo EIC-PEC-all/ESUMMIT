@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react'
 import NavCountdown from './NavCountdown'
-import { SPONSORS } from '@/lib/data'
+import { MASTER_SPONSORS } from '@/data/summitData'
 
 export interface SponsorMarqueeBarProps {
   position: 'top' | 'bottom'
@@ -15,14 +15,14 @@ export default function SponsorMarqueeBar({
   visible,
   countdownTarget,
 }: SponsorMarqueeBarProps) {
-  // Precompute and memoize sponsor items
+  // Precompute and memoize all authentic past summit sponsors
   const sponsorItems = useMemo(
-    () => [
-      ...SPONSORS.title.map((s) => ({ ...s, tier: 'Title Partner' })),
-      ...SPONSORS.gold.map((s) => ({ ...s, tier: 'Gold Sponsor' })),
-      ...SPONSORS.silver.map((s) => ({ ...s, tier: 'Ecosystem Partner' })),
-      ...SPONSORS.media.map((s) => ({ ...s, tier: 'Media Partner' })),
-    ],
+    () =>
+      MASTER_SPONSORS.map((s) => ({
+        id: s.id,
+        name: s.name,
+        tier: s.tier === 'Ecosystem Partner' ? s.category : s.tier,
+      })),
     []
   )
 
@@ -68,7 +68,7 @@ export default function SponsorMarqueeBar({
 
       {/* Ticker Track */}
       <div
-        className={`flex whitespace-nowrap animate-[marquee_50s_linear_infinite] md:animate-marquee hover:[animation-play-state:paused] items-center ${
+        className={`flex whitespace-nowrap animate-[marquee_65s_linear_infinite] md:animate-marquee hover:[animation-play-state:paused] items-center ${
           isTop ? 'pl-4 sm:pl-[135px] md:pl-[165px]' : 'pl-[135px] sm:pl-[165px]'
         }`}
       >

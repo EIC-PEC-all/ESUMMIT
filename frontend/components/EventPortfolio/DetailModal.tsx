@@ -1,11 +1,10 @@
 // components/EventPortfolio/DetailModal.tsx
 'use client'
 
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Layers, Layout, Users, ShieldCheck, ExternalLink } from 'lucide-react'
-import toast from 'react-hot-toast'
 import { PortfolioEvent } from './data'
 
 interface DetailModalProps {
@@ -14,19 +13,12 @@ interface DetailModalProps {
 }
 
 export function DetailModal({ event, onClose }: DetailModalProps) {
-  const [isSaved, setIsSaved] = useState(false)
   const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (event) {
       document.body.style.overflow = 'hidden'
       document.body.classList.add('modal-open')
-      try {
-        const saved = JSON.parse(localStorage.getItem('pec_my_schedule') || '[]')
-        setIsSaved(saved.includes(event.id))
-      } catch {
-        setIsSaved(false)
-      }
     } else {
       document.body.style.overflow = 'unset'
       document.body.classList.remove('modal-open')
@@ -69,31 +61,6 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [event, onClose])
-
-  const toggleSchedule = () => {
-    if (!event) return
-    try {
-      const saved: string[] = JSON.parse(localStorage.getItem('pec_my_schedule') || '[]')
-      let updated: string[]
-      if (saved.includes(event.id)) {
-        updated = saved.filter((id) => id !== event.id)
-        setIsSaved(false)
-        toast('Removed from schedule', {
-          style: { background: '#07130F', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' },
-        })
-      } else {
-        updated = [...saved, event.id]
-        setIsSaved(true)
-        toast.success(`Added to schedule`, {
-          style: { background: '#07130F', color: '#fff', border: '1px solid #00F5D4' },
-          iconTheme: { primary: '#00F5D4', secondary: '#060D0B' },
-        })
-      }
-      localStorage.setItem('pec_my_schedule', JSON.stringify(updated))
-    } catch {
-      console.warn('Failed to update schedule')
-    }
-  }
 
   if (!event) return null
 

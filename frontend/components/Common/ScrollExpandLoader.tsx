@@ -10,6 +10,14 @@ declare global {
 
 export default function ScrollExpandLoader() {
   const [stage, setStage] = useState<'loading' | 'expanding' | 'done'>('loading')
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 640)
+    const handleResize = () => setIsMobile(window.innerWidth < 640)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.__SCROLL_LOADER_ACTIVE__ === false) {
@@ -104,6 +112,10 @@ export default function ScrollExpandLoader() {
 
   if (stage === 'done') return null
 
+  const apertureScaleX = isMobile ? 0.88 : 0.68
+  const apertureScaleY = isMobile ? 0.74 : 0.62
+  const apertureRadius = isMobile ? '20px' : '24px'
+
   return (
     <AnimatePresence>
       {/*
@@ -132,11 +144,11 @@ export default function ScrollExpandLoader() {
             willChange: 'transform',
             boxShadow: '0 0 0 9999px var(--accent-mint, #00F5D4)',
           }}
-          initial={{ scaleX: 0.68, scaleY: 0.62, borderRadius: '24px' }}
+          initial={{ scaleX: apertureScaleX, scaleY: apertureScaleY, borderRadius: apertureRadius }}
           animate={
             stage === 'expanding'
               ? { scaleX: 1.8, scaleY: 1.8, borderRadius: '0px' }
-              : { scaleX: 0.68, scaleY: 0.62, borderRadius: '24px' }
+              : { scaleX: apertureScaleX, scaleY: apertureScaleY, borderRadius: apertureRadius }
           }
           transition={{ duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
         >

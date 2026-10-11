@@ -15,10 +15,13 @@ const SECTIONS = [
 
 export default function GlobalScrollProgress() {
   const pathname = usePathname()
+  const isLandingPage = pathname === '/' || pathname === ''
   const [activeIndex, setActiveIndex] = useState(0)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   useEffect(() => {
+    if (!isLandingPage) return
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -59,7 +62,7 @@ export default function GlobalScrollProgress() {
       clearInterval(interval)
       observer.disconnect()
     }
-  }, [])
+  }, [isLandingPage])
 
   const handleDashClick = (id: string) => {
     if (id === 'esummit-hero') {
@@ -70,7 +73,7 @@ export default function GlobalScrollProgress() {
   }
 
   // Show side scroll indicators exclusively on the landing page
-  if (pathname !== '/') {
+  if (!isLandingPage) {
     return null
   }
 

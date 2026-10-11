@@ -6,6 +6,8 @@ import Link from 'next/link'
 import { X, ExternalLink } from 'lucide-react'
 import { useSiteConfig } from '@/hooks/useSummitData'
 
+const STORAGE_KEY = 'pec_summit_dismissed_announcement'
+
 export default function AnnouncementBanner() {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
@@ -18,7 +20,7 @@ export default function AnnouncementBanner() {
   useEffect(() => {
     setMounted(true)
     try {
-      const saved = sessionStorage.getItem('pec_summit_dismissed_announcement')
+      const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) {
         setDismissedText(saved)
       }
@@ -27,6 +29,7 @@ export default function AnnouncementBanner() {
     }
   }, [])
 
+  // Stays dismissed in localStorage unless a new announcement message is posted
   const isVisible = Boolean(
     mounted &&
     pathname === '/' &&
@@ -44,7 +47,7 @@ export default function AnnouncementBanner() {
 
   const handleDismiss = () => {
     try {
-      sessionStorage.setItem('pec_summit_dismissed_announcement', message)
+      localStorage.setItem(STORAGE_KEY, message)
     } catch {
       // non-critical
     }

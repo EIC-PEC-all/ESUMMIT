@@ -130,7 +130,7 @@ const STATIC_FALLBACK: CmsBundle = {
     heroVideoUrl: null,
     announcementText: null,
     announcementLink: null,
-    stats: { footfall: '2K+', startups: '100+', workshops: '50+', speakers: '30+', participation: '5K+', alumni: '1000+' },
+    stats: { footfall: '5K+', startups: '50+', workshops: '50+', speakers: '30+', participation: '3K+', alumni: '1K+' },
     contacts: {},
     updatedAt: new Date().toISOString(),
   },

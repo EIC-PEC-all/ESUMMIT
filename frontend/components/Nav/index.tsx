@@ -18,10 +18,9 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'SPEAKERS', code: '04', href: '/speakers', sectionId: null },
   { label: 'TIMELINE', code: '05', href: '/timeline', sectionId: null },
   { label: 'ALUMNI', code: '06', href: '/#alumni', sectionId: 'alumni' },
-  { label: 'GALLERY', code: '07', href: '/#gallery', sectionId: 'gallery' },
-  { label: 'SPONSORS', code: '08', href: '/sponsors', sectionId: null },
-  { label: 'FAQ', code: '09', href: '/faq', sectionId: null },
-  { label: 'REGISTER', code: '10', href: '/register', sectionId: null },
+  { label: 'SPONSORS', code: '07', href: '/sponsors', sectionId: null },
+  { label: 'FAQ', code: '08', href: '/faq', sectionId: null },
+  { label: 'REGISTER', code: '09', href: '/register', sectionId: null },
 ]
 
 export default function Nav() {
@@ -232,20 +231,12 @@ export default function Nav() {
     [pathname]
   )
 
-  const isHomePage = pathname === '/'
-  const isHeroIntro = isHomePage && scrollYPos < 120
-
   const showHeader = useMemo(() => {
     if (isLoaderActive || isModalOpen) return false
     if (menuOpen) return true
 
-    if (isHomePage) {
-      if (isHeroIntro) return false
-      return scrollDirection === 'up'
-    }
-
     return !scrolled || scrollDirection === 'up'
-  }, [isLoaderActive, isModalOpen, menuOpen, isHomePage, isHeroIntro, scrollDirection, scrolled])
+  }, [isLoaderActive, isModalOpen, menuOpen, scrollDirection, scrolled])
 
   const showTopMarquee = useMemo(
     () => {

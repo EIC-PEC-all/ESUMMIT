@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 
 import Nav from '@/components/Nav'
 import NewHero from '@/components/Hero/NewHero'
-import LimeTransitionBanner from '@/components/Common/LimeTransitionBanner'
 import LimeEdgeMasks from '@/components/Common/LimeEdgeMasks'
 import ScrollExpandLoader from '@/components/Common/ScrollExpandLoader'
 
@@ -13,8 +12,6 @@ import ScrollExpandLoader from '@/components/Common/ScrollExpandLoader'
 const FlipFlopTransition = dynamic(() => import('@/components/Common/FlipFlopTransition'), { ssr: false })
 const EsummitAbout = dynamic(() => import('@/components/EsummitAbout'), { ssr: false })
 const Alumni = dynamic(() => import('@/components/Alumni'), { ssr: false })
-const ZoomParallaxSection = dynamic(() => import('@/components/ZoomParallaxSection'), { ssr: false })
-const MasonryShowcase = dynamic(() => import('@/components/MasonryShowcase'), { ssr: false })
 const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.RegisterCTA), { ssr: false })
 const Footer = dynamic(() => import('@/components/Footer'), { ssr: false })
 
@@ -44,8 +41,7 @@ export default function Home() {
       {/* ── 1. HERO — Grand Entrance & Frame Scrubbing ── */}
       <NewHero />
 
-      {/* ── 2. LIME TRANSITION BANNER & FLIPFLOP MARQUEE — Immediately after Hero ── */}
-      <LimeTransitionBanner />
+      {/* ── 2. FLIPFLOP PHOTO MARQUEE — Immediately after Hero ── */}
       <FlipFlopTransition />
 
       {/* ── 3. ABOUT — Mission, vision & core pillars ── */}
@@ -54,13 +50,7 @@ export default function Home() {
       {/* ── 4. ALUMNI — Wall of fame ── */}
       <Alumni />
 
-      {/* ── 5. ZOOM PARALLAX — Glimpses ── */}
-      <ZoomParallaxSection />
-
-      {/* ── 6. GALLERY — Masonry Showcase ── */}
-      <MasonryShowcase />
-
-      {/* ── 7. REGISTER CTA — Conversion banner ── */}
+      {/* ── 5. REGISTER CTA — Conversion banner ── */}
       <RegisterCTA />
 
       {/* ── 7. FOOTER ── */}

@@ -1,220 +1,152 @@
 'use client'
 // components/Common/FlipFlopTransition.tsx
-// Scroll-Driven Horizontal Entry (Left & Right Slide-In) + Pinned Marquee Pause + Strip Collapse
+// 3D Liquid Lens FlexCarousel section driven by window scroll across all 12 cards
 
-import React, { useRef, useState, useEffect } from 'react'
-import Image from 'next/image'
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+import React, { useEffect, useRef, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { FlexCarouselItem } from '@/components/ui/flexCarouselConstants'
 
+const FlexCarousel = dynamic(() => import('@/components/ui/FlexCarousel'), { ssr: false })
 
-
-const ALL_IMGS = [
-  '/gallery/pec_admin_building.jpg',
-  '/gallery/pec_centenary_hall.jpg',
-  '/gallery/pec_mig21.jpg',
-  '/gallery/pec_aerial_night.jpg',
-  '/gallery/pec_auditorium_facade.jpg',
-  '/gallery/pec_iaf_helicopter.jpg',
-  '/gallery/pec_pitch.jpg',
-  '/gallery/pec_team.png',
-  '/gallery/pec_group.png',
-  '/gallery/pec_auditorium.png',
-  '/gallery/pec_startup_fair.png',
-  '/gallery/pec_senate_roundtable.png',
-  '/gallery/pec_keynote_speaker.png',
-  '/gallery/pec_innovation_stage.png',
-  '/gallery/pec_pitch_table.png',
-  '/gallery/pec_investor_poster.png',
-  '/gallery/pec_funding_conclave.png',
-  '/gallery/pec_lawn_mosaic.png',
-  '/gallery/pec_senate_hall.png',
+const CAROUSEL_ITEMS: FlexCarouselItem[] = [
+  {
+    src: '/gallery/pec_admin_building.jpg',
+    alt: 'PEC Historic Administrative Building',
+    title: 'Heritage Campus',
+    subtitle: 'Punjab Engineering College',
+  },
+  {
+    src: '/gallery/pec_centenary_hall.jpg',
+    alt: 'Centenary Hall Convocation & Keynotes',
+    title: 'Centenary Hall',
+    subtitle: 'Keynote Auditorium',
+  },
+  {
+    src: '/gallery/pec_mig21.jpg',
+    alt: 'IAF MiG-21 Supersonic Memorial',
+    title: 'Aero Legacy',
+    subtitle: 'MiG-21 Monument',
+  },
+  {
+    src: '/gallery/pec_aerial_night.jpg',
+    alt: 'PEC Campus Night Aerial View',
+    title: 'Campus Aerial',
+    subtitle: 'Sector 12, Chandigarh',
+  },
+  {
+    src: '/gallery/pec_auditorium_facade.jpg',
+    alt: 'Auditorium Facade Grand Entrance',
+    title: 'Summit Stage',
+    subtitle: 'Main Auditorium',
+  },
+  {
+    src: '/gallery/pec_iaf_helicopter.jpg',
+    alt: 'IAF Mi-8 Helicopter Display',
+    title: 'Engineering Roots',
+    subtitle: 'IAF Memorial',
+  },
+  {
+    src: '/gallery/pec_pitch.jpg',
+    alt: 'Live Venture Pitching to Investors',
+    title: 'Pitch Arena',
+    subtitle: 'Founders & Angels',
+  },
+  {
+    src: '/gallery/pec_startup_fair.png',
+    alt: 'Startup Expo Exhibition Booths',
+    title: 'Startup Expo',
+    subtitle: '50+ High-Growth Ventures',
+  },
+  {
+    src: '/gallery/pec_senate_roundtable.png',
+    alt: 'Senate Hall Closed-Door Roundtables',
+    title: 'Senate Conclave',
+    subtitle: 'Ecosystem Leaders',
+  },
+  {
+    src: '/gallery/pec_keynote_speaker.png',
+    alt: 'Distinguished Keynote Address',
+    title: 'Keynote Arena',
+    subtitle: 'Industry Visionaries',
+  },
+  {
+    src: '/gallery/pec_innovation_stage.png',
+    alt: 'Innovation Stage 24H Hackathon',
+    title: 'Hackathon Sprint',
+    subtitle: 'Builders & Coders',
+  },
+  {
+    src: '/gallery/pec_team.png',
+    alt: 'EIC PEC Organizing Committee',
+    title: 'EIC Leadership',
+    subtitle: 'Organizing Committee',
+  },
 ]
 
-function shuffleArray<T>(array: T[]): T[] {
-  const arr = [...array]
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[arr[i], arr[j]] = [arr[j], arr[i]]
-  }
-  return arr
-}
-
-function PhotoCard({ src }: { src: string }) {
-  return (
-    <div
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl border-2 border-void/20 shadow-2xl transition-all duration-300 hover:scale-105 hover:border-void"
-      style={{ width: '380px', height: '230px' }}
-    >
-      <Image
-        src={src}
-        alt="PEC E-Summit photo"
-        fill
-        sizes="380px"
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
-      />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-      <div className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-void opacity-0 shadow-[0_0_20px_rgba(7,11,8,0.4)] transition-all duration-300 group-hover:opacity-100" />
-    </div>
-  )
-}
-
-
-function CleanStripSlat({
-  index,
-  totalSlats,
-  progress,
-}: {
-  index: number
-  totalSlats: number
-  progress: any
-}) {
-  const slatHeightPercent = 100 / totalSlats
-  const topPositionPercent = index * slatHeightPercent
-
-  // Staggered scroll window per strip (collapses FIRST to unfold vibrant lime stage)
-  const startRange = (index / totalSlats) * 0.08
-  const endRange = startRange + 0.10
-
-  const collapseScaleY = useTransform(progress, [startRange, endRange], [1, 0])
-  const collapseOpacity = useTransform(
-    progress,
-    [startRange, endRange - 0.02, endRange],
-    [1, 1, 0]
-  )
-
-  const laserOpacity = useTransform(
-    progress,
-    [startRange - 0.02, startRange + 0.05, endRange - 0.02, endRange + 0.02],
-    [0, 1, 1, 0]
-  )
-
-  return (
-    <div
-      className="absolute left-0 w-full overflow-hidden select-none pointer-events-none"
-      style={{
-        top: `${topPositionPercent}%`,
-        height: `calc(${slatHeightPercent}% + 1px)`,
-      }}
-    >
-      <motion.div
-        className="absolute inset-0 bg-[#070b08]"
-        initial={{ scaleY: 1, opacity: 1 }}
-        style={{
-          scaleY: collapseScaleY,
-          opacity: collapseOpacity,
-          transformOrigin: 'top',
-          willChange: 'transform, opacity',
-        }}
-      >
-        <div className="absolute bottom-0 left-0 right-0 h-4 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-[2px] bg-mint shadow-[0_0_20px_#00F5D4]"
-          initial={{ opacity: 0 }}
-          style={{ opacity: laserOpacity }}
-        />
-      </motion.div>
-    </div>
-  )
-}
-
-export default function FlipFlopTransition({ slatCount = 10 }: { slatCount?: number }) {
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const [loop1, setLoop1] = useState<string[]>(() => {
-    const row1 = ALL_IMGS.slice(0, 9)
-    return [...row1, ...row1]
-  })
-  const [loop2, setLoop2] = useState<string[]>(() => {
-    const row2 = ALL_IMGS.slice(9)
-    return [...row2, ...row2]
-  })
+export default function FlipFlopTransition() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   useEffect(() => {
-    const shuffled = shuffleArray(ALL_IMGS)
-    const mid = Math.ceil(shuffled.length / 2)
-    const r1 = shuffled.slice(0, mid)
-    const r2 = shuffled.slice(mid)
-    setLoop1([...r1, ...r1])
-    setLoop2([...r2, ...r2])
+    let rafId: number
+    const updateScroll = () => {
+      cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => {
+        const el = sectionRef.current
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        const totalScrollable = rect.height - window.innerHeight
+        if (totalScrollable <= 0) return
+        const raw = -rect.top / totalScrollable
+        const progress = Math.min(Math.max(raw, 0), 1)
+        setScrollProgress(progress)
+      })
+    }
+
+    window.addEventListener('scroll', updateScroll, { passive: true })
+    window.addEventListener('resize', updateScroll, { passive: true })
+    updateScroll()
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.removeEventListener('scroll', updateScroll)
+      window.removeEventListener('resize', updateScroll)
+    }
   }, [])
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start 85%', 'end end'],
-  })
-
-  // Scroll-driven horizontal entry: Row 1 from LEFT (-100vw -> 0vw), Row 2 from RIGHT (100vw -> 0vw)
-  const row1X = useTransform(scrollYProgress, [0.08, 0.38], ['-100vw', '0vw'])
-  const row2X = useTransform(scrollYProgress, [0.08, 0.38], ['100vw', '0vw'])
-
-  const slats = Array.from({ length: slatCount }, (_, i) => i)
 
   return (
     <section
-      ref={containerRef}
       id="flip-flop-transition"
-      className="relative z-20 h-[160vh] bg-mint -mt-[180px] sm:-mt-[220px]"
-      aria-label="Interactive scroll-driven photo marquee transition"
+      ref={sectionRef}
+      className="relative z-20 bg-[#071511] select-none border-y border-mint/20 h-[280vh] sm:h-[320vh] md:h-[360vh]"
+      aria-label="PEC E-Summit visual gallery"
     >
-      <style>{`
-        @keyframes marqueeScroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes marqueeScrollReverse {
-          0%   { transform: translateX(-50%); }
-          100% { transform: translateX(0%); }
-        }
-      `}</style>
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
+        {/* Subtle ambient lighting */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,242,178,0.06)_0%,transparent_75%)]" />
 
-      {/* Sticky Fullscreen Viewport — Stays pinned on stage during middle scroll phase */}
-      <div className="sticky top-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-mint">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.25)_0%,transparent_75%)]" />
-
-        {/* REVEALED LAYER: Dual Photo Marquee Rows sliding in from Left & Right on scroll */}
-        <div className="relative z-0 flex flex-col justify-center w-full gap-4 px-4 py-8 overflow-hidden">
-          {/* Row 1 — Slides in from LEFT on scroll */}
-          <motion.div initial={{ x: '-100vw' }} style={{ x: row1X }} className="w-full overflow-hidden">
-            <div
-              className="flex w-max gap-4"
-              style={{
-                animation: 'marqueeScroll 45s linear infinite',
-                willChange: 'transform',
-              }}
-            >
-              {loop1.map((src, i) => (
-                <PhotoCard key={`row1-${src}-${i}`} src={src} />
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Row 2 — Slides in from RIGHT on scroll */}
-          <motion.div initial={{ x: '100vw' }} style={{ x: row2X }} className="w-full overflow-hidden">
-            <div
-              className="flex w-max gap-4"
-              style={{
-                animation: 'marqueeScrollReverse 40s linear infinite',
-                willChange: 'transform',
-              }}
-            >
-              {loop2.map((src, i) => (
-                <PhotoCard key={`row2-${src}-${i}`} src={src} />
-              ))}
-            </div>
-          </motion.div>
+        {/* ── FlexCarousel 3D WebGL Liquid Lens Carousel ── */}
+        <div className="relative w-full h-[460px] sm:h-[540px] md:h-[600px] max-h-[85vh]">
+          <FlexCarousel
+            items={CAROUSEL_ITEMS}
+            preset="liquid"
+            intro="rise"
+            scrollProgress={scrollProgress}
+            cardHeight={0.52}
+            gap={14}
+            radius={16}
+            squeeze={0.22}
+            focusOnClick={true}
+            captions={true}
+            autoplay={false}
+            captureWheel={false}
+            infinite={false}
+          />
         </div>
 
-        {/* OVERLAY LAYER: Dark Slats Collapsing Top-to-Bottom on Scroll with Laser Slice Edges */}
-        <div className="absolute inset-0 z-10 select-none overflow-hidden pointer-events-none">
-          {slats.map((index) => (
-            <CleanStripSlat
-              key={index}
-              index={index}
-              totalSlats={slatCount}
-              progress={scrollYProgress}
-            />
-          ))}
-        </div>
+        {/* Edge gradient fade masks */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-24 bg-gradient-to-r from-[#071511] to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-24 bg-gradient-to-l from-[#071511] to-transparent z-10" />
       </div>
     </section>
   )

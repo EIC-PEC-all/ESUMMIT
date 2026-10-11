@@ -2,7 +2,18 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Ticket, ArrowLeft, LogOut, CheckCircle2, Download, Sparkles, Edit3, Trash2, X } from 'lucide-react'
+import {
+  Ticket,
+  ArrowLeft,
+  LogOut,
+  CheckCircle2,
+  Download,
+  Edit3,
+  Trash2,
+  X,
+  Settings,
+  Sparkles,
+} from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -12,11 +23,29 @@ import {
   getUserRegistrations,
   updateRegistrationRecord,
   deleteRegistrationRecord,
+  getLocalRegistrations,
+  saveLocalRegistrations,
 } from '@/lib/registrations'
 import toast, { Toaster } from 'react-hot-toast'
 import NavHeader from '@/components/Nav/NavHeader'
 import { useSummitData } from '@/hooks/useSummitData'
 import { TOAST_STYLE } from '@/lib/constants'
+import { auth, isFirebaseConfigured } from '@/lib/firebase'
+import { updateProfile } from 'firebase/auth'
+import AccountPreferencesForm from '@/components/Profile/AccountPreferencesForm'
+
+const PROFILE_STORAGE_KEY = 'pec_summit_attendee_profile'
+
+export interface AttendeeProfile {
+  name: string
+  email: string
+  phone: string
+  college: string
+  branch: string
+  gradYear: string
+  whatsappAlerts: boolean
+  emailAlerts: boolean
+}
 
 export default function ProfileClient() {
   const { user, logout, loading: authLoading } = useAuth()
@@ -24,10 +53,23 @@ export default function ProfileClient() {
   
   const [myRegistrations, setMyRegistrations] = useState<RegistrationRecord[]>([])
   const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState<'passes' | 'account'>('passes')
   
   const [currentBadge, setCurrentBadge] = useState<RegistrationRecord | null>(null)
   const [editingPass, setEditingPass] = useState<RegistrationRecord | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSavingProfile, setIsSavingProfile] = useState(false)
+
+  const [profile, setProfile] = useState<AttendeeProfile>({
+    name: '',
+    email: '',
+    phone: '',
+    college: 'Punjab Engineering College (PEC)',
+    branch: '',
+    gradYear: '3rd Year (Class of 2027)',
+    whatsappAlerts: true,
+    emailAlerts: true,
+  })
 
   const { data } = useSummitData()
   const summitDates = data?.siteConfig?.summitDates || 'MARCH 19 - 21'
@@ -54,6 +96,78 @@ export default function ProfileClient() {
     }
     fetchRegistrations()
   }, [user, authLoading, router, fetchRegistrations])
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(PROFILE_STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        setProfile((prev) => ({ ...prev, ...parsed }))
+      } else {
+        const fallbackName = user?.displayName || myRegistrations[0]?.name || ''
+        const fallbackEmail = user?.email || myRegistrations[0]?.email || ''
+        const fallbackPhone =
+          myRegistrations[0]?.phone && myRegistrations[0]?.phone !== 'Not provided'
+            ? myRegistrations[0]?.phone
+            : ''
+        const fallbackCollege = myRegistrations[0]?.college || 'Punjab Engineering College (PEC)'
+
+        setProfile((prev) => ({
+          ...prev,
+          name: fallbackName,
+          email: fallbackEmail,
+          phone: fallbackPhone,
+          college: fallbackCollege,
+        }))
+      }
+    } catch {
+      // non-fatal
+    }
+  }, [user, myRegistrations])
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSavingProfile(true)
+    try {
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile))
+
+      // Update cached auth display name if changed
+      const localAuthStr = localStorage.getItem('pec_summit_auth_user')
+      if (localAuthStr) {
+        try {
+          const authObj = JSON.parse(localAuthStr)
+          authObj.displayName = profile.name
+          localStorage.setItem('pec_summit_auth_user', JSON.stringify(authObj))
+        } catch {}
+      }
+
+      // Sync name, phone, college to local passes so tickets reflect new details
+      const localPasses = getLocalRegistrations()
+      if (localPasses.length > 0) {
+        const updated = localPasses.map((p) => ({
+          ...p,
+          name: profile.name || p.name,
+          phone: profile.phone || p.phone,
+          college: profile.college || p.college,
+        }))
+        saveLocalRegistrations(updated)
+        setMyRegistrations(updated)
+      }
+
+      // Update Firebase user displayName if configured
+      if (isFirebaseConfigured && auth?.currentUser && profile.name) {
+        try {
+          await updateProfile(auth.currentUser, { displayName: profile.name })
+        } catch {}
+      }
+
+      toast.success('Profile & preferences updated successfully!', TOAST_STYLE)
+    } catch {
+      toast.error('Failed to save profile changes.', TOAST_STYLE)
+    } finally {
+      setIsSavingProfile(false)
+    }
+  }
 
   const handleLogout = async () => {
     await logout()
@@ -96,7 +210,7 @@ export default function ProfileClient() {
 
       {/* Header */}
       <header className="sticky top-0 z-[100] w-full border-b border-white/5 bg-void/80 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <Image
               src="/esummit-logo.png"
@@ -125,19 +239,61 @@ export default function ProfileClient() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 relative z-10">
+      <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
         
         {/* Profile Header */}
-        <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl sm:text-4xl font-black uppercase tracking-tight font-display mb-1">
               Attendee Profile
             </h1>
             <p className="text-sm text-neutral-400">
-              Welcome back, <span className="text-white font-bold">{user?.displayName || myRegistrations[0]?.name || 'Delegate'}</span>!
+              Welcome back, <span className="text-white font-bold">{profile.name || user?.displayName || myRegistrations[0]?.name || 'Delegate'}</span>!
             </p>
           </div>
+
+          {currentBadge && (
+            <button
+              type="button"
+              onClick={() => setCurrentBadge(null)}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 text-xs font-mono font-bold text-neutral-300 hover:text-white uppercase tracking-wider transition-colors cursor-pointer self-start sm:self-auto"
+            >
+              <ArrowLeft size={14} />
+              <span>Back to Profile</span>
+            </button>
+          )}
         </div>
+
+        {/* Navigation Tabs */}
+        {!currentBadge && (
+          <div className="flex items-center gap-2 border-b border-white/10 pb-3.5 mb-6 overflow-x-auto">
+            <button
+              type="button"
+              onClick={() => setActiveTab('passes')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                activeTab === 'passes'
+                  ? 'bg-mint text-void shadow-[0_0_15px_rgba(0,242,178,0.3)]'
+                  : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <Ticket size={14} />
+              <span>Summit Passes ({myRegistrations.length})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('account')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                activeTab === 'account'
+                  ? 'bg-mint text-void shadow-[0_0_15px_rgba(0,242,178,0.3)]'
+                  : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              <Settings size={14} />
+              <span>Personal Details</span>
+            </button>
+          </div>
+        )}
 
         <AnimatePresence mode="wait">
           {currentBadge ? (
@@ -146,21 +302,10 @@ export default function ProfileClient() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="max-w-2xl mx-auto"
+              className="w-full space-y-5"
             >
-              <div className="flex items-center justify-between mb-4">
-                <button
-                  type="button"
-                  onClick={() => setCurrentBadge(null)}
-                  className="text-xs font-semibold text-neutral-400 hover:text-white flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/10 bg-white/5 transition-colors"
-                >
-                  <ArrowLeft size={13} />
-                  <span>Back to Profile</span>
-                </button>
-              </div>
-
               {/* Digital E-Badge */}
-              <div className="relative rounded-[2rem] overflow-hidden bg-[#0A1611] border border-mint/20 shadow-2xl p-6 sm:p-8 flex flex-col justify-between mb-6">
+              <div className="relative rounded-[2rem] overflow-hidden bg-[#0A1611] border border-mint/20 shadow-2xl p-6 sm:p-8 flex flex-col justify-between">
                 <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
                   <Image src="/esummit-mark.png" alt="Mark" width={120} height={120} />
                 </div>
@@ -225,36 +370,54 @@ export default function ProfileClient() {
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <Link
                   href="/register"
-                  className="py-2.5 px-3 rounded-full bg-mint hover:bg-white text-void text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-3 rounded-full bg-mint hover:bg-white text-void text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                 >
                   <Sparkles size={14} />
                   <span>Story Badge</span>
                 </Link>
                 <button
+                  type="button"
                   onClick={() => window.print()}
-                  className="py-2.5 px-3 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-3 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Download size={14} />
                   <span>Print Pass</span>
                 </button>
                 <button
+                  type="button"
                   onClick={() => setEditingPass(currentBadge)}
-                  className="py-2.5 px-3 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-3 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Edit3 size={14} />
                   <span>Edit Details</span>
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleDeletePass(currentBadge.id)}
-                  className="py-2.5 px-3 rounded-full border border-white/15 bg-white/5 hover:bg-red-500/10 text-neutral-400 hover:text-red-400 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-3 rounded-full border border-white/15 bg-white/5 hover:bg-red-500/10 text-neutral-400 hover:text-red-400 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <Trash2 size={14} />
                   <span>Cancel Pass</span>
                 </button>
               </div>
+            </motion.div>
+          ) : activeTab === 'account' ? (
+            <motion.div
+              key="account-view"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+            >
+              <AccountPreferencesForm
+                profile={profile}
+                setProfile={setProfile}
+                onSave={handleSaveProfile}
+                isSaving={isSavingProfile}
+                userDisplayName={user?.displayName}
+              />
             </motion.div>
           ) : (
             <motion.div
@@ -264,16 +427,28 @@ export default function ProfileClient() {
               exit={{ opacity: 0, y: -10 }}
             >
               {myRegistrations.length === 0 ? (
-                <div className="text-center py-20 border border-dashed border-white/10 rounded-3xl p-6 bg-white/[0.01]">
-                  <Ticket size={48} className="mx-auto text-neutral-600 mb-4 stroke-1" />
+                <div className="text-center py-16 border border-dashed border-white/10 rounded-3xl p-6 bg-white/[0.01] max-w-xl mx-auto">
+                  <Ticket size={44} className="mx-auto text-neutral-600 mb-4 stroke-1" />
                   <h3 className="text-xl font-bold text-white mb-2 font-display uppercase tracking-wider">No Passes Booked</h3>
-                  <p className="text-sm text-neutral-400 mb-6">You haven&apos;t registered for any summit passes yet.</p>
-                  <Link
-                    href="/register"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mint text-void font-bold text-sm uppercase tracking-wider hover:bg-white transition-colors"
-                  >
-                    <span>Get Your Pass Now</span>
-                  </Link>
+                  <p className="text-xs sm:text-sm text-neutral-400 mb-6">
+                    You haven&apos;t registered for any summit passes yet. Book your delegate pass or update your profile details.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <Link
+                      href="/register"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_rgba(0,242,178,0.25)] transition-all"
+                    >
+                      <span>Get Your Pass Now</span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('account')}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                    >
+                      <Settings size={13} />
+                      <span>Edit Personal Details</span>
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -314,9 +489,18 @@ export default function ProfileClient() {
                         <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => setCurrentBadge(item)}
-                            className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold uppercase tracking-wider transition-colors"
+                            className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
                           >
                             View Ticket
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeletePass(item.id)}
+                            className="p-1.5 rounded-full border border-white/10 bg-white/5 hover:border-red-500/40 hover:bg-red-500/15 text-neutral-400 hover:text-red-400 transition-colors cursor-pointer"
+                            title="Cancel / Delete Pass"
+                            aria-label={`Cancel pass ${item.id}`}
+                          >
+                            <Trash2 size={13} />
                           </button>
                         </div>
                       </div>

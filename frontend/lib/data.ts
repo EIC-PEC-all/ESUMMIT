@@ -31,11 +31,11 @@ export interface StatItem {
 }
 
 export const STATS: StatItem[] = [
-  { label: 'Total Footfall', value: 2000, suffix: '+', id: 'footfall', prefix: '' },
-  { label: 'Startups Attended', value: 100, suffix: '+', id: 'startups', prefix: '' },
+  { label: 'Total Footfall', value: 5000, suffix: '+', id: 'footfall', prefix: '' },
+  { label: 'Startups Attended', value: 50, suffix: '+', id: 'startups', prefix: '' },
   { label: 'Workshops Conducted', value: 50, suffix: '+', id: 'workshops', prefix: '' },
   { label: 'Speaker Sessions', value: 30, suffix: '+', id: 'speakers', prefix: '' },
-  { label: 'Event Participation', value: 5000, suffix: '+', id: 'participation', prefix: '' },
+  { label: 'Event Participation', value: 3000, suffix: '+', id: 'participation', prefix: '' },
   { label: 'Alumni Support', value: 1000, suffix: '+', id: 'alumni', prefix: '' },
 ]
 
@@ -812,22 +812,34 @@ export const SCHEDULE = {
 
 export const SPONSORS = {
   title: [
-    { id: 'ts1', name: 'NorthStar Ventures', logo: null, url: 'https://northstar.vc' },
+    { id: 'sp-1', name: 'Finvasia', logo: 'https://cdn.simpleicons.org/f-secure/white', url: 'https://finvasia.com' },
+    { id: 'sp-2', name: 'SBI', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/SBI-Logo.svg', url: 'https://sbi.co.in' },
   ],
   gold: [
-    { id: 'gs1', name: 'TechCorp India', logo: null, url: 'https://techcorp.in' },
-    { id: 'gs2', name: 'Finova Capital', logo: null, url: 'https://finovacapital.com' },
-    { id: 'gs3', name: 'CloudBase SaaS', logo: null, url: 'https://cloudbase.io' },
+    { id: 'sp-3', name: 'Fireside Ventures', logo: 'https://cdn.simpleicons.org/firefoxbrowser/white', url: 'https://firesideventures.com' },
+    { id: 'sp-9', name: 'Chiratae Ventures', logo: 'https://cdn.simpleicons.org/chartdotjs/white', url: 'https://chiratae.com' },
+    { id: 'sp-7', name: 'Monster Energy', logo: 'https://cdn.simpleicons.org/monster/white', url: 'https://monsterenergy.com' },
+    { id: 'sp-8', name: 'Vivo', logo: 'https://cdn.simpleicons.org/vivo/white', url: 'https://vivo.com' },
   ],
   silver: [
-    { id: 'ss1', name: 'DevStack Labs', logo: null, url: 'https://devstack.io' },
-    { id: 'ss2', name: 'InnoHub Chandigarh', logo: null, url: 'https://innohub.in' },
-    { id: 'ss3', name: 'Launchpad AI', logo: null, url: 'https://launchpadai.com' },
+    { id: 'sp-5', name: 'CII', logo: 'https://cdn.simpleicons.org/civic/white', url: 'https://cii.in' },
+    { id: 'sp-6', name: 'uTrade', logo: 'https://cdn.simpleicons.org/trademarked/white', url: 'https://utradesolutions.com' },
+    { id: 'sp-20', name: 'Decathlon Play', logo: 'https://cdn.simpleicons.org/decathlon/white', url: 'https://decathlon.in' },
+    { id: 'sp-21', name: 'Shoonya', logo: 'https://cdn.simpleicons.org/shazam/white', url: 'https://shoonya.com' },
+    { id: 'sp-22', name: 'Rebel Foods', logo: 'https://cdn.simpleicons.org/foodpanda/white', url: 'https://rebelfoods.com' },
+    { id: 'sp-12', name: 'Young Indians (Yi)', logo: 'https://cdn.simpleicons.org/youtubekids/white', url: 'https://youngindians.net' },
+    { id: 'sp-11', name: 'Shoutlo', logo: 'https://cdn.simpleicons.org/speakerdeck/white', url: 'https://shoutlo.com' },
+    { id: 'sp-19', name: 'Smaaash', logo: 'https://cdn.simpleicons.org/smashdotgg/white', url: 'https://smaaash.in' },
+    { id: 'sp-14', name: 'CityWoofer', logo: 'https://cdn.simpleicons.org/woocommerce/white', url: 'https://citywoofer.com' },
+    { id: 'sp-15', name: 'Venture Wolf', logo: 'https://cdn.simpleicons.org/wolfram/white', url: 'https://venturewolf.in' },
+    { id: 'sp-16', name: "Victoria's Cafe", logo: 'https://cdn.simpleicons.org/vlcmediaplayer/white', url: 'https://victoriascafe.in' },
+    { id: 'sp-18', name: 'CITCO', logo: 'https://cdn.simpleicons.org/cisco/white', url: 'https://citcochandigarh.com' },
+    { id: 'sp-17', name: 'JAL', logo: 'https://cdn.simpleicons.org/japanairlines/white', url: 'https://jal.in' },
+    { id: 'sp-10', name: 'Shree Ganesh', logo: 'https://cdn.simpleicons.org/googlehangouts/white', url: 'https://shreeganesh.in' },
   ],
   media: [
-    { id: 'mp1', name: 'YourStory', logo: null, url: 'https://yourstory.com' },
-    { id: 'mp2', name: 'INC42', logo: null, url: 'https://inc42.com' },
-    { id: 'mp3', name: 'Entrepreneur India', logo: null, url: 'https://entrepreneur.com' },
+    { id: 'sp-4', name: 'Amar Ujala', logo: 'https://cdn.simpleicons.org/newsblur/white', url: 'https://amarujala.com' },
+    { id: 'sp-13', name: 'Dainik Bhaskar', logo: 'https://cdn.simpleicons.org/dailymotion/white', url: 'https://bhaskar.com' },
   ],
 }
 

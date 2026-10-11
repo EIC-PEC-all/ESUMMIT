@@ -470,6 +470,34 @@ export const MASTER_ALUMNI: AlumniItem[] = [
     company: 'Su-Kam Power Systems',
     batch: "PEC '84",
     achievement: 'Known as the "Solar Man of India"; Revolutionized renewable energy systems across 70+ countries.',
+    image: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1791748759/esummit/alumni/kunwar_sachdev.jpg',
+  },
+  {
+    id: 'al-8',
+    name: 'Dr. Ritesh Malik',
+    role: 'Founder',
+    company: 'Innov8 Coworking',
+    batch: 'Mentor & Partner',
+    achievement: 'Forbes 30 Under 30 Asia; Scaled Innov8 to exit and angel invested in 80+ Indian startups.',
+    image: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1791748760/esummit/alumni/ritesh_malik.webp',
+  },
+  {
+    id: 'al-9',
+    name: 'Prof. Vijay K. Dhir',
+    role: 'Former Dean of Engineering',
+    company: 'UCLA Samueli School',
+    batch: "PEC '65",
+    achievement: 'National Academy of Engineering; Space shuttle heat-shield physics pioneer.',
+    image: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1790450619/esummit/alumni/OIP__6__jpg.jpg',
+  },
+  {
+    id: 'al-10',
+    name: 'D.C. Anand',
+    role: 'Founder & Chairman',
+    company: 'ANAND Group India',
+    batch: "PEC '52",
+    achievement: 'Pioneer of precision automotive component manufacturing in India with 19 tier-1 companies.',
+    image: 'https://res.cloudinary.com/dxtvq5s2x/image/upload/v1791748761/esummit/alumni/dc_anand.jpg',
   },
 ]
 
@@ -498,22 +526,338 @@ export const MASTER_SPONSORS: SponsorItem[] = [
   { id: 'sp-22', name: 'Rebel Foods', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/foodpanda/white', category: 'Cloud Kitchen Partner' },
 ]
 
+export interface TimelineEvent {
+  id: string
+  day: 1 | 2
+  dayLabel: string
+  date: string
+  time: string
+  title: string
+  category: 'Keynote' | 'Hackathon' | 'Expo' | 'Competition' | 'Workshop' | 'Networking' | 'Culture'
+  eyebrow: string
+  venue: string
+  description: string
+  tags: string[]
+  badge?: string
+  featured?: boolean
+  eventId?: string
+}
+
+export interface PartnerPillar {
+  id: string
+  number: string
+  title: string
+  desc: string
+}
+
+export interface SponsorRole {
+  role: string
+  description: string
+}
+
+export const MASTER_TIMELINE: TimelineEvent[] = [
+  // DAY 1 — Saturday, November 14, 2026
+  {
+    id: 'time-d1-1',
+    day: 1,
+    dayLabel: 'DAY 01',
+    date: 'Saturday, November 14, 2026',
+    time: '09:00 AM – 10:30 AM',
+    title: 'Inaugural Ceremony & Keynote Address',
+    category: 'Keynote',
+    eyebrow: 'HONORING THE PAST · INNOVATING THE FUTURE',
+    venue: 'Main Auditorium',
+    description: 'Formal inauguration of E-Summit 2026, institute leadership address, and keynote speech by pioneering industry titans.',
+    tags: ['Inaugural', 'Keynote', 'Leadership'],
+    badge: 'FLAGSHIP',
+    featured: true,
+  },
+  {
+    id: 'time-d1-2',
+    day: 1,
+    dayLabel: 'DAY 01',
+    date: 'Saturday, November 14, 2026',
+    time: '10:30 AM – 06:00 PM',
+    title: 'Startup Expo & Science Fair Floor Opens',
+    category: 'Expo',
+    eyebrow: 'BE SEEN BY THE RIGHT PEOPLE',
+    venue: 'Central Lawns & Exhibition Hall',
+    description: 'Live discovery floor for student ventures, emerging startups, research-led ideas, and applied innovation demonstrations.',
+    tags: ['DeepTech', 'Prototypes', 'Discovery Floor'],
+    badge: 'ALL-DAY',
+    eventId: 'ev-8',
+  },
+  {
+    id: 'time-d1-3',
+    day: 1,
+    dayLabel: 'DAY 01',
+    date: 'Saturday, November 14, 2026',
+    time: '11:00 AM – 12:00 PM',
+    title: '24-Hour Hackathon Flag-Off',
+    category: 'Hackathon',
+    eyebrow: 'IDEAS TURN INTO SOLUTIONS FAST',
+    venue: 'Hack Arena (Centenary Hall)',
+    description: 'Problem statement reveal and continuous 24-hour sprint kickoff for 120+ developer teams competing for the ₹5.0L prize pool.',
+    tags: ['24-Hour Sprint', 'AI & Web3', '₹5.0L Prize'],
+    badge: '24-HR CONTINUOUS',
+    featured: true,
+    eventId: 'ev-1',
+  },
+  {
+    id: 'time-d1-4',
+    day: 1,
+    dayLabel: 'DAY 01',
+    date: 'Saturday, November 14, 2026',
+    time: '12:00 PM – 07:00 PM',
+    title: 'E-Bazaar: Real-Time Trading & Flea Market',
+    category: 'Competition',
+    eyebrow: 'EXPERIENCE REAL-TIME TRADING',
+    venue: 'PEC Main Boulevard',
+    description: 'Live marketplace and trading simulation for student-run D2C brands, physical merchandise, and innovative consumer pop-ups.',
+    tags: ['D2C Pop-ups', 'Trading Simulation', 'Live Sales'],
+    eventId: 'ev-6',
+  },
+  {
+    id: 'time-d1-5',
+    day: 1,
+    dayLabel: 'DAY 01',
+    date: 'Saturday, November 14, 2026',
+    time: '01:30 PM – 03:00 PM',
+    title: 'Expert Sessions: Founder Journeys & Scaling',
+    category: 'Workshop',
+    eyebrow: 'INSIGHT THAT MOVES INTO ACTION',
+    venue: 'Senate Hall',
+    description: 'Candid discussions on venture building, market shifts, leadership decisions, and lessons rarely shared in textbooks.',
+    tags: ['Founder Stories', 'Scale', 'Zero to One'],
+  },
+  {
+    id: 'time-d1-6',
+    day: 1,
+    dayLabel: 'DAY 01',
+    date: 'Saturday, November 14, 2026',
+    time: '03:15 PM – 04:45 PM',
+    title: 'Hands-on Workshops: Product, Growth & AI',
+    category: 'Workshop',
+    eyebrow: 'PRACTICAL SKILL SESSIONS',
+    venue: 'Seminar Hall 1 & 2',
+    description: 'Actionable masterclasses covering market validation, tech architecture, unit economics, and AI-driven growth tactics.',
+    tags: ['Validation', 'Unit Economics', 'Growth Tools'],
+  },
+  {
+    id: 'time-d1-7',
+    day: 1,
+    dayLabel: 'DAY 01',
+    date: 'Saturday, November 14, 2026',
+    time: '05:00 PM – 06:45 PM',
+    title: 'Game of Brands & Biz Quiz Arena',
+    category: 'Competition',
+    eyebrow: 'INNOVATIVE & ENGAGING TRIVIA',
+    venue: 'Main Auditorium',
+    description: 'High-voltage trivia and buzzer battle testing business world acumen, brand identity, and venture strategy.',
+    tags: ['Brand Trivia', 'Buzzer Rounds', 'Cash Awards'],
+    eventId: 'ev-7',
+  },
+  {
+    id: 'time-d1-8',
+    day: 1,
+    dayLabel: 'DAY 01',
+    date: 'Saturday, November 14, 2026',
+    time: '07:00 PM – 08:30 PM',
+    title: 'Campus Treasure Hunt & Cultural Mixer',
+    category: 'Culture',
+    eyebrow: 'TEAMWORK & EXPLORATION',
+    venue: 'Open Lawns & Campus Checkpoints',
+    description: 'Campus-wide clue checkpoints, problem solving, exploration, and community networking under the stars.',
+    tags: ['Treasure Hunt', 'Team Quest', 'Exclusive Merch'],
+    eventId: 'ev-11',
+  },
+
+  // DAY 2 — Sunday, November 15, 2026
+  {
+    id: 'time-d2-1',
+    day: 2,
+    dayLabel: 'DAY 02',
+    date: 'Sunday, November 15, 2026',
+    time: '09:30 AM – 12:30 PM',
+    title: 'Funding Conclave: Curated VC Pitching',
+    category: 'Networking',
+    eyebrow: 'CAPITAL, WITHOUT THE THEATRE',
+    venue: 'Senate Hall & Private Boardrooms',
+    description: 'High-context pitching where promising early-stage ventures meet tier-1 investors, funds, and active angel syndicates.',
+    tags: ['Curated Dealflow', 'VCs & Angels', 'Term Sheets'],
+    badge: 'FLAGSHIP',
+    featured: true,
+    eventId: 'ev-3',
+  },
+  {
+    id: 'time-d2-2',
+    day: 2,
+    dayLabel: 'DAY 02',
+    date: 'Sunday, November 15, 2026',
+    time: '10:30 AM – 02:00 PM',
+    title: 'Talent Fair (Internship & Job Fair)',
+    category: 'Networking',
+    eyebrow: 'MEET PEOPLE WHO ARE READY TO BUILD',
+    venue: 'Academic Block Atrium',
+    description: 'Direct bridge between 800+ top engineering candidates and 35+ companies & funded startups hiring for paid roles.',
+    tags: ['Startups & Tech', 'Paid Roles', 'Interviews'],
+    badge: 'HIRING ARENA',
+    featured: true,
+    eventId: 'ev-2',
+  },
+  {
+    id: 'time-d2-3',
+    day: 2,
+    dayLabel: 'DAY 02',
+    date: 'Sunday, November 15, 2026',
+    time: '11:30 AM – 01:00 PM',
+    title: 'Women Founders + Alumni Connect',
+    category: 'Networking',
+    eyebrow: 'COMMUNITIES THAT COMPOUND AMBITION',
+    venue: 'Incubation Centre Lounge',
+    description: 'Keynotes and closed-door circles spotlighting women entrepreneurs alongside distinguished PEC alumni operators.',
+    tags: ['Women in Tech', 'Alumni Mentors', 'Peer Circles'],
+    eventId: 'ev-10',
+  },
+  {
+    id: 'time-d2-4',
+    day: 2,
+    dayLabel: 'DAY 02',
+    date: 'Sunday, November 15, 2026',
+    time: '01:30 PM – 03:45 PM',
+    title: 'IPL Auction Strategy Challenge',
+    category: 'Competition',
+    eyebrow: 'REAL-TIME SIMULATION',
+    venue: 'Main Auditorium',
+    description: 'Experience real-time simulated IPL bidding hall testing budget allocation, player valuation, and live bids.',
+    tags: ['Live Auction', 'Budget Strategy', '₹1.0L Prize'],
+    featured: true,
+    eventId: 'ev-4',
+  },
+  {
+    id: 'time-d2-5',
+    day: 2,
+    dayLabel: 'DAY 02',
+    date: 'Sunday, November 15, 2026',
+    time: '02:00 PM – 04:30 PM',
+    title: 'Build & Pitch Grand Finals',
+    category: 'Competition',
+    eyebrow: 'BUILD AND PITCH',
+    venue: 'Senate Hall',
+    description: 'Top student concepts pitch before institutional investors and VC partners for equity backing and incubation grants.',
+    tags: ['Brand Pitch', 'Term Sheets', 'Grant Pool'],
+    eventId: 'ev-5',
+  },
+  {
+    id: 'time-d2-6',
+    day: 2,
+    dayLabel: 'DAY 02',
+    date: 'Sunday, November 15, 2026',
+    time: '04:00 PM – 05:30 PM',
+    title: 'Hackathon Demos & E-Sports Showdown',
+    category: 'Hackathon',
+    eyebrow: 'LIVE DEMOS & ARENA CLASH',
+    venue: 'Centenary Hall & Gaming Arena',
+    description: 'Hackathon finalist product demos before the grand jury, concurrently with competitive E-Sports championship finals.',
+    tags: ['Product Demos', 'E-Sports Finals', 'Live Jury'],
+    eventId: 'ev-1',
+  },
+  {
+    id: 'time-d2-7',
+    day: 2,
+    dayLabel: 'DAY 02',
+    date: 'Sunday, November 15, 2026',
+    time: '06:00 PM – 08:30 PM',
+    title: 'Stand-up Comedy Night & Valedictory Awards',
+    category: 'Culture',
+    eyebrow: 'WIT, TIMING & CLOSING CELEBRATION',
+    venue: 'PEC Open Air Theatre',
+    description: 'Live performance by prominent stand-up comedians followed by the grand felicitation of competition winners and sponsors.',
+    tags: ['Stand-up Comedy', 'Valedictory', 'Award Night'],
+    badge: 'GRAND FINALE',
+    featured: true,
+    eventId: 'ev-12',
+  },
+]
+
+export const WHY_PARTNER_PILLARS: PartnerPillar[] = [
+  {
+    id: 'wp-1',
+    number: '01',
+    title: 'RELEVANT REACH',
+    desc: 'Meet ambitious students, early founders and ecosystem decision-makers across northern India.',
+  },
+  {
+    id: 'wp-2',
+    number: '02',
+    title: 'MEANINGFUL PRESENCE',
+    desc: 'Integrate deeply into the participant experience rather than appearing only as a passive logo.',
+  },
+  {
+    id: 'wp-3',
+    number: '03',
+    title: 'TALENT ACCESS',
+    desc: 'Build relationships and hire highly capable technical, analytical, and entrepreneurial students.',
+  },
+  {
+    id: 'wp-4',
+    number: '04',
+    title: 'CATEGORY AUTHORITY',
+    desc: 'Own a credible industry conversation aligned with your organization and market leadership.',
+  },
+  {
+    id: 'wp-5',
+    number: '05',
+    title: 'CONTENT VALUE',
+    desc: 'Create impactful stories, recorded sessions, and memorable moments that continue long after the summit.',
+  },
+  {
+    id: 'wp-6',
+    number: '06',
+    title: 'ECOSYSTEM GOODWILL',
+    desc: 'Support entrepreneurship and grassroot innovation at one of India’s oldest, most storied engineering institutions.',
+  },
+]
+
+export const SPONSORSHIP_ROLES: SponsorRole[] = [
+  {
+    role: 'PRESENTING PARTNER',
+    description: 'Summit-wide association and highest-visibility integration across all stages, hoardings, and digital collaterals.',
+  },
+  {
+    role: 'PROGRAMME PARTNER',
+    description: 'Own a defined property such as the Funding Conclave, Talent Fair, Hackathon, or Masterclass Workshops.',
+  },
+  {
+    role: 'ECOSYSTEM PARTNER',
+    description: 'Participate through investor networks, operational expertise, founder mentoring, or venture pipeline access.',
+  },
+  {
+    role: 'EXPERIENCE PARTNER',
+    description: 'Create a useful product trial, campus culture activation, gaming booth, or memorable attendee experience.',
+  },
+  {
+    role: 'MEDIA PARTNER',
+    description: 'Extend stories, press coverage, and digital visibility before, during, and after the summit.',
+  },
+]
+
 export const MASTER_FAQS: FAQItem[] = [
   {
     id: 'faq-1',
     question: 'Who can attend PEC E-Summit 2026?',
-    answer: 'E-Summit 2026 is open to student innovators, developers, creators, early-stage founders, investors, and industry professionals from across India. Join us on 26–27 September 2026 at Punjab Engineering College, Chandigarh.',
+    answer: 'E-Summit 2026 is open to student innovators, developers, creators, early-stage founders, investors, and industry professionals from across India. Join us on November 14–15, 2026 at Punjab Engineering College, Chandigarh.',
     category: 'General',
   },
   {
     id: 'faq-2',
     question: 'Are registration passes free?',
-    answer: 'General Student Delegate Passes and Campus Ambassador Passes are 100% FREE. Specific competition tracks like the 24-Hour Hackathon and Build & Pitch may include small delegate confirmation fees for prize pool pools.',
+    answer: 'General Student Delegate Passes and Campus Ambassador Passes are 100% FREE. Specific competition tracks like the 24-Hour Hackathon and Build & Pitch may include small delegate confirmation fees for prize pools.',
     category: 'Passes',
   },
   {
     id: 'faq-3',
-    question: 'How do I check in at the venue on 26–27 September 2026?',
+    question: 'How do I check in at the venue on November 14–15, 2026?',
     answer: 'Once registered, your digital E-Badge with a unique cryptographic QR code is generated instantly. Present your digital badge on your smartphone at the PEC Main Gate entry scanners.',
     category: 'Passes',
   },
@@ -532,12 +876,12 @@ export const MASTER_FAQS: FAQItem[] = [
 ]
 
 export const MASTER_STATS = [
-  { label: 'Total Footfall', value: 2000, suffix: '+', id: 'footfall', display: '2K+' },
-  { label: 'Startups Attended', value: 100, suffix: '+', id: 'startups', display: '100+' },
+  { label: 'Total Footfall', value: 5000, suffix: '+', id: 'footfall', display: '5K+' },
+  { label: 'Startups Attended', value: 50, suffix: '+', id: 'startups', display: '50+' },
   { label: 'Workshops Conducted', value: 50, suffix: '+', id: 'workshops', display: '50+' },
   { label: 'Speaker Sessions', value: 30, suffix: '+', id: 'speakers', display: '30+' },
-  { label: 'Event Participation', value: 5000, suffix: '+', id: 'participation', display: '5K+' },
-  { label: 'Alumni Support', value: 1000, suffix: '+', id: 'alumni', display: '1000+' },
+  { label: 'Event Participation', value: 3000, suffix: '+', id: 'participation', display: '3K+' },
+  { label: 'Alumni Support', value: 1000, suffix: '+', id: 'alumni', display: '1K+' },
 ]
 
 export const MASTER_CONTACTS = {
@@ -550,7 +894,7 @@ export const MASTER_CONTACTS = {
     { role: 'Convener', name: 'Bhrigu Verma', phone: '+91 94783 35331' },
   ],
   location: 'Entrepreneurship & Incubation Cell (EIC), Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh 160012',
-  dates: '26–27 September 2026',
+  dates: 'November 14–15, 2026',
   city: 'Chandigarh',
   emails: ['eicpec@pec.edu.in', 'esummitpr.pec@gmail.com'],
 }

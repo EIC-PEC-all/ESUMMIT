@@ -84,7 +84,9 @@ section,
   min-height: 100dvh;
 }
 
-#register {
+#register,
+#flip-flop-transition,
+#esummit-marquee {
   min-height: auto !important;
 }
 

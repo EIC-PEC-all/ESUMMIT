@@ -19,7 +19,31 @@ export interface RegistrationRecord {
 }
 
 const LOCAL_STORAGE_KEY = 'pec_summit_registrations'
+const DELETED_PASSES_KEY = 'pec_deleted_registration_ids'
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
+
+export const getDeletedPassIds = (): string[] => {
+  if (typeof window === 'undefined') return []
+  try {
+    const saved = localStorage.getItem(DELETED_PASSES_KEY)
+    return saved ? JSON.parse(saved) : []
+  } catch {
+    return []
+  }
+}
+
+export const addDeletedPassId = (id: string) => {
+  if (typeof window === 'undefined') return
+  try {
+    const list = getDeletedPassIds()
+    if (!list.includes(id)) {
+      list.push(id)
+      localStorage.setItem(DELETED_PASSES_KEY, JSON.stringify(list))
+    }
+  } catch {
+    // Non-fatal
+  }
+}
 
 const PASS_TYPE_MAP: Record<string, string> = {
   'Student Pass': 'STUDENT_GENERAL',
@@ -137,7 +161,9 @@ export const getUserRegistrations = async (
   userId?: string,
   userEmail?: string
 ): Promise<RegistrationRecord[]> => {
-  const localList = getLocalRegistrations()
+  const deletedIds = new Set(getDeletedPassIds())
+  const rawLocalList = getLocalRegistrations()
+  const localList = rawLocalList.filter((r) => !deletedIds.has(r.id))
 
   // 1. Try fetching from backend API if online
   try {
@@ -152,25 +178,27 @@ export const getUserRegistrations = async (
       if (res.ok) {
         const serverPasses = await res.json()
         if (Array.isArray(serverPasses) && serverPasses.length > 0) {
-          const syncedList: RegistrationRecord[] = serverPasses.map((sp: any) => ({
-            id: sp.passId || sp.id,
-            userId: sp.userId || userId,
-            name: sp.delegateName || sp.name || '',
-            email: sp.delegateEmail || sp.email || userEmail || '',
-            phone: sp.delegatePhone || sp.phone || 'Not provided',
-            college: sp.delegateCollege || sp.college || 'Punjab Engineering College',
-            category: sp.categoryTitle || sp.passType || 'Student Delegate',
-            tracks: sp.tracks || [],
-            selectedEvents: sp.selectedEvents || [],
-            amountPaid: sp.amountPaid || 0,
-            paymentStatus: sp.paymentStatus || 'PAID',
-            date: new Date(sp.createdAt || Date.now()).toLocaleDateString('en-IN', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-            }),
-            qrCodeData: sp.qrCodeDataUrl || `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${sp.passId}`,
-          }))
+          const syncedList: RegistrationRecord[] = serverPasses
+            .filter((sp: any) => !deletedIds.has(sp.passId || sp.id))
+            .map((sp: any) => ({
+              id: sp.passId || sp.id,
+              userId: sp.userId || userId,
+              name: sp.delegateName || sp.name || '',
+              email: sp.delegateEmail || sp.email || userEmail || '',
+              phone: sp.delegatePhone || sp.phone || 'Not provided',
+              college: sp.delegateCollege || sp.college || 'Punjab Engineering College',
+              category: sp.categoryTitle || sp.passType || 'Student Delegate',
+              tracks: sp.tracks || [],
+              selectedEvents: sp.selectedEvents || [],
+              amountPaid: sp.amountPaid || 0,
+              paymentStatus: sp.paymentStatus || 'PAID',
+              date: new Date(sp.createdAt || Date.now()).toLocaleDateString('en-IN', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              }),
+              qrCodeData: sp.qrCodeDataUrl || `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${sp.passId}`,
+            }))
 
           // Merge server passes with local storage
           const merged = [...syncedList]
@@ -234,6 +262,7 @@ export const updateRegistrationRecord = async (
 
 // ── DELETE ──
 export const deleteRegistrationRecord = async (ticketId: string): Promise<boolean> => {
+  addDeletedPassId(ticketId)
   // Attempt backend delete first
   try {
     await fetch(`${API_URL}/registrations/${ticketId}`, { method: 'DELETE' })

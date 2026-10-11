@@ -4,38 +4,38 @@ import { useRef, useEffect } from 'react'
 import FadeIn from '@/components/ui/FadeIn'
 import AnimatedText from '@/components/ui/AnimatedText'
 import RegisterButton from '@/components/ui/RegisterButton'
-import { Rocket, Users, BookOpen, Mic, Trophy, Network } from 'lucide-react'
 import { useSummitData } from '@/hooks/useSummitData'
+import GlassSurface from './GlassSurface'
 
 const PILLARS = [
   {
-    icon: Users,
-    title: '5K+ TOTAL FOOTFALL',
+    stat: '5K+',
+    label: 'TOTAL FOOTFALL',
     desc: 'Record-breaking attendance from student builders, innovators, and industry leaders.',
   },
   {
-    icon: Rocket,
-    title: '50+ STARTUPS ATTENDED',
+    stat: '50+',
+    label: 'STARTUPS ATTENDED',
     desc: 'Emerging ventures and deep-tech startups showcasing their products and raising capital.',
   },
   {
-    icon: BookOpen,
-    title: '50+ WORKSHOPS',
+    stat: '50+',
+    label: 'WORKSHOPS',
     desc: 'Hands-on learning sessions on validation, pitching, finance, and emerging tech.',
   },
   {
-    icon: Mic,
-    title: '30+ SPEAKER SESSIONS',
+    stat: '30+',
+    label: 'SPEAKER SESSIONS',
     desc: 'Insights from founders, market leaders, and VCs sharing non-textbook lessons.',
   },
   {
-    icon: Trophy,
-    title: '3K+ EVENT PARTICIPATION',
+    stat: '3K+',
+    label: 'EVENT PARTICIPATION',
     desc: 'Massive engagement in hackathons, B-quizzes, IPL auctions, and pitch competitions.',
   },
   {
-    icon: Network,
-    title: '1K+ ALUMNI SUPPORT',
+    stat: '1K+',
+    label: 'ALUMNI SUPPORT',
     desc: 'Backed by a formidable network of PEC alumni acting as mentors and angel investors.',
   },
 ]
@@ -186,14 +186,6 @@ export default function EsummitAbout() {
   const summitDates = data?.siteConfig?.summitDates || 'November 14–15, 2026'
   const dynamicAboutText = `PEC E-Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, bringing together 3,000+ student founders, seasoned venture capitalists, and technology leaders. From competitive pitching and an overnight hackathon to curated investor roundtables — it is North India's premier launchpad where ideas meet capital and build the future. Join us ${summitDates}.`
 
-  const handleSpotlight = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    e.currentTarget.style.setProperty('--mouse-x', `${x}px`)
-    e.currentTarget.style.setProperty('--mouse-y', `${y}px`)
-  }
-
   return (
     <section
       id="esummit-about"
@@ -238,39 +230,47 @@ export default function EsummitAbout() {
           }}
         />
 
-        {/* Spotlight Pillar Cards */}
+        {/* Spotlight Pillar Cards with GlassSurface */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full mt-4">
-          {PILLARS.map((pillar, idx) => {
-            const Icon = pillar.icon
-            return (
-              <FadeIn key={pillar.title} delay={0.15 + idx * 0.1} className="h-full">
-                <div
-                  onMouseMove={handleSpotlight}
-                  className="relative group rounded-2xl p-6 sm:p-8 bg-panel transition-all duration-300 overflow-hidden shadow-xl h-full"
-                >
-                  {/* Mouse spotlight overlay */}
-                  <div
-                    className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{
-                      background: 'radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--accent-green-glow), transparent 40%)',
-                    }}
-                  />
-
-                  <div className="w-12 h-12 rounded-xl bg-mint/10 border border-mint/30 flex items-center justify-center mb-5 text-mint group-hover:scale-110 transition-transform duration-300">
-                    <Icon size={24} />
+          {PILLARS.map((pillar, idx) => (
+            <FadeIn key={pillar.label} delay={0.15 + idx * 0.1} className="h-full">
+              <GlassSurface
+                borderRadius={24}
+                distortionScale={-220}
+                displace={0.5}
+                backgroundOpacity={0.06}
+                borderWidth={1}
+                borderColor="rgba(0, 242, 178, 0.2)"
+                brightness={100}
+                opacity={0.96}
+                blur={16}
+                saturation={1.1}
+                redOffset={0}
+                greenOffset={28}
+                blueOffset={56}
+                refraction
+                renderer="svg"
+                className="group p-6 sm:p-7 md:p-8 h-full flex flex-col justify-between transition-all duration-300 hover:border-mint/60 hover:bg-mint/[0.03]"
+              >
+                <div>
+                  {/* Big Bold Metric Stat */}
+                  <div className="font-display font-black text-3xl sm:text-4xl text-mint tracking-tight leading-none mb-2.5 select-none group-hover:scale-105 transition-transform duration-300 origin-left">
+                    {pillar.stat}
                   </div>
 
-                  <h3 className="font-display font-bold text-lg uppercase mb-2">
-                    <span className="text-gradient-white">{pillar.title}</span>
+                  {/* Metric Label */}
+                  <h3 className="font-display font-bold text-xs sm:text-sm uppercase mb-3 tracking-wider text-white/95 group-hover:text-white transition-colors">
+                    {pillar.label}
                   </h3>
 
-                  <p className="font-body text-xs sm:text-sm text-secondary leading-relaxed">
+                  {/* Description */}
+                  <p className="font-body text-xs sm:text-sm text-gray-300/85 leading-relaxed">
                     {pillar.desc}
                   </p>
                 </div>
-              </FadeIn>
-            )
-          })}
+              </GlassSurface>
+            </FadeIn>
+          ))}
         </div>
 
         {/* CTA */}

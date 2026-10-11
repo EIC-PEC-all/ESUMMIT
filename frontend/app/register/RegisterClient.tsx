@@ -404,7 +404,14 @@ export default function RegisterClient() {
 
         if (!isScriptLoaded || !(window as any).Razorpay) {
           toast.dismiss(toastId)
-          await finalizeSuccessfulBooking('DEMO_TXN_' + Date.now())
+          if (process.env.NEXT_PUBLIC_DEMO_PAYMENTS === 'true') {
+            await finalizeSuccessfulBooking('DEMO_TXN_' + Date.now())
+            return
+          }
+          setIsSubmitting(false)
+          const loadError = 'Payment gateway could not be loaded. Please check your connection or disable ad-blockers.'
+          setPaymentError(loadError)
+          toast.error(loadError, TOAST_STYLE)
           return
         }
 
@@ -431,8 +438,12 @@ export default function RegisterClient() {
             ondismiss: function () {
               setIsSubmitting(false)
               toast.dismiss(toastId)
-              setPaymentError('Payment was cancelled. You have not been charged.')
-              toast.error('Payment cancelled.', TOAST_STYLE)
+              setPaymentError((prev) =>
+                prev && prev.startsWith('Payment Failed')
+                  ? prev
+                  : 'Payment was cancelled or interrupted. You have not been charged.'
+              )
+              toast.error('Payment cancelled or incomplete.', TOAST_STYLE)
             },
           },
         }
@@ -449,9 +460,11 @@ export default function RegisterClient() {
 
         try {
           rzp.open()
-        } catch (e) {
+        } catch (e: any) {
           setIsSubmitting(false)
-          setPaymentError('Failed to launch payment interface. Please try again.')
+          const msg = e?.message || 'Failed to launch payment interface. Please try again.'
+          setPaymentError(`Payment Failed: ${msg}`)
+          toast.error(msg, TOAST_STYLE)
         }
 
         toast.dismiss(toastId)
@@ -498,7 +511,9 @@ export default function RegisterClient() {
       toast.success('Your pass is confirmed!', TOAST_STYLE)
     } catch (err: any) {
       console.error(err)
-      toast.error(err?.message || 'Failed to save booking.', TOAST_STYLE)
+      const errorMsg = err?.message || 'Failed to save booking. Please try again.'
+      setPaymentError(errorMsg)
+      toast.error(errorMsg, TOAST_STYLE)
     } finally {
       setIsSubmitting(false)
     }

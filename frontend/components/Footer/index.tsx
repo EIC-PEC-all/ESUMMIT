@@ -24,7 +24,10 @@ import {
 import toast from 'react-hot-toast'
 import Image from 'next/image'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import DynamicWeightHeading from '../DynamicWeightHeading'
+
+const CRTWarp = dynamic(() => import('@/components/ui/CRTWarp'), { ssr: false })
 import { ScrollGradientFill, GlitchText } from '@/components/Common/TextAnims'
 import StackedSlicedText from '@/components/ui/StackedSlicedText'
 import { FEST_META } from '@/lib/data'
@@ -128,6 +131,7 @@ const QUICK_LINKS = [
   { label: 'Speakers', href: '/speakers' },
   { label: 'Schedule', href: '/timeline' },
   { label: 'Sponsors', href: '/sponsors' },
+  { label: 'Brochure (PDF)', href: '/e-summit-brochure.pdf' },
   { label: 'FAQ', href: '/faq' },
   { label: 'Register', href: '/register' },
 ]
@@ -136,18 +140,42 @@ export function RegisterCTA() {
   return (
     <div
       id="register"
-      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-section-2 text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#00F5D4]/20 py-16 sm:py-20 md:py-24"
+      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#071511] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#00F5D4]/20 py-16 sm:py-20 md:py-24"
       aria-labelledby="footer-cta-heading"
-      style={{
-        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='105' viewBox='0 0 80 105'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='death-star' fill='%2300F2B2' fill-opacity='0.06'%3E%3Cpath d='M20 10a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm15 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zM20 75a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zm30-65a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V10zm0 65a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V75zM35 10a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zM5 45a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10zm60 35a5 5 0 0 1 10 0v50a5 5 0 0 1-10 0V45zm0-35a5 5 0 0 1 10 0v20a5 5 0 0 1-10 0V10z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-      }}
     >
-      {/* Pure teal radial wash */}
+      {/* ── CRT Warp Interactive Plasma Background (Cyber Teal Obsidian Theme) ── */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
+        <CRTWarp
+          color="#00F5D4"
+          backgroundColor="#071511"
+          speed={0.35}
+          curvature={0.2}
+          scanlineStrength={0.18}
+          scanlineFrequency={180}
+          waveAmplitude={0.2}
+          waveFrequency={2.2}
+          bloom={0.95}
+          bloomRadius={1}
+          noise={0.06}
+          vignette={0.55}
+          brightness={0.9}
+          pixelation={1}
+          rgbShift={0.01}
+          mouseReact={true}
+          mouseStrength={0.45}
+          dpr={1}
+          fps={30}
+          paused={false}
+        />
+      </div>
+
+      {/* Dark gradient vignettes for pristine text contrast and smooth boundary blending */}
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-[#071511] via-transparent to-[#071511]" />
       <div
-        className="pointer-events-none absolute inset-0 z-0 opacity-30"
+        className="pointer-events-none absolute inset-0 z-[1] opacity-25"
         style={{
           background:
-            'radial-gradient(circle at 50% 50%, rgba(0, 245, 212, 0.10) 0%, transparent 65%)',
+            'radial-gradient(circle at 50% 50%, rgba(0, 245, 212, 0.12) 0%, transparent 68%)',
         }}
       />
 
