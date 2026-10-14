@@ -3,7 +3,7 @@
 import React from 'react'
 import { Sparkles, Building2, Handshake, Download, Phone, Mail } from 'lucide-react'
 import PageBanner from '@/components/Common/PageBanner'
-import { SPONSORSHIP_ROLES, MASTER_CONTACTS } from '@/data/summitData'
+import { MASTER_CONTACTS } from '@/data/summitData'
 import WhyPartnerGrid from './WhyPartnerGrid'
 import PreviousSponsorsGrid from './PreviousSponsorsGrid'
 
@@ -98,43 +98,7 @@ export default function Sponsors() {
           {/* ── 1. Why Partner Grid (Brochure Page 24) ── */}
           <WhyPartnerGrid />
 
-          {/* ── 2. Sponsorship Roles (Brochure Page 25) ── */}
-          <div className="mt-16 sm:mt-24">
-            <div className="text-center mb-10">
-              <span className="text-[10px] font-mono-data text-mint font-semibold uppercase tracking-widest px-3 py-1 rounded-full bg-mint/10 border border-mint/20">
-                TAILORED ENGAGEMENT
-              </span>
-              <h3
-                className="font-display font-black uppercase tracking-wider text-white mt-3 mb-2"
-                style={{ fontSize: 'clamp(1.35rem, 2.8vw, 2rem)' }}
-              >
-                SPONSORSHIP <span className="text-gradient-mint">ROLES &amp; TIERS</span>
-              </h3>
-              <p className="font-body text-xs sm:text-sm text-gray-400 max-w-xl mx-auto leading-relaxed">
-                Partnerships can be shaped around a category, programme property, or custom institutional outcome.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {SPONSORSHIP_ROLES.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 sm:p-6 rounded-2xl bg-[#07130F] border border-white/5 hover:border-mint/30 transition-all duration-300 flex flex-col justify-between"
-                >
-                  <div>
-                    <h4 className="font-mono-data text-xs font-bold text-mint uppercase tracking-wider mb-2">
-                      {item.role}
-                    </h4>
-                    <p className="text-xs text-gray-300 font-body leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ── 3. Organizations that Backed the Journey (Brochure Page 27) ── */}
+          {/* ── 2. Organizations that Backed the Journey (Brochure Page 27) ── */}
           <PreviousSponsorsGrid />
 
           {/* ── 4. Connect With Leadership (Brochure Page 28) ── */}
