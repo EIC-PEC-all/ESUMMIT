@@ -29,22 +29,24 @@ export const POPULAR_COLLEGES = [
 ] as const
 
 export const GRADUATION_YEARS = [
-  { label: '1st Year (Class of 2029)', value: '1st Year (Class of 2029)' },
-  { label: '2nd Year (Class of 2028)', value: '2nd Year (Class of 2028)' },
-  { label: '3rd Year (Class of 2027)', value: '3rd Year (Class of 2027)' },
-  { label: 'Final Year (Class of 2026)', value: 'Final Year (Class of 2026)' },
+  { label: '1st Year (Class of 2030)', value: '1st Year (Class of 2030)' },
+  { label: '2nd Year (Class of 2029)', value: '2nd Year (Class of 2029)' },
+  { label: '3rd Year (Class of 2028)', value: '3rd Year (Class of 2028)' },
+  { label: 'Final Year (Class of 2027)', value: 'Final Year (Class of 2027)' },
+  { label: 'Graduating Batch / Class of 2026', value: 'Class of 2026' },
   { label: 'Postgraduate / Research Scholar', value: 'Postgraduate / Research' },
   { label: 'Alumni / Founder / Working Professional', value: 'Alumni / Founder / Professional' },
   { label: 'Other', value: 'Other' },
 ] as const
 
 export function normalizeGradYear(val?: string | null): string {
-  if (!val) return 'Final Year (Class of 2026)'
+  if (!val) return '1st Year (Class of 2030)'
   const s = val.trim()
-  if (s === '2029' || s.includes('2029')) return '1st Year (Class of 2029)'
-  if (s === '2028' || s.includes('2028')) return '2nd Year (Class of 2028)'
-  if (s === '2027' || s.includes('2027')) return '3rd Year (Class of 2027)'
-  if (s === '2026' || s.includes('2026')) return 'Final Year (Class of 2026)'
+  if (s === '2030' || s.includes('2030')) return '1st Year (Class of 2030)'
+  if (s === '2029' || s.includes('2029')) return '2nd Year (Class of 2029)'
+  if (s === '2028' || s.includes('2028')) return '3rd Year (Class of 2028)'
+  if (s === '2027' || s.includes('2027')) return 'Final Year (Class of 2027)'
+  if (s === '2026' || s.includes('2026')) return 'Class of 2026'
   if (s.toLowerCase().includes('postgrad') || s.toLowerCase().includes('research')) return 'Postgraduate / Research'
   if (s.toLowerCase().includes('alumni') || s.toLowerCase().includes('founder') || s.toLowerCase().includes('professional')) return 'Alumni / Founder / Professional'
   if (s === 'Other') return 'Other'
@@ -79,7 +81,7 @@ export function saveStoredProfile(updates: Partial<AttendeeProfile>): AttendeePr
     phone: '',
     college: '',
     branch: '',
-    gradYear: 'Final Year (Class of 2026)',
+    gradYear: '1st Year (Class of 2030)',
     whatsappAlerts: true,
     emailAlerts: true,
     onboardingCompleted: false,
@@ -89,7 +91,7 @@ export function saveStoredProfile(updates: Partial<AttendeeProfile>): AttendeePr
     ? normalizeGradYear(updates.gradYear)
     : current.gradYear
     ? normalizeGradYear(current.gradYear)
-    : 'Final Year (Class of 2026)'
+    : '1st Year (Class of 2030)'
 
   const merged: AttendeeProfile = {
     ...current,
