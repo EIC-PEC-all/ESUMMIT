@@ -126,14 +126,14 @@ const SOCIAL_LINKS = [
 
 const QUICK_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/#about' },
+  { label: 'About', href: '/about' },
+  { label: 'Passes & Packages', href: '/passes' },
   { label: 'Events', href: '/events' },
   { label: 'Speakers', href: '/speakers' },
   { label: 'Schedule', href: '/timeline' },
   { label: 'Sponsors', href: '/sponsors' },
   { label: 'Brochure (PDF)', href: '/e-summit-brochure.pdf' },
   { label: 'FAQ', href: '/faq' },
-  { label: 'Register', href: '/register' },
 ]
 
 export function RegisterCTA() {

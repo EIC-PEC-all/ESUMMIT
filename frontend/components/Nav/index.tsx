@@ -11,13 +11,15 @@ import NavMobileDrawer, { NavItem } from './NavMobileDrawer'
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'HOME', code: '01', href: '/', sectionId: null },
-  { label: 'ABOUT', code: '02', href: '/#esummit-about', sectionId: 'esummit-about' },
-  { label: 'EVENTS', code: '03', href: '/events', sectionId: null },
-  { label: 'SPEAKERS', code: '04', href: '/speakers', sectionId: null },
-  { label: 'TIMELINE', code: '05', href: '/timeline', sectionId: null },
-  { label: 'SPONSORS', code: '06', href: '/sponsors', sectionId: null },
-  { label: 'FAQ', code: '07', href: '/faq', sectionId: null },
+  { label: 'ABOUT', code: '02', href: '/about', sectionId: null },
+  { label: 'PASSES', code: '03', href: '/passes', sectionId: null },
+  { label: 'EVENTS', code: '04', href: '/events', sectionId: null },
+  { label: 'SPEAKERS', code: '05', href: '/speakers', sectionId: null },
+  { label: 'TIMELINE', code: '06', href: '/timeline', sectionId: null },
+  { label: 'SPONSORS', code: '07', href: '/sponsors', sectionId: null },
+  { label: 'FAQ', code: '08', href: '/faq', sectionId: null },
 ]
+
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
