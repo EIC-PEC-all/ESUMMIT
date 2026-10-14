@@ -65,7 +65,7 @@ export default function PassCard({ pkg, index, isCenter = false }: PassCardProps
       {/* Action Button (Flat, vibrant, zero glow) */}
       <div className="pt-2">
         <Link
-          href={`/register?tier=${pkg.tier}`}
+          href={`/passes?tier=${pkg.tier}`}
           className={`w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-transform duration-150 cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${pkg.accentColor.buttonBg}`}
           aria-label={`Apply for ${pkg.name}`}
         >
