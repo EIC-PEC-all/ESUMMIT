@@ -4,6 +4,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { usePathname } from 'next/navigation'
 import { X, Send, Bot, TrendingUp, ChevronDown, Calendar, Plus, Trash2, Bookmark, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useChatbot } from '@/hooks/useChatbot'
@@ -30,14 +31,73 @@ function FormattedText({ text }: { text: string }) {
 }
 
 export default function Concierge() {
+  const pathname = usePathname()
+  const isLandingPage = pathname === '/'
   const [open, setOpen] = useState(false)
   const [planOpen, setPlanOpen] = useState(false)
   const [myPlan, setMyPlan] = useState<ItinerarySession[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoaderActive, setIsLoaderActive] = useState(true)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isLive, setIsLive] = useState(false)
+  const [timeLeft, setTimeLeft] = useState<{ days: string; hours: string; minutes: string; seconds: string }>({
+    days: '00',
+    hours: '00',
+    minutes: '00',
+    seconds: '00',
+  })
+
   const [input, setInput] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  // Listen to window scroll to collapse countdown pill when scrolled down
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80)
+    }
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Live countdown timer calculation for E-Summit (active only on landing page)
+  useEffect(() => {
+    if (!isLandingPage) return
+    const target = new Date('2026-11-14T09:00:00+05:30')
+
+    const checkState = () => {
+      const curNow = Date.now()
+      const start = target.getTime()
+      const end = start + 2 * 24 * 60 * 60 * 1000
+      const live = curNow >= start && curNow <= end
+      setIsLive(live)
+
+      if (!live) {
+        const diff = start - curNow
+        if (diff > 0) {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+          const minutes = Math.floor((diff / (1000 * 60)) % 60)
+          const seconds = Math.floor((diff / 1000) % 60)
+
+          const pad = (n: number) => String(n).padStart(2, '0')
+          setTimeLeft({
+            days: pad(days),
+            hours: pad(hours),
+            minutes: pad(minutes),
+            seconds: pad(seconds),
+          })
+        } else {
+          setTimeLeft({ days: '00', hours: '00', minutes: '00', seconds: '00' })
+        }
+      }
+    }
+
+    checkState()
+    const timer = setInterval(checkState, 1000)
+    return () => clearInterval(timer)
+  }, [])
 
   // Use MutationObserver on the body class instead of custom events — immune to
   // StrictMode double-invoke timing where the loader cleanup briefly fires active:false.
@@ -197,26 +257,94 @@ export default function Concierge() {
 
   return (
     <>
-      {/* Floating Concierge Action Pill */}
-      <motion.button
-        onClick={() => setOpen(!open)}
+      {/* Floating Concierge Action + Live Countdown Capsule */}
+      <motion.div
+        layout
         style={{
           position: 'fixed',
           // Drop below loader (z-9999) while it's active so it's physically behind the overlay
           zIndex: isLoaderActive ? 9000 : 10000,
         }}
-        className={`hidden sm:flex bg-mint !fixed bottom-14 right-3 sm:right-6 w-[52px] h-[52px] rounded-full text-void items-center justify-center cursor-pointer transition-all duration-400 shadow-[0_8px_30px_rgba(0,245,212,0.25)] border border-[#5CFFE7] hover:brightness-110 hover:shadow-[0_8px_40px_rgba(0,245,212,0.4)] ${
+        className={`hidden sm:flex !fixed bottom-10 right-6 items-center transition-all duration-400 ${
           isHidden ? 'opacity-0 scale-75 pointer-events-none translate-y-4' : 'opacity-100 scale-100 pointer-events-auto translate-y-0'
         }`}
-        whileHover={{ scale: isHidden ? 0.75 : 1.05, y: -2 }}
-        whileTap={{ scale: isHidden ? 0.75 : 0.95 }}
-        aria-label="Open Summit AI Assistant"
       >
-        <Bot size={24} strokeWidth={2} />
-        {!open && (
-          <span className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-void animate-pulse" />
-        )}
-      </motion.button>
+        <div className="relative flex items-center p-1 sm:p-1.5 rounded-full bg-[#061510]/95 backdrop-blur-2xl border border-mint/40 shadow-[0_12px_40px_rgba(0,0,0,0.6)] group">
+          {/* Collapsible Left Countdown Pill (expanded in desktop at top of page, ONLY on landing page) */}
+          <AnimatePresence>
+            {!isScrolled && !open && isLandingPage && (
+              <motion.div
+
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 'auto', opacity: 1 }}
+                exit={{ width: 0, opacity: 0 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="hidden md:flex items-center overflow-hidden pl-3.5 pr-1 gap-2.5 select-none"
+              >
+                {/* Live or Starts Indicator */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="w-2 h-2 rounded-full bg-mint animate-pulse" />
+                  <span className="text-[9px] font-mono-data font-bold text-mint uppercase tracking-widest">
+                    {isLive ? 'LIVE' : 'STARTS'}
+                  </span>
+                </div>
+
+                <div className="w-px h-3.5 bg-mint/25 shrink-0" />
+
+                {/* Countdown values */}
+                {isLive ? (
+                  <span className="text-[11px] font-mono-data font-black text-mint tracking-wider shrink-0">
+                    SUMMIT LIVE NOW
+                  </span>
+                ) : (
+                  <div
+                    onClick={() => {
+                      const el = document.getElementById('passes') || document.getElementById('register') || document.getElementById('esummit-hero')
+                      el?.scrollIntoView({ behavior: 'smooth' })
+                    }}
+                    title="Click to explore passes"
+                    className="flex items-center gap-1.5 font-mono-data tabular-nums shrink-0 cursor-pointer hover:opacity-85 transition-opacity"
+                  >
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-xs sm:text-sm font-black text-white">{timeLeft.days}</span>
+                      <span className="text-[8px] font-bold text-mint/90 uppercase">d</span>
+                    </div>
+                    <span className="text-mint/40 text-[9px] font-bold">:</span>
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-xs sm:text-sm font-black text-white">{timeLeft.hours}</span>
+                      <span className="text-[8px] font-bold text-mint/90 uppercase">h</span>
+                    </div>
+                    <span className="text-mint/40 text-[9px] font-bold">:</span>
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-xs sm:text-sm font-black text-white">{timeLeft.minutes}</span>
+                      <span className="text-[8px] font-bold text-mint/90 uppercase">m</span>
+                    </div>
+                    <span className="text-mint/40 text-[9px] font-bold">:</span>
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-xs sm:text-sm font-black text-mint">{timeLeft.seconds}</span>
+                      <span className="text-[8px] font-bold text-mint uppercase">s</span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="w-px h-4 bg-mint/25 shrink-0 mx-1" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Chatbot Action Trigger Button */}
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label="Open Summit AI Assistant"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-mint text-void flex items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(0,245,212,0.3)] border border-[#5CFFE7] relative"
+          >
+            <Bot size={22} strokeWidth={2.2} />
+            {!open && (
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-void animate-pulse" />
+            )}
+          </button>
+        </div>
+      </motion.div>
 
       {/* Chat Widget Panel */}
       <AnimatePresence>

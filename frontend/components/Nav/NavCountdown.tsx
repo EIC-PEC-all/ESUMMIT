@@ -1,12 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 export interface NavCountdownProps {
-  targetISO: string
+  targetISO?: string
+  visible?: boolean
 }
 
-export default function NavCountdown({ targetISO }: NavCountdownProps) {
+export default function NavCountdown({
+  targetISO = '2026-11-14T09:00:00+05:30',
+  visible = true,
+}: NavCountdownProps) {
+  const pathname = usePathname()
+  const isLandingPage = pathname === '/'
   const [mounted, setMounted] = useState(false)
   const [timeLeft, setTimeLeft] = useState<{ days: string; hours: string; minutes: string; seconds: string }>({
     days: '00',
@@ -18,12 +25,13 @@ export default function NavCountdown({ targetISO }: NavCountdownProps) {
 
   useEffect(() => {
     setMounted(true)
+    if (!isLandingPage) return
     const target = new Date(targetISO)
 
     const checkState = () => {
       const curNow = Date.now()
       const start = target.getTime()
-      const end = start + 2 * 24 * 60 * 60 * 1000 // 2 days duration
+      const end = start + 2 * 24 * 60 * 60 * 1000
       const live = curNow >= start && curNow <= end
       setIsLive(live)
 
@@ -51,36 +59,51 @@ export default function NavCountdown({ targetISO }: NavCountdownProps) {
     checkState()
     const timer = setInterval(checkState, 1000)
     return () => clearInterval(timer)
-  }, [targetISO])
+  }, [targetISO, isLandingPage])
 
-  if (isLive) {
-    return (
-      <div className="flex items-center gap-1.5 text-mint select-none uppercase tracking-widest text-[9px] sm:text-xs">
-        <span className="relative flex h-2 w-2 shrink-0">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
-        </span>
-        <span className="font-extrabold text-mint drop-shadow-[0_0_8px_rgba(0,229,153,0.8)]">LIVE</span>
-      </div>
-    )
-  }
+  if (!mounted || !isLandingPage) return null
+
 
   return (
-    <div
-      className={`flex items-center gap-1 font-mono-data text-[10px] sm:text-xs text-mint [.light_&]:text-[#A0C868] font-bold tabular-nums transition-opacity duration-200 ${
-        mounted ? 'opacity-100' : 'opacity-0'
+    <aside
+      aria-label="Summit Countdown Timer"
+      className={`fixed sm:hidden bottom-0 left-0 right-0 z-[2400] w-full bg-[#061510]/95 backdrop-blur-xl border-t border-mint/25 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] rounded-none py-2 px-3 pb-[max(0.625rem,env(safe-area-inset-bottom))] select-none transition-all duration-400 ease-out ${
+        visible ? 'translate-y-0 opacity-100 pointer-events-auto' : 'translate-y-full opacity-0 pointer-events-none'
       }`}
-      suppressHydrationWarning
     >
-      <span suppressHydrationWarning>{timeLeft.days}d</span>
-      <span>:</span>
-      <span suppressHydrationWarning>{timeLeft.hours}h</span>
-      <span>:</span>
-      <span suppressHydrationWarning>{timeLeft.minutes}m</span>
-      <span>:</span>
-      <span className="w-5 inline-block" suppressHydrationWarning>
-        {timeLeft.seconds}s
-      </span>
-    </div>
+      <div className="flex items-center justify-center gap-2 font-mono-data text-xs tracking-wider select-none text-center">
+        <span className="w-1.5 h-1.5 rounded-full bg-mint animate-pulse shrink-0" />
+        <span className="text-[10px] font-bold text-mint uppercase tracking-widest shrink-0">
+          {isLive ? 'SUMMIT LIVE' : 'STARTS IN'}
+        </span>
+
+        {!isLive && (
+          <>
+            <span className="text-mint/40 font-bold">:</span>
+            <div className="flex items-center gap-1.5 tabular-nums">
+              <span className="font-black text-white">
+                {timeLeft.days}
+                <span className="text-[9px] font-bold text-mint ml-0.5">D</span>
+              </span>
+              <span className="text-mint/40 font-bold">:</span>
+              <span className="font-black text-white">
+                {timeLeft.hours}
+                <span className="text-[9px] font-bold text-mint ml-0.5">H</span>
+              </span>
+              <span className="text-mint/40 font-bold">:</span>
+              <span className="font-black text-white">
+                {timeLeft.minutes}
+                <span className="text-[9px] font-bold text-mint ml-0.5">M</span>
+              </span>
+              <span className="text-mint/40 font-bold">:</span>
+              <span className="font-black text-mint">
+                {timeLeft.seconds}
+                <span className="text-[9px] font-bold text-mint ml-0.5">S</span>
+              </span>
+            </div>
+          </>
+        )}
+      </div>
+    </aside>
   )
 }

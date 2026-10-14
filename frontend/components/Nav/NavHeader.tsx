@@ -12,6 +12,7 @@ export interface NavHeaderProps {
   menuOpen: boolean
   planCount: number
   isRegistered?: boolean
+  isModalOrLoaderOpen?: boolean
   onToggleMenu: () => void
   headerButtonRef: React.RefObject<HTMLButtonElement>
 }
@@ -21,6 +22,7 @@ export default function NavHeader({
   menuOpen,
   planCount,
   isRegistered = false,
+  isModalOrLoaderOpen = false,
   onToggleMenu,
   headerButtonRef,
 }: NavHeaderProps) {
@@ -29,7 +31,8 @@ export default function NavHeader({
       className={`fixed z-[2500] transition-all duration-300 ease-out 
         top-[calc(var(--announcement-height,0px)+0.5rem)] left-1/2 w-[calc(100%-1rem)] max-w-7xl rounded-full sm:top-[calc(var(--announcement-height,0px)+0.85rem)] sm:w-[calc(100%-2rem)] 
         bg-[#0F1D17]/90 text-white backdrop-blur-2xl shadow-2xl border border-white/15
-        ${showHeader ? 'translate-y-0 opacity-100' : '-translate-y-[150%] opacity-0 pointer-events-none'} 
+        ${isModalOrLoaderOpen ? 'opacity-0 pointer-events-none' : ''}
+        ${showHeader ? 'translate-y-0 opacity-100' : 'max-sm:translate-y-0 max-sm:opacity-100 max-sm:pointer-events-auto sm:-translate-y-[150%] sm:opacity-0 sm:pointer-events-none'} 
         ${
           menuOpen
             ? 'lg:w-[calc(100%-380px-3rem)] -translate-x-1/2 lg:-translate-x-[calc(50%+190px)]'

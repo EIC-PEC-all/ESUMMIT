@@ -19,8 +19,6 @@ module.exports = {
         volt: 'var(--accent-green)',
         blue: 'var(--accent-blue)',
         coral: 'var(--accent-coral)',
-        orange: 'var(--accent-coral)',
-        amber: 'var(--accent-coral)',
         
         // Neutrals & Effects
         primary: 'var(--text-primary)',

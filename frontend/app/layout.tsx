@@ -8,6 +8,7 @@ import ChevronRouteTransition from '@/components/Common/ChevronRouteTransition'
 import SessionProviderWrapper from '@/components/Providers/SessionProviderWrapper'
 import GlobalScrollProgress from '@/components/Common/GlobalScrollProgress'
 import Concierge from '@/components/Concierge'
+import OnboardingGate from '@/components/Onboarding/OnboardingGate'
 import { AuthProvider } from '@/context/AuthContext'
 import ServiceWorkerCleanup from '@/components/Common/ServiceWorkerCleanup'
 import AnnouncementBanner from '@/components/Common/AnnouncementBanner'
@@ -179,6 +180,9 @@ export default function RootLayout({
               </ChevronRouteTransition>
             </SmoothScrollProvider>
           </SessionProviderWrapper>
+
+          {/* Attendee Profile Onboarding Gate */}
+          <OnboardingGate />
 
           {/* Floating AI Concierge — outside all wrappers so fixed positioning works */}
           <Concierge />

@@ -229,7 +229,7 @@ Plus: Women Founders Connect, Campus Treasure Hunt, Stand-up Comedy & E-Sports, 
   },
   {
     patterns: ['thank', 'thanks', 'bye', 'goodbye', 'see you', 'that\'s all', 'awesome', 'great', 'perfect'],
-    answer: `You're welcome! Feel free to ask anything else about E-Summit 2026. See you at PEC on **November 14–15**! 🚀`,
+    answer: `You're welcome! Feel free to ask anything else about E-Summit 2026. See you at PEC on **November 14–15**!`,
   },
   {
     patterns: ['register', 'sign up', 'how to register', 'how to join', 'apply'],

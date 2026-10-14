@@ -62,7 +62,14 @@ const PASS_TYPE_MAP: Record<string, string> = {
   'Campus Ambassador Pass': 'CAMPUS_AMBASSADOR',
   'Campus Ambassador': 'CAMPUS_AMBASSADOR',
   'CAMPUS_AMBASSADOR': 'CAMPUS_AMBASSADOR',
+  'Silver Pass': 'STARTUP_SILVER',
+  'STARTUP_SILVER': 'STARTUP_SILVER',
+  'Gold Pass': 'STARTUP_GOLD',
+  'STARTUP_GOLD': 'STARTUP_GOLD',
+  'Diamond Pass': 'STARTUP_DIAMOND',
+  'STARTUP_DIAMOND': 'STARTUP_DIAMOND',
 }
+
 
 export const getLocalRegistrations = (): RegistrationRecord[] => {
   if (typeof window === 'undefined') return []
@@ -109,7 +116,15 @@ export const createRegistrationRecord = async (
 
   // 1. Send to MongoDB Backend API
   try {
-    const passType = PASS_TYPE_MAP[data.category] || 'STUDENT_GENERAL'
+    const rawPassType = PASS_TYPE_MAP[data.category] || 'STUDENT_GENERAL'
+    // Gracefully map startup pass types to FOUNDER_PITCH for backend Prisma enum compatibility
+    const passType = ['STARTUP_SILVER', 'STARTUP_GOLD', 'STARTUP_DIAMOND'].includes(rawPassType)
+      ? 'FOUNDER_PITCH'
+      : rawPassType
+    const tracks = ['STARTUP_SILVER', 'STARTUP_GOLD', 'STARTUP_DIAMOND'].includes(rawPassType)
+      ? [...(data.tracks || []), `Package: ${data.category}`]
+      : data.tracks
+
     const res = await fetch(`${API_URL}/registrations/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -119,9 +134,10 @@ export const createRegistrationRecord = async (
         phone: data.phone !== 'Not provided' ? data.phone : undefined,
         college: data.college,
         passType,
-        tracks: data.tracks,
+        tracks,
       }),
     })
+
 
     if (res.ok) {
       const serverData = await res.json()

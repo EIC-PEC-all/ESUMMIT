@@ -3,12 +3,10 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useScroll, useMotionValueEvent } from 'framer-motion'
 import { usePathname } from 'next/navigation'
-import { FEST_META } from '@/lib/data'
-import { useSiteConfig } from '@/hooks/useSummitData'
 import { Download, Bot, Sparkles } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import NavHeader from './NavHeader'
-import SponsorMarqueeBar from './SponsorMarqueeBar'
+import NavCountdown from './NavCountdown'
 import NavMobileDrawer, { NavItem } from './NavMobileDrawer'
 
 const NAV_ITEMS: NavItem[] = [
@@ -17,10 +15,8 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'EVENTS', code: '03', href: '/events', sectionId: null },
   { label: 'SPEAKERS', code: '04', href: '/speakers', sectionId: null },
   { label: 'TIMELINE', code: '05', href: '/timeline', sectionId: null },
-  { label: 'ALUMNI', code: '06', href: '/#alumni', sectionId: 'alumni' },
-  { label: 'SPONSORS', code: '07', href: '/sponsors', sectionId: null },
-  { label: 'FAQ', code: '08', href: '/faq', sectionId: null },
-  { label: 'REGISTER', code: '09', href: '/register', sectionId: null },
+  { label: 'SPONSORS', code: '06', href: '/sponsors', sectionId: null },
+  { label: 'FAQ', code: '07', href: '/faq', sectionId: null },
 ]
 
 export default function Nav() {
@@ -65,18 +61,6 @@ export default function Nav() {
   }, [])
 
   const isRegistered = Boolean(user || hasStoredPasses)
-
-  const dynamicNavItems = useMemo(() => {
-    if (!isRegistered) return NAV_ITEMS
-    return NAV_ITEMS.map((item) =>
-      item.label === 'REGISTER'
-        ? { label: 'PROFILE', code: '10', href: '/profile', sectionId: null }
-        : item
-    )
-  }, [isRegistered])
-
-  const { siteConfig } = useSiteConfig()
-  const countdownTarget = siteConfig?.stats?.countdownTarget || FEST_META.countdownTarget
 
   // Scroll tracking with RAF throttling
   const { scrollY } = useScroll()
@@ -231,6 +215,29 @@ export default function Nav() {
     [pathname]
   )
 
+  const [isPastHero, setIsPastHero] = useState(false)
+
+  // Track when hero section ends on mobile to switch from countdown to action bar
+  useEffect(() => {
+    const checkHero = () => {
+      const heroEl = document.getElementById('esummit-hero')
+      if (heroEl) {
+        const rect = heroEl.getBoundingClientRect()
+        setIsPastHero(rect.bottom <= window.innerHeight)
+      } else {
+        setIsPastHero(window.scrollY > 80)
+      }
+    }
+
+    checkHero()
+    window.addEventListener('scroll', checkHero, { passive: true })
+    window.addEventListener('resize', checkHero, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', checkHero)
+      window.removeEventListener('resize', checkHero)
+    }
+  }, [pathname])
+
   const showHeader = useMemo(() => {
     if (isLoaderActive || isModalOpen) return false
     if (menuOpen) return true
@@ -238,24 +245,9 @@ export default function Nav() {
     return !scrolled || scrollDirection === 'up'
   }, [isLoaderActive, isModalOpen, menuOpen, scrollDirection, scrolled])
 
-  const showTopMarquee = useMemo(
-    () => {
-      if (isLoaderActive || isModalOpen || menuOpen) return false
-      return scrolled && scrollDirection === 'down'
-    },
-    [isLoaderActive, isModalOpen, menuOpen, scrolled, scrollDirection]
-  )
-
-  const showBottomMarquee = useMemo(
-    () => {
-      if (isLoaderActive || isModalOpen) return false
-      if (menuOpen) return true
-      return !scrolled || scrollDirection === 'up'
-    },
-    [isLoaderActive, isModalOpen, scrolled, scrollDirection, menuOpen]
-  )
-
   if (pathname === '/register') return null
+
+  const isModalOrLoader = Boolean(isLoaderActive || isModalOpen)
 
   return (
     <>
@@ -264,26 +256,24 @@ export default function Nav() {
         menuOpen={menuOpen}
         planCount={planCount}
         isRegistered={isRegistered}
+        isModalOrLoaderOpen={isModalOrLoader}
         onToggleMenu={() => setMenuOpen((prev) => !prev)}
         headerButtonRef={headerButtonRef}
       />
 
-      <SponsorMarqueeBar
-        position="top"
-        visible={showTopMarquee}
-        countdownTarget={countdownTarget}
-      />
+      {/* ── Mobile Fixed Bottom Section ── */}
+      {/* 1. Countdown Bar: Visible while inside Hero section on mobile (landing page only) */}
+      {pathname === '/' && <NavCountdown visible={!isPastHero && !isModalOrLoader} />}
 
-      <SponsorMarqueeBar
-        position="bottom"
-        visible={showBottomMarquee}
-        countdownTarget={countdownTarget}
-      />
 
-      {/* Mobile Bottom Action Bar (Visible when scrolling down on mobile) */}
-      <div className={`fixed sm:hidden bottom-0 left-0 right-0 z-[2500] bg-[#07130F]/80 backdrop-blur-2xl border-t border-white/10 rounded-t-[24px] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-all duration-500 ease-out shadow-[0_-8px_30px_rgba(0,0,0,0.5)] ${
-        showTopMarquee ? 'translate-y-0 opacity-100' : 'translate-y-[150%] opacity-0 pointer-events-none'
-      }`}>
+      {/* 2. Download Brochure + Chat Action Bar: Visible once scrolled past Hero section on mobile */}
+      <div
+        className={`fixed sm:hidden bottom-0 left-0 right-0 z-[2400] bg-[#07130F]/85 backdrop-blur-2xl border-t border-white/10 rounded-t-[24px] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-all duration-400 ease-out shadow-[0_-8px_30px_rgba(0,0,0,0.5)] ${
+          isPastHero && !isModalOrLoader
+            ? 'translate-y-0 opacity-100 pointer-events-auto'
+            : 'translate-y-full opacity-0 pointer-events-none'
+        }`}
+      >
         <div className="flex items-center gap-3">
           <a
             href="/e-summit-brochure.pdf"
@@ -313,7 +303,7 @@ export default function Nav() {
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
         pathname={pathname}
-        navItems={dynamicNavItems}
+        navItems={NAV_ITEMS}
         onItemClick={handleItemClick}
       />
     </>

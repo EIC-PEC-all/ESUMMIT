@@ -33,19 +33,16 @@ import { TOAST_STYLE } from '@/lib/constants'
 import { auth, isFirebaseConfigured } from '@/lib/firebase'
 import { updateProfile } from 'firebase/auth'
 import AccountPreferencesForm from '@/components/Profile/AccountPreferencesForm'
+import {
+  AttendeeProfile,
+  PROFILE_STORAGE_KEY,
+  PROFILE_UPDATED_EVENT,
+  getStoredProfile,
+  saveStoredProfile,
+  normalizeGradYear,
+} from '@/lib/onboarding'
 
-const PROFILE_STORAGE_KEY = 'pec_summit_attendee_profile'
-
-export interface AttendeeProfile {
-  name: string
-  email: string
-  phone: string
-  college: string
-  branch: string
-  gradYear: string
-  whatsappAlerts: boolean
-  emailAlerts: boolean
-}
+export type { AttendeeProfile }
 
 export default function ProfileClient() {
   const { user, logout, loading: authLoading } = useAuth()
@@ -60,15 +57,20 @@ export default function ProfileClient() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSavingProfile, setIsSavingProfile] = useState(false)
 
-  const [profile, setProfile] = useState<AttendeeProfile>({
-    name: '',
-    email: '',
-    phone: '',
-    college: 'Punjab Engineering College (PEC)',
-    branch: '',
-    gradYear: '3rd Year (Class of 2027)',
-    whatsappAlerts: true,
-    emailAlerts: true,
+  const [profile, setProfile] = useState<AttendeeProfile>(() => {
+    return (
+      getStoredProfile() || {
+        name: '',
+        email: '',
+        phone: '',
+        college: '',
+        branch: '',
+        gradYear: '',
+        whatsappAlerts: true,
+        emailAlerts: true,
+        onboardingCompleted: false,
+      }
+    )
   })
 
   const { data } = useSummitData()
@@ -102,7 +104,11 @@ export default function ProfileClient() {
       const saved = localStorage.getItem(PROFILE_STORAGE_KEY)
       if (saved) {
         const parsed = JSON.parse(saved)
-        setProfile((prev) => ({ ...prev, ...parsed }))
+        setProfile((prev) => ({
+          ...prev,
+          ...parsed,
+          gradYear: normalizeGradYear(parsed.gradYear),
+        }))
       } else {
         const fallbackName = user?.displayName || myRegistrations[0]?.name || ''
         const fallbackEmail = user?.email || myRegistrations[0]?.email || ''
@@ -125,11 +131,29 @@ export default function ProfileClient() {
     }
   }, [user, myRegistrations])
 
+  useEffect(() => {
+    const handleSync = (e: Event) => {
+      const custom = e as CustomEvent<AttendeeProfile>
+      if (custom.detail) {
+        setProfile(custom.detail)
+      } else {
+        const p = getStoredProfile()
+        if (p) setProfile(p)
+      }
+    }
+    window.addEventListener(PROFILE_UPDATED_EVENT, handleSync)
+    window.addEventListener('storage', handleSync)
+    return () => {
+      window.removeEventListener(PROFILE_UPDATED_EVENT, handleSync)
+      window.removeEventListener('storage', handleSync)
+    }
+  }, [])
+
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSavingProfile(true)
     try {
-      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile))
+      saveStoredProfile(profile)
 
       // Update cached auth display name if changed
       const localAuthStr = localStorage.getItem('pec_summit_auth_user')
@@ -210,7 +234,7 @@ export default function ProfileClient() {
 
       {/* Header */}
       <header className="sticky top-0 z-[100] w-full border-b border-white/5 bg-void/80 backdrop-blur-md">
-        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
             <Image
               src="/esummit-logo.png"
@@ -239,7 +263,7 @@ export default function ProfileClient() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
+      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
         
         {/* Profile Header */}
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -427,27 +451,31 @@ export default function ProfileClient() {
               exit={{ opacity: 0, y: -10 }}
             >
               {myRegistrations.length === 0 ? (
-                <div className="text-center py-16 border border-dashed border-white/10 rounded-3xl p-6 bg-white/[0.01] max-w-xl mx-auto">
-                  <Ticket size={44} className="mx-auto text-neutral-600 mb-4 stroke-1" />
-                  <h3 className="text-xl font-bold text-white mb-2 font-display uppercase tracking-wider">No Passes Booked</h3>
-                  <p className="text-xs sm:text-sm text-neutral-400 mb-6">
-                    You haven&apos;t registered for any summit passes yet. Book your delegate pass or update your profile details.
-                  </p>
-                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                    <Link
-                      href="/register"
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_rgba(0,242,178,0.25)] transition-all"
-                    >
-                      <span>Get Your Pass Now</span>
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('account')}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer"
-                    >
-                      <Settings size={13} />
-                      <span>Edit Personal Details</span>
-                    </button>
+                <div className="text-center py-14 sm:py-16 border border-dashed border-white/10 rounded-3xl p-6 sm:p-10 bg-white/[0.01] w-full">
+                  <div className="max-w-md mx-auto space-y-4">
+                    <Ticket size={44} className="mx-auto text-neutral-600 mb-1 stroke-1" />
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-1.5 font-display uppercase tracking-wider">No Passes Booked</h3>
+                      <p className="text-xs sm:text-sm text-neutral-400">
+                        You haven&apos;t registered for any summit passes yet. Book your delegate pass or update your profile details.
+                      </p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                      <Link
+                        href="/register"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_rgba(0,242,178,0.25)] transition-all"
+                      >
+                        <span>Get Your Pass Now</span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab('account')}
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                      >
+                        <Settings size={13} />
+                        <span>Edit Personal Details</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               ) : (
