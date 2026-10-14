@@ -13,11 +13,12 @@ export default withAuth(
   }
 );
 
-// Apply this middleware ONLY to these specific protected routes
 export const config = {
   matcher: [
     "/dashboard/:path*",
     "/tickets/:path*",
     "/checkout/:path*",
+    "/profile/:path*",
+    "/passes/:path*",
   ],
 };

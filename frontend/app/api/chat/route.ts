@@ -16,24 +16,22 @@ const ipRequestHistory = new Map<string, number[]>()
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now()
-  const timestamps = ipRequestHistory.get(ip) || []
   const windowStart = now - RATE_LIMIT_WINDOW_MS
-  const recent = timestamps.filter((t) => t > windowStart)
-  
-  if (recent.length >= MAX_REQUESTS_PER_WINDOW) {
+  const timestamps = (ipRequestHistory.get(ip) || []).filter((t) => t > windowStart)
+
+  if (timestamps.length >= MAX_REQUESTS_PER_WINDOW) {
     return false
   }
 
-  recent.push(now)
-  ipRequestHistory.set(ip, recent)
-  
-  // Clean up stale entries periodically
-  if (ipRequestHistory.size > 2000) {
-    ipRequestHistory.forEach((list: number[], key: string) => {
-      if (list.every((t: number) => t <= windowStart)) {
+  timestamps.push(now)
+  ipRequestHistory.set(ip, timestamps)
+
+  if (ipRequestHistory.size > 200) {
+    for (const [key, list] of ipRequestHistory.entries()) {
+      if (!list.some((t) => t > windowStart)) {
         ipRequestHistory.delete(key)
       }
-    })
+    }
   }
   return true
 }
