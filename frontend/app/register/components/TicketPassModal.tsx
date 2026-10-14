@@ -25,7 +25,7 @@ export const TicketPassModal: React.FC<TicketPassModalProps> = ({
   totalPassesCount,
 }) => {
   const shareText = encodeURIComponent(
-    `I just registered for PEC E-Summit 2026! 🔥 Join founders, investors, and builders at Punjab Engineering College on November 14–15. Get your delegate pass: https://esummit.pec.ac.in/register?ref=${currentBadge.id}`
+    `I just registered for PEC E-Summit 2026! Join founders, investors, and builders at Punjab Engineering College on November 14–15. Get your delegate pass: https://esummit.pec.ac.in/register?ref=${currentBadge.id}`
   )
   const shareUrl = encodeURIComponent(`https://esummit.pec.ac.in/register?ref=${currentBadge.id}`)
 

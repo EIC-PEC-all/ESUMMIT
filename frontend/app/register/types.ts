@@ -1,8 +1,9 @@
-import { GraduationCap, Terminal, Briefcase, Award } from 'lucide-react'
+import { GraduationCap, Terminal, Briefcase, Award, Shield, Crown, Gem } from 'lucide-react'
 
 export interface PassTier {
   id: string
   title: string
+  category?: 'attendee' | 'startup'
   tagline: string
   desc: string
   fee: number
@@ -15,51 +16,41 @@ export interface PassTier {
 
 export const PASS_TIERS: PassTier[] = [
   {
-    id: 'student',
-    title: 'Student Pass',
-    tagline: 'General Access',
-    desc: 'Keynotes, keynote panels, open startup expo, and all public workshops.',
-    fee: 0,
-    feeLabel: 'FREE',
-    badge: 'STUDENT PASS',
-    defaultEventId: 'ev-2',
-    icon: GraduationCap,
+    id: 'silver',
+    title: 'Silver Pass',
+    category: 'startup',
+    tagline: 'Discovery Tier',
+    desc: 'Expo showcase attendance, keynote speaker sessions & delegate kit.',
+    fee: 1000,
+    feeLabel: '₹1,000 + GST',
+    badge: 'STARTUP EXPO',
+    icon: Shield,
   },
   {
-    id: 'hackathon',
-    title: 'Hackathon Pass',
-    tagline: '24-Hour Sprint',
-    desc: 'Overnight coding workspace, meals, mentorship, and ₹5L+ prize pool.',
-    fee: 199,
-    feeLabel: '₹199',
-    badge: 'HACKATHON PASS',
-    defaultEventId: 'ev-1',
+    id: 'gold',
+    title: 'Gold Pass',
+    category: 'startup',
+    tagline: 'Startup Growth',
+    desc: '10-minute stage pitch, investor panel, 2 delegate passes & channel branding.',
+    fee: 3500,
+    feeLabel: '₹3,500 + GST',
+    badge: 'MOST POPULAR',
     popular: true,
-    icon: Terminal,
+    icon: Crown,
   },
   {
-    id: 'founder',
-    title: 'Pitch Pass',
-    tagline: 'Startup Dealroom',
-    desc: 'Pitch to VCs, angel investors, expo showcase stall, and 1:1 meetings.',
-    fee: 799,
-    feeLabel: '₹799',
-    badge: 'FOUNDER PASS',
-    defaultEventId: 'ev-5',
-    icon: Briefcase,
-  },
-  {
-    id: 'ambassador',
-    title: 'Ambassador',
-    tagline: 'Campus Leader',
-    desc: 'Represent your college, get VIP access, leadership certification, and goodies.',
-    fee: 0,
-    feeLabel: 'FREE',
-    badge: 'AMBASSADOR PASS',
-    defaultEventId: 'ev-6',
-    icon: Award,
+    id: 'diamond',
+    title: 'Diamond Pass',
+    category: 'startup',
+    tagline: 'Comprehensive Expo',
+    desc: 'Dedicated 10×10 ft stall, on-site PEC hiring desk & VIP investor dinner.',
+    fee: 8000,
+    feeLabel: '₹8,000 + GST',
+    badge: 'VIP STALL',
+    icon: Gem,
   },
 ]
+
 
 export const INTEREST_TRACKS = [
   'Artificial Intelligence & ML',

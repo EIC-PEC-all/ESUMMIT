@@ -1,13 +1,15 @@
+import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import RegisterClient from './RegisterClient'
 
 export const metadata: Metadata = {
-  title: 'Register & Delegate Passes — PEC E-Summit 2026',
+  title: 'Register & Passes — PEC E-Summit 2026',
   description:
-    'Claim your delegate pass for PEC E-Summit 2026. Free Student Delegate passes, Startup Founder Pitch passes, and Hackathon Builder passes available now at Punjab Engineering College, Chandigarh.',
+    'Claim your official pass for PEC E-Summit 2026. Silver, Gold, and Diamond passes available now at Punjab Engineering College, Chandigarh.',
   alternates: {
     canonical: '/register',
   },
+
   openGraph: {
     title: 'Register for PEC E-Summit 2026 — Delegate Passes',
     description:
@@ -35,5 +37,10 @@ export const metadata: Metadata = {
 }
 
 export default function RegisterPage() {
-  return <RegisterClient />
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0B1410]" />}>
+      <RegisterClient />
+    </Suspense>
+  )
 }
+

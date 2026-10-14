@@ -11,8 +11,11 @@ import {
   ShieldCheck,
   CheckCircle2,
   Save,
+  MapPin,
 } from 'lucide-react'
 import type { AttendeeProfile } from '@/app/profile/ProfileClient'
+import { STATE_NAMES, getCitiesForState } from '@/data/indiaLocations'
+import { GRADUATION_YEARS, normalizeGradYear } from '@/lib/onboarding'
 
 interface AccountPreferencesFormProps {
   profile: AttendeeProfile
@@ -50,6 +53,7 @@ export default function AccountPreferencesForm({
             </div>
             <p className="text-xs text-neutral-400 font-mono mt-0.5">
               {profile.college || 'Punjab Engineering College (PEC)'}
+              {profile.city && profile.state ? ` • ${profile.city}, ${profile.state}` : ''}
             </p>
           </div>
         </div>
@@ -146,6 +150,83 @@ export default function AccountPreferencesForm({
               </div>
             </div>
 
+            {/* State & City */}
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-mono font-bold text-neutral-300 uppercase tracking-wider">
+                State / UT
+              </label>
+              <div className="relative">
+                <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                <select
+                  value={profile.state || ''}
+                  onChange={(e) => setProfile({ ...profile, state: e.target.value, city: '' })}
+                  className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
+                >
+                  <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                    Select State / UT
+                  </option>
+                  {STATE_NAMES.map((st) => (
+                    <option key={st} value={st} className="bg-[#0B1410] text-white">
+                      {st}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-[11px] font-mono font-bold text-neutral-300 uppercase tracking-wider">
+                City / District
+              </label>
+              <div className="relative">
+                <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                <select
+                  disabled={!profile.state}
+                  value={
+                    profile.city && !getCitiesForState(profile.state || '').includes(profile.city)
+                      ? 'Other'
+                      : profile.city || ''
+                  }
+                  onChange={(e) => {
+                    if (e.target.value === 'Other') {
+                      setProfile({ ...profile, city: '' })
+                    } else {
+                      setProfile({ ...profile, city: e.target.value })
+                    }
+                  }}
+                  className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer disabled:opacity-40"
+                >
+                  <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                    {profile.state ? `Select City in ${profile.state}` : 'Select State / UT first'}
+                  </option>
+                  {getCitiesForState(profile.state || '').map((ct) => (
+                    <option key={ct} value={ct} className="bg-[#0B1410] text-white">
+                      {ct}
+                    </option>
+                  ))}
+                  <option value="Other" className="bg-[#0B1410] text-mint">
+                    + Other (Specify City)
+                  </option>
+                </select>
+              </div>
+
+              {profile.state && (!profile.city || !getCitiesForState(profile.state || '').includes(profile.city)) && (
+                <div className="pt-1.5 space-y-1">
+                  <label className="block text-[10px] font-mono text-mint uppercase font-semibold">
+                    Specify City / Town Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={profile.city || ''}
+                    onChange={(e) => setProfile({ ...profile, city: e.target.value })}
+                    placeholder="e.g. Pilani, Abohar, Manipal, etc."
+                    className="w-full rounded-xl border border-mint/40 bg-[#07130F] px-3.5 py-2 text-xs text-white placeholder-neutral-500 outline-none focus:border-mint transition-colors"
+                  />
+                </div>
+              )}
+            </div>
+
             {/* Branch / Department */}
             <div className="space-y-1.5">
               <label className="block text-[11px] font-mono font-bold text-neutral-300 uppercase tracking-wider">
@@ -155,7 +236,7 @@ export default function AccountPreferencesForm({
                 <BookOpen size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
                 <input
                   type="text"
-                  value={profile.branch}
+                  value={profile.branch || ''}
                   onChange={(e) => setProfile({ ...profile, branch: e.target.value })}
                   placeholder="e.g. Computer Science, Mechanical, MBA"
                   className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-3.5 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-mint transition-colors"
@@ -171,16 +252,15 @@ export default function AccountPreferencesForm({
               <div className="relative">
                 <GraduationCap size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
                 <select
-                  value={profile.gradYear}
+                  value={normalizeGradYear(profile.gradYear)}
                   onChange={(e) => setProfile({ ...profile, gradYear: e.target.value })}
                   className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
                 >
-                  <option value="1st Year (Class of 2029)" className="bg-[#0B1410] text-white">1st Year (Class of 2029)</option>
-                  <option value="2nd Year (Class of 2028)" className="bg-[#0B1410] text-white">2nd Year (Class of 2028)</option>
-                  <option value="3rd Year (Class of 2027)" className="bg-[#0B1410] text-white">3rd Year (Class of 2027)</option>
-                  <option value="Final Year (Class of 2026)" className="bg-[#0B1410] text-white">Final Year (Class of 2026)</option>
-                  <option value="Postgraduate / Research" className="bg-[#0B1410] text-white">Postgraduate / Research Scholar</option>
-                  <option value="Alumni / Founder / Professional" className="bg-[#0B1410] text-white">Alumni / Founder / Working Professional</option>
+                  {GRADUATION_YEARS.map((yr) => (
+                    <option key={yr.value} value={yr.value} className="bg-[#0B1410] text-white">
+                      {yr.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

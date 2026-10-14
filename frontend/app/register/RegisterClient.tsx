@@ -24,10 +24,11 @@ import {
   Briefcase,
   Award,
   AlertCircle,
+  MapPin,
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/context/AuthContext'
 import { TOAST_STYLE } from '@/lib/constants'
@@ -41,6 +42,18 @@ import {
 
 import { MASTER_EVENTS, EventItem } from '@/data/summitData'
 import { useSummitData } from '@/hooks/useSummitData'
+import { PASS_TIERS, PassTier, INTEREST_TRACKS, EVENT_CATEGORIES } from './types'
+import {
+  getStoredProfile,
+  saveStoredProfile,
+  PROFILE_UPDATED_EVENT,
+  GRADUATION_YEARS,
+  normalizeGradYear,
+} from '@/lib/onboarding'
+import { STATE_NAMES, getCitiesForState } from '@/data/indiaLocations'
+
+export type { PassTier }
+export { PASS_TIERS, INTEREST_TRACKS, EVENT_CATEGORIES }
 
 // Maps tier.title → backend passType — must mirror PASS_TYPE_MAP in registrations.ts
 const PASS_TITLE_TO_TYPE: Record<string, string> = {
@@ -48,6 +61,9 @@ const PASS_TITLE_TO_TYPE: Record<string, string> = {
   'Hackathon Pass': 'HACKATHON_BUILDER',
   'Pitch Pass': 'FOUNDER_PITCH',
   'Ambassador': 'CAMPUS_AMBASSADOR',
+  'Silver Pass': 'STARTUP_SILVER',
+  'Gold Pass': 'STARTUP_GOLD',
+  'Diamond Pass': 'STARTUP_DIAMOND',
 }
 
 // Normalise a stored category string to its canonical backend type
@@ -57,6 +73,9 @@ const normaliseCategory = (cat: string): string => {
     'HACKATHON_BUILDER': 'HACKATHON_BUILDER',
     'FOUNDER_PITCH': 'FOUNDER_PITCH',
     'CAMPUS_AMBASSADOR': 'CAMPUS_AMBASSADOR',
+    'STARTUP_SILVER': 'STARTUP_SILVER',
+    'STARTUP_GOLD': 'STARTUP_GOLD',
+    'STARTUP_DIAMOND': 'STARTUP_DIAMOND',
     'Student Pass': 'STUDENT_GENERAL',
     'Student Delegate Pass': 'STUDENT_GENERAL',
     'Student Delegate': 'STUDENT_GENERAL',
@@ -68,90 +87,19 @@ const normaliseCategory = (cat: string): string => {
     'Ambassador': 'CAMPUS_AMBASSADOR',
     'Campus Ambassador Pass': 'CAMPUS_AMBASSADOR',
     'Campus Ambassador': 'CAMPUS_AMBASSADOR',
+    'Silver Pass': 'STARTUP_SILVER',
+    'Gold Pass': 'STARTUP_GOLD',
+    'Diamond Pass': 'STARTUP_DIAMOND',
+    'Startup Silver Pass': 'STARTUP_SILVER',
+    'Startup Gold Pass': 'STARTUP_GOLD',
+    'Startup Diamond Pass': 'STARTUP_DIAMOND',
   }
   return BACKEND_MAP[cat] ?? cat
 }
 
-export interface PassTier {
-  id: string
-  title: string
-  tagline: string
-  desc: string
-  fee: number
-  feeLabel: string
-  badge: string
-  defaultEventId?: string
-  popular?: boolean
-  icon: any
-}
-
-const PASS_TIERS: PassTier[] = [
-  {
-    id: 'student',
-    title: 'Student Pass',
-    tagline: 'General Access',
-    desc: 'Keynotes, keynote panels, open startup expo, and all public workshops.',
-    fee: 0,
-    feeLabel: 'FREE',
-    badge: 'STUDENT PASS',
-    defaultEventId: 'ev-2',
-    icon: GraduationCap,
-  },
-  {
-    id: 'hackathon',
-    title: 'Hackathon Pass',
-    tagline: '24-Hour Sprint',
-    desc: 'Overnight coding workspace, meals, mentorship, and ₹5L+ prize pool.',
-    fee: 199,
-    feeLabel: '₹199',
-    badge: 'HACKATHON PASS',
-    defaultEventId: 'ev-1',
-    popular: true,
-    icon: Terminal,
-  },
-  {
-    id: 'founder',
-    title: 'Pitch Pass',
-    tagline: 'Startup Dealroom',
-    desc: 'Pitch to VCs, angel investors, expo showcase stall, and 1:1 meetings.',
-    fee: 799,
-    feeLabel: '₹799',
-    badge: 'FOUNDER PASS',
-    defaultEventId: 'ev-5',
-    icon: Briefcase,
-  },
-  {
-    id: 'ambassador',
-    title: 'Ambassador',
-    tagline: 'Campus Leader',
-    desc: 'Represent your college, get VIP access, leadership certification, and goodies.',
-    fee: 0,
-    feeLabel: 'FREE',
-    badge: 'AMBASSADOR PASS',
-    defaultEventId: 'ev-6',
-    icon: Award,
-  },
-]
-
-const INTEREST_TRACKS = [
-  'Artificial Intelligence & ML',
-  'Fintech & Venture Finance',
-  'Pitch Competitions',
-  '24-Hour Hackathons',
-  'DeepTech & Robotics',
-  'Web3 & Cloud Systems',
-]
-
-const EVENT_CATEGORIES = [
-  { id: 'all', label: 'All' },
-  { id: 'hackathon', label: 'Hackathons' },
-  { id: 'pitch', label: 'Pitch & Startups' },
-  { id: 'finance', label: 'Finance' },
-  { id: 'workshops', label: 'Workshops' },
-]
-
 export default function RegisterClient() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { user, loginWithEmail, registerWithEmail, loginWithGoogle, resetPassword, logout } =
     useAuth()
   const { data: cmsData } = useSummitData()
@@ -159,7 +107,7 @@ export default function RegisterClient() {
 
   const [view, setView] = useState<'catalog' | 'checkout' | 'success' | 'passes' | 'auth'>('catalog')
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login')
-  const [selectedPassId, setSelectedPassId] = useState('student')
+  const [selectedPassId, setSelectedPassId] = useState('silver')
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [eventsList, setEventsList] = useState<EventItem[]>(MASTER_EVENTS)
@@ -176,6 +124,18 @@ export default function RegisterClient() {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Auto-switch tier from query parameters (e.g. /register?tier=gold or ?tier=diamond)
+  useEffect(() => {
+    const tierParam = searchParams?.get('tier')?.toLowerCase()
+    if (!tierParam) return
+
+    if (['silver', 'gold', 'diamond'].includes(tierParam)) {
+      setSelectedPassId(tierParam)
+    }
+  }, [searchParams])
+
+
 
   // Enforce Step 1: Google Auth Gate if not logged in
   useEffect(() => {
@@ -227,24 +187,72 @@ export default function RegisterClient() {
   const [authName, setAuthName] = useState('')
 
   // Form Inputs
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    college: '',
-    teamName: '',
-    gradYear: '2026',
-    referralCode: '',
+  const [formData, setFormData] = useState(() => {
+    const stored = getStoredProfile()
+    return {
+      name: stored?.name || '',
+      email: stored?.email || '',
+      phone: stored?.phone || '',
+      college: stored?.college || '',
+      state: stored?.state || '',
+      city: stored?.city || '',
+      branch: stored?.branch || '',
+      teamName: '',
+      gradYear: normalizeGradYear(stored?.gradYear) || '1st Year (Class of 2029)',
+      referralCode: '',
+    }
   })
 
-  // Pre-fill form when user logs in
+  const [customCityInput, setCustomCityInput] = useState(() => {
+    const stored = getStoredProfile()
+    if (stored?.state && stored?.city) {
+      const cities = getCitiesForState(stored.state)
+      if (!cities.includes(stored.city)) {
+        return stored.city
+      }
+    }
+    return ''
+  })
+
+  // Pre-fill form when user logs in or when attendee profile is updated
   useEffect(() => {
-    if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        name: prev.name || user.displayName || '',
-        email: user.email || prev.email || '',
-      }))
+    const syncProfileData = () => {
+      const stored = getStoredProfile()
+      if (stored) {
+        const normalizedGrad = normalizeGradYear(stored.gradYear)
+        setFormData((prev) => ({
+          ...prev,
+          name: stored.name || prev.name || user?.displayName || '',
+          email: stored.email || prev.email || user?.email || '',
+          phone: stored.phone || prev.phone || '',
+          college: stored.college || prev.college || '',
+          state: stored.state || prev.state || '',
+          city: stored.city || prev.city || '',
+          branch: stored.branch || prev.branch || '',
+          gradYear: normalizedGrad || prev.gradYear || '1st Year (Class of 2029)',
+        }))
+        if (stored.state && stored.city) {
+          const cities = getCitiesForState(stored.state)
+          if (!cities.includes(stored.city)) {
+            setCustomCityInput(stored.city)
+          }
+        }
+      } else if (user) {
+        setFormData((prev) => ({
+          ...prev,
+          name: prev.name || user.displayName || '',
+          email: prev.email || user.email || '',
+        }))
+      }
+    }
+
+    syncProfileData()
+    window.addEventListener(PROFILE_UPDATED_EVENT, syncProfileData)
+    window.addEventListener('storage', syncProfileData)
+
+    return () => {
+      window.removeEventListener(PROFILE_UPDATED_EVENT, syncProfileData)
+      window.removeEventListener('storage', syncProfileData)
     }
   }, [user])
 
@@ -343,11 +351,14 @@ export default function RegisterClient() {
       return
     }
     
-    const isAlreadyOwned = myRegistrations.some(r => r.category === selectedTier.title)
+    const isAlreadyOwned = myRegistrations.some(
+      (r) => normaliseCategory(r.category) === PASS_TITLE_TO_TYPE[selectedTier.title]
+    )
     if (isAlreadyOwned) {
       toast.error(`You have already claimed the ${selectedTier.title}.`, TOAST_STYLE)
       return
     }
+
 
     if (!formData.name.trim()) {
       toast.error('Please enter your full name.', TOAST_STYLE)
@@ -357,6 +368,19 @@ export default function RegisterClient() {
       toast.error('Please enter your email address.', TOAST_STYLE)
       return
     }
+
+    // Save any attendee profile changes so profile and passes stay in sync
+    saveStoredProfile({
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      college: formData.college.trim(),
+      state: formData.state,
+      city: formData.city,
+      branch: formData.branch,
+      gradYear: formData.gradYear,
+    })
+
     setView('checkout')
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -782,7 +806,8 @@ export default function RegisterClient() {
       </header>
 
       {/* ── BODY CONTENT ── */}
-      <div className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 pb-28 relative z-10">
+      <div className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 pb-24 sm:pb-28 relative z-10">
+
         <AnimatePresence mode="wait">
           {/* ══════════════════════════════════════════════════════════════
               VIEW: AUTH (LOGIN / SIGNUP / FORGOT PASSWORD)
@@ -1006,23 +1031,25 @@ export default function RegisterClient() {
 
               <form onSubmit={handleProceedToCheckout} className="space-y-6">
                 {/* ── 1. Pass Tier Selection Cards ── */}
-                <div className="space-y-2.5">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <h2 className="text-xs font-bold uppercase tracking-wider text-neutral-300 flex items-center gap-1.5">
                       <span className="w-4 h-4 rounded bg-white/10 text-white text-[10px] flex items-center justify-center font-mono font-bold">
                         1
                       </span>
-                      <span>Choose Your Ticket Tier</span>
+                      <span>Choose Your Summit Pass</span>
                     </h2>
                     <span className="text-[11px] text-neutral-500">All passes include summit ID &amp; kit</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {PASS_TIERS.map((tier) => {
                       const isSelected = selectedPassId === tier.id
                       const isAlreadyOwned = myRegistrations.some(
-                        r => normaliseCategory(r.category) === PASS_TITLE_TO_TYPE[tier.title]
+                        (r) => normaliseCategory(r.category) === PASS_TITLE_TO_TYPE[tier.title]
                       )
+                      const TierIcon = tier.icon
+
 
                       return (
                         <div
@@ -1032,28 +1059,29 @@ export default function RegisterClient() {
                               handlePassChange(tier.id)
                             }
                           }}
-                          className={`relative rounded-lg border p-3.5 transition-all flex flex-col justify-between gap-3 ${
+                          className={`relative rounded-xl border p-4 transition-all flex flex-col justify-between gap-3 ${
                             isAlreadyOwned
                               ? 'border-mint/20 bg-mint/5 opacity-80 cursor-not-allowed'
                               : isSelected
-                                ? 'border-mint bg-[#182A23] shadow-sm cursor-pointer'
+                                ? 'border-mint bg-[#182A23] shadow-md ring-1 ring-mint/40 cursor-pointer'
                                 : 'border-white/10 bg-[#13221C] hover:border-white/20 hover:bg-[#182A23] cursor-pointer'
                           }`}
                         >
                           {tier.popular && !isAlreadyOwned && (
-                            <span className="absolute -top-2 right-2 px-1.5 py-0.2 rounded bg-mint text-void text-[9px] font-bold uppercase tracking-wider">
+                            <span className="absolute -top-2 right-3 px-2 py-0.5 rounded-full bg-mint text-void text-[9px] font-bold uppercase tracking-wider shadow-sm">
                               Popular
                             </span>
                           )}
                           {isAlreadyOwned && (
-                            <span className="absolute -top-2 right-2 px-1.5 py-0.2 rounded bg-white/20 text-white text-[9px] font-bold uppercase tracking-wider">
+                            <span className="absolute -top-2 right-3 px-2 py-0.5 rounded-full bg-white/20 text-white text-[9px] font-bold uppercase tracking-wider">
                               Owned
                             </span>
                           )}
 
-                          <div className="space-y-1">
+                          <div className="space-y-1.5">
                             <div className="flex items-center justify-between">
-                              <span className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider">
+                              <span className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider flex items-center gap-1.5">
+                                {TierIcon && <TierIcon size={12} className="text-mint shrink-0" />}
                                 {tier.tagline}
                               </span>
                               <div
@@ -1084,9 +1112,11 @@ export default function RegisterClient() {
                             </span>
                             <span
                               className={`text-sm font-bold font-mono ${
-                                isAlreadyOwned 
-                                  ? 'text-mint' 
-                                  : tier.fee === 0 ? 'text-mint' : 'text-white'
+                                isAlreadyOwned
+                                  ? 'text-mint'
+                                  : tier.fee === 0
+                                    ? 'text-mint'
+                                    : 'text-white'
                               }`}
                             >
                               {isAlreadyOwned ? 'PURCHASED' : tier.fee === 0 ? 'FREE' : tier.feeLabel}
@@ -1098,14 +1128,21 @@ export default function RegisterClient() {
                   </div>
                 </div>
 
+
                 {/* ── 2. Contact Details ── */}
                 <div className="space-y-2.5">
-                  <h2 className="text-xs font-bold uppercase tracking-wider text-neutral-300 flex items-center gap-1.5">
-                    <span className="w-4 h-4 rounded bg-white/10 text-white text-[10px] flex items-center justify-center font-mono font-bold">
-                      2
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xs font-bold uppercase tracking-wider text-neutral-300 flex items-center gap-1.5">
+                      <span className="w-4 h-4 rounded bg-white/10 text-white text-[10px] flex items-center justify-center font-mono font-bold">
+                        2
+                      </span>
+                      <span>Your Contact Details</span>
+                    </h2>
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-mint/10 border border-mint/20 text-mint text-[10px] font-mono">
+                      <CheckCircle2 size={11} className="text-mint shrink-0" />
+                      <span>Fetched from Profile</span>
                     </span>
-                    <span>Your Contact Details</span>
-                  </h2>
+                  </div>
 
                   <div className="rounded-lg border border-white/10 bg-[#13221C] p-4 space-y-3">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1152,10 +1189,11 @@ export default function RegisterClient() {
 
                       <div className="space-y-1">
                         <label className="block text-[11px] font-medium text-neutral-300">
-                          College / Institute
+                          College / Institute <span className="text-mint">*</span>
                         </label>
                         <input
                           type="text"
+                          required
                           value={formData.college}
                           onChange={(e) => setFormData({ ...formData, college: e.target.value })}
                           placeholder="Punjab Engineering College, Chandigarh"
@@ -1163,23 +1201,104 @@ export default function RegisterClient() {
                         />
                       </div>
 
+                      {/* State / UT */}
+                      <div className="space-y-1">
+                        <label className="block text-[11px] font-medium text-neutral-300">
+                          State / UT <span className="text-mint">*</span>
+                        </label>
+                        <select
+                          required
+                          value={formData.state || ''}
+                          onChange={(e) => {
+                            const newState = e.target.value
+                            setFormData({ ...formData, state: newState, city: '' })
+                            setCustomCityInput('')
+                          }}
+                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer"
+                        >
+                          <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                            Select State / UT
+                          </option>
+                          {STATE_NAMES.map((st) => (
+                            <option key={st} value={st} className="bg-[#0B1410] text-white">
+                              {st}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* City / District */}
+                      <div className="space-y-1">
+                        <label className="block text-[11px] font-medium text-neutral-300">
+                          City / District <span className="text-mint">*</span>
+                        </label>
+                        <select
+                          required
+                          disabled={!formData.state}
+                          value={
+                            formData.city && !getCitiesForState(formData.state || '').includes(formData.city)
+                              ? 'Other'
+                              : formData.city || ''
+                          }
+                          onChange={(e) => {
+                            if (e.target.value === 'Other') {
+                              setFormData({ ...formData, city: customCityInput || '' })
+                            } else {
+                              setFormData({ ...formData, city: e.target.value })
+                              setCustomCityInput('')
+                            }
+                          }}
+                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer disabled:opacity-40"
+                        >
+                          <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                            {formData.state ? `Select City in ${formData.state}` : 'Select State / UT first'}
+                          </option>
+                          {getCitiesForState(formData.state || '').map((ct) => (
+                            <option key={ct} value={ct} className="bg-[#0B1410] text-white">
+                              {ct}
+                            </option>
+                          ))}
+                          <option value="Other" className="bg-[#0B1410] text-mint font-medium">
+                            + Other (Specify City)
+                          </option>
+                        </select>
+
+                        {formData.state && (formData.city === '' || !getCitiesForState(formData.state || '').includes(formData.city)) && (
+                          <div className="pt-1">
+                            <input
+                              type="text"
+                              required
+                              value={formData.city || ''}
+                              onChange={(e) => {
+                                setCustomCityInput(e.target.value)
+                                setFormData({ ...formData, city: e.target.value })
+                              }}
+                              placeholder="Specify city / town name"
+                              className="w-full rounded-md border border-mint/40 bg-[#0B1410] px-3 py-1.5 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Graduation Year */}
                       <div className="space-y-1">
                         <label className="block text-[11px] font-medium text-neutral-300">
                           Graduation Year
                         </label>
                         <select
-                          value={formData.gradYear}
+                          value={normalizeGradYear(formData.gradYear)}
                           onChange={(e) => setFormData({ ...formData, gradYear: e.target.value })}
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors"
+                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer"
                         >
-                          <option value="2026">Class of 2026</option>
-                          <option value="2027">Class of 2027</option>
-                          <option value="2028">Class of 2028</option>
-                          <option value="2029">Class of 2029</option>
-                          <option value="Alumni">Alumni / Professional</option>
+                          {GRADUATION_YEARS.map((yr) => (
+                            <option key={yr.value} value={yr.value} className="bg-[#0B1410] text-white">
+                              {yr.label}
+                            </option>
+                          ))}
                         </select>
                       </div>
 
+                      {/* Referral / CA Code */}
                       <div className="space-y-1">
                         <label className="block text-[11px] font-medium text-neutral-300">
                           Referral / CA Code
@@ -1208,7 +1327,7 @@ export default function RegisterClient() {
                     <span className="text-[11px] text-neutral-500 font-mono">Optional</span>
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {INTEREST_TRACKS.map((track) => {
                       const isSelected = selectedTracks.includes(track)
                       return (
@@ -1216,10 +1335,10 @@ export default function RegisterClient() {
                           type="button"
                           key={track}
                           onClick={() => toggleTrack(track)}
-                          className={`text-xs px-2.5 py-1 rounded-md border transition-all ${
+                          className={`text-xs px-3.5 py-1.5 rounded-full border transition-all ${
                             isSelected
-                              ? 'border-mint bg-mint/10 text-mint font-medium'
-                              : 'border-white/10 bg-white/5 text-neutral-400 hover:text-white'
+                              ? 'border-mint bg-mint/10 text-mint font-medium shadow-sm'
+                              : 'border-white/10 bg-white/5 text-neutral-400 hover:text-white hover:border-white/20'
                           }`}
                         >
                           <span>{track}</span>
@@ -1248,13 +1367,14 @@ export default function RegisterClient() {
 
                     <button
                       type="submit"
-                      className="px-5 py-2 rounded-md bg-mint hover:bg-white text-void text-xs sm:text-sm font-bold transition-colors flex items-center gap-1.5 shadow-sm active:scale-98"
+                      className="px-6 py-2.5 rounded-full bg-mint hover:bg-white text-void text-xs sm:text-sm font-bold transition-all flex items-center gap-1.5 shadow-sm active:scale-98 shrink-0 hover:shadow-mint/20"
                     >
                       <span>Continue to Summary</span>
                       <ChevronRight size={14} />
                     </button>
                   </div>
                 </div>
+
               </form>
             </motion.div>
           )}
@@ -1296,7 +1416,7 @@ export default function RegisterClient() {
                   {/* Selected Pass Card */}
                   <div className="rounded-lg border border-white/10 bg-[#13221C] p-4 space-y-1.5">
                     <span className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wider font-mono">
-                      Selected Ticket
+                      Selected Pass
                     </span>
                     <div className="flex items-center justify-between">
                       <div>
@@ -1335,6 +1455,22 @@ export default function RegisterClient() {
                         <div>
                           <span className="text-neutral-500 block text-[10px]">Phone</span>
                           <span className="text-neutral-300 font-medium">{formData.phone}</span>
+                        </div>
+                      )}
+                      {formData.state && (
+                        <div>
+                          <span className="text-neutral-500 block text-[10px]">Location</span>
+                          <span className="text-neutral-300 font-medium">
+                            {formData.city ? `${formData.city}, ${formData.state}` : formData.state}
+                          </span>
+                        </div>
+                      )}
+                      {formData.gradYear && (
+                        <div>
+                          <span className="text-neutral-500 block text-[10px]">Graduation / Year</span>
+                          <span className="text-neutral-300 font-medium">
+                            {normalizeGradYear(formData.gradYear)}
+                          </span>
                         </div>
                       )}
                     </div>
