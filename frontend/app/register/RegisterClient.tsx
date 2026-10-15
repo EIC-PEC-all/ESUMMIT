@@ -16,7 +16,6 @@ import {
   Edit3,
   Trash2,
   X,
-  CreditCard,
   Tag,
   Search,
   GraduationCap,
@@ -389,119 +388,15 @@ export default function RegisterClient() {
   const handleCompleteOrder = async () => {
     setIsSubmitting(true)
     setPaymentError(null)
-    const toastId = toast.loading('Securing your pass...', TOAST_STYLE)
+    const toastId = toast.loading('Submitting your registration...', TOAST_STYLE)
 
     try {
-      // If payment required (amount > 0)
-      if (finalPrice > 0) {
-        let orderData = { id: `order_${Date.now()}`, key_id: 'rzp_test_placeholder' }
-        try {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
-          const orderRes = await fetch(`${apiUrl}/payments/create-order`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              amount: finalPrice,
-              passType: selectedPassId,
-              email: formData.email,
-              name: formData.name,
-            }),
-          })
-          if (orderRes.ok) {
-            orderData = await orderRes.json()
-          }
-        } catch {
-          // Demo fallback
-        }
-
-        const isScriptLoaded = await new Promise<boolean>((resolve) => {
-          if (typeof window !== 'undefined' && (window as any).Razorpay) {
-            resolve(true)
-            return
-          }
-          const script = document.createElement('script')
-          script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-          script.onload = () => resolve(true)
-          script.onerror = () => resolve(false)
-          document.body.appendChild(script)
-        })
-
-        if (!isScriptLoaded || !(window as any).Razorpay) {
-          toast.dismiss(toastId)
-          if (process.env.NEXT_PUBLIC_DEMO_PAYMENTS === 'true') {
-            await finalizeSuccessfulBooking('DEMO_TXN_' + Date.now())
-            return
-          }
-          setIsSubmitting(false)
-          const loadError = 'Payment gateway could not be loaded. Please check your connection or disable ad-blockers.'
-          setPaymentError(loadError)
-          toast.error(loadError, TOAST_STYLE)
-          return
-        }
-
-        const options = {
-          key: orderData.key_id || 'rzp_test_51MockKey',
-          amount: finalPrice * 100,
-          currency: 'INR',
-          name: 'PEC E-Summit 2026',
-          description: `${selectedTier.title} - Official Pass`,
-          image: '/esummit-mark.png',
-          order_id: orderData.id.startsWith('order_') ? undefined : orderData.id,
-          handler: async function (response: any) {
-            await finalizeSuccessfulBooking(response.razorpay_payment_id || `txn_${Date.now()}`)
-          },
-          prefill: {
-            name: formData.name,
-            email: formData.email,
-            contact: formData.phone || '',
-          },
-          theme: {
-            color: '#00F5D4',
-          },
-          modal: {
-            ondismiss: function () {
-              setIsSubmitting(false)
-              toast.dismiss(toastId)
-              setPaymentError((prev) =>
-                prev && prev.startsWith('Payment Failed')
-                  ? prev
-                  : 'Payment was cancelled or interrupted. You have not been charged.'
-              )
-              toast.error('Payment cancelled or incomplete.', TOAST_STYLE)
-            },
-          },
-        }
-
-        const rzp = new (window as any).Razorpay(options)
-
-        rzp.on('payment.failed', function (response: any) {
-          setIsSubmitting(false)
-          toast.dismiss(toastId)
-          const desc = response?.error?.description || response?.error?.reason || 'Transaction could not be completed.'
-          setPaymentError(`Payment Failed: ${desc}`)
-          toast.error(`Payment failed: ${desc}`, TOAST_STYLE)
-        })
-
-        try {
-          rzp.open()
-        } catch (e: any) {
-          setIsSubmitting(false)
-          const msg = e?.message || 'Failed to launch payment interface. Please try again.'
-          setPaymentError(`Payment Failed: ${msg}`)
-          toast.error(msg, TOAST_STYLE)
-        }
-
-        toast.dismiss(toastId)
-        return
-      }
-
-      // Free Pass
       await finalizeSuccessfulBooking(undefined)
       toast.dismiss(toastId)
     } catch (err: any) {
       console.error(err)
       toast.dismiss(toastId)
-      const errorMsg = err?.message || 'Booking failed. Please try again.'
+      const errorMsg = err?.message || 'Registration failed. Please try again.'
       setPaymentError(errorMsg)
       toast.error(errorMsg, TOAST_STYLE)
       setIsSubmitting(false)
@@ -524,18 +419,18 @@ export default function RegisterClient() {
         tracks: selectedTracks.length > 0 ? selectedTracks : [selectedTier.title],
         selectedEvents: selectedEventTitles,
         amountPaid: finalPrice,
-        paymentStatus: finalPrice === 0 ? 'FREE' : 'PAID',
-        paymentId,
+        paymentStatus: finalPrice === 0 ? 'FREE' : 'PENDING',
+        paymentId: paymentId || 'CONTACT_OFFLINE',
         teamName: formData.teamName,
       })
 
       setCurrentBadge(record)
       await fetchRegistrations()
       setView('success')
-      toast.success('Your pass is confirmed!', TOAST_STYLE)
+      toast.success('Registration received! We will contact you soon.', TOAST_STYLE)
     } catch (err: any) {
       console.error(err)
-      const errorMsg = err?.message || 'Failed to save booking. Please try again.'
+      const errorMsg = err?.message || 'Failed to save registration. Please try again.'
       setPaymentError(errorMsg)
       toast.error(errorMsg, TOAST_STYLE)
     } finally {
@@ -622,14 +517,14 @@ export default function RegisterClient() {
     if (!ctx) return
 
     const bgGradient = ctx.createLinearGradient(0, 0, 0, 1920)
-    bgGradient.addColorStop(0, '#060D0B')
-    bgGradient.addColorStop(0.5, '#0D1C18')
-    bgGradient.addColorStop(1, '#040807')
+    bgGradient.addColorStop(0, '#050B06')
+    bgGradient.addColorStop(0.5, '#0D1C10')
+    bgGradient.addColorStop(1, '#020603')
     ctx.fillStyle = bgGradient
     ctx.fillRect(0, 0, 1080, 1920)
 
     ctx.textAlign = 'center'
-    ctx.fillStyle = '#00F5D4'
+    ctx.fillStyle = '#8AC53F'
     ctx.font = 'bold 36px monospace'
     ctx.fillText('PEC E-SUMMIT 2026', 540, 220)
 
@@ -637,7 +532,7 @@ export default function RegisterClient() {
     ctx.font = '900 84px sans-serif'
     ctx.fillText('OFFICIAL SUMMIT', 540, 320)
 
-    ctx.fillStyle = '#00F5D4'
+    ctx.fillStyle = '#8AC53F'
     ctx.font = '900 84px sans-serif'
     ctx.fillText('ENTRY PASS', 540, 410)
 
@@ -649,23 +544,23 @@ export default function RegisterClient() {
     ctx.save()
     ctx.beginPath()
     ctx.rect(cardX, cardY, cardW, cardH)
-    ctx.fillStyle = '#0D1C18'
+    ctx.fillStyle = '#0D1C10'
     ctx.fill()
     ctx.lineWidth = 2
-    ctx.strokeStyle = 'rgba(0, 245, 212, 0.35)'
+    ctx.strokeStyle = 'rgba(138, 197, 63, 0.35)'
     ctx.stroke()
     ctx.restore()
 
     const categoryText = currentBadge?.category || 'SUMMIT PASS'
-    ctx.fillStyle = 'rgba(0, 245, 212, 0.15)'
+    ctx.fillStyle = 'rgba(138, 197, 63, 0.15)'
     ctx.beginPath()
     ctx.rect(540 - 180, cardY + 60, 360, 60)
     ctx.fill()
-    ctx.strokeStyle = '#00F5D4'
+    ctx.strokeStyle = '#8AC53F'
     ctx.lineWidth = 1.5
     ctx.stroke()
 
-    ctx.fillStyle = '#00F5D4'
+    ctx.fillStyle = '#8AC53F'
     ctx.font = 'bold 26px monospace'
     ctx.fillText(categoryText.toUpperCase(), 540, cardY + 100)
 
@@ -692,7 +587,7 @@ export default function RegisterClient() {
 
     const finishAndDownload = () => {
       const ticketId = currentBadge?.id || 'PEC-000000'
-      ctx.fillStyle = '#00F5D4'
+      ctx.fillStyle = '#8AC53F'
       ctx.font = 'bold 32px monospace'
       ctx.fillText(ticketId, 540, cardY + 760)
 
@@ -700,7 +595,7 @@ export default function RegisterClient() {
       ctx.font = 'bold 28px sans-serif'
       ctx.fillText(`${summitDates.toUpperCase()}  •  PEC CHANDIGARH`, 540, cardY + 840)
 
-      ctx.fillStyle = '#00F5D4'
+      ctx.fillStyle = '#8AC53F'
       ctx.font = 'bold 32px sans-serif'
       ctx.fillText("I'M ATTENDING PEC E-SUMMIT '26!", 540, 1680)
 
@@ -1542,18 +1437,26 @@ export default function RegisterClient() {
                       </div>
                     </div>
 
-                    {/* Payment Failure / Cancellation Banner */}
                     {paymentError && (
                       <div className="p-3 rounded-lg bg-red-500/15 border border-red-500/30 text-red-200 text-xs flex items-start gap-2.5 my-2.5">
                         <AlertCircle size={15} className="text-red-400 shrink-0 mt-0.5" />
                         <div className="flex-1">
-                          <p className="font-bold text-red-300">Payment Unsuccessful</p>
+                          <p className="font-bold text-red-300">Registration Error</p>
                           <p className="text-[11px] text-red-200/90 mt-0.5 leading-relaxed">{paymentError}</p>
                         </div>
                       </div>
                     )}
 
-                    {/* Submit / Pay Button */}
+                    <div className="p-3 rounded-lg bg-mint/10 border border-mint/20 text-mint text-xs flex items-start gap-2.5 my-2.5">
+                      <CheckCircle2 size={15} className="text-mint shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="font-bold text-mint">Direct Registration · We&apos;ll Contact You</p>
+                        <p className="text-[11px] text-gray-300 mt-0.5 leading-relaxed">
+                          No online payment required now. Submit your details below and our organizing team will contact you directly with pass confirmation and access instructions.
+                        </p>
+                      </div>
+                    </div>
+
                     <button
                       type="button"
                       disabled={isSubmitting}
@@ -1561,27 +1464,17 @@ export default function RegisterClient() {
                       className="w-full py-2.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-md"
                     >
                       {isSubmitting ? (
-                        <span>Processing...</span>
-                      ) : finalPrice === 0 ? (
-                        <>
-                          <CheckCircle2 size={14} />
-                          <span>Confirm Free Registration</span>
-                        </>
-                      ) : paymentError ? (
-                        <>
-                          <CreditCard size={14} />
-                          <span>Retry Payment: Pay ₹{finalPrice}</span>
-                        </>
+                        <span>Submitting Details...</span>
                       ) : (
                         <>
-                          <CreditCard size={14} />
-                          <span>Pay ₹{finalPrice} &amp; Get Pass</span>
+                          <CheckCircle2 size={14} />
+                          <span>Confirm Pass Registration</span>
                         </>
                       )}
                     </button>
 
-                    <p className="text-center text-[10px] text-neutral-500 font-mono">
-                      Your entry ticket will be sent to {formData.email}.
+                    <p className="text-center text-[10px] text-neutral-400 font-mono">
+                      Our team will reach out to {formData.email} regarding your pass.
                     </p>
                   </div>
                 </div>
@@ -1589,9 +1482,6 @@ export default function RegisterClient() {
             </motion.div>
           )}
 
-          {/* ══════════════════════════════════════════════════════════════
-              VIEW: SUCCESS / ISSUED E-BADGE
-          ══════════════════════════════════════════════════════════════ */}
           {view === 'success' && currentBadge && (
             <motion.div
               key="success-view"
@@ -1606,10 +1496,13 @@ export default function RegisterClient() {
                   <CheckCircle2 size={18} />
                 </div>
                 <h2 className="text-xl font-bold text-white tracking-tight">
-                  Your Pass is Confirmed!
+                  Registration Received!
                 </h2>
+                <p className="text-xs text-mint font-semibold">
+                  We&apos;ll contact you shortly regarding your pass.
+                </p>
                 <p className="text-xs text-neutral-400">
-                  Save your entry pass or show your QR code at the registration desk.
+                  Our team has received your details and will contact {currentBadge.email} with pass confirmation and next steps.
                 </p>
               </div>
 

@@ -34,27 +34,20 @@ export default function AlumniCard({ person, onSelect }: AlumniCardProps) {
         </div>
       </div>
 
-      {/* Translucent Milestone / Valuation Pill ("nasdaq wali line") */}
-      {person.valuation && (
-        <span className="mt-3.5 inline-block font-mono-data text-[8.5px] font-bold tracking-wider text-mint uppercase bg-mint/10 border border-mint/25 px-2.5 py-0.5 rounded-full line-clamp-1 max-w-[200px]">
-          {person.valuation}
-        </span>
-      )}
-
       {/* Name */}
-      <h3 className="mt-2 font-display text-base sm:text-lg font-bold uppercase tracking-wider text-white group-hover:text-mint transition-colors line-clamp-1 leading-snug">
+      <h3 className="mt-4 font-display text-base sm:text-lg font-bold uppercase tracking-wider text-white group-hover:text-mint transition-colors line-clamp-1 leading-snug">
         {person.name}
       </h3>
 
       {/* Year */}
-      <p className="mt-1 font-mono-data text-[10px] uppercase tracking-wider text-mint font-bold">
+      <p className="mt-1 font-mono-data text-[10.5px] uppercase tracking-wider text-mint font-bold">
         {person.batch}
       </p>
 
-      {/* Translucent Glass View Story Button */}
-      <div className="w-full mt-3.5 py-2 px-3 rounded-xl bg-white/[0.05] group-hover:bg-mint/15 border border-white/10 group-hover:border-mint/40 text-white/80 group-hover:text-mint font-mono-data text-[9px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all duration-300">
+      {/* Translucent Glass Pill View Story Button */}
+      <div className="w-full mt-4 py-2 px-4 rounded-full bg-white/[0.05] group-hover:bg-mint/15 border border-white/10 group-hover:border-mint/40 text-white/80 group-hover:text-mint font-mono-data text-[9.5px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all duration-300">
         <span>VIEW STORY</span>
-        <ArrowUpRight size={10} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        <ArrowUpRight size={11} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
       </div>
     </button>
   )

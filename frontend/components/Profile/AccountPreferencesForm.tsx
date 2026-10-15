@@ -39,7 +39,7 @@ export default function AccountPreferencesForm({
       {/* Delegate Overview Ribbon */}
       <div className="p-4 sm:p-5 rounded-2xl bg-[#0A1611] border border-white/10 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
         <div className="flex items-center gap-3.5 text-center sm:text-left">
-          <div className="w-12 h-12 rounded-full bg-mint/15 border border-mint/30 flex items-center justify-center text-mint font-display font-black text-lg shadow-[0_0_15px_rgba(0,242,178,0.2)] shrink-0">
+          <div className="w-12 h-12 rounded-full bg-mint/15 border border-mint/30 flex items-center justify-center text-mint font-display font-black text-lg shadow-[0_0_15px_rgba(138,197,63,0.25)] shrink-0">
             {initials}
           </div>
           <div>
@@ -277,7 +277,7 @@ export default function AccountPreferencesForm({
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_20px_rgba(0,242,178,0.3)] transition-all cursor-pointer disabled:opacity-50"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_20px_rgba(138,197,63,0.35)] transition-all cursor-pointer disabled:opacity-50"
           >
             <Save size={14} />
             <span>{isSaving ? 'Saving Details...' : 'Save Profile Changes'}</span>

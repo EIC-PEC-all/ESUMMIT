@@ -209,7 +209,7 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
                 href={registerLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-1.5 h-11 px-4 rounded-xl bg-mint text-[#040806] font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:bg-[#8ee430] transition-colors whitespace-nowrap cursor-pointer shadow-md"
+                className="w-full flex items-center justify-center gap-1.5 h-11 px-5 rounded-full bg-mint text-[#040806] font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:bg-[#8ee430] transition-colors whitespace-nowrap cursor-pointer shadow-md"
               >
                 <span>Register on Unstop</span>
                 <ExternalLink size={14} className="shrink-0" />
@@ -218,7 +218,7 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
               <a
                 href="/register"
                 onClick={onClose}
-                className="w-full flex items-center justify-center gap-1.5 h-11 px-4 rounded-xl bg-mint text-[#040806] font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:bg-[#8ee430] transition-colors whitespace-nowrap cursor-pointer shadow-md"
+                className="w-full flex items-center justify-center gap-1.5 h-11 px-5 rounded-full bg-mint text-[#040806] font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:bg-[#8ee430] transition-colors whitespace-nowrap cursor-pointer shadow-md"
               >
                 <span>Claim Pass for this Event</span>
                 <ExternalLink size={14} className="shrink-0" />

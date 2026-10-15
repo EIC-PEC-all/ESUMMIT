@@ -24,7 +24,7 @@ export default function EventsNavigation() {
       {/* Green top divider */}
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(0,245,212,0.5) 50%, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(138,197,63,0.5) 50%, transparent)' }}
       />
 
       <h2

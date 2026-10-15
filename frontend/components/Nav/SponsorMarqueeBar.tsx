@@ -21,12 +21,12 @@ export default function SponsorMarqueeBar({
       MASTER_SPONSORS.map((s) => ({
         id: s.id,
         name: s.name,
+        logo: s.logo,
         tier: s.tier === 'Ecosystem Partner' ? s.category : s.tier,
       })),
     []
   )
 
-  // 2 copies total for seamless -50% loop
   const loopItems = useMemo(() => [...sponsorItems, ...sponsorItems], [sponsorItems])
 
   const isTop = position === 'top'
@@ -43,7 +43,6 @@ export default function SponsorMarqueeBar({
             }`
       }`}
     >
-      {/* Countdown Badge */}
       <div
         className={`${
           isTop ? 'hidden sm:flex' : 'flex'
@@ -52,7 +51,6 @@ export default function SponsorMarqueeBar({
         <NavCountdown targetISO={countdownTarget} />
       </div>
 
-      {/* Fade Gradients */}
       <div
         className={`absolute top-0 bottom-0 w-16 z-10 pointer-events-none ${
           isTop
@@ -66,7 +64,6 @@ export default function SponsorMarqueeBar({
         style={{ background: 'linear-gradient(to left, var(--bg-section-1), transparent)' }}
       />
 
-      {/* Ticker Track */}
       <div
         className={`flex whitespace-nowrap animate-[marquee_65s_linear_infinite] md:animate-marquee hover:[animation-play-state:paused] items-center ${
           isTop ? 'pl-4 sm:pl-[135px] md:pl-[165px]' : 'pl-[135px] sm:pl-[165px]'
@@ -75,9 +72,19 @@ export default function SponsorMarqueeBar({
         {loopItems.map((item, i) => (
           <div
             key={`${position}-${item.id}-${i}`}
-            className="inline-flex items-center gap-2 mx-5 font-mono-data text-[10px] sm:text-xs shrink-0"
+            className="inline-flex items-center gap-2 mx-4 font-mono-data text-[10px] sm:text-xs shrink-0"
           >
             <span className="text-mint [.light_&]:text-[#A0C868] font-bold">•</span>
+            {item.logo && (
+              <span className="relative w-4 h-4 shrink-0 flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={item.logo}
+                  alt={item.name}
+                  className="max-h-3.5 max-w-4 object-contain filter brightness-90"
+                />
+              </span>
+            )}
             <span className="font-bold tracking-widest uppercase text-gradient-white">{item.name}</span>
             <span className="text-gradient-mint font-bold uppercase tracking-widest ml-1">{item.tier}</span>
           </div>

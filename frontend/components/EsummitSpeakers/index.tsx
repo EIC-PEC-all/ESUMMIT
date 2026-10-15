@@ -152,7 +152,7 @@ export default function EsummitSchedule() {
             }}
             className={`px-4 sm:px-5 py-2 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
               activeDayIndex === idx
-                ? 'bg-[#00F2B2] text-void font-black shadow-lg shadow-[#00F2B2]/25 scale-[1.02]'
+                ? 'bg-mint text-void font-black shadow-lg shadow-mint/25 scale-[1.02]'
                 : 'bg-white/5 text-gray-400 border border-white/10 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -168,22 +168,22 @@ export default function EsummitSchedule() {
             onClick={() => setMobileView('schedule')}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
               mobileView === 'schedule'
-                ? 'bg-white/15 text-white border border-[#00F2B2]/40 shadow-[0_0_15px_rgba(0,242,178,0.2)]'
+                ? 'bg-white/15 text-white border border-mint/40 shadow-[0_0_15px_rgba(138,197,63,0.2)]'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            <Calendar size={12} className={mobileView === 'schedule' ? 'text-[#00F2B2]' : ''} />
+            <Calendar size={12} className={mobileView === 'schedule' ? 'text-mint' : ''} />
             <span>Schedule</span>
           </button>
           <button
             onClick={() => setMobileView('map')}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
               mobileView === 'map'
-                ? 'bg-white/15 text-white border border-[#00F2B2]/40 shadow-[0_0_15px_rgba(0,242,178,0.2)]'
+                ? 'bg-white/15 text-white border border-mint/40 shadow-[0_0_15px_rgba(138,197,63,0.2)]'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
-            <MapPin size={12} className={mobileView === 'map' ? 'text-[#00F2B2]' : ''} />
+            <MapPin size={12} className={mobileView === 'map' ? 'text-mint' : ''} />
             <span>Campus Map</span>
           </button>
         </div>

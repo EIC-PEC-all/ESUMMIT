@@ -121,7 +121,7 @@ export default function LeafletMapInner({
         className: `highlights-marker-${vKey}`,
         html: `
           <div role="button" aria-label="${vData.venueName}" style="display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;">
-            <div style="width:30px;height:30px;background:#0A1612;border:1.5px solid #00F2B2;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#00F2B2;box-shadow:0 0 12px rgba(0,242,178,0.4);transition:all 0.2s ease;">
+            <div style="width:30px;height:30px;background:#0D1C10;border:1.5px solid #8AC53F;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#8AC53F;box-shadow:0 0 12px rgba(138,197,63,0.4);transition:all 0.2s ease;">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
             </div>
           </div>
@@ -137,8 +137,8 @@ export default function LeafletMapInner({
       }).addTo(mapInstance)
 
       marker.bindPopup(`
-        <div style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; background: #0A1612; color: #ffffff; border-radius: 8px;">
-          <h4 style="margin: 0 0 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #00F2B2; letter-spacing: 0.05em;">${vData.venueName}</h4>
+        <div style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; background: #0D1C10; color: #ffffff; border-radius: 8px;">
+          <h4 style="margin: 0 0 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #8AC53F; letter-spacing: 0.05em;">${vData.venueName}</h4>
           <p style="margin: 0; font-size: 9.5px; color: #94A3B8; text-transform: uppercase;">${vData.building}</p>
         </div>
       `)
@@ -200,14 +200,14 @@ export default function LeafletMapInner({
       <style>{`
         .custom-lime-map { background: #0B1410 !important; }
         .custom-lime-map .leaflet-popup-content-wrapper {
-          background: #0A1612 !important;
+          background: #0D1C10 !important;
           border-radius: 8px !important;
           border: 1px solid rgba(0, 242, 178, 0.3) !important;
           box-shadow: 0 15px 35px -10px rgba(0,0,0,0.9) !important;
           padding: 0 !important;
         }
         .custom-lime-map .leaflet-popup-tip {
-          background: #0A1612 !important;
+          background: #0D1C10 !important;
           border-bottom: 1px solid rgba(0, 242, 178, 0.3) !important;
           border-right: 1px solid rgba(0, 242, 178, 0.3) !important;
           box-shadow: none !important;
@@ -222,9 +222,9 @@ export default function LeafletMapInner({
       <div ref={mapContainerRef} className="h-full w-full z-10 custom-lime-map" />
 
       {/* Mobile Top Floating Pill: 100% unobtrusive */}
-      <div className="sm:hidden absolute top-3 left-3 right-3 z-20 flex items-center justify-between bg-[#0A1612]/92 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 border-l-2 border-l-[#00F2B2] shadow-lg">
+      <div className="sm:hidden absolute top-3 left-3 right-3 z-20 flex items-center justify-between bg-[#0D1C10]/92 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 border-l-2 border-l-[#8AC53F] shadow-lg">
         <div className="flex items-center gap-2 min-w-0">
-          <MapPin size={11} className="text-[#00F2B2] shrink-0" />
+          <MapPin size={11} className="text-[#8AC53F] shrink-0" />
           <span className="font-mono-data text-[10px] font-bold text-white truncate">
             {selectedEvent ? `${selectedEvent.venueName} • ${selectedEvent.building}` : 'PEC Campus • Tap pins to inspect'}
           </span>
@@ -232,7 +232,7 @@ export default function LeafletMapInner({
         {selectedEvent && (
           <button
             onClick={onClearSelection}
-            className="font-mono-data text-[9px] font-bold text-[#00F2B2] px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 shrink-0 ml-2"
+            className="font-mono-data text-[9px] font-bold text-[#8AC53F] px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 shrink-0 ml-2"
             aria-label="Clear selected venue"
           >
             CLEAR
@@ -241,9 +241,9 @@ export default function LeafletMapInner({
       </div>
 
       {/* Desktop Bottom Floating Card */}
-      <div className="hidden sm:block absolute bottom-5 left-5 z-20 w-72 bg-[#0A1612]/95 backdrop-blur-md p-4 rounded-2xl shadow-2xl border border-white/10 border-l-4 border-l-[#00F2B2]">
+      <div className="hidden sm:block absolute bottom-5 left-5 z-20 w-72 bg-[#0D1C10]/95 backdrop-blur-md p-4 rounded-2xl shadow-2xl border border-white/10 border-l-4 border-l-[#8AC53F]">
         <div className="mb-2.5 flex items-center justify-between">
-          <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-[#00F2B2]">
+          <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-[#8AC53F]">
             {selectedEvent ? 'Selected Venue' : `Day 0${activeDayIndex + 1} Venues`}
           </span>
           {selectedEvent && (
@@ -266,7 +266,7 @@ export default function LeafletMapInner({
         </p>
 
         <div className="flex items-center gap-1.5 font-mono-data text-[9px] text-gray-500 font-bold tracking-wider uppercase">
-          <MapPin size={10} className="text-[#00F2B2]" />
+          <MapPin size={10} className="text-[#8AC53F]" />
           <span>{selectedEvent ? selectedEvent.building : 'Chandigarh 160012'}</span>
         </div>
       </div>

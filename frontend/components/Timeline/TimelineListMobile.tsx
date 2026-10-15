@@ -46,7 +46,7 @@ export default function TimelineListMobile({
                 linkedEvent ? 'cursor-pointer active:scale-[0.99]' : ''
               } ${
                 isFlagship
-                  ? 'bg-gradient-to-b from-mint/[0.12] via-[#091D15]/90 to-[#040F0B]/95 border-mint/35 border-l-4 border-l-mint shadow-[0_8px_32px_0_rgba(0,242,178,0.12)]'
+                  ? 'bg-gradient-to-b from-mint/[0.12] via-[#091D15]/90 to-[#040F0B]/95 border-mint/35 border-l-4 border-l-mint shadow-[0_8px_32px_0_rgba(138,197,63,0.12)]'
                   : 'bg-gradient-to-b from-white/[0.08] via-[#091D15]/85 to-[#040F0B]/95 border-white/10 hover:border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]'
               }`}
             >

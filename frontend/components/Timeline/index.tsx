@@ -82,11 +82,11 @@ export default function Timeline() {
           {/* Top Control Bar: Day Switcher, Search, and Brochure */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 mb-6 pb-5 border-b border-white/[0.08]">
             {/* Segmented Day Switcher */}
-            <div className="inline-flex p-1 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md self-start sm:self-auto">
+            <div className="inline-flex p-1 rounded-full bg-white/[0.03] border border-white/10 backdrop-blur-md self-start sm:self-auto">
               <button
                 type="button"
                 onClick={() => setSelectedDay(1)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono-data transition-all ${
+                className={`px-4 py-1.5 rounded-full text-xs font-mono-data transition-all ${
                   selectedDay === 1
                     ? 'bg-mint/15 text-mint font-semibold border border-mint/30 shadow-sm'
                     : 'text-gray-400 hover:text-white'
@@ -97,7 +97,7 @@ export default function Timeline() {
               <button
                 type="button"
                 onClick={() => setSelectedDay(2)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono-data transition-all ${
+                className={`px-4 py-1.5 rounded-full text-xs font-mono-data transition-all ${
                   selectedDay === 2
                     ? 'bg-mint/15 text-mint font-semibold border border-mint/30 shadow-sm'
                     : 'text-gray-400 hover:text-white'
@@ -108,7 +108,7 @@ export default function Timeline() {
               <button
                 type="button"
                 onClick={() => setSelectedDay(0)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-mono-data transition-all ${
+                className={`px-4 py-1.5 rounded-full text-xs font-mono-data transition-all ${
                   selectedDay === 0
                     ? 'bg-mint/15 text-mint font-semibold border border-mint/30 shadow-sm'
                     : 'text-gray-400 hover:text-white'
@@ -128,7 +128,7 @@ export default function Timeline() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search sessions, halls..."
-                  className="w-full pl-8 pr-7 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.05] focus:bg-white/[0.07] border border-white/10 focus:border-mint/40 text-xs font-body text-white placeholder:text-gray-400 outline-none transition-all"
+                  className="w-full pl-8 pr-7 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.05] focus:bg-white/[0.07] border border-white/10 focus:border-mint/40 text-xs font-body text-white placeholder:text-gray-400 outline-none transition-all"
                 />
                 {searchQuery && (
                   <button
@@ -147,7 +147,7 @@ export default function Timeline() {
                 download="PEC-E-Summit-2026-Brochure.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-white text-xs font-mono-data font-medium transition-all shrink-0"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-gray-300 hover:text-white text-xs font-mono-data font-medium transition-all shrink-0"
               >
                 <Download className="w-3.5 h-3.5 text-mint" />
                 <span className="hidden sm:inline">Brochure (PDF)</span>

@@ -55,7 +55,7 @@ export default function NewHero() {
             priority
             fetchPriority="high"
             className="object-cover"
-            style={{ filter: 'saturate(0.9) contrast(1.04)' }}
+            style={{ filter: 'saturate(1.05) contrast(1.06)' }}
           />
         </div>
 
@@ -65,17 +65,27 @@ export default function NewHero() {
           style={{
             transform: 'translate3d(0,0,0)',
             touchAction: 'pan-y',
-            filter: 'saturate(0.9) contrast(1.04)',
+            filter: 'saturate(1.05) contrast(1.06)',
           }}
         />
 
-        {/* Subtle Seafoam Mint color grading overlay */}
+        {/* Electric Lime & Logo Navy Color Grading Overlay */}
         <div
           className="pointer-events-none absolute inset-0 z-1"
           style={{
             background:
-              'linear-gradient(135deg, rgba(0, 242, 178, 0.12) 0%, rgba(6, 13, 11, 0.35) 50%, rgba(0, 220, 159, 0.10) 100%)',
+              'linear-gradient(135deg, rgba(138, 197, 63, 0.28) 0%, rgba(5, 11, 6, 0.25) 48%, rgba(45, 44, 113, 0.24) 85%, rgba(138, 197, 63, 0.15) 100%)',
             mixBlendMode: 'color',
+          }}
+        />
+
+        {/* Iridescent Logo Sheen Wash across Currency Note folds */}
+        <div
+          className="pointer-events-none absolute inset-0 z-1"
+          style={{
+            background:
+              'linear-gradient(115deg, rgba(138, 197, 63, 0.16) 0%, transparent 42%, rgba(67, 65, 168, 0.16) 75%, transparent 100%)',
+            mixBlendMode: 'screen',
           }}
         />
 
@@ -84,7 +94,7 @@ export default function NewHero() {
           className="pointer-events-none absolute inset-0 z-1"
           style={{
             background:
-              'radial-gradient(ellipse at 50% 45%, rgba(0, 242, 178, 0.07) 0%, rgba(6, 13, 11, 0.52) 55%, rgba(6, 13, 11, 0.94) 100%)',
+              'radial-gradient(ellipse at 50% 45%, rgba(138, 197, 63, 0.10) 0%, rgba(5, 11, 6, 0.48) 55%, rgba(5, 11, 6, 0.94) 100%)',
           }}
         />
 

@@ -33,8 +33,8 @@ export default function HighlightCard({
       <motion.div
         className="flex w-full flex-col justify-between rounded-[24px] sm:rounded-[30px] border border-white/15 p-4 sm:p-6 shadow-2xl h-auto lg:h-[min(560px,calc(100dvh-7rem))] lg:overflow-y-auto"
         style={{
-          borderColor: 'rgba(0, 242, 178, 0.25)',
-          background: 'linear-gradient(180deg, #0A1914 0%, #06110D 100%)',
+          borderColor: 'rgba(138, 197, 63, 0.25)',
+          background: 'linear-gradient(180deg, var(--bg-section-1) 0%, var(--bg-void) 100%)',
           boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
         }}
       >
@@ -49,7 +49,7 @@ export default function HighlightCard({
                 {card.date}
               </span>
             </div>
-            <span className="font-mono-data text-[11px] font-bold uppercase tracking-widest text-[#00F2B2] bg-[#00F2B2]/10 px-2.5 py-0.5 rounded-full border border-[#00F2B2]/20">
+            <span className="font-mono-data text-[11px] font-bold uppercase tracking-widest text-mint bg-mint/10 px-2.5 py-0.5 rounded-full border border-mint/20">
               Phase {card.num}
             </span>
           </div>
@@ -68,7 +68,7 @@ export default function HighlightCard({
                   onClick={() => onSelectEvent(ev.id)}
                   className={`group flex cursor-pointer items-start py-2.5 px-2.5 rounded-xl transition-all duration-200 border-b border-white/5 last:border-b-0 ${
                     isSelected
-                      ? 'bg-[#00F2B2]/10 border-[#00F2B2]/30 text-[#00F2B2]'
+                      ? 'bg-mint/10 border-mint/30 text-mint'
                       : 'hover:bg-white/5'
                   }`}
                 >
@@ -76,7 +76,7 @@ export default function HighlightCard({
                     {/* Left: Time */}
                     <span
                       className={`shrink-0 pt-0.5 font-mono-data text-[11px] sm:text-xs font-semibold tracking-wider transition-colors ${
-                        isSelected ? 'text-[#00F2B2]' : 'text-gray-400 group-hover:text-gray-300'
+                        isSelected ? 'text-mint' : 'text-gray-400 group-hover:text-gray-300'
                       }`}
                     >
                       {ev.time}
@@ -105,7 +105,7 @@ export default function HighlightCard({
                       >
                         <span
                           className={`font-mono-data text-[9.5px] uppercase font-bold tracking-wider transition-colors ${
-                            isSelected ? 'text-[#00F2B2]' : 'text-gray-400 group-hover:text-gray-300'
+                            isSelected ? 'text-mint' : 'text-gray-400 group-hover:text-gray-300'
                           }`}
                         >
                           {ev.tag}
@@ -114,8 +114,8 @@ export default function HighlightCard({
                           size={11}
                           className={`transition-colors ${
                             isSelected
-                              ? 'fill-[#00F2B2] text-[#00F2B2]'
-                              : 'text-gray-500 group-hover:text-[#00F2B2]'
+                              ? 'fill-mint text-mint'
+                              : 'text-gray-500 group-hover:text-mint'
                           }`}
                         />
                       </button>
@@ -130,7 +130,7 @@ export default function HighlightCard({
         {/* Card Footer — Extra pb-14 on mobile to prevent FAB collision */}
         <div className="mt-4 pb-14 sm:pb-0 flex items-center justify-between border-t border-white/10 pt-3 font-mono-data text-[11px] text-gray-400">
           <span>PEC Sector 12, Chandigarh</span>
-          <span className="text-[#00F2B2] text-[10.5px]">Click event to locate venue</span>
+          <span className="text-mint text-[10.5px]">Click event to locate venue</span>
         </div>
       </motion.div>
     </div>

@@ -33,7 +33,7 @@ const marcellus = Marcellus({
 })
 
 export const viewport: Viewport = {
-  themeColor: '#060D0B',
+  themeColor: '#050B06',
 }
 
 export const metadata: Metadata = {

@@ -502,28 +502,28 @@ export const MASTER_ALUMNI: AlumniItem[] = [
 ]
 
 export const MASTER_SPONSORS: SponsorItem[] = [
-  { id: 'sp-1', name: 'Finvasia', tier: 'Title Sponsor', logo: 'https://cdn.simpleicons.org/f-secure/white', category: 'Fintech & Trading' },
-  { id: 'sp-2', name: 'SBI (State Bank of India)', tier: 'Powered By', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/SBI-Logo.svg', category: 'Banking Partner' },
-  { id: 'sp-3', name: 'Fireside Ventures', tier: 'Associate Sponsor', logo: 'https://cdn.simpleicons.org/firefoxbrowser/white', category: 'Venture Capital' },
-  { id: 'sp-4', name: 'Amar Ujala', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/newsblur/white', category: 'Media Partner' },
-  { id: 'sp-5', name: 'CII (Confederation of Indian Industry)', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/civic/white', category: 'Industry Partner' },
-  { id: 'sp-6', name: 'uTrade', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/trademarked/white', category: 'Algorithmic Trading' },
-  { id: 'sp-7', name: 'Monster Energy', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/monster/white', category: 'Energy Drink Partner' },
-  { id: 'sp-8', name: 'Vivo', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/vivo/white', category: 'Smartphone Partner' },
-  { id: 'sp-9', name: 'Chiratae Ventures', tier: 'Associate Sponsor', logo: 'https://cdn.simpleicons.org/chartdotjs/white', category: 'Venture Capital' },
-  { id: 'sp-10', name: 'Shree Ganesh (South Indian Food)', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/googlehangouts/white', category: 'Food Partner' },
-  { id: 'sp-11', name: 'Shoutlo', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/speakerdeck/white', category: 'Local Discovery' },
-  { id: 'sp-12', name: 'Young Indians (Yi)', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/youtubekids/white', category: 'Youth Leadership' },
-  { id: 'sp-13', name: 'Dainik Bhaskar', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/dailymotion/white', category: 'Print Media' },
-  { id: 'sp-14', name: 'CityWoofer', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/woocommerce/white', category: 'Ticketing & Events' },
-  { id: 'sp-15', name: 'Venture Wolf', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/wolfram/white', category: 'Startup Accelerator' },
-  { id: 'sp-16', name: "Victoria's Cafe", tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/vlcmediaplayer/white', category: 'Hospitality' },
-  { id: 'sp-17', name: 'JAL', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/japanairlines/white', category: 'Hydration Partner' },
-  { id: 'sp-18', name: 'CITCO', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/cisco/white', category: 'Tourism Partner' },
-  { id: 'sp-19', name: 'Smaaash', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/smashdotgg/white', category: 'Gaming & Entertainment' },
-  { id: 'sp-20', name: 'Decathlon Play', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/decathlon/white', category: 'Sports & Active' },
-  { id: 'sp-21', name: 'Shoonya', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/shazam/white', category: 'Zero-Brokerage Trading' },
-  { id: 'sp-22', name: 'Rebel Foods', tier: 'Ecosystem Partner', logo: 'https://cdn.simpleicons.org/foodpanda/white', category: 'Cloud Kitchen Partner' },
+  { id: 'sp-1', name: 'Finvasia', tier: 'Title Sponsor', logo: '/sponsors/finvasia.svg', category: 'Fintech & Trading' },
+  { id: 'sp-2', name: 'SBI (State Bank of India)', tier: 'Powered By', logo: '/sponsors/sbi.png', category: 'Banking Partner' },
+  { id: 'sp-3', name: 'Fireside Ventures', tier: 'Associate Sponsor', logo: '/sponsors/fireside.png', category: 'Venture Capital' },
+  { id: 'sp-4', name: 'Amar Ujala', tier: 'Ecosystem Partner', logo: '/sponsors/amarujala.png', category: 'Media Partner' },
+  { id: 'sp-5', name: 'CII (Confederation of Indian Industry)', tier: 'Ecosystem Partner', logo: '/sponsors/cii.png', category: 'Industry Partner' },
+  { id: 'sp-6', name: 'uTrade', tier: 'Ecosystem Partner', logo: '/sponsors/utrade.png', category: 'Algorithmic Trading' },
+  { id: 'sp-7', name: 'Monster Energy', tier: 'Ecosystem Partner', logo: '/sponsors/monster.png', category: 'Energy Drink Partner' },
+  { id: 'sp-8', name: 'Vivo', tier: 'Ecosystem Partner', logo: '/sponsors/vivo.svg', category: 'Smartphone Partner' },
+  { id: 'sp-9', name: 'Chiratae Ventures', tier: 'Associate Sponsor', logo: '/sponsors/chiratae.png', category: 'Venture Capital' },
+  { id: 'sp-10', name: 'Shree Ganesh (South Indian Food)', tier: 'Ecosystem Partner', logo: '/sponsors/shreeganesh.png', category: 'Food Partner' },
+  { id: 'sp-11', name: 'Shoutlo', tier: 'Ecosystem Partner', logo: '/sponsors/shoutlo.png', category: 'Local Discovery' },
+  { id: 'sp-12', name: 'Young Indians (Yi)', tier: 'Ecosystem Partner', logo: '/sponsors/youngindians.png', category: 'Youth Leadership' },
+  { id: 'sp-13', name: 'Dainik Bhaskar', tier: 'Ecosystem Partner', logo: '/sponsors/dainikbhaskar.png', category: 'Print Media' },
+  { id: 'sp-14', name: 'CityWoofer', tier: 'Ecosystem Partner', logo: '/sponsors/citywoofer.png', category: 'Ticketing & Events' },
+  { id: 'sp-15', name: 'Venture Wolf', tier: 'Ecosystem Partner', logo: '/sponsors/venturewolf.png', category: 'Startup Accelerator' },
+  { id: 'sp-16', name: "Victoria's Cafe", tier: 'Ecosystem Partner', logo: '/sponsors/victoriascafe.png', category: 'Hospitality' },
+  { id: 'sp-17', name: 'JAL', tier: 'Ecosystem Partner', logo: '/sponsors/jal.png', category: 'Hydration Partner' },
+  { id: 'sp-18', name: 'CITCO', tier: 'Ecosystem Partner', logo: '/sponsors/citco.png', category: 'Tourism Partner' },
+  { id: 'sp-19', name: 'Smaaash', tier: 'Ecosystem Partner', logo: '/sponsors/smaaash.png', category: 'Gaming & Entertainment' },
+  { id: 'sp-20', name: 'Decathlon Play', tier: 'Ecosystem Partner', logo: '/sponsors/decathlon.png', category: 'Sports & Active' },
+  { id: 'sp-21', name: 'Shoonya', tier: 'Ecosystem Partner', logo: '/sponsors/shoonya.svg', category: 'Zero-Brokerage Trading' },
+  { id: 'sp-22', name: 'Rebel Foods', tier: 'Ecosystem Partner', logo: '/sponsors/rebelfoods.svg', category: 'Cloud Kitchen Partner' },
 ]
 
 export interface TimelineEvent {
@@ -543,17 +543,7 @@ export interface TimelineEvent {
   eventId?: string
 }
 
-export interface PartnerPillar {
-  id: string
-  number: string
-  title: string
-  desc: string
-}
 
-export interface SponsorRole {
-  role: string
-  description: string
-}
 
 export const MASTER_TIMELINE: TimelineEvent[] = [
   // DAY 1 — Saturday, November 14, 2026
@@ -780,67 +770,7 @@ export const MASTER_TIMELINE: TimelineEvent[] = [
   },
 ]
 
-export const WHY_PARTNER_PILLARS: PartnerPillar[] = [
-  {
-    id: 'wp-1',
-    number: '01',
-    title: 'RELEVANT REACH',
-    desc: 'Meet ambitious students, early founders and ecosystem decision-makers across northern India.',
-  },
-  {
-    id: 'wp-2',
-    number: '02',
-    title: 'MEANINGFUL PRESENCE',
-    desc: 'Integrate deeply into the participant experience rather than appearing only as a passive logo.',
-  },
-  {
-    id: 'wp-3',
-    number: '03',
-    title: 'TALENT ACCESS',
-    desc: 'Build relationships and hire highly capable technical, analytical, and entrepreneurial students.',
-  },
-  {
-    id: 'wp-4',
-    number: '04',
-    title: 'CATEGORY AUTHORITY',
-    desc: 'Own a credible industry conversation aligned with your organization and market leadership.',
-  },
-  {
-    id: 'wp-5',
-    number: '05',
-    title: 'CONTENT VALUE',
-    desc: 'Create impactful stories, recorded sessions, and memorable moments that continue long after the summit.',
-  },
-  {
-    id: 'wp-6',
-    number: '06',
-    title: 'ECOSYSTEM GOODWILL',
-    desc: 'Support entrepreneurship and grassroot innovation at one of India’s oldest, most storied engineering institutions.',
-  },
-]
 
-export const SPONSORSHIP_ROLES: SponsorRole[] = [
-  {
-    role: 'PRESENTING PARTNER',
-    description: 'Summit-wide association and highest-visibility integration across all stages, hoardings, and digital collaterals.',
-  },
-  {
-    role: 'PROGRAMME PARTNER',
-    description: 'Own a defined property such as the Funding Conclave, Talent Fair, Hackathon, or Masterclass Workshops.',
-  },
-  {
-    role: 'ECOSYSTEM PARTNER',
-    description: 'Participate through investor networks, operational expertise, founder mentoring, or venture pipeline access.',
-  },
-  {
-    role: 'EXPERIENCE PARTNER',
-    description: 'Create a useful product trial, campus culture activation, gaming booth, or memorable attendee experience.',
-  },
-  {
-    role: 'MEDIA PARTNER',
-    description: 'Extend stories, press coverage, and digital visibility before, during, and after the summit.',
-  },
-]
 
 export const MASTER_FAQS: FAQItem[] = [
   {
@@ -885,10 +815,6 @@ export const MASTER_STATS = [
 ]
 
 export const MASTER_CONTACTS = {
-  faculty: [
-    { role: 'Coordinator', name: 'Dr. Simranjit Singh', phone: '+91 98725 52898' },
-    { role: 'Co-Coordinator', name: 'Dr. Sudesh Rani', phone: '+91 98768 60085' },
-  ],
   studentLeadership: [
     { role: 'Convener', name: 'Vansh Gupta', phone: '+91 90413 09108' },
     { role: 'Convener', name: 'Bhrigu Verma', phone: '+91 94783 35331' },

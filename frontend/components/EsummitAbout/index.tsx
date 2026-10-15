@@ -116,7 +116,7 @@ function GeometricNodesCanvas() {
       ctx.clearRect(0, 0, width, height)
 
       ctx.beginPath()
-      ctx.strokeStyle = 'rgba(0, 242, 178, 0.12)'
+      ctx.strokeStyle = 'rgba(138, 197, 63, 0.14)'
       ctx.lineWidth = 1
 
       const len = nodes.length
@@ -135,7 +135,7 @@ function GeometricNodesCanvas() {
       ctx.stroke()
 
       ctx.beginPath()
-      ctx.fillStyle = 'rgba(0, 242, 178, 0.5)'
+      ctx.fillStyle = 'rgba(138, 197, 63, 0.55)'
 
       for (let i = 0; i < len; i++) {
         const node = nodes[i]
@@ -198,13 +198,13 @@ export default function EsummitAbout() {
       {/* Decorative ambient mint radial glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none z-0"
-        style={{ background: 'radial-gradient(circle, rgba(0,242,178,0.06) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(138,197,63,0.06) 0%, transparent 70%)' }}
       />
 
       {/* Top section divider line */}
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(0,242,178,0.3) 50%, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(138,197,63,0.3) 50%, transparent)' }}
       />
 
       {/* ── Central content ── */}
@@ -284,7 +284,7 @@ export default function EsummitAbout() {
       {/* Bottom section divider line */}
       <div
         className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(0,242,178,0.35) 50%, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(138,197,63,0.35) 50%, transparent)' }}
       />
     </section>
   )

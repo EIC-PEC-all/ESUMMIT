@@ -20,13 +20,13 @@ export async function GET(request: NextRequest) {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            backgroundColor: '#060D0B',
+            backgroundColor: '#050B06',
             backgroundImage:
-              'radial-gradient(circle at 80% 20%, rgba(0, 245, 212, 0.18) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(13, 74, 66, 0.4) 0%, transparent 60%)',
+              'radial-gradient(circle at 80% 20%, rgba(138, 197, 63, 0.18) 0%, transparent 50%), radial-gradient(circle at 20% 80%, rgba(45, 44, 113, 0.4) 0%, transparent 60%)',
             padding: '48px 56px',
             color: '#FFFFFF',
             fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-            border: '2px solid rgba(0, 245, 212, 0.25)',
+            border: '2px solid rgba(138, 197, 63, 0.25)',
           }}
         >
           {/* Header Row */}
@@ -46,8 +46,8 @@ export async function GET(request: NextRequest) {
                   width: '14px',
                   height: '14px',
                   borderRadius: '50%',
-                  backgroundColor: '#00F5D4',
-                  boxShadow: '0 0 16px #00F5D4',
+                  backgroundColor: '#8AC53F',
+                  boxShadow: '0 0 16px #8AC53F',
                 }}
               />
               <span
@@ -66,13 +66,13 @@ export async function GET(request: NextRequest) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                backgroundColor: 'rgba(0, 245, 212, 0.12)',
-                border: '1px solid rgba(0, 245, 212, 0.35)',
+                backgroundColor: 'rgba(138, 197, 63, 0.12)',
+                border: '1px solid rgba(138, 197, 63, 0.35)',
                 borderRadius: '8px',
                 padding: '6px 16px',
                 fontSize: '14px',
                 fontWeight: 700,
-                color: '#00F5D4',
+                color: '#8AC53F',
                 letterSpacing: '0.2em',
               }}
             >
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
               style={{
                 fontSize: '13px',
                 fontWeight: 700,
-                color: '#00F5D4',
+                color: '#8AC53F',
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
               }}
@@ -133,7 +133,7 @@ export async function GET(request: NextRequest) {
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <span style={{ fontSize: '11px', color: '#00F5D4', letterSpacing: '0.15em', fontWeight: 700 }}>
+              <span style={{ fontSize: '11px', color: '#8AC53F', letterSpacing: '0.15em', fontWeight: 700 }}>
                 PASS CATEGORY
               </span>
               <span style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF' }}>
@@ -159,7 +159,7 @@ export async function GET(request: NextRequest) {
                   fontSize: '15px',
                   fontWeight: 700,
                   fontFamily: 'monospace',
-                  color: '#00F5D4',
+                  color: '#8AC53F',
                 }}
               >
                 #{passId}

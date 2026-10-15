@@ -126,13 +126,14 @@ const SOCIAL_LINKS = [
 
 const QUICK_LINKS = [
   { label: 'Home', href: '/' },
-  { label: 'About', href: '/#about' },
+  { label: 'About', href: '/about' },
+  { label: 'Passes', href: '/passes' },
   { label: 'Events', href: '/events' },
   { label: 'Speakers', href: '/speakers' },
   { label: 'Schedule', href: '/timeline' },
   { label: 'Sponsors', href: '/sponsors' },
   { label: 'Brochure (PDF)', href: '/e-summit-brochure.pdf' },
-  { label: 'FAQ', href: '/faq' },
+  { label: 'FAQ', href: '/#faq' },
   { label: 'Register', href: '/register' },
 ]
 
@@ -140,14 +141,14 @@ export function RegisterCTA() {
   return (
     <div
       id="register"
-      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-[#071511] text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-[#00F5D4]/20 py-16 sm:py-20 md:py-24"
+      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-section-1 text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-mint/20 py-16 sm:py-20 md:py-24"
       aria-labelledby="footer-cta-heading"
     >
       {/* ── CRT Warp Interactive Plasma Background (Cyber Teal Obsidian Theme) ── */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
         <CRTWarp
-          color="#00F5D4"
-          backgroundColor="#071511"
+          color="#8AC53F"
+          backgroundColor="#071008"
           speed={0.35}
           curvature={0.2}
           scanlineStrength={0.18}
@@ -175,7 +176,7 @@ export function RegisterCTA() {
         className="pointer-events-none absolute inset-0 z-[1] opacity-25"
         style={{
           background:
-            'radial-gradient(circle at 50% 50%, rgba(0, 245, 212, 0.12) 0%, transparent 68%)',
+            'radial-gradient(circle at 50% 50%, rgba(138, 197, 63, 0.12) 0%, transparent 68%)',
         }}
       />
 
@@ -282,30 +283,28 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
               <div className="mb-6 flex flex-col gap-4">
                 <Link href="/" className="inline-block" aria-label="PEC E-Summit '26 — Home">
                   <Image
-                    src="/esummit-logo.png"
+                    src="/esummit-logo.png?v=3"
                     alt="PEC E-Summit '26 - Legacies Beyond Time"
-                    width={240}
-                    height={75}
-                    className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_0_20px_rgba(0,245,212,0.25)] hover:scale-[1.02] transition-transform"
+                    width={280}
+                    height={60}
+                    className="h-11 sm:h-13 md:h-14 w-auto max-w-[260px] sm:max-w-[300px] object-contain drop-shadow-[0_0_20px_rgba(138,197,63,0.25)] hover:scale-[1.02] transition-transform"
                   />
                 </Link>
-                <div className="flex items-center gap-5 pt-1">
+                <div className="flex items-center gap-6 sm:gap-7 pt-1.5">
                   <Image
                     src="/pec-logo.png"
                     alt="Punjab Engineering College Logo"
-                    width={110}
-                    height={70}
-                    style={{ width: 'auto', height: 'auto' }}
-                    className="brightness-120 object-contain drop-shadow-md opacity-85 hover:opacity-100 transition-opacity"
+                    width={150}
+                    height={60}
+                    className="h-12 sm:h-14 w-auto object-contain brightness-115 opacity-90 hover:opacity-100 transition-opacity"
                   />
-                  <div className="h-6 w-px bg-white/15" />
+                  <div className="h-10 sm:h-12 w-px bg-white/20" />
                   <Image
                     src="/eic-logo.png"
                     alt="EIC Logo"
-                    width={80}
-                    height={80}
-                    style={{ width: 'auto', height: 'auto' }}
-                    className="brightness-120 object-contain drop-shadow-md opacity-85 hover:opacity-100 transition-opacity"
+                    width={70}
+                    height={70}
+                    className="h-14 sm:h-16 w-auto object-contain brightness-115 opacity-90 hover:opacity-100 transition-opacity"
                   />
                 </div>
               </div>
@@ -369,26 +368,6 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                 </div>
               )}
 
-              {/* Faculty Coordinators */}
-              <div>
-                <span className="font-mono-data text-[10px] font-bold uppercase tracking-[0.2em] text-mint block mb-2">
-                  FACULTY COORDINATORS
-                </span>
-                <div className="space-y-1 text-xs sm:text-sm">
-                  <div className="flex items-center justify-between gap-2 py-0.5 border-b border-white/[0.05]">
-                    <span className="font-body text-gray-200 font-medium">Dr. Simranjit Singh</span>
-                    <a href="tel:+919872552898" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
-                      +91 98725 52898
-                    </a>
-                  </div>
-                  <div className="flex items-center justify-between gap-2 py-0.5">
-                    <span className="font-body text-gray-200 font-medium">Dr. Sudesh Rani</span>
-                    <a href="tel:+919876860085" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
-                      +91 98768 60085
-                    </a>
-                  </div>
-                </div>
-              </div>
 
               {/* Student Leadership */}
               <div>

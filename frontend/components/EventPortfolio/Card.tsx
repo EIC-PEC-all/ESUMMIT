@@ -31,7 +31,7 @@ export function Card({ event, index, total, onSelect }: CardProps) {
           onSelect(event)
         }
       }}
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-[#0A1813] border border-white/12 hover:border-[#00F2B2]/50 focus-visible:ring-2 focus-visible:ring-mint focus:outline-none w-full max-w-[380px] h-[420px] sm:h-[440px] flex flex-col justify-between shadow-2xl transition-colors duration-300"
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-panel border border-white/12 hover:border-mint/50 focus-visible:ring-2 focus-visible:ring-mint focus:outline-none w-full max-w-[380px] h-[420px] sm:h-[440px] flex flex-col justify-between shadow-2xl transition-colors duration-300"
       style={{
         boxShadow: '0 20px 45px rgba(0,0,0,0.6)',
       }}
@@ -48,11 +48,11 @@ export function Card({ event, index, total, onSelect }: CardProps) {
         />
 
         {/* Gradient Scrims */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A1813] via-transparent to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-panel via-transparent to-black/40" />
 
         {/* Top-Left: Category Tag Badge */}
         <div className="absolute top-3 left-3 z-10">
-          <span className="font-mono-data text-[9px] font-bold uppercase tracking-wider text-[#00F2B2] bg-[#06120E]/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-[#00F2B2]/30 shadow-sm">
+          <span className="font-mono-data text-[9px] font-bold uppercase tracking-wider text-mint bg-void/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-mint/30 shadow-sm">
             {event.eyebrow || event.category}
           </span>
         </div>
@@ -66,7 +66,7 @@ export function Card({ event, index, total, onSelect }: CardProps) {
       </div>
 
       {/* ── Bottom: Structured Content Body ── */}
-      <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-[#0A1813] border-t border-white/5">
+      <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-panel border-t border-white/5">
         <div>
           {/* Category Subtext */}
           <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-1 block">
@@ -74,7 +74,7 @@ export function Card({ event, index, total, onSelect }: CardProps) {
           </span>
 
           {/* Event Title */}
-          <h3 className="font-display text-lg sm:text-xl font-bold uppercase tracking-tight text-white group-hover:text-[#00F2B2] transition-colors duration-200 line-clamp-1 leading-snug">
+          <h3 className="font-display text-lg sm:text-xl font-bold uppercase tracking-tight text-white group-hover:text-mint transition-colors duration-200 line-clamp-1 leading-snug">
             {event.title}
           </h3>
 
@@ -112,12 +112,12 @@ export function Card({ event, index, total, onSelect }: CardProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-center h-7 px-3 rounded bg-mint text-[#0A1813] font-mono-data text-[10px] font-black uppercase tracking-wider hover:brightness-110 hover:scale-105 transition-all"
+                  className="flex items-center justify-center h-7 px-3.5 rounded-full bg-mint text-void font-mono-data text-[10px] font-black uppercase tracking-wider hover:brightness-110 hover:scale-105 transition-all"
                 >
                   Register
                 </a>
-                <div className="flex items-center gap-1.5 font-mono-data text-[10.5px] font-bold text-[#00F2B2] group-hover:translate-x-0.5 transition-transform">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#00F2B2]/15 text-[#00F2B2] group-hover:bg-[#00F2B2] group-hover:text-void transition-colors shadow-xs">
+                <div className="flex items-center gap-1.5 font-mono-data text-[10.5px] font-bold text-mint group-hover:translate-x-0.5 transition-transform">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-mint/15 text-mint group-hover:bg-mint group-hover:text-void transition-colors shadow-xs">
                     <ArrowUpRight size={14} strokeWidth={2.5} />
                   </div>
                 </div>

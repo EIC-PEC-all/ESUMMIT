@@ -86,6 +86,14 @@ const CAROUSEL_ITEMS: FlexCarouselItem[] = [
 export default function FlipFlopTransition() {
   const sectionRef = useRef<HTMLElement>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile, { passive: true })
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     let rafId: number
@@ -123,19 +131,23 @@ export default function FlipFlopTransition() {
     >
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
         {/* Subtle ambient lighting */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,242,178,0.06)_0%,transparent_75%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(138,197,63,0.06)_0%,transparent_75%)]" />
 
         {/* ── FlexCarousel 3D WebGL Liquid Lens Carousel ── */}
-        <div className="relative w-full h-[460px] sm:h-[540px] md:h-[600px] max-h-[85vh]">
+        <div className="relative w-full h-[420px] sm:h-[540px] md:h-[600px] max-h-[85vh]">
           <FlexCarousel
             items={CAROUSEL_ITEMS}
-            preset="liquid"
+            preset={isMobile ? 'ribbon' : 'liquid'}
             intro="rise"
             scrollProgress={scrollProgress}
-            cardHeight={0.52}
-            gap={14}
-            radius={16}
-            squeeze={0.22}
+            cardHeight={isMobile ? 0.44 : 0.52}
+            tilt={isMobile ? 0 : undefined}
+            bend={isMobile ? 0.05 : undefined}
+            reach={isMobile ? 0.16 : undefined}
+            dispersion={isMobile ? 0 : undefined}
+            gap={isMobile ? 32 : 14}
+            radius={isMobile ? 14 : 16}
+            squeeze={isMobile ? 0.08 : 0.22}
             focusOnClick={true}
             captions={true}
             autoplay={false}

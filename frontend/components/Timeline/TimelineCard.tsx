@@ -15,7 +15,7 @@ export default function TimelineCard({ event }: TimelineCardProps) {
     <article
       className={`group relative rounded-2xl p-5 sm:p-6 transition-all duration-300 border ${
         isFlagship
-          ? 'bg-[#091a13]/90 border-mint/40 shadow-[0_0_25px_rgba(0,245,212,0.1)]'
+          ? 'bg-[#091a13]/90 border-mint/40 shadow-[0_0_25px_rgba(138,197,63,0.1)]'
           : 'bg-[#071711]/70 border-white/10 hover:border-mint/30'
       } hover:-translate-y-0.5`}
     >

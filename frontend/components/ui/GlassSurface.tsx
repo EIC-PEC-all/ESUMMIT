@@ -42,7 +42,7 @@ export default function GlassSurface({
   refraction = true,
   renderer = 'svg',
   shape,
-  borderColor = 'rgba(0, 242, 178, 0.2)',
+  borderColor = 'rgba(138, 197, 63, 0.25)',
   className = '',
   style = {},
   children,

@@ -47,19 +47,19 @@ export function EventListPanel({
             className="animate-pulse"
             style={{
               display: 'inline-block', width: 8, height: 8, borderRadius: '50%',
-              background: '#00F5D4', boxShadow: '0 0 10px #00F5D4',
+              background: '#8AC53F', boxShadow: '0 0 10px #8AC53F',
             }}
           />
           <span
             className="uppercase tracking-widest text-[10px] font-bold"
-            style={{ fontFamily: "'Space Mono', monospace", color: '#00F5D4' }}
+            style={{ fontFamily: "'Space Mono', monospace", color: '#8AC53F' }}
           >
             {day === 'day1' ? 'Day 01' : 'Day 02'} · {events.length} Events
           </span>
         </div>
         <span
           className="text-[9px] uppercase tracking-wider"
-          style={{ fontFamily: "'Space Mono', monospace", color: 'rgba(0,245,212,0.5)' }}
+          style={{ fontFamily: "'Space Mono', monospace", color: 'rgba(138,197,63,0.5)' }}
         >
           TAP TO NAV
         </span>
@@ -142,7 +142,7 @@ export function EventListPanel({
                   transition={{ duration: 1.2, repeat: Infinity }}
                   style={{
                     fontFamily: "'Space Mono', monospace",
-                    fontSize: 9, color: '#00F5D4',
+                    fontSize: 9, color: '#8AC53F',
                     textTransform: 'uppercase', letterSpacing: '0.15em',
                     fontWeight: 700,
                   }}
@@ -164,7 +164,7 @@ export function EventListPanel({
                   <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>
                     Distance
                   </span>
-                  <span style={{ fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif", fontSize: 14, color: '#00F5D4', fontWeight: 700 }}>
+                  <span style={{ fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif", fontSize: 14, color: '#8AC53F', fontWeight: 700 }}>
                     {route.distance < 1000
                       ? `${Math.round(route.distance)} m`
                       : `${(route.distance / 1000).toFixed(1)} km`}
@@ -173,14 +173,14 @@ export function EventListPanel({
                 <div
                   style={{
                     width: 1, height: 28,
-                    background: 'linear-gradient(180deg, transparent, rgba(0,245,212,0.4), transparent)',
+                    background: 'linear-gradient(180deg, transparent, rgba(138,197,63,0.4), transparent)',
                   }}
                 />
                 <div className="flex flex-col items-end">
                   <span style={{ fontFamily: "'Space Mono', monospace", fontSize: 8, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>
                     Walk
                   </span>
-                  <span style={{ fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif", fontSize: 14, color: '#00DFBA', fontWeight: 700 }}>
+                  <span style={{ fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif", fontSize: 14, color: '#7BB832', fontWeight: 700 }}>
                     {Math.round(route.duration / 60)} min
                   </span>
                 </div>
@@ -192,10 +192,10 @@ export function EventListPanel({
                 className="w-full mt-3 py-2 rounded-[8px] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
                 style={{
                   fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
-                  background: isNavigating ? 'transparent' : '#00F5D4',
+                  background: isNavigating ? 'transparent' : '#8AC53F',
                   color: isNavigating ? '#FF4D3D' : '#050505',
                   border: isNavigating ? '1px solid rgba(255,77,61,0.3)' : 'none',
-                  boxShadow: isNavigating ? 'none' : '0 0 20px rgba(0,245,212,0.4)',
+                  boxShadow: isNavigating ? 'none' : '0 0 20px rgba(138,197,63,0.4)',
                 }}
               >
                 {isNavigating ? 'End Route' : 'Start Navigation'}
