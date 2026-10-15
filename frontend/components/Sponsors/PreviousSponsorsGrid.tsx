@@ -33,7 +33,7 @@ export default function PreviousSponsorsGrid() {
           return (
             <div
               key={sp.id}
-              className="flex flex-col items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-[#091812]/80 border border-white/10 hover:border-mint/50 hover:bg-[#0c2219] transition-all duration-300 text-center group shadow-lg hover:shadow-[0_0_20px_rgba(138,197,63,0.15)] hover:-translate-y-1"
+              className="flex flex-col items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-[#0D1C18]/80 border border-white/10 hover:border-mint/50 hover:bg-[#12241F] transition-all duration-300 text-center group shadow-lg hover:shadow-[0_0_20px_rgba(0,245,212,0.18)] hover:-translate-y-1"
             >
               <div className="w-full h-16 sm:h-20 flex items-center justify-center p-2 rounded-xl bg-white/[0.03] border border-white/5 group-hover:border-mint/20 group-hover:bg-white/[0.06] transition-all duration-300 mb-3 relative overflow-hidden">
                 {!hasError && sp.logo ? (

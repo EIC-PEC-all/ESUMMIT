@@ -320,58 +320,56 @@ export default function FundingConclaveClient() {
             </span>
             <span className="text-xs text-[#94A3B8] flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5 text-[#00F5D4]" />
-              14–15 Nov 2026
+              19–21 March 2026
             </span>
             <span className="text-xs text-[#94A3B8] flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5 text-[#00F5D4]" />
-              PEC Campus, Chandigarh
+              Punjab Engineering College (Deemed to be University), Chandigarh
             </span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-3">
-            Funding Conclave Startup Application
+            PEC E-Summit 2026 | Funding Conclave Startup Application
           </h1>
           <p className="text-[#94A3B8] text-sm sm:text-base leading-relaxed max-w-3xl mb-6">
-            The Funding Conclave gives selected startups an opportunity to pitch live before leading angel investors,
-            VCs, and institutional funds during PEC E-Summit 2026. Every application will be screened using your pitch
-            deck, traction, fundraising readiness, and investor alignment.
+            The Funding Conclave gives selected startups an opportunity to pitch before investors during PEC E-Summit 2026. Every application will be screened using the pitch deck, business quality, traction, fundraising readiness and investor fit. Submission of this form does not confirm selection.
           </p>
 
           {/* 5-Step Process Accordion / Guide */}
           <div className="p-4 rounded-xl bg-[#0D1C18] border border-white/5 text-xs text-[#94A3B8]">
             <span className="font-semibold text-white uppercase tracking-wider block mb-2 font-mono text-[11px]">
-              Selection & Registration Process:
+              Registration process:
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
                 <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   1
                 </span>
-                <span>Submit startup details and deck</span>
+                <span>Select preferred option & submit startup details and pitch deck.</span>
               </div>
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
                 <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   2
                 </span>
-                <span>PEC Conclave team review</span>
+                <span>PEC Funding Conclave team will review application and pitch deck.</span>
               </div>
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
                 <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   3
                 </span>
-                <span>Shortlisted startups receive MoU</span>
+                <span>Shortlisted startups will receive an MoU.</span>
               </div>
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
                 <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   4
                 </span>
-                <span>Direct fee deposit to PEC account</span>
+                <span>Review & accept MoU; payment made directly to PEC bank account stated in MoU.</span>
               </div>
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
                 <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   5
                 </span>
-                <span>Slot confirmed & pitch schedule sent</span>
+                <span>Registration is confirmed only after payment is received.</span>
               </div>
             </div>
           </div>
@@ -550,7 +548,7 @@ export default function FundingConclaveClient() {
                     <div className="space-y-4 pt-2">
                       <div>
                         <label htmlFor={emailId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                          Email Address <span className="text-[#FF4D3D]">*</span>
+                          Email <span className="text-[#FF4D3D]">*</span>
                         </label>
                         <input
                           id={emailId}
@@ -565,7 +563,7 @@ export default function FundingConclaveClient() {
 
                       <div>
                         <label htmlFor={founderNameId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                          Primary Founder&apos;s Full Name <span className="text-[#FF4D3D]">*</span>
+                          Primary founder’s full name <span className="text-[#FF4D3D]">*</span>
                         </label>
                         <input
                           id={founderNameId}
@@ -633,7 +631,7 @@ export default function FundingConclaveClient() {
                     <div className="space-y-4 pt-2">
                       <div>
                         <label htmlFor={startupNameId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                          Startup Name <span className="text-[#FF4D3D]">*</span>
+                          Startup name <span className="text-[#FF4D3D]">*</span>
                         </label>
                         <input
                           id={startupNameId}
@@ -649,7 +647,7 @@ export default function FundingConclaveClient() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label htmlFor={websiteUrlId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                            Startup Website URL <span className="text-[#64748B]">(optional)</span>
+                            Startup website URL
                           </label>
                           <input
                             id={websiteUrlId}
@@ -663,7 +661,7 @@ export default function FundingConclaveClient() {
 
                         <div>
                           <label htmlFor={dpiitId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                            DPIIT Recognition Number <span className="text-[#64748B]">(if applicable)</span>
+                            DPIIT recognition number, if applicable
                           </label>
                           <input
                             id={dpiitId}
@@ -678,7 +676,7 @@ export default function FundingConclaveClient() {
 
                       <div>
                         <label className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-2">
-                          Current Stage of the Startup <span className="text-[#FF4D3D]">*</span>
+                          Current stage of the startup <span className="text-[#FF4D3D]">*</span>
                         </label>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {STAGE_OPTIONS.map((opt) => (
@@ -688,7 +686,7 @@ export default function FundingConclaveClient() {
                               onClick={() => updateField('stage', opt.id)}
                               className={`p-3.5 rounded-xl border text-left transition-all flex items-start gap-3 ${
                                 formData.stage === opt.id
-                                  ? 'bg-[#00F5D4]/10 border-[#00F5D4] text-white shadow-[0_0_15px_rgba(0,245,212,0.15)]'
+                                    ? 'bg-[#00F5D4]/10 border-[#00F5D4] text-white shadow-[0_0_15px_rgba(0,245,212,0.15)]'
                                   : 'bg-[#0D1C18] border-white/10 text-[#94A3B8] hover:border-white/20 hover:text-white'
                               }`}
                             >
@@ -710,7 +708,7 @@ export default function FundingConclaveClient() {
 
                       <div>
                         <label htmlFor={sectorId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                          Primary Sector / Industry <span className="text-[#FF4D3D]">*</span>
+                          Primary sector / industry <span className="text-[#FF4D3D]">*</span>
                         </label>
                         <input
                           id={sectorId}
@@ -748,7 +746,7 @@ export default function FundingConclaveClient() {
                     <div className="space-y-5 pt-2">
                       <div>
                         <label className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-2">
-                          Current Revenue Stage <span className="text-[#FF4D3D]">*</span>
+                          Current revenue stage <span className="text-[#FF4D3D]">*</span>
                         </label>
                         <div className="space-y-2">
                           {REVENUE_OPTIONS.map((rev) => (
@@ -780,7 +778,7 @@ export default function FundingConclaveClient() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label htmlFor={totalFundingId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                            Total External Funding Raised to Date <span className="text-[#FF4D3D]">*</span>
+                            Total external funding raised to date (in INR; enter 0 if bootstrapped) <span className="text-[#FF4D3D]">*</span>
                           </label>
                           <input
                             id={totalFundingId}
@@ -795,7 +793,7 @@ export default function FundingConclaveClient() {
 
                         <div>
                           <label htmlFor={currentAskId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                            Current Fundraise Ask <span className="text-[#FF4D3D]">*</span>
+                            Current fundraise amount / ask (in INR; enter NA if not raising) <span className="text-[#FF4D3D]">*</span>
                           </label>
                           <input
                             id={currentAskId}
@@ -812,7 +810,7 @@ export default function FundingConclaveClient() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label htmlFor={valuationId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                            Expected Pre-Money Valuation (INR) <span className="text-[#64748B]">(if decided)</span>
+                            Expected pre-money valuation (in INR), if decided
                           </label>
                           <input
                             id={valuationId}
@@ -826,7 +824,7 @@ export default function FundingConclaveClient() {
 
                         <div>
                           <label htmlFor={committedCapitalId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                            Capital Already Committed <span className="text-[#64748B]">(if any)</span>
+                            Capital already committed in the current round, if any
                           </label>
                           <input
                             id={committedCapitalId}
@@ -864,7 +862,7 @@ export default function FundingConclaveClient() {
                     <div className="space-y-5 pt-2">
                       <div>
                         <label htmlFor={pitchDeckId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                          Pitch Deck Link <span className="text-[#FF4D3D]">*</span>
+                          Pitch deck link (Google Drive, Dropbox, OneDrive or DocSend) <span className="text-[#FF4D3D]">*</span>
                         </label>
                         <input
                           id={pitchDeckId}
@@ -877,14 +875,13 @@ export default function FundingConclaveClient() {
                         />
                         <p className="text-[11px] text-[#94A3B8] mt-1.5 flex items-center gap-1.5">
                           <AlertCircle className="w-3.5 h-3.5 text-[#00F5D4]" />
-                          Required for screening. PDF is preferred. Please ensure the link is public (Anyone with link
-                          can view) and does not require an access request.
+                          Required for screening. PDF is preferred. Please ensure the link is accessible to anyone with the link and does not require an access request.
                         </p>
                       </div>
 
                       <div>
                         <label htmlFor={demoVideoId} className="block text-xs font-mono uppercase tracking-wider text-[#94A3B8] mb-1.5">
-                          Product Demo / Video Link <span className="text-[#64748B]">(if available)</span>
+                          Product demo / video link, if available
                         </label>
                         <input
                           id={demoVideoId}

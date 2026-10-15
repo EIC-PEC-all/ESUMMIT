@@ -50,11 +50,11 @@ export interface MapViewport {
 export const VENUE_TYPE_COLORS: Record<CampusVenue['type'], string> = {
   auditorium: '#FF4D3D',
   expo: '#FF8C42',
-  seminar: '#4341A8',
+  seminar: '#3DD9FF',
   admin: '#9B5CFF',
-  lab: '#8AC53F',
-  social: '#7BB832',
-  entrance: '#8AC53F',
+  lab: '#00F5D4',
+  social: '#00DFBA',
+  entrance: '#00F5D4',
 }
 
 export const VENUE_TYPE_LABELS: Record<CampusVenue['type'], string> = {

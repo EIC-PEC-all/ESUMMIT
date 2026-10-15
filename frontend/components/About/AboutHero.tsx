@@ -44,7 +44,7 @@ const SPOTLIGHT_PILLARS = [
 
 export default function AboutHero() {
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'November 14–15, 2026'
+  const summitDates = data?.siteConfig?.summitDates || 'March 19–21, 2026'
   const dynamicAboutText = `PEC E-Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, bringing together 3,000+ student founders, seasoned venture capitalists, and technology leaders. From competitive pitching and an overnight hackathon to curated investor roundtables — it is North India's premier launchpad where ideas meet capital and build the future. Join us ${summitDates}.`
 
   return (
@@ -53,7 +53,7 @@ export default function AboutHero() {
 
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none z-0"
-        style={{ background: 'radial-gradient(circle, rgba(138,197,63,0.06) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(0,245,212,0.06) 0%, transparent 70%)' }}
       />
 
       <div className="relative z-10 flex flex-col items-center gap-6 max-w-5xl mx-auto">
@@ -119,7 +119,7 @@ export default function AboutHero() {
             download="PEC-E-Summit-2026-Brochure.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-mint text-[#06110D] font-mono-data text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(138,197,63,0.3)] hover:scale-105 active:scale-95"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-mint text-[#06110D] font-mono-data text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(0,245,212,0.3)] hover:scale-105 active:scale-95"
           >
             <Download size={14} strokeWidth={2.5} />
             <span>DOWNLOAD OFFICIAL BROCHURE (PDF)</span>

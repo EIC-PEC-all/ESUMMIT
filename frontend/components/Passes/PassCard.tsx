@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { motion } from 'framer-motion'
-import { Gem, Crown, Shield, ArrowRight, Sparkles, Terminal, GraduationCap, Award } from 'lucide-react'
+import { Gem, Crown, Shield, ArrowRight, Sparkles, Terminal, GraduationCap, Check } from 'lucide-react'
 import Link from 'next/link'
 import type { StartupPassPackage, StudentPassPackage } from './passesData'
 
@@ -10,9 +10,17 @@ interface PassCardProps {
   pkg: StartupPassPackage | StudentPassPackage
   index: number
   isCenter?: boolean
+  isSelected?: boolean
+  onSelect?: (tier: string) => void
 }
 
-export default function PassCard({ pkg, index, isCenter = false }: PassCardProps) {
+export default function PassCard({
+  pkg,
+  index,
+  isCenter = false,
+  isSelected = false,
+  onSelect,
+}: PassCardProps) {
   let IconComponent = Shield
   if (pkg.tier === 'diamond' || pkg.tier === 'combo') {
     IconComponent = Gem
@@ -26,10 +34,19 @@ export default function PassCard({ pkg, index, isCenter = false }: PassCardProps
 
   const isStartup = 'gstText' in pkg
   const passHref = isStartup
-    ? `/passes?tier=${pkg.tier}`
+    ? `/passes?type=startup&tier=${pkg.tier}#startup-pass-form`
     : `/register?pass=${pkg.id}`
 
   const hasPopularBadge = isCenter || ('popular' in pkg && pkg.popular)
+
+  const tierGlow =
+    pkg.tier === 'silver'
+      ? 'border-2 border-mint/80 shadow-[0_4px_24px_rgba(0,245,212,0.18)] scale-[1.01]'
+      : pkg.tier === 'gold'
+      ? 'border-2 border-amber-400/80 shadow-[0_4px_24px_rgba(251,191,36,0.18)] scale-[1.01]'
+      : 'border-2 border-cyan-400/80 shadow-[0_4px_24px_rgba(34,211,238,0.18)] scale-[1.01]'
+
+  const tierBadge = 'bg-mint text-[#06110D]'
 
   return (
     <motion.div
@@ -37,8 +54,29 @@ export default function PassCard({ pkg, index, isCenter = false }: PassCardProps
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.35, delay: index * 0.08 }}
-      className={`relative flex flex-col justify-between h-full rounded-3xl p-5 sm:p-6 md:p-7 transition-transform duration-200 ${pkg.accentColor.cardBg} ${pkg.accentColor.border} hover:-translate-y-1`}
+      onClick={() => {
+        if (isStartup && onSelect) {
+          onSelect(pkg.tier)
+        }
+      }}
+      className={`relative flex flex-col justify-between h-full rounded-3xl p-5 sm:p-6 md:p-7 transition-all duration-300 ${
+        isStartup && onSelect ? 'cursor-pointer' : ''
+      } ${
+        isSelected
+          ? `${pkg.accentColor.cardBg} ${tierGlow}`
+          : `${pkg.accentColor.cardBg} ${pkg.accentColor.border} hover:-translate-y-1`
+      }`}
     >
+      {/* Selected Pill Badge */}
+      {isStartup && isSelected && (
+        <div
+          className={`absolute -top-3.5 left-1/2 -translate-x-1/2 ${tierBadge} font-mono-data text-[10px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full shadow-[0_0_15px_rgba(0,245,212,0.45)] flex items-center gap-1.5 z-20`}
+        >
+          <Check className="w-3 h-3 stroke-[3]" />
+          Selected Pass
+        </div>
+      )}
+
       {/* Top Header Row */}
       <div className="flex flex-col flex-1">
         <div className="flex items-center justify-between gap-2 mb-4 h-10">
@@ -94,14 +132,44 @@ export default function PassCard({ pkg, index, isCenter = false }: PassCardProps
 
       {/* Action Button */}
       <div className="pt-2 mt-auto">
-        <Link
-          href={passHref}
-          className={`w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-transform duration-150 cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${pkg.accentColor.buttonBg}`}
-          aria-label={`Apply for ${pkg.name}`}
-        >
-          <span>Get {pkg.name.replace(' PASS', '')}</span>
-          <ArrowRight size={14} className="stroke-[2.5]" />
-        </Link>
+        {isStartup && onSelect ? (
+          isSelected ? (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelect(pkg.tier)
+              }}
+              className={`w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-transform duration-150 cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${pkg.accentColor.buttonBg}`}
+              aria-label={`Selected ${pkg.name}`}
+            >
+              <Check size={14} className="stroke-[3]" />
+              <span>Selected • View Form ↓</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onSelect(pkg.tier)
+              }}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-all duration-150 cursor-pointer border border-white/20 text-white/90 hover:border-mint hover:text-mint hover:bg-mint/5 hover:scale-[1.02] active:scale-[0.98]"
+              aria-label={`Select ${pkg.name}`}
+            >
+              <span>Select {pkg.name.replace(' PASS', '')}</span>
+              <ArrowRight size={14} className="stroke-[2.5]" />
+            </button>
+          )
+        ) : (
+          <Link
+            href={passHref}
+            className={`w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-transform duration-150 cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${pkg.accentColor.buttonBg}`}
+            aria-label={`Apply for ${pkg.name}`}
+          >
+            <span>Get {pkg.name.replace(' PASS', '')}</span>
+            <ArrowRight size={14} className="stroke-[2.5]" />
+          </Link>
+        )}
       </div>
     </motion.div>
   )

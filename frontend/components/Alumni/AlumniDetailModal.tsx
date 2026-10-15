@@ -90,7 +90,7 @@ export default function AlumniDetailModal({ person, onClose }: AlumniDetailModal
             {/* Header Profile Area */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
               {/* Liquid Glass Circular Avatar Bubble */}
-              <div className="relative h-28 w-28 sm:h-32 sm:w-32 shrink-0 rounded-full p-1.5 shadow-[0_12px_28px_rgba(0,0,0,0.65),inset_0_2px_4px_rgba(255,255,255,0.7),inset_0_-2px_4px_rgba(138,197,63,0.4)] bg-gradient-to-br from-white/60 via-mint/40 to-mint/20">
+              <div className="relative h-28 w-28 sm:h-32 sm:w-32 shrink-0 rounded-full p-1.5 shadow-[0_12px_28px_rgba(0,0,0,0.65),inset_0_2px_4px_rgba(255,255,255,0.7),inset_0_-2px_4px_rgba(0,245,212,0.4)] bg-gradient-to-br from-white/60 via-mint/40 to-mint/20">
                 <div className="relative h-full w-full rounded-full overflow-hidden bg-[#06120E]">
                   <BlurImage
                     src={person.imageUrl}

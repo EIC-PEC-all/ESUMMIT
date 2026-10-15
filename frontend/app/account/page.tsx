@@ -1,19 +1,11 @@
 import { redirect } from 'next/navigation'
 
-export default async function AccountPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}) {
+interface AccountPageProps {
+  searchParams?: Promise<{ callbackUrl?: string; [key: string]: string | string[] | undefined }>
+}
+
+export default async function AccountPage({ searchParams }: AccountPageProps) {
   const params = await searchParams
-  const query = new URLSearchParams()
-  for (const [key, value] of Object.entries(params)) {
-    if (typeof value === 'string') {
-      query.set(key, value)
-    } else if (Array.isArray(value)) {
-      value.forEach((v) => query.append(key, v))
-    }
-  }
-  const qs = query.toString()
-  redirect(`/register${qs ? `?${qs}` : ''}`)
+  const target = typeof params?.callbackUrl === 'string' && params.callbackUrl ? params.callbackUrl : '/profile'
+  redirect(target)
 }

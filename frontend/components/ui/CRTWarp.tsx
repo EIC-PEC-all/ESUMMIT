@@ -31,8 +31,8 @@ export interface CRTWarpProps {
 }
 
 export default function CRTWarp({
-  color = '#8AC53F',
-  backgroundColor = '#071008',
+  color = '#00F5D4',
+  backgroundColor = '#081310',
   speed = 0.35,
   curvature = 0.2,
   scanlineStrength = 0.18,
@@ -141,7 +141,7 @@ export default function CRTWarp({
     resizeObserver.observe(container)
     resize()
 
-    const clock = new THREE.Clock()
+    let lastTime = performance.now()
     const visibilityObserver = new IntersectionObserver(([entry]) => {
       visibleRef.current = entry.isIntersecting
     })
@@ -155,7 +155,9 @@ export default function CRTWarp({
       if (now - lastFrameRef.current < interval) return
       lastFrameRef.current = now - ((now - lastFrameRef.current) % interval)
 
-      const delta = Math.min(clock.getDelta(), 0.1)
+      const currentTime = performance.now()
+      const delta = Math.min((currentTime - lastTime) / 1000, 0.1)
+      lastTime = currentTime
       if (!pausedRef.current) {
         material.uniforms.uTime.value += delta * material.uniforms.uSpeed.value
       }

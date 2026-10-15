@@ -25,11 +25,11 @@ export const metadata: Metadata = {
 export default function PassesPage() {
   return (
     <main
-      className="bg-[#060D0B] min-h-screen text-[#FAFAFA] flex flex-col selection:bg-[#00F5D4]/20 selection:text-[#00F5D4]"
+      className="bg-[#060D0B] min-h-screen text-[#FAFAFA] flex flex-col"
       id="passes-page"
     >
       <Nav />
-      <div className="flex-1 pt-16 sm:pt-20">
+      <div className="flex-1 pt-14 sm:pt-16">
         <Suspense
           fallback={
             <div className="min-h-[70vh] flex items-center justify-center">

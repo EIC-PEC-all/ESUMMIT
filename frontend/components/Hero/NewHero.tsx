@@ -74,7 +74,7 @@ export default function NewHero() {
           className="pointer-events-none absolute inset-0 z-1"
           style={{
             background:
-              'linear-gradient(135deg, rgba(138, 197, 63, 0.28) 0%, rgba(5, 11, 6, 0.25) 48%, rgba(45, 44, 113, 0.24) 85%, rgba(138, 197, 63, 0.15) 100%)',
+              'linear-gradient(135deg, rgba(0, 245, 212, 0.22) 0%, rgba(6, 13, 11, 0.25) 48%, rgba(61, 217, 255, 0.20) 85%, rgba(0, 245, 212, 0.12) 100%)',
             mixBlendMode: 'color',
           }}
         />
@@ -84,7 +84,7 @@ export default function NewHero() {
           className="pointer-events-none absolute inset-0 z-1"
           style={{
             background:
-              'linear-gradient(115deg, rgba(138, 197, 63, 0.16) 0%, transparent 42%, rgba(67, 65, 168, 0.16) 75%, transparent 100%)',
+              'linear-gradient(115deg, rgba(0, 245, 212, 0.14) 0%, transparent 42%, rgba(61, 217, 255, 0.14) 75%, transparent 100%)',
             mixBlendMode: 'screen',
           }}
         />
@@ -94,7 +94,7 @@ export default function NewHero() {
           className="pointer-events-none absolute inset-0 z-1"
           style={{
             background:
-              'radial-gradient(ellipse at 50% 45%, rgba(138, 197, 63, 0.10) 0%, rgba(5, 11, 6, 0.48) 55%, rgba(5, 11, 6, 0.94) 100%)',
+              'radial-gradient(ellipse at 50% 45%, rgba(0, 245, 212, 0.10) 0%, rgba(6, 13, 11, 0.48) 55%, rgba(6, 13, 11, 0.94) 100%)',
           }}
         />
 

@@ -147,8 +147,8 @@ export function RegisterCTA() {
       {/* ── CRT Warp Interactive Plasma Background (Cyber Teal Obsidian Theme) ── */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
         <CRTWarp
-          color="#8AC53F"
-          backgroundColor="#071008"
+          color="#00F5D4"
+          backgroundColor="#081310"
           speed={0.35}
           curvature={0.2}
           scanlineStrength={0.18}
@@ -171,12 +171,12 @@ export function RegisterCTA() {
       </div>
 
       {/* Dark gradient vignettes for pristine text contrast and smooth boundary blending */}
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-[#071511] via-transparent to-[#071511]" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-[#081310] via-transparent to-[#081310]" />
       <div
         className="pointer-events-none absolute inset-0 z-[1] opacity-25"
         style={{
           background:
-            'radial-gradient(circle at 50% 50%, rgba(138, 197, 63, 0.12) 0%, transparent 68%)',
+            'radial-gradient(circle at 50% 50%, rgba(0, 245, 212, 0.12) 0%, transparent 68%)',
         }}
       />
 
@@ -248,9 +248,9 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
       {/* Corporate EIC / PEC Footer */}
       <div 
         className="border-mint/20 relative z-10 border-t py-12 text-white shadow-inner overflow-hidden"
-        style={{ backgroundColor: '#071511' }}
+        style={{ backgroundColor: '#081310' }}
       >
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#071511]/30 via-transparent to-[#071511]/60" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#081310]/30 via-transparent to-[#081310]/60" />
         <div className="section-container relative z-10">
           {/* Top Social Bar */}
           <div className="border-mint/20 mb-10 flex flex-col items-center justify-between gap-4 border-b pb-8 sm:flex-row">
@@ -283,11 +283,11 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
               <div className="mb-6 flex flex-col gap-4">
                 <Link href="/" className="inline-block" aria-label="PEC E-Summit '26 — Home">
                   <Image
-                    src="/esummit-logo.png?v=3"
+                    src="/esummit-logo.png"
                     alt="PEC E-Summit '26 - Legacies Beyond Time"
                     width={280}
                     height={60}
-                    className="h-11 sm:h-13 md:h-14 w-auto max-w-[260px] sm:max-w-[300px] object-contain drop-shadow-[0_0_20px_rgba(138,197,63,0.25)] hover:scale-[1.02] transition-transform"
+                    className="h-11 sm:h-13 md:h-14 w-auto max-w-[260px] sm:max-w-[300px] object-contain drop-shadow-[0_0_20px_rgba(0,245,212,0.25)] hover:scale-[1.02] transition-transform"
                   />
                 </Link>
                 <div className="flex items-center gap-6 sm:gap-7 pt-1.5">

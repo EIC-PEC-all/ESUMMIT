@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getDatabase } from '@/lib/mongodb'
 import { randomBytes } from 'crypto'
+import fs from 'fs/promises'
+import path from 'path'
+
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
+    const body = await req.json().catch(() => null)
+    if (!body || typeof body !== 'object') {
+      return NextResponse.json(
+        { success: false, error: 'Invalid or missing JSON payload' },
+        { status: 400 }
+      )
+    }
 
     // Required fields validation
     const requiredFields = [
@@ -105,16 +115,104 @@ export async function POST(req: NextRequest) {
       updatedAt: new Date().toISOString(),
     }
 
-    const db = await getDatabase()
-    const collection = db.collection('funding_conclave_applications')
-    const result = await collection.insertOne(applicationRecord)
+    // 1. Sync registration to backend NestJS API if available
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
+    try {
+      await fetch(`${apiUrl}/registrations/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(3000),
+        body: JSON.stringify({
+          name: String(body.founderName).trim(),
+          email,
+          phone,
+          college: String(body.startupName).trim(),
+          passType: 'FOUNDER_PITCH',
+          tracks: [
+            `Startup: ${String(body.startupName).trim()}`,
+            `Package: ${passTierName} (${passTier.toUpperCase()})`,
+            `Stage: ${String(body.stage).trim()}`,
+            `Sector: ${String(body.sector).trim()}`,
+            `Revenue: ${String(body.revenueStage).trim()}`,
+            `Funding Raised: ${String(body.totalFundingRaised).trim()}`,
+            `Current Ask: ${String(body.currentAsk).trim()}`,
+            `Deck: ${pitchDeckUrl}`,
+            `MoU Comfort: ${String(body.mouComfortable).trim()}`,
+            body.websiteUrl ? `Website: ${String(body.websiteUrl).trim()}` : '',
+            founderLinkedIn ? `LinkedIn: ${founderLinkedIn}` : '',
+          ].filter(Boolean),
+        }),
+      })
+    } catch (backendErr) {
+      console.warn('[Funding Conclave API] Backend sync warning:', backendErr)
+    }
+
+    // 2. Persist full startup application data locally
+    try {
+      const dataDir = path.join(process.cwd(), 'data')
+      await fs.mkdir(dataDir, { recursive: true })
+      const filePath = path.join(dataDir, 'funding-conclave-applications.json')
+      let existing: any[] = []
+      try {
+        const raw = await fs.readFile(filePath, 'utf-8')
+        existing = JSON.parse(raw)
+        if (!Array.isArray(existing)) existing = []
+      } catch {
+        existing = []
+      }
+      existing.unshift(applicationRecord)
+      await fs.writeFile(filePath, JSON.stringify(existing, null, 2), 'utf-8')
+    } catch (fsErr) {
+      console.warn('[Funding Conclave API] Local file persist notice:', fsErr)
+    }
 
     return NextResponse.json({
       success: true,
       applicationId,
-      insertedId: result.insertedId,
       passTierName,
       message: 'Application submitted successfully! We will contact you ASAP for further processing.',
+    })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown server error'
+    return NextResponse.json(
+      { success: false, error: message },
+      { status: 500 }
+    )
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const email = searchParams.get('email')?.trim().toLowerCase()
+    const userId = searchParams.get('userId')?.trim()
+
+    if (!email && !userId) {
+      return NextResponse.json(
+        { success: false, error: 'Email or userId query parameter is required' },
+        { status: 400 }
+      )
+    }
+
+    const filePath = path.join(process.cwd(), 'data', 'funding-conclave-applications.json')
+    let allApplications: any[] = []
+    try {
+      const raw = await fs.readFile(filePath, 'utf-8')
+      allApplications = JSON.parse(raw)
+      if (!Array.isArray(allApplications)) allApplications = []
+    } catch {
+      allApplications = []
+    }
+
+    const matched = allApplications.filter((app) => {
+      if (email && app.email && String(app.email).toLowerCase() === email) return true
+      if (userId && app.userId && app.userId === userId) return true
+      return false
+    })
+
+    return NextResponse.json({
+      success: true,
+      applications: matched,
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown server error'

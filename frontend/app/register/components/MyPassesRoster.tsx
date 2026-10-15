@@ -152,7 +152,7 @@ export const MyPassesRoster: React.FC<MyPassesRosterProps> = ({
                     onChange={(e) =>
                       setEditingPass({ ...editingPass, name: e.target.value })
                     }
-                    className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
+                    className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
                   />
                 </div>
 
@@ -166,7 +166,7 @@ export const MyPassesRoster: React.FC<MyPassesRosterProps> = ({
                     onChange={(e) =>
                       setEditingPass({ ...editingPass, college: e.target.value })
                     }
-                    className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
+                    className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
                   />
                 </div>
 
@@ -178,7 +178,7 @@ export const MyPassesRoster: React.FC<MyPassesRosterProps> = ({
                     onChange={(e) =>
                       setEditingPass({ ...editingPass, phone: e.target.value })
                     }
-                    className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
+                    className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
                   />
                 </div>
 

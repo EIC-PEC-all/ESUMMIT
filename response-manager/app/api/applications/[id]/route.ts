@@ -1,9 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDatabase } from '@/lib/mongodb'
-import { ObjectId } from 'mongodb'
 
 interface Params {
   params: Promise<{ id: string }>
+}
+
+function buildIdFilter(id: string): Record<string, unknown> {
+  const isHex24 = /^[0-9a-fA-F]{24}$/.test(id)
+  if (isHex24) {
+    return { $or: [{ _id: id }, { applicationId: id }] }
+  }
+  return { applicationId: id }
 }
 
 export async function PATCH(req: NextRequest, { params }: Params) {
@@ -21,11 +28,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     if (body.reviewNotes !== undefined) updateFields.reviewNotes = body.reviewNotes
     if (body.internalRating !== undefined) updateFields.internalRating = Number(body.internalRating)
 
-    let filter: Record<string, unknown> = { applicationId: id }
-    if (ObjectId.isValid(id)) {
-      filter = { $or: [{ _id: new ObjectId(id) }, { applicationId: id }] }
-    }
-
+    const filter = buildIdFilter(id)
     const result = await collection.updateOne(filter, { $set: updateFields })
 
     if (result.matchedCount === 0) {
@@ -45,11 +48,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
     const db = await getDatabase()
     const collection = db.collection('funding_conclave_applications')
 
-    let filter: Record<string, unknown> = { applicationId: id }
-    if (ObjectId.isValid(id)) {
-      filter = { $or: [{ _id: new ObjectId(id) }, { applicationId: id }] }
-    }
-
+    const filter = buildIdFilter(id)
     const result = await collection.deleteOne(filter)
 
     if (result.deletedCount === 0) {

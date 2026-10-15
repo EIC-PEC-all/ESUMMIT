@@ -9,7 +9,7 @@ export interface NavCountdownProps {
 }
 
 export default function NavCountdown({
-  targetISO = '2026-11-14T09:00:00+05:30',
+  targetISO = '2026-03-19T09:00:00+05:30',
   visible = true,
 }: NavCountdownProps) {
   const pathname = usePathname()

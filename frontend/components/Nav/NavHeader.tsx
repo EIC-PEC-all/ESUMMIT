@@ -60,12 +60,12 @@ export default function NavHeader({
           aria-label="PEC E-Summit '26 — Home"
         >
           <Image
-            src="/esummit-logo.png?v=3"
+            src="/esummit-logo.png"
             alt="PEC E-Summit '26 Logo"
             width={256}
             height={50}
             priority
-            className="h-5.5 sm:h-7.5 md:h-8 w-auto max-w-[150px] sm:max-w-[220px] md:max-w-[260px] object-contain drop-shadow-[0_0_12px_rgba(138,197,63,0.25)] group-hover:scale-[1.02] group-hover:brightness-110 transition-all duration-200"
+            className="h-5.5 sm:h-7.5 md:h-8 w-auto max-w-[150px] sm:max-w-[220px] md:max-w-[260px] object-contain drop-shadow-[0_0_12px_rgba(0,245,212,0.25)] group-hover:scale-[1.02] group-hover:brightness-110 transition-all duration-200"
           />
         </Link>
 

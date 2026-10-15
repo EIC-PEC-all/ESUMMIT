@@ -12,23 +12,23 @@ The design system is built on CSS custom properties defined in `app/globals.css`
 
 | Token | CSS Variable | Value | Usage |
 |---|---|---|---|
-| Void | `--bg-void` | `#050B06` | Deep obsidian page canvas |
-| Deep | `--bg-deep` | `#071008` | Recessed backgrounds |
-| Panel | `--bg-panel` | `#0D1C10` | Card and panel backgrounds |
-| Panel Alt | `--bg-panel-alt` | `#122416` | Elevated surface backgrounds |
-| Electric Lime | `--accent-mint` | `#8AC53F` | Official brand primary (from logo), CTAs, electric highlights |
-| Vibrant Green | `--accent-green` | `#7BB832` | Secondary green accent |
-| Logo Indigo | `--accent-blue` | `#4341A8` | Cool contrast accent matching logo curve |
-| Logo Navy | `--accent-navy` | `#2D2C71` | Deep logo navy accent |
+| Void | `--bg-void` | `#060D0B` | Deep obsidian page canvas |
+| Deep | `--bg-deep` | `#081310` | Recessed backgrounds |
+| Panel | `--bg-panel` | `#0D1C18` | Card and panel backgrounds |
+| Panel Alt | `--bg-panel-alt` | `#12241F` | Elevated surface backgrounds |
+| Cyber Mint | `--accent-mint` | `#00F5D4` | Official brand primary, CTAs, electric highlights |
+| Emerald Aqua | `--accent-green` | `#00DFBA` | Secondary teal-green accent |
+| Cyber Blue | `--accent-blue` | `#3DD9FF` | Cool contrast accent matching logo curve |
+| Obsidian Navy | `--accent-navy` | `#0D1C18` | Deep panel accent |
 | Accent Coral | `--accent-coral` | `#FF4D3D` | Pitch competition warm accent |
-| Lime Glow | `--accent-green-dim` | `rgba(138, 197, 63, 0.15)` | Radial glow, shadow effects |
+| Mint Glow | `--accent-green-dim` | `rgba(0, 245, 212, 0.15)` | Radial glow, shadow effects |
 | Gold | — | `#FFD700` | Highlight accents |
 | Text Primary | `--text-primary` | `#FFFFFF` | Body text |
 | Text Secondary | `--text-secondary` | `#94A3B8` | Subtitles, secondary labels |
 | Text Muted | `--text-muted` | `#64748B` | Captions, placeholders |
 | Border Subtle | `--border-subtle` | `rgba(255, 255, 255, 0.10)` | Default card borders |
 | Border Panel | `--border-panel` | `rgba(255, 255, 255, 0.15)` | Panel dividers |
-| Border Glow | `--border-glow` | `rgba(138, 197, 63, 0.3)` | Active / hover borders |
+| Border Glow | `--border-glow` | `rgba(0, 245, 212, 0.30)` | Active / hover borders |
 
 ### Light / Olive Mode
 
@@ -63,7 +63,7 @@ Three font families are configured. All are loaded in `app/layout.tsx` and expos
 
 | Type | Tailwind Classes | Usage |
 |---|---|---|
-| Primary CTA | `bg-mint text-void font-bold shadow-[0_0_25px_rgba(138,197,63,0.4)]` | Hero register, pitch CTA, main actions |
+| Primary CTA | `bg-mint text-void font-bold shadow-[0_0_25px_rgba(0,245,212,0.4)]` | Hero register, pitch CTA, main actions |
 | Passes (Nav) | `bg-[#FFD700] text-black font-black` | Navbar PASSES button only |
 | Secondary | `bg-panel text-primary border border-border-subtle` | Explore Tracks, secondary actions |
 | Ghost Outline | `border border-mint text-mint hover:bg-mint/10` | Card triggers, drawer opens |

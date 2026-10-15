@@ -246,11 +246,11 @@ export default function OnboardingModal({
                     onChange={(e) => handleStateChange(e.target.value)}
                     className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
                   >
-                    <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                    <option value="" disabled className="bg-[#081310] text-neutral-500">
                       Select State / UT
                     </option>
                     {STATE_NAMES.map((st) => (
-                      <option key={st} value={st} className="bg-[#0B1410] text-white">
+                      <option key={st} value={st} className="bg-[#081310] text-white">
                         {st}
                       </option>
                     ))}
@@ -281,15 +281,15 @@ export default function OnboardingModal({
                     onChange={(e) => setSelectedCity(e.target.value)}
                     className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                    <option value="" disabled className="bg-[#081310] text-neutral-500">
                       {selectedState ? `Select City in ${selectedState}` : 'Select State / UT first'}
                     </option>
                     {availableCities.map((ct) => (
-                      <option key={ct} value={ct} className="bg-[#0B1410] text-white">
+                      <option key={ct} value={ct} className="bg-[#081310] text-white">
                         {ct}
                       </option>
                     ))}
-                    <option value="Other" className="bg-[#0B1410] text-mint">
+                    <option value="Other" className="bg-[#081310] text-mint">
                       + Other (Specify City)
                     </option>
                   </select>
@@ -342,7 +342,7 @@ export default function OnboardingModal({
                   className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
                 >
                   {GRADUATION_YEARS.map((yr) => (
-                    <option key={yr.value} value={yr.value} className="bg-[#0B1410] text-white">
+                    <option key={yr.value} value={yr.value} className="bg-[#081310] text-white">
                       {yr.label}
                     </option>
                   ))}

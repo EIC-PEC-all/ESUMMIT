@@ -11,7 +11,7 @@ export default function TimelinePage() {
       <Nav />
       <PageBanner
         title="TIMELINE"
-        subtitle="14–15 NOVEMBER 2026 · OFFICIAL SUMMIT TIMETABLE & TRACK AGENDA"
+        subtitle="MARCH 19–21, 2026 · OFFICIAL SUMMIT TIMETABLE & TRACK AGENDA"
       />
 
       <section

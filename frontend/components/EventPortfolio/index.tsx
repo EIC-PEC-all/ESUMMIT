@@ -104,7 +104,7 @@ export default function EventPortfolioShowcase() {
     <>
       <PageBanner
         title="EVENTS"
-        subtitle="14–15 NOVEMBER 2026 · 12 SIGNATURE PROPERTIES & COMPETITIONS"
+        subtitle="MARCH 19–21, 2026 · 12 SIGNATURE PROPERTIES & COMPETITIONS"
       />
 
       <section

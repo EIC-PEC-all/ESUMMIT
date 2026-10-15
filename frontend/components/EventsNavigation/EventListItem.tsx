@@ -58,13 +58,13 @@ export function EventListItem({ event, isSelected, distance, duration, onClick }
       {/* Hover layer */}
       <motion.div
         className="absolute inset-0 rounded-[10px] opacity-0 group-hover:opacity-100"
-        style={{ background: 'rgba(138,197,63,0.04)', transition: 'opacity 0.25s ease' }}
+        style={{ background: 'rgba(0,245,212,0.04)', transition: 'opacity 0.25s ease' }}
       />
 
       {/* Selected left accent bar — morphs in */}
       <motion.div
         className="absolute left-0 top-2 bottom-2 rounded-full"
-        animate={isSelected ? { width: 3, opacity: 1, background: '#8AC53F', boxShadow: '0 0 10px #8AC53F' } : { width: 2, opacity: 0 }}
+        animate={isSelected ? { width: 3, opacity: 1, background: '#00F5D4', boxShadow: '0 0 10px #00F5D4' } : { width: 2, opacity: 0 }}
         transition={{ duration: 0.35, ease: 'easeOut' }}
       />
 
@@ -75,8 +75,8 @@ export function EventListItem({ event, isSelected, distance, duration, onClick }
           className="shrink-0 flex items-center justify-center rounded-lg"
           style={{ width: 34, height: 34 }}
           animate={isSelected ? {
-            background: 'rgba(138,197,63,0.15)',
-            boxShadow: '0 0 12px rgba(138,197,63,0.3)',
+            background: 'rgba(0,245,212,0.15)',
+            boxShadow: '0 0 12px rgba(0,245,212,0.3)',
           } : {
             background: 'rgba(255,255,255,0.04)',
             boxShadow: 'none',
@@ -84,7 +84,7 @@ export function EventListItem({ event, isSelected, distance, duration, onClick }
           transition={{ duration: 0.3 }}
         >
           <motion.div
-            animate={isSelected ? { color: '#8AC53F' } : { color: 'rgba(255,255,255,0.3)' }}
+            animate={isSelected ? { color: '#00F5D4' } : { color: 'rgba(255,255,255,0.3)' }}
             transition={{ duration: 0.3 }}
           >
             <MapPin size={16} />
@@ -105,7 +105,7 @@ export function EventListItem({ event, isSelected, distance, duration, onClick }
             <motion.span
               className="text-[9px] uppercase tracking-wider"
               style={{ fontFamily: "'Space Mono', monospace" }}
-              animate={isSelected ? { color: '#8AC53F' } : { color: 'rgba(255,255,255,0.25)' }}
+              animate={isSelected ? { color: '#00F5D4' } : { color: 'rgba(255,255,255,0.25)' }}
               transition={{ duration: 0.3 }}
             >
               {formatTime(event.time)}
@@ -116,7 +116,7 @@ export function EventListItem({ event, isSelected, distance, duration, onClick }
                 <motion.span
                   className="text-[9px]"
                   style={{ fontFamily: "'Space Mono', monospace" }}
-                  animate={isSelected ? { color: '#7BB832' } : { color: 'rgba(255,255,255,0.2)' }}
+                  animate={isSelected ? { color: '#00DFBA' } : { color: 'rgba(255,255,255,0.2)' }}
                   transition={{ duration: 0.3 }}
                 >
                   {distance !== undefined && formatDistance(distance)}
@@ -129,7 +129,7 @@ export function EventListItem({ event, isSelected, distance, duration, onClick }
           <motion.p
             className="text-[9px] truncate mt-0.5"
             style={{ fontFamily: "'Space Mono', monospace" }}
-            animate={isSelected ? { color: 'rgba(138,197,63,0.7)' } : { color: 'rgba(255,255,255,0.18)' }}
+            animate={isSelected ? { color: 'rgba(0,245,212,0.7)' } : { color: 'rgba(255,255,255,0.18)' }}
             transition={{ duration: 0.3 }}
           >
             {event.venueName}
@@ -140,7 +140,7 @@ export function EventListItem({ event, isSelected, distance, duration, onClick }
         <motion.div
           className="shrink-0"
           animate={isSelected
-            ? { color: '#8AC53F', rotate: 0, opacity: 1 }
+            ? { color: '#00F5D4', rotate: 0, opacity: 1 }
             : { color: 'rgba(255,255,255,0.15)', rotate: -20, opacity: 0.5 }}
           transition={{ duration: 0.35, ease: 'easeOut' }}
         >

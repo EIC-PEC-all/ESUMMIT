@@ -18,7 +18,7 @@ export default function UpcomingSponsorsComingSoon() {
           </h3>
 
           <div className="my-5 py-3 px-8 rounded-2xl bg-white/[0.03] border border-white/10 max-w-xs mx-auto shadow-inner">
-            <span className="font-display font-black uppercase tracking-widest text-mint text-xl sm:text-2xl drop-shadow-[0_0_15px_rgba(138,197,63,0.35)]">
+            <span className="font-display font-black uppercase tracking-widest text-mint text-xl sm:text-2xl drop-shadow-[0_0_15px_rgba(0,245,212,0.35)]">
               COMING SOON
             </span>
           </div>

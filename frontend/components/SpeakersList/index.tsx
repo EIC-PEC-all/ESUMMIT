@@ -55,9 +55,9 @@ function SpeakerCard({ person }: { person: Speaker }) {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      className="bg-[#0B1512] border border-white/10 hover:border-mint/40 rounded-2xl overflow-hidden transition-all duration-300 group hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col"
+      className="bg-[#0D1C18] border border-white/10 hover:border-mint/40 rounded-2xl overflow-hidden transition-all duration-300 group hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] flex flex-col"
     >
-      <div className="relative w-full aspect-[4/5] bg-[#070E0C] overflow-hidden">
+      <div className="relative w-full aspect-[4/5] bg-[#060D0B] overflow-hidden">
         {person.image ? (
           <BlurImage
             src={person.image}
@@ -128,7 +128,7 @@ export default function SpeakersList() {
         {/* Controls: Pill Tabs + Search Bar */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-10">
           {/* Pill Tabs */}
-          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-[#07130E] border border-white/10 overflow-x-auto max-w-full">
+          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-[#081310] border border-white/10 overflow-x-auto max-w-full">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
@@ -136,7 +136,7 @@ export default function SpeakersList() {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono-data font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   activeCategory === cat.id
-                    ? 'bg-mint text-void shadow-[0_0_15px_rgba(138,197,63,0.35)]'
+                    ? 'bg-mint text-void shadow-[0_0_15px_rgba(0,245,212,0.35)]'
                     : 'text-neutral-400 hover:text-white hover:bg-white/5'
                 }`}
               >
@@ -147,7 +147,7 @@ export default function SpeakersList() {
 
           {/* Quick Search Bar */}
           <div className="relative w-full md:w-72 lg:w-80">
-            <div className="relative flex items-center bg-[#07130E] border border-white/10 focus-within:border-mint/50 focus-within:shadow-[0_0_15px_rgba(138,197,63,0.15)] rounded-full px-4 py-2 transition-all">
+            <div className="relative flex items-center bg-[#081310] border border-white/10 focus-within:border-mint/50 focus-within:shadow-[0_0_15px_rgba(0,245,212,0.2)] rounded-full px-4 py-2 transition-all">
               <Search size={14} className="text-neutral-400 mr-2 shrink-0" />
               <input
                 type="text"
@@ -198,7 +198,7 @@ export default function SpeakersList() {
 
       {/* --- E-Summit '26 Speakers (Coming Soon) --- */}
       <div className="max-w-7xl mx-auto w-full mt-16 sm:mt-20 mb-12">
-        <div className="rounded-2xl border border-white/10 bg-[#0B1512] p-8 sm:p-14 text-center flex flex-col items-center justify-center space-y-5">
+        <div className="rounded-2xl border border-white/10 bg-[#0D1C18] p-8 sm:p-14 text-center flex flex-col items-center justify-center space-y-5">
           <Sparkles className="text-mint w-8 h-8 opacity-80" />
           
           <div className="space-y-2">

@@ -13,7 +13,7 @@ export default function Sponsors() {
     <>
       <PageBanner
         title="SPONSORS"
-        subtitle="14–15 NOVEMBER 2026 · POWERED BY GLOBAL TECH & VENTURE INSTITUTIONS"
+        subtitle="MARCH 19–21, 2026 · POWERED BY GLOBAL TECH & VENTURE INSTITUTIONS"
       />
 
       <section
@@ -70,7 +70,7 @@ export default function Sponsors() {
                 download="PEC-E-Summit-2026-Brochure.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-mint text-[#06110D] font-mono-data text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(138,197,63,0.25)] hover:scale-105 active:scale-95"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-mint text-[#06110D] font-mono-data text-xs font-bold uppercase tracking-wider hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(0,245,212,0.3)] hover:scale-105 active:scale-95"
               >
                 <Download size={14} strokeWidth={2.5} />
                 <span>DOWNLOAD OFFICIAL BROCHURE (PDF)</span>

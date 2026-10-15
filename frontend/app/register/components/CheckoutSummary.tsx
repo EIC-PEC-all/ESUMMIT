@@ -88,7 +88,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                 .map((ev) => (
                   <div
                     key={ev.id}
-                    className="flex items-center justify-between p-2 rounded bg-[#0B1410] text-xs"
+                    className="flex items-center justify-between p-2 rounded bg-[#081310] text-xs"
                   >
                     <span className="text-neutral-200 text-xs truncate mr-2">{ev.title}</span>
                     <span className="text-mint text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-mint/10 shrink-0 font-mono">
@@ -152,7 +152,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value)}
                     placeholder="EARLYBIRD"
-                    className="w-full rounded-md border border-white/10 bg-[#0B1410] px-2.5 py-1.5 pl-7 text-xs text-white uppercase outline-none focus:border-mint font-mono"
+                    className="w-full rounded-md border border-white/10 bg-[#081310] px-2.5 py-1.5 pl-7 text-xs text-white uppercase outline-none focus:border-mint font-mono"
                   />
                 </div>
                 <button

@@ -7,7 +7,7 @@ export default function LimeTransitionBanner() {
   const words = ['IDEATE', 'BUILD', 'PITCH', 'SCALE', 'INVEST', 'NETWORK']
 
   return (
-    <div className="relative w-full overflow-hidden bg-mint text-void py-6 sm:py-8 my-0 z-20 shadow-[0_0_50px_rgba(138,197,63,0.35)] border-y-2 border-void">
+    <div className="relative w-full overflow-hidden bg-mint text-void py-6 sm:py-8 my-0 z-20 shadow-[0_0_50px_rgba(0,245,212,0.35)] border-y-2 border-void">
       {/* Top micro line */}
       <div className="absolute top-1 left-0 right-0 h-0.5 bg-void/20" />
 

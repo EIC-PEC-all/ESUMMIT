@@ -213,7 +213,7 @@ export default function Home() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search startup, founder, email, sector, ID..."
-                className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-[#0D1C18] border border-white/10 text-white placeholder-gray-500 text-xs font-body focus:outline-none focus:border-mint transition-colors"
+                className="w-full pl-11 pr-5 py-2.5 rounded-full bg-[#0D1C18] border border-white/10 text-white placeholder-gray-500 text-xs font-body focus:outline-none focus:border-mint transition-colors"
               />
             </div>
 
@@ -226,7 +226,7 @@ export default function Home() {
                 <select
                   value={tierFilter}
                   onChange={(e) => setTierFilter(e.target.value)}
-                  className="px-3.5 py-2 rounded-xl bg-[#0D1C18] border border-white/10 text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-mint appearance-none cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-[#0D1C18] border border-white/10 text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-mint appearance-none cursor-pointer"
                 >
                   <option value="ALL">ALL PASSES</option>
                   <option value="diamond">DIAMOND PASS</option>
@@ -243,7 +243,7 @@ export default function Home() {
                 <select
                   value={stageFilter}
                   onChange={(e) => setStageFilter(e.target.value)}
-                  className="px-3.5 py-2 rounded-xl bg-[#0D1C18] border border-white/10 text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-mint appearance-none cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-[#0D1C18] border border-white/10 text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-mint appearance-none cursor-pointer"
                 >
                   <option value="ALL">ALL STAGES</option>
                   {uniqueStages.map((stage) => (
@@ -337,7 +337,7 @@ export default function Home() {
                             <span
                               className={`px-2 py-0.5 rounded-full text-[9px] font-mono-data font-bold uppercase tracking-wider border ${
                                 app.passTier === 'diamond'
-                                  ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+                                  ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
                                   : app.passTier === 'silver'
                                   ? 'bg-slate-500/15 text-slate-300 border-slate-500/30'
                                   : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
@@ -358,7 +358,7 @@ export default function Home() {
 
                       {/* Stage & Sector */}
                       <td className="py-4 px-5">
-                        <span className="px-2.5 py-0.5 rounded-md bg-white/5 text-white border border-white/10 text-[11px] font-medium block w-fit mb-1">
+                        <span className="px-2.5 py-0.5 rounded-full bg-white/5 text-white border border-white/10 text-[11px] font-medium block w-fit mb-1">
                           {app.stage}
                         </span>
                         <span className="text-[11px] text-gray-400 font-mono-data">{app.sector}</span>

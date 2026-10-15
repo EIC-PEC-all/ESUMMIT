@@ -102,7 +102,7 @@ export default function RegisterClient() {
   const { user, loginWithEmail, registerWithEmail, loginWithGoogle, resetPassword, logout } =
     useAuth()
   const { data: cmsData } = useSummitData()
-  const summitDates = cmsData?.siteConfig?.summitDates || 'November 14–15, 2026'
+  const summitDates = cmsData?.siteConfig?.summitDates || 'March 19–21, 2026'
 
   const [view, setView] = useState<'catalog' | 'checkout' | 'success' | 'passes' | 'auth'>('catalog')
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login')
@@ -517,14 +517,14 @@ export default function RegisterClient() {
     if (!ctx) return
 
     const bgGradient = ctx.createLinearGradient(0, 0, 0, 1920)
-    bgGradient.addColorStop(0, '#050B06')
-    bgGradient.addColorStop(0.5, '#0D1C10')
-    bgGradient.addColorStop(1, '#020603')
+    bgGradient.addColorStop(0, '#060D0B')
+    bgGradient.addColorStop(0.5, '#081310')
+    bgGradient.addColorStop(1, '#020605')
     ctx.fillStyle = bgGradient
     ctx.fillRect(0, 0, 1080, 1920)
 
     ctx.textAlign = 'center'
-    ctx.fillStyle = '#8AC53F'
+    ctx.fillStyle = '#00F5D4'
     ctx.font = 'bold 36px monospace'
     ctx.fillText('PEC E-SUMMIT 2026', 540, 220)
 
@@ -532,7 +532,7 @@ export default function RegisterClient() {
     ctx.font = '900 84px sans-serif'
     ctx.fillText('OFFICIAL SUMMIT', 540, 320)
 
-    ctx.fillStyle = '#8AC53F'
+    ctx.fillStyle = '#00F5D4'
     ctx.font = '900 84px sans-serif'
     ctx.fillText('ENTRY PASS', 540, 410)
 
@@ -544,23 +544,23 @@ export default function RegisterClient() {
     ctx.save()
     ctx.beginPath()
     ctx.rect(cardX, cardY, cardW, cardH)
-    ctx.fillStyle = '#0D1C10'
+    ctx.fillStyle = '#0D1C18'
     ctx.fill()
     ctx.lineWidth = 2
-    ctx.strokeStyle = 'rgba(138, 197, 63, 0.35)'
+    ctx.strokeStyle = 'rgba(0, 245, 212, 0.35)'
     ctx.stroke()
     ctx.restore()
 
     const categoryText = currentBadge?.category || 'SUMMIT PASS'
-    ctx.fillStyle = 'rgba(138, 197, 63, 0.15)'
+    ctx.fillStyle = 'rgba(0, 245, 212, 0.15)'
     ctx.beginPath()
     ctx.rect(540 - 180, cardY + 60, 360, 60)
     ctx.fill()
-    ctx.strokeStyle = '#8AC53F'
+    ctx.strokeStyle = '#00F5D4'
     ctx.lineWidth = 1.5
     ctx.stroke()
 
-    ctx.fillStyle = '#8AC53F'
+    ctx.fillStyle = '#00F5D4'
     ctx.font = 'bold 26px monospace'
     ctx.fillText(categoryText.toUpperCase(), 540, cardY + 100)
 
@@ -587,7 +587,7 @@ export default function RegisterClient() {
 
     const finishAndDownload = () => {
       const ticketId = currentBadge?.id || 'PEC-000000'
-      ctx.fillStyle = '#8AC53F'
+      ctx.fillStyle = '#00F5D4'
       ctx.font = 'bold 32px monospace'
       ctx.fillText(ticketId, 540, cardY + 760)
 
@@ -595,7 +595,7 @@ export default function RegisterClient() {
       ctx.font = 'bold 28px sans-serif'
       ctx.fillText(`${summitDates.toUpperCase()}  •  PEC CHANDIGARH`, 540, cardY + 840)
 
-      ctx.fillStyle = '#8AC53F'
+      ctx.fillStyle = '#00F5D4'
       ctx.font = 'bold 32px sans-serif'
       ctx.fillText("I'M ATTENDING PEC E-SUMMIT '26!", 540, 1680)
 
@@ -635,11 +635,11 @@ export default function RegisterClient() {
   }
 
   return (
-    <main className="min-h-screen bg-[#0B1410] text-[#E2E8F0] flex flex-col justify-between selection:bg-mint/30 selection:text-white font-body antialiased">
+    <main className="min-h-screen bg-[#060D0B] text-[#E2E8F0] flex flex-col justify-between selection:bg-mint/30 selection:text-white font-body antialiased">
       <Toaster position="top-center" />
 
       {/* ── TOP HEADER / MINIMALIST NAVIGATION ── */}
-      <header className="w-full border-b border-white/[0.08] bg-[#0B1410]/90 backdrop-blur-md sticky top-0 z-40">
+      <header className="w-full border-b border-white/[0.08] bg-[#081310]/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2">
           <Link
             href="/"
@@ -786,7 +786,7 @@ export default function RegisterClient() {
                         value={authName}
                         onChange={(e) => setAuthName(e.target.value)}
                         placeholder="Aryan Sharma"
-                        className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                        className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
                       />
                     </div>
                   )}
@@ -801,7 +801,7 @@ export default function RegisterClient() {
                       value={authEmail}
                       onChange={(e) => setAuthEmail(e.target.value)}
                       placeholder="name@college.edu or gmail.com"
-                      className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                      className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
                     />
                   </div>
 
@@ -827,7 +827,7 @@ export default function RegisterClient() {
                         value={authPassword}
                         onChange={(e) => setAuthPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                        className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
                       />
                     </div>
                   )}
@@ -1051,7 +1051,7 @@ export default function RegisterClient() {
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           placeholder="e.g. Aryan Sharma"
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                          className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
                         />
                       </div>
 
@@ -1065,7 +1065,7 @@ export default function RegisterClient() {
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           placeholder="e.g. aryan@college.edu or gmail.com"
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                          className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
                         />
                       </div>
 
@@ -1078,7 +1078,7 @@ export default function RegisterClient() {
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                           placeholder="+91 98765 43210"
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                          className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
                         />
                       </div>
 
@@ -1092,7 +1092,7 @@ export default function RegisterClient() {
                           value={formData.college}
                           onChange={(e) => setFormData({ ...formData, college: e.target.value })}
                           placeholder="Punjab Engineering College, Chandigarh"
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                          className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
                         />
                       </div>
 
@@ -1109,13 +1109,13 @@ export default function RegisterClient() {
                             setFormData({ ...formData, state: newState, city: '' })
                             setCustomCityInput('')
                           }}
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer"
+                          className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer"
                         >
-                          <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                          <option value="" disabled className="bg-[#081310] text-neutral-500">
                             Select State / UT
                           </option>
                           {STATE_NAMES.map((st) => (
-                            <option key={st} value={st} className="bg-[#0B1410] text-white">
+                            <option key={st} value={st} className="bg-[#081310] text-white">
                               {st}
                             </option>
                           ))}
@@ -1143,17 +1143,17 @@ export default function RegisterClient() {
                               setCustomCityInput('')
                             }
                           }}
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer disabled:opacity-40"
+                          className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer disabled:opacity-40"
                         >
-                          <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                          <option value="" disabled className="bg-[#081310] text-neutral-500">
                             {formData.state ? `Select City in ${formData.state}` : 'Select State / UT first'}
                           </option>
                           {getCitiesForState(formData.state || '').map((ct) => (
-                            <option key={ct} value={ct} className="bg-[#0B1410] text-white">
+                            <option key={ct} value={ct} className="bg-[#081310] text-white">
                               {ct}
                             </option>
                           ))}
-                          <option value="Other" className="bg-[#0B1410] text-mint font-medium">
+                          <option value="Other" className="bg-[#081310] text-mint font-medium">
                             + Other (Specify City)
                           </option>
                         </select>
@@ -1169,7 +1169,7 @@ export default function RegisterClient() {
                                 setFormData({ ...formData, city: e.target.value })
                               }}
                               placeholder="Specify city / town name"
-                              className="w-full rounded-md border border-mint/40 bg-[#0B1410] px-3 py-1.5 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
+                              className="w-full rounded-md border border-mint/40 bg-[#081310] px-3 py-1.5 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors"
                             />
                           </div>
                         )}
@@ -1183,10 +1183,10 @@ export default function RegisterClient() {
                         <select
                           value={normalizeGradYear(formData.gradYear)}
                           onChange={(e) => setFormData({ ...formData, gradYear: e.target.value })}
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer"
+                          className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white outline-none focus:border-mint transition-colors cursor-pointer"
                         >
                           {GRADUATION_YEARS.map((yr) => (
-                            <option key={yr.value} value={yr.value} className="bg-[#0B1410] text-white">
+                            <option key={yr.value} value={yr.value} className="bg-[#081310] text-white">
                               {yr.label}
                             </option>
                           ))}
@@ -1203,7 +1203,7 @@ export default function RegisterClient() {
                           value={formData.referralCode}
                           onChange={(e) => setFormData({ ...formData, referralCode: e.target.value.toUpperCase() })}
                           placeholder="e.g. PEC-CA-102"
-                          className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors font-mono"
+                          className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-2 text-xs text-white placeholder:text-neutral-500 outline-none focus:border-mint transition-colors font-mono"
                         />
                       </div>
                     </div>
@@ -1244,7 +1244,7 @@ export default function RegisterClient() {
                 </div>
 
                 {/* ── STICKY COMPACT BOTTOM ACTION BAR ── */}
-                <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#0B1410]/95 backdrop-blur-md border-t border-white/10 py-3 shadow-2xl">
+                <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#081310]/95 backdrop-blur-md border-t border-white/10 py-3 shadow-2xl">
                   <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <div>
@@ -1395,7 +1395,7 @@ export default function RegisterClient() {
                             value={couponCode}
                             onChange={(e) => setCouponCode(e.target.value)}
                             placeholder="EARLYBIRD"
-                            className="w-full rounded-md border border-white/10 bg-[#0B1410] px-2.5 py-1.5 pl-7 text-xs text-white uppercase outline-none focus:border-mint font-mono"
+                            className="w-full rounded-md border border-white/10 bg-[#081310] px-2.5 py-1.5 pl-7 text-xs text-white uppercase outline-none focus:border-mint font-mono"
                           />
                         </div>
                         <button
@@ -1777,7 +1777,7 @@ export default function RegisterClient() {
                     required
                     value={editingPass.name}
                     onChange={(e) => setEditingPass({ ...editingPass, name: e.target.value })}
-                    className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
+                    className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
                   />
                 </div>
 
@@ -1787,7 +1787,7 @@ export default function RegisterClient() {
                     type="text"
                     value={editingPass.college}
                     onChange={(e) => setEditingPass({ ...editingPass, college: e.target.value })}
-                    className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
+                    className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
                   />
                 </div>
 
@@ -1797,7 +1797,7 @@ export default function RegisterClient() {
                     type="tel"
                     value={editingPass.phone || ''}
                     onChange={(e) => setEditingPass({ ...editingPass, phone: e.target.value })}
-                    className="w-full rounded-md border border-white/10 bg-[#0B1410] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
+                    className="w-full rounded-md border border-white/10 bg-[#081310] px-3 py-1.5 text-xs text-white outline-none focus:border-mint"
                   />
                 </div>
 

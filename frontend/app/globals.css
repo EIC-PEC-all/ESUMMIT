@@ -20,22 +20,22 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-kanit, .font-asimovian {
   --font-kanit: var(--font-asimovian);
   --font-display: var(--font-asimovian);
   --font-jetbrains: var(--font-marcellus);
-  --bg-void: #050B06;
-  --bg-deep: #071008;
-  --bg-panel: #0D1C10;
-  --bg-panel-alt: #122416;
+  --bg-void: #060D0B;
+  --bg-deep: #081310;
+  --bg-panel: #0D1C18;
+  --bg-panel-alt: #12241F;
 
   /* Alternating section background colors */
-  --bg-section-1: #08130A;
-  --bg-section-2: #0D1E10;
+  --bg-section-1: #081310;
+  --bg-section-2: #0D1C18;
 
-  --accent-mint: #8AC53F;
-  --accent-green: #7BB832;
-  --accent-green-dim: rgba(138, 197, 63, 0.15);
-  --accent-green-glow: rgba(138, 197, 63, 0.35);
+  --accent-mint: #00F5D4;
+  --accent-green: #00DFBA;
+  --accent-green-dim: rgba(0, 245, 212, 0.15);
+  --accent-green-glow: rgba(0, 245, 212, 0.35);
 
-  --accent-blue: #4341A8;
-  --accent-navy: #2D2C71;
+  --accent-blue: #3DD9FF;
+  --accent-navy: #0D1C18;
   --accent-coral: #FF4D3D;
 
   --text-primary: #FFFFFF;
@@ -45,7 +45,7 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-kanit, .font-asimovian {
 
   --border-subtle: rgba(255, 255, 255, 0.10);
   --border-panel: rgba(255, 255, 255, 0.15);
-  --border-glow: rgba(138, 197, 63, 0.3);
+  --border-glow: rgba(0, 245, 212, 0.30);
 
   color-scheme: dark;
 }
@@ -175,13 +175,42 @@ header {
 
 /* Selection */
 ::selection {
-  background: var(--accent-mint);
-  color: var(--bg-void);
+  background: rgba(0, 245, 212, 0.30);
+  color: #00F5D4;
+  -webkit-text-fill-color: #00F5D4;
 }
 
 ::-moz-selection {
-  background: var(--accent-mint);
-  color: var(--bg-void);
+  background: rgba(0, 245, 212, 0.30);
+  color: #00F5D4;
+  -webkit-text-fill-color: #00F5D4;
+}
+
+/* Ensure text-gradient elements have visible, sharp white text when selected */
+.text-gradient-mint::selection,
+.text-gradient-green::selection,
+.text-gradient-white::selection,
+.text-gradient-blue::selection,
+.text-gradient-cyan::selection,
+.text-gradient-coral::selection,
+.text-gradient-orange::selection,
+.text-gradient-amber::selection {
+  background: rgba(0, 245, 212, 0.35);
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
+}
+
+.text-gradient-mint::-moz-selection,
+.text-gradient-green::-moz-selection,
+.text-gradient-white::-moz-selection,
+.text-gradient-blue::-moz-selection,
+.text-gradient-cyan::-moz-selection,
+.text-gradient-coral::-moz-selection,
+.text-gradient-orange::-moz-selection,
+.text-gradient-amber::-moz-selection {
+  background: rgba(0, 245, 212, 0.35);
+  color: #FFFFFF;
+  -webkit-text-fill-color: #FFFFFF;
 }
 
 /* â”€â”€â”€ Big Headings Font Rule (Kanit) â”€â”€â”€ */
@@ -202,9 +231,9 @@ h1, h2, h3 {
   background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-blue) 100%);
 }
 
-/* â”€â”€â”€ Glass / Panel â”€â”€â”€ */
+/* ─── Glass / Panel ─── */
 .glass {
-  background: rgba(13, 20, 14, 0.85);
+  background: rgba(8, 19, 16, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
@@ -212,7 +241,7 @@ h1, h2, h3 {
 
 /* ─── Glow effects ─── */
 .glow-orange, .glow-volt, .glow-amber, .glow-green {
-  box-shadow: 0 0 24px rgba(138, 197, 63, 0.4), 0 0 48px rgba(138, 197, 63, 0.15);
+  box-shadow: 0 0 24px rgba(0, 245, 212, 0.4), 0 0 48px rgba(0, 245, 212, 0.15);
 }
 
 /* ─── 3D Metallic Text Gradients ─── */
@@ -227,7 +256,7 @@ h1, h2, h3 {
 }
 
 .text-gradient-mint, .text-gradient-green {
-  background: linear-gradient(180deg, #F0FCE1 0%, var(--accent-mint) 65%, #629624 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, #00F5D4 65%, #00C2A7 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -237,7 +266,7 @@ h1, h2, h3 {
 }
 
 .text-gradient-blue, .text-gradient-cyan {
-  background: linear-gradient(180deg, #EEEEFC 0%, var(--accent-blue) 65%, #2D2C71 100%);
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--accent-blue) 65%, #0EA5E9 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -281,16 +310,16 @@ h1, h2, h3 {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: linear-gradient(180deg, #D4FFA3 0%, #8AC53F 60%, #689E28 100%);
-  color: #050B06;
+  background: linear-gradient(180deg, #5CFFE6 0%, #00F5D4 60%, #00C4A9 100%);
+  color: #060D0B;
   font-family: var(--font-jetbrains), monospace;
   font-weight: 700;
-  border: 1px solid #A8EE4A;
+  border: 1px solid rgba(0, 245, 212, 0.6);
   border-radius: 9999px;
   cursor: pointer;
   transition: transform 0.15s ease, filter 0.15s ease;
   overflow: hidden;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), 0 2px 12px rgba(138, 197, 63, 0.35);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), 0 2px 12px rgba(0, 245, 212, 0.35);
 }
 .btn-green:hover, .btn-orange:hover, .btn-volt:hover, .btn-amber:hover, .btn-mint-gradient:hover {
   transform: translateY(-1px);
@@ -357,9 +386,9 @@ h1, h2, h3 {
   box-shadow: none !important;
 }
 .btn-ghost:hover {
-  border-color: #8AC53F;
-  color: #8AC53F;
-  background: rgba(138, 197, 63, 0.08);
+  border-color: #00F5D4;
+  color: #00F5D4;
+  background: rgba(0, 245, 212, 0.08);
 }
 
 /* â”€â”€â”€ Current Line Accent â”€â”€â”€ */
@@ -400,26 +429,26 @@ h1, h2, h3 {
 
 /* ─── Highlight pulse ─── */
 @keyframes highlightPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(138, 197, 63, 0); }
-  50% { box-shadow: 0 0 0 4px rgba(138, 197, 63, 0.4), 0 0 28px rgba(138, 197, 63, 0.3); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 245, 212, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(0, 245, 212, 0.4), 0 0 28px rgba(0, 245, 212, 0.3); }
 }
 .highlight-active {
   animation: highlightPulse 1.2s ease 3;
 }
 
-/* â”€â”€â”€ Money ticker â”€â”€â”€ */
+/* ─── Money ticker ─── */
 @keyframes tickerScroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-/* â”€â”€â”€ Bill float â”€â”€â”€ */
+/* ─── Bill float ─── */
 @keyframes billFloat {
   0%, 100% { transform: translateY(0px) rotate(18deg); }
   50% { transform: translateY(-16px) rotate(20deg); }
 }
 
-/* â”€â”€â”€ Bill shimmer â”€â”€â”€ */
+/* ─── Bill shimmer ─── */
 @keyframes shimmerSweep {
   0% { background-position: -200% center; }
   100% { background-position: 300% center; }
@@ -427,8 +456,8 @@ h1, h2, h3 {
 
 /* ─── Glow pulse ring ─── */
 @keyframes glowRing {
-  0%, 100% { box-shadow: 0 0 20px rgba(138, 197, 63, 0.3), 0 0 40px rgba(138, 197, 63, 0.1); }
-  50% { box-shadow: 0 0 40px rgba(138, 197, 63, 0.55), 0 0 80px rgba(138, 197, 63, 0.25); }
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 245, 212, 0.3), 0 0 40px rgba(0, 245, 212, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(0, 245, 212, 0.55), 0 0 80px rgba(0, 245, 212, 0.25); }
 }
 .glow-pulse {
   animation: glowRing 3s ease-in-out infinite;

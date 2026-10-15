@@ -81,7 +81,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'E-Cell PEC', url: 'https://esummit.pec.ac.in' }],
   openGraph: {
-    title: 'PEC E-Summit 2026 — November 14–15',
+    title: 'PEC E-Summit 2026 — March 19–21',
     description:
       'The flagship entrepreneurship summit of E-Cell PEC, Chandigarh. Pitches, panels, expo, hackathon, and VIP investor networking.',
     url: 'https://esummit.pec.ac.in',

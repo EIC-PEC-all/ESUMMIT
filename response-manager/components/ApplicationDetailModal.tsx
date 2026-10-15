@@ -466,7 +466,7 @@ export function ApplicationDetailModal({
             type="button"
             disabled={isDeleting}
             onClick={handleDelete}
-            className="px-4 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25 transition-colors flex items-center gap-2 font-mono-data uppercase tracking-[0.14em] text-xs font-semibold disabled:opacity-50"
+            className="px-4 py-2.5 rounded-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/25 transition-colors flex items-center gap-2 font-mono-data uppercase tracking-[0.14em] text-xs font-semibold disabled:opacity-50"
           >
             <Trash2 className="w-3.5 h-3.5" />
             Delete Entry
@@ -476,7 +476,7 @@ export function ApplicationDetailModal({
             <button
               type="button"
               onClick={onClose}
-              className="btn-dark-gradient px-5 py-2.5 rounded-xl text-white font-mono-data uppercase tracking-[0.14em] text-xs font-semibold"
+              className="btn-dark-gradient px-5 py-2.5 rounded-full text-white font-mono-data uppercase tracking-[0.14em] text-xs font-semibold"
             >
               Close
             </button>
@@ -484,7 +484,7 @@ export function ApplicationDetailModal({
               type="button"
               disabled={isSaving}
               onClick={handleSave}
-              className="btn-mint-gradient px-6 py-2.5 rounded-xl text-xs font-mono-data uppercase tracking-[0.16em] font-bold flex items-center gap-2 disabled:opacity-50"
+              className="btn-mint-gradient px-6 py-2.5 rounded-full text-xs font-mono-data uppercase tracking-[0.16em] font-bold flex items-center gap-2 disabled:opacity-50"
             >
               {isSaving ? (
                 <>

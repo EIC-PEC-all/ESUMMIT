@@ -24,7 +24,7 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
       {/* Soft Top Glow */}
       <div
         className="absolute top-0 inset-x-0 h-32 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at top, rgba(138,197,63,0.12) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(ellipse at top, rgba(0,245,212,0.12) 0%, transparent 70%)' }}
       />
 
       <div className="relative z-10 flex flex-col flex-1 p-5 md:p-6 pb-0">
@@ -72,7 +72,7 @@ export function FinalCard({ onViewAll }: FinalCardProps) {
         <a
           href="#tracks"
           onClick={onViewAll}
-          className="group/btn w-full flex items-center justify-between px-5 py-3 rounded-xl font-mono-data text-[11px] font-black uppercase tracking-[0.1em] text-void bg-mint transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_4px_20px_rgba(138,197,63,0.25)]"
+          className="group/btn w-full flex items-center justify-between px-5 py-3 rounded-full font-mono-data text-[11px] font-black uppercase tracking-[0.1em] text-void bg-mint transition-all duration-300 hover:brightness-110 hover:scale-[1.02] shadow-[0_4px_20px_rgba(0,245,212,0.3)]"
         >
           <span>Explore All Events</span>
           <ArrowRight size={16} strokeWidth={2.5} className="transition-transform group-hover/btn:translate-x-1" />

@@ -22,9 +22,9 @@ export default function AboutHeritage() {
       </div>
 
       {/* Themed Timeline Infographic Container */}
-      <div className="relative rounded-2xl bg-[#07130F] border border-white/10 hover:border-mint/30 transition-all duration-300 p-4 sm:p-6 md:p-8 overflow-hidden shadow-2xl group">
+      <div className="relative rounded-2xl bg-[#0D1C18] border border-white/10 hover:border-mint/30 transition-all duration-300 p-4 sm:p-6 md:p-8 overflow-hidden shadow-2xl group">
         <div
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(138,197,63,0.06)_0%,_transparent_70%)] pointer-events-none"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(0,245,212,0.06)_0%,_transparent_70%)] pointer-events-none"
           aria-hidden="true"
         />
 

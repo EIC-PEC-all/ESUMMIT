@@ -33,7 +33,7 @@ export default function HighlightCard({
       <motion.div
         className="flex w-full flex-col justify-between rounded-[24px] sm:rounded-[30px] border border-white/15 p-4 sm:p-6 shadow-2xl h-auto lg:h-[min(560px,calc(100dvh-7rem))] lg:overflow-y-auto"
         style={{
-          borderColor: 'rgba(138, 197, 63, 0.25)',
+          borderColor: 'rgba(0, 245, 212, 0.25)',
           background: 'linear-gradient(180deg, var(--bg-section-1) 0%, var(--bg-void) 100%)',
           boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
         }}

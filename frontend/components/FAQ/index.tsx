@@ -85,7 +85,7 @@ export default function FAQ({ isStandalonePage = false }: { isStandalonePage?: b
       )}
       <section
         id="faq"
-        className={`relative z-10 overflow-hidden bg-[#071511] text-white ${
+        className={`relative z-10 overflow-hidden bg-[#081310] text-white ${
           isStandalonePage
             ? 'pt-12 pb-20 sm:pb-24'
             : '-mt-10 sm:-mt-12 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-mint/20 py-16 sm:py-20 md:py-24'

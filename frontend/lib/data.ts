@@ -11,9 +11,9 @@ export const FEST_META = {
     'Where the tricity\'s boldest ideas meet their moment.',
     'The north\'s premier stage for student builders and venture thinkers.',
   ],
-  dates: 'November 14–15, 2026',
+  dates: 'March 19–21, 2026',
   venue: 'Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh',
-  countdownTarget: new Date('2026-11-14T09:00:00+05:30').toISOString(),
+  countdownTarget: new Date('2026-03-19T09:00:00+05:30').toISOString(),
   registrationUrl: '#register',
   social: {
     instagram: 'https://instagram.com/ecell.pec',
@@ -101,7 +101,7 @@ export const SPEAKERS = [
     track: 'panels',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&auto=format&fit=crop',
     initials: 'SJ',
-    color: '#8AC53F',
+    color: '#00F5D4',
   },
   {
     id: 'spk2',
@@ -293,7 +293,7 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     lat: 30.76782763758229,
     lng: 76.78532031055364,
     coordinates: [76.78532031055364, 30.76782763758229],
-    color: '#8AC53F',
+    color: '#00F5D4',
     type: 'lab',
   },
   'student-center': {
@@ -578,7 +578,7 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
 export const SCHEDULE = {
   day1: {
     label: 'Day 1',
-    date: 'November 14, 2026',
+    date: 'March 19, 2026',
     events: [
       {
         id: 'd1-1',
@@ -694,7 +694,7 @@ export const SCHEDULE = {
   },
   day2: {
     label: 'Day 2',
-    date: 'November 15, 2026',
+    date: 'March 20, 2026',
     events: [
       {
         id: 'd2-1',

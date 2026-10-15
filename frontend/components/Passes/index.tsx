@@ -6,6 +6,7 @@ import { Sparkles, GraduationCap, Building2, ArrowRight } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import PassCard from './PassCard'
 import PassesComparisonTable from './PassesComparisonTable'
+import StartupPassForm from './StartupPassForm'
 import { STARTUP_PACKAGES, STUDENT_PACKAGES } from './passesData'
 
 interface PassesSectionProps {
@@ -15,22 +16,63 @@ interface PassesSectionProps {
 export default function PassesSection({ isStandalonePage = false }: PassesSectionProps) {
   const searchParams = useSearchParams()
   const [passType, setPassType] = useState<'student' | 'startup'>('student')
+  const [selectedTier, setSelectedTier] = useState<string | null>(null)
 
   useEffect(() => {
     const type = searchParams?.get('type')?.toLowerCase()
-    if (type === 'startup' || type === 'startups') {
+    const tier = searchParams?.get('tier')?.toLowerCase()
+
+    if (tier === 'silver' || tier === 'gold' || tier === 'diamond') {
+      setSelectedTier(tier)
+      setPassType('startup')
+      setTimeout(() => {
+        const formEl = document.getElementById('startup-pass-form')
+        if (formEl) formEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 150)
+    } else if (type === 'startup' || type === 'startups') {
       setPassType('startup')
     } else if (type === 'student' || type === 'students') {
       setPassType('student')
     }
   }, [searchParams])
 
+  const handleSelectTier = (tier: string) => {
+    setSelectedTier(tier)
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      url.searchParams.set('type', 'startup')
+      url.searchParams.set('tier', tier)
+      window.history.replaceState({}, '', url.toString())
+      setTimeout(() => {
+        const formEl = document.getElementById('startup-pass-form')
+        if (formEl) {
+          formEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100)
+    }
+  }
+
+  const handleBackToComparison = () => {
+    setSelectedTier(null)
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('tier')
+      window.history.replaceState({}, '', url.toString())
+      setTimeout(() => {
+        const tableEl = document.getElementById('deliverables-comparison-table')
+        if (tableEl) {
+          tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 80)
+    }
+  }
+
   return (
     <section
       id="passes"
-      className={`relative z-10 overflow-hidden bg-[#071511] text-white ${
+      className={`relative z-10 overflow-hidden bg-[#081310] text-white ${
         isStandalonePage
-          ? 'pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24'
+          ? 'pt-4 sm:pt-6 md:pt-8 pb-12 sm:pb-16'
           : '-mt-10 sm:-mt-12 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-mint/20 py-16 sm:py-20 md:py-24'
       }`}
       aria-label="Passes and Packages"
@@ -42,9 +84,9 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
 
       <div className="section-container relative z-10">
         {/* Header Block */}
-        <div className="mt-4 sm:mt-6 mb-8 lg:mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div className="mt-1 sm:mt-2 mb-4 sm:mb-5 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
           <div>
-            <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-mint flex items-center gap-2 mb-2">
+            <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-mint flex items-center gap-2 mb-1.5">
               <Sparkles size={14} />
               {passType === 'student' ? 'JOIN THE SUMMIT' : 'PARTNER WITH US'}
             </span>
@@ -55,7 +97,7 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
                 <>STARTUP <span className="text-gradient-mint">PACKAGES</span></>
               )}
             </h2>
-            <p className="font-mono-data text-xs sm:text-sm text-gray-300 font-bold uppercase tracking-widest mt-3">
+            <p className="font-mono-data text-xs sm:text-sm text-gray-300 font-bold uppercase tracking-widest mt-2">
               {passType === 'student'
                 ? 'LEARN • COMPETE • NETWORK • BUILD'
                 : 'SHOWCASE • NETWORK • HIRE • COLLABORATE'}
@@ -68,21 +110,21 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
                 ? "Join 5,000+ ambitious student engineers & innovators at North India's premier student-run entrepreneurship platform."
                 : "Engage with 8,000+ students, founders, investors, and innovators at one of North India's largest student-run startup platforms."}
             </p>
-            <span className="font-mono-data text-[11px] font-bold text-mint uppercase tracking-widest mt-2 block">
+            <span className="font-mono-data text-[11px] font-bold text-mint uppercase tracking-widest mt-1 block">
               CHOOSE THE TIER THAT FITS YOUR GOALS
             </span>
           </div>
         </div>
 
         {/* Pill-Rounded Toggle: Student vs Startup */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-white/10 pb-6 mb-10">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-white/10 pb-3 sm:pb-4 mb-4 sm:mb-6">
           <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-[#050D0A] border border-white/10 shadow-xl">
             <button
               type="button"
               onClick={() => setPassType('student')}
               className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                 passType === 'student'
-                  ? 'bg-mint text-[#06110D] shadow-[0_0_20px_rgba(138,197,63,0.35)]'
+                  ? 'bg-mint text-[#06110D] shadow-[0_0_20px_rgba(0,245,212,0.35)]'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -94,7 +136,7 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
               onClick={() => setPassType('startup')}
               className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
                 passType === 'startup'
-                  ? 'bg-mint text-[#06110D] shadow-[0_0_20px_rgba(138,197,63,0.35)]'
+                  ? 'bg-mint text-[#06110D] shadow-[0_0_20px_rgba(0,245,212,0.35)]'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
@@ -111,25 +153,50 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
         {/* Dynamic Cards Grid */}
         {passType === 'student' ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch pt-2 mb-10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 items-stretch mb-6 sm:mb-8">
               {STUDENT_PACKAGES.map((pkg, idx) => (
                 <PassCard key={pkg.id} pkg={pkg} index={idx} isCenter={pkg.popular} />
               ))}
             </div>
           </>
         ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch pt-2 mb-10">
+          <div id="startup-packages-content">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 items-stretch mb-6 sm:mb-8">
               {STARTUP_PACKAGES.map((pkg, idx) => (
-                <PassCard key={pkg.id} pkg={pkg} index={idx} isCenter={idx === 1} />
+                <PassCard
+                  key={pkg.id}
+                  pkg={pkg}
+                  index={idx}
+                  isCenter={idx === 1}
+                  isSelected={isStandalonePage && selectedTier === pkg.tier}
+                  onSelect={isStandalonePage ? handleSelectTier : undefined}
+                />
               ))}
             </div>
 
-            {/* Show comparison table only on dedicated /passes page */}
+            {/* Dynamic view: When tier is selected, show Application Form; Otherwise show Comparison Table */}
             {isStandalonePage ? (
-              <div className="mt-4">
-                <PassesComparisonTable />
-              </div>
+              selectedTier ? (
+                <div className="mb-14 w-full">
+                  <StartupPassForm
+                    selectedTier={selectedTier}
+                    onSelectTier={handleSelectTier}
+                    onBackToComparison={handleBackToComparison}
+                  />
+                </div>
+              ) : (
+                <div className="mt-8 mb-6 w-full">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <span className="text-xs font-mono-data uppercase tracking-[0.2em] text-gray-400 font-bold">
+                      DELIVERABLES COMPARISON TABLE
+                    </span>
+                    <span className="text-xs font-mono-data text-mint font-bold uppercase tracking-wider">
+                      Click &apos;Select&apos; on any pass to begin application
+                    </span>
+                  </div>
+                  <PassesComparisonTable onSelect={handleSelectTier} />
+                </div>
+              )
             ) : (
               <div className="mt-6 text-center">
                 <Link
@@ -141,12 +208,13 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
                 </Link>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </section>
   )
 }
+
 
 
 

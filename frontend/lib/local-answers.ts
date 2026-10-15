@@ -10,7 +10,7 @@
 
 // ── Static knowledge base ────────────────────────────────────────────────────
 
-const SCHEDULE_TEXT = `**Day 1 — November 14, 2026**
+const SCHEDULE_TEXT = `**Day 1 — March 19, 2026**
 • 09:00 Registration & Welcome Kit (Main Gate Plaza)
 • 10:00 Inaugural Ceremony & Keynote (Main Auditorium)
 • 11:00 Startup Expo & Founder Alley Launch (Exhibition Grounds)
@@ -22,7 +22,7 @@ const SCHEDULE_TEXT = `**Day 1 — November 14, 2026**
 • 19:00 Speed Networking & E-Bazaar (Central Quadrangle)
 • 20:00 VIP Investor & Founder Networking Dinner (PEC Club Lounge)
 
-**Day 2 — November 15, 2026**
+**Day 2 — March 20, 2026**
 • 09:00 Hackathon Mid-Check & Mentor Rotations (Computer Center)
 • 10:00 DeepTech & GenAI Masterclass (Main Auditorium)
 • 11:30 Talent Fair & Dealroom Pitches (Admin Block)
@@ -170,7 +170,7 @@ For specific queries, you can also ask me directly — I'm connected to live eve
     patterns: ['hi', 'hello', 'hey', 'hii', 'helo', 'good morning', 'good evening', 'sup', 'wassup'],
     answer: `Hello! I am the **E-Summit 2026 Official Assistant**. I can help you with:
 
-• **Schedule** — Day-by-day agenda for November 14–15
+• **Schedule** — Day-by-day agenda for March 19–21
 • **Speakers** — Our confirmed speakers
 • **Campus Navigation** — Walking routes to any venue
 • **Activities** — Hackathon, Pitch Competition, Job Fair, and more
@@ -229,7 +229,7 @@ Plus: Women Founders Connect, Campus Treasure Hunt, Stand-up Comedy & E-Sports, 
   },
   {
     patterns: ['thank', 'thanks', 'bye', 'goodbye', 'see you', 'that\'s all', 'awesome', 'great', 'perfect'],
-    answer: `You're welcome! Feel free to ask anything else about E-Summit 2026. See you at PEC on **November 14–15**!`,
+    answer: `You're welcome! Feel free to ask anything else about E-Summit 2026. See you at PEC on **March 19–21**!`,
   },
   {
     patterns: ['register', 'sign up', 'how to register', 'how to join', 'apply'],

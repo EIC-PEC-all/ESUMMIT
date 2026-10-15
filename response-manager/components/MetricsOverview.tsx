@@ -34,7 +34,7 @@ export function MetricsOverview({ applications }: MetricsOverviewProps) {
           <span className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-gray-400">
             TOTAL SUBMISSIONS
           </span>
-          <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-mint">
+          <div className="w-9 h-9 rounded-full bg-mint/10 border border-mint/20 flex items-center justify-center text-mint">
             <FileCheck size={18} />
           </div>
         </div>
@@ -48,17 +48,17 @@ export function MetricsOverview({ applications }: MetricsOverviewProps) {
       </div>
 
       {/* Metric 2: Shortlisted Startups */}
-      <div className="p-6 rounded-3xl bg-[#081310] border border-white/10 hover:border-purple-400/30 transition-all duration-300 shadow-xl relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-28 h-28 bg-purple-500/5 rounded-full blur-2xl pointer-events-none" />
+      <div className="p-6 rounded-3xl bg-[#081310] border border-white/10 hover:border-cyan-400/30 transition-all duration-300 shadow-xl relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-28 h-28 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
         <div className="flex items-center justify-between mb-3">
-          <span className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-purple-300">
+          <span className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-cyan-300">
             INVESTOR SHORTLIST
           </span>
-          <div className="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+          <div className="w-9 h-9 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
             <Award size={18} />
           </div>
         </div>
-        <div className="font-display text-4xl sm:text-5xl font-black text-purple-300 tracking-tight leading-none mb-2">
+        <div className="font-display text-4xl sm:text-5xl font-black text-cyan-300 tracking-tight leading-none mb-2">
           {shortlisted}
         </div>
         <div className="font-mono-data text-[11px] text-gray-400">
@@ -73,7 +73,7 @@ export function MetricsOverview({ applications }: MetricsOverviewProps) {
           <span className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-amber-300">
             PASS TIERS APPLIED
           </span>
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+          <div className="w-9 h-9 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
             <Crown size={18} />
           </div>
         </div>
@@ -100,7 +100,7 @@ export function MetricsOverview({ applications }: MetricsOverviewProps) {
           <span className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-emerald-300">
             MOU READINESS
           </span>
-          <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+          <div className="w-9 h-9 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
             <Handshake size={18} />
           </div>
         </div>

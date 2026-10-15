@@ -11,11 +11,13 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <main className="bg-void min-h-screen overflow-x-clip pb-12 pt-20 sm:pt-28">
+    <div className="bg-void min-h-screen overflow-x-clip flex flex-col justify-between pt-16 sm:pt-20">
       <Nav />
-      <ProfileClient />
+      <main className="flex-1 pb-12">
+        <ProfileClient />
+      </main>
       <Footer hideCTA />
-    </main>
+    </div>
   )
 }
 

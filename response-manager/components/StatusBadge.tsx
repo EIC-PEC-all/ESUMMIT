@@ -21,9 +21,9 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     },
     SHORTLISTED: {
       label: 'Shortlisted',
-      bg: 'bg-purple-500/10',
-      text: 'text-purple-400',
-      border: 'border-purple-500/30',
+      bg: 'bg-cyan-500/10',
+      text: 'text-cyan-400',
+      border: 'border-cyan-500/30',
     },
     MOU_SENT: {
       label: 'MoU Sent',

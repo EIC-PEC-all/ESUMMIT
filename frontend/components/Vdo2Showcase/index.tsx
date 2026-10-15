@@ -7,7 +7,7 @@ import { useSummitData } from '@/hooks/useSummitData'
 
 export default function Vdo2Showcase() {
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'NOVEMBER 14–15'
+  const summitDates = data?.siteConfig?.summitDates || 'MARCH 19–21, 2026'
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -19,7 +19,7 @@ export default function Vdo2Showcase() {
       {/* Ambient Mint Glows */}
       <div
         className="pointer-events-none absolute left-1/4 top-0 h-[380px] w-[380px] rounded-full"
-        style={{ background: 'radial-gradient(circle, rgba(138,197,63,0.12) 0%, rgba(138,197,63,0) 70%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(0,245,212,0.12) 0%, rgba(0,245,212,0) 70%)' }}
       />
       <div
         className="pointer-events-none absolute right-1/4 bottom-0 h-[380px] w-[380px] rounded-full"
@@ -56,8 +56,8 @@ export default function Vdo2Showcase() {
                 : 'sm:translate-x-6 sm:-rotate-6 sm:scale-[0.94] z-10'
             }`}
             style={{
-              background: 'linear-gradient(150deg, #8AC53F 0%, #7BB832 50%, #689E28 100%)',
-              boxShadow: '0 12px 28px rgba(138,197,63,0.25)',
+              background: 'linear-gradient(150deg, #00F5D4 0%, #00DFBA 50%, #009E86 100%)',
+              boxShadow: '0 12px 28px rgba(0,245,212,0.25)',
             }}
           >
             {/* Subtle Texture */}
@@ -140,12 +140,12 @@ export default function Vdo2Showcase() {
                 : 'sm:translate-y-[-8px] sm:rotate-0 sm:scale-[1.03] z-20'
             }`}
             style={{
-              background: 'linear-gradient(150deg, #D4FFA3 0%, #8AC53F 45%, #689E28 100%)',
-              boxShadow: '0 16px 36px rgba(138,197,63,0.32)',
+              background: 'linear-gradient(150deg, #5CFFE6 0%, #00F5D4 45%, #00C4A9 100%)',
+              boxShadow: '0 16px 36px rgba(0,245,212,0.32)',
             }}
           >
             {/* Featured Badge */}
-            <div className="absolute top-2 right-2 rounded-full bg-black text-[#8AC53F] px-2 py-0.5 font-mono-data text-[7.5px] font-black tracking-widest uppercase shadow">
+            <div className="absolute top-2 right-2 rounded-full bg-black text-[#00F5D4] px-2 py-0.5 font-mono-data text-[7.5px] font-black tracking-widest uppercase shadow">
               POPULAR
             </div>
 
@@ -229,8 +229,8 @@ export default function Vdo2Showcase() {
                 : 'sm:-translate-x-6 sm:rotate-6 sm:scale-[0.94] z-10'
             }`}
             style={{
-              background: 'linear-gradient(150deg, #FFFFFF 0%, #F5FBEF 50%, #D4FFA3 100%)',
-              boxShadow: '0 12px 28px rgba(138,197,63,0.20)',
+              background: 'linear-gradient(150deg, #FFFFFF 0%, #EFFCF9 50%, #5CFFE6 100%)',
+              boxShadow: '0 12px 28px rgba(0,245,212,0.20)',
             }}
           >
             {/* Subtle Texture */}

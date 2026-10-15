@@ -4,8 +4,8 @@
   "description": "Chandigarh's Launchpad for Founders",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#050B06",
-  "theme_color": "#8AC53F",
+  "background_color": "#060D0B",
+  "theme_color": "#00F5D4",
   "orientation": "portrait-primary",
   "icons": [
     {

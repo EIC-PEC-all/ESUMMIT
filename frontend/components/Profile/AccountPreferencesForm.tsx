@@ -39,7 +39,7 @@ export default function AccountPreferencesForm({
       {/* Delegate Overview Ribbon */}
       <div className="p-4 sm:p-5 rounded-2xl bg-[#0A1611] border border-white/10 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
         <div className="flex items-center gap-3.5 text-center sm:text-left">
-          <div className="w-12 h-12 rounded-full bg-mint/15 border border-mint/30 flex items-center justify-center text-mint font-display font-black text-lg shadow-[0_0_15px_rgba(138,197,63,0.25)] shrink-0">
+          <div className="w-12 h-12 rounded-full bg-mint/15 border border-mint/30 flex items-center justify-center text-mint font-display font-black text-lg shadow-[0_0_15px_rgba(0,245,212,0.25)] shrink-0">
             {initials}
           </div>
           <div>
@@ -162,11 +162,11 @@ export default function AccountPreferencesForm({
                   onChange={(e) => setProfile({ ...profile, state: e.target.value, city: '' })}
                   className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
                 >
-                  <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                  <option value="" disabled className="bg-[#081310] text-neutral-500">
                     Select State / UT
                   </option>
                   {STATE_NAMES.map((st) => (
-                    <option key={st} value={st} className="bg-[#0B1410] text-white">
+                    <option key={st} value={st} className="bg-[#081310] text-white">
                       {st}
                     </option>
                   ))}
@@ -196,15 +196,15 @@ export default function AccountPreferencesForm({
                   }}
                   className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer disabled:opacity-40"
                 >
-                  <option value="" disabled className="bg-[#0B1410] text-neutral-500">
+                  <option value="" disabled className="bg-[#081310] text-neutral-500">
                     {profile.state ? `Select City in ${profile.state}` : 'Select State / UT first'}
                   </option>
                   {getCitiesForState(profile.state || '').map((ct) => (
-                    <option key={ct} value={ct} className="bg-[#0B1410] text-white">
+                    <option key={ct} value={ct} className="bg-[#081310] text-white">
                       {ct}
                     </option>
                   ))}
-                  <option value="Other" className="bg-[#0B1410] text-mint">
+                  <option value="Other" className="bg-[#081310] text-mint">
                     + Other (Specify City)
                   </option>
                 </select>
@@ -257,7 +257,7 @@ export default function AccountPreferencesForm({
                   className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
                 >
                   {GRADUATION_YEARS.map((yr) => (
-                    <option key={yr.value} value={yr.value} className="bg-[#0B1410] text-white">
+                    <option key={yr.value} value={yr.value} className="bg-[#081310] text-white">
                       {yr.label}
                     </option>
                   ))}
@@ -277,7 +277,7 @@ export default function AccountPreferencesForm({
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_20px_rgba(138,197,63,0.35)] transition-all cursor-pointer disabled:opacity-50"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_20px_rgba(0,245,212,0.35)] transition-all cursor-pointer disabled:opacity-50"
           >
             <Save size={14} />
             <span>{isSaving ? 'Saving Details...' : 'Save Profile Changes'}</span>

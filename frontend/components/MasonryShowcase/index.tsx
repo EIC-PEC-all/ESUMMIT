@@ -68,7 +68,7 @@ function MarqueeColumn({
         {items.map((item) => (
           <div
             key={item.id}
-            className="group relative w-full shrink-0 overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0A1611] transition-transform duration-300 hover:border-white/20"
+            className="group relative w-full shrink-0 overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0D1C18] transition-transform duration-300 hover:border-white/20"
             style={{ height: `${item.height}px` }}
           >
             <BlurImage
@@ -173,15 +173,15 @@ export default function MasonryShowcase() {
       className="relative h-[200vh] border-b border-mint/20 bg-section-2 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10"
     >
       {/* Pinned sticky viewport */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden" style={{ background: 'var(--bg-section-2, #0d1f15)' }}>
+      <div className="sticky top-0 h-screen w-full overflow-hidden" style={{ background: 'var(--bg-section-2, #0D1C18)' }}>
         {/* Top & bottom gradient masks */}
         <div 
           className="pointer-events-none absolute left-0 right-0 top-0 z-20 h-32" 
-          style={{ background: 'linear-gradient(to bottom, var(--bg-section-2), rgba(24, 51, 39, 0.8) 50%, transparent)' }}
+          style={{ background: 'linear-gradient(to bottom, var(--bg-section-2), rgba(13, 28, 24, 0.8) 50%, transparent)' }}
         />
         <div 
           className="pointer-events-none absolute bottom-0 left-0 right-0 z-20 h-32" 
-          style={{ background: 'linear-gradient(to top, var(--bg-section-2), rgba(24, 51, 39, 0.8) 50%, transparent)' }}
+          style={{ background: 'linear-gradient(to top, var(--bg-section-2), rgba(13, 28, 24, 0.8) 50%, transparent)' }}
         />
 
         {/* 5 self-contained marquee columns filling full screen height */}

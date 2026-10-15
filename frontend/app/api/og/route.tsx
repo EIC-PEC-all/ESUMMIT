@@ -21,8 +21,8 @@ export async function GET(req: NextRequest) {
             flexDirection: 'column',
             alignItems: 'flex-start',
             justifyContent: 'space-between',
-            backgroundColor: '#0B1410',
-            backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(16, 185, 129, 0.15) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(16, 185, 129, 0.05) 2%, transparent 0%)',
+            backgroundColor: '#060D0B',
+            backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(0, 245, 212, 0.15) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(0, 245, 212, 0.05) 2%, transparent 0%)',
             backgroundSize: '100px 100px',
             padding: '60px 70px',
             fontFamily: 'sans-serif',
@@ -44,10 +44,10 @@ export async function GET(req: NextRequest) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: '#10B981',
-                  color: '#0B1410',
+                  backgroundColor: '#00F5D4',
+                  color: '#060D0B',
                   padding: '8px 16px',
-                  borderRadius: '8px',
+                  borderRadius: '9999px',
                   fontWeight: 900,
                   fontSize: 22,
                   letterSpacing: '2px',
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
               >
                 E-SUMMIT &apos;26
               </div>
-              <div style={{ fontSize: 18, color: '#A7F3D0', fontWeight: 600 }}>
+              <div style={{ fontSize: 18, color: '#5CFFE6', fontWeight: 600 }}>
                 PUNJAB ENGINEERING COLLEGE
               </div>
             </div>
@@ -149,7 +149,7 @@ export async function GET(req: NextRequest) {
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <div style={{ fontSize: 20, fontWeight: 800, color: '#FFFFFF' }}>
-                NOVEMBER 14–15, 2026
+                MARCH 19–21, 2026
               </div>
               <div style={{ fontSize: 16, color: '#9CA3AF' }}>
                 Sector 12, Chandigarh • EIC PEC
@@ -159,7 +159,7 @@ export async function GET(req: NextRequest) {
             <div
               style={{
                 fontSize: 16,
-                color: '#10B981',
+                color: '#00F5D4',
                 fontWeight: 700,
                 letterSpacing: '1px',
               }}

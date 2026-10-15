@@ -136,13 +136,14 @@ export default function ScrollExpandLoader() {
           and the lime border shrinks naturally as the element fills the viewport.
         */}
         <motion.div
+          suppressHydrationWarning
           className="relative flex items-end justify-center border-2 border-black/25"
           style={{
             width: '100vw',
             height: '100vh',
             transformOrigin: 'center center',
             willChange: 'transform',
-            boxShadow: '0 0 0 9999px var(--accent-mint, #8AC53F)',
+            boxShadow: '0 0 0 9999px var(--accent-mint, #00F5D4)',
           }}
           initial={{ scaleX: apertureScaleX, scaleY: apertureScaleY, borderRadius: apertureRadius }}
           animate={
@@ -150,7 +151,11 @@ export default function ScrollExpandLoader() {
               ? { scaleX: 1.8, scaleY: 1.8, borderRadius: '0px' }
               : { scaleX: apertureScaleX, scaleY: apertureScaleY, borderRadius: apertureRadius }
           }
-          transition={{ duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
+          transition={
+            stage === 'expanding'
+              ? { duration: 1.0, ease: [0.76, 0, 0.24, 1] }
+              : { duration: 0 }
+          }
         >
           {/* Ambient grid on the aperture mask */}
           <div
@@ -182,7 +187,7 @@ export default function ScrollExpandLoader() {
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
                 className="h-full bg-mint rounded-full origin-left"
-                style={{ willChange: 'transform', boxShadow: '0 0 8px var(--accent-mint, #8AC53F)' }}
+                style={{ willChange: 'transform', boxShadow: '0 0 8px var(--accent-mint, #00F5D4)' }}
               />
             </div>
           </motion.div>

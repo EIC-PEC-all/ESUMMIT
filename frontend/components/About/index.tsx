@@ -10,7 +10,7 @@ export default function About() {
     <>
       <PageBanner
         title="ABOUT"
-        subtitle="14–15 NOVEMBER 2026 · 100+ YEARS OF PEC LEGACY · FOSTERING TOMORROW'S FOUNDERS"
+        subtitle="MARCH 19–21, 2026 · 100+ YEARS OF PEC LEGACY · FOSTERING TOMORROW'S FOUNDERS"
         bgImage="/pec-campus-vintage.jpg"
       />
 

@@ -5,9 +5,13 @@ import { Check, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { COMPARISON_FEATURES } from './passesData'
 
-export default function PassesComparisonTable() {
+interface PassesComparisonTableProps {
+  onSelect?: (tier: string) => void
+}
+
+export default function PassesComparisonTable({ onSelect }: PassesComparisonTableProps = {}) {
   return (
-    <div className="w-full rounded-3xl bg-[#091712] border border-white/10 p-4 sm:p-7 md:p-9 overflow-hidden">
+    <div id="deliverables-comparison-table" className="w-full rounded-3xl bg-[#091712] border border-white/10 p-4 sm:p-7 md:p-9 overflow-hidden scroll-mt-28">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px] text-left border-collapse">
           {/* Table Header */}
@@ -85,7 +89,7 @@ export default function PassesComparisonTable() {
                 {/* Gold Value (Highlighted Column) */}
                 <td className="py-3.5 px-3 sm:px-4 text-center bg-amber-500/10 border-x border-amber-400/40">
                   {typeof item.gold === 'string' ? (
-                    <span className="font-mono-data text-xs font-bold text-amber-300 px-2 py-0.5 rounded bg-amber-400/20 border border-amber-400/40">
+                    <span className="font-mono-data text-xs font-bold text-amber-300 px-2 py-0.5 rounded bg-amber-400/15 border border-amber-400/30">
                       {item.gold}
                     </span>
                   ) : item.gold ? (
@@ -130,35 +134,68 @@ export default function PassesComparisonTable() {
 
               {/* Silver Button */}
               <td className="py-5 px-3 sm:px-4 text-center">
-                <Link
-                  href="/passes?tier=silver"
-                  className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-emerald-400 text-black hover:bg-emerald-300 transition-colors"
-                >
-                  <span>Select</span>
-                  <ArrowRight size={12} className="stroke-[2.5]" />
-                </Link>
+                {onSelect ? (
+                  <button
+                    type="button"
+                    onClick={() => onSelect('silver')}
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-emerald-400 text-black hover:bg-emerald-300 transition-colors cursor-pointer active:scale-95"
+                  >
+                    <span>Select</span>
+                    <ArrowRight size={12} className="stroke-[2.5]" />
+                  </button>
+                ) : (
+                  <Link
+                    href="/passes?type=startup&tier=silver#startup-pass-form"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-emerald-400 text-black hover:bg-emerald-300 transition-colors"
+                  >
+                    <span>Select</span>
+                    <ArrowRight size={12} className="stroke-[2.5]" />
+                  </Link>
+                )}
               </td>
 
               {/* Gold Button (Highlighted Column) */}
               <td className="py-5 px-3 sm:px-4 text-center bg-amber-500/10 border-x border-amber-400/40 rounded-b-2xl">
-                <Link
-                  href="/passes?tier=gold"
-                  className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-amber-400 text-black hover:bg-amber-300 transition-colors"
-                >
-                  <span>Select</span>
-                  <ArrowRight size={12} className="stroke-[2.5]" />
-                </Link>
+                {onSelect ? (
+                  <button
+                    type="button"
+                    onClick={() => onSelect('gold')}
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-amber-400 text-black hover:bg-amber-300 transition-colors cursor-pointer active:scale-95"
+                  >
+                    <span>Select</span>
+                    <ArrowRight size={12} className="stroke-[2.5]" />
+                  </button>
+                ) : (
+                  <Link
+                    href="/passes?type=startup&tier=gold#startup-pass-form"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-amber-400 text-black hover:bg-amber-300 transition-colors"
+                  >
+                    <span>Select</span>
+                    <ArrowRight size={12} className="stroke-[2.5]" />
+                  </Link>
+                )}
               </td>
 
               {/* Diamond Button */}
               <td className="py-5 px-3 sm:px-4 text-center">
-                <Link
-                  href="/passes?tier=diamond"
-                  className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-cyan-400 text-black hover:bg-cyan-300 transition-colors"
-                >
-                  <span>Select</span>
-                  <ArrowRight size={12} className="stroke-[2.5]" />
-                </Link>
+                {onSelect ? (
+                  <button
+                    type="button"
+                    onClick={() => onSelect('diamond')}
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-cyan-400 text-black hover:bg-cyan-300 transition-colors cursor-pointer active:scale-95"
+                  >
+                    <span>Select</span>
+                    <ArrowRight size={12} className="stroke-[2.5]" />
+                  </button>
+                ) : (
+                  <Link
+                    href="/passes?type=startup&tier=diamond#startup-pass-form"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-cyan-400 text-black hover:bg-cyan-300 transition-colors"
+                  >
+                    <span>Select</span>
+                    <ArrowRight size={12} className="stroke-[2.5]" />
+                  </Link>
+                )}
               </td>
             </tr>
           </tfoot>
@@ -167,3 +204,4 @@ export default function PassesComparisonTable() {
     </div>
   )
 }
+

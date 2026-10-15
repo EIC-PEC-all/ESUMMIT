@@ -43,7 +43,7 @@ export default function EsummitSchedule() {
 
   const { scheduleItems } = useSchedule()
   const { data: summitBundle } = useSummitData()
-  const globalDates = summitBundle?.siteConfig?.summitDates || 'NOVEMBER 14–15, 2026'
+  const globalDates = summitBundle?.siteConfig?.summitDates || 'MARCH 19–21, 2026'
 
   // Transform CMS schedule items into DayCard format
   const cmsCards: DayCard[] = useMemo(() => {
@@ -168,7 +168,7 @@ export default function EsummitSchedule() {
             onClick={() => setMobileView('schedule')}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
               mobileView === 'schedule'
-                ? 'bg-white/15 text-white border border-mint/40 shadow-[0_0_15px_rgba(138,197,63,0.2)]'
+                ? 'bg-white/15 text-white border border-mint/40 shadow-[0_0_15px_rgba(0,245,212,0.2)]'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -179,7 +179,7 @@ export default function EsummitSchedule() {
             onClick={() => setMobileView('map')}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
               mobileView === 'map'
-                ? 'bg-white/15 text-white border border-mint/40 shadow-[0_0_15px_rgba(138,197,63,0.2)]'
+                ? 'bg-white/15 text-white border border-mint/40 shadow-[0_0_15px_rgba(0,245,212,0.2)]'
                 : 'text-gray-400 hover:text-white'
             }`}
           >
@@ -206,7 +206,7 @@ export default function EsummitSchedule() {
               onSelectEventId={handleSelectEvent}
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-[#0B1410] font-mono-data text-xs text-gray-300">
+            <div className="flex h-full w-full items-center justify-center bg-[#081310] font-mono-data text-xs text-gray-300">
               Interactive Campus Map
             </div>
           )}
