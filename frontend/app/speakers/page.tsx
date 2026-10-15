@@ -8,7 +8,7 @@ export default function SpeakersPage() {
     <main className="bg-section-1 min-h-screen overflow-x-clip pb-12">
       <Nav />
       <SpeakersList />
-      <Footer hideCTA />
+      <Footer />
     </main>
   )
 }

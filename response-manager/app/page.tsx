@@ -1,0 +1,427 @@
+'use client'
+
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import Image from 'next/image'
+import { Header } from '@/components/Header'
+import { MetricsOverview } from '@/components/MetricsOverview'
+import { StatusBadge } from '@/components/StatusBadge'
+import { ApplicationDetailModal } from '@/components/ApplicationDetailModal'
+import { FundingApplication } from '@/lib/types'
+import {
+  Search,
+  Filter,
+  Eye,
+  FileText,
+  ExternalLink,
+  MessageCircle,
+  Building2,
+  Calendar,
+  Sparkles,
+  Inbox,
+  ArrowUpDown,
+  Plus,
+  Gem,
+  Crown,
+  Shield,
+  Layers,
+  CheckCircle2
+} from 'lucide-react'
+import toast from 'react-hot-toast'
+
+const STATUS_FILTERS: { id: string; label: string }[] = [
+  { id: 'ALL', label: 'ALL STATUSES' },
+  { id: 'PENDING_REVIEW', label: 'PENDING' },
+  { id: 'UNDER_REVIEW', label: 'UNDER REVIEW' },
+  { id: 'SHORTLISTED', label: 'SHORTLISTED' },
+  { id: 'MOU_SENT', label: 'MOU SENT' },
+  { id: 'MOU_ACCEPTED', label: 'MOU ACCEPTED' },
+  { id: 'PAYMENT_CONFIRMED', label: 'CONFIRMED' },
+  { id: 'REJECTED', label: 'NOT SELECTED' },
+]
+
+export default function Home() {
+  const [applications, setApplications] = useState<FundingApplication[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [search, setSearch] = useState<string>('')
+  const [statusFilter, setStatusFilter] = useState<string>('ALL')
+  const [stageFilter, setStageFilter] = useState<string>('ALL')
+  const [tierFilter, setTierFilter] = useState<string>('ALL')
+  const [selectedApp, setSelectedApp] = useState<FundingApplication | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
+
+  const fetchApplications = useCallback(async () => {
+    try {
+      setIsRefreshing(true)
+      const res = await fetch('/api/applications')
+      const data = await res.json()
+      if (data.success && Array.isArray(data.applications)) {
+        setApplications(data.applications)
+      } else {
+        toast.error('Failed to load applications')
+      }
+    } catch {
+      toast.error('Network error loading applications')
+    } finally {
+      setLoading(false)
+      setIsRefreshing(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchApplications()
+  }, [fetchApplications])
+
+  // Extract unique stages for filter dropdown
+  const uniqueStages = useMemo(() => {
+    const set = new Set<string>()
+    applications.forEach((a) => {
+      if (a.stage) set.add(a.stage)
+    })
+    return Array.from(set)
+  }, [applications])
+
+  // Client-side filtering & search
+  const filteredApplications = useMemo(() => {
+    return applications.filter((app) => {
+      if (statusFilter !== 'ALL' && app.status !== statusFilter) return false
+      if (stageFilter !== 'ALL' && app.stage !== stageFilter) return false
+      if (tierFilter !== 'ALL' && app.passTier !== tierFilter) return false
+      if (search.trim()) {
+        const q = search.toLowerCase()
+        const matchesName = app.startupName?.toLowerCase().includes(q)
+        const matchesFounder = app.founderName?.toLowerCase().includes(q)
+        const matchesEmail = app.email?.toLowerCase().includes(q)
+        const matchesSector = app.sector?.toLowerCase().includes(q)
+        const matchesId = app.applicationId?.toLowerCase().includes(q)
+        const matchesTier = app.passTierName?.toLowerCase().includes(q)
+        if (!matchesName && !matchesFounder && !matchesEmail && !matchesSector && !matchesId && !matchesTier) {
+          return false
+        }
+      }
+      return true
+    })
+  }, [applications, statusFilter, stageFilter, tierFilter, search])
+
+  const handleUpdateApplication = (updated: FundingApplication) => {
+    setApplications((prev) =>
+      prev.map((app) => (app.applicationId === updated.applicationId ? updated : app))
+    )
+    if (selectedApp?.applicationId === updated.applicationId) {
+      setSelectedApp(updated)
+    }
+  }
+
+  const handleDeleteApplication = (id: string) => {
+    setApplications((prev) => prev.filter((app) => app.applicationId !== id))
+    if (selectedApp?.applicationId === id) {
+      setSelectedApp(null)
+    }
+  }
+
+  // Create sample test entry
+  const createSampleApplication = async () => {
+    try {
+      const sample = {
+        passTier: 'diamond',
+        passTierName: 'DIAMOND PASS',
+        passPrice: '₹8,000 + GST',
+        email: 'founder.demo@pecsummit.com',
+        founderName: 'Aarav Sharma',
+        phone: '9876543210',
+        founderLinkedIn: 'https://linkedin.com/in/aarav-sharma-demo',
+        startupName: 'NexusAI Health',
+        websiteUrl: 'https://nexusai-health.io',
+        dpiitNumber: 'DIPP98762',
+        stage: 'Early revenue',
+        sector: 'AI / HealthTech',
+        revenueStage: '₹10 lakh–₹50 lakh annual revenue',
+        totalFundingRaised: '₹25,00,000 (Angel Seed)',
+        currentAsk: '₹1.5 Crore for 8% equity',
+        preMoneyValuation: '₹18 Crore',
+        committedCapital: '₹30 Lakh committed',
+        pitchDeckUrl: 'https://drive.google.com/file/d/sample-pitch-deck/view',
+        demoVideoUrl: 'https://youtube.com/watch?v=sample-demo',
+        mouComfortable:
+          'Yes, I am comfortable with the fee for my selected option and can proceed after reviewing the MoU.',
+      }
+
+      const res = await fetch('http://localhost:3000/api/funding-conclave/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(sample),
+      })
+
+      if (res.ok) {
+        toast.success('Sample application created in MongoDB')
+        fetchApplications()
+      } else {
+        toast.error('Failed to create sample application')
+      }
+    } catch {
+      toast.error('Could not connect to submission endpoint')
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-[#060D0B] text-white selection:bg-[#00F5D4]/20 selection:text-[#00F5D4]">
+      {/* Top Header */}
+      <Header
+        totalCount={applications.length}
+        onRefresh={fetchApplications}
+        isRefreshing={isRefreshing}
+      />
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        {/* ── Section Header (Mirroring Main Site Banner) ── */}
+        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+          <div>
+            <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-mint flex items-center gap-2 mb-2">
+              <Sparkles size={14} />
+              EXECUTIVE CMS PORTAL
+            </span>
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none">
+              STARTUP PASS <span className="text-gradient-mint">RESPONSES</span>
+            </h1>
+            <p className="font-mono-data text-xs sm:text-sm text-gray-400 font-bold uppercase tracking-widest mt-3">
+              SCREENING • INVESTOR FIT • MOU WORKFLOW • OFFLINE DIRECT PAYMENTS
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={createSampleApplication}
+              className="btn-dark-gradient min-h-[42px] px-5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider text-white hover:border-mint transition-all"
+            >
+              <Plus size={14} className="text-mint stroke-[2.5]" />
+              <span>TEST ENTRY</span>
+            </button>
+          </div>
+        </div>
+
+        {/* ── Metrics Overview Cards ── */}
+        <MetricsOverview applications={applications} />
+
+        {/* ── Filter & Search Control Panel ── */}
+        <div className="p-5 rounded-3xl bg-[#081310] border border-white/10 mb-8 space-y-4 shadow-xl">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
+            {/* Search Input */}
+            <div className="relative w-full lg:w-96">
+              <Search className="w-4 h-4 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search startup, founder, email, sector, ID..."
+                className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-[#0D1C18] border border-white/10 text-white placeholder-gray-500 text-xs font-body focus:outline-none focus:border-mint transition-colors"
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+              {/* Pass Tier Filter */}
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono-data font-bold text-gray-400 uppercase tracking-wider">
+                  TIER:
+                </span>
+                <select
+                  value={tierFilter}
+                  onChange={(e) => setTierFilter(e.target.value)}
+                  className="px-3.5 py-2 rounded-xl bg-[#0D1C18] border border-white/10 text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-mint appearance-none cursor-pointer"
+                >
+                  <option value="ALL">ALL PASSES</option>
+                  <option value="diamond">DIAMOND PASS</option>
+                  <option value="gold">GOLD PASS</option>
+                  <option value="silver">SILVER PASS</option>
+                </select>
+              </div>
+
+              {/* Stage Filter */}
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono-data font-bold text-gray-400 uppercase tracking-wider">
+                  STAGE:
+                </span>
+                <select
+                  value={stageFilter}
+                  onChange={(e) => setStageFilter(e.target.value)}
+                  className="px-3.5 py-2 rounded-xl bg-[#0D1C18] border border-white/10 text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-mint appearance-none cursor-pointer"
+                >
+                  <option value="ALL">ALL STAGES</option>
+                  {uniqueStages.map((stage) => (
+                    <option key={stage} value={stage}>
+                      {stage}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Status Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 text-xs no-scrollbar">
+            {STATUS_FILTERS.map((filter) => {
+              const isActive = statusFilter === filter.id
+              return (
+                <button
+                  key={filter.id}
+                  type="button"
+                  onClick={() => setStatusFilter(filter.id)}
+                  className={`px-3.5 py-1.5 rounded-full font-mono-data text-[10px] font-bold tracking-wider whitespace-nowrap transition-all border ${
+                    isActive
+                      ? 'bg-mint text-[#060D0B] border-mint shadow-[0_0_15px_rgba(0,245,212,0.3)]'
+                      : 'bg-[#0D1C18] text-gray-400 border-white/5 hover:border-white/20 hover:text-white'
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* ── Applications List Table ── */}
+        <div className="rounded-3xl bg-[#081310] border border-white/10 overflow-hidden shadow-2xl">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-white/10 bg-[#0D1C18] text-[11px] font-mono-data font-black text-gray-400 uppercase tracking-[0.15em]">
+                  <th className="py-4 px-5 font-bold">STARTUP &amp; PASS TIER</th>
+                  <th className="py-4 px-5 font-bold">PRIMARY FOUNDER</th>
+                  <th className="py-4 px-5 font-bold">STAGE &amp; SECTOR</th>
+                  <th className="py-4 px-5 font-bold">FUNDRAISE ASK</th>
+                  <th className="py-4 px-5 font-bold">MOU READINESS</th>
+                  <th className="py-4 px-5 font-bold">STATUS</th>
+                  <th className="py-4 px-5 font-bold text-right">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5 text-xs">
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} className="py-20 text-center text-gray-400 font-mono-data">
+                      <div className="w-7 h-7 border-2 border-mint border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                      LOADING SUBMISSIONS FROM MONGODB...
+                    </td>
+                  </tr>
+                ) : filteredApplications.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-20 text-center">
+                      <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 text-gray-500">
+                        <Inbox className="w-7 h-7" />
+                      </div>
+                      <span className="font-display text-xl font-bold text-white block mb-1">
+                        NO APPLICATIONS FOUND
+                      </span>
+                      <p className="text-xs text-gray-400 font-mono-data max-w-sm mx-auto">
+                        {search || statusFilter !== 'ALL' || stageFilter !== 'ALL' || tierFilter !== 'ALL'
+                          ? 'TRY ADJUSTING SEARCH CRITERIA OR RESETTING STATUS FILTERS.'
+                          : 'NO STARTUP PASS APPLICATIONS SUBMITTED YET. USE "TEST ENTRY" ABOVE TO CREATE ONE.'}
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredApplications.map((app) => (
+                    <tr
+                      key={app.applicationId}
+                      className="hover:bg-white/[0.03] transition-colors group cursor-pointer"
+                      onClick={() => setSelectedApp(app)}
+                    >
+                      {/* Startup & ID & Pass Tier */}
+                      <td className="py-4 px-5">
+                        <div className="font-display font-black text-white text-base group-hover:text-mint transition-colors flex items-center gap-2">
+                          {app.startupName}
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                          <span className="font-mono-data text-[10px] text-mint font-bold tracking-wider">
+                            {app.applicationId}
+                          </span>
+                          {app.passTierName && (
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-[9px] font-mono-data font-bold uppercase tracking-wider border ${
+                                app.passTier === 'diamond'
+                                  ? 'bg-purple-500/15 text-purple-300 border-purple-500/30'
+                                  : app.passTier === 'silver'
+                                  ? 'bg-slate-500/15 text-slate-300 border-slate-500/30'
+                                  : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                              }`}
+                            >
+                              {app.passTierName} {app.passPrice ? `(${app.passPrice})` : ''}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      {/* Founder */}
+                      <td className="py-4 px-5">
+                        <div className="text-white font-medium text-sm">{app.founderName}</div>
+                        <div className="text-[11px] text-gray-400 font-mono-data mt-0.5">{app.email}</div>
+                        <div className="text-[10px] text-gray-500 font-mono-data">{app.phone}</div>
+                      </td>
+
+                      {/* Stage & Sector */}
+                      <td className="py-4 px-5">
+                        <span className="px-2.5 py-0.5 rounded-md bg-white/5 text-white border border-white/10 text-[11px] font-medium block w-fit mb-1">
+                          {app.stage}
+                        </span>
+                        <span className="text-[11px] text-gray-400 font-mono-data">{app.sector}</span>
+                      </td>
+
+                      {/* Ask & Valuation */}
+                      <td className="py-4 px-5 font-mono-data">
+                        <span className="text-mint font-bold text-sm block">{app.currentAsk}</span>
+                        <span className="text-[10px] text-gray-400">
+                          Pre-money: {app.preMoneyValuation || 'N/A'}
+                        </span>
+                      </td>
+
+                      {/* MoU */}
+                      <td className="py-4 px-5 max-w-[200px]">
+                        <span
+                          className={`text-xs leading-relaxed line-clamp-2 ${
+                            app.mouComfortable?.toLowerCase().includes('comfortable')
+                              ? 'text-emerald-400'
+                              : 'text-amber-400'
+                          }`}
+                        >
+                          {app.mouComfortable}
+                        </span>
+                      </td>
+
+                      {/* Status Badge */}
+                      <td className="py-4 px-5">
+                        <StatusBadge status={app.status} />
+                      </td>
+
+                      {/* Quick Actions */}
+                      <td className="py-4 px-5 text-right">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setSelectedApp(app)
+                          }}
+                          className="btn-dark-gradient px-3.5 py-1.5 rounded-full font-mono-data text-[11px] font-bold uppercase tracking-wider text-white transition-all inline-flex items-center gap-1.5 hover:border-mint"
+                        >
+                          <Eye size={12} className="text-mint stroke-[2.5]" />
+                          <span>REVIEW</span>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      {/* Application Detail Slide-Over Modal */}
+      {selectedApp && (
+        <ApplicationDetailModal
+          application={selectedApp}
+          onClose={() => setSelectedApp(null)}
+          onUpdate={handleUpdateApplication}
+          onDelete={handleDeleteApplication}
+        />
+      )}
+    </div>
+  )
+}

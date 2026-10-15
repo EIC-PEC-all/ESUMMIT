@@ -7,10 +7,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 const SECTIONS = [
   { id: 'esummit-hero', name: 'HOME' },
   { id: 'flip-flop-transition', name: 'WELCOME' },
-  { id: 'esummit-about', name: 'ABOUT' },
   { id: 'alumni', name: 'ALUMNI' },
   { id: 'register', name: 'REGISTER' },
-  { id: 'footer', name: 'FOOTER' }
+  { id: 'footer', name: 'FOOTER' },
 ]
 
 export default function GlobalScrollProgress() {

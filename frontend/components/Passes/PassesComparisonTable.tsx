@@ -131,7 +131,7 @@ export default function PassesComparisonTable() {
               {/* Silver Button */}
               <td className="py-5 px-3 sm:px-4 text-center">
                 <Link
-                  href="/register?tier=silver"
+                  href="/passes?tier=silver"
                   className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-emerald-400 text-black hover:bg-emerald-300 transition-colors"
                 >
                   <span>Select</span>
@@ -142,7 +142,7 @@ export default function PassesComparisonTable() {
               {/* Gold Button (Highlighted Column) */}
               <td className="py-5 px-3 sm:px-4 text-center bg-amber-500/10 border-x border-amber-400/40 rounded-b-2xl">
                 <Link
-                  href="/register?tier=gold"
+                  href="/passes?tier=gold"
                   className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-amber-400 text-black hover:bg-amber-300 transition-colors"
                 >
                   <span>Select</span>
@@ -153,7 +153,7 @@ export default function PassesComparisonTable() {
               {/* Diamond Button */}
               <td className="py-5 px-3 sm:px-4 text-center">
                 <Link
-                  href="/register?tier=diamond"
+                  href="/passes?tier=diamond"
                   className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-cyan-400 text-black hover:bg-cyan-300 transition-colors"
                 >
                   <span>Select</span>

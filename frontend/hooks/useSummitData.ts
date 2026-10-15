@@ -74,7 +74,7 @@ const FALLBACK_SPEAKERS: CmsSpeaker[] = MASTER_SPEAKERS.map((s, i) => ({
   track: s.track,
   avatarUrl: s.image ?? null,
   initials: s.initials,
-  color: '#00F5D4',
+  color: '#8AC53F',
   linkedin: null,
   twitter: null,
   order: i + 1,

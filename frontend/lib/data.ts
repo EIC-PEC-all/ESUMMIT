@@ -101,7 +101,7 @@ export const SPEAKERS = [
     track: 'panels',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&auto=format&fit=crop',
     initials: 'SJ',
-    color: '#00F5D4',
+    color: '#8AC53F',
   },
   {
     id: 'spk2',
@@ -293,7 +293,7 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     lat: 30.76782763758229,
     lng: 76.78532031055364,
     coordinates: [76.78532031055364, 30.76782763758229],
-    color: '#00F5D4',
+    color: '#8AC53F',
     type: 'lab',
   },
   'student-center': {

@@ -69,7 +69,7 @@ function FAQItem({ faq, isOpen, onToggle }: {
 
 import PageBanner from '@/components/Common/PageBanner'
 
-export default function FAQ() {
+export default function FAQ({ isStandalonePage = false }: { isStandalonePage?: boolean }) {
   const { faqs: cmsFaqs } = useFaqs()
   const faqs: FaqItem[] = Array.isArray(cmsFaqs) && cmsFaqs.length > 0 ? cmsFaqs : STATIC_FAQS
 
@@ -77,47 +77,82 @@ export default function FAQ() {
 
   return (
     <>
-      <PageBanner 
-        title="FAQ" 
-        subtitle="Frequently Asked Questions"
-      />
+      {isStandalonePage && (
+        <PageBanner 
+          title="FAQ" 
+          subtitle="Frequently Asked Questions"
+        />
+      )}
       <section
         id="faq"
-        className="pt-12 pb-20 sm:pb-24 relative bg-section-1 text-white z-10 overflow-hidden"
+        className={`relative z-10 overflow-hidden bg-[#071511] text-white ${
+          isStandalonePage
+            ? 'pt-12 pb-20 sm:pb-24'
+            : '-mt-10 sm:-mt-12 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-mint/20 py-16 sm:py-20 md:py-24'
+        }`}
         aria-labelledby="faq-heading"
       >
-        <div className="section-container relative z-10">
-          <div className="mb-12 flex flex-col items-center justify-center text-center">
-            <p className="font-body text-sm sm:text-base leading-relaxed text-gray-300 max-w-lg">
-              If you don&apos;t find your answer here, our Concierge agent (bottom right) can assist — or email us directly at{' '}
-              <a href="mailto:info@ecellpec.in" className="text-mint underline underline-offset-4 font-semibold">
-                info@ecellpec.in
-              </a>
-            </p>
-          </div>
-
-        <div className="max-w-5xl mx-auto">
-
-          {/* Right: Accordion */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="w-full"
-          >
-            {faqs.map((faq) => (
-              <FAQItem
-                key={faq.id}
-                faq={faq}
-                isOpen={openId === faq.id}
-                onToggle={() => setOpenId(openId === faq.id ? null : faq.id)}
-              />
-            ))}
-          </motion.div>
+        {/* Background Ambience Glow */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
+          <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-mint/15 blur-[120px] rounded-full" />
         </div>
-      </div>
-    </section>
+
+        <div className="section-container relative z-10">
+          {!isStandalonePage ? (
+            <div className="mb-10 lg:mb-14 text-center max-w-3xl mx-auto">
+              <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-mint flex items-center justify-center gap-2 mb-2">
+                <Zap size={14} />
+                COMMON INQUIRIES
+              </span>
+              <h2 id="faq-heading" className="font-display text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none">
+                FREQUENTLY ASKED <span className="text-gradient-mint">QUESTIONS</span>
+              </h2>
+              <p className="font-body text-xs sm:text-sm text-gray-300 mt-4 leading-relaxed max-w-xl mx-auto">
+                Everything you need to know about passes, registration, campus venue, and logistics.
+              </p>
+            </div>
+          ) : (
+            <div className="mb-12 flex flex-col items-center justify-center text-center">
+              <p className="font-body text-sm sm:text-base leading-relaxed text-gray-300 max-w-lg">
+                If you don&apos;t find your answer here, our Concierge agent (bottom right) can assist — or email us directly at{' '}
+                <a href="mailto:info@ecellpec.in" className="text-mint underline underline-offset-4 font-semibold">
+                  info@ecellpec.in
+                </a>
+              </p>
+            </div>
+          )}
+
+          <div className="max-w-4xl mx-auto">
+            {/* Accordion */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="w-full"
+            >
+              {faqs.map((faq) => (
+                <FAQItem
+                  key={faq.id}
+                  faq={faq}
+                  isOpen={openId === faq.id}
+                  onToggle={() => setOpenId(openId === faq.id ? null : faq.id)}
+                />
+              ))}
+            </motion.div>
+
+            {/* Bottom Support Note */}
+            <div className="mt-8 text-center">
+              <p className="font-body text-xs sm:text-sm text-gray-400">
+                Still have questions? Chat with our AI Concierge at the bottom-right or email{' '}
+                <a href="mailto:eicpec@pec.edu.in" className="text-mint underline underline-offset-4 font-semibold hover:text-white transition-colors">
+                  eicpec@pec.edu.in
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </>
   )
 }

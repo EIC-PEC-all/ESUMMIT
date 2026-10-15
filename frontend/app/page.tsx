@@ -10,9 +10,9 @@ import ScrollExpandLoader from '@/components/Common/ScrollExpandLoader'
 
 // ── Below-the-fold sections loaded asynchronously to protect initial critical bundle ──
 const FlipFlopTransition = dynamic(() => import('@/components/Common/FlipFlopTransition'), { ssr: false })
-const EsummitAbout = dynamic(() => import('@/components/EsummitAbout'), { ssr: false })
 const Alumni = dynamic(() => import('@/components/Alumni'), { ssr: false })
 const PassesSection = dynamic(() => import('@/components/Passes'), { ssr: false })
+const FAQ = dynamic(() => import('@/components/FAQ'), { ssr: false })
 const RegisterCTA = dynamic(() => import('@/components/Footer').then((m) => m.RegisterCTA), { ssr: false })
 const Footer = dynamic(() => import('@/components/Footer'), { ssr: false })
 
@@ -45,14 +45,14 @@ export default function Home() {
       {/* ── 2. FLIPFLOP PHOTO MARQUEE — Immediately after Hero ── */}
       <FlipFlopTransition />
 
-      {/* ── 3. ABOUT — Mission, vision & core pillars ── */}
-      <EsummitAbout />
-
-      {/* ── 4. ALUMNI — Wall of fame ── */}
+      {/* ── 3. ALUMNI — Wall of fame ── */}
       <Alumni />
 
-      {/* ── 5. STARTUP PACKAGES / PASSES — Diamond, Gold, Silver tiers ── */}
+      {/* ── 4. STARTUP PACKAGES / PASSES — Diamond, Gold, Silver tiers ── */}
       <PassesSection />
+
+      {/* ── 5. FAQ — Answers before registration ── */}
+      <FAQ />
 
       {/* ── 6. REGISTER CTA — Conversion banner ── */}
       <RegisterCTA />

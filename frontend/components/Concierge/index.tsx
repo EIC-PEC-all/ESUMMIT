@@ -336,7 +336,7 @@ export default function Concierge() {
           <button
             onClick={() => setOpen(!open)}
             aria-label="Open Summit AI Assistant"
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-mint text-void flex items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(0,245,212,0.3)] border border-[#5CFFE7] relative"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-mint text-void flex items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(138,197,63,0.3)] border border-[#A8EE4A] relative"
           >
             <Bot size={22} strokeWidth={2.2} />
             {!open && (

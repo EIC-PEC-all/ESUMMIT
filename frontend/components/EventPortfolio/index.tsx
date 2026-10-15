@@ -124,7 +124,7 @@ export default function EventPortfolioShowcase() {
           {/* Top Control Bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-white/10">
             {/* Filter Tabs */}
-            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#091812] border border-mint/20 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#091812] border border-mint/20 overflow-x-auto scrollbar-none">
               {FILTER_TABS.map((tab) => {
                 const isActive = activeTab === tab.id
                 return (
@@ -132,7 +132,7 @@ export default function EventPortfolioShowcase() {
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-mono-data whitespace-nowrap transition-all ${
+                    className={`px-4 py-2 rounded-full text-xs font-mono-data whitespace-nowrap transition-all ${
                       isActive
                         ? 'bg-mint text-[#07130F] font-bold shadow-sm'
                         : 'text-gray-400 hover:text-white'
@@ -150,7 +150,7 @@ export default function EventPortfolioShowcase() {
               download="PEC-E-Summit-2026-Brochure.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-mint/10 hover:bg-mint/20 border border-mint/30 text-mint text-xs font-mono-data font-bold transition-all shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-mint/10 hover:bg-mint/20 border border-mint/30 text-mint text-xs font-mono-data font-bold transition-all shrink-0"
             >
               <Download className="w-3.5 h-3.5" />
               <span>DOWNLOAD BROCHURE (PDF)</span>

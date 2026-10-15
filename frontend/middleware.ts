@@ -18,7 +18,5 @@ export const config = {
     "/dashboard/:path*",
     "/tickets/:path*",
     "/checkout/:path*",
-    "/profile/:path*",
-    "/passes/:path*",
   ],
 };

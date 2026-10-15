@@ -85,7 +85,7 @@ export function useCampusMap({ containerRef, day, onMapLoad, onError }: UseCampu
       const style = document.createElement("style")
       style.id = "leaflet-campus-styles"
       style.innerHTML =
-        `.leaflet-campus-tooltip{background:#0a1713;color:#00F5D4;border:1px solid #00F5D440;font-size:11px;font-weight:700;font-family:monospace;padding:3px 8px;border-radius:6px;box-shadow:none}` +
+        `.leaflet-campus-tooltip{background:#08130a;color:#8AC53F;border:1px solid #8AC53F40;font-size:11px;font-weight:700;font-family:monospace;padding:3px 8px;border-radius:6px;box-shadow:none}` +
         `.leaflet-campus-tooltip::before{display:none}` +
         `.leaflet-container{background:#060d0b}`
       document.head.appendChild(style)
@@ -113,7 +113,7 @@ export function useCampusMap({ containerRef, day, onMapLoad, onError }: UseCampu
 
       Object.entries(CAMPUS_VENUES).forEach(([id, venue]) => {
         const v = venue as CampusVenue
-        const color = VENUE_TYPE_COLORS[v.type] || "#00F5D4"
+        const color = VENUE_TYPE_COLORS[v.type] || "#8AC53F"
         const latLng = toLLArr(v.coordinates as [number, number])
 
         const el = document.createElement("div")
@@ -234,7 +234,7 @@ export function useCampusMap({ containerRef, day, onMapLoad, onError }: UseCampu
       if (!destMarkerRef.current) {
         const el = document.createElement("div")
         Object.assign(el.style, {
-          width: "20px", height: "20px", backgroundColor: "#00FF88",
+          width: "20px", height: "20px", backgroundColor: "#8AC53F",
           borderRadius: "50% 50% 50% 0", transform: "rotate(-45deg)",
           border: "2px solid #050505",
         })

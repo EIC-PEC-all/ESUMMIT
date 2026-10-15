@@ -112,8 +112,8 @@ export default function ScrollExpandLoader() {
 
   if (stage === 'done') return null
 
-  const apertureScaleX = isMobile ? 0.88 : 0.68
-  const apertureScaleY = isMobile ? 0.74 : 0.62
+  const apertureScaleX = isMobile ? 0.92 : 0.72
+  const apertureScaleY = isMobile ? 0.76 : 0.64
   const apertureRadius = isMobile ? '20px' : '24px'
 
   return (
@@ -142,7 +142,7 @@ export default function ScrollExpandLoader() {
             height: '100vh',
             transformOrigin: 'center center',
             willChange: 'transform',
-            boxShadow: '0 0 0 9999px var(--accent-mint, #00F5D4)',
+            boxShadow: '0 0 0 9999px var(--accent-mint, #8AC53F)',
           }}
           initial={{ scaleX: apertureScaleX, scaleY: apertureScaleY, borderRadius: apertureRadius }}
           animate={
@@ -182,7 +182,7 @@ export default function ScrollExpandLoader() {
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
                 className="h-full bg-mint rounded-full origin-left"
-                style={{ willChange: 'transform', boxShadow: '0 0 8px var(--accent-mint, #00F5D4)' }}
+                style={{ willChange: 'transform', boxShadow: '0 0 8px var(--accent-mint, #8AC53F)' }}
               />
             </div>
           </motion.div>

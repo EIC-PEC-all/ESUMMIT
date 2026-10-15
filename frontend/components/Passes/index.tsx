@@ -1,16 +1,30 @@
 'use client'
 
-import React from 'react'
-import { Sparkles } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { Sparkles, GraduationCap, Building2, ArrowRight } from 'lucide-react'
+import { useSearchParams } from 'next/navigation'
 import PassCard from './PassCard'
 import PassesComparisonTable from './PassesComparisonTable'
-import { STARTUP_PACKAGES } from './passesData'
+import { STARTUP_PACKAGES, STUDENT_PACKAGES } from './passesData'
 
 interface PassesSectionProps {
   isStandalonePage?: boolean
 }
 
 export default function PassesSection({ isStandalonePage = false }: PassesSectionProps) {
+  const searchParams = useSearchParams()
+  const [passType, setPassType] = useState<'student' | 'startup'>('student')
+
+  useEffect(() => {
+    const type = searchParams?.get('type')?.toLowerCase()
+    if (type === 'startup' || type === 'startups') {
+      setPassType('startup')
+    } else if (type === 'student' || type === 'students') {
+      setPassType('student')
+    }
+  }, [searchParams])
+
   return (
     <section
       id="passes"
@@ -19,7 +33,7 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
           ? 'pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-20 md:pb-24'
           : '-mt-10 sm:-mt-12 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-mint/20 py-16 sm:py-20 md:py-24'
       }`}
-      aria-label="Startup Packages and Passes"
+      aria-label="Passes and Packages"
     >
       {/* Background Ambience Grid */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
@@ -28,23 +42,31 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
 
       <div className="section-container relative z-10">
         {/* Header Block */}
-        <div className="mt-4 sm:mt-6 mb-10 lg:mb-14 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div className="mt-4 sm:mt-6 mb-8 lg:mb-10 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div>
             <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-mint flex items-center gap-2 mb-2">
               <Sparkles size={14} />
-              PARTNER WITH US
+              {passType === 'student' ? 'JOIN THE SUMMIT' : 'PARTNER WITH US'}
             </span>
             <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none">
-              STARTUP <span className="text-gradient-mint">PACKAGES</span>
+              {passType === 'student' ? (
+                <>STUDENT <span className="text-gradient-mint">PASSES</span></>
+              ) : (
+                <>STARTUP <span className="text-gradient-mint">PACKAGES</span></>
+              )}
             </h2>
             <p className="font-mono-data text-xs sm:text-sm text-gray-300 font-bold uppercase tracking-widest mt-3">
-              SHOWCASE • NETWORK • HIRE • COLLABORATE
+              {passType === 'student'
+                ? 'LEARN • COMPETE • NETWORK • BUILD'
+                : 'SHOWCASE • NETWORK • HIRE • COLLABORATE'}
             </p>
           </div>
 
           <div className="max-w-md lg:text-right">
             <p className="font-body text-xs sm:text-sm text-gray-200 leading-relaxed">
-              Engage with 8,000+ students, founders, investors, and innovators at one of North India&apos;s largest student-run startup platforms.
+              {passType === 'student'
+                ? "Join 5,000+ ambitious student engineers & innovators at North India's premier student-run entrepreneurship platform."
+                : "Engage with 8,000+ students, founders, investors, and innovators at one of North India's largest student-run startup platforms."}
             </p>
             <span className="font-mono-data text-[11px] font-bold text-mint uppercase tracking-widest mt-2 block">
               CHOOSE THE TIER THAT FITS YOUR GOALS
@@ -52,20 +74,79 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
           </div>
         </div>
 
-        {/* 3 Tier Summary Cards (Silver -> Gold -> Diamond) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch pt-2 mb-10">
-          {STARTUP_PACKAGES.map((pkg, idx) => (
-            <PassCard key={pkg.id} pkg={pkg} index={idx} isCenter={idx === 1} />
-          ))}
+        {/* Pill-Rounded Toggle: Student vs Startup */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-white/10 pb-6 mb-10">
+          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-[#050D0A] border border-white/10 shadow-xl">
+            <button
+              type="button"
+              onClick={() => setPassType('student')}
+              className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                passType === 'student'
+                  ? 'bg-mint text-[#06110D] shadow-[0_0_20px_rgba(138,197,63,0.35)]'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <GraduationCap size={16} />
+              <span>Student Passes</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setPassType('startup')}
+              className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+                passType === 'startup'
+                  ? 'bg-mint text-[#06110D] shadow-[0_0_20px_rgba(138,197,63,0.35)]'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Building2 size={16} />
+              <span>Startup Packages</span>
+            </button>
+          </div>
+
+          <span className="font-mono-data text-[11px] font-bold text-mint uppercase tracking-widest">
+            {passType === 'student' ? 'FOR ATTENDEES & BUILDERS' : 'FOR FOUNDERS & VENTURES'}
+          </span>
         </div>
 
-        {/* Feature Comparison Table */}
-        <div className="mt-4">
-          <PassesComparisonTable />
-        </div>
+        {/* Dynamic Cards Grid */}
+        {passType === 'student' ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch pt-2 mb-10">
+              {STUDENT_PACKAGES.map((pkg, idx) => (
+                <PassCard key={pkg.id} pkg={pkg} index={idx} isCenter={pkg.popular} />
+              ))}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch pt-2 mb-10">
+              {STARTUP_PACKAGES.map((pkg, idx) => (
+                <PassCard key={pkg.id} pkg={pkg} index={idx} isCenter={idx === 1} />
+              ))}
+            </div>
+
+            {/* Show comparison table only on dedicated /passes page */}
+            {isStandalonePage ? (
+              <div className="mt-4">
+                <PassesComparisonTable />
+              </div>
+            ) : (
+              <div className="mt-6 text-center">
+                <Link
+                  href="/passes?type=startup"
+                  className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-full bg-white/5 hover:bg-white/10 text-white font-mono-data text-xs font-bold uppercase tracking-wider border border-white/15 hover:border-mint transition-all shadow-lg hover:scale-105"
+                >
+                  <span>View Full Startup Packages &amp; Deliverables</span>
+                  <ArrowRight size={14} className="text-mint" />
+                </Link>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </section>
   )
 }
+
 
 
