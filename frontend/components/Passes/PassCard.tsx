@@ -25,8 +25,8 @@ export default function PassCard({ pkg, index, isCenter = false }: PassCardProps
   }
 
   const isStartup = 'gstText' in pkg
-  const registerHref = isStartup
-    ? `/register?tier=${pkg.tier}`
+  const passHref = isStartup
+    ? `/passes?tier=${pkg.tier}`
     : `/register?pass=${pkg.id}`
 
   const hasPopularBadge = isCenter || ('popular' in pkg && pkg.popular)
@@ -95,7 +95,7 @@ export default function PassCard({ pkg, index, isCenter = false }: PassCardProps
       {/* Action Button */}
       <div className="pt-2 mt-auto">
         <Link
-          href={registerHref}
+          href={passHref}
           className={`w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-transform duration-150 cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${pkg.accentColor.buttonBg}`}
           aria-label={`Apply for ${pkg.name}`}
         >

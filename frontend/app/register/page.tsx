@@ -36,11 +36,10 @@ export const metadata: Metadata = {
   },
 }
 
+import { redirect } from 'next/navigation'
+
 export default function RegisterPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0B1410]" />}>
-      <RegisterClient />
-    </Suspense>
-  )
+  redirect('/passes')
 }
+
 

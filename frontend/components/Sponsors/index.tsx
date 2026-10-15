@@ -4,6 +4,7 @@ import React from 'react'
 import { Sparkles, Building2, Handshake, Download, Mail } from 'lucide-react'
 import PageBanner from '@/components/Common/PageBanner'
 import { MASTER_CONTACTS } from '@/data/summitData'
+
 import PreviousSponsorsGrid from './PreviousSponsorsGrid'
 import UpcomingSponsorsComingSoon from './UpcomingSponsorsComingSoon'
 
@@ -84,6 +85,7 @@ export default function Sponsors() {
               </a>
             </div>
           </div>
+
         </div>
       </section>
     </>

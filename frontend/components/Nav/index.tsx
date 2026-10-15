@@ -19,6 +19,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'SPONSORS', code: '07', href: '/sponsors', sectionId: null },
 ]
 
+
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [scrollYPos, setScrollYPos] = useState(0)

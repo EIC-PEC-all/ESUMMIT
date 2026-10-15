@@ -197,7 +197,7 @@ export default function RegisterClient() {
       city: stored?.city || '',
       branch: stored?.branch || '',
       teamName: '',
-      gradYear: normalizeGradYear(stored?.gradYear) || '1st Year (Class of 2029)',
+      gradYear: normalizeGradYear(stored?.gradYear) || '1st Year (Class of 2030)',
       referralCode: '',
     }
   })
@@ -228,7 +228,7 @@ export default function RegisterClient() {
           state: stored.state || prev.state || '',
           city: stored.city || prev.city || '',
           branch: stored.branch || prev.branch || '',
-          gradYear: normalizedGrad || prev.gradYear || '1st Year (Class of 2029)',
+          gradYear: normalizedGrad || prev.gradYear || '1st Year (Class of 2030)',
         }))
         if (stored.state && stored.city) {
           const cities = getCitiesForState(stored.state)

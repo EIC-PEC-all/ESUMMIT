@@ -42,7 +42,7 @@ export default function OnboardingModal({
   const [selectedState, setSelectedState] = useState('')
   const [selectedCity, setSelectedCity] = useState('')
   const [customCity, setCustomCity] = useState('')
-  const [gradYear, setGradYear] = useState('Final Year (Class of 2026)')
+  const [gradYear, setGradYear] = useState('1st Year (Class of 2030)')
   const [phone, setPhone] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -53,7 +53,7 @@ export default function OnboardingModal({
     if (initialProfile) {
       setName(initialProfile.name || userDisplayName || '')
       setCollege(initialProfile.college || '')
-      setGradYear(normalizeGradYear(initialProfile.gradYear) || 'Final Year (Class of 2026)')
+      setGradYear(normalizeGradYear(initialProfile.gradYear) || '1st Year (Class of 2030)')
       setPhone(initialProfile.phone || '')
       const st = initialProfile.state || ''
       setSelectedState(st)
