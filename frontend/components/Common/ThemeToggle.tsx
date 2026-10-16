@@ -14,11 +14,12 @@ interface ThemeToggleProps {
 const HIDE_THEME_TOGGLE = true
 
 export default function ThemeToggle({ className = '', variant = 'pill' }: ThemeToggleProps) {
+  const { theme, toggleTheme, isLoaded } = useTheme()
+
   if (HIDE_THEME_TOGGLE) {
     return null
   }
 
-  const { theme, toggleTheme, isLoaded } = useTheme()
   const isLight = isLoaded && theme === 'light'
 
   if (variant === 'icon') {

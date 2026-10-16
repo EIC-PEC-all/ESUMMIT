@@ -97,7 +97,7 @@ export default function Concierge() {
     checkState()
     const timer = setInterval(checkState, 1000)
     return () => clearInterval(timer)
-  }, [])
+  }, [isLandingPage])
 
   // Use MutationObserver on the body class instead of custom events — immune to
   // StrictMode double-invoke timing where the loader cleanup briefly fires active:false.

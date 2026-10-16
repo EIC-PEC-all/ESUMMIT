@@ -5,4 +5,5 @@ export async function getDatabase(): Promise<null> {
   return null
 }
 
-export default null
+const dummyMongoDb = null
+export default dummyMongoDb

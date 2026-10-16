@@ -66,6 +66,7 @@ export interface StartupPassApplication {
   email: string
   founderName: string
   phone: string
+  role?: string
   founderLinkedIn?: string
   startupName: string
   websiteUrl?: string

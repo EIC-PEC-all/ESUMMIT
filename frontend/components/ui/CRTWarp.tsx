@@ -58,6 +58,8 @@ export default function CRTWarp({
   const materialRef = useRef<THREE.ShaderMaterial | null>(null)
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
   const frameRef = useRef<number | null>(null)
+  const colorRef = useRef(color)
+  const bgRef = useRef(backgroundColor)
   const pausedRef = useRef(paused)
   const pointerTargetRef = useRef(new THREE.Vector2(0, 0))
   const pointerCurrentRef = useRef(new THREE.Vector2(0, 0))
@@ -87,8 +89,8 @@ export default function CRTWarp({
         uResolution: { value: new THREE.Vector2(1, 1) },
         uTime: { value: 0 },
         uSpeed: { value: 0.5 },
-        uColor: { value: new THREE.Color(color) },
-        uBackgroundColor: { value: new THREE.Color(backgroundColor) },
+        uColor: { value: new THREE.Color(colorRef.current) },
+        uBackgroundColor: { value: new THREE.Color(bgRef.current) },
         uCurvature: { value: 0.25 },
         uScanlineStrength: { value: 0.25 },
         uScanlineFrequency: { value: 200 },
