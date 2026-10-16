@@ -40,13 +40,15 @@ export default function PassCard({
   const hasPopularBadge = isCenter || ('popular' in pkg && pkg.popular)
 
   const tierGlow =
-    pkg.tier === 'silver'
-      ? 'border-2 border-mint/80 shadow-[0_4px_24px_rgba(0,245,212,0.18)] scale-[1.01]'
-      : pkg.tier === 'gold'
-      ? 'border-2 border-amber-400/80 shadow-[0_4px_24px_rgba(251,191,36,0.18)] scale-[1.01]'
-      : 'border-2 border-cyan-400/80 shadow-[0_4px_24px_rgba(34,211,238,0.18)] scale-[1.01]'
+    pkg.tier === 'silver' || pkg.tier === 'delegate'
+      ? 'border-2 border-tier-delegate ring-2 ring-tier-delegate/40 scale-[1.01]'
+      : pkg.tier === 'gold' || pkg.tier === 'combo'
+      ? 'border-2 border-tier-combo ring-2 ring-tier-combo/40 scale-[1.01]'
+      : pkg.tier === 'hackathon'
+      ? 'border-2 border-tier-hackathon ring-2 ring-tier-hackathon/40 scale-[1.01]'
+      : 'border-2 border-tier-allaccess ring-2 ring-tier-allaccess/40 scale-[1.01]'
 
-  const tierBadge = 'bg-mint text-[#06110D]'
+  const tierBadge = 'bg-mint text-void'
 
   return (
     <motion.div
@@ -55,22 +57,22 @@ export default function PassCard({
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.35, delay: index * 0.08 }}
       onClick={() => {
-        if (isStartup && onSelect) {
-          onSelect(pkg.tier)
+        if (onSelect) {
+          onSelect(pkg.id || pkg.tier)
         }
       }}
-      className={`relative flex flex-col justify-between h-full rounded-3xl p-5 sm:p-6 md:p-7 transition-all duration-300 ${
-        isStartup && onSelect ? 'cursor-pointer' : ''
+      className={`pass-tier-card relative flex flex-col justify-between h-full rounded-3xl p-5 sm:p-6 md:p-7 transition-all duration-300 bg-panel text-primary shadow-xl ${
+        onSelect ? 'cursor-pointer' : ''
       } ${
         isSelected
-          ? `${pkg.accentColor.cardBg} ${tierGlow}`
-          : `${pkg.accentColor.cardBg} ${pkg.accentColor.border} hover:-translate-y-1`
+          ? `${tierGlow}`
+          : `${pkg.accentColor.border} hover:-translate-y-1`
       }`}
     >
-      {/* Selected Pill Badge */}
-      {isStartup && isSelected && (
+      {/* Selected Badge */}
+      {isSelected && (
         <div
-          className={`absolute -top-3.5 left-1/2 -translate-x-1/2 ${tierBadge} font-mono-data text-[10px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full shadow-[0_0_15px_rgba(0,245,212,0.45)] flex items-center gap-1.5 z-20`}
+          className={`absolute -top-3.5 left-1/2 -translate-x-1/2 ${tierBadge} font-mono-data text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-md shadow-md flex items-center gap-1.5 z-20`}
         >
           <Check className="w-3 h-3 stroke-[3]" />
           Selected Pass
@@ -87,7 +89,7 @@ export default function PassCard({
           </div>
 
           <span
-            className={`font-mono-data text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-1 rounded-full border flex items-center gap-1.5 shrink-0 ${pkg.accentColor.badgeBg}`}
+            className={`font-mono-data text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2.5 sm:px-3 py-1 rounded-md border flex items-center gap-1.5 shrink-0 ${pkg.accentColor.badgeBg}`}
           >
             {hasPopularBadge && <Sparkles size={10} className="stroke-[2.5]" />}
             {pkg.badgeText}
@@ -105,40 +107,40 @@ export default function PassCard({
             {pkg.price}
           </span>
           {isStartup && pkg.gstText && (
-            <span className="font-mono-data text-xs text-gray-300 font-bold uppercase tracking-wider">
+            <span className="font-mono-data text-xs text-muted font-bold uppercase tracking-wider">
               {pkg.gstText}
             </span>
           )}
         </div>
 
         {/* Tagline with uniform height */}
-        <p className="font-body text-xs text-gray-200 leading-relaxed mb-5 min-h-[44px] line-clamp-2">
+        <p className="font-body text-xs text-secondary leading-relaxed mb-5 min-h-[44px] line-clamp-2">
           {pkg.tagline}
         </p>
 
-        {/* Deliverables Bullet List (all 4 items displayed consistently) */}
-        <div className="space-y-2 mb-6 pt-3.5 border-t border-white/10 flex-1">
+        {/* Deliverables Bullet List */}
+        <div className="space-y-2 mb-6 pt-3.5 border-t border-border-subtle flex-1">
           {pkg.deliverables.slice(0, 4).map((d, i) => (
             <div key={i} className="flex items-start gap-2 text-xs leading-tight">
               <span className={`font-mono-data font-bold text-xs mt-0.5 shrink-0 ${pkg.accentColor.deliverablesTitleColor}`}>✓</span>
               <div>
-                <span className="font-bold text-white/95">{d.title}: </span>
-                <span className="text-gray-300 font-body text-[11px] leading-snug">{d.desc}</span>
+                <span className="font-bold text-primary">{d.title}: </span>
+                <span className="text-secondary font-body text-[11px] leading-snug">{d.desc}</span>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Action Button */}
+      {/* Action Button (Rounded-Full Pill Button) */}
       <div className="pt-2 mt-auto">
-        {isStartup && onSelect ? (
+        {onSelect ? (
           isSelected ? (
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation()
-                onSelect(pkg.tier)
+                onSelect(pkg.id || pkg.tier)
               }}
               className={`w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-transform duration-150 cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${pkg.accentColor.buttonBg}`}
               aria-label={`Selected ${pkg.name}`}
@@ -151,9 +153,9 @@ export default function PassCard({
               type="button"
               onClick={(e) => {
                 e.stopPropagation()
-                onSelect(pkg.tier)
+                onSelect(pkg.id || pkg.tier)
               }}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-all duration-150 cursor-pointer border border-white/20 text-white/90 hover:border-mint hover:text-mint hover:bg-mint/5 hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider py-3.5 px-5 transition-all duration-150 cursor-pointer border border-border-subtle text-secondary hover:border-mint hover:text-mint hover:bg-mint/10 hover:scale-[1.02] active:scale-[0.98]"
               aria-label={`Select ${pkg.name}`}
             >
               <span>Select {pkg.name.replace(' PASS', '')}</span>

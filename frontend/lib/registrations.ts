@@ -1,4 +1,4 @@
-// lib/registrations.ts — Connected to MongoDB Backend API
+// lib/registrations.ts — Connected to MongoDB Backend API & Local CMS Sync
 export interface RegistrationRecord {
   id: string
   userId?: string
@@ -45,41 +45,16 @@ export const addDeletedPassId = (id: string) => {
   }
 }
 
-const PASS_TYPE_MAP: Record<string, string> = {
-  'Student Pass': 'STUDENT_GENERAL',
-  'Student Delegate Pass': 'STUDENT_GENERAL',
-  'Student Delegate': 'STUDENT_GENERAL',
-  'STUDENT_GENERAL': 'STUDENT_GENERAL',
-  'Hackathon Pass': 'HACKATHON_BUILDER',
-  '24-Hour Hackathon Pass': 'HACKATHON_BUILDER',
-  '24-Hour Hackathon': 'HACKATHON_BUILDER',
-  'HACKATHON_BUILDER': 'HACKATHON_BUILDER',
-  'Pitch Pass': 'FOUNDER_PITCH',
-  'Startup Pitch Pass': 'FOUNDER_PITCH',
-  'Founder Pass': 'FOUNDER_PITCH',
-  'FOUNDER_PITCH': 'FOUNDER_PITCH',
-  'Ambassador': 'CAMPUS_AMBASSADOR',
-  'Campus Ambassador Pass': 'CAMPUS_AMBASSADOR',
-  'Campus Ambassador': 'CAMPUS_AMBASSADOR',
-  'CAMPUS_AMBASSADOR': 'CAMPUS_AMBASSADOR',
-  'Silver Pass': 'STARTUP_SILVER',
-  'STARTUP_SILVER': 'STARTUP_SILVER',
-  'Gold Pass': 'STARTUP_GOLD',
-  'STARTUP_GOLD': 'STARTUP_GOLD',
-  'Diamond Pass': 'STARTUP_DIAMOND',
-  'STARTUP_DIAMOND': 'STARTUP_DIAMOND',
-}
-
-
+// ── LOCAL STORAGE HELPERS ──
 export const getLocalRegistrations = (): RegistrationRecord[] => {
   if (typeof window === 'undefined') return []
   try {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY)
-    if (!saved) return []
-    const parsed = JSON.parse(saved)
-    return Array.isArray(parsed) ? parsed : []
-  } catch (e) {
-    console.warn('Error reading local registrations:', e)
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw)
+    const deletedIds = new Set(getDeletedPassIds())
+    return Array.isArray(parsed) ? parsed.filter((r) => !deletedIds.has(r.id)) : []
+  } catch {
     return []
   }
 }
@@ -88,12 +63,23 @@ export const saveLocalRegistrations = (list: RegistrationRecord[]) => {
   if (typeof window === 'undefined') return
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(list))
-  } catch (e) {
-    console.warn('Error saving local registrations:', e)
+  } catch {
+    // Local storage quota exceeded or private mode
   }
 }
 
-// ── CREATE (Saved to MongoDB Backend) ──
+const PASS_TYPE_MAP: Record<string, string> = {
+  'Student Pass': 'STUDENT_GENERAL',
+  'Startup Silver Pass': 'STARTUP_SILVER',
+  'Startup Gold Pass': 'STARTUP_GOLD',
+  'Startup Diamond Pass': 'STARTUP_DIAMOND',
+  'Founder Pass': 'FOUNDER_PITCH',
+  'Investor Pass': 'INVESTOR_VIP',
+  'Delegate Pass': 'DELEGATE_ALL_ACCESS',
+  'VIP Pass': 'VIP_ALL_ACCESS',
+}
+
+// ── CREATE (Saved to MongoDB Backend & Synced with Response Manager) ──
 export const createRegistrationRecord = async (
   data: Omit<RegistrationRecord, 'id' | 'date' | 'qrCodeData'>
 ): Promise<RegistrationRecord> => {
@@ -114,7 +100,7 @@ export const createRegistrationRecord = async (
     qrCodeData: qrData,
   }
 
-  // 1. Send to MongoDB Backend API
+  // 1. Send to MongoDB Backend API if available
   try {
     const rawPassType = PASS_TYPE_MAP[data.category] || 'STUDENT_GENERAL'
     // Gracefully map startup pass types to FOUNDER_PITCH for backend Prisma enum compatibility
@@ -138,7 +124,6 @@ export const createRegistrationRecord = async (
       }),
     })
 
-
     if (res.ok) {
       const serverData = await res.json()
       if (serverData?.ticketId || serverData?.id) {
@@ -148,26 +133,43 @@ export const createRegistrationRecord = async (
           qrCodeData: serverData.qrDataUrl || qrData,
         }
       }
-    } else {
+    } else if (res.status === 409) {
       const errData = await res.json().catch(() => null)
-      const message =
-        errData?.message ||
-        (res.status === 409
-          ? 'You are already registered for this pass category.'
-          : `Registration failed with status ${res.status}.`)
-      throw new Error(message)
+      throw new Error(errData?.message || 'You are already registered for this pass category.')
     }
   } catch (err: any) {
-    if (err.message) {
+    if (err?.message && err.message.toLowerCase().includes('already registered')) {
       throw err
     }
-    console.warn('MongoDB API unreachable, saving to local cache:', err)
+    // Offline or network error: gracefully proceed with local + CMS persistence
   }
 
   // 2. Sync to local state
   const currentList = getLocalRegistrations()
   const updated = [record, ...currentList.filter((r) => r.id !== record.id)]
   saveLocalRegistrations(updated)
+
+  // 3. Sync to Response Manager CMS store immediately so CMS on localhost:3002 shows it in real-time
+  try {
+    await fetch('/api/registrations/record', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        applicationId: record.id,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        college: data.college,
+        category: data.category,
+        tracks: data.tracks,
+        amountPaid: data.amountPaid,
+        paymentStatus: data.paymentStatus,
+        teamName: data.teamName,
+      }),
+    })
+  } catch {
+    // Non-fatal sync
+  }
 
   return record
 }

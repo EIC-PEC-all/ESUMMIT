@@ -17,18 +17,18 @@ function FAQItem({ faq, isOpen, onToggle }: {
 }) {
   return (
     <div
-      className="mb-4 rounded-2xl overflow-hidden transition-colors duration-300 bg-white/[0.03] border border-white/10 hover:border-white/[0.18]"
+      className="mb-4 rounded-2xl overflow-hidden transition-colors duration-300 bg-panel border border-border-panel hover:border-mint/30 shadow-sm"
     >
       <button
         id={`faq-btn-${faq.id}`}
         aria-expanded={isOpen}
         aria-controls={`faq-panel-${faq.id}`}
         onClick={onToggle}
-        className="w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left transition-colors duration-150 group"
+        className="w-full flex items-center justify-between gap-4 p-5 sm:p-6 text-left transition-colors duration-150 group cursor-pointer"
       >
         <span
           className={`font-body font-bold text-base sm:text-lg leading-snug transition-colors ${
-            isOpen ? 'text-mint' : 'text-white group-hover:text-mint'
+            isOpen ? 'text-mint' : 'text-primary group-hover:text-mint'
           }`}
         >
           {faq.question}
@@ -36,10 +36,10 @@ function FAQItem({ faq, isOpen, onToggle }: {
         <motion.span
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 bg-[#0E241D] border border-[#193B2F]"
+          className="shrink-0 w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 bg-panel-alt border border-border-subtle"
           aria-hidden="true"
         >
-          <ChevronDown size={18} className={isOpen ? 'text-mint' : 'text-gray-300'} />
+          <ChevronDown size={18} className={isOpen ? 'text-mint' : 'text-secondary'} />
         </motion.span>
       </button>
 
@@ -55,8 +55,8 @@ function FAQItem({ faq, isOpen, onToggle }: {
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             style={{ overflow: 'hidden' }}
           >
-            <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-white/10">
-              <p className="font-body text-sm sm:text-base leading-relaxed text-[#E6EFE0] font-medium">
+            <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-border-subtle">
+              <p className="font-body text-sm sm:text-base leading-relaxed text-secondary font-medium">
                 {faq.answer}
               </p>
             </div>
@@ -85,7 +85,7 @@ export default function FAQ({ isStandalonePage = false }: { isStandalonePage?: b
       )}
       <section
         id="faq"
-        className={`relative z-10 overflow-hidden bg-[#081310] text-white ${
+        className={`relative z-10 overflow-hidden bg-section-2 text-primary ${
           isStandalonePage
             ? 'pt-12 pb-20 sm:pb-24'
             : '-mt-10 sm:-mt-12 rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-mint/20 py-16 sm:py-20 md:py-24'
@@ -104,10 +104,10 @@ export default function FAQ({ isStandalonePage = false }: { isStandalonePage?: b
                 <Zap size={14} />
                 COMMON INQUIRIES
               </span>
-              <h2 id="faq-heading" className="font-display text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none">
+              <h2 id="faq-heading" className="font-display text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-primary leading-none">
                 FREQUENTLY ASKED <span className="text-gradient-mint">QUESTIONS</span>
               </h2>
-              <p className="font-body text-xs sm:text-sm text-gray-300 mt-4 leading-relaxed max-w-xl mx-auto">
+              <p className="font-body text-xs sm:text-sm text-secondary mt-4 leading-relaxed max-w-xl mx-auto">
                 Everything you need to know about passes, registration, campus venue, and logistics.
               </p>
             </div>

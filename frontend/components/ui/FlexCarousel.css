@@ -24,7 +24,7 @@
 }
 
 .flex-carousel:focus-visible {
-  box-shadow: inset 0 0 0 2px rgba(0, 245, 212, 0.6);
+  box-shadow: inset 0 0 0 2px var(--accent-mint);
 }
 
 .flex-carousel__caption {
@@ -50,7 +50,7 @@
   font-size: 15px;
   font-weight: 700;
   line-height: 1.35;
-  color: #FFFFFF;
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-family: var(--font-asimovian), sans-serif;
@@ -74,7 +74,7 @@
   font-size: 12px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  color: #94A3B8;
+  color: var(--text-secondary);
   font-family: var(--font-jetbrains), monospace;
   opacity: 0.75;
   transition: opacity 400ms ease;

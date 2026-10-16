@@ -52,7 +52,7 @@ export interface FlipClockProps {
 }
 
 export default function FlipClock({
-  targetDate = '2026-03-19T09:00:00+05:30',
+  targetDate = '2026-11-14T09:00:00+05:30',
   className = 'flex justify-center items-center gap-1.5 sm:gap-3',
 }: FlipClockProps) {
   const [mounted, setMounted] = useState(false)

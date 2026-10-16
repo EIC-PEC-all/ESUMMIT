@@ -28,7 +28,7 @@ interface TicketPassCardProps {
 
 export default function TicketPassCard({ pass, onSelectPass }: TicketPassCardProps) {
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'MARCH 19–21, 2026'
+  const summitDates = data?.siteConfig?.summitDates || 'NOVEMBER 14–15, 2026'
 
   return (
     <motion.div

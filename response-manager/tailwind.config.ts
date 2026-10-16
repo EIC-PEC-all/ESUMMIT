@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,19 +10,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void: '#060D0B',
-        deep: '#081310',
-        panel: '#0D1C18',
-        'panel-alt': '#12241F',
-        mint: '#00F5D4',
-        'mint-glow': 'rgba(0, 245, 212, 0.25)',
-        green: '#00DC9F',
-        volt: '#00DC9F',
-        blue: '#3DD9FF',
-        coral: '#FF4D3D',
-        primary: '#FFFFFF',
-        secondary: '#94A3B8',
-        muted: '#64748B',
+        void: 'var(--bg-void)',
+        deep: 'var(--bg-deep)',
+        panel: 'var(--bg-panel)',
+        'panel-alt': 'var(--bg-panel-alt)',
+        mint: 'var(--accent-mint)',
+        'mint-glow': 'var(--accent-green-glow)',
+        green: 'var(--accent-green)',
+        volt: 'var(--accent-green)',
+        blue: 'var(--accent-blue)',
+        coral: 'var(--accent-coral)',
+        primary: 'var(--text-primary)',
+        secondary: 'var(--text-secondary)',
+        muted: 'var(--text-muted)',
+        'border-subtle': 'var(--border-subtle)',
+        'border-panel': 'var(--border-panel)',
+      },
+      borderColor: {
+        subtle: 'var(--border-subtle)',
+        panel: 'var(--border-panel)',
       },
       fontFamily: {
         display: ['var(--font-asimovian)', 'Asimovian', 'sans-serif'],

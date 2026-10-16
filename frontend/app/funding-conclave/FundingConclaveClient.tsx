@@ -273,19 +273,19 @@ export default function FundingConclaveClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#060D0B] text-white pt-24 pb-20 px-4 sm:px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-deep text-primary pt-24 pb-20 px-4 sm:px-6 relative overflow-hidden">
       <Toaster position="top-right" />
 
       {/* Background ambient lighting */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-[#00F5D4]/5 blur-[140px] pointer-events-none rounded-full" />
-      <div className="absolute top-1/3 -right-40 w-[400px] h-[400px] bg-[#00DFBA]/5 blur-[120px] pointer-events-none rounded-full" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-[#8AC53F]/5 blur-[140px] pointer-events-none rounded-full" />
+      <div className="absolute top-1/3 -right-40 w-[400px] h-[400px] bg-[#A8EE4A]/5 blur-[120px] pointer-events-none rounded-full" />
 
       <div className="max-w-4xl mx-auto relative z-10">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between mb-8">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-[#94A3B8] hover:text-[#00F5D4] transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-[#94A3B8] hover:text-[#8AC53F] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Festival Home
@@ -293,8 +293,8 @@ export default function FundingConclaveClient() {
 
           {hasRestoredDraft && !submittedData && (
             <div className="flex items-center gap-3">
-              <span className="text-xs text-[#00F5D4] flex items-center gap-1.5 bg-[#00F5D4]/10 border border-[#00F5D4]/20 px-2.5 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00F5D4] animate-pulse" />
+              <span className="text-xs text-[#8AC53F] flex items-center gap-1.5 bg-[#8AC53F]/10 border border-[#8AC53F]/20 px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8AC53F] animate-pulse" />
                 Draft restored
               </span>
               <button
@@ -311,19 +311,19 @@ export default function FundingConclaveClient() {
 
         {/* Hero Banner Card */}
         <div className="mb-10 p-6 sm:p-8 rounded-2xl bg-[#081310] border border-white/10 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-[#00F5D4]/10 blur-3xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-48 h-48 bg-[#8AC53F]/10 blur-3xl pointer-events-none" />
 
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <span className="px-3 py-1 rounded-full text-xs font-mono tracking-wider uppercase bg-[#00F5D4]/10 text-[#00F5D4] border border-[#00F5D4]/30 flex items-center gap-1.5">
+            <span className="px-3 py-1 rounded-full text-xs font-mono tracking-wider uppercase bg-[#8AC53F]/10 text-[#8AC53F] border border-[#8AC53F]/30 flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" />
               INVESTOR ARENA
             </span>
             <span className="text-xs text-[#94A3B8] flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-[#00F5D4]" />
-              19–21 March 2026
+              <Calendar className="w-3.5 h-3.5 text-[#8AC53F]" />
+              14–15 November 2026
             </span>
             <span className="text-xs text-[#94A3B8] flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-[#00F5D4]" />
+              <MapPin className="w-3.5 h-3.5 text-[#8AC53F]" />
               Punjab Engineering College (Deemed to be University), Chandigarh
             </span>
           </div>
@@ -342,31 +342,31 @@ export default function FundingConclaveClient() {
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-5 gap-2.5">
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
-                <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#8AC53F]/20 text-[#8AC53F] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   1
                 </span>
                 <span>Select preferred option & submit startup details and pitch deck.</span>
               </div>
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
-                <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#8AC53F]/20 text-[#8AC53F] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   2
                 </span>
                 <span>PEC Funding Conclave team will review application and pitch deck.</span>
               </div>
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
-                <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#8AC53F]/20 text-[#8AC53F] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   3
                 </span>
                 <span>Shortlisted startups will receive an MoU.</span>
               </div>
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
-                <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#8AC53F]/20 text-[#8AC53F] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   4
                 </span>
                 <span>Review & accept MoU; payment made directly to PEC bank account stated in MoU.</span>
               </div>
               <div className="flex items-start gap-2 bg-[#081310] p-2.5 rounded-lg border border-white/5">
-                <span className="w-5 h-5 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
+                <span className="w-5 h-5 rounded-full bg-[#8AC53F]/20 text-[#8AC53F] flex items-center justify-center font-mono font-bold text-[10px] shrink-0">
                   5
                 </span>
                 <span>Registration is confirmed only after payment is received.</span>
@@ -380,13 +380,13 @@ export default function FundingConclaveClient() {
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="p-8 sm:p-12 rounded-2xl bg-[#081310] border border-[#00F5D4]/30 text-center relative overflow-hidden"
+            className="p-8 sm:p-12 rounded-2xl bg-[#081310] border border-[#8AC53F]/30 text-center relative overflow-hidden"
           >
-            <div className="w-16 h-16 rounded-full bg-[#00F5D4]/20 text-[#00F5D4] flex items-center justify-center mx-auto mb-6">
+            <div className="w-16 h-16 rounded-full bg-[#8AC53F]/20 text-[#8AC53F] flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 className="w-10 h-10" />
             </div>
 
-            <span className="text-xs font-mono uppercase tracking-widest text-[#00F5D4] block mb-2">
+            <span className="text-xs font-mono uppercase tracking-widest text-[#8AC53F] block mb-2">
               Application Received
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
@@ -400,7 +400,7 @@ export default function FundingConclaveClient() {
             <div className="max-w-md mx-auto p-5 rounded-xl bg-[#0D1C18] border border-white/10 mb-8 text-left">
               <span className="text-xs text-[#94A3B8] block mb-1">Your Application Reference ID:</span>
               <div className="flex items-center justify-between">
-                <span className="text-xl sm:text-2xl font-mono font-bold text-[#00F5D4]">
+                <span className="text-xl sm:text-2xl font-mono font-bold text-[#8AC53F]">
                   {submittedData.applicationId}
                 </span>
                 <button
@@ -408,7 +408,7 @@ export default function FundingConclaveClient() {
                   onClick={copyApplicationId}
                   className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs text-white border border-white/10 transition-colors flex items-center gap-1.5"
                 >
-                  {copiedId ? <Check className="w-3.5 h-3.5 text-[#00F5D4]" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedId ? <Check className="w-3.5 h-3.5 text-[#8AC53F]" /> : <Copy className="w-3.5 h-3.5" />}
                   {copiedId ? 'Copied' : 'Copy'}
                 </button>
               </div>
@@ -417,7 +417,7 @@ export default function FundingConclaveClient() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#00F5D4] text-[#060D0B] font-semibold text-sm hover:bg-[#00DFBA] transition-colors"
+                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#8AC53F] text-[#060D0B] font-semibold text-sm hover:bg-[#A8EE4A] transition-colors"
               >
                 Return to E-Summit Home
               </Link>
@@ -439,7 +439,7 @@ export default function FundingConclaveClient() {
             {/* Step Progress Bar */}
             <div className="mb-8 p-4 rounded-xl bg-[#081310] border border-white/10">
               <div className="flex items-center justify-between text-xs font-mono mb-3">
-                <span className="text-[#00F5D4] font-semibold">
+                <span className="text-[#8AC53F] font-semibold">
                   STEP {step} OF 5: {step === 1 && 'FOUNDER DETAILS'}
                   {step === 2 && 'STARTUP PROFILE'}
                   {step === 3 && 'FINANCIALS & ASK'}
@@ -450,7 +450,7 @@ export default function FundingConclaveClient() {
               </div>
               <div className="w-full h-1.5 bg-[#0D1C18] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#00F5D4] transition-all duration-300"
+                  className="h-full bg-[#8AC53F] transition-all duration-300"
                   style={{ width: `${(step / 5) * 100}%` }}
                 />
               </div>
@@ -462,9 +462,9 @@ export default function FundingConclaveClient() {
                   onClick={() => setStep(1)}
                   className={`py-1.5 px-1 rounded transition-colors ${
                     step === 1
-                      ? 'text-[#00F5D4] font-semibold bg-[#00F5D4]/10'
+                      ? 'text-[#8AC53F] font-semibold bg-[#8AC53F]/10'
                       : step > 1
-                      ? 'text-white hover:text-[#00F5D4]'
+                      ? 'text-white hover:text-[#8AC53F]'
                       : 'text-[#64748B]'
                   }`}
                 >
@@ -475,9 +475,9 @@ export default function FundingConclaveClient() {
                   onClick={() => validateStep(1) && setStep(2)}
                   className={`py-1.5 px-1 rounded transition-colors ${
                     step === 2
-                      ? 'text-[#00F5D4] font-semibold bg-[#00F5D4]/10'
+                      ? 'text-[#8AC53F] font-semibold bg-[#8AC53F]/10'
                       : step > 2
-                      ? 'text-white hover:text-[#00F5D4]'
+                      ? 'text-white hover:text-[#8AC53F]'
                       : 'text-[#64748B]'
                   }`}
                 >
@@ -488,9 +488,9 @@ export default function FundingConclaveClient() {
                   onClick={() => validateStep(1) && validateStep(2) && setStep(3)}
                   className={`py-1.5 px-1 rounded transition-colors ${
                     step === 3
-                      ? 'text-[#00F5D4] font-semibold bg-[#00F5D4]/10'
+                      ? 'text-[#8AC53F] font-semibold bg-[#8AC53F]/10'
                       : step > 3
-                      ? 'text-white hover:text-[#00F5D4]'
+                      ? 'text-white hover:text-[#8AC53F]'
                       : 'text-[#64748B]'
                   }`}
                 >
@@ -501,9 +501,9 @@ export default function FundingConclaveClient() {
                   onClick={() => validateStep(1) && validateStep(2) && validateStep(3) && setStep(4)}
                   className={`py-1.5 px-1 rounded transition-colors ${
                     step === 4
-                      ? 'text-[#00F5D4] font-semibold bg-[#00F5D4]/10'
+                      ? 'text-[#8AC53F] font-semibold bg-[#8AC53F]/10'
                       : step > 4
-                      ? 'text-white hover:text-[#00F5D4]'
+                      ? 'text-white hover:text-[#8AC53F]'
                       : 'text-[#64748B]'
                   }`}
                 >
@@ -514,7 +514,7 @@ export default function FundingConclaveClient() {
                   onClick={() => validateStep(1) && validateStep(2) && validateStep(3) && validateStep(4) && setStep(5)}
                   className={`py-1.5 px-1 rounded transition-colors ${
                     step === 5
-                      ? 'text-[#00F5D4] font-semibold bg-[#00F5D4]/10'
+                      ? 'text-[#8AC53F] font-semibold bg-[#8AC53F]/10'
                       : 'text-[#64748B]'
                   }`}
                 >
@@ -537,7 +537,7 @@ export default function FundingConclaveClient() {
                   >
                     <div>
                       <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <User className="w-5 h-5 text-[#00F5D4]" />
+                        <User className="w-5 h-5 text-[#8AC53F]" />
                         1. Founder and Contact Details
                       </h2>
                       <p className="text-xs text-[#94A3B8] mt-1">
@@ -557,7 +557,7 @@ export default function FundingConclaveClient() {
                           value={formData.email}
                           onChange={(e) => updateField('email', e.target.value)}
                           placeholder="founder@yourstartup.com"
-                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                         />
                       </div>
 
@@ -572,7 +572,7 @@ export default function FundingConclaveClient() {
                           value={formData.founderName}
                           onChange={(e) => updateField('founderName', e.target.value)}
                           placeholder="e.g. Anand Dubey"
-                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                         />
                       </div>
 
@@ -587,7 +587,7 @@ export default function FundingConclaveClient() {
                           value={formData.phone}
                           onChange={(e) => updateField('phone', e.target.value)}
                           placeholder="+91 98765 43210"
-                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                         />
                       </div>
 
@@ -602,7 +602,7 @@ export default function FundingConclaveClient() {
                           value={formData.founderLinkedIn}
                           onChange={(e) => updateField('founderLinkedIn', e.target.value)}
                           placeholder="https://linkedin.com/in/foundername"
-                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                         />
                       </div>
                     </div>
@@ -620,7 +620,7 @@ export default function FundingConclaveClient() {
                   >
                     <div>
                       <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Building2 className="w-5 h-5 text-[#00F5D4]" />
+                        <Building2 className="w-5 h-5 text-[#8AC53F]" />
                         2. Startup Profile
                       </h2>
                       <p className="text-xs text-[#94A3B8] mt-1">
@@ -640,7 +640,7 @@ export default function FundingConclaveClient() {
                           value={formData.startupName}
                           onChange={(e) => updateField('startupName', e.target.value)}
                           placeholder="e.g. Acme Tech Labs"
-                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                         />
                       </div>
 
@@ -655,7 +655,7 @@ export default function FundingConclaveClient() {
                             value={formData.websiteUrl}
                             onChange={(e) => updateField('websiteUrl', e.target.value)}
                             placeholder="https://acme.io"
-                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                           />
                         </div>
 
@@ -669,7 +669,7 @@ export default function FundingConclaveClient() {
                             value={formData.dpiitNumber}
                             onChange={(e) => updateField('dpiitNumber', e.target.value)}
                             placeholder="e.g. DIPP12345"
-                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                           />
                         </div>
                       </div>
@@ -686,13 +686,13 @@ export default function FundingConclaveClient() {
                               onClick={() => updateField('stage', opt.id)}
                               className={`p-3.5 rounded-xl border text-left transition-all flex items-start gap-3 ${
                                 formData.stage === opt.id
-                                    ? 'bg-[#00F5D4]/10 border-[#00F5D4] text-white shadow-[0_0_15px_rgba(0,245,212,0.15)]'
+                                    ? 'bg-[#8AC53F]/10 border-[#8AC53F] text-white shadow-[0_0_15px_var(--border-glow)]'
                                   : 'bg-[#0D1C18] border-white/10 text-[#94A3B8] hover:border-white/20 hover:text-white'
                               }`}
                             >
                               <div
                                 className={`w-4 h-4 rounded-full border mt-0.5 flex items-center justify-center shrink-0 ${
-                                  formData.stage === opt.id ? 'border-[#00F5D4] bg-[#00F5D4]' : 'border-white/30'
+                                  formData.stage === opt.id ? 'border-[#8AC53F] bg-[#8AC53F]' : 'border-white/30'
                                 }`}
                               >
                                 {formData.stage === opt.id && <div className="w-1.5 h-1.5 rounded-full bg-[#060D0B]" />}
@@ -717,7 +717,7 @@ export default function FundingConclaveClient() {
                           value={formData.sector}
                           onChange={(e) => updateField('sector', e.target.value)}
                           placeholder="e.g. AI / DeepTech, SaaS, FinTech, CleanTech, HealthTech"
-                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                         />
                       </div>
                     </div>
@@ -735,7 +735,7 @@ export default function FundingConclaveClient() {
                   >
                     <div>
                       <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <DollarSign className="w-5 h-5 text-[#00F5D4]" />
+                        <DollarSign className="w-5 h-5 text-[#8AC53F]" />
                         3. Financials and Fundraise
                       </h2>
                       <p className="text-xs text-[#94A3B8] mt-1">
@@ -756,13 +756,13 @@ export default function FundingConclaveClient() {
                               onClick={() => updateField('revenueStage', rev)}
                               className={`w-full p-3 rounded-xl border text-left transition-all flex items-center gap-3 ${
                                 formData.revenueStage === rev
-                                  ? 'bg-[#00F5D4]/10 border-[#00F5D4] text-white'
+                                  ? 'bg-[#8AC53F]/10 border-[#8AC53F] text-white'
                                   : 'bg-[#0D1C18] border-white/10 text-[#94A3B8] hover:border-white/20 hover:text-white'
                               }`}
                             >
                               <div
                                 className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                                  formData.revenueStage === rev ? 'border-[#00F5D4] bg-[#00F5D4]' : 'border-white/30'
+                                  formData.revenueStage === rev ? 'border-[#8AC53F] bg-[#8AC53F]' : 'border-white/30'
                                 }`}
                               >
                                 {formData.revenueStage === rev && (
@@ -787,7 +787,7 @@ export default function FundingConclaveClient() {
                             value={formData.totalFundingRaised}
                             onChange={(e) => updateField('totalFundingRaised', e.target.value)}
                             placeholder="in INR (enter 0 if bootstrapped)"
-                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                           />
                         </div>
 
@@ -802,7 +802,7 @@ export default function FundingConclaveClient() {
                             value={formData.currentAsk}
                             onChange={(e) => updateField('currentAsk', e.target.value)}
                             placeholder="in INR (enter NA if not raising)"
-                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                           />
                         </div>
                       </div>
@@ -818,7 +818,7 @@ export default function FundingConclaveClient() {
                             value={formData.preMoneyValuation}
                             onChange={(e) => updateField('preMoneyValuation', e.target.value)}
                             placeholder="e.g. ₹5 Crore"
-                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                           />
                         </div>
 
@@ -832,7 +832,7 @@ export default function FundingConclaveClient() {
                             value={formData.committedCapital}
                             onChange={(e) => updateField('committedCapital', e.target.value)}
                             placeholder="e.g. ₹25 Lakhs"
-                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                            className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                           />
                         </div>
                       </div>
@@ -851,7 +851,7 @@ export default function FundingConclaveClient() {
                   >
                     <div>
                       <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <FileText className="w-5 h-5 text-[#00F5D4]" />
+                        <FileText className="w-5 h-5 text-[#8AC53F]" />
                         4. Pitch Deck and Event Participation
                       </h2>
                       <p className="text-xs text-[#94A3B8] mt-1">
@@ -871,10 +871,10 @@ export default function FundingConclaveClient() {
                           value={formData.pitchDeckUrl}
                           onChange={(e) => updateField('pitchDeckUrl', e.target.value)}
                           placeholder="https://drive.google.com/file/d/... or DocSend link"
-                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                         />
                         <p className="text-[11px] text-[#94A3B8] mt-1.5 flex items-center gap-1.5">
-                          <AlertCircle className="w-3.5 h-3.5 text-[#00F5D4]" />
+                          <AlertCircle className="w-3.5 h-3.5 text-[#8AC53F]" />
                           Required for screening. PDF is preferred. Please ensure the link is accessible to anyone with the link and does not require an access request.
                         </p>
                       </div>
@@ -889,7 +889,7 @@ export default function FundingConclaveClient() {
                           value={formData.demoVideoUrl}
                           onChange={(e) => updateField('demoVideoUrl', e.target.value)}
                           placeholder="https://youtube.com/... or Loom link"
-                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#00F5D4] transition-colors"
+                          className="w-full px-4 py-3 rounded-xl bg-[#0D1C18] border border-white/10 text-white placeholder-[#64748B] focus:outline-none focus:border-[#8AC53F] transition-colors"
                         />
                       </div>
 
@@ -906,14 +906,14 @@ export default function FundingConclaveClient() {
                               onClick={() => updateField('mouComfortable', mou.id)}
                               className={`w-full p-4 rounded-xl border text-left transition-all flex items-start gap-3.5 ${
                                 formData.mouComfortable === mou.id
-                                  ? 'bg-[#00F5D4]/10 border-[#00F5D4] text-white shadow-[0_0_15px_rgba(0,245,212,0.1)]'
+                                  ? 'bg-[#8AC53F]/10 border-[#8AC53F] text-white shadow-[0_0_15px_var(--border-glow)]'
                                   : 'bg-[#0D1C18] border-white/10 text-[#94A3B8] hover:border-white/20 hover:text-white'
                               }`}
                             >
                               <div
                                 className={`w-4 h-4 rounded-full border mt-0.5 flex items-center justify-center shrink-0 ${
                                   formData.mouComfortable === mou.id
-                                    ? 'border-[#00F5D4] bg-[#00F5D4]'
+                                    ? 'border-[#8AC53F] bg-[#8AC53F]'
                                     : 'border-white/30'
                                 }`}
                               >
@@ -941,7 +941,7 @@ export default function FundingConclaveClient() {
                   >
                     <div>
                       <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                        <ShieldCheck className="w-5 h-5 text-[#00F5D4]" />
+                        <ShieldCheck className="w-5 h-5 text-[#8AC53F]" />
                         5. Review & Final Confirmation
                       </h2>
                       <p className="text-xs text-[#94A3B8] mt-1">
@@ -953,11 +953,11 @@ export default function FundingConclaveClient() {
                       {/* Summary Section 1 */}
                       <div className="p-4 rounded-xl bg-[#0D1C18] border border-white/10">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-mono font-bold text-[#00F5D4] uppercase">Founder Details</span>
+                          <span className="text-xs font-mono font-bold text-[#8AC53F] uppercase">Founder Details</span>
                           <button
                             type="button"
                             onClick={() => setStep(1)}
-                            className="text-xs text-[#94A3B8] hover:text-[#00F5D4] transition-colors"
+                            className="text-xs text-[#94A3B8] hover:text-[#8AC53F] transition-colors"
                           >
                             Edit
                           </button>
@@ -981,7 +981,7 @@ export default function FundingConclaveClient() {
                               href={formData.founderLinkedIn}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[#00F5D4] hover:underline flex items-center gap-1 truncate"
+                              className="text-[#8AC53F] hover:underline flex items-center gap-1 truncate"
                             >
                               {formData.founderLinkedIn}
                               <ExternalLink className="w-3 h-3 shrink-0" />
@@ -993,11 +993,11 @@ export default function FundingConclaveClient() {
                       {/* Summary Section 2 */}
                       <div className="p-4 rounded-xl bg-[#0D1C18] border border-white/10">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-mono font-bold text-[#00F5D4] uppercase">Startup Profile</span>
+                          <span className="text-xs font-mono font-bold text-[#8AC53F] uppercase">Startup Profile</span>
                           <button
                             type="button"
                             onClick={() => setStep(2)}
-                            className="text-xs text-[#94A3B8] hover:text-[#00F5D4] transition-colors"
+                            className="text-xs text-[#94A3B8] hover:text-[#8AC53F] transition-colors"
                           >
                             Edit
                           </button>
@@ -1031,13 +1031,13 @@ export default function FundingConclaveClient() {
                       {/* Summary Section 3 */}
                       <div className="p-4 rounded-xl bg-[#0D1C18] border border-white/10">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-mono font-bold text-[#00F5D4] uppercase">
+                          <span className="text-xs font-mono font-bold text-[#8AC53F] uppercase">
                             Financials & Ask
                           </span>
                           <button
                             type="button"
                             onClick={() => setStep(3)}
-                            className="text-xs text-[#94A3B8] hover:text-[#00F5D4] transition-colors"
+                            className="text-xs text-[#94A3B8] hover:text-[#8AC53F] transition-colors"
                           >
                             Edit
                           </button>
@@ -1071,11 +1071,11 @@ export default function FundingConclaveClient() {
                       {/* Summary Section 4 */}
                       <div className="p-4 rounded-xl bg-[#0D1C18] border border-white/10">
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-xs font-mono font-bold text-[#00F5D4] uppercase">Pitch Deck & MoU</span>
+                          <span className="text-xs font-mono font-bold text-[#8AC53F] uppercase">Pitch Deck & MoU</span>
                           <button
                             type="button"
                             onClick={() => setStep(4)}
-                            className="text-xs text-[#94A3B8] hover:text-[#00F5D4] transition-colors"
+                            className="text-xs text-[#94A3B8] hover:text-[#8AC53F] transition-colors"
                           >
                             Edit
                           </button>
@@ -1087,7 +1087,7 @@ export default function FundingConclaveClient() {
                               href={formData.pitchDeckUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-[#00F5D4] hover:underline flex items-center gap-1 truncate"
+                              className="text-[#8AC53F] hover:underline flex items-center gap-1 truncate"
                             >
                               {formData.pitchDeckUrl}
                               <ExternalLink className="w-3 h-3 shrink-0" />
@@ -1100,7 +1100,7 @@ export default function FundingConclaveClient() {
                                 href={formData.demoVideoUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-[#00F5D4] hover:underline flex items-center gap-1 truncate"
+                                className="text-[#8AC53F] hover:underline flex items-center gap-1 truncate"
                               >
                                 {formData.demoVideoUrl}
                                 <ExternalLink className="w-3 h-3 shrink-0" />
@@ -1137,7 +1137,7 @@ export default function FundingConclaveClient() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="px-6 py-2.5 rounded-xl bg-[#00F5D4] hover:bg-[#00DFBA] text-[#060D0B] font-bold text-xs sm:text-sm transition-colors flex items-center gap-2 shadow-[0_0_20px_rgba(0,245,212,0.2)]"
+                    className="px-6 py-2.5 rounded-xl bg-[#8AC53F] hover:bg-[#A8EE4A] text-[#060D0B] font-bold text-xs sm:text-sm transition-colors flex items-center gap-2 shadow-[0_0_20px_var(--border-glow)]"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4" />
@@ -1147,7 +1147,7 @@ export default function FundingConclaveClient() {
                     type="button"
                     disabled={isSubmitting}
                     onClick={handleSubmit}
-                    className="px-8 py-3 rounded-xl bg-[#00F5D4] hover:bg-[#00DFBA] disabled:opacity-50 text-[#060D0B] font-bold text-sm transition-colors flex items-center gap-2 shadow-[0_0_25px_rgba(0,245,212,0.3)]"
+                    className="px-8 py-3 rounded-xl bg-[#8AC53F] hover:bg-[#A8EE4A] disabled:opacity-50 text-[#060D0B] font-bold text-sm transition-colors flex items-center gap-2 shadow-[0_0_25px_var(--border-glow)]"
                   >
                     {isSubmitting ? (
                       <>

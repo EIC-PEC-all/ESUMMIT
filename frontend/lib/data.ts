@@ -11,9 +11,9 @@ export const FEST_META = {
     'Where the tricity\'s boldest ideas meet their moment.',
     'The north\'s premier stage for student builders and venture thinkers.',
   ],
-  dates: 'March 19–21, 2026',
+  dates: 'November 14–15, 2026',
   venue: 'Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh',
-  countdownTarget: new Date('2026-03-19T09:00:00+05:30').toISOString(),
+  countdownTarget: new Date('2026-11-14T09:00:00+05:30').toISOString(),
   registrationUrl: '#register',
   social: {
     instagram: 'https://instagram.com/ecell.pec',
@@ -57,8 +57,8 @@ export const TRACKS = [
     icon: 'Users',
     shortDesc: 'Hard-hitting conversations with founders, CXOs, and policymakers on what actually builds companies.',
     fullDesc: `Curated panel topics: Fundraising in a Tough Climate, AI for Startups, Deep-Tech in India, and the Student-to-Founder playbook. Each session is 60 min with structured Q&A from the floor.\n\nSpeakers confirmed from the startup ecosystem — fintech, deep-tech, consumer internet, and climate tech.`,
-    color: '#3DD9FF',
-    accentColor: 'rgba(61,217,255,0.12)',
+    color: '#8AC53F',
+    accentColor: 'rgba(138,197,63,0.12)',
   },
   {
     id: 'expo',
@@ -87,8 +87,8 @@ export const TRACKS = [
     icon: 'Network',
     shortDesc: 'Structured networking sessions designed so you actually meet the right people — not just collect business cards.',
     fullDesc: `Three formats: Speed Networking (5-min rotations), Investor Open Hours (one-on-one 15-min slots, apply in advance), and the closing Mixer evening with music and food.\n\nAll registered participants get a digital profile in the E-Summit app for pre-event connection. Investor Open Hours have limited slots — apply when registering.`,
-    color: '#3DD9FF',
-    accentColor: 'rgba(61,217,255,0.12)',
+    color: '#4341A8',
+    accentColor: 'rgba(67,65,168,0.12)',
   },
 ]
 
@@ -101,7 +101,7 @@ export const SPEAKERS = [
     track: 'panels',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&auto=format&fit=crop',
     initials: 'SJ',
-    color: '#00F5D4',
+    color: '#8AC53F',
   },
   {
     id: 'spk2',
@@ -111,7 +111,7 @@ export const SPEAKERS = [
     track: 'pitch',
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80&auto=format&fit=crop',
     initials: 'SM',
-    color: '#3DD9FF',
+    color: '#8AC53F',
   },
   {
     id: 'spk3',
@@ -151,7 +151,7 @@ export const SPEAKERS = [
     track: 'expo',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&auto=format&fit=crop',
     initials: 'SS',
-    color: '#3DD9FF',
+    color: '#4341A8',
   },
 ]
 
@@ -293,7 +293,7 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     lat: 30.76782763758229,
     lng: 76.78532031055364,
     coordinates: [76.78532031055364, 30.76782763758229],
-    color: '#00F5D4',
+    color: '#8AC53F',
     type: 'lab',
   },
   'student-center': {
@@ -578,7 +578,7 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
 export const SCHEDULE = {
   day1: {
     label: 'Day 1',
-    date: 'March 19, 2026',
+    date: 'November 14, 2026',
     events: [
       {
         id: 'd1-1',
@@ -694,7 +694,7 @@ export const SCHEDULE = {
   },
   day2: {
     label: 'Day 2',
-    date: 'March 20, 2026',
+    date: 'November 15, 2026',
     events: [
       {
         id: 'd2-1',

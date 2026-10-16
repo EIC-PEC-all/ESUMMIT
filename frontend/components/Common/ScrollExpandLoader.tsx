@@ -143,7 +143,7 @@ export default function ScrollExpandLoader() {
             height: '100vh',
             transformOrigin: 'center center',
             willChange: 'transform',
-            boxShadow: '0 0 0 9999px var(--accent-mint, #00F5D4)',
+            boxShadow: '0 0 0 9999px var(--bg-loader, #8AC53F)',
           }}
           initial={{ scaleX: apertureScaleX, scaleY: apertureScaleY, borderRadius: apertureRadius }}
           animate={
@@ -187,7 +187,7 @@ export default function ScrollExpandLoader() {
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1] }}
                 className="h-full bg-mint rounded-full origin-left"
-                style={{ willChange: 'transform', boxShadow: '0 0 8px var(--accent-mint, #00F5D4)' }}
+                style={{ willChange: 'transform', boxShadow: '0 0 8px var(--accent-mint, #8AC53F)' }}
               />
             </div>
           </motion.div>

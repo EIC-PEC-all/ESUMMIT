@@ -144,7 +144,7 @@ export default function OnboardingModal({
   return (
     <AnimatePresence>
       <div
-        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-backdrop backdrop-blur-md overflow-y-auto"
         role="dialog"
         aria-modal="true"
         aria-labelledby="onboarding-modal-title"
@@ -154,23 +154,23 @@ export default function OnboardingModal({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 12 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="w-full max-w-lg my-8 rounded-3xl border border-white/15 bg-[#0C1914] p-6 sm:p-8 shadow-2xl space-y-6 relative"
+          className="w-full max-w-lg my-8 rounded-3xl border border-border-panel bg-panel p-6 sm:p-8 shadow-2xl space-y-6 relative text-primary"
         >
           {/* Header */}
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-mint/10 border border-mint/20 text-mint text-[10px] font-mono font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-mint/10 border border-mint/20 text-mint text-[10px] font-mono font-bold uppercase tracking-wider">
               <ShieldCheck size={12} className="text-mint shrink-0" />
               <span>Attendee Verification • Step 1 of 1</span>
             </div>
 
             <h2
               id="onboarding-modal-title"
-              className="text-2xl sm:text-3xl font-display font-black uppercase tracking-tight text-white leading-tight"
+              className="text-2xl sm:text-3xl font-display font-black uppercase tracking-tight text-primary leading-tight"
             >
               Complete Your Profile
             </h2>
 
-            <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
+            <p className="text-xs sm:text-sm text-secondary leading-relaxed">
               Enter your college and graduation year to unlock official delegate passes, check-in badges, and summit features.
             </p>
           </div>
@@ -181,12 +181,12 @@ export default function OnboardingModal({
             <div className="space-y-1.5">
               <label
                 htmlFor="onboarding-name"
-                className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-300"
+                className="block text-xs font-mono font-bold uppercase tracking-wider text-secondary"
               >
                 Full Name <span className="text-mint">*</span>
               </label>
               <div className="relative">
-                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <input
                   id="onboarding-name"
                   type="text"
@@ -194,7 +194,7 @@ export default function OnboardingModal({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="e.g. Aryan Sharma"
-                  className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-3.5 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-mint transition-colors"
+                  className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-3.5 py-2.5 text-sm text-primary placeholder:text-muted outline-none focus:border-mint transition-colors"
                 />
               </div>
             </div>
@@ -204,14 +204,14 @@ export default function OnboardingModal({
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="onboarding-college"
-                  className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-300"
+                  className="block text-xs font-mono font-bold uppercase tracking-wider text-secondary"
                 >
                   College / Institute Name <span className="text-mint">*</span>
                 </label>
-                <span className="text-[10px] font-mono text-neutral-500 uppercase">Required</span>
+                <span className="text-[10px] font-mono text-muted uppercase">Required</span>
               </div>
               <div className="relative">
-                <Building2 size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                <Building2 size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <input
                   id="onboarding-college"
                   type="text"
@@ -219,7 +219,7 @@ export default function OnboardingModal({
                   value={college}
                   onChange={(e) => setCollege(e.target.value)}
                   placeholder="e.g. Punjab Engineering College (PEC)"
-                  className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-3.5 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-mint transition-colors"
+                  className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-3.5 py-2.5 text-sm text-primary placeholder:text-muted outline-none focus:border-mint transition-colors"
                 />
               </div>
             </div>
@@ -231,26 +231,26 @@ export default function OnboardingModal({
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="onboarding-state"
-                    className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-300"
+                    className="block text-xs font-mono font-bold uppercase tracking-wider text-secondary"
                   >
                     State / UT <span className="text-mint">*</span>
                   </label>
-                  <span className="text-[10px] font-mono text-neutral-500 uppercase">36 Covered</span>
+                  <span className="text-[10px] font-mono text-muted uppercase">36 Covered</span>
                 </div>
                 <div className="relative">
-                  <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                  <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                   <select
                     id="onboarding-state"
                     required
                     value={selectedState}
                     onChange={(e) => handleStateChange(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
+                    className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-8 py-2.5 text-sm text-primary outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
                   >
-                    <option value="" disabled className="bg-[#081310] text-neutral-500">
+                    <option value="" disabled className="bg-panel text-muted">
                       Select State / UT
                     </option>
                     {STATE_NAMES.map((st) => (
-                      <option key={st} value={st} className="bg-[#081310] text-white">
+                      <option key={st} value={st} className="bg-panel text-primary">
                         {st}
                       </option>
                     ))}
@@ -263,33 +263,33 @@ export default function OnboardingModal({
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="onboarding-city"
-                    className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-300"
+                    className="block text-xs font-mono font-bold uppercase tracking-wider text-secondary"
                   >
                     City / District <span className="text-mint">*</span>
                   </label>
-                  <span className="text-[10px] font-mono text-neutral-500 uppercase">
+                  <span className="text-[10px] font-mono text-muted uppercase">
                     {selectedState ? `${availableCities.length} Cities` : 'Select State'}
                   </span>
                 </div>
                 <div className="relative">
-                  <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                  <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                   <select
                     id="onboarding-city"
                     required
                     disabled={!selectedState}
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-8 py-2.5 text-sm text-primary outline-none focus:border-mint transition-colors appearance-none cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                   >
-                    <option value="" disabled className="bg-[#081310] text-neutral-500">
+                    <option value="" disabled className="bg-panel text-muted">
                       {selectedState ? `Select City in ${selectedState}` : 'Select State / UT first'}
                     </option>
                     {availableCities.map((ct) => (
-                      <option key={ct} value={ct} className="bg-[#081310] text-white">
+                      <option key={ct} value={ct} className="bg-panel text-primary">
                         {ct}
                       </option>
                     ))}
-                    <option value="Other" className="bg-[#081310] text-mint">
+                    <option value="Other" className="bg-panel text-mint">
                       + Other (Specify City)
                     </option>
                   </select>
@@ -317,7 +317,7 @@ export default function OnboardingModal({
                       value={customCity}
                       onChange={(e) => setCustomCity(e.target.value)}
                       placeholder="e.g. Pilani, Abohar, Manipal, etc."
-                      className="w-full rounded-xl border border-mint/40 bg-[#07130F] px-3.5 py-2 text-xs text-white placeholder-neutral-500 outline-none focus:border-mint transition-colors"
+                      className="w-full rounded-xl border border-mint/40 bg-panel-alt px-3.5 py-2 text-xs text-primary placeholder:text-muted outline-none focus:border-mint transition-colors"
                     />
                   </motion.div>
                 )}
@@ -328,21 +328,21 @@ export default function OnboardingModal({
             <div className="space-y-1.5">
               <label
                 htmlFor="onboarding-year"
-                className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-300"
+                className="block text-xs font-mono font-bold uppercase tracking-wider text-secondary"
               >
                 Passing / Graduation Year <span className="text-mint">*</span>
               </label>
               <div className="relative">
-                <GraduationCap size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                <GraduationCap size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <select
                   id="onboarding-year"
                   required
                   value={normalizeGradYear(gradYear)}
                   onChange={(e) => setGradYear(e.target.value)}
-                  className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-8 py-2.5 text-sm text-white outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
+                  className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-8 py-2.5 text-sm text-primary outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
                 >
                   {GRADUATION_YEARS.map((yr) => (
-                    <option key={yr.value} value={yr.value} className="bg-[#081310] text-white">
+                    <option key={yr.value} value={yr.value} className="bg-panel text-primary">
                       {yr.label}
                     </option>
                   ))}
@@ -355,26 +355,26 @@ export default function OnboardingModal({
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="onboarding-phone"
-                  className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-300"
+                  className="block text-xs font-mono font-bold uppercase tracking-wider text-secondary"
                 >
                   WhatsApp / Phone Number
                 </label>
-                <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-wide">
+                <span className="text-[10px] font-mono text-muted uppercase tracking-wide">
                   Optional
                 </span>
               </div>
               <div className="relative">
-                <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" />
+                <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <input
                   id="onboarding-phone"
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+91 98765 43210"
-                  className="w-full rounded-xl border border-white/10 bg-[#07130F] pl-10 pr-3.5 py-2.5 text-sm text-white placeholder-neutral-600 outline-none focus:border-mint transition-colors"
+                  className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-3.5 py-2.5 text-sm text-primary placeholder:text-muted outline-none focus:border-mint transition-colors"
                 />
               </div>
-              <p className="text-[11px] text-neutral-500">
+              <p className="text-[11px] text-muted">
                 Optional for instant WhatsApp pass badges, schedule changes, and entry updates.
               </p>
             </div>
@@ -384,7 +384,7 @@ export default function OnboardingModal({
               <button
                 type="submit"
                 disabled={isSubmitting || !name.trim() || !college.trim() || !selectedState.trim() || !finalCity}
-                className="w-full py-3 px-5 rounded-full bg-mint text-void font-bold text-xs sm:text-sm uppercase tracking-wider hover:bg-white transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                className="w-full py-3 px-5 rounded-xl bg-mint text-void font-bold text-xs sm:text-sm uppercase tracking-wider hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
               >
                 {isSubmitting ? (
                   <span>Saving Profile...</span>

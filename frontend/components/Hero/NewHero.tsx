@@ -42,7 +42,8 @@ export default function NewHero() {
     <section
       id="esummit-hero"
       ref={containerRef}
-      className="relative h-[270vh] md:h-[350vh] bg-void"
+      data-theme-dark="true"
+      className="relative h-[270vh] md:h-[350vh] bg-[#060D0B]"
       aria-label="PEC E-Summit Hero"
     >
       <div className="sticky top-0 z-0 flex h-screen w-full items-center justify-center overflow-hidden">
@@ -69,38 +70,38 @@ export default function NewHero() {
           }}
         />
 
-        {/* Electric Lime & Logo Navy Color Grading Overlay */}
+        {/* Deep Edge Vignette - Frames the 3D Canvas smoothly into the Void Stage */}
         <div
           className="pointer-events-none absolute inset-0 z-1"
           style={{
             background:
-              'linear-gradient(135deg, rgba(0, 245, 212, 0.22) 0%, rgba(6, 13, 11, 0.25) 48%, rgba(61, 217, 255, 0.20) 85%, rgba(0, 245, 212, 0.12) 100%)',
-            mixBlendMode: 'color',
+              'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 35%, rgba(6, 13, 11, 0.60) 70%, #060D0B 100%)',
           }}
         />
 
-        {/* Iridescent Logo Sheen Wash across Currency Note folds */}
+        {/* Cyber Brand Green Luminescence using CSS Blending Mode 'screen' */}
         <div
           className="pointer-events-none absolute inset-0 z-1"
           style={{
-            background:
-              'linear-gradient(115deg, rgba(0, 245, 212, 0.14) 0%, transparent 42%, rgba(61, 217, 255, 0.14) 75%, transparent 100%)',
             mixBlendMode: 'screen',
+            background:
+              'radial-gradient(ellipse 70% 60% at 50% 48%, rgba(116, 251, 68, 0.22) 0%, rgba(16, 185, 129, 0.12) 40%, transparent 70%)',
           }}
         />
 
-        {/* Ambient Brand Aura & Obsidian Scrim — balanced center contrast */}
+        {/* Ambient Dark Green Contrast Blend using CSS Blending Mode 'overlay' */}
         <div
-          className="pointer-events-none absolute inset-0 z-1"
+          className="pointer-events-none absolute inset-0 z-1 opacity-75"
           style={{
+            mixBlendMode: 'overlay',
             background:
-              'radial-gradient(ellipse at 50% 45%, rgba(0, 245, 212, 0.10) 0%, rgba(6, 13, 11, 0.48) 55%, rgba(6, 13, 11, 0.94) 100%)',
+              'radial-gradient(circle at 48% 42%, rgba(116, 251, 68, 0.16) 0%, rgba(6, 26, 18, 0.40) 65%, transparent 100%)',
           }}
         />
 
         {/* Exit transition blur */}
         <motion.div
-          className="z-2 pointer-events-none absolute inset-0 bg-void"
+          className="hero-exit-blur z-2 pointer-events-none absolute inset-0 bg-[#060D0B]"
           style={{
             opacity: endBlackenOpacity,
             filter: endBlur,

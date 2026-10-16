@@ -10,6 +10,7 @@ import GlobalScrollProgress from '@/components/Common/GlobalScrollProgress'
 import Concierge from '@/components/Concierge'
 import OnboardingGate from '@/components/Onboarding/OnboardingGate'
 import { AuthProvider } from '@/context/AuthContext'
+import { ThemeProvider } from '@/context/ThemeContext'
 import ServiceWorkerCleanup from '@/components/Common/ServiceWorkerCleanup'
 import AnnouncementBanner from '@/components/Common/AnnouncementBanner'
 
@@ -81,7 +82,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'E-Cell PEC', url: 'https://esummit.pec.ac.in' }],
   openGraph: {
-    title: 'PEC E-Summit 2026 — March 19–21',
+    title: 'PEC E-Summit 2026 — November 14–15',
     description:
       'The flagship entrepreneurship summit of E-Cell PEC, Chandigarh. Pitches, panels, expo, hackathon, and VIP investor networking.',
     url: 'https://esummit.pec.ac.in',
@@ -111,8 +112,8 @@ const JSON_LD_EVENT_SCHEMA = {
   name: 'PEC E-Summit 2026',
   description:
     "North India's largest student entrepreneurship summit at Punjab Engineering College. 2 days of keynotes, high-stakes startup pitches, hackathons, and angel investor networking.",
-  startDate: '2026-03-15T09:00:00+05:30',
-  endDate: '2026-03-16T18:00:00+05:30',
+  startDate: '2026-11-14T09:00:00+05:30',
+  endDate: '2026-11-15T20:00:00+05:30',
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   location: {
@@ -156,10 +157,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" data-theme="dark" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://firebase.googleapis.com" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('esummit-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';}document.documentElement.setAttribute('data-theme',t);if(t==='light'){document.documentElement.classList.add('light');document.documentElement.classList.remove('dark');}else{document.documentElement.classList.add('dark');document.documentElement.classList.remove('light');}}catch(e){}})()`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_EVENT_SCHEMA) }}
@@ -170,23 +176,25 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ServiceWorkerCleanup />
-        <AuthProvider>
-          <SessionProviderWrapper>
-            <AnnouncementBanner />
-            <GlobalScrollProgress />
-            <SmoothScrollProvider>
-              <ChevronRouteTransition>
-                {children}
-              </ChevronRouteTransition>
-            </SmoothScrollProvider>
-          </SessionProviderWrapper>
+        <ThemeProvider>
+          <AuthProvider>
+            <SessionProviderWrapper>
+              <AnnouncementBanner />
+              <GlobalScrollProgress />
+              <SmoothScrollProvider>
+                <ChevronRouteTransition>
+                  {children}
+                </ChevronRouteTransition>
+              </SmoothScrollProvider>
+            </SessionProviderWrapper>
 
-          {/* Attendee Profile Onboarding Gate */}
-          <OnboardingGate />
+            {/* Attendee Profile Onboarding Gate */}
+            <OnboardingGate />
 
-          {/* Floating AI Concierge — outside all wrappers so fixed positioning works */}
-          <Concierge />
-        </AuthProvider>
+            {/* Floating AI Concierge — outside all wrappers so fixed positioning works */}
+            <Concierge />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

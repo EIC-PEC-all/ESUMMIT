@@ -76,8 +76,9 @@ export default function GeometricNodesCanvas() {
 
       ctx.clearRect(0, 0, width, height)
 
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light'
       ctx.beginPath()
-      ctx.strokeStyle = 'rgba(0, 245, 212, 0.16)'
+      ctx.strokeStyle = isLight ? 'rgba(22, 101, 52, 0.28)' : 'rgba(138, 197, 63, 0.22)'
       ctx.lineWidth = 1
 
       const len = nodes.length
@@ -96,7 +97,7 @@ export default function GeometricNodesCanvas() {
       ctx.stroke()
 
       ctx.beginPath()
-      ctx.fillStyle = 'rgba(0, 245, 212, 0.55)'
+      ctx.fillStyle = isLight ? 'rgba(22, 101, 52, 0.75)' : 'rgba(138, 197, 63, 0.65)'
 
       for (let i = 0; i < len; i++) {
         const node = nodes[i]

@@ -111,18 +111,18 @@ export const TRACK_STYLES: Record<string, { pill: string; dot: string; label: st
     label: 'Keynote',
   },
   hackathon: {
-    pill: 'bg-cyan-500/20 text-cyan-300 border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]',
-    dot: 'bg-cyan-400',
+    pill: 'bg-purple-500/20 text-purple-400 dark:text-purple-300 border-purple-400/40 shadow-[0_0_12px_rgba(168,85,247,0.2)]',
+    dot: 'bg-purple-400',
     label: 'Hackathon',
   },
   competition: {
-    pill: 'bg-amber-500/20 text-amber-300 border-amber-400/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]',
+    pill: 'bg-amber-500/20 text-amber-500 dark:text-amber-300 border-amber-400/40 shadow-[0_0_12px_rgba(245,158,11,0.2)]',
     dot: 'bg-amber-400',
     label: 'Competition',
   },
   expo: {
-    pill: 'bg-teal-500/20 text-teal-300 border-teal-400/40 shadow-[0_0_12px_rgba(20,184,166,0.2)]',
-    dot: 'bg-teal-400',
+    pill: 'bg-mint/20 text-mint border-mint/40 shadow-[0_0_12px_var(--border-glow)]',
+    dot: 'bg-mint',
     label: 'Expo',
   },
   workshop: {

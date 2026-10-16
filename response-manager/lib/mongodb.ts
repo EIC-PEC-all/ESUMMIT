@@ -35,13 +35,9 @@ async function readAllRecords(): Promise<any[]> {
 }
 
 async function writeAllRecords(records: any[]): Promise<void> {
-  try {
-    const filePath = await resolveStoragePath()
-    await fs.mkdir(path.dirname(filePath), { recursive: true })
-    await fs.writeFile(filePath, JSON.stringify(records, null, 2), 'utf-8')
-  } catch (err) {
-    console.warn('[Storage] Write error:', err)
-  }
+  const filePath = await resolveStoragePath()
+  await fs.mkdir(path.dirname(filePath), { recursive: true })
+  await fs.writeFile(filePath, JSON.stringify(records, null, 2), 'utf-8')
 }
 
 function matchesQuery(item: any, query: Record<string, any>): boolean {
@@ -154,6 +150,13 @@ function getLocalDatabase() {
         await writeAllRecords(remaining)
         return { deletedCount: initialLength - remaining.length }
       },
+
+      insertOne: async (record: Record<string, any>) => {
+        const apps = await readAllRecords()
+        apps.unshift(record)
+        await writeAllRecords(apps)
+        return { acknowledged: true, insertedId: record.applicationId }
+      },
     }),
   }
 }
@@ -161,17 +164,21 @@ function getLocalDatabase() {
 let cachedDb: any = null
 
 export async function getDatabase(): Promise<any> {
-  const uri = process.env.DATABASE_URL
-  if (uri && !uri.includes('127.0.0.1')) {
+  const uri =
+    process.env.RESPONSE_MANAGER_DATABASE_URL ||
+    process.env.DATABASE_URL ||
+    'mongodb+srv://ananay:peYyvZH5S1KSTzD5@cluster0.7gpudbl.mongodb.net/esummit?retryWrites=true&w=majority&appName=Cluster0'
+
+  if (uri) {
     try {
       if (cachedDb) return cachedDb
-      const mongo = await (Function('return import("mongodb")')() as Promise<any>)
-      const client = new mongo.MongoClient(uri, { serverSelectionTimeoutMS: 2000 })
+      const { MongoClient } = await import('mongodb')
+      const client = new MongoClient(uri, { serverSelectionTimeoutMS: 5000 })
       await client.connect()
       cachedDb = client.db('esummit')
       return cachedDb
-    } catch {
-      // Graceful fallback to file storage
+    } catch (err) {
+      console.warn('[Response Manager] MongoDB connection warning, using fallback:', err)
     }
   }
 

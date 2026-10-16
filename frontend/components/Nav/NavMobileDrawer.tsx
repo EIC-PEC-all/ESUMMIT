@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import ThemeToggle from '@/components/Common/ThemeToggle'
 import { FEST_META } from '@/lib/data'
 
 export interface NavItem {
@@ -74,7 +75,7 @@ export default function NavMobileDrawer({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-md z-[11000] lg:hidden"
+            className="fixed inset-0 bg-backdrop backdrop-blur-md z-[11000] lg:hidden"
             aria-hidden="true"
             onClick={onClose}
           />
@@ -86,16 +87,16 @@ export default function NavMobileDrawer({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-            className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[11001] bg-mint text-void shadow-[0_0_60px_rgba(0,245,212,0.4)] flex flex-col justify-between p-6 sm:p-8 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] overflow-y-auto border-l-4 border-void"
+            className="fixed top-0 right-0 bottom-0 w-full lg:w-[380px] z-[11001] bg-panel text-primary shadow-2xl flex flex-col justify-between p-6 sm:p-8 pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] overflow-y-auto border-l border-border-panel backdrop-blur-2xl"
             role="dialog"
             aria-modal="true"
             aria-label="Navigation Menu Drawer"
           >
             {/* Drawer Top Header */}
             <div>
-              <div className="flex items-center justify-between pb-5 border-b-2 border-void/20 mb-8">
+              <div className="flex items-center justify-between pb-5 border-b border-border-subtle mb-8">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-void flex items-center justify-center p-1 shadow-inner">
+                  <div className="w-8 h-8 rounded-full bg-mint/15 border border-mint/30 flex items-center justify-center p-1 shadow-inner">
                     <Image
                       src="/esummit-mark.png"
                       alt="PEC E-Summit Emblem"
@@ -104,15 +105,16 @@ export default function NavMobileDrawer({
                       className="w-full h-full object-contain"
                     />
                   </div>
-                  <span className="font-mono-data text-xs font-black uppercase tracking-[0.25em] text-void">
+                  <span className="font-mono-data text-xs font-black uppercase tracking-[0.25em] text-primary">
                     E-SUMMIT &apos;26
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
+                  <ThemeToggle variant="icon" className="shadow-sm" />
                   <button
                     onClick={onClose}
-                    className="min-h-[44px] min-w-[44px] rounded-xl bg-void text-white font-bold flex items-center justify-center border border-void/30 hover:bg-black/90 transition-all cursor-pointer shadow-md"
+                    className="min-h-[44px] min-w-[44px] rounded-xl bg-panel-alt text-primary font-bold flex items-center justify-center border border-border-subtle hover:border-mint hover:text-mint transition-all cursor-pointer shadow-sm"
                     aria-label="Close navigation sidebar"
                   >
                     <X size={20} className="stroke-[2.5]" />
@@ -131,18 +133,18 @@ export default function NavMobileDrawer({
                       key={item.label}
                       href={targetHref}
                       onClick={(e) => onItemClick(e, item)}
-                      className="group flex items-baseline justify-between py-2 border-b border-void/15 transition-all"
+                      className="group flex items-baseline justify-between py-2 border-b border-border-subtle transition-all"
                     >
                       <span
                         className={`font-display text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight transition-colors ${
                           isActive
-                            ? 'text-void underline decoration-void decoration-4 underline-offset-8'
-                            : 'text-void/80 group-hover:text-void group-hover:underline decoration-void/50 underline-offset-4'
+                            ? 'text-mint underline decoration-mint decoration-4 underline-offset-8'
+                            : 'text-primary/90 group-hover:text-mint group-hover:underline decoration-mint/50 underline-offset-4'
                         }`}
                       >
                         {item.label}
                       </span>
-                      <span className="font-mono-data text-xs text-void/70 group-hover:text-void transition-colors font-black tracking-widest">
+                      <span className="font-mono-data text-xs text-muted group-hover:text-mint transition-colors font-black tracking-widest">
                         {item.code}
                       </span>
                     </Link>
@@ -152,17 +154,17 @@ export default function NavMobileDrawer({
             </div>
 
             {/* Socials & Meta */}
-            <div className="pt-6 border-t-2 border-void/20 mt-6 flex flex-col gap-5">
+            <div className="pt-6 border-t border-border-subtle mt-6 flex flex-col gap-5">
               <div>
-                <span className="font-mono-data text-[10px] uppercase tracking-[0.25em] text-void font-black block mb-2.5">
+                <span className="font-mono-data text-[10px] uppercase tracking-[0.25em] text-muted font-black block mb-2.5">
                   SOCIALS &amp; CONNECT
                 </span>
-                <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono-data text-xs text-void font-bold">
+                <div className="flex flex-wrap gap-x-5 gap-y-1 font-mono-data text-xs text-secondary font-bold">
                   <a
                     href={FEST_META.social.instagram}
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-white transition-colors min-h-[44px] inline-flex items-center gap-1 py-2"
+                    className="hover:text-mint transition-colors min-h-[44px] inline-flex items-center gap-1 py-2"
                     aria-label="E-Cell PEC on Instagram"
                   >
                     <span>Instagram</span>
@@ -172,7 +174,7 @@ export default function NavMobileDrawer({
                     href={FEST_META.social.linkedin}
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-white transition-colors min-h-[44px] inline-flex items-center gap-1 py-2"
+                    className="hover:text-mint transition-colors min-h-[44px] inline-flex items-center gap-1 py-2"
                     aria-label="E-Cell PEC on LinkedIn"
                   >
                     <span>LinkedIn</span>
@@ -182,7 +184,7 @@ export default function NavMobileDrawer({
                     href={FEST_META.social.twitter}
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-white transition-colors min-h-[44px] inline-flex items-center gap-1 py-2"
+                    className="hover:text-mint transition-colors min-h-[44px] inline-flex items-center gap-1 py-2"
                     aria-label="E-Cell PEC on Twitter"
                   >
                     <span>Twitter</span>
@@ -190,7 +192,7 @@ export default function NavMobileDrawer({
                   </a>
                   <a
                     href="mailto:eic@pec.edu.in"
-                    className="hover:text-white transition-colors min-h-[44px] inline-flex items-center gap-1 py-2"
+                    className="hover:text-mint transition-colors min-h-[44px] inline-flex items-center gap-1 py-2"
                     aria-label="Email EIC PEC"
                   >
                     <span>eic@pec.edu.in</span>
@@ -199,7 +201,7 @@ export default function NavMobileDrawer({
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs font-mono-data text-void/80 font-bold pt-2 border-t border-void/15">
+              <div className="flex items-center justify-between text-xs font-mono-data text-muted font-bold pt-2 border-t border-border-subtle">
                 <span>{FEST_META.dates}</span>
                 <span>{FEST_META.venue}</span>
               </div>

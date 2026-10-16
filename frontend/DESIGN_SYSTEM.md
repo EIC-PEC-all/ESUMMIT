@@ -16,29 +16,43 @@ The design system is built on CSS custom properties defined in `app/globals.css`
 | Deep | `--bg-deep` | `#081310` | Recessed backgrounds |
 | Panel | `--bg-panel` | `#0D1C18` | Card and panel backgrounds |
 | Panel Alt | `--bg-panel-alt` | `#12241F` | Elevated surface backgrounds |
-| Cyber Mint | `--accent-mint` | `#00F5D4` | Official brand primary, CTAs, electric highlights |
-| Emerald Aqua | `--accent-green` | `#00DFBA` | Secondary teal-green accent |
-| Cyber Blue | `--accent-blue` | `#3DD9FF` | Cool contrast accent matching logo curve |
+| Logo Lime | `--accent-mint` | `#8AC53F` | Official logo brand primary, CTAs, electric highlights |
+| Neon Lime | `--accent-green` | `#A8EE4A` | Secondary bright lime highlight |
+| Logo Purple | `--accent-blue` | `#4341A8` | Logo curve arc accent |
 | Obsidian Navy | `--accent-navy` | `#0D1C18` | Deep panel accent |
 | Accent Coral | `--accent-coral` | `#FF4D3D` | Pitch competition warm accent |
-| Mint Glow | `--accent-green-dim` | `rgba(0, 245, 212, 0.15)` | Radial glow, shadow effects |
+| Lime Glow | `--accent-green-dim` | `rgba(138, 197, 63, 0.15)` | Radial glow, shadow effects |
 | Gold | — | `#FFD700` | Highlight accents |
 | Text Primary | `--text-primary` | `#FFFFFF` | Body text |
 | Text Secondary | `--text-secondary` | `#94A3B8` | Subtitles, secondary labels |
 | Text Muted | `--text-muted` | `#64748B` | Captions, placeholders |
 | Border Subtle | `--border-subtle` | `rgba(255, 255, 255, 0.10)` | Default card borders |
 | Border Panel | `--border-panel` | `rgba(255, 255, 255, 0.15)` | Panel dividers |
-| Border Glow | `--border-glow` | `rgba(0, 245, 212, 0.30)` | Active / hover borders |
+| Border Glow | `--border-glow` | `rgba(138, 197, 63, 0.30)` | Active / hover borders |
 
-### Light / Olive Mode
+### Light Mode (Lime-Infused Off-White & Deep Forest)
 
-| CSS Variable | Value | Usage |
-|---|---|---|
-| `--bg-void` | `#F8FAFC` | Light page canvas |
-| `--bg-panel` | `#FFFFFF` | Card backgrounds |
-| `--accent-mint` | `#4E6527` | Deep olive brand accent |
-| `--text-primary` | `#0F172A` | Dark charcoal text |
-| `--text-secondary` | `#475569` | Subdued text |
+| Token | CSS Variable | Value | Usage |
+|---|---|---|---|
+| Light Void | `--bg-void` | `#F2F5F0` | Soft lime-frosted canvas background |
+| Light Deep | `--bg-deep` | `#F8FAF6` | Elevated page body backdrop |
+| Light Panel | `--bg-panel` | `#FFFFFF` | Crisp white card surface |
+| Light Panel Alt | `--bg-panel-alt` | `#E8EDE3` | Secondary panels and form controls |
+| Deep Lime | `--accent-mint` | `#659A26` | High-contrast brand primary (legible against light bg) |
+| Forest Lime | `--accent-green` | `#52801C` | Secondary lime accent |
+| Logo Purple | `--accent-blue` | `#4341A8` | Logo curve accent |
+| Forest Primary | `--text-primary` | `#121A0E` | High-contrast body text (14:1 contrast) |
+| Slate Forest | `--text-secondary` | `#3D4D35` | Subtitles, labels, and secondary copy (7.5:1) |
+| Muted Forest | `--text-muted` | `#64755C` | Captions, placeholders (4.8:1) |
+| Border Subtle | `--border-subtle` | `rgba(18, 26, 14, 0.10)` | Default card borders |
+| Border Panel | `--border-panel` | `rgba(18, 26, 14, 0.16)` | Panel dividers |
+| Border Glow | `--border-glow` | `rgba(101, 154, 38, 0.30)` | Active / focus borders |
+
+### Theme Persistence & Architecture
+- Controlled via `ThemeProvider` (`frontend/context/ThemeContext.tsx`) and `useTheme()` hook.
+- Persisted in `localStorage` under `esummit-theme` with fallback to `prefers-color-scheme`.
+- Zero flash of unstyled content (FOUC) guaranteed via synchronous inline script in `<head>`.
+- Responsive `ThemeToggle` component mounted in `NavHeader` and `NavMobileDrawer`.
 
 ---
 
@@ -104,7 +118,7 @@ Each event track has an assigned accent color used for card borders and icon tin
 | Track | Hex |
 |---|---|
 | Pitch Competition | `#FF4D3D` |
-| Panel Discussions | `#3DD9FF` |
-| Startup Expo | `#00F5D4` |
-| Hackathon | `#A855F7` |
-| Investor Networking | `#F59E0B` |
+| Panel Discussions | `#8AC53F` |
+| Startup Expo | `#FF8C42` |
+| Hackathon | `#9B5CFF` |
+| Investor Networking | `#4341A8` |

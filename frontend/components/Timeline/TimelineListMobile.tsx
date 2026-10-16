@@ -17,12 +17,12 @@ export default function TimelineListMobile({
   eventsList,
 }: TimelineListMobileProps) {
   return (
-    <div className="relative pl-5 sm:pl-6 border-l border-white/10 space-y-4 sm:space-y-5 my-3">
+    <div className="relative pl-5 sm:pl-6 border-l border-border-subtle space-y-4 sm:space-y-5 my-3">
       {events.map((ev) => {
         const catKey = ev.category.toLowerCase()
         const trackStyle = TRACK_STYLES[catKey] || {
-          pill: 'bg-white/5 text-gray-300 border-white/10',
-          dot: 'bg-gray-400',
+          pill: 'bg-panel-alt text-secondary border-border-subtle',
+          dot: 'bg-muted',
           label: ev.category,
         }
         const isFlagship = ev.badge === 'FLAGSHIP' || ev.badge === 'GRAND FINALE'
@@ -35,7 +35,7 @@ export default function TimelineListMobile({
               className={`absolute -left-[25px] sm:-left-[29px] top-4 w-2 h-2 rounded-full transition-all duration-200 ${
                 isFlagship
                   ? 'bg-mint ring-4 ring-mint/20'
-                  : 'bg-gray-500 ring-2 ring-black group-hover:bg-mint'
+                  : 'bg-muted ring-2 ring-panel group-hover:bg-mint'
               }`}
             />
 
@@ -46,8 +46,8 @@ export default function TimelineListMobile({
                 linkedEvent ? 'cursor-pointer active:scale-[0.99]' : ''
               } ${
                 isFlagship
-                  ? 'bg-gradient-to-b from-mint/[0.12] via-[#091D15]/90 to-[#040F0B]/95 border-mint/35 border-l-4 border-l-mint shadow-[0_8px_32px_0_rgba(0,245,212,0.15)]'
-                  : 'bg-gradient-to-b from-white/[0.08] via-[#091D15]/85 to-[#040F0B]/95 border-white/10 hover:border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.4)]'
+                  ? 'bg-panel border-mint/40 border-l-4 border-l-mint shadow-md'
+                  : 'bg-panel border-border-subtle hover:border-mint/30 shadow-sm'
               }`}
             >
               {/* Header: Time & Track */}
@@ -64,7 +64,7 @@ export default function TimelineListMobile({
                     <span>{ev.category}</span>
                   </span>
                   {ev.badge && (
-                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono-data font-bold uppercase tracking-wider bg-white/5 text-gray-300 border border-white/10">
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono-data font-bold uppercase tracking-wider bg-panel-alt text-secondary border border-border-subtle">
                       <Sparkles className="w-2.5 h-2.5 text-mint" />
                       {ev.badge}
                     </span>
@@ -73,13 +73,13 @@ export default function TimelineListMobile({
               </div>
 
               {/* Eyebrow */}
-              <p className="text-[10px] font-mono-data uppercase tracking-wider text-gray-400 mb-1">
+              <p className="text-[10px] font-mono-data uppercase tracking-wider text-muted mb-1">
                 {ev.eyebrow}
               </p>
 
               {/* Session Title */}
               <div className="flex items-start justify-between gap-2 mb-1.5">
-                <h4 className="font-sans font-bold text-[15px] sm:text-base text-white leading-snug tracking-tight">
+                <h4 className="font-sans font-bold text-[15px] sm:text-base text-primary leading-snug tracking-tight">
                   {ev.title}
                 </h4>
                 {linkedEvent && (
@@ -88,15 +88,15 @@ export default function TimelineListMobile({
               </div>
 
               {/* Description */}
-              <p className="text-xs text-gray-300/90 font-body leading-relaxed mb-3">
+              <p className="text-xs text-secondary font-body leading-relaxed mb-3">
                 {ev.description}
               </p>
 
               {/* Venue & Tags Footer */}
-              <div className="pt-2.5 border-t border-white/5 flex flex-wrap items-center justify-between gap-2">
-                <div className="inline-flex items-center gap-1.5 text-gray-300">
+              <div className="pt-2.5 border-t border-border-subtle flex flex-wrap items-center justify-between gap-2">
+                <div className="inline-flex items-center gap-1.5 text-secondary">
                   <MapPin className="w-3.5 h-3.5 text-mint/80 shrink-0" />
-                  <span className="font-body text-xs font-medium text-gray-200">{ev.venue}</span>
+                  <span className="font-body text-xs font-medium text-secondary">{ev.venue}</span>
                 </div>
 
                 {ev.tags.length > 0 && (
@@ -104,7 +104,7 @@ export default function TimelineListMobile({
                     {ev.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 rounded text-[10px] font-mono-data text-gray-400 bg-white/[0.03] border border-white/5"
+                        className="px-2 py-0.5 rounded text-[10px] font-mono-data text-muted bg-panel-alt border border-border-subtle"
                       >
                         {tag}
                       </span>

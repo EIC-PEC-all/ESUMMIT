@@ -121,7 +121,7 @@ export default function LeafletMapInner({
         className: `highlights-marker-${vKey}`,
         html: `
           <div role="button" aria-label="${vData.venueName}" style="display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;">
-            <div style="width:30px;height:30px;background:#081310;border:1.5px solid #00F5D4;border-radius:9999px;display:flex;align-items:center;justify-content:center;color:#00F5D4;box-shadow:0 0 14px rgba(0,245,212,0.45);transition:all 0.2s ease;">
+            <div style="width:30px;height:30px;background:#081310;border:1.5px solid #8AC53F;border-radius:9999px;display:flex;align-items:center;justify-content:center;color:#8AC53F;box-shadow:0 0 14px rgba(138,197,63,0.45);transition:all 0.2s ease;">
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function LeafletMapInner({
 
       marker.bindPopup(`
         <div style="padding: 10px 12px; font-family: 'JetBrains Mono', monospace; background: #081310; color: #ffffff; border-radius: 8px;">
-          <h4 style="margin: 0 0 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #00F5D4; letter-spacing: 0.05em;">${vData.venueName}</h4>
+          <h4 style="margin: 0 0 3px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #8AC53F; letter-spacing: 0.05em;">${vData.venueName}</h4>
           <p style="margin: 0; font-size: 9.5px; color: #94A3B8; text-transform: uppercase;">${vData.building}</p>
         </div>
       `)
@@ -202,14 +202,14 @@ export default function LeafletMapInner({
         .custom-lime-map .leaflet-popup-content-wrapper {
           background: #081310 !important;
           border-radius: 12px !important;
-          border: 1px solid rgba(0, 245, 212, 0.3) !important;
+          border: 1px solid rgba(138, 197, 63, 0.3) !important;
           box-shadow: 0 15px 35px -10px rgba(0,0,0,0.9) !important;
           padding: 0 !important;
         }
         .custom-lime-map .leaflet-popup-tip {
           background: #081310 !important;
-          border-bottom: 1px solid rgba(0, 245, 212, 0.3) !important;
-          border-right: 1px solid rgba(0, 245, 212, 0.3) !important;
+          border-bottom: 1px solid rgba(138, 197, 63, 0.3) !important;
+          border-right: 1px solid rgba(138, 197, 63, 0.3) !important;
           box-shadow: none !important;
         }
         .custom-lime-map .leaflet-popup-content { margin: 0 !important; }

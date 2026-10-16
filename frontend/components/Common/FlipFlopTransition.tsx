@@ -126,12 +126,12 @@ export default function FlipFlopTransition() {
     <section
       id="flip-flop-transition"
       ref={sectionRef}
-      className="relative z-20 bg-[#081310] select-none border-y border-mint/20 h-[280vh] sm:h-[320vh] md:h-[360vh]"
+      className="relative z-20 bg-section-1 text-primary select-none border-y border-mint/20 h-[280vh] sm:h-[320vh] md:h-[360vh]"
       aria-label="PEC E-Summit visual gallery"
     >
       <div className="sticky top-0 h-screen w-full flex flex-col justify-center overflow-hidden">
         {/* Subtle ambient lighting */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,245,212,0.06)_0%,transparent_75%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,var(--accent-green-dim)_0%,transparent_75%)]" />
 
         {/* ── FlexCarousel 3D WebGL Liquid Lens Carousel ── */}
         <div className="relative w-full h-[420px] sm:h-[540px] md:h-[600px] max-h-[85vh]">
@@ -156,9 +156,9 @@ export default function FlipFlopTransition() {
           />
         </div>
 
-        {/* Edge gradient fade masks */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-24 bg-gradient-to-r from-[#081310] to-transparent z-10" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-24 bg-gradient-to-l from-[#081310] to-transparent z-10" />
+        {/* Edge gradient fade masks (theme-adaptive) */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 sm:w-24 edge-mask-left z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 sm:w-24 edge-mask-right z-10" />
       </div>
     </section>
   )

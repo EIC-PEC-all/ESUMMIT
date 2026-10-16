@@ -104,27 +104,27 @@ export default function EventPortfolioShowcase() {
     <>
       <PageBanner
         title="EVENTS"
-        subtitle="MARCH 19–21, 2026 · 12 SIGNATURE PROPERTIES & COMPETITIONS"
+        subtitle="NOVEMBER 14–15, 2026 · 12 SIGNATURE PROPERTIES & COMPETITIONS"
       />
 
       <section
         id="event-portfolio"
-        className={`relative w-full bg-section-2 text-white transition-all pt-8 sm:pt-12 md:pt-16 pb-20 sm:pb-24 ${
+        className={`relative w-full bg-section-2 text-primary transition-all pt-8 sm:pt-12 md:pt-16 pb-20 sm:pb-24 ${
           selectedEvent ? 'z-[12000]' : 'z-10'
         }`}
         aria-label="Event Portfolio Showcase"
       >
         {/* Background Section Scrim */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none bg-[#07130F]">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0F221D]/75 via-transparent to-[#0F221D]/85" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none bg-section-2">
+          <div className="absolute inset-0 bg-gradient-to-b from-section-1/75 via-transparent to-section-1/85" />
         </div>
 
         {/* ── Main Container ── */}
         <div className="relative z-10 w-full px-5 sm:px-10 md:px-16 max-w-[1400px] mx-auto">
           {/* Top Control Bar */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-white/10">
-            {/* Filter Tabs */}
-            <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#091812] border border-mint/20 overflow-x-auto scrollbar-none">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-border-subtle">
+            {/* Filter Tabs (Rounded-Full Pill Container) */}
+            <div className="flex items-center gap-1.5 p-1 rounded-full bg-panel border border-border-panel overflow-x-auto scrollbar-none">
               {FILTER_TABS.map((tab) => {
                 const isActive = activeTab === tab.id
                 return (
@@ -134,8 +134,8 @@ export default function EventPortfolioShowcase() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-4 py-2 rounded-full text-xs font-mono-data whitespace-nowrap transition-all ${
                       isActive
-                        ? 'bg-mint text-[#07130F] font-bold shadow-sm'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'bg-mint text-black font-bold shadow-sm'
+                        : 'text-secondary hover:text-primary'
                     }`}
                   >
                     {tab.label}
@@ -158,12 +158,12 @@ export default function EventPortfolioShowcase() {
           </div>
 
           {/* Event Count Indicator */}
-          <div className="flex items-center justify-between text-xs font-mono-data text-gray-400 mb-6">
+          <div className="flex items-center justify-between text-xs font-mono-data text-secondary mb-6">
             <div className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-mint" />
               <span>SHOWING {filteredEvents.length} OF {allEvents.length} EVENTS</span>
             </div>
-            <span className="text-[11px] text-gray-400">CLICK ANY CARD FOR DETAILED GUIDELINES</span>
+            <span className="text-[11px] text-muted">CLICK ANY CARD FOR DETAILED GUIDELINES</span>
           </div>
 
           {/* Cards Grid */}

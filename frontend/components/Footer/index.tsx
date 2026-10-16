@@ -35,6 +35,7 @@ import { TOAST_STYLE } from '@/lib/constants'
 import { useSiteConfig } from '@/hooks/useSummitData'
 import { api } from '@/lib/api'
 import { prefetchRegister } from '@/lib/prefetch'
+import { useTheme } from '@/context/ThemeContext'
 
 function EmailCapture() {
   const [email, setEmail] = useState('')
@@ -43,7 +44,7 @@ function EmailCapture() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(email.trim())) {
       toast.error('Please enter a valid email address.', TOAST_STYLE)
       return
     }
@@ -100,7 +101,7 @@ function EmailCapture() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 rounded-xl border border-mint/30 bg-[#1E2B12] px-4 py-3 font-body text-sm text-white outline-none placeholder:text-gray-500 focus:border-mint/60 transition-colors"
+        className="flex-1 rounded-xl border border-mint/30 bg-panel-alt px-4 py-3 font-body text-sm text-primary outline-none placeholder:text-muted focus:border-mint/60 transition-colors"
         aria-label="Enter your email to get E-Summit updates"
       />
       <button
@@ -138,49 +139,65 @@ const QUICK_LINKS = [
 ]
 
 export function RegisterCTA() {
+  const { theme, isLoaded } = useTheme()
+  const isDark = !isLoaded || theme === 'dark'
+
   return (
     <div
       id="register"
-      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] bg-section-1 text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t border-mint/20 py-16 sm:py-20 md:py-24"
+      className="relative z-10 -mt-10 overflow-hidden rounded-t-[40px] dark:bg-[#081310] bg-white text-slate-900 dark:text-white sm:-mt-12 sm:rounded-t-[50px] md:rounded-t-[60px] border-t dark:border-mint/20 border-emerald-500/15 py-16 sm:py-20 md:py-24 shadow-2xl"
       aria-labelledby="footer-cta-heading"
     >
-      {/* ── CRT Warp Interactive Plasma Background (Cyber Teal Obsidian Theme) ── */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
-        <CRTWarp
-          color="#00F5D4"
-          backgroundColor="#081310"
-          speed={0.35}
-          curvature={0.2}
-          scanlineStrength={0.18}
-          scanlineFrequency={180}
-          waveAmplitude={0.2}
-          waveFrequency={2.2}
-          bloom={0.95}
-          bloomRadius={1}
-          noise={0.06}
-          vignette={0.55}
-          brightness={0.9}
-          pixelation={1}
-          rgbShift={0.01}
-          mouseReact={true}
-          mouseStrength={0.45}
-          dpr={1}
-          fps={30}
-          paused={false}
-        />
-      </div>
+      {/* ── CRT Warp Interactive Plasma Background (Visible in Dark Mode Only) ── */}
+      {isDark && (
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
+          <CRTWarp
+            color="#74FB44"
+            backgroundColor="#081310"
+            speed={0.35}
+            curvature={0.2}
+            scanlineStrength={0.18}
+            scanlineFrequency={180}
+            waveAmplitude={0.2}
+            waveFrequency={2.2}
+            bloom={0.95}
+            bloomRadius={1}
+            noise={0.06}
+            vignette={0.55}
+            brightness={0.9}
+            pixelation={1}
+            rgbShift={0.01}
+            mouseReact={true}
+            mouseStrength={0.45}
+            dpr={1}
+            fps={30}
+            paused={false}
+          />
+        </div>
+      )}
 
-      {/* Dark gradient vignettes for pristine text contrast and smooth boundary blending */}
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-[#081310] via-transparent to-[#081310]" />
+      {/* ── Light Mode Luminous Soft Mint & Pure Canvas Backdrop ── */}
+      <div className="absolute inset-0 z-0 pointer-events-none dark:hidden bg-gradient-to-b from-white via-[#F0F7F3] to-white" />
       <div
-        className="pointer-events-none absolute inset-0 z-[1] opacity-25"
+        className="pointer-events-none absolute inset-0 z-[1] dark:hidden opacity-30"
         style={{
           background:
-            'radial-gradient(circle at 50% 50%, rgba(0, 245, 212, 0.12) 0%, transparent 68%)',
+            'radial-gradient(ellipse at 50% 50%, rgba(5, 150, 105, 0.12) 0%, transparent 70%)',
         }}
       />
+      {/* Soft Top and Bottom Luminous Fade for pristine section blending */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 z-[2] dark:hidden bg-gradient-to-b from-white to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 z-[2] dark:hidden bg-gradient-to-t from-white to-transparent" />
 
-
+      {/* Dark gradient vignettes for dark mode */}
+      <div className="register-vignette pointer-events-none absolute inset-0 z-[1] hidden dark:block bg-gradient-to-b from-[#081310] via-transparent to-[#081310]" />
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] opacity-25 hidden dark:block"
+        style={{
+          background:
+            'radial-gradient(circle at 50% 50%, rgba(116, 251, 68, 0.12) 0%, transparent 68%)',
+        }}
+      />
 
       {/* ── Center Content Block ──────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
@@ -197,11 +214,12 @@ export function RegisterCTA() {
             className="mb-6 font-display font-black uppercase text-center leading-none tracking-tight select-none"
             style={{ fontSize: 'clamp(2rem, 6.5vw, 5rem)' }}
           >
-            <span className="text-gradient-mint">REGISTER</span>
+            <span className="hidden dark:inline text-gradient-mint drop-shadow-[0_0_35px_var(--border-glow)]">REGISTER</span>
+            <span className="dark:hidden font-black text-emerald-950 tracking-tight" style={{ background: 'linear-gradient(180deg, #064E3B 0%, #047857 60%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>REGISTER</span>
           </h2>
 
           {/* Subtitle */}
-          <p className="mb-10 max-w-xl font-body text-base sm:text-lg leading-relaxed text-gray-300">
+          <p className="mb-10 max-w-xl font-body text-base sm:text-lg leading-relaxed dark:text-gray-200 text-slate-800 font-medium">
             Join 3,000+ builders, founders, and investors at Punjab Engineering College. Secure your summit pass for keynote sessions, hackathons, and pitch tracks.
           </p>
 
@@ -212,7 +230,7 @@ export function RegisterCTA() {
               onMouseEnter={prefetchRegister}
               onTouchStart={prefetchRegister}
               onFocus={prefetchRegister}
-              className="btn-mint-gradient flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105 cursor-pointer"
+              className="btn-mint-gradient flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105 cursor-pointer dark:text-[#060D0B] text-white"
               id="footer-register-btn"
               aria-label="Claim Your Pass for E-Summit"
             >
@@ -247,14 +265,14 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
       {/* Corporate EIC / PEC Footer */}
       <div 
-        className="border-mint/20 relative z-10 border-t py-12 text-white shadow-inner overflow-hidden"
-        style={{ backgroundColor: '#081310' }}
+        className="border-mint/20 relative z-10 border-t py-12 text-primary shadow-inner overflow-hidden"
+        style={{ backgroundColor: 'var(--bg-section-1)' }}
       >
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#081310]/30 via-transparent to-[#081310]/60" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10" />
         <div className="section-container relative z-10">
           {/* Top Social Bar */}
           <div className="border-mint/20 mb-10 flex flex-col items-center justify-between gap-4 border-b pb-8 sm:flex-row">
-            <p className="font-body text-base font-medium text-gray-200">
+            <p className="font-body text-base font-medium text-secondary">
               Get connected with us on social networks:
             </p>
             <div
@@ -268,7 +286,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="border-mint/30 flex min-h-[44px] min-w-[44px] h-11 w-11 items-center justify-center rounded-xl border bg-[#07130F] text-white shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
+                  className="border-mint/30 flex min-h-[44px] min-w-[44px] h-11 w-11 items-center justify-center rounded-xl border bg-panel text-primary shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
                 >
                   <Icon size={18} aria-hidden="true" strokeWidth={1.5} />
                 </a>
@@ -281,13 +299,13 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
             {/* Column 1 & 2: Branding and Description */}
             <div className="md:col-span-2">
               <div className="mb-6 flex flex-col gap-4">
-                <Link href="/" className="inline-block" aria-label="PEC E-Summit '26 — Home">
+                <Link href="/" className="footer-logo-badge inline-flex items-center px-4 py-2 rounded-full dark:bg-transparent bg-[#061A12] border border-emerald-500/30 dark:border-transparent transition-all max-w-fit shadow-md dark:shadow-none" aria-label="PEC E-Summit '26 — Home">
                   <Image
                     src="/esummit-logo.png"
                     alt="PEC E-Summit '26 - Legacies Beyond Time"
                     width={280}
                     height={60}
-                    className="h-11 sm:h-13 md:h-14 w-auto max-w-[260px] sm:max-w-[300px] object-contain drop-shadow-[0_0_20px_rgba(0,245,212,0.25)] hover:scale-[1.02] transition-transform"
+                    className="h-10 sm:h-12 w-auto max-w-[240px] sm:max-w-[280px] object-contain drop-shadow-[0_0_20px_var(--border-glow)] hover:scale-[1.02] transition-transform"
                   />
                 </Link>
                 <div className="flex items-center gap-6 sm:gap-7 pt-1.5">
@@ -298,7 +316,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                     height={60}
                     className="h-12 sm:h-14 w-auto object-contain brightness-115 opacity-90 hover:opacity-100 transition-opacity"
                   />
-                  <div className="h-10 sm:h-12 w-px bg-white/20" />
+                  <div className="h-10 sm:h-12 w-px bg-border-subtle" />
                   <Image
                     src="/eic-logo.png"
                     alt="EIC Logo"
@@ -308,7 +326,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   />
                 </div>
               </div>
-              <p className="max-w-md font-body text-sm leading-relaxed text-gray-300">
+              <p className="max-w-md font-body text-sm leading-relaxed text-secondary">
                 Entrepreneurship and Incubation Cell at PEC operates under the Ministry of
                 Education&apos;s Innovation Cell Programs since 2015. EIC Provides mentoring in
                 entrepreneurship, achieving its goal of nurturing businesses.
@@ -317,7 +335,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
             {/* Column 3: Quick Links */}
             <div>
-              <h3 className="mb-6 font-display text-xl font-bold uppercase tracking-wider text-white">
+              <h3 className="mb-6 font-display text-xl font-bold uppercase tracking-wider text-primary">
                 Quick Links
               </h3>
               <ul className="space-y-2.5">
@@ -325,7 +343,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="font-body text-sm font-medium text-gray-300 transition-colors hover:text-mint inline-block py-0.5"
+                      className="font-body text-sm font-semibold text-secondary transition-colors hover:text-mint inline-block py-0.5"
                     >
                       {link.label}
                     </a>
@@ -336,7 +354,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
 
             {/* Column 4: Contact & Team Leadership */}
             <div className="space-y-6 min-h-[420px] lg:min-h-0">
-              <h3 className="mb-6 font-display text-xl font-bold uppercase tracking-wider text-white">
+              <h3 className="mb-6 font-display text-xl font-bold uppercase tracking-wider text-primary">
                 Contact Us
               </h3>
               
@@ -345,7 +363,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                 <span className="font-mono-data text-[10px] font-bold uppercase tracking-[0.2em] text-mint block mb-1.5">
                   CAMPUS VENUE
                 </span>
-                <p className="font-body text-xs sm:text-sm leading-relaxed text-gray-200 font-medium">
+                <p className="font-body text-xs sm:text-sm leading-relaxed text-secondary font-medium">
                   {siteConfig?.summitVenue || 'Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh, 160012'}
                 </p>
               </div>
@@ -357,7 +375,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                     HELPLINE / SUPPORT
                   </span>
                   <div className="flex items-center justify-between gap-2 py-0.5">
-                    <span className="font-body text-gray-200 font-medium text-xs sm:text-sm">Helpdesk Support</span>
+                    <span className="font-body text-secondary font-medium text-xs sm:text-sm">Helpdesk Support</span>
                     <a
                       href={`tel:${contacts.phone.replace(/\s+/g, '')}`}
                       className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline transition-colors shrink-0"
@@ -368,22 +386,21 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                 </div>
               )}
 
-
               {/* Student Leadership */}
               <div>
                 <span className="font-mono-data text-[10px] font-bold uppercase tracking-[0.2em] text-mint block mb-2">
                   STUDENT CONVENERS
                 </span>
-                <div className="space-y-1 text-xs sm:text-sm">
-                  <div className="flex items-center justify-between gap-2 py-0.5 border-b border-white/[0.05]">
-                    <span className="font-body text-gray-200 font-medium">Vansh Gupta</span>
-                    <a href="tel:+919041309108" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
+                <div className="space-y-1.5 text-xs sm:text-sm">
+                  <div className="flex items-center justify-between gap-2 py-0.5 border-b border-border-subtle">
+                    <span className="font-body text-primary font-semibold">Vansh Gupta</span>
+                    <a href="tel:+919041309108" className="font-mono-data text-xs text-mint font-bold hover:underline shrink-0">
                       +91 90413 09108
                     </a>
                   </div>
                   <div className="flex items-center justify-between gap-2 py-0.5">
-                    <span className="font-body text-gray-200 font-medium">Bhrigu Verma</span>
-                    <a href="tel:+919478335331" className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline shrink-0">
+                    <span className="font-body text-primary font-semibold">Bhrigu Verma</span>
+                    <a href="tel:+919478335331" className="font-mono-data text-xs text-mint font-bold hover:underline shrink-0">
                       +91 94783 35331
                     </a>
                   </div>
@@ -395,22 +412,22 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                 <span className="font-mono-data text-[10px] font-bold uppercase tracking-[0.2em] text-mint block mb-2">
                   OFFICIAL INQUIRIES
                 </span>
-                <div className="space-y-1 text-xs sm:text-sm">
-                  <div className="flex items-center justify-between gap-2 py-0.5 border-b border-white/[0.05]">
-                    <span className="font-body text-gray-200 font-medium">General / Secretariat</span>
+                <div className="space-y-1.5 text-xs sm:text-sm">
+                  <div className="flex items-center justify-between gap-2 py-0.5 border-b border-border-subtle">
+                    <span className="font-body text-primary font-semibold">General / Secretariat</span>
                     <a
                       href="mailto:eicpec@pec.edu.in"
-                      className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline transition-colors shrink-0"
+                      className="font-mono-data text-xs text-mint font-bold hover:underline transition-colors shrink-0"
                       aria-label="Email EIC PEC Secretariat at eicpec@pec.edu.in"
                     >
                       eicpec@pec.edu.in
                     </a>
                   </div>
                   <div className="flex items-center justify-between gap-2 py-0.5">
-                    <span className="font-body text-gray-200 font-medium">Media &amp; Sponsorship</span>
+                    <span className="font-body text-primary font-semibold">Media &amp; Sponsorship</span>
                     <a
                       href="mailto:esummitpr.pec@gmail.com"
-                      className="font-mono-data text-xs text-mint/90 hover:text-mint hover:underline transition-colors shrink-0"
+                      className="font-mono-data text-xs text-mint font-bold hover:underline transition-colors shrink-0"
                       aria-label="Email Public Relations & Sponsorship at esummitpr.pec@gmail.com"
                     >
                       esummitpr.pec@gmail.com
@@ -422,7 +439,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
           </div>
 
           {/* Bottom copyright line */}
-          <div className="border-mint/20 flex flex-col items-center justify-between gap-4 border-t pt-8 pb-16 sm:pb-0 font-mono-data text-xs text-gray-400 sm:flex-row text-center sm:text-left">
+          <div className="border-border-subtle flex flex-col items-center justify-between gap-4 border-t pt-8 pb-16 sm:pb-0 font-mono-data text-xs text-secondary font-medium sm:flex-row text-center sm:text-left">
             <p>© {new Date().getFullYear()} E-Cell PEC · Punjab Engineering College, Chandigarh</p>
             <p className="font-bold text-mint">PEC E-Summit 2026</p>
           </div>

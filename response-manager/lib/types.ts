@@ -18,10 +18,13 @@ export interface FundingApplication {
   phone: string
   founderLinkedIn: string
   startupName: string
+  organization?: string
+  role?: string
+  motive?: string
   websiteUrl?: string
   dpiitNumber?: string
-  stage: string
-  sector: string
+  stage?: string
+  sector?: string
   revenueStage: string
   totalFundingRaised: string
   currentAsk: string

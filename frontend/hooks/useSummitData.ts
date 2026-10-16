@@ -25,6 +25,7 @@ import {
 
 const CACHE_KEY = 'esummit_cms_bundle_v1'
 const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
+const STATIC_TIMESTAMP = '2025-01-01T00:00:00.000Z'
 
 export function refreshSummitData() {
   if (typeof window !== 'undefined') {
@@ -58,8 +59,8 @@ const FALLBACK_EVENTS: CmsEvent[] = MASTER_EVENTS.map((e, i) => ({
   venue: '',
   speakerIds: [],
   order: i + 1,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  createdAt: STATIC_TIMESTAMP,
+  updatedAt: STATIC_TIMESTAMP,
 }))
 
 const FALLBACK_SPEAKERS: CmsSpeaker[] = MASTER_SPEAKERS.map((s, i) => ({
@@ -74,12 +75,12 @@ const FALLBACK_SPEAKERS: CmsSpeaker[] = MASTER_SPEAKERS.map((s, i) => ({
   track: s.track,
   avatarUrl: s.image ?? null,
   initials: s.initials,
-  color: '#00F5D4',
+  color: '#8AC53F',
   linkedin: null,
   twitter: null,
   order: i + 1,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  createdAt: STATIC_TIMESTAMP,
+  updatedAt: STATIC_TIMESTAMP,
 }))
 
 const FALLBACK_SPONSORS: CmsSponsor[] = MASTER_SPONSORS.map((s, i) => ({
@@ -90,8 +91,8 @@ const FALLBACK_SPONSORS: CmsSponsor[] = MASTER_SPONSORS.map((s, i) => ({
   websiteUrl: null,
   category: s.category,
   order: i + 1,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  createdAt: STATIC_TIMESTAMP,
+  updatedAt: STATIC_TIMESTAMP,
 }))
 
 const FALLBACK_ALUMNI: CmsAlumni[] = MASTER_ALUMNI.map((a, i) => ({
@@ -106,8 +107,8 @@ const FALLBACK_ALUMNI: CmsAlumni[] = MASTER_ALUMNI.map((a, i) => ({
   imageUrl: a.image ?? null,
   linkedin: null,
   order: i + 1,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  createdAt: STATIC_TIMESTAMP,
+  updatedAt: STATIC_TIMESTAMP,
 }))
 
 const FALLBACK_FAQS: CmsFaq[] = MASTER_FAQS.map((f, i) => ({
@@ -116,8 +117,8 @@ const FALLBACK_FAQS: CmsFaq[] = MASTER_FAQS.map((f, i) => ({
   answer: f.answer,
   category: f.category,
   order: i + 1,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  createdAt: STATIC_TIMESTAMP,
+  updatedAt: STATIC_TIMESTAMP,
 }))
 
 const STATIC_FALLBACK: CmsBundle = {
@@ -125,14 +126,14 @@ const STATIC_FALLBACK: CmsBundle = {
     id: 'global',
     heroTitle: 'PEC E-SUMMIT 2026',
     heroSubtitle: 'IGNITING ENTREPRENEURSHIP & INNOVATION',
-    summitDates: 'MARCH 19–21, 2026',
+    summitDates: 'NOVEMBER 14–15, 2026',
     summitVenue: 'Punjab Engineering College, Sector 12, Chandigarh',
     heroVideoUrl: null,
     announcementText: null,
     announcementLink: null,
     stats: { footfall: '5K+', startups: '50+', workshops: '50+', speakers: '30+', participation: '3K+', alumni: '1K+' },
     contacts: {},
-    updatedAt: new Date().toISOString(),
+    updatedAt: STATIC_TIMESTAMP,
   },
   events: FALLBACK_EVENTS,
   speakers: FALLBACK_SPEAKERS,
@@ -180,6 +181,8 @@ export function useSummitData(): UseSummitDataReturn {
     'cms-bundle',
     fetchCmsBundleWithCache,
     {
+      fallbackData: STATIC_FALLBACK,
+      revalidateOnMount: false,
       revalidateOnFocus: false,
       revalidateIfStale: false,
       revalidateOnReconnect: false,

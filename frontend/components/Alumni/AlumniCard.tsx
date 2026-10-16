@@ -15,15 +15,15 @@ export default function AlumniCard({ person, onSelect }: AlumniCardProps) {
     <button
       type="button"
       onClick={() => onSelect(person)}
-      className="group relative shrink-0 flex flex-col items-center text-center outline-none cursor-pointer p-4 sm:p-5 rounded-[28px] sm:rounded-[32px] backdrop-blur-xl bg-white/[0.04] hover:bg-white/[0.07] border border-white/15 hover:border-mint/50 transition-all duration-300 select-none shadow-[0_8px_32px_rgba(0,0,0,0.37),inset_0_1px_1px_rgba(255,255,255,0.2)]"
+      className="alumni-card group relative shrink-0 flex flex-col items-center text-center outline-none cursor-pointer p-4 sm:p-5 rounded-[28px] sm:rounded-[32px] backdrop-blur-xl bg-panel/90 hover:bg-panel border border-border-subtle hover:border-mint transition-all duration-300 select-none shadow-lg hover:-translate-y-1"
       style={{
         width: 'clamp(230px, 70vw, 260px)',
       }}
       aria-label={`View profile details for ${person.name}`}
     >
       {/* Circular Avatar with Clean Glass Rim */}
-      <div className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full p-1 border border-white/20 group-hover:border-mint/60 transition-colors duration-300 shadow-md">
-        <div className="relative w-full h-full rounded-full overflow-hidden bg-white/5">
+      <div className="alumni-avatar-rim relative w-32 h-32 sm:w-36 sm:h-36 rounded-full p-1 border border-border-subtle group-hover:border-mint transition-colors duration-300 shadow-md bg-panel-alt">
+        <div className="relative w-full h-full rounded-full overflow-hidden bg-panel-alt">
           <BlurImage
             src={person.imageUrl}
             alt={person.name}
@@ -35,7 +35,7 @@ export default function AlumniCard({ person, onSelect }: AlumniCardProps) {
       </div>
 
       {/* Name */}
-      <h3 className="mt-4 font-display text-base sm:text-lg font-bold uppercase tracking-wider text-white group-hover:text-mint transition-colors line-clamp-1 leading-snug">
+      <h3 className="alumni-card-name mt-4 font-display text-base sm:text-lg font-bold uppercase tracking-wider text-primary group-hover:text-mint transition-colors line-clamp-1 leading-snug">
         {person.name}
       </h3>
 
@@ -45,7 +45,7 @@ export default function AlumniCard({ person, onSelect }: AlumniCardProps) {
       </p>
 
       {/* Translucent Glass Pill View Story Button */}
-      <div className="w-full mt-4 py-2 px-4 rounded-full bg-white/[0.05] group-hover:bg-mint/15 border border-white/10 group-hover:border-mint/40 text-white/80 group-hover:text-mint font-mono-data text-[9.5px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all duration-300">
+      <div className="alumni-story-btn w-full mt-4 py-2 px-4 rounded-full bg-panel-alt group-hover:bg-mint/15 border border-border-subtle group-hover:border-mint text-secondary group-hover:text-mint font-mono-data text-[9.5px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all duration-300">
         <span>VIEW STORY</span>
         <ArrowUpRight size={11} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
       </div>

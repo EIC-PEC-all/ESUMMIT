@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
             alignItems: 'flex-start',
             justifyContent: 'space-between',
             backgroundColor: '#060D0B',
-            backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(0, 245, 212, 0.15) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(0, 245, 212, 0.05) 2%, transparent 0%)',
+            backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(138, 197, 63, 0.18) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(138, 197, 63, 0.08) 2%, transparent 0%)',
             backgroundSize: '100px 100px',
             padding: '60px 70px',
             fontFamily: 'sans-serif',
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: '#00F5D4',
+                  backgroundColor: '#8AC53F',
                   color: '#060D0B',
                   padding: '8px 16px',
                   borderRadius: '9999px',
@@ -149,7 +149,7 @@ export async function GET(req: NextRequest) {
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               <div style={{ fontSize: 20, fontWeight: 800, color: '#FFFFFF' }}>
-                MARCH 19–21, 2026
+                NOVEMBER 14–15, 2026
               </div>
               <div style={{ fontSize: 16, color: '#9CA3AF' }}>
                 Sector 12, Chandigarh • EIC PEC
@@ -159,7 +159,7 @@ export async function GET(req: NextRequest) {
             <div
               style={{
                 fontSize: 16,
-                color: '#00F5D4',
+                color: '#8AC53F',
                 fontWeight: 700,
                 letterSpacing: '1px',
               }}

@@ -115,8 +115,9 @@ function GeometricNodesCanvas() {
 
       ctx.clearRect(0, 0, width, height)
 
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light'
       ctx.beginPath()
-      ctx.strokeStyle = 'rgba(0, 245, 212, 0.16)'
+      ctx.strokeStyle = isLight ? 'rgba(22, 101, 52, 0.28)' : 'rgba(138, 197, 63, 0.22)'
       ctx.lineWidth = 1
 
       const len = nodes.length
@@ -135,7 +136,7 @@ function GeometricNodesCanvas() {
       ctx.stroke()
 
       ctx.beginPath()
-      ctx.fillStyle = 'rgba(0, 245, 212, 0.55)'
+      ctx.fillStyle = isLight ? 'rgba(22, 101, 52, 0.75)' : 'rgba(138, 197, 63, 0.65)'
 
       for (let i = 0; i < len; i++) {
         const node = nodes[i]
@@ -183,28 +184,28 @@ function GeometricNodesCanvas() {
 
 export default function EsummitAbout() {
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'March 19–21, 2026'
+  const summitDates = data?.siteConfig?.summitDates || 'November 14–15, 2026'
   const dynamicAboutText = `PEC E-Summit is the flagship entrepreneurship summit of E-Cell Punjab Engineering College, bringing together 3,000+ student founders, seasoned venture capitalists, and technology leaders. From competitive pitching and an overnight hackathon to curated investor roundtables — it is North India's premier launchpad where ideas meet capital and build the future. Join us ${summitDates}.`
 
   return (
     <section
       id="esummit-about"
-      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 bg-section-1 text-white border-t border-mint/20"
+      className="esummit-section relative min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 sm:py-32 overflow-hidden rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px] -mt-10 sm:-mt-12 z-10 bg-section-1 text-primary border-t border-mint/20"
       aria-labelledby="esummit-about-heading"
     >
       {/* Interactive geometric node canvas background */}
       <GeometricNodesCanvas />
 
-      {/* Decorative ambient mint radial glow */}
+      {/* Decorative ambient radial glow */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none z-0"
-        style={{ background: 'radial-gradient(circle, rgba(0, 245, 212, 0.06) 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, var(--accent-green-dim) 0%, transparent 70%)' }}
       />
 
       {/* Top section divider line */}
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(0, 245, 212, 0.3) 50%, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, var(--border-glow) 50%, transparent)' }}
       />
 
       {/* ── Central content ── */}
@@ -225,7 +226,7 @@ export default function EsummitAbout() {
           text={dynamicAboutText}
           className="font-body font-medium text-center leading-relaxed max-w-[680px]"
           style={{
-            color: '#D1D5DB',
+            color: 'var(--text-secondary)',
             fontSize: 'clamp(0.95rem, 3.8vw, 1.35rem)',
           }}
         />
@@ -240,7 +241,7 @@ export default function EsummitAbout() {
                 displace={0.5}
                 backgroundOpacity={0.06}
                 borderWidth={1}
-                borderColor="rgba(0, 242, 178, 0.2)"
+                borderColor="var(--border-glow)"
                 brightness={100}
                 opacity={0.96}
                 blur={16}
@@ -259,12 +260,12 @@ export default function EsummitAbout() {
                   </div>
 
                   {/* Metric Label */}
-                  <h3 className="font-display font-bold text-xs sm:text-sm uppercase mb-3 tracking-wider text-white/95 group-hover:text-white transition-colors">
+                  <h3 className="font-display font-bold text-xs sm:text-sm uppercase mb-3 tracking-wider text-primary group-hover:text-primary transition-colors">
                     {pillar.label}
                   </h3>
 
                   {/* Description */}
-                  <p className="font-body text-xs sm:text-sm text-gray-300/85 leading-relaxed">
+                  <p className="font-body text-xs sm:text-sm text-secondary leading-relaxed">
                     {pillar.desc}
                   </p>
                 </div>
@@ -284,7 +285,7 @@ export default function EsummitAbout() {
       {/* Bottom section divider line */}
       <div
         className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(0, 245, 212, 0.35) 50%, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, var(--border-glow) 50%, transparent)' }}
       />
     </section>
   )

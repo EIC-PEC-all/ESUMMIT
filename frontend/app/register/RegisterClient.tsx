@@ -102,7 +102,7 @@ export default function RegisterClient() {
   const { user, loginWithEmail, registerWithEmail, loginWithGoogle, resetPassword, logout } =
     useAuth()
   const { data: cmsData } = useSummitData()
-  const summitDates = cmsData?.siteConfig?.summitDates || 'March 19–21, 2026'
+  const summitDates = cmsData?.siteConfig?.summitDates || 'November 14–15, 2026'
 
   const [view, setView] = useState<'catalog' | 'checkout' | 'success' | 'passes' | 'auth'>('catalog')
   const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('login')
@@ -524,7 +524,7 @@ export default function RegisterClient() {
     ctx.fillRect(0, 0, 1080, 1920)
 
     ctx.textAlign = 'center'
-    ctx.fillStyle = '#00F5D4'
+    ctx.fillStyle = '#8AC53F'
     ctx.font = 'bold 36px monospace'
     ctx.fillText('PEC E-SUMMIT 2026', 540, 220)
 
@@ -532,7 +532,7 @@ export default function RegisterClient() {
     ctx.font = '900 84px sans-serif'
     ctx.fillText('OFFICIAL SUMMIT', 540, 320)
 
-    ctx.fillStyle = '#00F5D4'
+    ctx.fillStyle = '#8AC53F'
     ctx.font = '900 84px sans-serif'
     ctx.fillText('ENTRY PASS', 540, 410)
 
@@ -547,20 +547,20 @@ export default function RegisterClient() {
     ctx.fillStyle = '#0D1C18'
     ctx.fill()
     ctx.lineWidth = 2
-    ctx.strokeStyle = 'rgba(0, 245, 212, 0.35)'
+    ctx.strokeStyle = 'rgba(138, 197, 63, 0.35)'
     ctx.stroke()
     ctx.restore()
 
     const categoryText = currentBadge?.category || 'SUMMIT PASS'
-    ctx.fillStyle = 'rgba(0, 245, 212, 0.15)'
+    ctx.fillStyle = 'rgba(138, 197, 63, 0.15)'
     ctx.beginPath()
     ctx.rect(540 - 180, cardY + 60, 360, 60)
     ctx.fill()
-    ctx.strokeStyle = '#00F5D4'
+    ctx.strokeStyle = '#8AC53F'
     ctx.lineWidth = 1.5
     ctx.stroke()
 
-    ctx.fillStyle = '#00F5D4'
+    ctx.fillStyle = '#8AC53F'
     ctx.font = 'bold 26px monospace'
     ctx.fillText(categoryText.toUpperCase(), 540, cardY + 100)
 
@@ -587,7 +587,7 @@ export default function RegisterClient() {
 
     const finishAndDownload = () => {
       const ticketId = currentBadge?.id || 'PEC-000000'
-      ctx.fillStyle = '#00F5D4'
+      ctx.fillStyle = '#8AC53F'
       ctx.font = 'bold 32px monospace'
       ctx.fillText(ticketId, 540, cardY + 760)
 
@@ -595,7 +595,7 @@ export default function RegisterClient() {
       ctx.font = 'bold 28px sans-serif'
       ctx.fillText(`${summitDates.toUpperCase()}  •  PEC CHANDIGARH`, 540, cardY + 840)
 
-      ctx.fillStyle = '#00F5D4'
+      ctx.fillStyle = '#8AC53F'
       ctx.font = 'bold 32px sans-serif'
       ctx.fillText("I'M ATTENDING PEC E-SUMMIT '26!", 540, 1680)
 
@@ -635,11 +635,11 @@ export default function RegisterClient() {
   }
 
   return (
-    <main className="min-h-screen bg-[#060D0B] text-[#E2E8F0] flex flex-col justify-between selection:bg-mint/30 selection:text-white font-body antialiased">
+    <main className="min-h-screen bg-deep text-primary flex flex-col justify-between selection:bg-mint/30 selection:text-white font-body antialiased">
       <Toaster position="top-center" />
 
       {/* ── TOP HEADER / MINIMALIST NAVIGATION ── */}
-      <header className="w-full border-b border-white/[0.08] bg-[#081310]/90 backdrop-blur-md sticky top-0 z-40">
+      <header className="w-full border-b border-border-subtle bg-panel/90 backdrop-blur-md sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2">
           <Link
             href="/"
@@ -1244,7 +1244,7 @@ export default function RegisterClient() {
                 </div>
 
                 {/* ── STICKY COMPACT BOTTOM ACTION BAR ── */}
-                <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#081310]/95 backdrop-blur-md border-t border-white/10 py-3 shadow-2xl">
+                <div className="fixed bottom-0 left-0 right-0 z-40 bg-panel/95 backdrop-blur-md border-t border-border-panel py-3 shadow-2xl">
                   <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                       <div>

@@ -122,8 +122,8 @@ export function getPassStatusInfo(status?: string) {
     case 'MOU_ACCEPTED':
       return {
         label: 'MoU Accepted',
-        color: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
-        dot: 'bg-cyan-400',
+        color: 'text-blue bg-blue/10 border-blue/25',
+        dot: 'bg-blue',
         description: 'Your signed MoU has been verified by the organizing committee.',
         nextStep: 'Pass payment instructions have been sent to your email.',
       }
@@ -131,9 +131,9 @@ export function getPassStatusInfo(status?: string) {
       return {
         label: 'Pass Confirmed & Locked',
         color: 'text-mint bg-mint/15 border-mint/30',
-        dot: 'bg-mint shadow-[0_0_8px_#00F5D4]',
+        dot: 'bg-mint shadow-[0_0_8px_#8AC53F]',
         description: 'Pass payment confirmed! Your Founder passes and Conclave pitching slot are locked.',
-        nextStep: 'Present your Application Reference ID at the registration desk on March 19th at PEC.',
+        nextStep: 'Present your Application Reference ID at the registration desk on November 14th at PEC.',
       }
     case 'REJECTED':
       return {
@@ -179,8 +179,8 @@ function getTierColor(tier?: string, tierName?: string) {
   }
   if (t.includes('diamond')) {
     return {
-      badge: 'bg-cyan-400/10 text-cyan-400 border-cyan-400/25',
-      accent: 'text-cyan-400',
+      badge: 'bg-blue/15 text-blue border-blue/30',
+      accent: 'text-blue',
     }
   }
   return {
@@ -247,7 +247,7 @@ export default function ProfileClient() {
   })
 
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'MARCH 19 - 21'
+  const summitDates = data?.siteConfig?.summitDates || 'NOVEMBER 14–15'
 
   const fetchRegistrations = useCallback(async () => {
     try {
@@ -519,14 +519,14 @@ export default function ProfileClient() {
 
         {/* Navigation Tabs */}
         {!currentBadge && (
-          <div className="flex items-center gap-2 border-b border-white/10 pb-3.5 mb-6 overflow-x-auto">
+          <div className="flex items-center gap-2 border-b border-border-subtle pb-3.5 mb-6 overflow-x-auto">
             <button
               type="button"
               onClick={() => setActiveTab('passes')}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
                 activeTab === 'passes'
-                  ? 'bg-mint text-void shadow-[0_0_15px_rgba(0,242,178,0.3)]'
-                  : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
+                  ? 'bg-mint text-void shadow-md shadow-mint/25'
+                  : 'bg-panel-alt text-secondary border border-border-subtle hover:text-primary hover:bg-panel'
               }`}
             >
               <Ticket size={14} />
@@ -538,8 +538,8 @@ export default function ProfileClient() {
               onClick={() => setActiveTab('startup_passes')}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
                 activeTab === 'startup_passes'
-                  ? 'bg-mint text-void shadow-[0_0_15px_rgba(0,242,178,0.3)]'
-                  : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
+                  ? 'bg-mint text-void shadow-md shadow-mint/25'
+                  : 'bg-panel-alt text-secondary border border-border-subtle hover:text-primary hover:bg-panel'
               }`}
             >
               <Briefcase size={14} />
@@ -551,8 +551,8 @@ export default function ProfileClient() {
               onClick={() => setActiveTab('account')}
               className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
                 activeTab === 'account'
-                  ? 'bg-mint text-void shadow-[0_0_15px_rgba(0,242,178,0.3)]'
-                  : 'bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10'
+                  ? 'bg-mint text-void shadow-md shadow-mint/25'
+                  : 'bg-panel-alt text-secondary border border-border-subtle hover:text-primary hover:bg-panel'
               }`}
             >
               <Settings size={14} />
@@ -708,7 +708,7 @@ export default function ProfileClient() {
                     <div className="pt-2">
                       <Link
                         href="/passes"
-                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_rgba(0,242,178,0.25)] transition-all"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_var(--border-glow)] transition-all"
                       >
                         <span>Apply for Startup Pass</span>
                       </Link>
@@ -984,14 +984,14 @@ export default function ProfileClient() {
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                       <Link
                         href="/events"
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_rgba(0,242,178,0.25)] transition-all"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_var(--border-glow)] transition-all"
                       >
                         <span>Explore &amp; Register Events</span>
                       </Link>
                       <button
                         type="button"
                         onClick={() => setActiveTab('account')}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-border-subtle bg-panel-alt hover:bg-panel text-primary font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer"
                       >
                         <Settings size={13} />
                         <span>Edit Personal Details</span>

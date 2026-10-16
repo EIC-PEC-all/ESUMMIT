@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, Ticket, Download, User } from 'lucide-react'
 import Magnetic from '@/components/Common/Magnetic'
+import ThemeToggle from '@/components/Common/ThemeToggle'
 import { prefetchRegister } from '@/lib/prefetch'
 
 export interface NavHeaderProps {
@@ -33,16 +34,16 @@ export default function NavHeader({
       className={`fixed z-[2500] transition-all duration-300 ease-out 
         ${
           isSubPage
-            ? `top-[var(--announcement-height,0px)] left-0 w-full rounded-none border-b border-white/10 border-t-0 border-x-0 bg-[#060D08]/85 backdrop-blur-2xl shadow-xl ${
+            ? `nav-subpage-bar top-[var(--announcement-height,0px)] left-0 w-full rounded-none border-b border-border-panel border-t-0 border-x-0 bg-panel/90 backdrop-blur-2xl shadow-xl ${
                 menuOpen ? 'lg:pr-[380px]' : ''
               }`
-            : `top-[calc(var(--announcement-height,0px)+0.5rem)] left-1/2 w-[calc(100%-1rem)] max-w-7xl rounded-full sm:top-[calc(var(--announcement-height,0px)+0.85rem)] sm:w-[calc(100%-2rem)] bg-[#0F1D17]/90 border border-white/15 backdrop-blur-2xl shadow-2xl ${
+            : `nav-floating-pill top-[calc(var(--announcement-height,0px)+0.5rem)] left-1/2 w-[calc(100%-1rem)] max-w-7xl rounded-full sm:top-[calc(var(--announcement-height,0px)+0.85rem)] sm:w-[calc(100%-2rem)] bg-panel/90 border border-border-panel backdrop-blur-2xl shadow-xl ${
                 menuOpen
                   ? 'lg:w-[calc(100%-380px-3rem)] -translate-x-1/2 lg:-translate-x-[calc(50%+190px)]'
                   : 'lg:w-[calc(100%-3rem)] -translate-x-1/2'
               }`
         }
-        text-white
+        text-primary
         ${isModalOrLoaderOpen ? 'opacity-0 pointer-events-none' : ''}
         ${
           showHeader
@@ -59,14 +60,16 @@ export default function NavHeader({
           className="flex items-center shrink-0 group py-1"
           aria-label="PEC E-Summit '26 — Home"
         >
-          <Image
-            src="/esummit-logo.png"
-            alt="PEC E-Summit '26 Logo"
-            width={256}
-            height={50}
-            priority
-            className="h-5.5 sm:h-7.5 md:h-8 w-auto max-w-[150px] sm:max-w-[220px] md:max-w-[260px] object-contain drop-shadow-[0_0_12px_rgba(0,245,212,0.25)] group-hover:scale-[1.02] group-hover:brightness-110 transition-all duration-200"
-          />
+          <div className="nav-logo-badge flex items-center px-3 sm:px-3.5 py-1 rounded-full transition-all duration-200 dark:bg-transparent bg-[#061A12] border border-emerald-500/30 dark:border-transparent">
+            <Image
+              src="/esummit-logo.png"
+              alt="PEC E-Summit '26 Logo"
+              width={256}
+              height={50}
+              priority
+              className="h-5.5 sm:h-7.5 md:h-8 w-auto max-w-[150px] sm:max-w-[220px] md:max-w-[260px] object-contain group-hover:scale-[1.02] group-hover:brightness-110 transition-all duration-200"
+            />
+          </div>
         </Link>
 
         {/* Center: Push buttons to right */}
@@ -92,7 +95,7 @@ export default function NavHeader({
                 {isRegistered ? (
                   <Link
                     href="/profile"
-                    className="btn-mint-gradient min-h-[36px] sm:min-h-[44px] h-9 sm:h-11 box-border inline-flex items-center justify-center gap-1 sm:gap-1.5 px-3 sm:px-6 rounded-full font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider leading-none transition-all duration-200 text-void cursor-pointer shadow-lg hover:scale-105"
+                    className="btn-mint-gradient min-h-[36px] sm:min-h-[44px] h-9 sm:h-11 box-border inline-flex items-center justify-center gap-1 sm:gap-1.5 px-3 sm:px-6 rounded-full font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider leading-none transition-all duration-200 text-void cursor-pointer hover:scale-105"
                     id="nav-profile-btn"
                     aria-label="View My Profile and Passes"
                   >
@@ -116,6 +119,11 @@ export default function NavHeader({
               </Magnetic>
             </>
           )}
+
+          {/* Theme Toggle */}
+          <Magnetic strength={0.3}>
+            <ThemeToggle variant="icon" />
+          </Magnetic>
 
           {/* Hamburger Trigger Button */}
           <Magnetic strength={0.3}>

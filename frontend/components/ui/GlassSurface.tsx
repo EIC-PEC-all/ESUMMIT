@@ -42,7 +42,7 @@ export default function GlassSurface({
   refraction = true,
   renderer = 'svg',
   shape,
-  borderColor = 'rgba(0, 245, 212, 0.25)',
+  borderColor = 'var(--border-glow)',
   className = '',
   style = {},
   children,
@@ -74,7 +74,8 @@ export default function GlassSurface({
         WebkitBackdropFilter: `blur(${blur}px) saturate(${saturation * 100}%) brightness(${brightness}%)`,
         opacity: opacity,
         boxShadow:
-          '0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4)',
+          (style as any)?.boxShadow ||
+          'var(--glass-shadow, 0 8px 24px 0 rgba(0, 0, 0, 0.25))',
         ...style,
       }}
       {...rest}

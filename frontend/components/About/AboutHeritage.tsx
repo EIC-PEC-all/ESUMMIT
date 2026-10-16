@@ -11,20 +11,20 @@ export default function AboutHeritage() {
           FOUNDED 1921 · CHANDIGARH
         </p>
         <h3
-          className="font-display font-black uppercase tracking-wider text-white mt-2 mb-2"
+          className="font-display font-black uppercase tracking-wider text-primary mt-2 mb-2"
           style={{ fontSize: 'clamp(1.35rem, 2.8vw, 2.25rem)' }}
         >
           PUNJAB ENGINEERING COLLEGE <span className="text-gradient-mint">HERITAGE</span>
         </h3>
-        <p className="font-body text-xs sm:text-sm text-gray-400 max-w-xl mx-auto leading-relaxed">
+        <p className="font-body text-xs sm:text-sm text-secondary max-w-xl mx-auto leading-relaxed">
           Over a century of producing pioneers in aerospace, manufacturing, technology, and venture creation.
         </p>
       </div>
 
       {/* Themed Timeline Infographic Container */}
-      <div className="relative rounded-2xl bg-[#0D1C18] border border-white/10 hover:border-mint/30 transition-all duration-300 p-4 sm:p-6 md:p-8 overflow-hidden shadow-2xl group">
+      <div className="relative rounded-2xl bg-panel border border-border-panel hover:border-mint/30 transition-all duration-300 p-4 sm:p-6 md:p-8 overflow-hidden shadow-2xl group">
         <div
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(0,245,212,0.06)_0%,_transparent_70%)] pointer-events-none"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--accent-green-dim)_0%,_transparent_70%)] pointer-events-none"
           aria-hidden="true"
         />
 

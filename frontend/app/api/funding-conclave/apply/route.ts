@@ -2,9 +2,52 @@ import { NextRequest, NextResponse } from 'next/server'
 import { randomBytes } from 'crypto'
 import fs from 'fs/promises'
 import path from 'path'
+import { MongoClient } from 'mongodb'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
+
+const MONGO_URI =
+  process.env.MONGODB_URI ||
+  process.env.DATABASE_URL ||
+  process.env.RESPONSE_MANAGER_DATABASE_URL ||
+  'mongodb+srv://ananay:peYyvZH5S1KSTzD5@cluster0.7gpudbl.mongodb.net/esummit?retryWrites=true&w=majority&appName=Cluster0'
+
+let cachedClient: MongoClient | null = null
+
+async function getMongoCollection() {
+  try {
+    if (!cachedClient) {
+      cachedClient = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 5000 })
+      await cachedClient.connect()
+    }
+    return cachedClient.db('esummit').collection('funding_conclave_applications')
+  } catch (err) {
+    console.warn('[Funding Conclave API] MongoDB direct connect notice:', err)
+    return null
+  }
+}
+
+function getCandidatePaths(): string[] {
+  return [
+    path.join(process.cwd(), 'data/funding-conclave-applications.json'),
+    path.join(process.cwd(), 'frontend/data/funding-conclave-applications.json'),
+    path.join(process.cwd(), '../frontend/data/funding-conclave-applications.json'),
+  ]
+}
+
+async function resolveStoragePath(): Promise<string> {
+  const candidates = getCandidatePaths()
+  for (const candidate of candidates) {
+    try {
+      await fs.access(candidate)
+      return candidate
+    } catch {
+      // continue
+    }
+  }
+  return candidates[0]
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,74 +59,64 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Required fields validation
-    const requiredFields = [
-      'email',
-      'founderName',
-      'phone',
-      'founderLinkedIn',
-      'startupName',
-      'stage',
-      'sector',
-      'revenueStage',
-      'totalFundingRaised',
-      'currentAsk',
-      'pitchDeckUrl',
-      'mouComfortable',
-    ]
-
-    for (const field of requiredFields) {
-      if (!body[field] || String(body[field]).trim() === '') {
-        return NextResponse.json(
-          { success: false, error: `Missing required field: ${field}` },
-          { status: 400 }
-        )
-      }
-    }
-
-    // Strict Field Validations
-    const email = String(body.email).trim().toLowerCase()
+    const email = String(body.email || '').trim().toLowerCase()
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    if (!emailRegex.test(email)) {
+    if (!email || !emailRegex.test(email)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid email address format' },
+        { success: false, error: 'A valid email address is required' },
         { status: 400 }
       )
     }
 
-    const phone = String(body.phone).trim()
+    const founderName = String(body.fullName || body.founderName || '').trim()
+    if (!founderName) {
+      return NextResponse.json(
+        { success: false, error: 'Full Name is required' },
+        { status: 400 }
+      )
+    }
+
+    const phone = String(body.phone || '').trim()
     const cleanDigits = phone.replace(/\D/g, '')
     if (cleanDigits.length < 10) {
       return NextResponse.json(
-        { success: false, error: 'Mobile / WhatsApp number must be at least 10 digits' },
+        { success: false, error: 'Phone number must be at least 10 digits' },
         { status: 400 }
       )
     }
 
-    const founderLinkedIn = String(body.founderLinkedIn).trim()
-    if (!founderLinkedIn.startsWith('http://') && !founderLinkedIn.startsWith('https://')) {
+    const linkedin = String(body.linkedin || body.founderLinkedIn || '').trim()
+    if (!linkedin) {
       return NextResponse.json(
-        { success: false, error: 'Founder LinkedIn profile must start with http:// or https://' },
+        { success: false, error: 'LinkedIn profile is required' },
         { status: 400 }
       )
     }
 
-    const pitchDeckUrl = String(body.pitchDeckUrl).trim()
-    if (!pitchDeckUrl.startsWith('http://') && !pitchDeckUrl.startsWith('https://')) {
-      return NextResponse.json(
-        { success: false, error: 'Pitch deck link must be a valid public URL starting with http:// or https://' },
-        { status: 400 }
-      )
-    }
+    const motive = String(body.motive || 'Showcase & Networking').trim()
+    const role = String(body.role || 'Founder').trim()
+    const organization = String(body.organization || body.startupName || `${founderName}'s Venture`).trim()
 
-    // Pass details (defaults to Gold Pass if not explicitly specified)
-    const passTier = body.passTier ? String(body.passTier).trim().toLowerCase() : 'gold'
-    const passTierName = body.passTierName ? String(body.passTierName).trim() : 'GOLD PASS'
-    const passPrice = body.passPrice ? String(body.passPrice).trim() : '₹3,500'
+    // Pass details
+    const rawTier = String(body.passTier || 'gold').trim().toLowerCase()
+    const passTier = rawTier === 'diamond' || rawTier === 'silver' ? rawTier : 'gold'
+    const tierNames: Record<string, string> = {
+      diamond: 'DIAMOND PASS',
+      gold: 'GOLD PASS',
+      silver: 'SILVER PASS',
+    }
+    const tierPrices: Record<string, string> = {
+      diamond: '₹8,000 + GST',
+      gold: '₹3,500 + GST',
+      silver: '₹1,000 + GST',
+    }
+    const passTierName = body.passTierName ? String(body.passTierName).trim() : tierNames[passTier]
+    const passPrice = body.passPrice ? String(body.passPrice).trim() : tierPrices[passTier]
 
     // Generate unique application ID
     const randomHex = randomBytes(3).toString('hex').toUpperCase()
     const applicationId = `PEC-FC-${randomHex}`
+    const now = new Date().toISOString()
 
     const applicationRecord = {
       applicationId,
@@ -91,31 +124,41 @@ export async function POST(req: NextRequest) {
       passTierName,
       passPrice,
       email,
-      founderName: String(body.founderName).trim(),
+      founderName,
       phone,
-      founderLinkedIn,
-      startupName: String(body.startupName).trim(),
-      websiteUrl: body.websiteUrl ? String(body.websiteUrl).trim() : '',
-      dpiitNumber: body.dpiitNumber ? String(body.dpiitNumber).trim() : '',
-      stage: String(body.stage).trim(),
-      sector: String(body.sector).trim(),
-      revenueStage: String(body.revenueStage).trim(),
-      totalFundingRaised: String(body.totalFundingRaised).trim(),
-      currentAsk: String(body.currentAsk).trim(),
-      preMoneyValuation: body.preMoneyValuation ? String(body.preMoneyValuation).trim() : '',
-      committedCapital: body.committedCapital ? String(body.committedCapital).trim() : '',
-      pitchDeckUrl,
-      demoVideoUrl: body.demoVideoUrl ? String(body.demoVideoUrl).trim() : '',
-      mouComfortable: String(body.mouComfortable).trim(),
+      founderLinkedIn: linkedin.startsWith('http') ? linkedin : `https://linkedin.com/in/${linkedin.replace(/^@/, '')}`,
+      startupName: organization,
+      organization,
+      motive,
+      role,
+      stage: String(body.stage || 'Early Stage').trim(),
+      sector: String(body.sector || 'Technology / General').trim(),
+      revenueStage: String(body.revenueStage || 'Pre-revenue').trim(),
+      totalFundingRaised: String(body.totalFundingRaised || '0').trim(),
+      currentAsk: String(body.currentAsk || 'N/A').trim(),
+      pitchDeckUrl: String(body.pitchDeckUrl || '').trim(),
+      mouComfortable: String(body.mouComfortable || 'Yes, comfortable with MoU process').trim(),
       status: 'PENDING_REVIEW',
       reviewNotes: '',
       internalRating: 0,
       paymentMethod: 'OFFLINE_MOU_DIRECT_TRANSFER',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: now,
+      updatedAt: now,
     }
 
-    // 1. Sync registration to backend NestJS API if available
+    // 1. Save directly to MongoDB Atlas
+    let dbSaved = false
+    try {
+      const collection = await getMongoCollection()
+      if (collection) {
+        await collection.insertOne(applicationRecord)
+        dbSaved = true
+      }
+    } catch (dbErr) {
+      console.warn('[Funding Conclave API] MongoDB save notice:', dbErr)
+    }
+
+    // 2. Sync registration to backend NestJS API if available
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
     try {
       await fetch(`${apiUrl}/registrations/create`, {
@@ -123,35 +166,28 @@ export async function POST(req: NextRequest) {
         headers: { 'Content-Type': 'application/json' },
         signal: AbortSignal.timeout(3000),
         body: JSON.stringify({
-          name: String(body.founderName).trim(),
+          name: founderName,
           email,
           phone,
-          college: String(body.startupName).trim(),
+          college: organization,
           passType: 'FOUNDER_PITCH',
           tracks: [
-            `Startup: ${String(body.startupName).trim()}`,
+            `Startup: ${organization}`,
             `Package: ${passTierName} (${passTier.toUpperCase()})`,
-            `Stage: ${String(body.stage).trim()}`,
-            `Sector: ${String(body.sector).trim()}`,
-            `Revenue: ${String(body.revenueStage).trim()}`,
-            `Funding Raised: ${String(body.totalFundingRaised).trim()}`,
-            `Current Ask: ${String(body.currentAsk).trim()}`,
-            `Deck: ${pitchDeckUrl}`,
-            `MoU Comfort: ${String(body.mouComfortable).trim()}`,
-            body.websiteUrl ? `Website: ${String(body.websiteUrl).trim()}` : '',
-            founderLinkedIn ? `LinkedIn: ${founderLinkedIn}` : '',
+            `Role: ${role}`,
+            `Motive: ${motive}`,
+            `LinkedIn: ${linkedin}`,
           ].filter(Boolean),
         }),
       })
     } catch (backendErr) {
-      console.warn('[Funding Conclave API] Backend sync warning:', backendErr)
+      console.warn('[Funding Conclave API] Backend sync notice:', backendErr)
     }
 
-    // 2. Persist full startup application data locally
+    // 3. Persist to fallback JSON file
     try {
-      const dataDir = path.join(process.cwd(), 'data')
-      await fs.mkdir(dataDir, { recursive: true })
-      const filePath = path.join(dataDir, 'funding-conclave-applications.json')
+      const filePath = await resolveStoragePath()
+      await fs.mkdir(path.dirname(filePath), { recursive: true })
       let existing: any[] = []
       try {
         const raw = await fs.readFile(filePath, 'utf-8')
@@ -170,7 +206,8 @@ export async function POST(req: NextRequest) {
       success: true,
       applicationId,
       passTierName,
-      message: 'Application submitted successfully! We will contact you ASAP for further processing.',
+      dbSaved,
+      message: 'Application submitted successfully! Our team will review your details and send an MoU.',
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown server error'
@@ -187,14 +224,28 @@ export async function GET(req: NextRequest) {
     const email = searchParams.get('email')?.trim().toLowerCase()
     const userId = searchParams.get('userId')?.trim()
 
-    if (!email && !userId) {
-      return NextResponse.json(
-        { success: false, error: 'Email or userId query parameter is required' },
-        { status: 400 }
-      )
+    // 1. Try MongoDB first
+    try {
+      const collection = await getMongoCollection()
+      if (collection) {
+        const query: Record<string, any> = {}
+        if (email) query.email = email
+        if (userId) query.userId = userId
+
+        const fromDb = await collection.find(query).sort({ createdAt: -1 }).toArray()
+        if (fromDb.length > 0 || (!email && !userId)) {
+          return NextResponse.json({
+            success: true,
+            applications: fromDb,
+          })
+        }
+      }
+    } catch (dbErr) {
+      console.warn('[Funding Conclave API] MongoDB GET fallback:', dbErr)
     }
 
-    const filePath = path.join(process.cwd(), 'data', 'funding-conclave-applications.json')
+    // 2. Fallback to local file
+    const filePath = await resolveStoragePath()
     let allApplications: any[] = []
     try {
       const raw = await fs.readFile(filePath, 'utf-8')
@@ -212,7 +263,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      applications: matched,
+      applications: email || userId ? matched : allApplications,
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown server error'

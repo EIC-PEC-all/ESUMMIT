@@ -166,10 +166,10 @@ export default function ChevronRouteTransition({ children }: { children: React.R
             style={{
               willChange: 'transform',
               background: `linear-gradient(to bottom, 
-                #00F5D4 0%, #00F5D4 20%, 
-                #00DFBA 20%, #00DFBA 40%, 
-                #3DD9FF 40%, #3DD9FF 60%, 
-                #0D1C18 60%, #0D1C18 80%, 
+                #A8EE4A 0%, #A8EE4A 20%, 
+                #8AC53F 20%, #8AC53F 40%, 
+                #7BB832 40%, #7BB832 60%, 
+                #4341A8 60%, #4341A8 80%, 
                 #060D0B 80%, #060D0B 100%
               )`,
             }}

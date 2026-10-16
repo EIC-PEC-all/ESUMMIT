@@ -144,7 +144,7 @@ export default function PecLeafletMap({
                     width: 44px;
                     height: 44px;
                     border-radius: 50%;
-                    background: #00F5D4;
+                    background: #8AC53F;
                     opacity: 0.3;
                     animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
                   "></div>`
@@ -153,12 +153,12 @@ export default function PecLeafletMap({
             <div style="
               width: ${isSelected ? '34px' : '26px'};
               height: ${isSelected ? '34px' : '26px'};
-              background: ${isSelected ? '#00F5D4' : '#0A110E'};
-              border: 1.5px solid ${isSelected ? '#ffffff' : '#00F5D4'};
+              background: ${isSelected ? '#8AC53F' : '#0A110E'};
+              border: 1.5px solid ${isSelected ? '#ffffff' : '#8AC53F'};
               display: flex;
               align-items: center;
               justify-content: center;
-              color: ${isSelected ? '#0A110E' : '#00F5D4'};
+              color: ${isSelected ? '#0A110E' : '#8AC53F'};
               font-weight: bold;
               transition: all 0.3s ease;
               box-shadow: 0 4px 12px rgba(0,0,0,0.6);
@@ -175,9 +175,9 @@ export default function PecLeafletMap({
 
       marker.bindPopup(`
         <div style="padding: 12px 14px; font-family: 'JetBrains Mono', monospace; background: #0A110E; color: #ffffff;">
-          <h4 style="margin: 0 0 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #00F5D4; letter-spacing: 0.05em;">${venue.name}</h4>
+          <h4 style="margin: 0 0 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; color: #8AC53F; letter-spacing: 0.05em;">${venue.name}</h4>
           <p style="margin: 0 0 6px; font-size: 10px; color: #94A3B8; text-transform: uppercase;">${venue.building}</p>
-          <div style="font-size: 9px; color: #00F5D4; opacity: 0.8; font-family: monospace;">(${venue.lat.toFixed(5)}, ${venue.lng.toFixed(5)})</div>
+          <div style="font-size: 9px; color: #8AC53F; opacity: 0.8; font-family: monospace;">(${venue.lat.toFixed(5)}, ${venue.lng.toFixed(5)})</div>
         </div>
       `)
 

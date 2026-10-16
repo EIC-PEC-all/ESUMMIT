@@ -18,13 +18,13 @@ export default function EventsNavigation() {
       className="esummit-section rounded-t-[40px] sm:rounded-t-[50px] md:rounded-t-[60px]
         -mt-10 sm:-mt-12 md:-mt-14 z-10 relative
         px-5 sm:px-8 md:px-10 py-20 sm:py-24 md:py-32"
-      style={{ background: '#060D0B', fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif" }}
+      style={{ background: 'var(--bg-section-1)', fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif" }}
       aria-labelledby="events-navigation-heading"
     >
       {/* Green top divider */}
       <div
         className="absolute top-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(0,245,212,0.5) 50%, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, var(--border-glow) 50%, transparent)' }}
       />
 
       <h2

@@ -18,6 +18,8 @@
     "lint": "npm --prefix frontend run lint",
     "docker:dev": "docker compose -f docker-compose.dev.yml up",
     "docker:dev:down": "docker compose -f docker-compose.dev.yml down"
+  },
+  "devDependencies": {
+    "mongodb": "^7.7.0"
   }
 }
-

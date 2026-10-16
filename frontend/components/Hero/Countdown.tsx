@@ -39,20 +39,20 @@ function calculateTimeLeft(target: Date): TimeLeft {
 function DigitBlock({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col items-center group">
-      {/* Number container with futuristic dark glass card */}
-      <div className="relative bg-[#07130F]/90 border border-mint/35 rounded-2xl px-3.5 sm:px-5 py-2.5 sm:py-3.5 flex items-center justify-center min-w-[62px] sm:min-w-[84px] lg:min-w-[96px] tabular-nums backdrop-blur-xl group-hover:border-mint transition-colors overflow-hidden">
+      {/* Number container with futuristic glass card */}
+      <div className="relative dark:bg-[#07130F]/90 bg-white/95 border dark:border-mint/35 border-emerald-500/30 rounded-2xl px-3.5 sm:px-5 py-2.5 sm:py-3.5 flex items-center justify-center min-w-[62px] sm:min-w-[84px] lg:min-w-[96px] tabular-nums backdrop-blur-xl group-hover:border-mint transition-colors overflow-hidden shadow-sm">
         {/* Top Gloss Line */}
         <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-mint/40 via-mint to-mint/40" />
         
         <span
-          className="font-mono-data text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-none tracking-normal"
+          className="font-mono-data text-2xl sm:text-4xl lg:text-5xl font-black dark:text-white text-slate-900 leading-none tracking-normal"
           suppressHydrationWarning
         >
           {value}
         </span>
       </div>
       {/* Label */}
-      <span className="font-mono-data text-[9px] sm:text-[11px] font-extrabold uppercase tracking-[0.2em] mt-2 text-mint">
+      <span className="font-mono-data text-[9px] sm:text-[11px] font-extrabold uppercase tracking-[0.2em] mt-2 dark:text-mint text-emerald-800">
         {label}
       </span>
     </div>
@@ -89,12 +89,11 @@ export default function Countdown({
     <div className="flex flex-col items-center gap-3">
       {/* Small label above countdown */}
       {!hideHeader && (
-        <div className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] text-mint flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full bg-mint animate-ping" />
+        <div className="font-mono-data text-xs font-bold uppercase tracking-[0.2em] dark:text-mint text-emerald-800 flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full dark:bg-mint bg-emerald-500 animate-ping" />
           <span>COUNTDOWN TO OPENING BELL</span>
         </div>
       )}
-
 
       {/* Countdown timer: four blocks separated by ":" */}
       <div
@@ -104,15 +103,15 @@ export default function Countdown({
         suppressHydrationWarning
       >
         <DigitBlock value={timeLeft.days} label="DAYS" />
-        <span className="font-mono-data text-xl sm:text-3xl lg:text-4xl font-bold text-mint pb-6 select-none animate-pulse">
+        <span className="font-mono-data text-xl sm:text-3xl lg:text-4xl font-bold dark:text-mint text-emerald-600 pb-6 select-none animate-pulse">
           :
         </span>
         <DigitBlock value={timeLeft.hours} label="HOURS" />
-        <span className="font-mono-data text-xl sm:text-3xl lg:text-4xl font-bold text-mint pb-6 select-none animate-pulse">
+        <span className="font-mono-data text-xl sm:text-3xl lg:text-4xl font-bold dark:text-mint text-emerald-600 pb-6 select-none animate-pulse">
           :
         </span>
         <DigitBlock value={timeLeft.minutes} label="MIN" />
-        <span className="font-mono-data text-xl sm:text-3xl lg:text-4xl font-bold text-mint pb-6 select-none animate-pulse">
+        <span className="font-mono-data text-xl sm:text-3xl lg:text-4xl font-bold dark:text-mint text-emerald-600 pb-6 select-none animate-pulse">
           :
         </span>
         <DigitBlock value={timeLeft.seconds} label="SEC" />

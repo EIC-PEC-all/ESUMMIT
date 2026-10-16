@@ -33,12 +33,12 @@ export default function SponsorMarqueeBar({
 
   return (
     <div
-      className={`fixed left-0 right-0 fixed-marquee z-[4000] bg-section-1 [.light_&]:bg-[#2A3B18] text-white backdrop-blur-md py-2.5 shadow-2xl transition-all duration-500 ease-out ${
+      className={`fixed left-0 right-0 fixed-marquee z-[4000] dark:bg-[#060D0B]/95 bg-white/95 text-primary backdrop-blur-md py-2.5 shadow-md transition-all duration-500 ease-out ${
         isTop
-          ? `top-0 border-b border-mint/20 [.light_&]:border-[#4E6527]/50 ${
+          ? `top-0 border-b dark:border-mint/20 border-emerald-500/20 ${
               visible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
             }`
-          : `bottom-0 border-t border-mint/20 [.light_&]:border-[#4E6527]/50 pb-[max(0.6rem,env(safe-area-inset-bottom))] ${
+          : `bottom-0 border-t dark:border-mint/20 border-emerald-500/20 pb-[max(0.6rem,env(safe-area-inset-bottom))] ${
               visible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
             }`
       }`}
@@ -46,7 +46,7 @@ export default function SponsorMarqueeBar({
       <div
         className={`${
           isTop ? 'hidden sm:flex' : 'flex'
-        } absolute left-0 top-0 bottom-0 z-20 items-center bg-[#132620] [.light_&]:bg-[#1A2510] pl-4 pr-3 border-r border-mint/30 [.light_&]:border-[#4E6527]/40 shadow-[4px_0_15px_rgba(0,0,0,0.4)] shrink-0 select-none`}
+        } absolute left-0 top-0 bottom-0 z-20 items-center dark:bg-[#07130F] bg-slate-50 pl-4 pr-3 border-r dark:border-mint/30 border-emerald-500/20 shadow-sm shrink-0 select-none`}
       >
         <NavCountdown targetISO={countdownTarget} />
       </div>
@@ -74,7 +74,7 @@ export default function SponsorMarqueeBar({
             key={`${position}-${item.id}-${i}`}
             className="inline-flex items-center gap-2 mx-4 font-mono-data text-[10px] sm:text-xs shrink-0"
           >
-            <span className="text-mint [.light_&]:text-[#A0C868] font-bold">•</span>
+            <span className="dark:text-mint text-emerald-600 font-bold">•</span>
             {item.logo && (
               <span className="relative w-4 h-4 shrink-0 flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}

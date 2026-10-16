@@ -36,7 +36,7 @@ export async function GET() {
       return `"${stringValue}"`
     }
 
-    const rows = apps.map((app) => [
+    const rows = apps.map((app: any) => [
       escapeCsv(app.applicationId),
       escapeCsv(app.startupName),
       escapeCsv(app.founderName),
@@ -59,7 +59,7 @@ export async function GET() {
       escapeCsv(app.createdAt),
     ])
 
-    const csvContent = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n')
+    const csvContent = [headers.join(','), ...rows.map((row: string[]) => row.join(','))].join('\n')
 
     return new NextResponse(csvContent, {
       status: 200,

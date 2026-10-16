@@ -64,7 +64,7 @@ export default function Concierge() {
   // Live countdown timer calculation for E-Summit (active only on landing page)
   useEffect(() => {
     if (!isLandingPage) return
-    const target = new Date('2026-03-19T09:00:00+05:30')
+    const target = new Date('2026-11-14T09:00:00+05:30')
 
     const checkState = () => {
       const curNow = Date.now()
@@ -269,7 +269,7 @@ export default function Concierge() {
           isHidden ? 'opacity-0 scale-75 pointer-events-none translate-y-4' : 'opacity-100 scale-100 pointer-events-auto translate-y-0'
         }`}
       >
-        <div className="relative flex items-center p-1 sm:p-1.5 rounded-full bg-[#061510]/95 backdrop-blur-2xl border border-mint/40 shadow-[0_12px_40px_rgba(0,0,0,0.6)] group">
+        <div className="relative flex items-center p-1 sm:p-1.5 rounded-full bg-panel/95 backdrop-blur-2xl border border-mint/40 shadow-[0_12px_40px_rgba(0,0,0,0.3)] group">
           {/* Collapsible Left Countdown Pill (expanded in desktop at top of page, ONLY on landing page) */}
           <AnimatePresence>
             {!isScrolled && !open && isLandingPage && (
@@ -283,17 +283,17 @@ export default function Concierge() {
               >
                 {/* Live or Starts Indicator */}
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="w-2 h-2 rounded-full bg-mint animate-pulse" />
-                  <span className="text-[9px] font-mono-data font-bold text-mint uppercase tracking-widest">
+                  <span className="w-2 h-2 rounded-full dark:bg-mint bg-emerald-500 animate-pulse" />
+                  <span className="text-[9px] font-mono-data font-bold dark:text-mint text-emerald-800 uppercase tracking-widest">
                     {isLive ? 'LIVE' : 'STARTS'}
                   </span>
                 </div>
 
-                <div className="w-px h-3.5 bg-mint/25 shrink-0" />
+                <div className="w-px h-3.5 dark:bg-mint/25 bg-emerald-300 shrink-0" />
 
                 {/* Countdown values */}
                 {isLive ? (
-                  <span className="text-[11px] font-mono-data font-black text-mint tracking-wider shrink-0">
+                  <span className="text-[11px] font-mono-data font-black dark:text-mint text-emerald-800 tracking-wider shrink-0">
                     SUMMIT LIVE NOW
                   </span>
                 ) : (
@@ -306,28 +306,28 @@ export default function Concierge() {
                     className="flex items-center gap-1.5 font-mono-data tabular-nums shrink-0 cursor-pointer hover:opacity-85 transition-opacity"
                   >
                     <div className="flex items-baseline gap-0.5">
-                      <span className="text-xs sm:text-sm font-black text-white">{timeLeft.days}</span>
-                      <span className="text-[8px] font-bold text-mint/90 uppercase">d</span>
+                      <span className="text-xs sm:text-sm font-black dark:text-white text-slate-900">{timeLeft.days}</span>
+                      <span className="text-[8px] font-extrabold dark:text-mint/90 text-emerald-700 uppercase">d</span>
                     </div>
-                    <span className="text-mint/40 text-[9px] font-bold">:</span>
+                    <span className="dark:text-mint/40 text-emerald-600 text-[9px] font-black">:</span>
                     <div className="flex items-baseline gap-0.5">
-                      <span className="text-xs sm:text-sm font-black text-white">{timeLeft.hours}</span>
-                      <span className="text-[8px] font-bold text-mint/90 uppercase">h</span>
+                      <span className="text-xs sm:text-sm font-black dark:text-white text-slate-900">{timeLeft.hours}</span>
+                      <span className="text-[8px] font-extrabold dark:text-mint/90 text-emerald-700 uppercase">h</span>
                     </div>
-                    <span className="text-mint/40 text-[9px] font-bold">:</span>
+                    <span className="dark:text-mint/40 text-emerald-600 text-[9px] font-black">:</span>
                     <div className="flex items-baseline gap-0.5">
-                      <span className="text-xs sm:text-sm font-black text-white">{timeLeft.minutes}</span>
-                      <span className="text-[8px] font-bold text-mint/90 uppercase">m</span>
+                      <span className="text-xs sm:text-sm font-black dark:text-white text-slate-900">{timeLeft.minutes}</span>
+                      <span className="text-[8px] font-extrabold dark:text-mint/90 text-emerald-700 uppercase">m</span>
                     </div>
-                    <span className="text-mint/40 text-[9px] font-bold">:</span>
+                    <span className="dark:text-mint/40 text-emerald-600 text-[9px] font-black">:</span>
                     <div className="flex items-baseline gap-0.5">
-                      <span className="text-xs sm:text-sm font-black text-mint">{timeLeft.seconds}</span>
-                      <span className="text-[8px] font-bold text-mint uppercase">s</span>
+                      <span className="text-xs sm:text-sm font-black dark:text-mint text-emerald-800">{timeLeft.seconds}</span>
+                      <span className="text-[8px] font-extrabold dark:text-mint text-emerald-800 uppercase">s</span>
                     </div>
                   </div>
                 )}
 
-                <div className="w-px h-4 bg-mint/25 shrink-0 mx-1" />
+                <div className="w-px h-4 dark:bg-mint/25 bg-emerald-300 shrink-0 mx-1" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -336,7 +336,13 @@ export default function Concierge() {
           <button
             onClick={() => setOpen(!open)}
             aria-label="Open Summit AI Assistant"
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-mint text-void flex items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(0,245,212,0.3)] border border-mint/40 relative"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full text-void flex items-center justify-center cursor-pointer transition-all duration-200 hover:scale-105 active:scale-95 relative"
+            style={{
+              background: 'linear-gradient(180deg, #E2FFA8 0%, #B6F554 18%, #8AC53F 65%, #76B32D 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.45)',
+              boxShadow:
+                'inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 16px rgba(138, 197, 63, 0.35)',
+            }}
           >
             <Bot size={22} strokeWidth={2.2} />
             {!open && (
@@ -353,7 +359,7 @@ export default function Concierge() {
             role="dialog"
             aria-modal="true"
             aria-label="E-Summit PEC AI Assistant"
-            className="fixed z-[10000] flex flex-col shadow-2xl bg-gradient-to-b from-[#0D2218]/95 via-[#081710]/95 to-[#040A07]/95 backdrop-blur-2xl overflow-hidden
+            className="fixed z-[10000] flex flex-col shadow-2xl bg-panel/95 text-primary backdrop-blur-2xl overflow-hidden
                        inset-0 rounded-none border-0
                        sm:top-auto sm:left-auto sm:bottom-[108px] sm:right-6 sm:w-[360px] sm:h-[min(480px,72vh)] sm:rounded-2xl sm:border sm:border-mint/30"
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -369,7 +375,7 @@ export default function Concierge() {
                   <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-mint" />
                 </div>
                 <div>
-                  <p className="font-display font-bold text-sm text-white flex items-center gap-1.5">
+                  <p className="font-display font-bold text-sm text-primary flex items-center gap-1.5">
                     E-Summit PEC Assistant
                   </p>
                   <p className="font-mono-data text-[10px] text-mint font-semibold flex items-center gap-1">
@@ -418,7 +424,7 @@ export default function Concierge() {
                       className={`max-w-[82%] px-4 py-3 rounded-2xl leading-relaxed text-xs sm:text-sm ${
                         msg.role === 'user'
                           ? 'bg-mint/15 text-mint border border-mint/30 rounded-br-none'
-                          : 'bg-white/[0.06] border border-white/10 text-white rounded-bl-none'
+                          : 'bg-panel-alt border border-border-subtle text-primary rounded-bl-none'
                       }`}
                     >
                       <FormattedText text={msg.content} />
@@ -427,7 +433,7 @@ export default function Concierge() {
 
                   {/* Render Inline Itinerary Card */}
                   {msg.itinerary && (
-                    <div className="mt-3 ml-8 w-[88%] rounded-2xl p-4 bg-white/[0.04] border border-white/10 space-y-3">
+                    <div className="mt-3 ml-8 w-[88%] rounded-2xl p-4 bg-panel-alt border border-border-subtle space-y-3">
                       <div className="flex items-center gap-2 text-xs font-mono-data text-mint uppercase font-bold">
                         <Calendar size={14} />
                         <span>{msg.itinerary.title}</span>
@@ -438,13 +444,13 @@ export default function Concierge() {
                           return (
                             <div
                               key={session.id}
-                              className="p-3 rounded-xl bg-black/40 border border-white/15 flex items-center justify-between gap-2"
+                              className="p-3 rounded-xl bg-panel border border-border-subtle flex items-center justify-between gap-2"
                             >
                               <div className="flex-1 min-w-0">
                                 <p className="font-mono-data text-[10px] text-mint font-bold">
                                   {session.day} • {session.time}
                                 </p>
-                                <p className="font-body text-xs font-bold text-white truncate">{session.title}</p>
+                                <p className="font-body text-xs font-bold text-primary truncate">{session.title}</p>
                               </div>
                               <button
                                 onClick={() => addToPlan(session as ItinerarySession)}
@@ -470,13 +476,13 @@ export default function Concierge() {
             </div>
 
             {/* Input Form Container */}
-            <div className="p-3 bg-white/5 border-t border-white/10 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="p-3 bg-panel border-t border-border-subtle pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               <form
                 onSubmit={(e) => {
                   e.preventDefault()
                   handleSend(input)
                 }}
-                className="flex items-center gap-2 bg-black/40 border border-white/20 focus-within:border-mint rounded-2xl p-1.5 transition-all"
+                className="flex items-center gap-2 bg-panel-alt border border-border-subtle focus-within:border-mint rounded-2xl p-1.5 transition-all"
               >
                 <input
                   ref={inputRef}
@@ -484,7 +490,7 @@ export default function Concierge() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ask about E-Summit schedule, tracks, speakers..."
-                  className="flex-1 bg-transparent px-3 py-1.5 text-base sm:text-sm text-white placeholder:text-gray-400 outline-none font-body"
+                  className="flex-1 bg-transparent px-3 py-1.5 text-base sm:text-sm text-primary placeholder:text-muted outline-none font-body"
                 />
                 <button
                   type="submit"
@@ -503,7 +509,7 @@ export default function Concierge() {
       {/* Persistent "My Plan" Itinerary Modal */}
       <AnimatePresence>
         {planOpen && (
-          <div className="fixed inset-0 z-[12000] flex items-center justify-center bg-black/40 backdrop-blur-md p-4 sm:p-6">
+          <div className="fixed inset-0 z-[12000] flex items-center justify-center bg-black/50 backdrop-blur-md p-4 sm:p-6">
             <motion.div
               role="dialog"
               aria-modal="true"
@@ -512,16 +518,16 @@ export default function Concierge() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-lg bg-gradient-to-b from-[#0C1A14] via-[#07120E] to-[#040A08] border border-mint/35 rounded-3xl flex flex-col p-6 shadow-[0_0_100px_rgba(0,0,0,0.95),inset_0_1px_1px_rgba(255,255,255,0.1)] relative max-h-[85vh]"
+              className="w-full max-w-lg bg-panel border border-border-subtle rounded-3xl flex flex-col p-6 shadow-2xl relative max-h-[85vh] text-primary"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-mint/30 mb-6 shrink-0">
+              <div className="flex items-center justify-between pb-4 border-b border-border-subtle mb-6 shrink-0">
                 <div className="flex items-center gap-2">
                   <Bookmark size={18} className="text-mint fill-mint/20" />
-                  <h3 className="font-display text-2xl text-white">My Personal Itinerary</h3>
+                  <h3 className="font-display text-2xl text-primary">My Personal Itinerary</h3>
                 </div>
                 <button
                   onClick={() => setPlanOpen(false)}
-                  className="min-h-[44px] min-w-[44px] rounded-xl text-muted hover:text-white flex items-center justify-center hover:bg-white/5 transition-colors cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] rounded-xl text-muted hover:text-primary flex items-center justify-center hover:bg-black/5 transition-colors cursor-pointer"
                   aria-label="Close Itinerary"
                 >
                   <X size={18} />
@@ -531,10 +537,10 @@ export default function Concierge() {
               <div className="flex-1 overflow-y-auto space-y-3">
                 {myPlan.length === 0 ? (
                   <div className="py-16 text-center flex flex-col items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-white/4 border border-white/10 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-2xl bg-panel-alt border border-border-subtle flex items-center justify-center">
                       <Calendar size={22} className="text-muted" />
                     </div>
-                    <p className="font-mono-data text-xs font-bold text-white uppercase tracking-wider">No Sessions Saved</p>
+                    <p className="font-mono-data text-xs font-bold text-primary uppercase tracking-wider">No Sessions Saved</p>
                     <p className="font-body text-xs text-muted max-w-[200px]">Ask the assistant to build a schedule and add sessions here.</p>
                     <button
                       onClick={() => { setPlanOpen(false); setOpen(true) }}
@@ -547,13 +553,13 @@ export default function Concierge() {
                   myPlan.map((session) => (
                     <div
                       key={session.id}
-                      className="p-4 rounded-xl bg-void border border-mint/30 flex items-start justify-between gap-3"
+                      className="p-4 rounded-xl bg-panel-alt border border-border-subtle flex items-start justify-between gap-3"
                     >
                       <div>
                         <span className="font-mono-data text-[10px] uppercase text-mint block mb-1 font-bold">
                           {session.day} • {session.time}
                         </span>
-                        <h4 className="font-body font-semibold text-sm text-white mb-1">{session.title}</h4>
+                        <h4 className="font-body font-semibold text-sm text-primary mb-1">{session.title}</h4>
                         <span className="font-mono-data text-[9px] uppercase px-2 py-0.5 rounded bg-panel text-muted">
                           {session.type}
                         </span>

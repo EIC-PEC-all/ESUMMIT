@@ -21,7 +21,7 @@ function Word({
   progress: MotionValue<number>
   range: [number, number]
 }) {
-  const opacity = useTransform(progress, range, [0.25, 1])
+  const opacity = useTransform(progress, range, [0.85, 1])
   return (
     <motion.span className="inline-block mr-[0.28em]" style={{ opacity }}>
       {word}

@@ -1,30 +1,18 @@
 'use client'
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import Image from 'next/image'
 import { Header } from '@/components/Header'
 import { MetricsOverview } from '@/components/MetricsOverview'
 import { StatusBadge } from '@/components/StatusBadge'
 import { ApplicationDetailModal } from '@/components/ApplicationDetailModal'
+import { NewApplicationModal } from '@/components/NewApplicationModal'
 import { FundingApplication } from '@/lib/types'
 import {
   Search,
-  Filter,
   Eye,
-  FileText,
-  ExternalLink,
-  MessageCircle,
-  Building2,
-  Calendar,
   Sparkles,
   Inbox,
-  ArrowUpDown,
-  Plus,
-  Gem,
-  Crown,
-  Shield,
-  Layers,
-  CheckCircle2
+  Plus
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -48,6 +36,7 @@ export default function Home() {
   const [tierFilter, setTierFilter] = useState<string>('ALL')
   const [selectedApp, setSelectedApp] = useState<FundingApplication | null>(null)
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
+  const [isCreateOpen, setIsCreateOpen] = useState(false)
 
   const fetchApplications = useCallback(async () => {
     try {
@@ -118,52 +107,8 @@ export default function Home() {
     }
   }
 
-  // Create sample test entry
-  const createSampleApplication = async () => {
-    try {
-      const sample = {
-        passTier: 'diamond',
-        passTierName: 'DIAMOND PASS',
-        passPrice: '₹8,000 + GST',
-        email: 'founder.demo@pecsummit.com',
-        founderName: 'Aarav Sharma',
-        phone: '9876543210',
-        founderLinkedIn: 'https://linkedin.com/in/aarav-sharma-demo',
-        startupName: 'NexusAI Health',
-        websiteUrl: 'https://nexusai-health.io',
-        dpiitNumber: 'DIPP98762',
-        stage: 'Early revenue',
-        sector: 'AI / HealthTech',
-        revenueStage: '₹10 lakh–₹50 lakh annual revenue',
-        totalFundingRaised: '₹25,00,000 (Angel Seed)',
-        currentAsk: '₹1.5 Crore for 8% equity',
-        preMoneyValuation: '₹18 Crore',
-        committedCapital: '₹30 Lakh committed',
-        pitchDeckUrl: 'https://drive.google.com/file/d/sample-pitch-deck/view',
-        demoVideoUrl: 'https://youtube.com/watch?v=sample-demo',
-        mouComfortable:
-          'Yes, I am comfortable with the fee for my selected option and can proceed after reviewing the MoU.',
-      }
-
-      const res = await fetch('http://localhost:3000/api/funding-conclave/apply', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(sample),
-      })
-
-      if (res.ok) {
-        toast.success('Sample application created in MongoDB')
-        fetchApplications()
-      } else {
-        toast.error('Failed to create sample application')
-      }
-    } catch {
-      toast.error('Could not connect to submission endpoint')
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-[#060D0B] text-white selection:bg-[#00F5D4]/20 selection:text-[#00F5D4]">
+    <div className="manager-app min-h-screen">
       {/* Top Header */}
       <Header
         totalCount={applications.length}
@@ -172,17 +117,17 @@ export default function Home() {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* ── Section Header (Mirroring Main Site Banner) ── */}
-        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8">
+        {/* ── Section Header ── */}
+        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 dark:border-white/10 pb-8">
           <div>
-            <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-mint flex items-center gap-2 mb-2">
+            <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-emerald-700 dark:text-mint flex items-center gap-2 mb-2">
               <Sparkles size={14} />
               EXECUTIVE CMS PORTAL
             </span>
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none">
-              STARTUP PASS <span className="text-gradient-mint">RESPONSES</span>
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-slate-900 dark:text-white leading-none">
+              STARTUP PASS <span className="text-emerald-700 dark:text-mint">RESPONSES</span>
             </h1>
-            <p className="font-mono-data text-xs sm:text-sm text-gray-400 font-bold uppercase tracking-widest mt-3">
+            <p className="font-mono-data text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-bold uppercase tracking-widest mt-3">
               SCREENING • INVESTOR FIT • MOU WORKFLOW • OFFLINE DIRECT PAYMENTS
             </p>
           </div>
@@ -190,11 +135,11 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={createSampleApplication}
-              className="btn-dark-gradient min-h-[42px] px-5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider text-white hover:border-mint transition-all"
+              onClick={() => setIsCreateOpen(true)}
+              className="min-h-[42px] px-5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider bg-white dark:bg-[#0D1C18] text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-mint shadow-sm transition-all inline-flex items-center gap-2 cursor-pointer"
             >
-              <Plus size={14} className="text-mint stroke-[2.5]" />
-              <span>TEST ENTRY</span>
+              <Plus size={14} className="text-emerald-700 dark:text-mint stroke-[2.5]" />
+              <span>ADD APPLICATION</span>
             </button>
           </div>
         </div>
@@ -203,30 +148,30 @@ export default function Home() {
         <MetricsOverview applications={applications} />
 
         {/* ── Filter & Search Control Panel ── */}
-        <div className="p-5 rounded-3xl bg-[#081310] border border-white/10 mb-8 space-y-4 shadow-xl">
+        <div className="p-5 rounded-3xl bg-white dark:bg-[#0D1C18] border border-slate-200/80 dark:border-white/10 mb-8 space-y-4 shadow-sm">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
             {/* Search Input */}
             <div className="relative w-full lg:w-96">
-              <Search className="w-4 h-4 text-gray-500 absolute left-4 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-4 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search startup, founder, email, sector, ID..."
-                className="w-full pl-11 pr-5 py-2.5 rounded-full bg-[#0D1C18] border border-white/10 text-white placeholder-gray-500 text-xs font-body focus:outline-none focus:border-mint transition-colors"
+                className="w-full pl-11 pr-5 py-2.5 rounded-full bg-slate-50 dark:bg-[#12241F] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-xs font-body focus:outline-none focus:border-emerald-500 focus:bg-white dark:focus:bg-[#0D1C18] transition-colors"
               />
             </div>
 
             <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
               {/* Pass Tier Filter */}
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-mono-data font-bold text-gray-400 uppercase tracking-wider">
+                <span className="text-[11px] font-mono-data font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                   TIER:
                 </span>
                 <select
                   value={tierFilter}
                   onChange={(e) => setTierFilter(e.target.value)}
-                  className="px-4 py-2 rounded-full bg-[#0D1C18] border border-white/10 text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-mint appearance-none cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-slate-50 dark:bg-[#12241F] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-emerald-500 cursor-pointer shadow-xs"
                 >
                   <option value="ALL">ALL PASSES</option>
                   <option value="diamond">DIAMOND PASS</option>
@@ -237,13 +182,13 @@ export default function Home() {
 
               {/* Stage Filter */}
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-mono-data font-bold text-gray-400 uppercase tracking-wider">
+                <span className="text-[11px] font-mono-data font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">
                   STAGE:
                 </span>
                 <select
                   value={stageFilter}
                   onChange={(e) => setStageFilter(e.target.value)}
-                  className="px-4 py-2 rounded-full bg-[#0D1C18] border border-white/10 text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-mint appearance-none cursor-pointer"
+                  className="px-4 py-2 rounded-full bg-slate-50 dark:bg-[#12241F] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-emerald-500 cursor-pointer shadow-xs"
                 >
                   <option value="ALL">ALL STAGES</option>
                   {uniqueStages.map((stage) => (
@@ -265,10 +210,10 @@ export default function Home() {
                   key={filter.id}
                   type="button"
                   onClick={() => setStatusFilter(filter.id)}
-                  className={`px-3.5 py-1.5 rounded-full font-mono-data text-[10px] font-bold tracking-wider whitespace-nowrap transition-all border ${
+                  className={`px-3.5 py-1.5 rounded-full font-mono-data text-[10px] tracking-wider whitespace-nowrap transition-all border cursor-pointer ${
                     isActive
-                      ? 'bg-mint text-[#060D0B] border-mint shadow-[0_0_15px_rgba(0,245,212,0.3)]'
-                      : 'bg-[#0D1C18] text-gray-400 border-white/5 hover:border-white/20 hover:text-white'
+                      ? 'bg-emerald-600 text-white border-emerald-600 dark:bg-mint dark:text-[#060D0B] dark:border-mint font-black shadow-sm'
+                      : 'bg-slate-100/80 dark:bg-[#12241F] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-white/10 hover:border-emerald-500 hover:text-slate-900 dark:hover:text-white font-bold shadow-xs'
                   }`}
                 >
                   {filter.label}
@@ -279,11 +224,11 @@ export default function Home() {
         </div>
 
         {/* ── Applications List Table ── */}
-        <div className="rounded-3xl bg-[#081310] border border-white/10 overflow-hidden shadow-2xl">
+        <div className="rounded-3xl bg-white dark:bg-[#0D1C18] border border-slate-200/80 dark:border-white/10 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/10 bg-[#0D1C18] text-[11px] font-mono-data font-black text-gray-400 uppercase tracking-[0.15em]">
+                <tr className="border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#12241F] text-[11px] font-mono-data font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.15em]">
                   <th className="py-4 px-5 font-bold">STARTUP &amp; PASS TIER</th>
                   <th className="py-4 px-5 font-bold">PRIMARY FOUNDER</th>
                   <th className="py-4 px-5 font-bold">STAGE &amp; SECTOR</th>
@@ -293,27 +238,27 @@ export default function Home() {
                   <th className="py-4 px-5 font-bold text-right">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 text-xs">
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5 text-xs">
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="py-20 text-center text-gray-400 font-mono-data">
-                      <div className="w-7 h-7 border-2 border-mint border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-                      LOADING SUBMISSIONS FROM MONGODB...
+                    <td colSpan={7} className="py-20 text-center text-slate-500 dark:text-slate-400 font-mono-data">
+                      <div className="w-7 h-7 border-2 border-emerald-600 dark:border-mint border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                      LOADING SUBMISSIONS...
                     </td>
                   </tr>
                 ) : filteredApplications.length === 0 ? (
                   <tr>
                     <td colSpan={7} className="py-20 text-center">
-                      <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4 text-gray-500">
+                      <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-[#12241F] border border-slate-200 dark:border-white/10 flex items-center justify-center mx-auto mb-4 text-slate-400 dark:text-slate-500">
                         <Inbox className="w-7 h-7" />
                       </div>
-                      <span className="font-display text-xl font-bold text-white block mb-1">
+                      <span className="font-display text-xl font-bold text-slate-900 dark:text-white block mb-1">
                         NO APPLICATIONS FOUND
                       </span>
-                      <p className="text-xs text-gray-400 font-mono-data max-w-sm mx-auto">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 font-mono-data max-w-sm mx-auto font-medium">
                         {search || statusFilter !== 'ALL' || stageFilter !== 'ALL' || tierFilter !== 'ALL'
                           ? 'TRY ADJUSTING SEARCH CRITERIA OR RESETTING STATUS FILTERS.'
-                          : 'NO STARTUP PASS APPLICATIONS SUBMITTED YET. USE "TEST ENTRY" ABOVE TO CREATE ONE.'}
+                          : 'NO STARTUP PASS APPLICATIONS SUBMITTED YET.'}
                       </p>
                     </td>
                   </tr>
@@ -321,26 +266,26 @@ export default function Home() {
                   filteredApplications.map((app) => (
                     <tr
                       key={app.applicationId}
-                      className="hover:bg-white/[0.03] transition-colors group cursor-pointer"
+                      className="hover:bg-slate-50/80 dark:hover:bg-white/[0.03] transition-colors group cursor-pointer"
                       onClick={() => setSelectedApp(app)}
                     >
                       {/* Startup & ID & Pass Tier */}
                       <td className="py-4 px-5">
-                        <div className="font-display font-black text-white text-base group-hover:text-mint transition-colors flex items-center gap-2">
+                        <div className="font-display font-black text-slate-900 dark:text-white text-base group-hover:text-emerald-700 dark:group-hover:text-mint transition-colors flex items-center gap-2">
                           {app.startupName}
                         </div>
                         <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                          <span className="font-mono-data text-[10px] text-mint font-bold tracking-wider">
+                          <span className="font-mono-data text-[10px] text-emerald-700 dark:text-mint font-extrabold tracking-wider">
                             {app.applicationId}
                           </span>
                           {app.passTierName && (
                             <span
                               className={`px-2 py-0.5 rounded-full text-[9px] font-mono-data font-bold uppercase tracking-wider border ${
                                 app.passTier === 'diamond'
-                                  ? 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30'
+                                  ? 'bg-purple-100 text-purple-900 border-purple-200 dark:bg-purple-500/15 dark:text-purple-300 dark:border-purple-500/20'
                                   : app.passTier === 'silver'
-                                  ? 'bg-slate-500/15 text-slate-300 border-slate-500/30'
-                                  : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                                  ? 'bg-slate-100 text-slate-800 border-slate-200 dark:bg-slate-500/15 dark:text-slate-300 dark:border-slate-500/20'
+                                  : 'bg-amber-100 text-amber-900 border-amber-200 dark:bg-amber-500/15 dark:text-amber-300 dark:border-amber-500/20'
                               }`}
                             >
                               {app.passTierName} {app.passPrice ? `(${app.passPrice})` : ''}
@@ -351,25 +296,31 @@ export default function Home() {
 
                       {/* Founder */}
                       <td className="py-4 px-5">
-                        <div className="text-white font-medium text-sm">{app.founderName}</div>
-                        <div className="text-[11px] text-gray-400 font-mono-data mt-0.5">{app.email}</div>
-                        <div className="text-[10px] text-gray-500 font-mono-data">{app.phone}</div>
+                        <div className="text-slate-900 dark:text-white font-bold text-sm">{app.founderName}</div>
+                        <div className="text-[11px] text-slate-600 dark:text-slate-400 font-mono-data mt-0.5 font-medium">{app.email}</div>
+                        <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono-data font-medium">{app.phone}</div>
                       </td>
 
-                      {/* Stage & Sector */}
+                      {/* Role & Organization / Stage & Sector */}
                       <td className="py-4 px-5">
-                        <span className="px-2.5 py-0.5 rounded-full bg-white/5 text-white border border-white/10 text-[11px] font-medium block w-fit mb-1">
-                          {app.stage}
+                        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-[#12241F] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-white/10 text-[11px] font-bold block w-fit mb-1">
+                          {app.role || app.stage || 'Founder'}
                         </span>
-                        <span className="text-[11px] text-gray-400 font-mono-data">{app.sector}</span>
+                        <span className="text-[11px] text-slate-600 dark:text-slate-400 font-mono-data font-medium line-clamp-1">
+                          {app.organization || app.sector || 'General'}
+                        </span>
                       </td>
 
-                      {/* Ask & Valuation */}
-                      <td className="py-4 px-5 font-mono-data">
-                        <span className="text-mint font-bold text-sm block">{app.currentAsk}</span>
-                        <span className="text-[10px] text-gray-400">
-                          Pre-money: {app.preMoneyValuation || 'N/A'}
+                      {/* Motive / Fundraise Ask */}
+                      <td className="py-4 px-5 font-mono-data max-w-[220px]">
+                        <span className="text-emerald-700 dark:text-mint font-bold text-xs block line-clamp-2">
+                          {app.motive || (app.currentAsk && app.currentAsk !== 'N/A' ? `Ask: ${app.currentAsk}` : 'Networking & Collaboration')}
                         </span>
+                        {app.currentAsk && app.currentAsk !== 'N/A' && app.motive && (
+                          <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+                            Ask: {app.currentAsk}
+                          </span>
+                        )}
                       </td>
 
                       {/* MoU */}
@@ -377,8 +328,8 @@ export default function Home() {
                         <span
                           className={`text-xs leading-relaxed line-clamp-2 ${
                             app.mouComfortable?.toLowerCase().includes('comfortable')
-                              ? 'text-emerald-400'
-                              : 'text-amber-400'
+                              ? 'text-emerald-700 dark:text-emerald-400 font-bold'
+                              : 'text-amber-800 dark:text-amber-400 font-bold'
                           }`}
                         >
                           {app.mouComfortable}
@@ -398,9 +349,9 @@ export default function Home() {
                             e.stopPropagation()
                             setSelectedApp(app)
                           }}
-                          className="btn-dark-gradient px-3.5 py-1.5 rounded-full font-mono-data text-[11px] font-bold uppercase tracking-wider text-white transition-all inline-flex items-center gap-1.5 hover:border-mint"
+                          className="px-3.5 py-1.5 rounded-full font-mono-data text-[11px] font-bold uppercase tracking-wider text-slate-900 dark:text-white border border-slate-200 dark:border-white/10 bg-white dark:bg-[#12241F] hover:bg-slate-50 dark:hover:bg-white/[0.05] transition-all inline-flex items-center gap-1.5 hover:border-emerald-500 hover:text-emerald-700 dark:hover:text-mint shadow-xs cursor-pointer"
                         >
-                          <Eye size={12} className="text-mint stroke-[2.5]" />
+                          <Eye size={12} className="text-emerald-700 dark:text-mint stroke-[2.5]" />
                           <span>REVIEW</span>
                         </button>
                       </td>
@@ -420,6 +371,12 @@ export default function Home() {
           onClose={() => setSelectedApp(null)}
           onUpdate={handleUpdateApplication}
           onDelete={handleDeleteApplication}
+        />
+      )}
+      {isCreateOpen && (
+        <NewApplicationModal
+          onClose={() => setIsCreateOpen(false)}
+          onCreated={(application) => setApplications((current) => [application, ...current])}
         />
       )}
     </div>

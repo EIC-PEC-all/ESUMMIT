@@ -281,7 +281,7 @@ export default function Nav() {
           <a
             href="/e-summit-brochure.pdf"
             target="_blank"
-            className="flex-1 flex items-center justify-center gap-2 rounded-full bg-white/10 border border-white/10 py-3.5 shadow-md text-white font-mono-data text-[11px] font-bold tracking-wider uppercase active:scale-[0.98] transition-transform"
+            className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-white/10 border border-white/10 py-3.5 shadow-md text-white font-mono-data text-[11px] font-bold tracking-wider uppercase active:scale-[0.98] transition-transform"
           >
             <Download size={16} className="text-mint" />
             <span>DOWNLOAD BROCHURE</span>
@@ -293,7 +293,7 @@ export default function Nav() {
                 window.dispatchEvent(new CustomEvent('toggle-concierge'))
               }
             }}
-            className="w-[48px] h-[48px] shrink-0 rounded-full bg-white text-black flex items-center justify-center shadow-md active:scale-[0.95] transition-transform relative"
+            className="w-[48px] h-[48px] shrink-0 rounded-xl bg-white text-black flex items-center justify-center shadow-md active:scale-[0.95] transition-transform relative"
             aria-label="Open AI Assistant"
           >
             <Sparkles size={20} strokeWidth={2.5} />

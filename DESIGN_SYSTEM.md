@@ -16,18 +16,18 @@ The design system is built on CSS custom properties defined in `app/globals.css`
 | Deep | `--bg-deep` | `#081310` | Recessed backgrounds |
 | Panel | `--bg-panel` | `#0D1C18` | Card and panel backgrounds |
 | Panel Alt | `--bg-panel-alt` | `#12241F` | Elevated surface backgrounds |
-| Cyber Teal (Mint) | `--accent-mint` | `#00F5D4` | Official brand primary, CTAs, electric highlights |
-| Emerald Aqua | `--accent-green` | `#00DFBA` | Secondary neon accent |
-| Accent Blue | `--accent-blue` | `#3DD9FF` | Cool contrast accent |
+| Logo Lime | `--accent-mint` | `#8AC53F` | Official logo brand primary, CTAs, electric highlights |
+| Neon Lime | `--accent-green` | `#A8EE4A` | Secondary neon accent |
+| Logo Purple | `--accent-blue` | `#4341A8` | Logo curve arc accent |
 | Accent Coral | `--accent-coral` | `#FF4D3D` | Pitch competition warm accent |
-| Teal Glow | `--accent-green-dim` | `rgba(0, 245, 212, 0.15)` | Radial glow, shadow effects |
+| Lime Glow | `--accent-green-dim` | `rgba(138, 197, 63, 0.15)` | Radial glow, shadow effects |
 | Gold | — | `#FFD700` | Highlight accents |
 | Text Primary | `--text-primary` | `#FFFFFF` | Body text |
 | Text Secondary | `--text-secondary` | `#94A3B8` | Subtitles, secondary labels |
 | Text Muted | `--text-muted` | `#64748B` | Captions, placeholders |
 | Border Subtle | `--border-subtle` | `rgba(255, 255, 255, 0.10)` | Default card borders |
 | Border Panel | `--border-panel` | `rgba(255, 255, 255, 0.15)` | Panel dividers |
-| Border Glow | `--border-glow` | `rgba(0, 245, 212, 0.3)` | Active / hover borders |
+| Border Glow | `--border-glow` | `rgba(138, 197, 63, 0.3)` | Active / hover borders |
 
 ### Light / Olive Mode
 

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default function PassesPage() {
   return (
     <main
-      className="bg-[#060D0B] min-h-screen text-[#FAFAFA] flex flex-col"
+      className="bg-deep min-h-screen text-primary flex flex-col"
       id="passes-page"
     >
       <Nav />

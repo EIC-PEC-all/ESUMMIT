@@ -31,7 +31,7 @@ export interface CRTWarpProps {
 }
 
 export default function CRTWarp({
-  color = '#00F5D4',
+  color = '#8AC53F',
   backgroundColor = '#081310',
   speed = 0.35,
   curvature = 0.2,

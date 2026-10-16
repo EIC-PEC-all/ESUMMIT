@@ -128,8 +128,8 @@ export function NavigationCard({ day, index, scrollYProgress }: NavigationCardPr
                 fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
                 fontSize: 'clamp(2.5rem, 8vw, 120px)',
                 lineHeight: 0.9,
-                color: '#00F5D4',
-                textShadow: '0 0 40px rgba(0, 245, 212, 0.5)',
+                color: '#8AC53F',
+                textShadow: '0 0 40px rgba(138, 197, 63, 0.5)',
               }}
             >
               {index + 1 < 10 ? `0${index + 1}` : index + 1}
@@ -139,7 +139,7 @@ export function NavigationCard({ day, index, scrollYProgress }: NavigationCardPr
               <span
                 className="font-mono-data uppercase tracking-widest"
                 style={{
-                  color: '#00F5D4',
+                  color: '#8AC53F',
                   fontSize: 'clamp(0.6rem, 1vw, 0.85rem)',
                   opacity: 0.7,
                   fontFamily: "'Space Mono', monospace",
@@ -173,7 +173,7 @@ export function NavigationCard({ day, index, scrollYProgress }: NavigationCardPr
               </span>
             )}
             {effectiveLocation && !locationError && (
-              <span className="font-mono-data text-[9px] text-[#00F5D4] px-2 py-1 rounded bg-[#00F5D4]/10" style={{ fontFamily: "'Space Mono', monospace" }}>
+              <span className="font-mono-data text-[9px] text-[#8AC53F] px-2 py-1 rounded bg-[#8AC53F]/10" style={{ fontFamily: "'Space Mono', monospace" }}>
                 GPS Active
               </span>
             )}
@@ -204,14 +204,11 @@ export function NavigationCard({ day, index, scrollYProgress }: NavigationCardPr
             <div className="absolute inset-0 flex items-center justify-center bg-[#050505]/80 z-20 rounded-[20px]">
               <button
                 onClick={getCurrentLocation}
-                className="px-6 py-3 rounded-full text-[#060D0B] font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer"
+                className="px-6 py-3 rounded-xl text-[#060D0B] font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
                 style={{
                   fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
-                  background: '#00F5D4',
-                  boxShadow: '0 0 24px rgba(0,245,212,0.5)',
+                  background: '#8AC53F',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 0 40px rgba(0,245,212,0.8)')}
-                onMouseLeave={e => (e.currentTarget.style.boxShadow = '0 0 24px rgba(0,245,212,0.5)')}
               >
                 <span className="w-5 h-5" />
                 Enable Location

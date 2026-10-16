@@ -43,7 +43,7 @@ export default function EsummitSchedule() {
 
   const { scheduleItems } = useSchedule()
   const { data: summitBundle } = useSummitData()
-  const globalDates = summitBundle?.siteConfig?.summitDates || 'MARCH 19–21, 2026'
+  const globalDates = summitBundle?.siteConfig?.summitDates || 'NOVEMBER 14–15, 2026'
 
   // Transform CMS schedule items into DayCard format
   const cmsCards: DayCard[] = useMemo(() => {
@@ -124,7 +124,7 @@ export default function EsummitSchedule() {
     <section
       id="timeline"
       ref={containerRef}
-      className="esummit-section z-10 relative px-4 sm:px-8 md:px-10 pt-28 sm:pt-36 md:pt-44 pb-14 sm:pb-18 md:pb-20 bg-section-1 text-white"
+      className="esummit-section z-10 relative px-4 sm:px-8 md:px-10 pt-28 sm:pt-36 md:pt-44 pb-14 sm:pb-18 md:pb-20 bg-section-1 text-primary"
       aria-labelledby="timeline-heading"
     >
       {/* Title */}
@@ -153,7 +153,7 @@ export default function EsummitSchedule() {
             className={`px-4 sm:px-5 py-2 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
               activeDayIndex === idx
                 ? 'bg-mint text-void font-black shadow-lg shadow-mint/25 scale-[1.02]'
-                : 'bg-white/5 text-gray-400 border border-white/10 hover:text-white hover:bg-white/10'
+                : 'bg-panel-alt text-secondary border border-border-subtle hover:text-primary hover:bg-panel'
             }`}
           >
             {c.day} • {c.date.split('(')[0].trim()}
@@ -163,13 +163,13 @@ export default function EsummitSchedule() {
 
       {/* Mobile Segmented Toggle (Schedule vs Campus Map) */}
       <div className="lg:hidden flex items-center justify-center mb-6">
-        <div className="flex bg-[#0A1612] p-1 rounded-full border border-white/10 shadow-lg">
+        <div className="flex bg-panel-alt p-1 rounded-full border border-border-subtle shadow-md">
           <button
             onClick={() => setMobileView('schedule')}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
               mobileView === 'schedule'
-                ? 'bg-white/15 text-white border border-mint/40 shadow-[0_0_15px_rgba(0,245,212,0.2)]'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-panel text-primary border border-mint/40 shadow-sm shadow-mint/20'
+                : 'text-secondary hover:text-primary'
             }`}
           >
             <Calendar size={12} className={mobileView === 'schedule' ? 'text-mint' : ''} />
@@ -179,8 +179,8 @@ export default function EsummitSchedule() {
             onClick={() => setMobileView('map')}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
               mobileView === 'map'
-                ? 'bg-white/15 text-white border border-mint/40 shadow-[0_0_15px_rgba(0,245,212,0.2)]'
-                : 'text-gray-400 hover:text-white'
+                ? 'bg-panel text-primary border border-mint/40 shadow-sm shadow-mint/20'
+                : 'text-secondary hover:text-primary'
             }`}
           >
             <MapPin size={12} className={mobileView === 'map' ? 'text-mint' : ''} />
@@ -193,7 +193,7 @@ export default function EsummitSchedule() {
       <div className="relative flex flex-col lg:flex-row gap-6 sm:gap-8 items-start min-h-[auto] lg:min-h-[140vh]">
         {/* Left Column: Leaflet Map */}
         <div
-          className={`w-full lg:w-1/2 h-[380px] sm:h-[440px] lg:h-[min(560px,calc(100dvh-7rem))] relative lg:sticky lg:top-24 z-30 overflow-hidden rounded-[24px] sm:rounded-[28px] border border-white/10 shadow-2xl ${
+          className={`w-full lg:w-1/2 h-[380px] sm:h-[440px] lg:h-[min(560px,calc(100dvh-7rem))] relative lg:sticky lg:top-24 z-30 overflow-hidden rounded-[24px] sm:rounded-[28px] border border-border-panel shadow-2xl ${
             mobileView === 'map' ? 'block' : 'hidden lg:block'
           }`}
         >
@@ -206,7 +206,7 @@ export default function EsummitSchedule() {
               onSelectEventId={handleSelectEvent}
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-[#081310] font-mono-data text-xs text-gray-300">
+            <div className="flex h-full w-full items-center justify-center bg-panel-alt font-mono-data text-xs text-secondary">
               Interactive Campus Map
             </div>
           )}

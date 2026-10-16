@@ -43,7 +43,7 @@ const SPARKLINE_PTS = '0,40 12,32 24,36 36,20 48,28 60,12 72,18 84,6 96,14 108,4
 function TickerStrip() {
   const items = [...TICKERS, ...TICKERS]
   return (
-    <div className="relative overflow-hidden py-2 border-y" style={{ borderColor: 'rgba(0,245,212,0.15)', background: 'rgba(0,245,212,0.04)' }}>
+    <div className="relative overflow-hidden py-2 border-y" style={{ borderColor: 'var(--border-glow)', background: 'var(--accent-green-dim)' }}>
       <motion.div
         className="flex gap-10 whitespace-nowrap"
         animate={{ x: ['0%', '-50%'] }}
@@ -87,7 +87,7 @@ function Sparkline() {
 
 export default function EsummitHero() {
   const { data } = useSummitData()
-  const summitDates = data?.siteConfig?.summitDates || 'March 19–21, 2026'
+  const summitDates = data?.siteConfig?.summitDates || 'November 14–15, 2026'
   const [hovered, setHovered] = useState(false)
   const [mounted, setMounted] = useState(false)
 
@@ -104,8 +104,8 @@ export default function EsummitHero() {
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(0,245,212,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,245,212,0.04) 1px, transparent 1px)
+            linear-gradient(rgba(138,197,63,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(138,197,63,0.04) 1px, transparent 1px)
           `,
           backgroundSize: '60px 60px',
         }}
@@ -114,11 +114,11 @@ export default function EsummitHero() {
       {/* ── Ambient glow blobs ── */}
       <div
         className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse, rgba(0,245,212,0.07) 0%, transparent 65%)' }}
+        style={{ background: 'radial-gradient(ellipse, rgba(138,197,63,0.07) 0%, transparent 65%)' }}
       />
       <div
         className="absolute bottom-[-5%] right-[-5%] w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(0,245,212,0.06) 0%, transparent 65%)' }}
+        style={{ background: 'radial-gradient(circle, rgba(138,197,63,0.06) 0%, transparent 65%)' }}
       />
 
       {/* ── Top: live badge + nav ── */}
@@ -132,7 +132,7 @@ export default function EsummitHero() {
         >
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border"
-            style={{ background: 'rgba(0,245,212,0.08)', borderColor: 'rgba(0,245,212,0.35)' }}
+            style={{ background: 'var(--accent-green-dim)', borderColor: 'var(--border-glow)' }}
           >
             <motion.span
               className="w-2 h-2 rounded-full bg-mint"
@@ -199,7 +199,7 @@ export default function EsummitHero() {
               <circle
                 cx="100" cy="100" r="94"
                 fill="none"
-                stroke="rgba(0,245,212,0.18)"
+                stroke="rgba(138,197,63,0.22)"
                 strokeWidth="1"
                 strokeDasharray="4 8"
               />
@@ -217,7 +217,7 @@ export default function EsummitHero() {
               <circle
                 cx="100" cy="100" r="88"
                 fill="none"
-                stroke="rgba(0,245,212,0.08)"
+                stroke="rgba(138,197,63,0.12)"
                 strokeWidth="1"
               />
               {/* Bright arc segment */}
@@ -237,7 +237,7 @@ export default function EsummitHero() {
           {/* Radial glow beneath the bull */}
           <motion.div
             className="absolute bottom-[-5%] left-1/2 -translate-x-1/2 w-[110%] h-[45%] pointer-events-none rounded-full"
-            style={{ background: 'radial-gradient(ellipse, rgba(0,245,212,0.28) 0%, transparent 70%)' }}
+            style={{ background: 'radial-gradient(ellipse, rgba(138,197,63,0.28) 0%, transparent 70%)' }}
             animate={{ opacity: [0.7, 1, 0.7], scaleX: [1, 1.05, 1] }}
             transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -283,10 +283,10 @@ export default function EsummitHero() {
             style={{
               top: '-8%',
               background: 'rgba(7,11,8,0.9)',
-              border: '1px solid rgba(0,245,212,0.45)',
+              border: '1px solid var(--border-glow)',
               backdropFilter: 'blur(10px)',
               WebkitBackdropFilter: 'blur(10px)',
-              boxShadow: '0 0 20px rgba(0,245,212,0.15)',
+              boxShadow: '0 0 20px var(--border-glow)',
               whiteSpace: 'nowrap',
             }}
             animate={{ y: [0, -4, 0] }}
@@ -311,7 +311,7 @@ export default function EsummitHero() {
               right: '-20%',
               width: '100px',
               background: 'rgba(7,11,8,0.88)',
-              border: '1px solid rgba(0,245,212,0.3)',
+              border: '1px solid var(--border-subtle)',
               borderRadius: '10px',
               padding: '8px',
               backdropFilter: 'blur(10px)',
@@ -330,8 +330,8 @@ export default function EsummitHero() {
             <motion.div
               className="relative"
               animate={hovered
-                ? { filter: 'drop-shadow(0 0 40px rgba(0,245,212,0.6)) drop-shadow(0 0 80px rgba(0,245,212,0.2))' }
-                : { filter: 'drop-shadow(0 0 20px rgba(0,245,212,0.25))' }
+                ? { filter: 'drop-shadow(0 0 40px rgba(138,197,63,0.6)) drop-shadow(0 0 80px rgba(138,197,63,0.2))' }
+                : { filter: 'drop-shadow(0 0 20px rgba(138,197,63,0.25))' }
               }
               transition={{ duration: 0.4, ease: 'easeOut' }}
               style={{ mixBlendMode: 'screen' }}
@@ -392,7 +392,7 @@ export default function EsummitHero() {
               <div
                 key={s.label}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
-                style={{ background: 'rgba(0,245,212,0.06)', border: '1px solid rgba(0,245,212,0.2)' }}
+                style={{ background: 'var(--accent-green-dim)', border: '1px solid var(--border-glow)' }}
               >
                 <span className="text-mint">{s.icon}</span>
                 <span className="font-mono-data text-[10px] text-muted uppercase tracking-widest font-bold">{s.label}</span>
@@ -406,7 +406,7 @@ export default function EsummitHero() {
       {/* ── Bottom edge glow line ── */}
       <div
         className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(0,245,212,0.4) 50%, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, var(--border-glow) 50%, transparent)' }}
       />
     </section>
   )

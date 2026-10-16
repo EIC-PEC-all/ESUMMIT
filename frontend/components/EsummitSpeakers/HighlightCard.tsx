@@ -31,21 +31,20 @@ export default function HighlightCard({
       }}
     >
       <motion.div
-        className="flex w-full flex-col justify-between rounded-[24px] sm:rounded-[30px] border border-white/15 p-4 sm:p-6 shadow-2xl h-auto lg:h-[min(560px,calc(100dvh-7rem))] lg:overflow-y-auto"
+        className="flex w-full flex-col justify-between rounded-[24px] sm:rounded-[30px] border border-border-panel p-4 sm:p-6 shadow-2xl h-auto lg:h-[min(560px,calc(100dvh-7rem))] lg:overflow-y-auto"
         style={{
-          borderColor: 'rgba(0, 245, 212, 0.25)',
+          borderColor: 'var(--border-glow)',
           background: 'linear-gradient(180deg, var(--bg-section-1) 0%, var(--bg-void) 100%)',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
         }}
       >
         <div>
           {/* Card Header */}
-          <div className="mb-3.5 flex items-center justify-between border-b border-white/10 pb-3">
+          <div className="mb-3.5 flex items-center justify-between border-b border-border-subtle pb-3">
             <div className="flex items-baseline gap-2.5">
               <span className="font-display text-3xl sm:text-4xl font-black text-gradient-mint">
                 {card.day}
               </span>
-              <span className="font-mono-data text-[11px] sm:text-xs font-bold uppercase tracking-wider text-gray-400">
+              <span className="font-mono-data text-[11px] sm:text-xs font-bold uppercase tracking-wider text-secondary">
                 {card.date}
               </span>
             </div>
@@ -66,17 +65,17 @@ export default function HighlightCard({
                 <div
                   key={ev.id}
                   onClick={() => onSelectEvent(ev.id)}
-                  className={`group flex cursor-pointer items-start py-2.5 px-2.5 rounded-xl transition-all duration-200 border-b border-white/5 last:border-b-0 ${
+                  className={`group flex cursor-pointer items-start py-2.5 px-2.5 rounded-xl transition-all duration-200 border-b border-border-subtle last:border-b-0 ${
                     isSelected
                       ? 'bg-mint/10 border-mint/30 text-mint'
-                      : 'hover:bg-white/5'
+                      : 'hover:bg-panel-alt'
                   }`}
                 >
                   <div className="flex items-start gap-2.5 sm:gap-3.5 min-w-0 w-full">
                     {/* Left: Time */}
                     <span
                       className={`shrink-0 pt-0.5 font-mono-data text-[11px] sm:text-xs font-semibold tracking-wider transition-colors ${
-                        isSelected ? 'text-mint' : 'text-gray-400 group-hover:text-gray-300'
+                        isSelected ? 'text-mint' : 'text-secondary group-hover:text-primary'
                       }`}
                     >
                       {ev.time}
@@ -86,7 +85,7 @@ export default function HighlightCard({
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full min-w-0 gap-1 sm:gap-3">
                       <span
                         className={`font-body text-xs sm:text-sm font-medium transition-colors leading-snug ${
-                          isSelected ? 'text-white font-bold' : 'text-gray-300 group-hover:text-white'
+                          isSelected ? 'text-primary font-bold' : 'text-secondary group-hover:text-primary'
                         }`}
                       >
                         {ev.title}
@@ -100,12 +99,12 @@ export default function HighlightCard({
                           onSelectEvent(ev.id)
                           if (onLocateOnMap) onLocateOnMap(ev.id)
                         }}
-                        className="flex shrink-0 items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-white/10 transition-colors text-left"
+                        className="flex shrink-0 items-center gap-1.5 px-2 py-0.5 rounded-md hover:bg-panel transition-colors text-left"
                         title="Locate on map"
                       >
                         <span
                           className={`font-mono-data text-[9.5px] uppercase font-bold tracking-wider transition-colors ${
-                            isSelected ? 'text-mint' : 'text-gray-400 group-hover:text-gray-300'
+                            isSelected ? 'text-mint' : 'text-secondary group-hover:text-primary'
                           }`}
                         >
                           {ev.tag}
@@ -115,7 +114,7 @@ export default function HighlightCard({
                           className={`transition-colors ${
                             isSelected
                               ? 'fill-mint text-mint'
-                              : 'text-gray-500 group-hover:text-mint'
+                              : 'text-muted group-hover:text-mint'
                           }`}
                         />
                       </button>
@@ -128,7 +127,7 @@ export default function HighlightCard({
         </div>
 
         {/* Card Footer — Extra pb-14 on mobile to prevent FAB collision */}
-        <div className="mt-4 pb-14 sm:pb-0 flex items-center justify-between border-t border-white/10 pt-3 font-mono-data text-[11px] text-gray-400">
+        <div className="mt-4 pb-14 sm:pb-0 flex items-center justify-between border-t border-border-subtle pt-3 font-mono-data text-[11px] text-secondary">
           <span>PEC Sector 12, Chandigarh</span>
           <span className="text-mint text-[10.5px]">Click event to locate venue</span>
         </div>

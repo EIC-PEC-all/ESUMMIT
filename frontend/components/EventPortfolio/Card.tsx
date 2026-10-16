@@ -31,9 +31,9 @@ export function Card({ event, index, total, onSelect }: CardProps) {
           onSelect(event)
         }
       }}
-      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-panel border border-white/12 hover:border-mint/50 focus-visible:ring-2 focus-visible:ring-mint focus:outline-none w-full max-w-[380px] h-[420px] sm:h-[440px] flex flex-col justify-between shadow-2xl transition-colors duration-300"
+      className="group relative shrink-0 cursor-pointer overflow-hidden rounded-2xl bg-panel border border-border-panel hover:border-mint/50 focus-visible:ring-2 focus-visible:ring-mint focus:outline-none w-full max-w-[380px] h-[420px] sm:h-[440px] flex flex-col justify-between shadow-2xl transition-colors duration-300"
       style={{
-        boxShadow: '0 20px 45px rgba(0,0,0,0.6)',
+        boxShadow: 'var(--card-shadow, 0 16px 36px -6px rgba(0,0,0,0.35))',
       }}
     >
       {/* ── Top: Framed Banner Image ── */}
@@ -52,34 +52,34 @@ export function Card({ event, index, total, onSelect }: CardProps) {
 
         {/* Top-Left: Category Tag Badge */}
         <div className="absolute top-3 left-3 z-10">
-          <span className="font-mono-data text-[9px] font-bold uppercase tracking-wider text-mint bg-void/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-mint/30 shadow-sm">
+          <span className="font-mono-data text-[9px] font-bold uppercase tracking-wider text-mint bg-void/85 backdrop-blur-md px-2.5 py-1 rounded-md border border-mint/30 shadow-sm">
             {event.eyebrow || event.category}
           </span>
         </div>
 
         {/* Top-Right: Index Counter */}
         <div className="absolute top-3 right-3 z-10">
-          <span className="font-mono-data text-[9.5px] font-bold text-white/80 bg-black/60 backdrop-blur-md px-2 py-0.5 rounded-full border border-white/10">
+          <span className="font-mono-data text-[9.5px] font-bold text-primary bg-panel-alt/80 backdrop-blur-md px-2 py-0.5 rounded-md border border-border-subtle">
             {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
           </span>
         </div>
       </div>
 
       {/* ── Bottom: Structured Content Body ── */}
-      <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-panel border-t border-white/5">
+      <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-panel border-t border-border-subtle">
         <div>
           {/* Category Subtext */}
-          <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-gray-400 mb-1 block">
+          <span className="font-mono-data text-[9px] font-bold uppercase tracking-widest text-muted mb-1 block">
             {event.category}
           </span>
 
           {/* Event Title */}
-          <h3 className="font-display text-lg sm:text-xl font-bold uppercase tracking-tight text-white group-hover:text-mint transition-colors duration-200 line-clamp-1 leading-snug">
+          <h3 className="font-display text-lg sm:text-xl font-bold uppercase tracking-tight text-primary group-hover:text-mint transition-colors duration-200 line-clamp-1 leading-snug">
             {event.title}
           </h3>
 
           {/* Description Teaser */}
-          <p className="font-body text-xs text-gray-300 font-normal line-clamp-2 leading-relaxed mt-2 mb-3">
+          <p className="font-body text-xs text-secondary font-normal line-clamp-2 leading-relaxed mt-2 mb-3">
             {event.purpose}
           </p>
 
@@ -89,7 +89,7 @@ export function Card({ event, index, total, onSelect }: CardProps) {
               {event.tags.slice(0, 2).map((tag, tIdx) => (
                 <span
                   key={tIdx}
-                  className="font-mono-data text-[9px] font-semibold text-gray-300 bg-white/5 border border-white/10 px-2 py-0.5 rounded-md"
+                  className="font-mono-data text-[9px] font-semibold text-secondary bg-panel-alt border border-border-subtle px-2 py-0.5 rounded-md"
                 >
                   {tag}
                 </span>
@@ -99,8 +99,8 @@ export function Card({ event, index, total, onSelect }: CardProps) {
         </div>
 
         {/* Card Footer: Participation & Action Arrow */}
-        <div className="flex items-center justify-between pt-3 border-t border-white/10 mt-auto">
-          <span className="font-mono-data text-[9.5px] font-semibold text-gray-400 truncate max-w-[150px]">
+        <div className="flex items-center justify-between pt-3 border-t border-border-subtle mt-auto">
+          <span className="font-mono-data text-[9.5px] font-semibold text-muted truncate max-w-[150px]">
             {event.expectedParticipation || 'PEC E-Summit 2026'}
           </span>
 
@@ -112,12 +112,12 @@ export function Card({ event, index, total, onSelect }: CardProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center justify-center h-7 px-3.5 rounded-full bg-mint text-void font-mono-data text-[10px] font-black uppercase tracking-wider hover:brightness-110 hover:scale-105 transition-all"
+                  className="flex items-center justify-center h-7 px-3.5 rounded-lg bg-mint text-void font-mono-data text-[10px] font-black uppercase tracking-wider hover:brightness-110 hover:scale-105 transition-all"
                 >
                   Register
                 </a>
                 <div className="flex items-center gap-1.5 font-mono-data text-[10.5px] font-bold text-mint group-hover:translate-x-0.5 transition-transform">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full bg-mint/15 text-mint group-hover:bg-mint group-hover:text-void transition-colors shadow-xs">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-mint/15 text-mint group-hover:bg-mint group-hover:text-void transition-colors shadow-xs">
                     <ArrowUpRight size={14} strokeWidth={2.5} />
                   </div>
                 </div>
