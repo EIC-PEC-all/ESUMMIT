@@ -30,9 +30,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
       const domTheme = document.documentElement.getAttribute('data-theme') as Theme | null
       
-      const initialTheme: Theme = stored || domTheme || (
-        window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
-      )
+      const initialTheme: Theme = stored || domTheme || 'dark'
       
       setThemeState(initialTheme)
       applyTheme(initialTheme)

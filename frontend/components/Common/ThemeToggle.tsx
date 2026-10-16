@@ -10,7 +10,14 @@ interface ThemeToggleProps {
   variant?: 'pill' | 'icon'
 }
 
+// Light mode toggle temporarily disabled
+const HIDE_THEME_TOGGLE = true
+
 export default function ThemeToggle({ className = '', variant = 'pill' }: ThemeToggleProps) {
+  if (HIDE_THEME_TOGGLE) {
+    return null
+  }
+
   const { theme, toggleTheme, isLoaded } = useTheme()
   const isLight = isLoaded && theme === 'light'
 
