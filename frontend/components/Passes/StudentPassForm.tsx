@@ -22,9 +22,15 @@ import {
   ArrowRight,
   Loader2,
 } from 'lucide-react'
+import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/context/AuthContext'
-import { getStoredProfile } from '@/lib/onboarding'
+import { getStoredProfile, saveStoredProfile } from '@/lib/onboarding'
+import {
+  RegistrationRecord,
+  getLocalRegistrations,
+  saveLocalRegistrations,
+} from '@/lib/registrations'
 import { STUDENT_PACKAGES } from './passesData'
 
 interface StudentFormData {
@@ -188,10 +194,72 @@ export default function StudentPassForm({
           regId = data.registration.passId
         } else if (data?.passId) {
           regId = data.passId
+        } else if (typeof data?.message === 'string') {
+          const match = data.message.match(/pass ID\s+([A-Z0-9-]+)/i)
+          if (match?.[1]) regId = match[1]
         }
       } catch (backendErr) {
         console.warn('Backend sync note:', backendErr)
       }
+
+      // ── Persist pass locally for instant profile access ──
+      const qrDataUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(regId)}`
+      const newRecord: RegistrationRecord = {
+        id: regId,
+        userId: user?.uid,
+        name: form.fullName.trim(),
+        email: form.email.trim().toLowerCase(),
+        phone: form.phone.trim(),
+        college: form.college.trim(),
+        category: selectedPkg.name,
+        tracks,
+        amountPaid: selectedPkg.fee,
+        paymentStatus: selectedPkg.fee === 0 ? 'FREE' : 'PAID',
+        date: new Date().toLocaleDateString('en-IN', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        }),
+        qrCodeData: qrDataUrl,
+      }
+
+      const existingPasses = getLocalRegistrations()
+      const dedupedPasses = existingPasses.filter((p) => p.id !== regId)
+      saveLocalRegistrations([newRecord, ...dedupedPasses])
+
+      // ── Sync with Response Manager store ──
+      try {
+        await fetch('/api/registrations/record', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            applicationId: regId,
+            name: form.fullName.trim(),
+            email: form.email.trim().toLowerCase(),
+            phone: form.phone.trim(),
+            college: form.college.trim(),
+            category: selectedPkg.name,
+            tracks,
+            amountPaid: selectedPkg.fee,
+            paymentStatus: selectedPkg.fee === 0 ? 'FREE' : 'PAID',
+          }),
+        })
+      } catch {
+        // Non-fatal
+      }
+
+      // Update attendee profile
+      try {
+        const stored = getStoredProfile()
+        saveStoredProfile({
+          ...(stored || {}),
+          name: form.fullName.trim(),
+          email: form.email.trim().toLowerCase(),
+          phone: form.phone.trim(),
+          college: form.college.trim(),
+          onboardingCompleted: true,
+        })
+      } catch {}
 
       setRegistrationId(regId)
       setSubmitState('success')
@@ -268,11 +336,18 @@ export default function StudentPassForm({
           </div>
           <div className="flex justify-between">
             <span className="text-muted">Event Dates:</span>
-            <span className="font-bold text-mint">March 15–16, 2026 @ PEC Chandigarh</span>
+            <span className="font-bold text-mint">November 14–15, 2026 @ PEC Chandigarh</span>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <Link
+            href="/profile"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer hover:brightness-105 shadow-md"
+          >
+            <span>View in My Profile</span>
+            <ArrowRight size={14} />
+          </Link>
           {onBackToCards && (
             <button
               type="button"
@@ -286,7 +361,7 @@ export default function StudentPassForm({
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer hover:brightness-105 shadow-md"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-panel-alt border border-border-subtle text-secondary hover:text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:border-mint"
           >
             <RotateCcw size={14} />
             <span>Register Another</span>
@@ -298,7 +373,7 @@ export default function StudentPassForm({
 
   // ── Main Form Screen ───────────────────────────────────────────────────────
   return (
-    <div id="student-pass-form" className="w-full max-w-4xl mx-auto">
+    <div id="student-pass-form" className="w-full max-w-6xl mx-auto">
       <Toaster position="top-right" />
 
       <div className="rounded-3xl bg-panel border border-border-subtle p-6 sm:p-9 md:p-11 shadow-2xl relative overflow-hidden">
@@ -332,7 +407,7 @@ export default function StudentPassForm({
         </div>
 
         {/* Pass Selector Tabs */}
-        <div className="mb-8 p-1.5 rounded-2xl bg-panel-alt border border-border-subtle grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+        <div className="mb-8 p-1.5 rounded-full bg-panel-alt border border-border-subtle flex flex-row items-center gap-2 overflow-x-auto no-scrollbar">
           {STUDENT_PACKAGES.map((pkg) => {
             const isSelected = form.selectedPassId === pkg.id
             let Icon = Shield
@@ -345,28 +420,28 @@ export default function StudentPassForm({
                 key={pkg.id}
                 type="button"
                 onClick={() => handlePassSwitch(pkg.id)}
-                className={`flex flex-col justify-between p-3.5 rounded-xl transition-all cursor-pointer text-left ${
+                className={`flex-1 min-w-[190px] sm:min-w-0 w-full flex items-center justify-between sm:justify-center gap-2 py-3 px-3.5 sm:px-4 rounded-full transition-all cursor-pointer text-left sm:text-center shrink-0 sm:shrink whitespace-nowrap ${
                   isSelected
-                    ? 'bg-mint text-void font-black shadow-md'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
                     : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
-                <div className="flex items-center justify-between gap-1 mb-1">
-                  <Icon size={16} className={isSelected ? 'text-void' : 'text-mint'} />
-                  {isSelected && (
-                    <span className="font-mono-data text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-void text-mint">
-                      Active
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <div className="font-mono-data text-[11px] font-bold uppercase tracking-wider truncate">
-                    {pkg.name.replace(' PASS', '')}
-                  </div>
-                  <div className={`text-xs font-display font-black ${isSelected ? 'text-void' : 'text-primary'}`}>
-                    {pkg.price}
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <Icon size={15} className={isSelected ? 'text-void stroke-[2.5]' : 'text-mint'} />
+                  <div>
+                    <div className="font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider truncate">
+                      {pkg.name.replace(' PASS', '')}
+                    </div>
+                    <div className={`text-[10px] sm:text-[11px] font-mono-data font-bold ${isSelected ? 'text-void/90' : 'text-muted'}`}>
+                      {pkg.price}
+                    </div>
                   </div>
                 </div>
+                {isSelected && (
+                  <span className="font-mono-data text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-void text-mint shadow-xs">
+                    ACTIVE
+                  </span>
+                )}
               </button>
             )
           })}
@@ -544,7 +619,7 @@ export default function StudentPassForm({
             <button
               type="submit"
               disabled={submitState === 'submitting'}
-              className="w-full py-4 px-6 rounded-full bg-mint text-void font-mono-data text-xs sm:text-sm font-black uppercase tracking-wider cursor-pointer hover:brightness-105 active:scale-[0.99] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+              className="btn-mint-gradient w-full py-4 px-6 rounded-full text-void font-mono-data text-xs sm:text-sm font-black uppercase tracking-wider cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {submitState === 'submitting' ? (
                 <>
@@ -558,8 +633,9 @@ export default function StudentPassForm({
                 </>
               )}
             </button>
-            <p className="text-center font-mono-data text-[10px] text-muted uppercase tracking-wider mt-2.5">
-              🔒 Instant confirmation. Pass credentials will be available on your summit profile.
+            <p className="text-center font-mono-data text-[10px] text-muted uppercase tracking-wider mt-2.5 flex items-center justify-center gap-1.5">
+              <Shield size={12} className="text-mint shrink-0" />
+              <span>Instant confirmation. Pass credentials will be available on your summit profile.</span>
             </p>
           </div>
         </form>

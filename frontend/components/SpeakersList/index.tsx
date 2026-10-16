@@ -128,15 +128,15 @@ export default function SpeakersList() {
         {/* Controls: Category Tabs + Search Bar (Rounded-Full Pill Styling) */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-10">
           {/* Category Tabs */}
-          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle overflow-x-auto max-w-full">
+          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md overflow-x-auto no-scrollbar max-w-full flex-nowrap">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono-data font-bold uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   activeCategory === cat.id
-                    ? 'bg-mint text-void shadow-sm'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
                     : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
@@ -182,7 +182,7 @@ export default function SpeakersList() {
                 setActiveCategory('all')
                 setSearchQuery('')
               }}
-              className="px-5 py-2 rounded-xl border border-border-subtle bg-panel-alt hover:bg-panel text-xs font-mono-data font-bold uppercase tracking-wider text-primary transition-colors cursor-pointer"
+              className="px-6 py-2.5 rounded-full btn-dark-gradient border border-border-subtle text-xs font-mono-data font-bold uppercase tracking-wider text-primary transition-colors cursor-pointer shadow-md"
             >
               Reset Filters
             </button>

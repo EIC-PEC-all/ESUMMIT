@@ -269,21 +269,21 @@ export default function Nav() {
       {pathname === '/' && <NavCountdown visible={!isPastHero && !isModalOrLoader} />}
 
 
-      {/* 2. Download Brochure + Chat Action Bar: Visible once scrolled past Hero section on mobile */}
+      {/* 2. Download Brochure + Chat Action Bar: Floating pill on mobile */}
       <div
-        className={`fixed sm:hidden bottom-0 left-0 right-0 z-[2400] bg-[#07130F]/85 backdrop-blur-2xl border-t border-white/10 rounded-t-[24px] px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-all duration-400 ease-out shadow-[0_-8px_30px_rgba(0,0,0,0.5)] ${
+        className={`fixed sm:hidden bottom-3 left-3 right-3 z-[2400] bg-[#07130F]/90 backdrop-blur-2xl border border-white/15 rounded-full p-1.5 transition-all duration-400 ease-out shadow-[0_8px_30px_rgba(0,0,0,0.6)] ${
           isPastHero && !isModalOrLoader
             ? 'translate-y-0 opacity-100 pointer-events-auto'
-            : 'translate-y-full opacity-0 pointer-events-none'
+            : 'translate-y-24 opacity-0 pointer-events-none'
         }`}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <a
             href="/e-summit-brochure.pdf"
             target="_blank"
-            className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-white/10 border border-white/10 py-3.5 shadow-md text-white font-mono-data text-[11px] font-bold tracking-wider uppercase active:scale-[0.98] transition-transform"
+            className="flex-1 flex items-center justify-center gap-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 py-2.5 px-4 shadow-sm text-white font-mono-data text-[11px] font-bold tracking-wider uppercase active:scale-[0.98] transition-all"
           >
-            <Download size={16} className="text-mint" />
+            <Download size={14} className="text-mint" />
             <span>DOWNLOAD BROCHURE</span>
           </a>
           
@@ -293,11 +293,11 @@ export default function Nav() {
                 window.dispatchEvent(new CustomEvent('toggle-concierge'))
               }
             }}
-            className="w-[48px] h-[48px] shrink-0 rounded-xl bg-white text-black flex items-center justify-center shadow-md active:scale-[0.95] transition-transform relative"
+            className="w-10 h-10 shrink-0 rounded-full bg-white text-black flex items-center justify-center shadow-md active:scale-95 transition-transform relative cursor-pointer"
             aria-label="Open AI Assistant"
           >
-            <Sparkles size={20} strokeWidth={2.5} />
-            <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-mint border border-white animate-pulse" />
+            <Sparkles size={18} strokeWidth={2.5} />
+            <span className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-mint border-2 border-white animate-pulse" />
           </button>
         </div>
       </div>

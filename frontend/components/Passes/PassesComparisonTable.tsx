@@ -138,7 +138,7 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
                   <button
                     type="button"
                     onClick={() => onSelect('silver')}
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-mono-data text-xs font-black uppercase tracking-wider bg-emerald-500 hover:bg-emerald-400 text-white dark:text-black transition-colors cursor-pointer active:scale-95 shadow-sm"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider btn-mint-gradient transition-all cursor-pointer active:scale-95 shadow-md hover:opacity-95"
                   >
                     <span>Select</span>
                     <ArrowRight size={12} className="stroke-[2.5]" />
@@ -146,7 +146,7 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
                 ) : (
                   <Link
                     href="/passes?type=startup&tier=silver#startup-pass-form"
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-mono-data text-xs font-black uppercase tracking-wider bg-emerald-500 hover:bg-emerald-400 text-white dark:text-black transition-colors shadow-sm"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider btn-mint-gradient transition-all shadow-md hover:opacity-95 cursor-pointer active:scale-95"
                   >
                     <span>Select</span>
                     <ArrowRight size={12} className="stroke-[2.5]" />
@@ -160,7 +160,7 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
                   <button
                     type="button"
                     onClick={() => onSelect('gold')}
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-mono-data text-xs font-black uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-black transition-colors cursor-pointer active:scale-95 shadow-sm"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black font-extrabold transition-all cursor-pointer active:scale-95 shadow-md hover:brightness-105"
                   >
                     <span>Select</span>
                     <ArrowRight size={12} className="stroke-[2.5]" />
@@ -168,7 +168,7 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
                 ) : (
                   <Link
                     href="/passes?type=startup&tier=gold#startup-pass-form"
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-mono-data text-xs font-black uppercase tracking-wider bg-amber-400 hover:bg-amber-300 text-black transition-colors shadow-sm"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black font-extrabold transition-all shadow-md hover:brightness-105 cursor-pointer active:scale-95"
                   >
                     <span>Select</span>
                     <ArrowRight size={12} className="stroke-[2.5]" />
@@ -182,7 +182,7 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
                   <button
                     type="button"
                     onClick={() => onSelect('diamond')}
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-mono-data text-xs font-black uppercase tracking-wider bg-indigo-600 hover:bg-indigo-500 dark:bg-blue dark:hover:bg-blue/90 text-white transition-colors cursor-pointer active:scale-95 shadow-sm"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 text-white font-extrabold transition-all cursor-pointer active:scale-95 shadow-md hover:brightness-105"
                   >
                     <span>Select</span>
                     <ArrowRight size={12} className="stroke-[2.5]" />
@@ -190,7 +190,7 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
                 ) : (
                   <Link
                     href="/passes?type=startup&tier=diamond#startup-pass-form"
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl font-mono-data text-xs font-black uppercase tracking-wider bg-indigo-600 hover:bg-indigo-500 dark:bg-blue dark:hover:bg-blue/90 text-white transition-colors shadow-sm"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 text-white font-extrabold transition-all shadow-md hover:brightness-105 cursor-pointer active:scale-95"
                   >
                     <span>Select</span>
                     <ArrowRight size={12} className="stroke-[2.5]" />

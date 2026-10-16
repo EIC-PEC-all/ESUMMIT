@@ -101,16 +101,16 @@ function EmailCapture() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
         required
-        className="flex-1 rounded-xl border border-mint/30 bg-panel-alt px-4 py-3 font-body text-sm text-primary outline-none placeholder:text-muted focus:border-mint/60 transition-colors"
+        className="flex-1 rounded-full border border-mint/30 bg-panel-alt px-5 py-3 font-body text-sm text-primary outline-none placeholder:text-muted focus:border-mint/60 transition-colors"
         aria-label="Enter your email to get E-Summit updates"
       />
       <button
         type="submit"
-        className="btn-green shrink-0"
+        className="rounded-full px-6 py-3 font-mono-data text-xs font-black uppercase tracking-wider btn-mint-gradient shadow-md flex items-center justify-center gap-2 cursor-pointer hover:opacity-90 shrink-0"
         id="footer-subscribe-btn"
         aria-label="Subscribe to E-Summit updates"
       >
-        Get Updates
+        <span>Get Updates</span>
         <ArrowRight size={16} aria-hidden="true" />
       </button>
     </form>
@@ -286,7 +286,7 @@ export default function Footer({ hideCTA = false }: { hideCTA?: boolean }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="border-mint/30 flex min-h-[44px] min-w-[44px] h-11 w-11 items-center justify-center rounded-xl border bg-panel text-primary shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
+                  className="border-mint/30 flex min-h-[44px] min-w-[44px] h-11 w-11 items-center justify-center rounded-full border bg-panel text-primary shadow-sm transition-all hover:scale-105 hover:border-mint hover:text-mint"
                 >
                   <Icon size={18} aria-hidden="true" strokeWidth={1.5} />
                 </a>

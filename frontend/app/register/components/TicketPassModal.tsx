@@ -165,11 +165,11 @@ export const TicketPassModal: React.FC<TicketPassModalProps> = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="grid grid-cols-2 gap-2 pt-1">
+      <div className="grid grid-cols-2 gap-2.5 pt-1">
         <button
           type="button"
           onClick={onExportInstagramStory}
-          className="py-2 px-3 rounded-md bg-mint hover:bg-white text-void text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
+          className="py-2.5 px-4 rounded-full btn-mint-gradient text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
         >
           <Sparkles size={13} />
           <span>Story Badge</span>
@@ -178,7 +178,7 @@ export const TicketPassModal: React.FC<TicketPassModalProps> = ({
         <button
           type="button"
           onClick={onPrint}
-          className="py-2 px-3 rounded-md border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+          className="py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
         >
           <Download size={13} />
           <span>Print Ticket</span>
@@ -187,7 +187,7 @@ export const TicketPassModal: React.FC<TicketPassModalProps> = ({
         <button
           type="button"
           onClick={() => onEdit(currentBadge)}
-          className="py-2 px-3 rounded-md border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+          className="py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
         >
           <Edit3 size={12} />
           <span>Edit Details</span>
@@ -196,7 +196,7 @@ export const TicketPassModal: React.FC<TicketPassModalProps> = ({
         <button
           type="button"
           onClick={onViewPasses}
-          className="py-2 px-3 rounded-md border border-white/10 hover:border-white/20 text-neutral-400 hover:text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+          className="py-2.5 px-4 rounded-full border border-white/10 hover:border-white/20 text-neutral-300 hover:text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
         >
           <Ticket size={12} />
           <span>My Passes ({totalPassesCount})</span>

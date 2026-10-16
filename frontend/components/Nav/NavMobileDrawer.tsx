@@ -75,7 +75,7 @@ export default function NavMobileDrawer({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 bg-backdrop backdrop-blur-md z-[11000] lg:hidden"
+            className="fixed inset-0 bg-backdrop backdrop-blur-md z-[11000] cursor-pointer"
             aria-hidden="true"
             onClick={onClose}
           />
@@ -114,7 +114,7 @@ export default function NavMobileDrawer({
                   <ThemeToggle variant="icon" className="shadow-sm" />
                   <button
                     onClick={onClose}
-                    className="min-h-[44px] min-w-[44px] rounded-xl bg-panel-alt text-primary font-bold flex items-center justify-center border border-border-subtle hover:border-mint hover:text-mint transition-all cursor-pointer shadow-sm"
+                    className="min-h-[44px] min-w-[44px] rounded-full bg-panel-alt text-primary font-bold flex items-center justify-center border border-border-subtle hover:border-mint hover:text-mint transition-all cursor-pointer shadow-sm"
                     aria-label="Close navigation sidebar"
                   >
                     <X size={20} className="stroke-[2.5]" />

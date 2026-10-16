@@ -48,10 +48,26 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     }
 
     const filter = buildIdFilter(id)
-    const result = await collection.updateOne(filter, { $set: updateFields })
+    let result = await collection.updateOne(filter, { $set: updateFields })
 
     if (result.matchedCount === 0) {
-      return NextResponse.json({ success: false, error: 'Application not found' }, { status: 404 })
+      // Check Registration collection for student pass
+      const regCollection = db.collection('Registration')
+      const regFilter: Record<string, unknown> = { passId: id }
+      const isHex24 = /^[0-9a-fA-F]{24}$/.test(id)
+      if (isHex24) {
+        regFilter.$or = [{ _id: id }, { passId: id }]
+      }
+      const regUpdate: Record<string, unknown> = { updatedAt: new Date() }
+      if (body.status === 'REJECTED') {
+        regUpdate.isRevoked = true
+      } else if (body.status === 'PAYMENT_CONFIRMED') {
+        regUpdate.isRevoked = false
+      }
+      const regResult = await regCollection.updateOne({ passId: id }, { $set: regUpdate })
+      if (regResult.matchedCount === 0) {
+        return NextResponse.json({ success: false, error: 'Application or pass not found' }, { status: 404 })
+      }
     }
 
     return NextResponse.json({ success: true, message: 'Application updated successfully' })
@@ -71,7 +87,11 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
     const result = await collection.deleteOne(filter)
 
     if (result.deletedCount === 0) {
-      return NextResponse.json({ success: false, error: 'Application not found' }, { status: 404 })
+      const regCollection = db.collection('Registration')
+      const regResult = await regCollection.deleteOne({ passId: id })
+      if (regResult.deletedCount === 0) {
+        return NextResponse.json({ success: false, error: 'Application not found' }, { status: 404 })
+      }
     }
 
     return NextResponse.json({ success: true, message: 'Application deleted successfully' })

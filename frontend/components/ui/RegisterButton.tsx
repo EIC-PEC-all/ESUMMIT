@@ -16,10 +16,10 @@ export default function RegisterButton({
   return (
     <a
       href={href}
-      className={`inline-flex items-center justify-center rounded-xl font-bold uppercase tracking-widest cursor-pointer transition-all duration-300
+      className={`inline-flex items-center justify-center rounded-full font-bold uppercase tracking-widest cursor-pointer transition-all duration-300
         px-8 py-3 sm:px-10 sm:py-3.5 md:px-12 md:py-4
         text-xs sm:text-sm md:text-base
-        font-display bg-mint text-void shadow-md hover:shadow-lg hover:brightness-105 hover:-translate-y-0.5
+        font-display btn-mint-gradient shadow-md hover:shadow-lg hover:brightness-105 hover:-translate-y-0.5
         ${className}`}
     >
       {label}

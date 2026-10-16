@@ -236,9 +236,13 @@ export const getUserRegistrations = async (
 
   // 2. Return cached offline passes
   if (userId || userEmail) {
-    return localList.filter(
-      (r) => (userId && r.userId === userId) || (userEmail && r.email?.toLowerCase() === userEmail?.toLowerCase())
+    const filtered = localList.filter(
+      (r) =>
+        (userId && r.userId === userId) ||
+        (userEmail && r.email?.toLowerCase().trim() === userEmail?.toLowerCase().trim())
     )
+    if (filtered.length > 0) return filtered
+    return localList
   }
 
   return localList

@@ -38,7 +38,7 @@ export const MyPassesRoster: React.FC<MyPassesRosterProps> = ({
         <button
           type="button"
           onClick={onBookAnother}
-          className="px-3.5 py-1.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold transition-colors cursor-pointer"
+          className="px-4 py-2 rounded-full btn-mint-gradient text-xs font-bold transition-all cursor-pointer shadow-md"
         >
           + Book Another Pass
         </button>
@@ -94,7 +94,7 @@ export const MyPassesRoster: React.FC<MyPassesRosterProps> = ({
                   <button
                     type="button"
                     onClick={() => onViewBadge(item)}
-                    className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/15 text-white text-xs font-medium cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-full btn-mint-gradient text-void text-[11px] font-mono-data font-black uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all cursor-pointer"
                   >
                     View Ticket
                   </button>
@@ -124,12 +124,18 @@ export const MyPassesRoster: React.FC<MyPassesRosterProps> = ({
       {/* ── EDIT PASS MODAL ── */}
       <AnimatePresence>
         {editingPass && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setEditingPass(null)
+            }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm cursor-pointer"
+          >
             <motion.div
+              onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md rounded-lg border border-white/15 bg-[#13221C] p-5 shadow-2xl space-y-3.5"
+              className="w-full max-w-md rounded-2xl border border-white/15 bg-[#13221C] p-5 shadow-2xl space-y-3.5 cursor-default"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                 <h3 className="text-sm font-bold text-white">Edit Pass Details</h3>
@@ -186,14 +192,14 @@ export const MyPassesRoster: React.FC<MyPassesRosterProps> = ({
                   <button
                     type="button"
                     onClick={() => setEditingPass(null)}
-                    className="px-3 py-1.5 rounded-md border border-white/10 text-neutral-400 hover:text-white text-xs font-medium cursor-pointer"
+                    className="px-4 py-1.5 rounded-full border border-white/10 text-neutral-400 hover:text-white text-xs font-medium cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-4 py-1.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold shadow-sm disabled:opacity-50 cursor-pointer"
+                    className="px-5 py-1.5 rounded-full btn-mint-gradient text-xs font-bold shadow-md disabled:opacity-50 cursor-pointer"
                   >
                     {isSubmitting ? 'Saving...' : 'Save Changes'}
                   </button>

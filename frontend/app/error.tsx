@@ -31,14 +31,14 @@ export default function Error({
           <button
             type="button"
             onClick={() => reset()}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-mint hover:bg-white text-void font-mono-data text-xs font-bold uppercase tracking-wider transition-all shadow-[0_0_20px_var(--border-glow)] hover:scale-105 active:scale-95 cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full btn-mint-gradient font-mono-data text-xs font-black uppercase tracking-wider transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
           >
             <RotateCw size={13} />
             <span>Try Again</span>
           </button>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-border-subtle bg-panel-alt hover:bg-panel text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all hover:border-mint"
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full btn-dark-gradient border border-border-subtle hover:border-mint text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all shadow-md cursor-pointer"
           >
             <ArrowLeft size={13} />
             <span>Home</span>

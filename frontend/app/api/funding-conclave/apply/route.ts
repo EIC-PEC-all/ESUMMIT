@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { randomBytes } from 'crypto'
-import fs from 'fs/promises'
-import path from 'path'
 import { MongoClient } from 'mongodb'
 
 export const dynamic = 'force-dynamic'
@@ -16,37 +14,11 @@ const MONGO_URI =
 let cachedClient: MongoClient | null = null
 
 async function getMongoCollection() {
-  try {
-    if (!cachedClient) {
-      cachedClient = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 5000 })
-      await cachedClient.connect()
-    }
-    return cachedClient.db('esummit').collection('funding_conclave_applications')
-  } catch (err) {
-    console.warn('[Funding Conclave API] MongoDB direct connect notice:', err)
-    return null
+  if (!cachedClient) {
+    cachedClient = new MongoClient(MONGO_URI, { serverSelectionTimeoutMS: 8000 })
+    await cachedClient.connect()
   }
-}
-
-function getCandidatePaths(): string[] {
-  return [
-    path.join(process.cwd(), 'data/funding-conclave-applications.json'),
-    path.join(process.cwd(), 'frontend/data/funding-conclave-applications.json'),
-    path.join(process.cwd(), '../frontend/data/funding-conclave-applications.json'),
-  ]
-}
-
-async function resolveStoragePath(): Promise<string> {
-  const candidates = getCandidatePaths()
-  for (const candidate of candidates) {
-    try {
-      await fs.access(candidate)
-      return candidate
-    } catch {
-      // continue
-    }
-  }
-  return candidates[0]
+  return cachedClient.db('esummit').collection('funding_conclave_applications')
 }
 
 export async function POST(req: NextRequest) {
@@ -150,12 +122,10 @@ export async function POST(req: NextRequest) {
     let dbSaved = false
     try {
       const collection = await getMongoCollection()
-      if (collection) {
-        await collection.insertOne(applicationRecord)
-        dbSaved = true
-      }
+      await collection.insertOne(applicationRecord)
+      dbSaved = true
     } catch (dbErr) {
-      console.warn('[Funding Conclave API] MongoDB save notice:', dbErr)
+      console.warn('[Funding Conclave API] MongoDB save error:', dbErr)
     }
 
     // 2. Sync registration to backend NestJS API if available
@@ -180,26 +150,8 @@ export async function POST(req: NextRequest) {
           ].filter(Boolean),
         }),
       })
-    } catch (backendErr) {
-      console.warn('[Funding Conclave API] Backend sync notice:', backendErr)
-    }
-
-    // 3. Persist to fallback JSON file
-    try {
-      const filePath = await resolveStoragePath()
-      await fs.mkdir(path.dirname(filePath), { recursive: true })
-      let existing: any[] = []
-      try {
-        const raw = await fs.readFile(filePath, 'utf-8')
-        existing = JSON.parse(raw)
-        if (!Array.isArray(existing)) existing = []
-      } catch {
-        existing = []
-      }
-      existing.unshift(applicationRecord)
-      await fs.writeFile(filePath, JSON.stringify(existing, null, 2), 'utf-8')
-    } catch (fsErr) {
-      console.warn('[Funding Conclave API] Local file persist notice:', fsErr)
+    } catch {
+      // Backend sync is non-blocking
     }
 
     return NextResponse.json({
@@ -224,46 +176,25 @@ export async function GET(req: NextRequest) {
     const email = searchParams.get('email')?.trim().toLowerCase()
     const userId = searchParams.get('userId')?.trim()
 
-    // 1. Try MongoDB first
-    try {
-      const collection = await getMongoCollection()
-      if (collection) {
-        const query: Record<string, any> = {}
-        if (email) query.email = email
-        if (userId) query.userId = userId
+    const collection = await getMongoCollection()
+    const query: Record<string, any> = {}
+    if (email) query.email = email
+    if (userId) query.userId = userId
 
-        const fromDb = await collection.find(query).sort({ createdAt: -1 }).toArray()
-        if (fromDb.length > 0 || (!email && !userId)) {
-          return NextResponse.json({
-            success: true,
-            applications: fromDb,
-          })
-        }
-      }
-    } catch (dbErr) {
-      console.warn('[Funding Conclave API] MongoDB GET fallback:', dbErr)
-    }
+    const fromDb = await collection.find(query).sort({ createdAt: -1 }).toArray()
 
-    // 2. Fallback to local file
-    const filePath = await resolveStoragePath()
-    let allApplications: any[] = []
-    try {
-      const raw = await fs.readFile(filePath, 'utf-8')
-      allApplications = JSON.parse(raw)
-      if (!Array.isArray(allApplications)) allApplications = []
-    } catch {
-      allApplications = []
-    }
-
-    const matched = allApplications.filter((app) => {
-      if (email && app.email && String(app.email).toLowerCase() === email) return true
-      if (userId && app.userId && app.userId === userId) return true
+    // Strictly ensure only startup applications are returned
+    const validStartupApps = fromDb.filter((app: any) => {
+      const tier = String(app.passTier || '').toLowerCase()
+      const tierName = String(app.passTierName || '').toLowerCase()
+      if (['diamond', 'gold', 'silver'].includes(tier)) return true
+      if (tierName.includes('diamond') || tierName.includes('gold') || tierName.includes('silver')) return true
       return false
     })
 
     return NextResponse.json({
       success: true,
-      applications: email || userId ? matched : allApplications,
+      applications: validStartupApps,
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown server error'

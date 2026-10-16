@@ -75,7 +75,12 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[99999] flex items-stretch sm:items-center justify-center p-0 sm:p-6">
+      <div
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose()
+        }}
+        className="fixed inset-0 z-[99999] flex items-stretch sm:items-center justify-center p-0 sm:p-6 cursor-pointer"
+      >
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -96,7 +101,7 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 15 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="relative z-10 w-full h-[100dvh] sm:h-auto sm:max-w-xl lg:max-w-3xl sm:max-h-[85vh] overflow-hidden rounded-none sm:rounded-2xl bg-panel/95 backdrop-blur-2xl border-0 sm:border sm:border-border-panel text-primary shadow-2xl flex flex-col"
+          className="relative z-10 w-full h-[100dvh] sm:h-auto sm:max-w-xl lg:max-w-3xl sm:max-h-[85vh] overflow-hidden rounded-none sm:rounded-2xl bg-panel/95 backdrop-blur-2xl border-0 sm:border sm:border-border-panel text-primary shadow-2xl flex flex-col cursor-default"
         >
           {/* Top Bar Header */}
           <div className="flex items-center justify-between px-4 sm:px-5 py-3.5 border-b border-border-subtle bg-panel shrink-0 pt-[max(0.8rem,env(safe-area-inset-top))]">
@@ -209,7 +214,7 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
                 href={registerLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-1.5 h-11 px-5 rounded-full bg-mint text-void font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:opacity-90 transition-opacity whitespace-nowrap cursor-pointer shadow-md"
+                className="w-full flex items-center justify-center gap-1.5 h-11 px-5 rounded-full btn-mint-gradient font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:opacity-90 transition-opacity whitespace-nowrap cursor-pointer shadow-md"
               >
                 <span>Register on Unstop</span>
                 <ExternalLink size={14} className="shrink-0" />
@@ -218,7 +223,7 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
               <a
                 href="/register"
                 onClick={onClose}
-                className="w-full flex items-center justify-center gap-1.5 h-11 px-5 rounded-full bg-mint text-void font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:opacity-90 transition-opacity whitespace-nowrap cursor-pointer shadow-md"
+                className="w-full flex items-center justify-center gap-1.5 h-11 px-5 rounded-full btn-mint-gradient font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:opacity-90 transition-opacity whitespace-nowrap cursor-pointer shadow-md"
               >
                 <span>Claim Pass for this Event</span>
                 <ExternalLink size={14} className="shrink-0" />

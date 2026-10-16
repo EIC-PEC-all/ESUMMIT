@@ -64,23 +64,23 @@ export default function Sponsors() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
               <a
                 href="/e-summit-brochure.pdf"
                 download="PEC-E-Summit-2026-Brochure.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-mint text-void font-mono-data text-xs font-bold uppercase tracking-wider hover:opacity-90 transition-all shadow-md hover:scale-105 active:scale-95"
+                className="btn-mint-gradient w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full font-mono-data text-xs font-black uppercase tracking-wider text-void shadow-md hover:scale-105 active:scale-95 cursor-pointer"
               >
-                <Download size={14} strokeWidth={2.5} />
+                <Download size={15} strokeWidth={2.5} className="text-void" />
                 <span>DOWNLOAD OFFICIAL BROCHURE (PDF)</span>
               </a>
 
               <a
                 href={`mailto:${MASTER_CONTACTS.emails[0]}?subject=Partnership%20Inquiry%20-%20PEC%20E-Summit%202026`}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-panel-alt hover:bg-panel text-primary font-mono-data text-xs font-bold uppercase tracking-wider border border-border-subtle transition-all hover:border-mint"
+                className="btn-dark-gradient w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-primary font-mono-data text-xs font-bold uppercase tracking-wider border border-border-subtle hover:border-mint hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
               >
-                <Mail size={14} />
+                <Mail size={15} className="text-mint stroke-[2.5]" />
                 <span>PARTNER INQUIRY</span>
               </a>
             </div>

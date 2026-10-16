@@ -137,53 +137,55 @@ export default function EsummitSchedule() {
       </h2>
 
       {/* Day Selector Pills */}
-      <div className="flex items-center justify-center gap-2 mb-5 sm:mb-7">
-        {cards.map((c, idx) => (
-          <button
-            key={c.num}
-            onClick={() => {
-              setActiveDayIndex(idx)
-              if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
-                const cardEl = document.getElementById(`timeline-day-${idx}`)
-                if (cardEl) {
-                  cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      <div className="flex items-center justify-center mb-5 sm:mb-7 overflow-x-auto no-scrollbar">
+        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md max-w-full flex-nowrap">
+          {cards.map((c, idx) => (
+            <button
+              key={c.num}
+              onClick={() => {
+                setActiveDayIndex(idx)
+                if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+                  const cardEl = document.getElementById(`timeline-day-${idx}`)
+                  if (cardEl) {
+                    cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                  }
                 }
-              }
-            }}
-            className={`px-4 sm:px-5 py-2 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-              activeDayIndex === idx
-                ? 'bg-mint text-void font-black shadow-lg shadow-mint/25 scale-[1.02]'
-                : 'bg-panel-alt text-secondary border border-border-subtle hover:text-primary hover:bg-panel'
-            }`}
-          >
-            {c.day} • {c.date.split('(')[0].trim()}
-          </button>
-        ))}
+              }}
+              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-mono-data text-xs sm:text-sm font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                activeDayIndex === idx
+                  ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                  : 'text-secondary hover:text-primary hover:bg-panel'
+              }`}
+            >
+              {c.day} • {c.date.split('(')[0].trim()}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Mobile Segmented Toggle (Schedule vs Campus Map) */}
       <div className="lg:hidden flex items-center justify-center mb-6">
-        <div className="flex bg-panel-alt p-1 rounded-full border border-border-subtle shadow-md">
+        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md flex-nowrap">
           <button
             onClick={() => setMobileView('schedule')}
-            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
               mobileView === 'schedule'
-                ? 'bg-panel text-primary border border-mint/40 shadow-sm shadow-mint/20'
-                : 'text-secondary hover:text-primary'
+                ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                : 'text-secondary hover:text-primary hover:bg-panel'
             }`}
           >
-            <Calendar size={12} className={mobileView === 'schedule' ? 'text-mint' : ''} />
+            <Calendar size={13} className={mobileView === 'schedule' ? 'text-void stroke-[2.5]' : 'text-mint'} />
             <span>Schedule</span>
           </button>
           <button
             onClick={() => setMobileView('map')}
-            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-full font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
               mobileView === 'map'
-                ? 'bg-panel text-primary border border-mint/40 shadow-sm shadow-mint/20'
-                : 'text-secondary hover:text-primary'
+                ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                : 'text-secondary hover:text-primary hover:bg-panel'
             }`}
           >
-            <MapPin size={12} className={mobileView === 'map' ? 'text-mint' : ''} />
+            <MapPin size={13} className={mobileView === 'map' ? 'text-void stroke-[2.5]' : 'text-mint'} />
             <span>Campus Map</span>
           </button>
         </div>

@@ -82,14 +82,14 @@ export default function Timeline() {
           {/* Top Control Bar: Day Switcher, Search, and Brochure */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 mb-6 pb-5 border-b border-border-subtle">
             {/* Segmented Day Switcher (Rounded-Full Pill Container) */}
-            <div className="inline-flex p-1 rounded-full bg-panel-alt border border-border-subtle backdrop-blur-md self-start sm:self-auto">
+            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md backdrop-blur-md self-start sm:self-auto overflow-x-auto no-scrollbar flex-nowrap max-w-full">
               <button
                 type="button"
                 onClick={() => setSelectedDay(1)}
-                className={`px-4 py-1.5 rounded-full text-xs font-mono-data transition-all ${
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   selectedDay === 1
-                    ? 'bg-mint text-void font-bold shadow-sm'
-                    : 'text-secondary hover:text-primary'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                    : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
                 Day 01 (14 Nov)
@@ -97,10 +97,10 @@ export default function Timeline() {
               <button
                 type="button"
                 onClick={() => setSelectedDay(2)}
-                className={`px-4 py-1.5 rounded-full text-xs font-mono-data transition-all ${
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   selectedDay === 2
-                    ? 'bg-mint text-void font-bold shadow-sm'
-                    : 'text-secondary hover:text-primary'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                    : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
                 Day 02 (15 Nov)
@@ -108,10 +108,10 @@ export default function Timeline() {
               <button
                 type="button"
                 onClick={() => setSelectedDay(0)}
-                className={`px-4 py-1.5 rounded-full text-xs font-mono-data transition-all ${
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   selectedDay === 0
-                    ? 'bg-mint text-void font-bold shadow-sm'
-                    : 'text-secondary hover:text-primary'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                    : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
                 All Sessions

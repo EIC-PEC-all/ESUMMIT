@@ -75,14 +75,18 @@ export function NewApplicationModal({ onClose, onCreated }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 backdrop-blur-md animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 backdrop-blur-md animate-in fade-in duration-200 cursor-pointer"
       role="dialog"
       aria-modal="true"
       aria-labelledby="new-application-title"
     >
       <form
+        onClick={(e) => e.stopPropagation()}
         onSubmit={submit}
-        className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0B1814] shadow-2xl"
+        className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0B1814] shadow-2xl cursor-default"
       >
         <div className="flex items-center justify-between border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#081310] p-5 sm:p-6">
           <div>
@@ -186,7 +190,7 @@ export function NewApplicationModal({ onClose, onCreated }: Props) {
           </button>
           <button
             disabled={saving}
-            className="rounded-full px-5 py-2.5 font-mono-data text-xs font-bold uppercase tracking-wider disabled:opacity-50 bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-mint dark:text-[#060D0B] shadow-md flex items-center gap-1.5 cursor-pointer transition-all"
+            className="rounded-full px-5 py-2.5 font-mono-data text-xs font-bold uppercase tracking-wider disabled:opacity-50 btn-mint-gradient shadow-md flex items-center gap-1.5 cursor-pointer transition-all"
           >
             {saving ? 'Saving…' : (
               <>

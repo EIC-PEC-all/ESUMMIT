@@ -204,11 +204,7 @@ export function NavigationCard({ day, index, scrollYProgress }: NavigationCardPr
             <div className="absolute inset-0 flex items-center justify-center bg-[#050505]/80 z-20 rounded-[20px]">
               <button
                 onClick={getCurrentLocation}
-                className="px-6 py-3 rounded-xl text-[#060D0B] font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
-                style={{
-                  fontFamily: "var(--font-tamrin), 'Tamrin', sans-serif",
-                  background: '#8AC53F',
-                }}
+                className="px-6 py-3 rounded-full btn-mint-gradient text-void font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
               >
                 <span className="w-5 h-5" />
                 Enable Location

@@ -124,7 +124,7 @@ export default function EventPortfolioShowcase() {
           {/* Top Control Bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-border-subtle">
             {/* Filter Tabs (Rounded-Full Pill Container) */}
-            <div className="flex items-center gap-1.5 p-1 rounded-full bg-panel border border-border-panel overflow-x-auto scrollbar-none">
+            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md overflow-x-auto no-scrollbar flex-nowrap max-w-full">
               {FILTER_TABS.map((tab) => {
                 const isActive = activeTab === tab.id
                 return (
@@ -132,10 +132,10 @@ export default function EventPortfolioShowcase() {
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-4 py-2 rounded-full text-xs font-mono-data whitespace-nowrap transition-all ${
+                    className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider whitespace-nowrap shrink-0 transition-all cursor-pointer ${
                       isActive
-                        ? 'bg-mint text-black font-bold shadow-sm'
-                        : 'text-secondary hover:text-primary'
+                        ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                        : 'text-secondary hover:text-primary hover:bg-panel'
                     }`}
                   >
                     {tab.label}
@@ -150,7 +150,7 @@ export default function EventPortfolioShowcase() {
               download="PEC-E-Summit-2026-Brochure.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-mint/10 hover:bg-mint/20 border border-mint/30 text-mint text-xs font-mono-data font-bold transition-all shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full btn-mint-gradient text-xs font-mono-data font-black tracking-wider uppercase transition-all shrink-0 shadow-md cursor-pointer hover:opacity-95"
             >
               <Download className="w-3.5 h-3.5" />
               <span>DOWNLOAD BROCHURE (PDF)</span>

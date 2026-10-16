@@ -281,7 +281,7 @@ export default function StartupPassForm({
 
   // ── Main Form Screen ───────────────────────────────────────────────────────
   return (
-    <div id="startup-pass-form" className="w-full max-w-4xl mx-auto">
+    <div id="startup-pass-form" className="w-full max-w-6xl mx-auto">
       <Toaster position="top-right" />
 
       <div className="rounded-3xl bg-panel border border-border-subtle p-6 sm:p-9 md:p-11 shadow-2xl relative overflow-hidden">
@@ -315,7 +315,7 @@ export default function StartupPassForm({
         </div>
 
         {/* Tier Selector Ribbon */}
-        <div className="mb-8 p-1.5 rounded-2xl bg-panel-alt border border-border-subtle flex flex-col sm:flex-row gap-2">
+        <div className="mb-8 p-1.5 rounded-full bg-panel-alt border border-border-subtle flex flex-row items-center gap-2 overflow-x-auto no-scrollbar">
           {STARTUP_PACKAGES.map((pkg) => {
             const isSelected = form.passTier === pkg.tier
             let Icon = Shield
@@ -327,26 +327,24 @@ export default function StartupPassForm({
                 key={pkg.id}
                 type="button"
                 onClick={() => handleTierSwitch(pkg.tier)}
-                className={`flex-1 flex items-center justify-between p-3.5 rounded-xl transition-all cursor-pointer text-left ${
+                className={`flex-1 min-w-[200px] sm:min-w-0 w-full flex items-center justify-between sm:justify-center gap-2.5 py-3 px-4 sm:px-5 rounded-full transition-all cursor-pointer text-left sm:text-center shrink-0 sm:shrink whitespace-nowrap ${
                   isSelected
-                    ? 'bg-mint text-void font-black shadow-md'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
                     : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
-                <div className="flex items-center gap-2.5">
-                  <Icon size={17} className={isSelected ? 'text-void' : 'text-mint'} />
-                  <div>
-                    <div className="font-mono-data text-xs font-bold uppercase tracking-wider">
-                      {pkg.name}
-                    </div>
-                    <div className={`text-[11px] font-mono-data ${isSelected ? 'text-void/80' : 'text-muted'}`}>
-                      {pkg.price} + GST
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Icon size={16} className={isSelected ? 'text-void stroke-[2.5]' : 'text-mint'} />
+                  <span className="font-mono-data text-xs font-black uppercase tracking-wider">
+                    {pkg.name}
+                  </span>
+                  <span className={`text-[11px] font-mono-data font-bold ${isSelected ? 'text-void/90' : 'text-muted'}`}>
+                    ({pkg.price})
+                  </span>
                 </div>
                 {isSelected && (
-                  <span className="font-mono-data text-[10px] font-black uppercase px-2 py-0.5 rounded bg-void text-mint">
-                    Selected
+                  <span className="font-mono-data text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full bg-void text-mint shadow-xs">
+                    ACTIVE
                   </span>
                 )}
               </button>
@@ -545,7 +543,7 @@ export default function StartupPassForm({
             <button
               type="submit"
               disabled={submitState === 'submitting'}
-              className="w-full py-4 px-6 rounded-full bg-mint text-void font-mono-data text-xs sm:text-sm font-black uppercase tracking-wider cursor-pointer hover:brightness-105 active:scale-[0.99] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+              className="btn-mint-gradient w-full py-4 px-6 rounded-full text-void font-mono-data text-xs sm:text-sm font-black uppercase tracking-wider cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {submitState === 'submitting' ? (
                 <>
@@ -559,8 +557,9 @@ export default function StartupPassForm({
                 </>
               )}
             </button>
-            <p className="text-center font-mono-data text-[10px] text-muted uppercase tracking-wider mt-2.5">
-              🔒 Form responses are saved directly to E-Summit database. Team will reach out with MoU.
+            <p className="text-center font-mono-data text-[10px] text-muted uppercase tracking-wider mt-2.5 flex items-center justify-center gap-1.5">
+              <Shield size={12} className="text-mint shrink-0" />
+              <span>Form responses are saved directly to E-Summit database. Team will reach out with MoU.</span>
             </p>
           </div>
         </form>

@@ -50,7 +50,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
         <button
           type="button"
           onClick={onBackToEdit}
-          className="text-xs font-medium text-neutral-400 hover:text-white flex items-center gap-1 px-3 py-1.5 rounded-md border border-white/10 bg-white/5 transition-colors cursor-pointer"
+          className="text-xs font-semibold text-neutral-300 hover:text-white flex items-center gap-1.5 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:border-mint/50 transition-all cursor-pointer shadow-sm"
         >
           <ArrowLeft size={13} />
           <span>Back to Edit</span>
@@ -158,7 +158,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
                 <button
                   type="button"
                   onClick={applyCoupon}
-                  className="px-3 py-1.5 rounded-md bg-white/10 text-white hover:bg-white/15 text-xs font-semibold uppercase transition-colors shrink-0 cursor-pointer"
+                  className="px-4 py-1.5 rounded-full bg-white/10 text-white hover:bg-white/15 text-xs font-semibold uppercase transition-colors shrink-0 cursor-pointer shadow-xs"
                 >
                   Apply
                 </button>
@@ -199,7 +199,7 @@ export const CheckoutSummary: React.FC<CheckoutSummaryProps> = ({
               type="button"
               disabled={isSubmitting}
               onClick={handleCompleteOrder}
-              className="w-full py-2.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
+              className="w-full py-3 px-5 rounded-full btn-mint-gradient text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-md"
             >
               {isSubmitting ? (
                 <span>Processing...</span>

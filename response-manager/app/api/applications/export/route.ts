@@ -1,33 +1,89 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getDatabase } from '@/lib/mongodb'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url)
+    const category = searchParams.get('category')?.toLowerCase()
+
     const db = await getDatabase()
-    const collection = db.collection('funding_conclave_applications')
-    const apps = await collection.find({}).sort({ createdAt: -1 }).toArray()
+    
+    let allRecords: any[] = []
+
+    if (category !== 'student') {
+      const startupApps = await db
+        .collection('funding_conclave_applications')
+        .find({})
+        .sort({ createdAt: -1 })
+        .toArray()
+      allRecords.push(
+        ...startupApps.map((a: any) => ({
+          type: 'Startup Pass',
+          id: a.applicationId,
+          tier: a.passTierName || a.passTier,
+          name: a.founderName,
+          org: a.startupName || a.organization,
+          email: a.email,
+          phone: a.phone,
+          stage: a.stage,
+          sector: a.sector,
+          status: a.status,
+          date: a.createdAt,
+        }))
+      )
+    }
+
+    if (category !== 'startup') {
+      const studentRegs = await db
+        .collection('Registration')
+        .aggregate([
+          {
+            $lookup: {
+              from: 'User',
+              localField: 'userId',
+              foreignField: '_id',
+              as: 'user',
+            },
+          },
+          {
+            $unwind: {
+              path: '$user',
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          { $sort: { createdAt: -1 } },
+        ])
+        .toArray()
+
+      allRecords.push(
+        ...studentRegs.map((r: any) => ({
+          type: 'Student Pass',
+          id: r.passId,
+          tier: r.passType === 'HACKATHON_BUILDER' ? 'HACKATHON BUILDER' : r.amountPaid > 0 ? 'ALL-ACCESS PASS' : 'FREE DELEGATE PASS',
+          name: r.user?.name || 'Student Delegate',
+          org: r.user?.college || 'Punjab Engineering College',
+          email: r.user?.email || '',
+          phone: r.user?.phone || 'Not provided',
+          stage: r.user?.gradYear ? `Class of ${r.user.gradYear}` : 'Delegate',
+          sector: Array.isArray(r.tracks) && r.tracks.length > 0 ? r.tracks.join('; ') : 'General',
+          status: r.isRevoked ? 'REJECTED' : 'PAYMENT_CONFIRMED',
+          date: r.createdAt ? new Date(r.createdAt).toISOString() : '',
+        }))
+      )
+    }
 
     const headers = [
-      'Application ID',
-      'Startup Name',
-      'Founder Name',
+      'Type',
+      'Pass / Application ID',
+      'Tier / Category',
+      'Name',
+      'College / Startup',
       'Email',
       'Phone',
-      'LinkedIn',
-      'Stage',
-      'Sector',
-      'Revenue Stage',
-      'Total Raised (INR)',
-      'Current Ask (INR)',
-      'Pre-Money Valuation (INR)',
-      'Committed Capital (INR)',
-      'Pitch Deck Link',
-      'Demo Video Link',
-      'MoU Fee Comfortable',
+      'Stage / Year',
+      'Sector / Tracks',
       'Status',
-      'Internal Rating',
-      'Review Notes',
-      'Submitted At',
+      'Created At',
     ]
 
     const escapeCsv = (str: unknown) => {
@@ -36,27 +92,18 @@ export async function GET() {
       return `"${stringValue}"`
     }
 
-    const rows = apps.map((app: any) => [
-      escapeCsv(app.applicationId),
-      escapeCsv(app.startupName),
-      escapeCsv(app.founderName),
-      escapeCsv(app.email),
-      escapeCsv(app.phone),
-      escapeCsv(app.founderLinkedIn),
-      escapeCsv(app.stage),
-      escapeCsv(app.sector),
-      escapeCsv(app.revenueStage),
-      escapeCsv(app.totalFundingRaised),
-      escapeCsv(app.currentAsk),
-      escapeCsv(app.preMoneyValuation),
-      escapeCsv(app.committedCapital),
-      escapeCsv(app.pitchDeckUrl),
-      escapeCsv(app.demoVideoUrl),
-      escapeCsv(app.mouComfortable),
-      escapeCsv(app.status),
-      escapeCsv(app.internalRating || 0),
-      escapeCsv(app.reviewNotes || ''),
-      escapeCsv(app.createdAt),
+    const rows = allRecords.map((r: any) => [
+      escapeCsv(r.type),
+      escapeCsv(r.id),
+      escapeCsv(r.tier),
+      escapeCsv(r.name),
+      escapeCsv(r.org),
+      escapeCsv(r.email),
+      escapeCsv(r.phone),
+      escapeCsv(r.stage),
+      escapeCsv(r.sector),
+      escapeCsv(r.status),
+      escapeCsv(r.date),
     ])
 
     const csvContent = [headers.join(','), ...rows.map((row: string[]) => row.join(','))].join('\n')
@@ -65,7 +112,7 @@ export async function GET() {
       status: 200,
       headers: {
         'Content-Type': 'text/csv; charset=utf-8',
-        'Content-Disposition': `attachment; filename="pec_funding_conclave_applications_${new Date()
+        'Content-Disposition': `attachment; filename="pec_esummit_responses_${category || 'all'}_${new Date()
           .toISOString()
           .slice(0, 10)}.csv"`,
       },

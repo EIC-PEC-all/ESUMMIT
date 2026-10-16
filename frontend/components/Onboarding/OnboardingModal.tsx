@@ -27,6 +27,7 @@ interface OnboardingModalProps {
   userDisplayName?: string | null
   userEmail?: string | null
   initialProfile?: AttendeeProfile | null
+  onClose?: () => void
   onCompleted: (profile: AttendeeProfile) => void
 }
 
@@ -35,6 +36,7 @@ export default function OnboardingModal({
   userDisplayName,
   userEmail,
   initialProfile,
+  onClose,
   onCompleted,
 }: OnboardingModalProps) {
   const [name, setName] = useState('')
@@ -144,17 +146,23 @@ export default function OnboardingModal({
   return (
     <AnimatePresence>
       <div
-        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-backdrop backdrop-blur-md overflow-y-auto"
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-backdrop backdrop-blur-md overflow-y-auto cursor-pointer"
         role="dialog"
         aria-modal="true"
         aria-labelledby="onboarding-modal-title"
+        onClick={(e) => {
+          if (e.target === e.currentTarget && onClose) {
+            onClose()
+          }
+        }}
       >
         <motion.div
+          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.95, y: 12 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 12 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="w-full max-w-lg my-8 rounded-3xl border border-border-panel bg-panel p-6 sm:p-8 shadow-2xl space-y-6 relative text-primary"
+          className="w-full max-w-lg my-8 rounded-3xl border border-border-panel bg-panel p-6 sm:p-8 shadow-2xl space-y-6 relative text-primary cursor-default"
         >
           {/* Header */}
           <div className="space-y-2">
@@ -384,15 +392,15 @@ export default function OnboardingModal({
               <button
                 type="submit"
                 disabled={isSubmitting || !name.trim() || !college.trim() || !selectedState.trim() || !finalCity}
-                className="w-full py-3 px-5 rounded-xl bg-mint text-void font-bold text-xs sm:text-sm uppercase tracking-wider hover:opacity-90 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                className="btn-mint-gradient w-full py-4 px-6 rounded-full text-void font-mono-data font-black text-xs sm:text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:scale-[1.01] active:scale-98"
               >
                 {isSubmitting ? (
                   <span>Saving Profile...</span>
                 ) : (
                   <>
-                    <CheckCircle2 size={16} />
+                    <CheckCircle2 size={16} className="text-void stroke-[2.5]" />
                     <span>Complete Profile &amp; Continue</span>
-                    <ArrowRight size={14} />
+                    <ArrowRight size={14} className="text-void stroke-[2.5]" />
                   </>
                 )}
               </button>

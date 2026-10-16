@@ -509,8 +509,14 @@ export default function Concierge() {
       {/* Persistent "My Plan" Itinerary Modal */}
       <AnimatePresence>
         {planOpen && (
-          <div className="fixed inset-0 z-[12000] flex items-center justify-center bg-black/50 backdrop-blur-md p-4 sm:p-6">
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setPlanOpen(false)
+            }}
+            className="fixed inset-0 z-[12000] flex items-center justify-center bg-black/50 backdrop-blur-md p-4 sm:p-6 cursor-pointer"
+          >
             <motion.div
+              onClick={(e) => e.stopPropagation()}
               role="dialog"
               aria-modal="true"
               aria-label="Personal Itinerary Plan"
@@ -518,7 +524,7 @@ export default function Concierge() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="w-full max-w-lg bg-panel border border-border-subtle rounded-3xl flex flex-col p-6 shadow-2xl relative max-h-[85vh] text-primary"
+              className="w-full max-w-lg bg-panel border border-border-subtle rounded-3xl flex flex-col p-6 shadow-2xl relative max-h-[85vh] text-primary cursor-default"
             >
               <div className="flex items-center justify-between pb-4 border-b border-border-subtle mb-6 shrink-0">
                 <div className="flex items-center gap-2">

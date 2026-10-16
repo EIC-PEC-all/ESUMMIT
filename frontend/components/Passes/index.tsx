@@ -158,29 +158,29 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
 
         {/* Structured Segmented Toggle: Student vs Startup */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-border-subtle pb-3 sm:pb-4 mb-4 sm:mb-6">
-          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md">
+          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md max-w-full overflow-x-auto no-scrollbar flex-nowrap">
             <button
               type="button"
               onClick={() => setPassType('student')}
-              className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+              className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 shrink-0 whitespace-nowrap ${
                 passType === 'student'
-                  ? 'bg-mint text-void shadow-sm'
+                  ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
                   : 'text-secondary hover:text-primary hover:bg-panel'
               }`}
             >
-              <GraduationCap size={16} />
+              <GraduationCap size={16} className={passType === 'student' ? 'text-void stroke-[2.5]' : 'text-mint'} />
               <span>Student Passes</span>
             </button>
             <button
               type="button"
               onClick={() => setPassType('startup')}
-              className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 ${
+              className={`px-5 sm:px-6 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-2 shrink-0 whitespace-nowrap ${
                 passType === 'startup'
-                  ? 'bg-mint text-void shadow-sm'
+                  ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
                   : 'text-secondary hover:text-primary hover:bg-panel'
               }`}
             >
-              <Building2 size={16} />
+              <Building2 size={16} className={passType === 'startup' ? 'text-void stroke-[2.5]' : 'text-mint'} />
               <span>Startup Packages</span>
             </button>
           </div>
@@ -258,10 +258,10 @@ export default function PassesSection({ isStandalonePage = false }: PassesSectio
               <div className="mt-6 text-center">
                 <Link
                   href="/passes?type=startup"
-                  className="inline-flex items-center gap-2 px-6 sm:px-8 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-mono-data text-xs font-bold uppercase tracking-wider border border-white/15 hover:border-mint transition-all shadow-md hover:scale-105"
+                  className="btn-dark-gradient inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-white font-mono-data text-xs font-bold uppercase tracking-wider border border-white/15 hover:border-mint transition-all shadow-md hover:scale-105"
                 >
                   <span>View Full Startup Packages &amp; Deliverables</span>
-                  <ArrowRight size={14} className="text-mint" />
+                  <ArrowRight size={14} className="text-mint stroke-[2.5]" />
                 </Link>
               </div>
             )}

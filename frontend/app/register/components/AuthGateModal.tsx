@@ -67,7 +67,7 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
               type="button"
               disabled={authLoading}
               onClick={handleGoogleSignIn}
-              className="w-full py-2 px-3 rounded-md border border-white/15 bg-white/5 hover:bg-white/10 text-xs font-medium text-white transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-xs font-medium text-white transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 cursor-pointer shadow-sm"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
                 <path
@@ -161,7 +161,7 @@ export const AuthGateModal: React.FC<AuthGateModalProps> = ({
           <button
             type="submit"
             disabled={authLoading}
-            className="w-full py-2 px-3 rounded-md bg-mint hover:bg-mint/90 text-void text-xs font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer mt-2"
+            className="w-full py-2.5 px-4 rounded-full btn-mint-gradient text-xs font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer mt-2 shadow-md"
           >
             {authLoading ? (
               <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-void border-t-transparent" />

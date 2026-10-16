@@ -58,7 +58,12 @@ export default function AlumniDetailModal({ person, onClose }: AlumniDetailModal
   return createPortal(
     <AnimatePresence>
       {person && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 overflow-y-auto overscroll-contain">
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) onClose()
+          }}
+          className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 overflow-y-auto overscroll-contain cursor-pointer"
+        >
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -75,7 +80,7 @@ export default function AlumniDetailModal({ person, onClose }: AlumniDetailModal
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full max-w-lg max-h-[88vh] overflow-y-auto my-auto rounded-[28px] sm:rounded-[32px] bg-white dark:bg-[#0A1612] text-[#061A12] dark:text-white border border-emerald-500/25 dark:border-white/15 p-5 sm:p-7 shadow-[0_20px_60px_rgba(5,150,105,0.15)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)] z-10"
+            className="relative w-full max-w-lg max-h-[88vh] overflow-y-auto my-auto rounded-[28px] sm:rounded-[32px] bg-white dark:bg-[#0A1612] text-[#061A12] dark:text-white border border-emerald-500/25 dark:border-white/15 p-5 sm:p-7 shadow-[0_20px_60px_rgba(5,150,105,0.15)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)] z-10 cursor-default"
           >
             {/* Close Button */}
             <button

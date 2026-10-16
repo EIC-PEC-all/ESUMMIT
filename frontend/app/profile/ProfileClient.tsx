@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Ticket,
   ArrowLeft,
+  ArrowRight,
   LogOut,
   CheckCircle2,
   Download,
@@ -24,6 +25,7 @@ import {
   FileText,
   Globe,
 } from 'lucide-react'
+import { STUDENT_PACKAGES } from '@/components/Passes/passesData'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -194,11 +196,46 @@ function cleanPrice(price?: string | null) {
   return price.replace(/^\?+/, '₹').replace(/\?(\d)/g, '₹$1')
 }
 
+function isRealStartupApp(app: StartupPassApplication): boolean {
+  if (!app) return false
+  const tier = (app.passTier || '').toLowerCase().trim()
+  const name = (app.passTierName || '').toLowerCase().trim()
+  const role = (app.role || '').toLowerCase().trim()
+
+  // Exclude student / delegate passes
+  if (['delegate', 'hackathon', 'all-access', 'combo', 'standard', 'ambassador'].includes(tier)) {
+    return false
+  }
+  if (
+    name.includes('delegate') ||
+    name.includes('student') ||
+    name.includes('hackathon') ||
+    name.includes('free')
+  ) {
+    return false
+  }
+  if (role.includes('student delegate')) {
+    return false
+  }
+
+  // Include genuine startup passes
+  if (['diamond', 'gold', 'silver'].includes(tier)) {
+    return true
+  }
+  if (name.includes('diamond') || name.includes('gold') || name.includes('silver')) {
+    return true
+  }
+  return false
+}
+
 function deduplicateApps(apps: StartupPassApplication[]) {
   const seen = new Set<string>()
   const result: StartupPassApplication[] = []
 
-  const sorted = [...apps].sort(
+  // Strictly filter out any student passes that may have been cached
+  const validStartupOnly = apps.filter(isRealStartupApp)
+
+  const sorted = [...validStartupOnly].sort(
     (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
   )
 
@@ -251,7 +288,8 @@ export default function ProfileClient() {
 
   const fetchRegistrations = useCallback(async () => {
     try {
-      const records = await getUserRegistrations(user?.uid)
+      const email = user?.email || profile.email
+      const records = await getUserRegistrations(user?.uid, email)
       setMyRegistrations(records)
     } catch (err) {
       console.error('Failed to fetch user registrations', err)
@@ -259,7 +297,7 @@ export default function ProfileClient() {
     } finally {
       setLoading(false)
     }
-  }, [user])
+  }, [user, profile.email])
 
   const fetchPassApplications = useCallback(async () => {
     // 1. Read from local cache first for zero-latency instant rendering
@@ -271,6 +309,8 @@ export default function ProfileClient() {
         if (Array.isArray(parsed) && parsed.length > 0) {
           localList = deduplicateApps(parsed)
           setPassApplications(localList)
+          // Cleanse local storage of any previously erroneously cached student passes
+          localStorage.setItem('pec_user_pass_applications', JSON.stringify(localList))
         }
       }
     } catch {
@@ -292,7 +332,7 @@ export default function ProfileClient() {
       if (res.ok) {
         const json = await res.json()
         if (json.success && Array.isArray(json.applications)) {
-          const serverApps: StartupPassApplication[] = json.applications
+          const serverApps: StartupPassApplication[] = json.applications.filter(isRealStartupApp)
 
           // Create map of server applications
           const serverMap = new Map<string, StartupPassApplication>()
@@ -303,7 +343,7 @@ export default function ProfileClient() {
           // Merge: server items + any local items not yet reflected on server
           const merged: StartupPassApplication[] = [...serverApps]
           localList.forEach((local) => {
-            if (local.applicationId && !serverMap.has(local.applicationId)) {
+            if (local.applicationId && !serverMap.has(local.applicationId) && isRealStartupApp(local)) {
               merged.push(local)
             }
           })
@@ -324,8 +364,18 @@ export default function ProfileClient() {
     if (authLoading) return
     const local = typeof window !== 'undefined' ? localStorage.getItem('pec_summit_registrations') : null
     const hasLocal = local && JSON.parse(local).length > 0
-    const localPassApps = typeof window !== 'undefined' ? localStorage.getItem('pec_user_pass_applications') : null
-    const hasLocalPassApps = localPassApps && JSON.parse(localPassApps).length > 0
+    let hasLocalPassApps = false
+    try {
+      const localPassApps = typeof window !== 'undefined' ? localStorage.getItem('pec_user_pass_applications') : null
+      if (localPassApps) {
+        const parsed = JSON.parse(localPassApps)
+        if (Array.isArray(parsed)) {
+          const valid = parsed.filter(isRealStartupApp)
+          hasLocalPassApps = valid.length > 0
+          localStorage.setItem('pec_user_pass_applications', JSON.stringify(valid))
+        }
+      }
+    } catch {}
 
     if (!user && !hasLocal && !hasLocalPassApps) {
       router.push('/register')
@@ -436,8 +486,32 @@ export default function ProfileClient() {
   }
 
   const handleLogout = async () => {
-    await logout()
-    router.push('/')
+    try {
+      const { signOut: nextAuthSignOut } = await import('next-auth/react')
+      await nextAuthSignOut({ redirect: false }).catch(() => {})
+    } catch {}
+
+    try {
+      await logout()
+    } catch {}
+
+    try {
+      localStorage.removeItem('pec_summit_auth_user')
+      localStorage.removeItem('pec_summit_access_token')
+      localStorage.removeItem('pec_summit_auth_token')
+      localStorage.removeItem('pec_summit_registrations')
+      localStorage.removeItem('pec_user_pass_applications')
+      localStorage.removeItem('pec_summit_attendee_profile')
+      localStorage.removeItem('pec_checkout_draft')
+      sessionStorage.clear()
+    } catch {}
+
+    setMyRegistrations([])
+    setPassApplications([])
+    setCurrentBadge(null)
+
+    toast.success('Signed out successfully', TOAST_STYLE)
+    router.replace('/register')
   }
 
   const handleDeletePass = async (id: string) => {
@@ -519,45 +593,47 @@ export default function ProfileClient() {
 
         {/* Navigation Tabs */}
         {!currentBadge && (
-          <div className="flex items-center gap-2 border-b border-border-subtle pb-3.5 mb-6 overflow-x-auto">
-            <button
-              type="button"
-              onClick={() => setActiveTab('passes')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
-                activeTab === 'passes'
-                  ? 'bg-mint text-void shadow-md shadow-mint/25'
-                  : 'bg-panel-alt text-secondary border border-border-subtle hover:text-primary hover:bg-panel'
-              }`}
-            >
-              <Ticket size={14} />
-              <span>Registered Events ({myRegistrations.length})</span>
-            </button>
+          <div className="border-b border-border-subtle pb-3.5 mb-6 overflow-x-auto no-scrollbar">
+            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md max-w-full flex-nowrap">
+              <button
+                type="button"
+                onClick={() => setActiveTab('passes')}
+                className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                  activeTab === 'passes'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                    : 'text-secondary hover:text-primary hover:bg-panel'
+                }`}
+              >
+                <Ticket size={14} className={activeTab === 'passes' ? 'text-void stroke-[2.5]' : 'text-mint'} />
+                <span>Student Passes ({myRegistrations.length})</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('startup_passes')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
-                activeTab === 'startup_passes'
-                  ? 'bg-mint text-void shadow-md shadow-mint/25'
-                  : 'bg-panel-alt text-secondary border border-border-subtle hover:text-primary hover:bg-panel'
-              }`}
-            >
-              <Briefcase size={14} />
-              <span>Startup Passes ({passApplications.length})</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('startup_passes')}
+                className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                  activeTab === 'startup_passes'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                    : 'text-secondary hover:text-primary hover:bg-panel'
+                }`}
+              >
+                <Briefcase size={14} className={activeTab === 'startup_passes' ? 'text-void stroke-[2.5]' : 'text-mint'} />
+                <span>Startup Passes ({passApplications.length})</span>
+              </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('account')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-mono font-bold uppercase tracking-wider transition-all cursor-pointer shrink-0 ${
-                activeTab === 'account'
-                  ? 'bg-mint text-void shadow-md shadow-mint/25'
-                  : 'bg-panel-alt text-secondary border border-border-subtle hover:text-primary hover:bg-panel'
-              }`}
-            >
-              <Settings size={14} />
-              <span>Personal Details</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('account')}
+                className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                  activeTab === 'account'
+                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                    : 'text-secondary hover:text-primary hover:bg-panel'
+                }`}
+              >
+                <Settings size={14} className={activeTab === 'account' ? 'text-void stroke-[2.5]' : 'text-mint'} />
+                <span>Personal Details</span>
+              </button>
+            </div>
           </div>
         )}
 
@@ -693,6 +769,33 @@ export default function ProfileClient() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-6"
             >
+              {/* Student Pass Quick Access Banner inside Startup Passes */}
+              <div className="p-4 rounded-2xl border border-white/10 bg-white/[0.02] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="p-2.5 rounded-full bg-mint/10 text-mint border border-mint/20 shrink-0">
+                    <Ticket size={16} />
+                  </div>
+                  <div>
+                    <p className="text-xs sm:text-sm font-bold text-white">
+                      Student Passes &amp; Delegate Badges
+                    </p>
+                    <p className="text-[11px] text-neutral-400">
+                      {myRegistrations.length > 0
+                        ? `You have ${myRegistrations.length} confirmed student pass${myRegistrations.length > 1 ? 'es' : ''} / entry badges.`
+                        : 'Claim your Free Delegate, Hackathon, or All-Access pass for PEC E-Summit 2026.'}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('passes')}
+                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full btn-mint-gradient text-void text-xs font-mono-data font-black uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all self-start sm:self-auto cursor-pointer shrink-0"
+                >
+                  <Ticket size={13} className="text-void stroke-[2.5]" />
+                  <span>{myRegistrations.length > 0 ? 'View Student Passes' : 'Get Student Pass'}</span>
+                </button>
+              </div>
+
               {passApplications.length === 0 ? (
                 <div className="text-center py-14 sm:py-16 border border-dashed border-white/10 rounded-3xl p-6 sm:p-10 bg-white/[0.01] w-full">
                   <div className="max-w-md mx-auto space-y-4">
@@ -708,7 +811,7 @@ export default function ProfileClient() {
                     <div className="pt-2">
                       <Link
                         href="/passes"
-                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_var(--border-glow)] transition-all"
+                        className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full btn-mint-gradient text-void font-black text-xs font-mono-data uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all"
                       >
                         <span>Apply for Startup Pass</span>
                       </Link>
@@ -965,42 +1068,97 @@ export default function ProfileClient() {
                   <button
                     type="button"
                     onClick={() => setActiveTab('startup_passes')}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-mint text-void text-xs font-mono font-bold uppercase tracking-wider hover:brightness-110 transition-all self-start sm:self-auto cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full btn-mint-gradient text-void text-xs font-mono-data font-black uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all self-start sm:self-auto cursor-pointer shrink-0"
                   >
                     <span>View Startup Requests</span>
                   </button>
                 </div>
               )}
               {myRegistrations.length === 0 ? (
-                <div className="text-center py-14 sm:py-16 border border-dashed border-white/10 rounded-3xl p-6 sm:p-10 bg-white/[0.01] w-full">
-                  <div className="max-w-md mx-auto space-y-4">
-                    <Ticket size={44} className="mx-auto text-neutral-600 mb-1 stroke-1" />
-                    <div>
-                      <h3 className="text-xl font-bold text-white mb-1.5 font-display uppercase tracking-wider">No Events Registered</h3>
+                <div className="space-y-6">
+                  <div className="text-center py-8 sm:py-10 border border-dashed border-white/10 rounded-3xl p-6 sm:p-8 bg-white/[0.01] w-full">
+                    <div className="max-w-md mx-auto space-y-3">
+                      <Ticket size={40} className="mx-auto text-mint/80 mb-1 stroke-1" />
+                      <h3 className="text-xl font-bold text-white font-display uppercase tracking-wider">
+                        Official Student Passes
+                      </h3>
                       <p className="text-xs sm:text-sm text-neutral-400">
-                        You haven&apos;t registered for any summit events, hackathons, or workshops yet.
+                        You haven&apos;t claimed a Student Pass yet. Select an official delegate or competition pass below to get your digital badge with entry QR code.
                       </p>
                     </div>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-                      <Link
-                        href="/events"
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-mint text-void font-bold text-xs uppercase tracking-wider hover:brightness-110 shadow-[0_0_15px_var(--border-glow)] transition-all"
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
+                    {STUDENT_PACKAGES.map((pkg) => (
+                      <div
+                        key={pkg.id}
+                        className={`rounded-3xl border p-5 flex flex-col justify-between transition-all bg-[#0B1512] ${
+                          pkg.popular ? 'border-mint shadow-[0_0_20px_rgba(116,251,68,0.15)]' : 'border-white/10 hover:border-white/20'
+                        }`}
                       >
-                        <span>Explore &amp; Register Events</span>
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => setActiveTab('account')}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full border border-border-subtle bg-panel-alt hover:bg-panel text-primary font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer"
-                      >
-                        <Settings size={13} />
-                        <span>Edit Personal Details</span>
-                      </button>
-                    </div>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-neutral-300">
+                              {pkg.badgeText}
+                            </span>
+                            {pkg.popular && (
+                              <span className="text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-mint text-void">
+                                POPULAR
+                              </span>
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="text-base font-black text-white uppercase font-display tracking-wide">{pkg.name}</h4>
+                            <div className="text-xl font-black font-display text-mint mt-1">{pkg.price}</div>
+                            <p className="text-[11px] text-neutral-400 mt-1 leading-snug">{pkg.tagline}</p>
+                          </div>
+                          <ul className="space-y-1.5 pt-2 border-t border-white/5 text-[11px] text-neutral-300">
+                            {pkg.deliverables.slice(0, 3).map((d, i) => (
+                              <li key={i} className="flex items-start gap-1.5">
+                                <Check size={12} className="text-mint shrink-0 mt-0.5" />
+                                <span>{d.title}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="pt-4 mt-4 border-t border-white/5">
+                          <Link
+                            href={`/passes?type=student&tier=${pkg.tier}`}
+                            className={`w-full py-2.5 px-3 rounded-full text-xs font-mono-data font-black uppercase tracking-wider text-center flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                              pkg.popular
+                                ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                                : 'border border-white/15 bg-white/5 hover:bg-white/10 text-white'
+                            }`}
+                          >
+                            <span>Select Pass</span>
+                            <ArrowRight size={13} />
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="space-y-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white/[0.02] border border-white/5 p-4 rounded-2xl">
+                    <div>
+                      <h3 className="text-base font-bold text-white uppercase tracking-wider font-display">
+                        Official Student Passes ({myRegistrations.length})
+                      </h3>
+                      <p className="text-xs text-neutral-400">
+                        Your confirmed digital delegate passes and entry badges for PEC E-Summit 2026.
+                      </p>
+                    </div>
+                    <Link
+                      href="/passes?type=student"
+                      className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full border border-mint/40 bg-mint/10 hover:btn-mint-gradient hover:text-void text-mint text-xs font-mono-data font-black uppercase tracking-wider shadow-xs hover:shadow-md transition-all self-start sm:self-auto cursor-pointer shrink-0"
+                    >
+                      <Ticket size={13} />
+                      <span>Get Another Pass</span>
+                    </Link>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {myRegistrations.map((item) => (
                     <div
                       key={item.id}
@@ -1038,7 +1196,7 @@ export default function ProfileClient() {
                         <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => setCurrentBadge(item)}
-                            className="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-[11px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                            className="px-3.5 py-1.5 rounded-full btn-mint-gradient text-void text-[11px] font-mono-data font-black uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all cursor-pointer"
                           >
                             View Ticket
                           </button>
@@ -1056,8 +1214,9 @@ export default function ProfileClient() {
                     </div>
                   ))}
                 </div>
-              )}
-            </motion.div>
+              </div>
+            )}
+          </motion.div>
           )}
         </AnimatePresence>
       </div>
@@ -1065,12 +1224,18 @@ export default function ProfileClient() {
       {/* Edit Pass Modal */}
       <AnimatePresence>
         {editingPass && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setEditingPass(null)
+            }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm cursor-pointer"
+          >
             <motion.div
+              onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md rounded-[2rem] border border-white/15 bg-[#13221C] p-6 shadow-2xl space-y-4"
+              className="w-full max-w-md rounded-[2rem] border border-white/15 bg-[#13221C] p-6 shadow-2xl space-y-4 cursor-default"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-base font-bold text-white uppercase tracking-wider">Edit Pass Details</h3>
@@ -1141,7 +1306,7 @@ export default function ProfileClient() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full rounded-full bg-mint px-4 py-3 text-sm font-bold text-void hover:bg-white transition-colors disabled:opacity-50 uppercase tracking-wider cursor-pointer"
+                    className="w-full rounded-full btn-mint-gradient px-4 py-3 text-sm font-bold shadow-md hover:opacity-90 transition-opacity disabled:opacity-50 uppercase tracking-wider cursor-pointer"
                   >
                     {isSubmitting ? 'Saving...' : 'Save Changes'}
                   </button>

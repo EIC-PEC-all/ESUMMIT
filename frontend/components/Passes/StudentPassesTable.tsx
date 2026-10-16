@@ -145,10 +145,10 @@ export default function StudentPassesTable() {
             <p className="text-xs text-secondary font-body mb-3">{row.included}</p>
             <Link
               href={`/register?pass=${row.passId}`}
-              className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-mint text-white dark:text-void font-bold font-mono-data text-xs uppercase tracking-wider shadow-sm"
+              className="btn-mint-gradient w-full inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full text-void font-black font-mono-data text-xs uppercase tracking-wider shadow-md hover:scale-[1.02] active:scale-98 transition-all"
             >
               <span>Get Pass</span>
-              <ArrowRight size={12} strokeWidth={2.5} />
+              <ArrowRight size={12} strokeWidth={2.5} className="text-void" />
             </Link>
           </div>
         ))}

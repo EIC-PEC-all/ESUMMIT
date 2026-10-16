@@ -1461,7 +1461,7 @@ export default function RegisterClient() {
                       type="button"
                       disabled={isSubmitting}
                       onClick={handleCompleteOrder}
-                      className="w-full py-2.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-md"
+                      className="w-full py-3 rounded-full btn-mint-gradient text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer shadow-md"
                     >
                       {isSubmitting ? (
                         <span>Submitting Details...</span>
@@ -1572,11 +1572,11 @@ export default function RegisterClient() {
               </div>
 
               {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-2 pt-1">
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
                 <button
                   type="button"
                   onClick={handleExportInstagramStory}
-                  className="py-2 px-3 rounded-md bg-mint hover:bg-white text-void text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-4 rounded-full btn-mint-gradient text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
                 >
                   <Sparkles size={13} />
                   <span>Story Badge</span>
@@ -1585,7 +1585,7 @@ export default function RegisterClient() {
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="py-2 px-3 rounded-md border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                 >
                   <Download size={13} />
                   <span>Print Ticket</span>
@@ -1594,7 +1594,7 @@ export default function RegisterClient() {
                 <button
                   type="button"
                   onClick={() => setEditingPass(currentBadge)}
-                  className="py-2 px-3 rounded-md border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                 >
                   <Edit3 size={12} />
                   <span>Edit Details</span>
@@ -1603,7 +1603,7 @@ export default function RegisterClient() {
                 <button
                   type="button"
                   onClick={() => router.push('/profile')}
-                  className="py-2 px-3 rounded-md border border-white/10 hover:border-white/20 text-neutral-400 hover:text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-4 rounded-full border border-white/10 hover:border-white/20 text-neutral-300 hover:text-white text-xs font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                 >
                   <Ticket size={12} />
                   <span>My Passes ({myRegistrations.length})</span>
@@ -1634,7 +1634,7 @@ export default function RegisterClient() {
                 <button
                   type="button"
                   onClick={() => setView('catalog')}
-                  className="px-3.5 py-1.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold transition-colors"
+                  className="px-4 py-2 rounded-full btn-mint-gradient text-xs font-bold transition-all cursor-pointer shadow-md"
                 >
                   + Book Another Pass
                 </button>
@@ -1693,7 +1693,7 @@ export default function RegisterClient() {
                               setCurrentBadge(item)
                               setView('success')
                             }}
-                            className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/15 text-white text-xs font-medium"
+                            className="px-3.5 py-1.5 rounded-full btn-mint-gradient text-void text-[11px] font-mono-data font-black uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all cursor-pointer"
                           >
                             View Ticket
                           </button>
@@ -1727,12 +1727,18 @@ export default function RegisterClient() {
       {/* ── EDIT PASS MODAL ── */}
       <AnimatePresence>
         {editingPass && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setEditingPass(null)
+            }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm cursor-pointer"
+          >
             <motion.div
+              onClick={(e) => e.stopPropagation()}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md rounded-lg border border-white/15 bg-[#13221C] p-5 shadow-2xl space-y-3.5"
+              className="w-full max-w-md rounded-2xl border border-white/15 bg-[#13221C] p-5 shadow-2xl space-y-3.5 cursor-default"
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
                 <h3 className="text-sm font-bold text-white">Edit Pass Details</h3>
@@ -1805,14 +1811,14 @@ export default function RegisterClient() {
                   <button
                     type="button"
                     onClick={() => setEditingPass(null)}
-                    className="px-3 py-1.5 rounded-md border border-white/10 text-neutral-400 hover:text-white text-xs font-medium"
+                    className="px-4 py-1.5 rounded-full border border-white/10 text-neutral-400 hover:text-white text-xs font-medium cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-4 py-1.5 rounded-md bg-mint hover:bg-white text-void text-xs font-bold shadow-sm disabled:opacity-50"
+                    className="px-5 py-1.5 rounded-full btn-mint-gradient text-xs font-bold shadow-md disabled:opacity-50 cursor-pointer"
                   >
                     {isSubmitting ? 'Saving...' : 'Save Changes'}
                   </button>

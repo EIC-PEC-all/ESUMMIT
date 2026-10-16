@@ -70,32 +70,32 @@ export default function NewHero() {
           }}
         />
 
-        {/* Deep Edge Vignette - Frames the 3D Canvas smoothly into the Void Stage */}
+        {/* Dark Film Contrast Layer — Dims the bright banknote paper so white and volt text have deep contrast */}
         <div
           className="pointer-events-none absolute inset-0 z-1"
           style={{
             background:
-              'radial-gradient(ellipse 85% 75% at 50% 50%, transparent 35%, rgba(6, 13, 11, 0.60) 70%, #060D0B 100%)',
+              'radial-gradient(ellipse 85% 75% at 50% 50%, rgba(4, 10, 8, 0.55) 0%, rgba(6, 13, 11, 0.72) 65%, #060D0B 100%)',
           }}
         />
 
-        {/* Cyber Brand Green Luminescence using CSS Blending Mode 'screen' */}
+        {/* Subtle Brand Green Ambient Glow using CSS Blending Mode 'screen' */}
         <div
-          className="pointer-events-none absolute inset-0 z-1"
+          className="pointer-events-none absolute inset-0 z-1 opacity-80"
           style={{
             mixBlendMode: 'screen',
             background:
-              'radial-gradient(ellipse 70% 60% at 50% 48%, rgba(116, 251, 68, 0.22) 0%, rgba(16, 185, 129, 0.12) 40%, transparent 70%)',
+              'radial-gradient(ellipse 65% 55% at 50% 48%, rgba(116, 251, 68, 0.15) 0%, rgba(16, 185, 129, 0.08) 40%, transparent 70%)',
           }}
         />
 
         {/* Ambient Dark Green Contrast Blend using CSS Blending Mode 'overlay' */}
         <div
-          className="pointer-events-none absolute inset-0 z-1 opacity-75"
+          className="pointer-events-none absolute inset-0 z-1 opacity-60"
           style={{
             mixBlendMode: 'overlay',
             background:
-              'radial-gradient(circle at 48% 42%, rgba(116, 251, 68, 0.16) 0%, rgba(6, 26, 18, 0.40) 65%, transparent 100%)',
+              'radial-gradient(circle at 48% 42%, rgba(116, 251, 68, 0.12) 0%, rgba(6, 26, 18, 0.45) 65%, transparent 100%)',
           }}
         />
 

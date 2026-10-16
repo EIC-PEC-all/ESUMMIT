@@ -9,9 +9,10 @@ interface HeaderProps {
   totalCount: number
   onRefresh: () => void
   isRefreshing: boolean
+  category?: 'startup' | 'student'
 }
 
-export function Header({ totalCount, onRefresh, isRefreshing }: HeaderProps) {
+export function Header({ totalCount, onRefresh, isRefreshing, category = 'startup' }: HeaderProps) {
   const handleExport = () => {
     window.open('/api/applications/export', '_blank')
   }
@@ -38,7 +39,9 @@ export function Header({ totalCount, onRefresh, isRefreshing }: HeaderProps) {
               </span>
             </div>
             <p className="font-mono-data text-[10px] font-bold uppercase tracking-widest mt-1 text-slate-500 dark:text-slate-400">
-              STARTUP PASSES &amp; FUNDING CONCLAVE RESPONSES
+              {category === 'student'
+                ? 'STUDENT & BUILDER PASSES • ATTENDEE RESPONSES'
+                : 'STARTUP PASSES & FUNDING CONCLAVE RESPONSES'}
             </p>
           </div>
         </div>

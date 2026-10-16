@@ -75,16 +75,16 @@ export const EventPicker: React.FC<EventPickerProps> = ({
         </div>
 
         {/* Category Tabs */}
-        <div className="flex items-center gap-1 overflow-x-auto pb-0.5 scrollbar-none">
+        <div className="inline-flex items-center gap-1.5 p-1 rounded-full bg-panel-alt border border-border-subtle shadow-xs overflow-x-auto no-scrollbar flex-nowrap max-w-full">
           {EVENT_CATEGORIES.map((cat) => (
             <button
               type="button"
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-2.5 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
+              className={`px-3 sm:px-4 py-1.5 rounded-full text-xs font-mono-data font-black uppercase tracking-wider whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                 activeCategory === cat.id
-                  ? 'bg-white/15 text-white border border-white/20'
-                  : 'bg-[#13221C] text-neutral-400 hover:text-white border border-white/5'
+                  ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                  : 'text-secondary hover:text-primary hover:bg-panel'
               }`}
             >
               {cat.label}

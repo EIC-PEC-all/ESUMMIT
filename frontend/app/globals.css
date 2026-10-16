@@ -918,8 +918,8 @@ h1, h2, h3 {
   transform: translateZ(0);
 }
 
-.text-gradient-mint, .text-gradient-green {
-  background: linear-gradient(180deg, #FFFFFF 0%, #A8EE4A 65%, #8AC53F 100%);
+.text-gradient-mint, .text-gradient-green, .text-gradient-mint-btn {
+  background: linear-gradient(180deg, #E2FFA8 0%, #B8F754 22%, #8AC53F 65%, #76B42D 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

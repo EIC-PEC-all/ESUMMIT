@@ -417,7 +417,7 @@ export default function FundingConclaveClient() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#8AC53F] text-[#060D0B] font-semibold text-sm hover:bg-[#A8EE4A] transition-colors"
+                className="w-full sm:w-auto px-7 py-3 rounded-full btn-mint-gradient font-bold text-sm shadow-md transition-all uppercase tracking-wider text-center"
               >
                 Return to E-Summit Home
               </Link>
@@ -428,7 +428,7 @@ export default function FundingConclaveClient() {
                   setFormData(INITIAL_FORM_DATA)
                   setStep(1)
                 }}
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/5 text-white font-medium text-sm hover:bg-white/10 border border-white/10 transition-colors"
+                className="w-full sm:w-auto px-7 py-3 rounded-full btn-dark-gradient text-primary font-bold text-sm border border-border-subtle shadow-md hover:border-mint/50 transition-all uppercase tracking-wider cursor-pointer"
               >
                 Submit Another Application
               </button>
@@ -1124,7 +1124,7 @@ export default function FundingConclaveClient() {
                   <button
                     type="button"
                     onClick={handleBack}
-                    className="px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-medium text-xs sm:text-sm border border-white/10 transition-colors flex items-center gap-2"
+                    className="px-6 py-2.5 rounded-full btn-dark-gradient hover:border-mint/50 text-white font-bold text-xs sm:text-sm border border-white/10 transition-all flex items-center gap-2 cursor-pointer shadow-md uppercase tracking-wider"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     Back
@@ -1137,7 +1137,7 @@ export default function FundingConclaveClient() {
                   <button
                     type="button"
                     onClick={handleNext}
-                    className="px-6 py-2.5 rounded-xl bg-[#8AC53F] hover:bg-[#A8EE4A] text-[#060D0B] font-bold text-xs sm:text-sm transition-colors flex items-center gap-2 shadow-[0_0_20px_var(--border-glow)]"
+                    className="px-7 py-2.5 rounded-full btn-mint-gradient text-[#060D0B] font-bold text-xs sm:text-sm transition-all flex items-center gap-2 shadow-md hover:brightness-105 cursor-pointer uppercase tracking-wider"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4" />
@@ -1147,7 +1147,7 @@ export default function FundingConclaveClient() {
                     type="button"
                     disabled={isSubmitting}
                     onClick={handleSubmit}
-                    className="px-8 py-3 rounded-xl bg-[#8AC53F] hover:bg-[#A8EE4A] disabled:opacity-50 text-[#060D0B] font-bold text-sm transition-colors flex items-center gap-2 shadow-[0_0_25px_var(--border-glow)]"
+                    className="px-8 py-3 rounded-full btn-mint-gradient disabled:opacity-50 text-[#060D0B] font-bold text-sm transition-all flex items-center gap-2 shadow-md hover:brightness-105 cursor-pointer uppercase tracking-wider"
                   >
                     {isSubmitting ? (
                       <>

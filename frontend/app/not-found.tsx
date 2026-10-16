@@ -19,7 +19,7 @@ export default function NotFound() {
         <div className="pt-2">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-mint hover:bg-white text-void font-mono-data text-xs font-bold uppercase tracking-wider transition-all shadow-[0_0_20px_var(--border-glow)] hover:scale-105 active:scale-95"
+            className="inline-flex items-center gap-2 px-7 py-3 rounded-full btn-mint-gradient font-mono-data text-xs font-black uppercase tracking-wider transition-all shadow-md hover:scale-105 active:scale-95 cursor-pointer"
           >
             <ArrowLeft size={14} />
             <span>Return to E-Summit Home</span>

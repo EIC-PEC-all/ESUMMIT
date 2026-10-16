@@ -277,9 +277,9 @@ export default function AccountPreferencesForm({
           <button
             type="submit"
             disabled={isSaving}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-xl bg-mint text-void font-bold text-xs uppercase tracking-wider hover:opacity-90 shadow-md transition-all cursor-pointer disabled:opacity-50"
+            className="btn-mint-gradient w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-void font-mono-data font-black text-xs uppercase tracking-wider shadow-md hover:scale-105 active:scale-95 transition-all cursor-pointer disabled:opacity-50"
           >
-            <Save size={14} />
+            <Save size={14} className="stroke-[2.5]" />
             <span>{isSaving ? 'Saving Details...' : 'Save Profile Changes'}</span>
           </button>
         </div>

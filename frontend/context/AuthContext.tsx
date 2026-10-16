@@ -234,6 +234,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null)
     try {
       localStorage.removeItem(LOCAL_USER_KEY)
+      localStorage.removeItem('pec_summit_access_token')
+      localStorage.removeItem('pec_summit_auth_token')
+      localStorage.removeItem('pec_summit_registrations')
+      localStorage.removeItem('pec_user_pass_applications')
+      localStorage.removeItem('pec_summit_attendee_profile')
+      localStorage.removeItem('pec_checkout_draft')
+      sessionStorage.clear()
     } catch {}
     setLoading(false)
   }
