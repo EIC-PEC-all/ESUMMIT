@@ -2,11 +2,12 @@
 
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ArrowUpRight } from 'lucide-react'
+import { X, ArrowUpRight, User, Ticket, Download, LogOut } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import ThemeToggle from '@/components/Common/ThemeToggle'
 import { FEST_META } from '@/lib/data'
+import { useAuth } from '@/context/AuthContext'
 
 export interface NavItem {
   label: string
@@ -21,6 +22,7 @@ export interface NavMobileDrawerProps {
   pathname: string
   navItems: NavItem[]
   onItemClick: (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => void
+  isRegistered?: boolean
 }
 
 export default function NavMobileDrawer({
@@ -29,8 +31,33 @@ export default function NavMobileDrawer({
   pathname,
   navItems,
   onItemClick,
+  isRegistered = false,
 }: NavMobileDrawerProps) {
+  const { logout } = useAuth()
   const drawerRef = useRef<HTMLDivElement>(null)
+
+  const handleDrawerSignOut = async () => {
+    try {
+      const { signOut: nextAuthSignOut } = await import('next-auth/react')
+      await nextAuthSignOut({ redirect: false }).catch(() => {})
+    } catch {}
+    try {
+      await logout()
+    } catch {}
+    try {
+      localStorage.removeItem('pec_summit_auth_user')
+      localStorage.removeItem('pec_summit_access_token')
+      localStorage.removeItem('pec_summit_auth_token')
+      localStorage.removeItem('pec_summit_registrations')
+      localStorage.removeItem('pec_user_pass_applications')
+      localStorage.removeItem('pec_summit_attendee_profile')
+      localStorage.removeItem('pec_checkout_draft')
+      sessionStorage.clear()
+    } catch {}
+    window.dispatchEvent(new Event('storage'))
+    window.dispatchEvent(new Event('pec_auth_changed'))
+    onClose()
+  }
 
   // Escape key handler & focus trapping
   useEffect(() => {
@@ -151,6 +178,50 @@ export default function NavMobileDrawer({
                   )
                 })}
               </nav>
+
+              {/* Drawer Action CTAs */}
+              <div className="pt-4 flex flex-col gap-2.5">
+                {isRegistered ? (
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href="/profile"
+                      onClick={onClose}
+                      className="flex-1 py-3 px-5 rounded-full btn-mint-gradient text-void font-mono-data text-xs font-black uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-md cursor-pointer hover:scale-[1.01]"
+                    >
+                      <User size={14} className="stroke-[2.5]" />
+                      <span>MY PROFILE &amp; PASSES</span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleDrawerSignOut}
+                      className="py-3 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-colors"
+                      title="Sign Out"
+                    >
+                      <LogOut size={13} />
+                      <span className="hidden sm:inline">SIGN OUT</span>
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    href="/register"
+                    onClick={onClose}
+                    className="w-full py-3 px-5 rounded-full btn-mint-gradient text-void font-mono-data text-xs font-black uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-md cursor-pointer hover:scale-[1.01]"
+                  >
+                    <Ticket size={14} className="stroke-[2.5]" />
+                    <span>REGISTER FOR PASSES</span>
+                  </Link>
+                )}
+
+                <a
+                  href="/e-summit-brochure.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors"
+                >
+                  <Download size={13} className="text-mint" />
+                  <span>DOWNLOAD BROCHURE (PDF)</span>
+                </a>
+              </div>
             </div>
 
             {/* Socials & Meta */}

@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, Ticket, Download, User } from 'lucide-react'
+import { Menu, Ticket, User } from 'lucide-react'
 import Magnetic from '@/components/Common/Magnetic'
 import ThemeToggle from '@/components/Common/ThemeToggle'
 import { prefetchRegister } from '@/lib/prefetch'
@@ -71,29 +71,30 @@ export default function NavHeader({
 
         {/* Right: Actions — Brochure (desktop), Profile & Hamburger */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-          <Magnetic strength={0.3}>
-            <a
-              href="/e-summit-brochure.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:inline-flex btn-dark-gradient min-h-[32px] sm:min-h-[38px] h-[32px] sm:h-[38px] box-border items-center justify-center gap-1.5 px-3 sm:px-4 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider leading-none cursor-pointer shrink-0 shadow-sm hover:border-mint transition-all"
-              aria-label="Download E-Summit Brochure"
-            >
-              <Download size={13} className="text-mint" />
-              <span>BROCHURE</span>
-            </a>
-          </Magnetic>
+
 
           <Magnetic strength={0.3}>
-            <Link
-              href="/profile"
-              className="btn-mint-gradient min-h-[32px] sm:min-h-[38px] h-[32px] sm:h-[38px] box-border inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 rounded-full font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider leading-none text-void cursor-pointer hover:scale-105 shrink-0 shadow-sm"
-              id="nav-profile-btn"
-              aria-label="View My Profile and Passes"
-            >
-              <User size={12} className="text-void stroke-[2.5]" />
-              <span>PROFILE</span>
-            </Link>
+            {isRegistered ? (
+              <Link
+                href="/profile"
+                className="btn-mint-gradient min-h-[32px] sm:min-h-[38px] h-[32px] sm:h-[38px] box-border inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 rounded-full font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider leading-none text-void cursor-pointer hover:scale-105 shrink-0 shadow-sm"
+                id="nav-profile-btn"
+                aria-label="View My Profile and Passes"
+              >
+                <User size={12} className="text-void stroke-[2.5]" />
+                <span>PROFILE</span>
+              </Link>
+            ) : (
+              <Link
+                href="/register"
+                className="btn-mint-gradient min-h-[32px] sm:min-h-[38px] h-[32px] sm:h-[38px] box-border inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 rounded-full font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider leading-none text-void cursor-pointer hover:scale-105 shrink-0 shadow-sm"
+                id="nav-register-btn"
+                aria-label="Register for Passes"
+              >
+                <Ticket size={12} className="text-void stroke-[2.5]" />
+                <span>REGISTER</span>
+              </Link>
+            )}
           </Magnetic>
 
           {/* Hamburger Trigger Button */}

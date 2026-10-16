@@ -267,6 +267,8 @@ export default function ProfileClient() {
   const [editingPass, setEditingPass] = useState<RegistrationRecord | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSavingProfile, setIsSavingProfile] = useState(false)
+  const [lookupEmail, setLookupEmail] = useState('')
+  const [isLookingUp, setIsLookingUp] = useState(false)
 
   const [profile, setProfile] = useState<AttendeeProfile>(() => {
     return (
@@ -379,7 +381,7 @@ export default function ProfileClient() {
     } catch {}
 
     if (!user && !hasLocal && !hasLocalPassApps) {
-      router.push('/register')
+      setLoading(false)
       return
     }
 
@@ -511,8 +513,63 @@ export default function ProfileClient() {
     setPassApplications([])
     setCurrentBadge(null)
 
+    window.dispatchEvent(new Event('storage'))
+    window.dispatchEvent(new Event('pec_auth_changed'))
+
     toast.success('Signed out successfully', TOAST_STYLE)
-    router.replace('/register')
+  }
+
+  const handleLookupPasses = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const cleanEmail = lookupEmail.trim().toLowerCase()
+    if (!cleanEmail) return
+
+    setIsLookingUp(true)
+    try {
+      const records = await getUserRegistrations(undefined, cleanEmail)
+      let foundApps: StartupPassApplication[] = []
+
+      try {
+        const res = await fetch(`/api/funding-conclave/apply?email=${encodeURIComponent(cleanEmail)}`)
+        if (res.ok) {
+          const json = await res.json()
+          if (json.success && Array.isArray(json.applications)) {
+            foundApps = json.applications.filter(isRealStartupApp)
+          }
+        }
+      } catch {}
+
+      if (records.length > 0 || foundApps.length > 0) {
+        if (records.length > 0) {
+          setMyRegistrations(records)
+          localStorage.setItem('pec_summit_registrations', JSON.stringify(records))
+          setProfile((prev) => ({
+            ...prev,
+            email: cleanEmail,
+            name: records[0].name || prev.name,
+            phone: records[0].phone && records[0].phone !== 'Not provided' ? records[0].phone : prev.phone,
+            college: records[0].college || prev.college,
+          }))
+          setActiveTab('passes')
+        }
+        if (foundApps.length > 0) {
+          setPassApplications(foundApps)
+          localStorage.setItem('pec_user_pass_applications', JSON.stringify(foundApps))
+          if (records.length === 0) {
+            setActiveTab('startup_passes')
+          }
+        }
+        toast.success(`Welcome back! Pass credentials loaded.`, TOAST_STYLE)
+        window.dispatchEvent(new Event('storage'))
+        window.dispatchEvent(new Event('pec_auth_changed'))
+      } else {
+        toast.error(`No passes found for ${cleanEmail}. Click Explore & Get Passes below to register.`, TOAST_STYLE)
+      }
+    } catch {
+      toast.error('Failed to lookup passes. Please check your connection.', TOAST_STYLE)
+    } finally {
+      setIsLookingUp(false)
+    }
   }
 
   const handleDeletePass = async (id: string) => {
@@ -542,6 +599,62 @@ export default function ProfileClient() {
         <div className="flex items-center gap-2 text-mint font-mono text-sm uppercase">
           <span className="w-2 h-2 rounded-full bg-mint animate-pulse" />
           Loading Profile...
+        </div>
+      </div>
+    )
+  }
+
+  const hasAccess = Boolean(user || myRegistrations.length > 0 || passApplications.length > 0)
+
+  if (!hasAccess) {
+    return (
+      <div className="w-full text-white selection:bg-mint/30 flex flex-col items-center justify-center min-h-[75vh] px-4 sm:px-6 relative overflow-hidden font-sans py-16">
+        <Toaster position="bottom-center" />
+        
+        {/* Background Ambience */}
+        <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-mint/5 to-transparent pointer-events-none" />
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-mint/10 rounded-full blur-[120px] pointer-events-none" />
+
+        <div className="relative z-10 w-full max-w-md mx-auto p-6 sm:p-8 rounded-3xl bg-panel border border-border-panel shadow-2xl text-center">
+          <div className="w-14 h-14 rounded-full btn-mint-gradient flex items-center justify-center text-void mx-auto mb-5 shadow-lg">
+            <Ticket size={24} className="stroke-[2.5]" />
+          </div>
+
+          <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight font-display mb-2 text-white">
+            Attendee Pass Portal
+          </h1>
+          <p className="text-xs sm:text-sm text-neutral-400 mb-6 leading-relaxed">
+            Enter your registered email address to view, download, and manage your official PEC E-Summit 2026 passes and applications.
+          </p>
+
+          <form onSubmit={handleLookupPasses} className="w-full flex flex-col gap-3">
+            <input
+              type="email"
+              required
+              placeholder="name@example.com"
+              value={lookupEmail}
+              onChange={(e) => setLookupEmail(e.target.value)}
+              className="w-full px-4 py-3 rounded-full bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
+            />
+            <button
+              type="submit"
+              disabled={isLookingUp}
+              className="w-full py-3.5 px-6 rounded-full btn-mint-gradient text-void font-mono-data font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md hover:scale-[1.01] active:scale-98 disabled:opacity-50"
+            >
+              {isLookingUp ? 'Searching Passes...' : 'Access My Passes'}
+            </button>
+          </form>
+
+          <div className="mt-6 pt-5 border-t border-border-subtle flex flex-col items-center gap-2.5">
+            <span className="text-xs text-neutral-500 font-mono">Don&apos;t have an official pass yet?</span>
+            <Link
+              href="/register"
+              className="w-full py-2.5 px-5 rounded-full btn-dark-gradient border border-border-panel text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 hover:border-mint transition-all"
+            >
+              <span>Explore &amp; Get Passes</span>
+              <ArrowRight size={13} className="text-mint" />
+            </Link>
+          </div>
         </div>
       </div>
     )

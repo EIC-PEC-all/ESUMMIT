@@ -47,18 +47,23 @@ export default function Nav() {
     const checkPasses = () => {
       try {
         const saved = localStorage.getItem('pec_summit_registrations')
-        if (saved && JSON.parse(saved).length > 0) {
-          setHasStoredPasses(true)
-        } else {
-          setHasStoredPasses(false)
-        }
+        const passApps = localStorage.getItem('pec_user_pass_applications')
+        const hasRegistrations = Boolean(saved && JSON.parse(saved).length > 0)
+        const hasApplications = Boolean(passApps && JSON.parse(passApps).length > 0)
+        setHasStoredPasses(hasRegistrations || hasApplications)
       } catch {
         setHasStoredPasses(false)
       }
     }
     checkPasses()
     window.addEventListener('storage', checkPasses)
-    return () => window.removeEventListener('storage', checkPasses)
+    window.addEventListener('pec_auth_changed', checkPasses)
+    window.addEventListener('pec_registration_success', checkPasses)
+    return () => {
+      window.removeEventListener('storage', checkPasses)
+      window.removeEventListener('pec_auth_changed', checkPasses)
+      window.removeEventListener('pec_registration_success', checkPasses)
+    }
   }, [])
 
   const isRegistered = Boolean(user || hasStoredPasses)
@@ -308,6 +313,7 @@ export default function Nav() {
         pathname={pathname}
         navItems={NAV_ITEMS}
         onItemClick={handleItemClick}
+        isRegistered={isRegistered}
       />
     </>
   )
