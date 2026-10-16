@@ -21,11 +21,21 @@ import {
   Sparkles,
   ArrowRight,
   Loader2,
+  MapPin,
+  Lock,
+  AlertCircle,
 } from 'lucide-react'
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/context/AuthContext'
-import { getStoredProfile, saveStoredProfile } from '@/lib/onboarding'
+import AuthCard from '@/components/Account/AuthCard'
+import { STATE_NAMES, getCitiesForState } from '@/data/indiaLocations'
+import {
+  getStoredProfile,
+  saveStoredProfile,
+  GRADUATION_YEARS,
+  normalizeGradYear,
+} from '@/lib/onboarding'
 import {
   RegistrationRecord,
   getLocalRegistrations,
@@ -39,6 +49,9 @@ interface StudentFormData {
   phone: string
   linkedin: string
   college: string
+  state: string
+  city: string
+  customCity: string
   courseYear: string
   motive: string
   selectedPassId: string
@@ -52,15 +65,6 @@ const MOTIVE_OPTIONS = [
   'Internships, Jobs & Career Opportunities',
   'Pitching Ideas & Learning Venture Building',
   'Other',
-]
-
-const COURSE_YEAR_OPTIONS = [
-  'B.Tech / B.E. — 1st Year',
-  'B.Tech / B.E. — 2nd Year',
-  'B.Tech / B.E. — 3rd Year',
-  'B.Tech / B.E. — 4th Year',
-  'Postgraduate / MBA / M.Tech',
-  'Other Degree / Stream',
 ]
 
 interface Props {
@@ -86,20 +90,30 @@ export default function StudentPassForm({
     return found ? found.id : STUDENT_PACKAGES[0].id
   }
 
-  const [form, setForm] = useState<StudentFormData>({
-    fullName: '',
-    email: '',
-    phone: '',
-    linkedin: '',
-    college: '',
-    courseYear: COURSE_YEAR_OPTIONS[1],
-    motive: MOTIVE_OPTIONS[0],
-    selectedPassId: resolveInitialPass(selectedTier),
+  const [form, setForm] = useState<StudentFormData>(() => {
+    const profile = getStoredProfile()
+    return {
+      fullName: profile?.name || '',
+      email: profile?.email || '',
+      phone: profile?.phone || '',
+      linkedin: '',
+      college: profile?.college || '',
+      state: profile?.state || 'Punjab',
+      city: profile?.city || 'Chandigarh Tricity',
+      customCity: '',
+      courseYear: normalizeGradYear(profile?.gradYear) || '1st Year (Class of 2030)',
+      motive: MOTIVE_OPTIONS[0],
+      selectedPassId: resolveInitialPass(selectedTier),
+    }
   })
 
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [registrationId, setRegistrationId] = useState<string>('')
   const [errorMsg, setErrorMsg] = useState<string>('')
+  const [existingPass, setExistingPass] = useState<{
+    id: string
+    category?: string
+  } | null>(null)
 
   // Sync prop changes
   useEffect(() => {
@@ -111,16 +125,46 @@ export default function StudentPassForm({
     }
   }, [selectedTier])
 
-  // Pre-fill user data
+  // Pre-fill user data & check existing registration
   useEffect(() => {
     const profile = getStoredProfile()
-    setForm((prev) => ({
-      ...prev,
-      fullName: user?.displayName || profile?.name || prev.fullName,
-      email: user?.email || profile?.email || prev.email,
-      phone: profile?.phone || prev.phone,
-      college: profile?.college || prev.college,
-    }))
+    setForm((prev) => {
+      const st = profile?.state || prev.state || 'Punjab'
+      const c = profile?.city || prev.city || 'Chandigarh Tricity'
+      return {
+        ...prev,
+        fullName: user?.displayName || profile?.name || prev.fullName,
+        email: user?.email || profile?.email || prev.email,
+        phone: profile?.phone || prev.phone,
+        college: profile?.college || prev.college,
+        state: st,
+        city: c,
+        courseYear: normalizeGradYear(profile?.gradYear) || prev.courseYear,
+      }
+    })
+
+    // Check local storage first
+    const local = getLocalRegistrations()
+    if (local && local.length > 0) {
+      setExistingPass({ id: local[0].id, category: local[0].category })
+    }
+
+    // Check backend API for user registration
+    const email = user?.email || profile?.email
+    if (email) {
+      fetch(`/api/registrations/record?email=${encodeURIComponent(email.trim())}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && Array.isArray(data.registrations) && data.registrations.length > 0) {
+            const first = data.registrations[0]
+            setExistingPass({
+              id: first.passId || first._id,
+              category: first.category || first.passType,
+            })
+          }
+        })
+        .catch(() => {})
+    }
   }, [user])
 
   const selectedPkg =
@@ -135,6 +179,57 @@ export default function StudentPassForm({
     setForm((prev) => ({ ...prev, [key]: value }))
   }
 
+  const handleStateChange = (newState: string) => {
+    setForm((prev) => ({
+      ...prev,
+      state: newState,
+      city: '',
+      customCity: '',
+    }))
+  }
+
+  const availableCities = getCitiesForState(form.state)
+  const finalCity = form.city === 'Other' ? form.customCity.trim() : form.city.trim()
+
+  // ── STRICT AUTH GATE: GUEST CANNOT OPEN OR VIEW PASS REGISTRATION FORM ──
+  if (!user) {
+    return (
+      <div id="student-pass-form" className="w-full max-w-xl mx-auto my-8">
+        <Toaster position="top-right" />
+        <div className="mb-4 text-center">
+          <span className="font-mono-data text-xs font-black uppercase tracking-[0.25em] text-mint flex items-center justify-center gap-1.5 mb-1.5">
+            <Sparkles size={13} />
+            LOGIN REQUIRED TO CLAIM PASS
+          </span>
+          <h2 className="font-display text-2xl sm:text-3xl font-black uppercase tracking-tight text-primary">
+            Sign In To Access <span className="text-gradient-mint">{selectedPkg.name}</span>
+          </h2>
+          <p className="font-body text-xs text-secondary mt-1">
+            Sign in with Google or Email. Passes and QR badges are saved directly to your account.
+          </p>
+        </div>
+
+        <AuthCard
+          title="Sign In Required"
+          subtitle={`Please sign in to unlock and claim your official ${selectedPkg.name}.`}
+        />
+
+        {onBackToCards && (
+          <div className="text-center mt-5">
+            <button
+              type="button"
+              onClick={onBackToCards}
+              className="inline-flex items-center gap-2 font-mono-data text-xs text-secondary hover:text-mint transition-colors cursor-pointer group"
+            >
+              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+              <span>Back to All Passes</span>
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -146,6 +241,9 @@ export default function StudentPassForm({
       return toast.error('A valid 10-digit WhatsApp number is required')
     }
     if (!form.college.trim()) return toast.error('College / Institute Name is required')
+    if (!form.state.trim()) return toast.error('State or UT is required')
+    if (!finalCity) return toast.error('City is required')
+    if (!form.courseYear.trim()) return toast.error('Degree & Year of Study is required')
     if (!form.linkedin.trim()) return toast.error('LinkedIn Profile or ID is required')
     if (!form.motive.trim()) return toast.error('Please select your primary motive')
 
@@ -163,11 +261,24 @@ export default function StudentPassForm({
       const tracks = [
         `Pass: ${selectedPkg.name} (${selectedPkg.price})`,
         `College: ${form.college.trim()}`,
-        `Course/Year: ${form.courseYear}`,
+        `Location: ${finalCity}, ${form.state.trim()}`,
+        `Year: ${form.courseYear}`,
         `Motive: ${form.motive}`,
         `LinkedIn: ${form.linkedin.trim()}`,
         `Phone: ${form.phone.trim()}`,
       ]
+
+      // ── Mark Onboarding Completed & Sync Profile ──
+      saveStoredProfile({
+        name: form.fullName.trim(),
+        email: form.email.trim().toLowerCase(),
+        phone: form.phone.trim(),
+        college: form.college.trim(),
+        state: form.state.trim(),
+        city: finalCity,
+        gradYear: form.courseYear,
+        onboardingCompleted: true,
+      })
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
 
@@ -223,9 +334,9 @@ export default function StudentPassForm({
         qrCodeData: qrDataUrl,
       }
 
-      const existingPasses = getLocalRegistrations()
-      const dedupedPasses = existingPasses.filter((p) => p.id !== regId)
-      saveLocalRegistrations([newRecord, ...dedupedPasses])
+      // ── Persist pass locally for instant profile access (Single Pass Rule) ──
+      saveLocalRegistrations([newRecord])
+      setExistingPass({ id: regId, category: selectedPkg.name })
 
       // ── Sync with Response Manager store ──
       try {
@@ -285,7 +396,7 @@ export default function StudentPassForm({
         id="student-pass-form"
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-3xl bg-panel border border-mint/30 p-8 sm:p-12 text-center space-y-6 shadow-2xl max-w-3xl mx-auto"
+        className="rounded-3xl bg-panel border border-mint/30 p-8 sm:p-12 text-center space-y-6 shadow-2xl w-full max-w-5xl mx-auto"
       >
         <div className="w-20 h-20 rounded-full bg-mint/10 border border-mint/30 flex items-center justify-center mx-auto shadow-inner">
           <CheckCircle2 className="w-10 h-10 text-mint" />
@@ -295,10 +406,10 @@ export default function StudentPassForm({
           <span className="font-mono-data text-xs font-bold uppercase tracking-[0.25em] text-mint">
             REGISTRATION CONFIRMED
           </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-black uppercase tracking-tight text-primary mt-2">
+          <h2 className="font-display text-3xl sm:text-5xl font-black uppercase tracking-tight text-primary mt-2">
             YOU&apos;RE <span className="text-gradient-mint">REGISTERED!</span>
           </h2>
-          <p className="text-secondary font-body text-sm max-w-lg mx-auto leading-relaxed mt-2">
+          <p className="text-secondary font-body text-sm sm:text-base max-w-xl mx-auto leading-relaxed mt-2">
             Your pass for <strong className="text-primary">{selectedPkg.name}</strong> has been secured in the E-Summit database.
           </p>
         </div>
@@ -321,7 +432,7 @@ export default function StudentPassForm({
           </div>
         )}
 
-        <div className="p-5 rounded-2xl bg-panel-alt border border-border-subtle text-left max-w-lg mx-auto space-y-2 text-xs font-mono-data text-secondary">
+        <div className="p-5 rounded-2xl bg-panel-alt border border-border-subtle text-left max-w-xl mx-auto space-y-2.5 text-xs font-mono-data text-secondary">
           <div className="flex justify-between">
             <span className="text-muted">Pass Tier:</span>
             <span className="font-bold text-primary">{selectedPkg.name} ({selectedPkg.price})</span>
@@ -340,10 +451,14 @@ export default function StudentPassForm({
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <p className="text-[11px] font-mono-data text-muted max-w-md mx-auto">
+          Notice: Each attendee is permitted 1 active student pass. Re-registering or switching tiers automatically replaces previous registrations.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
           <Link
-            href="/profile"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer hover:brightness-105 shadow-md"
+            href="/profile?tab=passes"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-mint text-void font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer hover:brightness-105 shadow-lg shadow-mint/20"
           >
             <span>View in My Profile</span>
             <ArrowRight size={14} />
@@ -352,7 +467,7 @@ export default function StudentPassForm({
             <button
               type="button"
               onClick={onBackToCards}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-panel-alt border border-border-subtle text-secondary hover:text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:border-mint"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-panel-alt border border-border-subtle text-secondary hover:text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:border-mint"
             >
               <ArrowLeft size={14} />
               <span>Back to Passes</span>
@@ -361,10 +476,10 @@ export default function StudentPassForm({
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-panel-alt border border-border-subtle text-secondary hover:text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:border-mint"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-panel-alt border border-border-subtle text-secondary hover:text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:border-mint"
           >
             <RotateCcw size={14} />
-            <span>Register Another</span>
+            <span>Switch Pass Tier</span>
           </button>
         </div>
       </motion.div>
@@ -406,45 +521,67 @@ export default function StudentPassForm({
           </p>
         </div>
 
-        {/* Pass Selector Tabs */}
-        <div className="mb-8 p-1.5 rounded-full bg-panel-alt border border-border-subtle flex flex-row items-center gap-2 overflow-x-auto no-scrollbar">
-          {STUDENT_PACKAGES.map((pkg) => {
-            const isSelected = form.selectedPassId === pkg.id
-            let Icon = Shield
-            if (pkg.tier === 'all-access') Icon = Crown
-            if (pkg.tier === 'hackathon') Icon = Terminal
-            if (pkg.tier === 'combo') Icon = Gem
+        {/* Auth Status Banner */}
+        <div className="mb-6 px-4 py-2.5 rounded-2xl bg-mint/10 border border-mint/20 flex items-center justify-between gap-3 text-xs font-mono-data">
+          <div className="flex items-center gap-2 text-mint font-bold">
+            <CheckCircle2 size={15} />
+            <span>Logged in as: <strong className="text-white">{user.email}</strong></span>
+          </div>
+          <span className="text-[10px] text-muted uppercase tracking-wider hidden sm:inline">Details Auto-Synced</span>
+        </div>
 
-            return (
-              <button
-                key={pkg.id}
-                type="button"
-                onClick={() => handlePassSwitch(pkg.id)}
-                className={`flex-1 min-w-[190px] sm:min-w-0 w-full flex items-center justify-between sm:justify-center gap-2 py-3 px-3.5 sm:px-4 rounded-full transition-all cursor-pointer text-left sm:text-center shrink-0 sm:shrink whitespace-nowrap ${
-                  isSelected
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <Icon size={15} className={isSelected ? 'text-void stroke-[2.5]' : 'text-mint'} />
-                  <div>
-                    <div className="font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider truncate">
-                      {pkg.name.replace(' PASS', '')}
-                    </div>
-                    <div className={`text-[10px] sm:text-[11px] font-mono-data font-bold ${isSelected ? 'text-void/90' : 'text-muted'}`}>
-                      {pkg.price}
-                    </div>
-                  </div>
-                </div>
-                {isSelected && (
-                  <span className="font-mono-data text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-void text-mint shadow-xs">
-                    ACTIVE
+        {/* Existing Pass Notice */}
+        {existingPass && (
+          <div className="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-left">
+            <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-mono-data text-xs font-bold text-amber-300 uppercase tracking-wider">
+                Active Student Pass Detected ({existingPass.category || 'General Pass'})
+              </p>
+              <p className="font-body text-xs text-secondary leading-relaxed">
+                Attendees are limited to <strong className="text-primary">one active student pass</strong>. Registering another pass will automatically <strong className="text-amber-300">overwrite and replace your existing pass</strong> ({existingPass.id}).
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Pass Selector Tabs — Single-line horizontally scrollable with fully extending pill container */}
+        <div className="w-full overflow-x-auto no-scrollbar pb-2 mb-8">
+          <div className="inline-flex min-w-full items-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md">
+            {STUDENT_PACKAGES.map((pkg) => {
+              const isSelected = form.selectedPassId === pkg.id
+              let Icon = Shield
+              if (pkg.tier === 'all-access') Icon = Crown
+              if (pkg.tier === 'hackathon') Icon = Terminal
+              if (pkg.tier === 'combo') Icon = Gem
+
+              return (
+                <button
+                  key={pkg.id}
+                  type="button"
+                  onClick={() => handlePassSwitch(pkg.id)}
+                  className={`flex-1 inline-flex items-center justify-center gap-2 py-2.5 sm:py-3 px-3.5 sm:px-5 rounded-full transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    isSelected
+                      ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                      : 'text-secondary hover:text-primary hover:bg-panel'
+                  }`}
+                >
+                  <Icon size={15} className={isSelected ? 'text-void stroke-[2.5]' : 'text-mint shrink-0'} />
+                  <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-wider">
+                    {pkg.name.replace(' PASS', '')}
                   </span>
-                )}
-              </button>
-            )
-          })}
+                  <span className={`text-[11px] sm:text-xs font-mono-data font-bold ${isSelected ? 'text-void/90' : 'text-muted'}`}>
+                    {pkg.price}
+                  </span>
+                  {isSelected && (
+                    <span className="font-mono-data text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-void text-mint shadow-xs ml-0.5">
+                      ACTIVE
+                    </span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         {/* Selected Tier Brief */}
@@ -486,19 +623,29 @@ export default function StudentPassForm({
 
             {/* Email Address */}
             <div>
-              <label htmlFor="student-email" className="block font-mono-data text-xs font-bold uppercase tracking-wider text-secondary mb-1.5">
-                College / Personal Email <span className="text-mint">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="student-email" className="block font-mono-data text-xs font-bold uppercase tracking-wider text-secondary">
+                  Account Email <span className="text-mint">*</span>
+                </label>
+                {user?.email && (
+                  <span className="inline-flex items-center gap-1 font-mono-data text-[10px] text-mint uppercase tracking-wider font-bold">
+                    <CheckCircle2 size={11} /> Verified Account
+                  </span>
+                )}
+              </div>
               <div className="relative">
                 <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <input
                   id="student-email"
                   type="email"
                   required
+                  readOnly={Boolean(user?.email)}
                   value={form.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   placeholder="rahul@pec.edu.in"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm placeholder:text-muted transition-colors"
+                  className={`w-full pl-10 pr-4 py-3 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm placeholder:text-muted transition-colors ${
+                    user?.email ? 'opacity-85 cursor-not-allowed bg-black/30' : ''
+                  }`}
                 />
               </div>
             </div>
@@ -542,6 +689,75 @@ export default function StudentPassForm({
             </div>
           </div>
 
+          {/* Location: State and City */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label htmlFor="student-state" className="block font-mono-data text-xs font-bold uppercase tracking-wider text-secondary mb-1.5">
+                State / Union Territory <span className="text-mint">*</span>
+              </label>
+              <div className="relative">
+                <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
+                <select
+                  id="student-state"
+                  required
+                  value={form.state}
+                  onChange={(e) => handleStateChange(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm transition-colors cursor-pointer appearance-none"
+                >
+                  <option value="" disabled className="bg-panel text-muted">
+                    Select State / UT
+                  </option>
+                  {STATE_NAMES.map((s) => (
+                    <option key={s} value={s} className="bg-panel text-primary">
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="student-city" className="block font-mono-data text-xs font-bold uppercase tracking-wider text-secondary mb-1.5">
+                City / Town <span className="text-mint">*</span>
+              </label>
+              <div className="relative">
+                <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
+                <select
+                  id="student-city"
+                  required
+                  value={form.city}
+                  onChange={(e) => updateField('city', e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm transition-colors cursor-pointer appearance-none"
+                >
+                  <option value="" disabled className="bg-panel text-muted">
+                    Select City
+                  </option>
+                  {availableCities.map((c) => (
+                    <option key={c} value={c} className="bg-panel text-primary">
+                      {c}
+                    </option>
+                  ))}
+                  <option value="Other" className="bg-panel text-primary font-bold">
+                    Other (Specify Custom City)
+                  </option>
+                </select>
+              </div>
+
+              {form.city === 'Other' && (
+                <div className="mt-2.5">
+                  <input
+                    type="text"
+                    required
+                    value={form.customCity}
+                    onChange={(e) => updateField('customCity', e.target.value)}
+                    placeholder="Enter your city name"
+                    className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm placeholder:text-muted transition-colors"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {/* College / Institute */}
             <div>
@@ -571,13 +787,14 @@ export default function StudentPassForm({
                 <BookOpen size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <select
                   id="student-courseYear"
+                  required
                   value={form.courseYear}
                   onChange={(e) => updateField('courseYear', e.target.value)}
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm transition-colors cursor-pointer appearance-none"
                 >
-                  {COURSE_YEAR_OPTIONS.map((c) => (
-                    <option key={c} value={c} className="bg-panel text-primary">
-                      {c}
+                  {GRADUATION_YEARS.map((y) => (
+                    <option key={y.value} value={y.value} className="bg-panel text-primary">
+                      {y.label}
                     </option>
                   ))}
                 </select>

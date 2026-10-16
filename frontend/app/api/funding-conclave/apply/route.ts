@@ -95,6 +95,7 @@ export async function POST(req: NextRequest) {
       passTier,
       passTierName,
       passPrice,
+      userId: body.userId ? String(body.userId).trim() : undefined,
       email,
       founderName,
       phone,
@@ -118,10 +119,13 @@ export async function POST(req: NextRequest) {
       updatedAt: now,
     }
 
-    // 1. Save directly to MongoDB Atlas
+    // 1. Save directly to MongoDB Atlas (Overwrite any previous application for this applicant)
     let dbSaved = false
     try {
       const collection = await getMongoCollection()
+      await collection.deleteMany({
+        email: { $regex: new RegExp(`^${email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') },
+      })
       await collection.insertOne(applicationRecord)
       dbSaved = true
     } catch (dbErr) {
@@ -176,19 +180,29 @@ export async function GET(req: NextRequest) {
     const email = searchParams.get('email')?.trim().toLowerCase()
     const userId = searchParams.get('userId')?.trim()
 
-    const collection = await getMongoCollection()
-    const query: Record<string, any> = {}
-    if (email) query.email = email
-    if (userId) query.userId = userId
+    if (!email && !userId) {
+      return NextResponse.json({ success: true, applications: [] })
+    }
 
+    const collection = await getMongoCollection()
+    const orConditions: any[] = []
+    if (email) {
+      orConditions.push({ email: { $regex: new RegExp(`^${email.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') } })
+    }
+    if (userId) {
+      orConditions.push({ userId })
+    }
+
+    const query = orConditions.length > 1 ? { $or: orConditions } : orConditions[0]
     const fromDb = await collection.find(query).sort({ createdAt: -1 }).toArray()
 
-    // Strictly ensure only startup applications are returned
+    // Ensure all real startup applications are returned
     const validStartupApps = fromDb.filter((app: any) => {
       const tier = String(app.passTier || '').toLowerCase()
       const tierName = String(app.passTierName || '').toLowerCase()
       if (['diamond', 'gold', 'silver'].includes(tier)) return true
       if (tierName.includes('diamond') || tierName.includes('gold') || tierName.includes('silver')) return true
+      if (app.applicationId && (app.startupName || app.organization || app.founderName)) return true
       return false
     })
 

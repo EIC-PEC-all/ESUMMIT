@@ -183,7 +183,30 @@ export const getUserRegistrations = async (
   const rawLocalList = getLocalRegistrations()
   const localList = rawLocalList.filter((r) => !deletedIds.has(r.id))
 
-  // 1. Try fetching from backend API if online
+  // 1. Try fetching from live database API by email
+  if (userEmail) {
+    try {
+      const res = await fetch(`/api/registrations/record?email=${encodeURIComponent(userEmail.trim())}`)
+      if (res.ok) {
+        const data = await res.json()
+        if (data.success && Array.isArray(data.passes) && data.passes.length > 0) {
+          const dbPasses: RegistrationRecord[] = data.passes.filter((p: any) => !deletedIds.has(p.id))
+          const merged = [...dbPasses]
+          for (const local of localList) {
+            if (!merged.some((m) => m.id === local.id)) {
+              merged.push(local)
+            }
+          }
+          saveLocalRegistrations(merged)
+          return merged
+        }
+      }
+    } catch {
+      // Offline fallback
+    }
+  }
+
+  // 2. Try fetching from NestJS backend API if auth token is present
   try {
     const token = typeof window !== 'undefined' ? localStorage.getItem('pec_summit_access_token') : null
     if (token) {

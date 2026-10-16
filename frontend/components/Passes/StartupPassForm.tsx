@@ -20,10 +20,13 @@ import {
   Sparkles,
   ArrowRight,
   Loader2,
+  AlertCircle,
 } from 'lucide-react'
+import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/context/AuthContext'
-import { getStoredProfile } from '@/lib/onboarding'
+import AuthCard from '@/components/Account/AuthCard'
+import { getStoredProfile, saveStoredProfile } from '@/lib/onboarding'
 import { STARTUP_PACKAGES } from './passesData'
 
 interface StartupFormData {
@@ -68,7 +71,7 @@ export default function StartupPassForm({
   onSelectTier,
   onBackToComparison,
 }: Props) {
-  const { user } = useAuth()
+  const { user, loginWithGoogle } = useAuth()
 
   const normalizedInitialTier = (
     selectedTier === 'diamond' || selectedTier === 'silver' ? selectedTier : 'gold'
@@ -88,6 +91,11 @@ export default function StartupPassForm({
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [applicationId, setApplicationId] = useState<string>('')
   const [errorMsg, setErrorMsg] = useState<string>('')
+  const [existingApp, setExistingApp] = useState<{
+    applicationId: string
+    passTierName?: string
+    startupName?: string
+  } | null>(null)
 
   // Sync when prop selectedTier changes
   useEffect(() => {
@@ -96,7 +104,7 @@ export default function StartupPassForm({
     }
   }, [selectedTier])
 
-  // Pre-fill user data if available
+  // Pre-fill user data & check existing application
   useEffect(() => {
     const profile = getStoredProfile()
     setForm((prev) => ({
@@ -106,6 +114,21 @@ export default function StartupPassForm({
       phone: profile?.phone || prev.phone,
       organization: profile?.college || prev.organization,
     }))
+
+    const checkExisting = async () => {
+      const email = user?.email || profile?.email
+      if (!email) return
+      try {
+        const res = await fetch(`/api/funding-conclave/apply?email=${encodeURIComponent(email.trim())}`)
+        if (res.ok) {
+          const data = await res.json()
+          if (data.success && Array.isArray(data.applications) && data.applications.length > 0) {
+            setExistingApp(data.applications[0])
+          }
+        }
+      } catch {}
+    }
+    checkExisting()
   }, [user])
 
   const selectedPkg =
@@ -133,6 +156,9 @@ export default function StartupPassForm({
     if (!form.linkedin.trim()) {
       return toast.error('LinkedIn Profile URL or ID is required')
     }
+    if (!form.organization.trim()) {
+      return toast.error('Organization or Startup name is required')
+    }
     if (!form.motive.trim()) {
       return toast.error('Please specify your primary motive')
     }
@@ -144,6 +170,15 @@ export default function StartupPassForm({
     setErrorMsg('')
 
     try {
+      // Sync attendee profile
+      saveStoredProfile({
+        name: form.fullName.trim(),
+        email: form.email.trim().toLowerCase(),
+        phone: form.phone.trim(),
+        college: form.organization.trim(),
+        onboardingCompleted: true,
+      })
+
       const payload = {
         fullName: form.fullName.trim(),
         founderName: form.fullName.trim(),
@@ -173,7 +208,23 @@ export default function StartupPassForm({
       const data = await res.json().catch(() => ({ success: false }))
 
       if (res.ok && data.success) {
-        setApplicationId(data.applicationId || `PEC-FC-${Math.random().toString(36).substring(2, 8).toUpperCase()}`)
+        const appRef = data.applicationId || `PEC-FC-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+        setApplicationId(appRef)
+        // Store strictly ONE startup pass in localStorage (1 pass per category rule)
+        try {
+          const newApp = {
+            applicationId: appRef,
+            passTier: form.passTier,
+            passTierName: selectedPkg.name,
+            passPrice: `${selectedPkg.price} + GST`,
+            startupName: form.organization.trim() || `${form.fullName.trim()}'s Venture`,
+            role: form.role.trim(),
+            createdAt: new Date().toISOString(),
+            status: 'PENDING_REVIEW',
+          }
+          localStorage.setItem('pec_user_pass_applications', JSON.stringify([newApp]))
+        } catch {}
+        setExistingApp({ applicationId: appRef, passTierName: selectedPkg.name })
         setSubmitState('success')
         toast.success('Application registered successfully!')
       } else {
@@ -200,7 +251,7 @@ export default function StartupPassForm({
         id="startup-pass-form"
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-3xl bg-panel border border-mint/30 p-8 sm:p-12 text-center space-y-6 shadow-2xl max-w-3xl mx-auto"
+        className="rounded-3xl bg-panel border border-mint/30 p-8 sm:p-12 text-center space-y-6 shadow-2xl w-full max-w-5xl mx-auto"
       >
         <div className="w-20 h-20 rounded-full bg-mint/10 border border-mint/30 flex items-center justify-center mx-auto shadow-inner">
           <CheckCircle2 className="w-10 h-10 text-mint" />
@@ -210,11 +261,11 @@ export default function StartupPassForm({
           <span className="font-mono-data text-xs font-bold uppercase tracking-[0.25em] text-mint">
             REGISTRATION RECEIVED
           </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-black uppercase tracking-tight text-primary mt-2">
+          <h2 className="font-display text-3xl sm:text-5xl font-black uppercase tracking-tight text-primary mt-2">
             YOU&apos;RE <span className="text-gradient-mint">PRE-REGISTERED!</span>
           </h2>
-          <p className="text-secondary font-body text-sm max-w-lg mx-auto leading-relaxed mt-2">
-            Thank you for applying for the <strong className="text-primary">{selectedPkg.name}</strong>. Our team will review your application details, shortlist you, and send an MoU.
+          <p className="text-secondary font-body text-sm sm:text-base max-w-xl mx-auto leading-relaxed mt-2">
+            Thank you for applying for the <strong className="text-primary">{selectedPkg.name}</strong>. Your application is saved directly to your account.
           </p>
         </div>
 
@@ -236,7 +287,7 @@ export default function StartupPassForm({
           </div>
         )}
 
-        <div className="p-5 rounded-2xl bg-panel-alt border border-border-subtle text-left max-w-lg mx-auto space-y-2 text-xs font-mono-data text-secondary">
+        <div className="p-5 rounded-2xl bg-panel-alt border border-border-subtle text-left max-w-xl mx-auto space-y-2.5 text-xs font-mono-data text-secondary">
           <div className="flex justify-between">
             <span className="text-muted">Selected Tier:</span>
             <span className="font-bold text-primary">{selectedPkg.name} ({selectedPkg.price})</span>
@@ -255,12 +306,23 @@ export default function StartupPassForm({
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <p className="text-[11px] font-mono-data text-muted max-w-md mx-auto">
+          Notice: Each attendee or venture is permitted 1 active startup pass application. Re-submitting or changing tier replaces previous records.
+        </p>
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
+          <Link
+            href="/profile?tab=startup_passes"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-mint text-void font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer hover:brightness-105 shadow-lg shadow-mint/20"
+          >
+            <span>View in My Profile</span>
+            <ArrowRight size={14} />
+          </Link>
           {onBackToComparison && (
             <button
               type="button"
               onClick={onBackToComparison}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-panel-alt border border-border-subtle text-secondary hover:text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:border-mint"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-panel-alt border border-border-subtle text-secondary hover:text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:border-mint"
             >
               <ArrowLeft size={14} />
               <span>Back to Packages</span>
@@ -269,13 +331,52 @@ export default function StartupPassForm({
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-mint text-void font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer hover:brightness-105 shadow-md"
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-panel-alt border border-border-subtle text-secondary hover:text-primary font-mono-data text-xs font-bold uppercase tracking-wider transition-all cursor-pointer hover:border-mint"
           >
             <RotateCcw size={14} />
-            <span>Submit Another</span>
+            <span>Switch / Modify Tier</span>
           </button>
         </div>
       </motion.div>
+    )
+  }
+
+  // ── STRICT AUTH GATE: GUEST CANNOT OPEN OR VIEW PASS APPLICATION FORM ──
+  if (!user) {
+    return (
+      <div id="startup-pass-form" className="w-full max-w-xl mx-auto my-8">
+        <Toaster position="top-right" />
+        <div className="mb-4 text-center">
+          <span className="font-mono-data text-xs font-black uppercase tracking-[0.25em] text-mint flex items-center justify-center gap-1.5 mb-1.5">
+            <Sparkles size={13} />
+            LOGIN REQUIRED TO APPLY
+          </span>
+          <h2 className="font-display text-2xl sm:text-3xl font-black uppercase tracking-tight text-primary">
+            Sign In To Access <span className="text-gradient-mint">{selectedPkg.name}</span>
+          </h2>
+          <p className="font-body text-xs text-secondary mt-1">
+            Sign in with Google or Email. Passes and applications are linked directly to your official account.
+          </p>
+        </div>
+
+        <AuthCard
+          title="Sign In Required"
+          subtitle={`Please sign in to unlock and apply for your ${selectedPkg.name}.`}
+        />
+
+        {onBackToComparison && (
+          <div className="text-center mt-5">
+            <button
+              type="button"
+              onClick={onBackToComparison}
+              className="inline-flex items-center gap-2 font-mono-data text-xs text-secondary hover:text-mint transition-colors cursor-pointer group"
+            >
+              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+              <span>Back to Packages</span>
+            </button>
+          </div>
+        )}
+      </div>
     )
   }
 
@@ -314,42 +415,66 @@ export default function StartupPassForm({
           </p>
         </div>
 
-        {/* Tier Selector Ribbon */}
-        <div className="mb-8 p-1.5 rounded-full bg-panel-alt border border-border-subtle flex flex-row items-center gap-2 overflow-x-auto no-scrollbar">
-          {STARTUP_PACKAGES.map((pkg) => {
-            const isSelected = form.passTier === pkg.tier
-            let Icon = Shield
-            if (pkg.tier === 'gold') Icon = Crown
-            if (pkg.tier === 'diamond') Icon = Gem
+        {/* Auth Status Banner */}
+        <div className="mb-6 px-4 py-2.5 rounded-2xl bg-mint/10 border border-mint/20 flex items-center justify-between gap-3 text-xs font-mono-data">
+          <div className="flex items-center gap-2 text-mint font-bold">
+            <CheckCircle2 size={15} />
+            <span>Logged in as: <strong className="text-white">{user.email}</strong></span>
+          </div>
+          <span className="text-[10px] text-muted uppercase tracking-wider hidden sm:inline">Details Auto-Synced</span>
+        </div>
 
-            return (
-              <button
-                key={pkg.id}
-                type="button"
-                onClick={() => handleTierSwitch(pkg.tier)}
-                className={`flex-1 min-w-[200px] sm:min-w-0 w-full flex items-center justify-between sm:justify-center gap-2.5 py-3 px-4 sm:px-5 rounded-full transition-all cursor-pointer text-left sm:text-center shrink-0 sm:shrink whitespace-nowrap ${
-                  isSelected
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <Icon size={16} className={isSelected ? 'text-void stroke-[2.5]' : 'text-mint'} />
-                  <span className="font-mono-data text-xs font-black uppercase tracking-wider">
+        {/* Existing Application Notice */}
+        {existingApp && (
+          <div className="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-left">
+            <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <p className="font-mono-data text-xs font-bold text-amber-300 uppercase tracking-wider">
+                Active Application Detected ({existingApp.passTierName || 'Startup Pass'})
+              </p>
+              <p className="font-body text-xs text-secondary leading-relaxed">
+                Founders and startups are limited to <strong className="text-primary">one active startup pass application</strong>. Submitting a new application will automatically <strong className="text-amber-300">overwrite and replace your previous application</strong> ({existingApp.applicationId}).
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Tier Selector Ribbon — Single-line horizontally scrollable with fully extending pill container */}
+        <div className="w-full overflow-x-auto no-scrollbar pb-2 mb-8">
+          <div className="inline-flex min-w-full items-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md">
+            {STARTUP_PACKAGES.map((pkg) => {
+              const isSelected = form.passTier === pkg.tier
+              let Icon = Shield
+              if (pkg.tier === 'gold') Icon = Crown
+              if (pkg.tier === 'diamond') Icon = Gem
+
+              return (
+                <button
+                  key={pkg.id}
+                  type="button"
+                  onClick={() => handleTierSwitch(pkg.tier)}
+                  className={`flex-1 inline-flex items-center justify-center gap-2 py-2.5 sm:py-3 px-4 sm:px-5 rounded-full transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                    isSelected
+                      ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
+                      : 'text-secondary hover:text-primary hover:bg-panel'
+                  }`}
+                >
+                  <Icon size={15} className={isSelected ? 'text-void stroke-[2.5]' : 'text-mint shrink-0'} />
+                  <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-wider">
                     {pkg.name}
                   </span>
-                  <span className={`text-[11px] font-mono-data font-bold ${isSelected ? 'text-void/90' : 'text-muted'}`}>
+                  <span className={`text-[11px] sm:text-xs font-mono-data font-bold ${isSelected ? 'text-void/90' : 'text-muted'}`}>
                     ({pkg.price})
                   </span>
-                </div>
-                {isSelected && (
-                  <span className="font-mono-data text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full bg-void text-mint shadow-xs">
-                    ACTIVE
-                  </span>
-                )}
-              </button>
-            )
-          })}
+                  {isSelected && (
+                    <span className="font-mono-data text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-void text-mint shadow-xs ml-0.5">
+                      ACTIVE
+                    </span>
+                  )}
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         {/* Selected Tier Brief */}
@@ -391,19 +516,29 @@ export default function StartupPassForm({
 
             {/* Email Address */}
             <div>
-              <label htmlFor="startup-email" className="block font-mono-data text-xs font-bold uppercase tracking-wider text-secondary mb-1.5">
-                Email Address <span className="text-mint">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label htmlFor="startup-email" className="block font-mono-data text-xs font-bold uppercase tracking-wider text-secondary">
+                  Email Address <span className="text-mint">*</span>
+                </label>
+                {user?.email && (
+                  <span className="inline-flex items-center gap-1 font-mono-data text-[10px] text-mint uppercase tracking-wider font-bold">
+                    <CheckCircle2 size={11} /> Verified Account
+                  </span>
+                )}
+              </div>
               <div className="relative">
                 <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <input
                   id="startup-email"
                   type="email"
                   required
+                  readOnly={Boolean(user?.email)}
                   value={form.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   placeholder="name@company.com"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm placeholder:text-muted transition-colors"
+                  className={`w-full pl-10 pr-4 py-3 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm placeholder:text-muted transition-colors ${
+                    user?.email ? 'opacity-85 cursor-not-allowed bg-black/30' : ''
+                  }`}
                 />
               </div>
             </div>
@@ -450,13 +585,14 @@ export default function StartupPassForm({
           {/* Organization / Startup / Institute Name */}
           <div>
             <label htmlFor="startup-organization" className="block font-mono-data text-xs font-bold uppercase tracking-wider text-secondary mb-1.5">
-              Organization / Startup / Institute Name
+              Organization / Startup / Institute Name <span className="text-mint">*</span>
             </label>
             <div className="relative">
               <Building2 size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
               <input
                 id="startup-organization"
                 type="text"
+                required
                 value={form.organization}
                 onChange={(e) => updateField('organization', e.target.value)}
                 placeholder="e.g. NexaAI Labs / Peak Ventures"

@@ -45,6 +45,7 @@ import { TOAST_STYLE } from '@/lib/constants'
 import { auth, isFirebaseConfigured } from '@/lib/firebase'
 import { updateProfile } from 'firebase/auth'
 import AccountPreferencesForm from '@/components/Profile/AccountPreferencesForm'
+import AuthCard from '@/components/Account/AuthCard'
 import {
   AttendeeProfile,
   PROFILE_STORAGE_KEY,
@@ -608,54 +609,21 @@ export default function ProfileClient() {
 
   if (!hasAccess) {
     return (
-      <div className="w-full text-white selection:bg-mint/30 flex flex-col items-center justify-center min-h-[75vh] px-4 sm:px-6 relative overflow-hidden font-sans py-16">
+      <div className="w-full text-white selection:bg-mint/30 flex flex-col items-center justify-center min-h-[75vh] px-4 sm:px-6 relative overflow-hidden font-sans py-12">
         <Toaster position="bottom-center" />
         
         {/* Background Ambience */}
         <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-mint/5 to-transparent pointer-events-none" />
         <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-mint/10 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="relative z-10 w-full max-w-md mx-auto p-6 sm:p-8 rounded-3xl bg-panel border border-border-panel shadow-2xl text-center">
-          <div className="w-14 h-14 rounded-full btn-mint-gradient flex items-center justify-center text-void mx-auto mb-5 shadow-lg">
-            <Ticket size={24} className="stroke-[2.5]" />
-          </div>
-
-          <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight font-display mb-2 text-white">
-            Attendee Pass Portal
-          </h1>
-          <p className="text-xs sm:text-sm text-neutral-400 mb-6 leading-relaxed">
-            Enter your registered email address to view, download, and manage your official PEC E-Summit 2026 passes and applications.
-          </p>
-
-          <form onSubmit={handleLookupPasses} className="w-full flex flex-col gap-3">
-            <input
-              type="email"
-              required
-              placeholder="name@example.com"
-              value={lookupEmail}
-              onChange={(e) => setLookupEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-full bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
-            />
-            <button
-              type="submit"
-              disabled={isLookingUp}
-              className="w-full py-3.5 px-6 rounded-full btn-mint-gradient text-void font-mono-data font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md hover:scale-[1.01] active:scale-98 disabled:opacity-50"
-            >
-              {isLookingUp ? 'Searching Passes...' : 'Access My Passes'}
-            </button>
-          </form>
-
-          <div className="mt-6 pt-5 border-t border-border-subtle flex flex-col items-center gap-2.5">
-            <span className="text-xs text-neutral-500 font-mono">Don&apos;t have an official pass yet?</span>
-            <Link
-              href="/register"
-              className="w-full py-2.5 px-5 rounded-full btn-dark-gradient border border-border-panel text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 hover:border-mint transition-all"
-            >
-              <span>Explore &amp; Get Passes</span>
-              <ArrowRight size={13} className="text-mint" />
-            </Link>
-          </div>
-        </div>
+        <AuthCard
+          title="Attendee Pass Portal"
+          subtitle="Sign in with Google or Email to view, download, and manage your official PEC E-Summit 2026 passes and applications."
+          onSuccess={() => {
+            fetchRegistrations()
+            fetchPassApplications()
+          }}
+        />
       </div>
     )
   }
@@ -705,46 +673,46 @@ export default function ProfileClient() {
           </div>
         </div>
 
-        {/* Navigation Tabs */}
+        {/* Navigation Tabs — Single-line horizontally scrollable with fully extending pill container */}
         {!currentBadge && (
-          <div className="border-b border-border-subtle pb-3.5 mb-6 overflow-x-auto no-scrollbar">
-            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md max-w-full flex-nowrap">
+          <div className="w-full border-b border-border-subtle pb-3.5 mb-6 overflow-x-auto no-scrollbar">
+            <div className="inline-flex min-w-full sm:min-w-0 items-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md">
               <button
                 type="button"
                 onClick={() => setActiveTab('passes')}
-                className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   activeTab === 'passes'
                     ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
                     : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
-                <Ticket size={14} className={activeTab === 'passes' ? 'text-void stroke-[2.5]' : 'text-mint'} />
+                <Ticket size={14} className={activeTab === 'passes' ? 'text-void stroke-[2.5]' : 'text-mint shrink-0'} />
                 <span>Student Passes ({myRegistrations.length})</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setActiveTab('startup_passes')}
-                className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   activeTab === 'startup_passes'
                     ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
                     : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
-                <Briefcase size={14} className={activeTab === 'startup_passes' ? 'text-void stroke-[2.5]' : 'text-mint'} />
+                <Briefcase size={14} className={activeTab === 'startup_passes' ? 'text-void stroke-[2.5]' : 'text-mint shrink-0'} />
                 <span>Startup Passes ({passApplications.length})</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setActiveTab('account')}
-                className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
+                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                   activeTab === 'account'
                     ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
                     : 'text-secondary hover:text-primary hover:bg-panel'
                 }`}
               >
-                <Settings size={14} className={activeTab === 'account' ? 'text-void stroke-[2.5]' : 'text-mint'} />
+                <Settings size={14} className={activeTab === 'account' ? 'text-void stroke-[2.5]' : 'text-mint shrink-0'} />
                 <span>Personal Details</span>
               </button>
             </div>

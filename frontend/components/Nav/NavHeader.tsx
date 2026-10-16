@@ -86,7 +86,7 @@ export default function NavHeader({
               </Link>
             ) : (
               <Link
-                href="/register"
+                href="/passes"
                 className="btn-mint-gradient min-h-[32px] sm:min-h-[38px] h-[32px] sm:h-[38px] box-border inline-flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 rounded-full font-mono-data text-[10px] sm:text-xs font-black uppercase tracking-wider leading-none text-void cursor-pointer hover:scale-105 shrink-0 shadow-sm"
                 id="nav-register-btn"
                 aria-label="Register for Passes"

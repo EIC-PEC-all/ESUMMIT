@@ -2,9 +2,10 @@
 
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ArrowUpRight, User, Ticket, Download, LogOut } from 'lucide-react'
+import { X, ArrowUpRight, User, Ticket, Download, LogOut, LogIn } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import ThemeToggle from '@/components/Common/ThemeToggle'
 import { FEST_META } from '@/lib/data'
 import { useAuth } from '@/context/AuthContext'
@@ -34,6 +35,7 @@ export default function NavMobileDrawer({
   isRegistered = false,
 }: NavMobileDrawerProps) {
   const { logout } = useAuth()
+  const router = useRouter()
   const drawerRef = useRef<HTMLDivElement>(null)
 
   const handleDrawerSignOut = async () => {
@@ -57,6 +59,9 @@ export default function NavMobileDrawer({
     window.dispatchEvent(new Event('storage'))
     window.dispatchEvent(new Event('pec_auth_changed'))
     onClose()
+    if (pathname === '/profile') {
+      router.push('/')
+    }
   }
 
   // Escape key handler & focus trapping
@@ -202,14 +207,24 @@ export default function NavMobileDrawer({
                     </button>
                   </div>
                 ) : (
-                  <Link
-                    href="/register"
-                    onClick={onClose}
-                    className="w-full py-3 px-5 rounded-full btn-mint-gradient text-void font-mono-data text-xs font-black uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-md cursor-pointer hover:scale-[1.01]"
-                  >
-                    <Ticket size={14} className="stroke-[2.5]" />
-                    <span>REGISTER FOR PASSES</span>
-                  </Link>
+                  <>
+                    <Link
+                      href="/passes"
+                      onClick={onClose}
+                      className="w-full py-3 px-5 rounded-full btn-mint-gradient text-void font-mono-data text-xs font-black uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-md cursor-pointer hover:scale-[1.01]"
+                    >
+                      <Ticket size={14} className="stroke-[2.5]" />
+                      <span>REGISTER FOR PASSES</span>
+                    </Link>
+                    <Link
+                      href="/login"
+                      onClick={onClose}
+                      className="w-full py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors"
+                    >
+                      <LogIn size={13} className="text-mint" />
+                      <span>SIGN IN / ATTENDEE PORTAL</span>
+                    </Link>
+                  </>
                 )}
 
                 <a
