@@ -3,13 +3,20 @@ import { MongoClient, Db } from 'mongodb'
 const uri =
   process.env.RESPONSE_MANAGER_DATABASE_URL ||
   process.env.DATABASE_URL ||
-  'mongodb+srv://ananay:peYyvZH5S1KSTzD5@cluster0.7gpudbl.mongodb.net/esummit?retryWrites=true&w=majority&appName=Cluster0'
+  process.env.MONGODB_URI ||
+  ''
 
 let cachedClient: MongoClient | null = null
 let cachedDb: Db | null = null
 
 export async function getDatabase(): Promise<Db> {
   if (cachedDb) return cachedDb
+
+  if (!uri) {
+    throw new Error(
+      'Database connection string is not configured. Please set RESPONSE_MANAGER_DATABASE_URL or DATABASE_URL in your environment.',
+    )
+  }
 
   if (!cachedClient) {
     cachedClient = new MongoClient(uri, {

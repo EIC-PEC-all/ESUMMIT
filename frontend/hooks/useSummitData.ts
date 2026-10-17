@@ -4,8 +4,6 @@
 // Falls back to static data from summitData.ts if the backend is unreachable,
 // so the site always renders even without a running backend.
 
-import useSWR, { mutate } from 'swr'
-import { api } from '@/lib/api'
 import type {
   CmsBundle,
   CmsEvent,
@@ -23,17 +21,10 @@ import {
   MASTER_FAQS,
 } from '@/data/summitData'
 
-const CACHE_KEY = 'esummit_cms_bundle_v1'
-const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
 const STATIC_TIMESTAMP = '2025-01-01T00:00:00.000Z'
 
 export function refreshSummitData() {
-  if (typeof window !== 'undefined') {
-    try {
-      localStorage.removeItem(CACHE_KEY)
-    } catch (_) {}
-  }
-  return mutate('cms-bundle')
+  return Promise.resolve(STATIC_FALLBACK)
 }
 
 // ─── Static fallbacks (shapes are compatible with CMS types) ─────────────────
@@ -150,64 +141,16 @@ interface UseSummitDataReturn {
   data: CmsBundle
   isLoading: boolean
   isError: boolean
-  /** True when data is served from the static fallback (backend unreachable) */
+  /** True when data is served from the static fallback (no CMS backend needed) */
   isFallback: boolean
 }
 
-const fetchCmsBundleWithCache = async (): Promise<CmsBundle> => {
-  if (typeof window !== 'undefined') {
-    try {
-      const raw = localStorage.getItem(CACHE_KEY)
-      if (raw) {
-        const parsed = JSON.parse(raw)
-        if (parsed.timestamp && Date.now() - parsed.timestamp < CACHE_TTL_MS && parsed.data) {
-          return parsed.data
-        }
-      }
-    } catch (_) {}
-  }
-
-  const fresh = await api.getBundle()
-  if (typeof window !== 'undefined' && fresh) {
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data: fresh }))
-    } catch (_) {}
-  }
-  return fresh
-}
-
 export function useSummitData(): UseSummitDataReturn {
-  const { data, error, isLoading } = useSWR<CmsBundle>(
-    'cms-bundle',
-    fetchCmsBundleWithCache,
-    {
-      fallbackData: STATIC_FALLBACK,
-      revalidateOnMount: false,
-      revalidateOnFocus: false,
-      revalidateIfStale: false,
-      revalidateOnReconnect: false,
-      dedupingInterval: CACHE_TTL_MS,
-      errorRetryCount: 1,
-      shouldRetryOnError: false,
-    },
-  )
-
-  const sanitizedData: CmsBundle = {
-    siteConfig: (data && data.siteConfig) || STATIC_FALLBACK.siteConfig,
-    events: Array.isArray(data?.events) ? data.events : STATIC_FALLBACK.events,
-    speakers: Array.isArray(data?.speakers) ? data.speakers : STATIC_FALLBACK.speakers,
-    sponsors: Array.isArray(data?.sponsors) ? data.sponsors : STATIC_FALLBACK.sponsors,
-    alumni: Array.isArray(data?.alumni) ? data.alumni : STATIC_FALLBACK.alumni,
-    faqs: Array.isArray(data?.faqs) ? data.faqs : STATIC_FALLBACK.faqs,
-    scheduleItems: Array.isArray(data?.scheduleItems) ? data.scheduleItems : STATIC_FALLBACK.scheduleItems,
-    gallery: Array.isArray(data?.gallery) ? data.gallery : STATIC_FALLBACK.gallery,
-  }
-
   return {
-    data: sanitizedData,
-    isLoading,
-    isError: Boolean(error),
-    isFallback: !data && Boolean(error),
+    data: STATIC_FALLBACK,
+    isLoading: false,
+    isError: false,
+    isFallback: true,
   }
 }
 
