@@ -200,19 +200,24 @@ export async function subscribeEmail(email: string): Promise<string> {
   if (!emailRegex.test(email)) {
     return `That doesn't look like a valid email address. Please try again.`
   }
+  const cleanEmail = email.trim().toLowerCase()
+  import('@/lib/api')
+    .then(({ api }) => api.subscribe(cleanEmail))
+    .catch(() => {})
+
   if (typeof window !== 'undefined') {
     try {
       const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
-      if (existing.includes(email)) {
-        return `${email} is already on the E-Summit PEC updates list!`
+      if (existing.includes(cleanEmail)) {
+        return `${cleanEmail} is already on the E-Summit PEC updates list!`
       }
-      existing.push(email)
+      existing.push(cleanEmail)
       localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
     } catch {
       // Non-critical local storage fallback
     }
   }
-  return `Done! **${email}** has been subscribed to E-Summit PEC 2026 updates.`
+  return `Done! **${cleanEmail}** has been subscribed to E-Summit PEC 2026 updates.`
 }
 
 export async function getTreasureHuntStatus(teamId: string): Promise<string> {

@@ -59,24 +59,28 @@ function subscribeEmail(email: string): { message: string; toast: string } {
   if (!emailRegex.test(email)) {
     return { message: `That doesn't look like a valid email address. Try again?`, toast: '' }
   }
+  const cleanEmail = email.trim().toLowerCase()
+  import('@/lib/api')
+    .then(({ api }) => api.subscribe(cleanEmail))
+    .catch(() => {})
+
   try {
     const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
-    if (existing.includes(email)) {
+    if (existing.includes(cleanEmail)) {
       return {
-        message: `${email} is already on the list! You'll be among the first to hear any updates.`,
+        message: `${cleanEmail} is already on the list! You'll be among the first to hear any updates.`,
         toast: '',
       }
     }
-    existing.push(email)
+    existing.push(cleanEmail)
     localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
   } catch {
     // Non-critical local storage fallback
   }
   return {
-    message: `Done! ${email} has been added to the E-Summit updates list.`,
-    toast: `${email} subscribed to E-Summit updates`,
+    message: `Done! ${cleanEmail} has been added to the E-Summit updates list.`,
+    toast: `${cleanEmail} subscribed to E-Summit updates`,
   }
-
 }
 
 /**

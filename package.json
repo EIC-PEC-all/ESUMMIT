@@ -15,11 +15,9 @@
     "build:backend": "npm --prefix backend run build",
     "build:responses": "npm --prefix response-manager run build",
     "typecheck": "npm --prefix frontend run typecheck",
-    "lint": "npm --prefix frontend run lint",
-    "docker:dev": "docker compose -f docker-compose.dev.yml up",
-    "docker:dev:down": "docker compose -f docker-compose.dev.yml down"
+    "lint": "npm --prefix frontend run lint"
   },
-  "devDependencies": {
-    "mongodb": "^7.7.0"
+  "dependencies": {
+    "ogl": "^1.0.11"
   }
 }
