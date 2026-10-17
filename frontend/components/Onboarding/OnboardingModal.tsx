@@ -18,6 +18,7 @@ import {
   GRADUATION_YEARS,
   normalizeGradYear,
   saveStoredProfile,
+  saveUserProfileToDb,
 } from '@/lib/onboarding'
 import { STATE_NAMES, getCitiesForState } from '@/data/indiaLocations'
 import { TOAST_STYLE } from '@/lib/constants'
@@ -89,7 +90,7 @@ export default function OnboardingModal({
     setCustomCity('')
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     const trimmedName = name.trim()
@@ -133,6 +134,9 @@ export default function OnboardingModal({
         phone: phone.trim(),
         onboardingCompleted: true,
       })
+
+      // Persist to MongoDB database
+      await saveUserProfileToDb(saved)
 
       toast.success('Profile setup complete!', TOAST_STYLE)
       onCompleted(saved)

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { MapPin, Sparkles, ArrowUpRight } from 'lucide-react'
+import { MapPin, ArrowUpRight } from 'lucide-react'
 import type { TimelineEvent, EventItem } from '@/data/summitData'
 import { getLinkedEvent, TRACK_STYLES } from './eventMapping'
 
@@ -65,7 +65,6 @@ export default function TimelineListMobile({
                   </span>
                   {ev.badge && (
                     <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-mono-data font-bold uppercase tracking-wider bg-panel-alt text-secondary border border-border-subtle">
-                      <Sparkles className="w-2.5 h-2.5 text-mint" />
                       {ev.badge}
                     </span>
                   )}

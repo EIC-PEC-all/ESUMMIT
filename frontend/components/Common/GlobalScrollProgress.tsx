@@ -77,52 +77,55 @@ export default function GlobalScrollProgress() {
   }
 
   return (
-    <div className="hidden md:flex fixed right-4 top-1/2 -translate-y-1/2 flex-col z-[2000] items-end">
-      {SECTIONS.map((section, i) => {
-        const isActive = i === activeIndex
-        const isHovered = hoveredIndex === i
+    <div className="hidden md:flex fixed bottom-6 left-16 z-[2000] flex-row items-center pointer-events-auto">
+      {/* Solid Green Enclosure Dock — Horizontal at bottom-left */}
+      <div className="flex flex-row items-center gap-2 px-3 py-2 rounded-full bg-[#06261B] border-2 border-[#10B981] shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_16px_rgba(16,185,129,0.35)] backdrop-blur-md">
+        {SECTIONS.map((section, i) => {
+          const isActive = i === activeIndex
+          const isHovered = hoveredIndex === i
 
-        return (
-          <button
-            key={section.id}
-            onClick={() => handleDashClick(section.id)}
-            onMouseEnter={() => setHoveredIndex(i)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            className="group relative flex items-center justify-end py-1.5 pl-4 pr-1 border-none bg-transparent cursor-pointer focus:outline-none"
-            aria-label={`Scroll to ${section.name}`}
-          >
-            {/* Tooltip — slides in from right when hovered or active */}
-            <AnimatePresence>
-              {isHovered && (
-                <motion.span
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 8 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-8 text-[9px] font-mono tracking-widest uppercase px-2 py-0.5 rounded pointer-events-none whitespace-nowrap bg-black/80 text-white/90 border border-white/10 backdrop-blur-sm"
-                >
-                  {section.name}
-                </motion.span>
-              )}
-            </AnimatePresence>
+          return (
+            <button
+              key={section.id}
+              onClick={() => handleDashClick(section.id)}
+              onMouseEnter={() => setHoveredIndex(i)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              className="group relative flex items-center justify-center p-1 border-none bg-transparent cursor-pointer focus:outline-none"
+              aria-label={`Scroll to ${section.name}`}
+            >
+              {/* Tooltip — pops up directly above the hovered indicator */}
+              <AnimatePresence>
+                {isHovered && (
+                  <motion.span
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute -top-8 left-1/2 -translate-x-1/2 text-[10px] font-mono tracking-widest uppercase px-2.5 py-1 rounded-md pointer-events-none whitespace-nowrap bg-[#06261B] text-[#74FB44] border border-[#10B981]/50 shadow-xl"
+                  >
+                    {section.name}
+                  </motion.span>
+                )}
+              </AnimatePresence>
 
-            {/* Dash indicator with dynamic states */}
-            <motion.div
-              animate={{
-                width: isActive ? 24 : isHovered ? 16 : 8,
-                backgroundColor: isActive
-                  ? '#10b981' // emerald
-                  : isHovered
-                  ? 'rgba(255, 255, 255, 0.8)'
-                  : 'rgba(255, 255, 255, 0.25)',
-                opacity: isActive ? 1 : isHovered ? 0.9 : 0.4,
-              }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="h-[2px] rounded-full"
-            />
-          </button>
-        )
-      })}
+              {/* Horizontal dash indicator with dynamic expansion */}
+              <motion.div
+                animate={{
+                  width: isActive ? 22 : isHovered ? 15 : 9,
+                  backgroundColor: isActive
+                    ? '#74FB44'
+                    : isHovered
+                    ? '#FFFFFF'
+                    : 'rgba(255, 255, 255, 0.4)',
+                  opacity: isActive ? 1 : isHovered ? 0.95 : 0.6,
+                }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                className="h-[3.5px] rounded-full"
+              />
+            </button>
+          )
+        })}
+      </div>
     </div>
   )
 }

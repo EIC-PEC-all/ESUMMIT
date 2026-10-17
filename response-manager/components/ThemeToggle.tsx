@@ -4,14 +4,7 @@ import React from 'react'
 import { Moon, Sun } from 'lucide-react'
 import { useTheme } from '@/context/ThemeContext'
 
-// Light mode toggle temporarily disabled
-const HIDE_THEME_TOGGLE = true
-
 export function ThemeToggle() {
-  if (HIDE_THEME_TOGGLE) {
-    return null
-  }
-
   const { theme, toggleTheme, isLoaded } = useTheme()
   const isLight = isLoaded && theme === 'light'
 

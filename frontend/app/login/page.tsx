@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   title: "Sign In / Attendee Portal | PEC E-Summit '26",
   description:
     'Sign in to your PEC E-Summit 2026 account. Access your official student passes, digital QR entry badges, and startup funding conclave applications.',
+  robots: {
+    index: false,
+    follow: true,
+  },
 }
 
 export default function LoginPage() {

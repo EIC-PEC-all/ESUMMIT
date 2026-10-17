@@ -43,7 +43,13 @@ const nextConfig = {
     ]
   },
   async redirects() {
-    return []
+    return [
+      {
+        source: '/register',
+        destination: '/passes',
+        permanent: true,
+      },
+    ]
   },
   // Allow Three.js to work without SSR issues
 

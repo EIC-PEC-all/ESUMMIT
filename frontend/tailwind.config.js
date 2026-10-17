@@ -1,4 +1,12 @@
-/** @type {import('tailwindcss').Config} */
+function withOpacity(variableName) {
+  return ({ opacityValue }) => {
+    if (opacityValue !== undefined) {
+      return `color-mix(in srgb, var(${variableName}) calc(${opacityValue} * 100%), transparent)`
+    }
+    return `var(${variableName})`
+  }
+}
+
 module.exports = {
   darkMode: 'class',
   content: [
@@ -9,47 +17,47 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Neon Cyber-Finance Core Palette (CSS Variable Backed)
-        void: 'var(--bg-void)',
-        deep: 'var(--bg-deep)',
-        panel: 'var(--bg-panel)',
-        'panel-alt': 'var(--bg-panel-alt)',
-        'section-1': 'var(--bg-section-1)',
-        'section-2': 'var(--bg-section-2)',
+        // Neon Cyber-Finance Core Palette (CSS Variable Backed with full opacity support)
+        void: withOpacity('--bg-void'),
+        deep: withOpacity('--bg-deep'),
+        panel: withOpacity('--bg-panel'),
+        'panel-alt': withOpacity('--bg-panel-alt'),
+        'section-1': withOpacity('--bg-section-1'),
+        'section-2': withOpacity('--bg-section-2'),
         
         // Accents
-        mint: 'var(--accent-mint)',
-        green: 'var(--accent-green)',
-        volt: 'var(--accent-green)',
-        blue: 'var(--accent-blue)',
-        purple: 'var(--accent-purple)',
-        navy: 'var(--accent-navy)',
-        coral: 'var(--accent-coral)',
-        amber: 'var(--accent-amber)',
-        cyan: 'var(--accent-cyan)',
+        mint: withOpacity('--accent-mint'),
+        green: withOpacity('--accent-green'),
+        volt: withOpacity('--accent-green'),
+        blue: withOpacity('--accent-blue'),
+        purple: withOpacity('--accent-purple'),
+        navy: withOpacity('--accent-navy'),
+        coral: withOpacity('--accent-coral'),
+        amber: withOpacity('--accent-amber'),
+        cyan: withOpacity('--accent-cyan'),
 
         // Pass Tiers (Controlled via CSS variables)
-        'tier-delegate': 'var(--tier-delegate)',
-        'tier-allaccess': 'var(--tier-allaccess)',
-        'tier-hackathon': 'var(--tier-hackathon)',
-        'tier-combo': 'var(--tier-combo)',
+        'tier-delegate': withOpacity('--tier-delegate'),
+        'tier-allaccess': withOpacity('--tier-allaccess'),
+        'tier-hackathon': withOpacity('--tier-hackathon'),
+        'tier-combo': withOpacity('--tier-combo'),
         
         // Neutrals & Effects
-        primary: 'var(--text-primary)',
-        secondary: 'var(--text-secondary)',
-        muted: 'var(--text-muted)',
-        'green-dim': 'var(--accent-green-dim)',
-        'green-glow': 'var(--accent-green-glow)',
-        'border-subtle': 'var(--border-subtle)',
-        'border-panel': 'var(--border-panel)',
-        'border-glow': 'var(--border-glow)',
-        backdrop: 'var(--bg-backdrop)',
+        primary: withOpacity('--text-primary'),
+        secondary: withOpacity('--text-secondary'),
+        muted: withOpacity('--text-muted'),
+        'green-dim': withOpacity('--accent-green-dim'),
+        'green-glow': withOpacity('--accent-green-glow'),
+        'border-subtle': withOpacity('--border-subtle'),
+        'border-panel': withOpacity('--border-panel'),
+        'border-glow': withOpacity('--border-glow'),
+        backdrop: withOpacity('--bg-backdrop'),
       },
       borderColor: {
-        DEFAULT: 'var(--border-subtle)',
-        subtle: 'var(--border-subtle)',
-        panel: 'var(--border-panel)',
-        glow: 'var(--border-glow)',
+        DEFAULT: withOpacity('--border-subtle'),
+        subtle: withOpacity('--border-subtle'),
+        panel: withOpacity('--border-panel'),
+        glow: withOpacity('--border-glow'),
       },
       fontFamily: {
         display: ['var(--font-asimovian)', 'var(--font-kanit)', 'Asimovian', 'sans-serif'],

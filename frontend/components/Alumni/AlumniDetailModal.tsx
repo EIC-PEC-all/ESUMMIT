@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Award, Sparkles } from 'lucide-react'
+import { X, Award } from 'lucide-react'
 import BlurImage from '@/components/ui/BlurImage'
 
 export interface AlumniMember {
@@ -153,7 +153,7 @@ export default function AlumniDetailModal({ person, onClose }: AlumniDetailModal
             {/* Key Achievement */}
             {person.achievement && (
               <div className="mt-4 p-3.5 rounded-2xl bg-[#EBF7F0] border border-emerald-500/20 dark:bg-white/[0.04] dark:border-white/10 flex items-start gap-2.5">
-                <Sparkles size={16} className="text-emerald-600 dark:text-mint shrink-0 mt-0.5" />
+                <Award size={16} className="text-emerald-600 dark:text-mint shrink-0 mt-0.5" />
                 <div>
                   <p className="font-mono-data text-[9.5px] uppercase font-bold text-emerald-700 dark:text-mint tracking-wider">
                     KEY MILESTONE

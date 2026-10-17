@@ -7,6 +7,10 @@ import Footer from '@/components/Footer'
 export const metadata: Metadata = {
   title: 'My Profile & Passes — PEC E-Summit 2026',
   description: 'Manage your delegate passes, update your attendee profile, and view your tickets for PEC E-Summit 2026.',
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function ProfilePage() {

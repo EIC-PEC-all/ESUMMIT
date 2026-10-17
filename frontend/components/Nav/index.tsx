@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useScroll, useMotionValueEvent } from 'framer-motion'
 import { usePathname } from 'next/navigation'
-import { Download, Bot, Sparkles } from 'lucide-react'
+import { Download, Bot } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import NavHeader from './NavHeader'
 import NavCountdown from './NavCountdown'
@@ -222,16 +222,27 @@ export default function Nav() {
   )
 
   const [isPastHero, setIsPastHero] = useState(false)
+  const [isPastHeroHeader, setIsPastHeroHeader] = useState(false)
 
-  // Track when hero section ends on mobile to switch from countdown to action bar
+  // Track when hero section ends on mobile (countdown) and desktop/header (smart navbar)
   useEffect(() => {
     const checkHero = () => {
+      if (pathname !== '/') {
+        setIsPastHero(true)
+        setIsPastHeroHeader(true)
+        return
+      }
       const heroEl = document.getElementById('esummit-hero')
       if (heroEl) {
         const rect = heroEl.getBoundingClientRect()
+        // Top header transitions when bottom of hero reaches top navbar area (~120px)
+        setIsPastHeroHeader(rect.bottom <= 120)
+        // Bottom mobile action bar transitions when hero bottom reaches viewport bottom
         setIsPastHero(rect.bottom <= window.innerHeight)
       } else {
-        setIsPastHero(window.scrollY > 80)
+        const scroll = typeof window !== 'undefined' ? window.scrollY : 0
+        setIsPastHero(scroll > 1800)
+        setIsPastHeroHeader(scroll > 1800)
       }
     }
 
@@ -243,6 +254,8 @@ export default function Nav() {
       window.removeEventListener('resize', checkHero)
     }
   }, [pathname])
+
+  const isHeroActive = pathname === '/' && !isPastHeroHeader
 
   const showHeader = useMemo(() => {
     if (isLoaderActive || isModalOpen) return false
@@ -262,9 +275,11 @@ export default function Nav() {
         showHeader={showHeader}
         menuOpen={menuOpen}
         planCount={planCount}
+        isLoggedIn={Boolean(user)}
         isRegistered={isRegistered}
         isModalOrLoaderOpen={isModalOrLoader}
         isSubPage={isSubPage}
+        isHeroActive={isHeroActive}
         onToggleMenu={() => setMenuOpen((prev) => !prev)}
         headerButtonRef={headerButtonRef}
       />
@@ -276,7 +291,8 @@ export default function Nav() {
 
       {/* 2. Download Brochure + Chat Action Bar: Floating pill on mobile */}
       <div
-        className={`fixed sm:hidden bottom-3 left-3 right-3 z-[2400] bg-[#07130F]/90 backdrop-blur-2xl border border-white/15 rounded-full p-1.5 transition-all duration-400 ease-out shadow-[0_8px_30px_rgba(0,0,0,0.6)] ${
+        data-surface="dark"
+        className={`fixed sm:hidden bottom-3 left-3 right-3 z-[2400] bg-[#07130F]/90 backdrop-blur-2xl border border-white/15 rounded-full p-1.5 transition-all duration-400 ease-out shadow-[0_8px_30px_rgba(0,0,0,0.6)] text-white ${
           isPastHero && !isModalOrLoader
             ? 'translate-y-0 opacity-100 pointer-events-auto'
             : 'translate-y-24 opacity-0 pointer-events-none'
@@ -288,8 +304,8 @@ export default function Nav() {
             target="_blank"
             className="flex-1 flex items-center justify-center gap-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 py-2.5 px-4 shadow-sm text-white font-mono-data text-[11px] font-bold tracking-wider uppercase active:scale-[0.98] transition-all"
           >
-            <Download size={14} className="text-mint" />
-            <span>DOWNLOAD BROCHURE</span>
+            <Download size={14} className="text-[#74FB44] shrink-0" />
+            <span className="text-white keep-white">DOWNLOAD BROCHURE</span>
           </a>
           
           <button
@@ -301,8 +317,8 @@ export default function Nav() {
             className="w-10 h-10 shrink-0 rounded-full bg-white text-black flex items-center justify-center shadow-md active:scale-95 transition-transform relative cursor-pointer"
             aria-label="Open AI Assistant"
           >
-            <Sparkles size={18} strokeWidth={2.5} />
-            <span className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-mint border-2 border-white animate-pulse" />
+            <Bot size={18} strokeWidth={2.5} />
+            <span className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-[#74FB44] border-2 border-white animate-pulse" />
           </button>
         </div>
       </div>

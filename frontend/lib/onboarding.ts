@@ -53,12 +53,23 @@ export function normalizeGradYear(val?: string | null): string {
   return s
 }
 
-export function getStoredProfile(): AttendeeProfile | null {
+export function getStoredProfile(userEmail?: string | null): AttendeeProfile | null {
   if (typeof window === 'undefined') return null
   try {
+    if (userEmail) {
+      const userKey = `pec_profile_${userEmail.trim().toLowerCase()}`
+      const userRaw = localStorage.getItem(userKey)
+      if (userRaw) {
+        return JSON.parse(userRaw) as AttendeeProfile
+      }
+    }
     const raw = localStorage.getItem(PROFILE_STORAGE_KEY)
     if (!raw) return null
-    return JSON.parse(raw) as AttendeeProfile
+    const parsed = JSON.parse(raw) as AttendeeProfile
+    if (userEmail && parsed.email && parsed.email.toLowerCase() !== userEmail.toLowerCase()) {
+      return null
+    }
+    return parsed
   } catch {
     return null
   }
@@ -75,7 +86,8 @@ export function isOnboardingComplete(profile: AttendeeProfile | null): boolean {
 }
 
 export function saveStoredProfile(updates: Partial<AttendeeProfile>): AttendeeProfile {
-  const current = getStoredProfile() || {
+  const emailKey = updates.email || undefined
+  const current = getStoredProfile(emailKey) || {
     name: '',
     email: '',
     phone: '',
@@ -103,6 +115,10 @@ export function saveStoredProfile(updates: Partial<AttendeeProfile>): AttendeePr
   if (typeof window !== 'undefined') {
     try {
       localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(merged))
+      const email = (merged.email || '').trim().toLowerCase()
+      if (email) {
+        localStorage.setItem(`pec_profile_${email}`, JSON.stringify(merged))
+      }
       window.dispatchEvent(new CustomEvent(PROFILE_UPDATED_EVENT, { detail: merged }))
     } catch (e) {
       console.warn('Failed to save profile to localStorage:', e)
@@ -111,3 +127,41 @@ export function saveStoredProfile(updates: Partial<AttendeeProfile>): AttendeePr
 
   return merged
 }
+
+export async function fetchUserProfileFromDb(email: string): Promise<AttendeeProfile | null> {
+  if (!email || typeof window === 'undefined') return null
+  try {
+    const res = await fetch(`/api/profile?email=${encodeURIComponent(email.trim().toLowerCase())}`, {
+      method: 'GET',
+      headers: { 'Cache-Control': 'no-cache' },
+    })
+    if (!res.ok) return null
+    const data = await res.json()
+    if (data?.success && data.profile) {
+      const prof = data.profile as AttendeeProfile
+      saveStoredProfile(prof)
+      return prof
+    }
+    return null
+  } catch (err) {
+    console.warn('Failed to fetch user profile from DB:', err)
+    return null
+  }
+}
+
+export async function saveUserProfileToDb(profile: Partial<AttendeeProfile>): Promise<boolean> {
+  if (!profile.email || typeof window === 'undefined') return false
+  try {
+    const res = await fetch('/api/profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile),
+    })
+    const data = await res.json()
+    return Boolean(data?.success)
+  } catch (err) {
+    console.warn('Failed to save user profile to DB:', err)
+    return false
+  }
+}
+

@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useId } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  Sparkles,
   ArrowRight,
   ArrowLeft,
   CheckCircle2,
@@ -315,7 +314,6 @@ export default function FundingConclaveClient() {
 
           <div className="flex flex-wrap items-center gap-3 mb-4">
             <span className="px-3 py-1 rounded-full text-xs font-mono tracking-wider uppercase bg-[#8AC53F]/10 text-[#8AC53F] border border-[#8AC53F]/30 flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
               INVESTOR ARENA
             </span>
             <span className="text-xs text-[#94A3B8] flex items-center gap-1">

@@ -126,7 +126,7 @@ export default function AboutHero() {
           </a>
 
           <Link
-            href="/register"
+            href="/passes"
             className="btn-dark-gradient w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-primary font-mono-data text-xs font-bold uppercase tracking-wider border border-border-subtle hover:border-mint hover:scale-105 active:scale-95 shadow-sm cursor-pointer"
           >
             <span>REGISTER FOR PASSES</span>

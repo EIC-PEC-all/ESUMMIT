@@ -10,11 +10,11 @@ import { FundingApplication } from '@/lib/types'
 import {
   Search,
   Eye,
-  Sparkles,
   Inbox,
   Plus,
   Briefcase,
-  GraduationCap
+  GraduationCap,
+  Clock
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -182,7 +182,7 @@ export default function Home() {
               <span
                 className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
                   activeCategory === 'startup'
-                    ? 'bg-void text-mint'
+                    ? 'bg-black/25 text-white dark:bg-void dark:text-mint'
                     : 'bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300'
                 }`}
               >
@@ -208,7 +208,7 @@ export default function Home() {
               <span
                 className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
                   activeCategory === 'student'
-                    ? 'bg-void text-mint'
+                    ? 'bg-black/25 text-white dark:bg-void dark:text-mint'
                     : 'bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300'
                 }`}
               >
@@ -222,7 +222,6 @@ export default function Home() {
         <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 dark:border-white/10 pb-8">
           <div>
             <span className="font-mono-data text-xs sm:text-sm font-black uppercase tracking-[0.25em] text-emerald-700 dark:text-mint flex items-center gap-2 mb-2">
-              <Sparkles size={14} />
               {activeCategory === 'student' ? 'DELEGATE CMS PORTAL' : 'EXECUTIVE CMS PORTAL'}
             </span>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-slate-900 dark:text-white leading-none">
@@ -432,6 +431,23 @@ export default function Home() {
                             </span>
                           )}
                         </div>
+                        {app.createdAt && (
+                          <div className="flex items-center gap-1.5 mt-1.5 text-[10px] font-mono-data text-slate-500 dark:text-slate-400 font-medium">
+                            <Clock className="w-3 h-3 text-emerald-600 dark:text-mint shrink-0" />
+                            <span>
+                              {new Date(app.createdAt).toLocaleDateString('en-IN', {
+                                day: 'numeric',
+                                month: 'short',
+                                year: 'numeric',
+                              })}
+                              ,{' '}
+                              {new Date(app.createdAt).toLocaleTimeString('en-IN', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
+                          </div>
+                        )}
                       </td>
 
                       {/* Founder / Student */}

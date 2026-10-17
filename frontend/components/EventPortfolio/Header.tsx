@@ -4,7 +4,8 @@
 import React from 'react'
 import Link from 'next/link'
 import { motion, MotionValue, useTransform } from 'framer-motion'
-import { Sparkles, ArrowRight, SlidersHorizontal } from 'lucide-react'
+import { Calendar, ArrowRight, SlidersHorizontal } from 'lucide-react'
+import { APPLE_SPRING_TRANSITION } from '@/components/Common/PillSegmentedTabs'
 
 interface HeaderProps {
   progress: MotionValue<number>
@@ -37,7 +38,7 @@ export function Header({
             className="group flex items-center gap-2.5 text-base font-bold tracking-tight text-primary transition-colors hover:text-mint"
           >
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-panel-alt text-mint border border-border-subtle">
-              <Sparkles size={14} />
+              <Calendar size={13} />
             </span>
             <span className="flex items-center gap-2 font-display">
               E-SUMMIT
@@ -57,13 +58,18 @@ export function Header({
               <button
                 key={cat}
                 onClick={() => onCategorySelect(cat)}
-                className={`relative py-1.5 font-mono-data text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all hover:text-primary border-b-2 ${
-                  isActive 
-                    ? 'text-mint border-mint' 
-                    : 'text-secondary border-transparent'
+                className={`relative py-1.5 font-mono-data text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-colors hover:text-primary ${
+                  isActive ? 'text-mint' : 'text-secondary'
                 }`}
               >
-                {cat}
+                <span>{cat}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="eventCategoryActiveUnderline"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-mint rounded-full"
+                    transition={APPLE_SPRING_TRANSITION}
+                  />
+                )}
               </button>
             )
           })}

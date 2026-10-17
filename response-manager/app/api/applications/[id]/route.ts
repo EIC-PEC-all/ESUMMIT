@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDatabase } from '@/lib/mongodb'
 
+import { ObjectId } from 'mongodb'
+
 const VALID_STATUSES = new Set([
   'PENDING_REVIEW', 'UNDER_REVIEW', 'SHORTLISTED', 'MOU_SENT',
   'MOU_ACCEPTED', 'PAYMENT_CONFIRMED', 'REJECTED',
@@ -13,9 +15,14 @@ interface Params {
 function buildIdFilter(id: string): Record<string, unknown> {
   const isHex24 = /^[0-9a-fA-F]{24}$/.test(id)
   if (isHex24) {
-    return { $or: [{ _id: id }, { applicationId: id }] }
+    try {
+      const objId = new ObjectId(id)
+      return { $or: [{ _id: objId }, { _id: id }, { applicationId: id }, { passId: id }] }
+    } catch {
+      return { $or: [{ _id: id }, { applicationId: id }, { passId: id }] }
+    }
   }
-  return { applicationId: id }
+  return { $or: [{ applicationId: id }, { passId: id }] }
 }
 
 export async function PATCH(req: NextRequest, { params }: Params) {
@@ -53,18 +60,24 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     if (result.matchedCount === 0) {
       // Check Registration collection for student pass
       const regCollection = db.collection('Registration')
-      const regFilter: Record<string, unknown> = { passId: id }
-      const isHex24 = /^[0-9a-fA-F]{24}$/.test(id)
-      if (isHex24) {
-        regFilter.$or = [{ _id: id }, { passId: id }]
-      }
       const regUpdate: Record<string, unknown> = { updatedAt: new Date() }
-      if (body.status === 'REJECTED') {
-        regUpdate.isRevoked = true
-      } else if (body.status === 'PAYMENT_CONFIRMED') {
-        regUpdate.isRevoked = false
+      if (body.status !== undefined) {
+        regUpdate.status = body.status
+        if (body.status === 'PAYMENT_CONFIRMED') {
+          regUpdate.paymentStatus = 'PAID'
+          regUpdate.isRevoked = false
+        } else if (body.status === 'REJECTED') {
+          regUpdate.isRevoked = true
+          regUpdate.paymentStatus = 'REJECTED'
+        } else {
+          regUpdate.paymentStatus = 'PENDING'
+          regUpdate.isRevoked = false
+        }
       }
-      const regResult = await regCollection.updateOne({ passId: id }, { $set: regUpdate })
+      if (body.reviewNotes !== undefined) {
+        regUpdate.reviewNotes = String(body.reviewNotes).trim()
+      }
+      const regResult = await regCollection.updateOne(filter, { $set: regUpdate })
       if (regResult.matchedCount === 0) {
         return NextResponse.json({ success: false, error: 'Application or pass not found' }, { status: 404 })
       }
@@ -88,7 +101,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
 
     if (result.deletedCount === 0) {
       const regCollection = db.collection('Registration')
-      const regResult = await regCollection.deleteOne({ passId: id })
+      const regResult = await regCollection.deleteOne(filter)
       if (regResult.deletedCount === 0) {
         return NextResponse.json({ success: false, error: 'Application not found' }, { status: 404 })
       }

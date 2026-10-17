@@ -32,14 +32,14 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
               </th>
 
               {/* Gold Column (Highlighted) */}
-              <th className="py-4 px-3 sm:px-4 text-center w-[20%] bg-amber-500/10 border-x border-amber-400/40 rounded-t-xl relative">
-                <div className="inline-block px-2.5 py-0.5 mb-1 rounded-md bg-amber-400 text-black text-[9px] font-black uppercase tracking-widest">
+              <th className="py-4 px-3 sm:px-4 text-center w-[20%] bg-tier-combo/10 border-x border-tier-combo/40 rounded-t-xl relative">
+                <div className="inline-block px-2.5 py-0.5 mb-1 rounded-md bg-tier-combo text-white text-[9px] font-black uppercase tracking-widest">
                   Popular
                 </div>
-                <span className="font-display text-base sm:text-lg font-black text-amber-500 dark:text-amber-400 block">
+                <span className="font-display text-base sm:text-lg font-black text-tier-combo block">
                   Gold
                 </span>
-                <span className="text-[11px] text-amber-600 dark:text-amber-300 font-bold block mt-0.5">
+                <span className="text-[11px] text-tier-combo font-bold block mt-0.5">
                   ₹3,500 + GST
                 </span>
               </th>
@@ -87,15 +87,15 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
                 </td>
 
                 {/* Gold Value (Highlighted Column) */}
-                <td className="py-3.5 px-3 sm:px-4 text-center bg-amber-500/10 border-x border-amber-400/40">
+                <td className="py-3.5 px-3 sm:px-4 text-center bg-tier-combo/10 border-x border-tier-combo/40">
                   {typeof item.gold === 'string' ? (
-                    <span className="font-mono-data text-xs font-bold text-amber-600 dark:text-amber-300 px-2 py-0.5 rounded-md bg-amber-400/15 border border-amber-400/30">
+                    <span className="font-mono-data text-xs font-bold text-tier-combo px-2 py-0.5 rounded-md bg-tier-combo/15 border border-tier-combo/30">
                       {item.gold}
                     </span>
                   ) : item.gold ? (
                     <Check
                       size={18}
-                      className="text-amber-500 dark:text-amber-400 stroke-[2.5] mx-auto"
+                      className="text-tier-combo stroke-[2.5] mx-auto"
                     />
                   ) : (
                     <span className="text-muted font-bold text-sm select-none">
@@ -155,12 +155,12 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
               </td>
 
               {/* Gold Button (Highlighted Column) */}
-              <td className="py-5 px-3 sm:px-4 text-center bg-amber-500/10 border-x border-amber-400/40 rounded-b-xl">
+              <td className="py-5 px-3 sm:px-4 text-center bg-tier-combo/10 border-x border-tier-combo/40 rounded-b-xl">
                 {onSelect ? (
                   <button
                     type="button"
                     onClick={() => onSelect('gold')}
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black font-extrabold transition-all cursor-pointer active:scale-95 shadow-md hover:brightness-105"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-tier-combo text-white font-extrabold transition-all cursor-pointer active:scale-95 shadow-md hover:brightness-105"
                   >
                     <span>Select</span>
                     <ArrowRight size={12} className="stroke-[2.5]" />
@@ -168,7 +168,7 @@ export default function PassesComparisonTable({ onSelect }: PassesComparisonTabl
                 ) : (
                   <Link
                     href="/passes?type=startup&tier=gold#startup-pass-form"
-                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 text-black font-extrabold transition-all shadow-md hover:brightness-105 cursor-pointer active:scale-95"
+                    className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full font-mono-data text-xs font-black uppercase tracking-wider bg-tier-combo text-white font-extrabold transition-all shadow-md hover:brightness-105 cursor-pointer active:scale-95"
                   >
                     <span>Select</span>
                     <ArrowRight size={12} className="stroke-[2.5]" />

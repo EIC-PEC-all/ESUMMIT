@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import localFont from 'next/font/local'
 import { Inter, Marcellus } from 'next/font/google'
 import './globals.css'
+import { SITE_URL, absoluteUrl } from '@/lib/siteConfig'
 import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
 import ChevronRouteTransition from '@/components/Common/ChevronRouteTransition'
 import SessionProviderWrapper from '@/components/Providers/SessionProviderWrapper'
@@ -38,7 +39,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://esummit.pec.ac.in'),
+  metadataBase: new URL(SITE_URL),
   manifest: '/manifest.json',
   icons: {
     icon: '/esummit-mark.png',
@@ -80,12 +81,12 @@ export const metadata: Metadata = {
     'Chandigarh',
     'student innovation',
   ],
-  authors: [{ name: 'E-Cell PEC', url: 'https://esummit.pec.ac.in' }],
+  authors: [{ name: 'E-Cell PEC', url: SITE_URL }],
   openGraph: {
     title: 'PEC E-Summit 2026 — November 14–15',
     description:
       'The flagship entrepreneurship summit of E-Cell PEC, Chandigarh. Pitches, panels, expo, hackathon, and VIP investor networking.',
-    url: 'https://esummit.pec.ac.in',
+    url: SITE_URL,
     siteName: 'PEC E-Summit 2026',
     images: [
       {
@@ -133,22 +134,120 @@ const JSON_LD_EVENT_SCHEMA = {
       longitude: 76.7874,
     },
   },
-  image: ['https://esummit.pec.ac.in/readme-hero.png'],
+  image: [absoluteUrl('/readme-hero.png')],
   offers: {
     '@type': 'AggregateOffer',
-    url: 'https://esummit.pec.ac.in/register',
+    url: absoluteUrl('/passes'),
     priceCurrency: 'INR',
     lowPrice: 0,
-    highPrice: 999,
+    highPrice: 5000,
     availability: 'https://schema.org/InStock',
     validFrom: '2026-01-01T00:00:00+05:30',
   },
   organizer: {
     '@type': 'Organization',
     name: 'EIC - Entrepreneurship & Incubation Cell, PEC',
-    url: 'https://esummit.pec.ac.in',
-    logo: 'https://esummit.pec.ac.in/esummit-logo.png',
+    url: SITE_URL,
+    logo: absoluteUrl('/esummit-logo.png'),
+    sameAs: [
+      'https://instagram.com/ecell.pec',
+      'https://twitter.com/ecell_pec',
+      'https://linkedin.com/company/ecell-pec',
+    ],
   },
+}
+
+const JSON_LD_ORGANIZATION_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'CollegeOrUniversity',
+  name: 'Punjab Engineering College',
+  alternateName: ['PEC Chandigarh', 'PEC', 'Punjab Engineering College (Deemed to be University)'],
+  url: 'https://pec.ac.in',
+  logo: absoluteUrl('/pec-logo.png'),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Sector 12',
+    addressLocality: 'Chandigarh',
+    postalCode: '160012',
+    addressRegion: 'Chandigarh',
+    addressCountry: 'IN',
+  },
+  sameAs: [
+    'https://en.wikipedia.org/wiki/Punjab_Engineering_College',
+    'https://www.wikidata.org/wiki/Q7260341',
+    'https://www.linkedin.com/school/punjab-engineering-college/',
+  ],
+}
+
+const JSON_LD_FAQ_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Who can attend PEC E-Summit 2026?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'PEC E-Summit is open to all college students, recent graduates, early-stage founders, angel investors, and tech professionals across India.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Where is PEC E-Summit held?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The summit is held at the historic campus of Punjab Engineering College (PEC), Sector 12, Chandigarh, 160012.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do startups apply for funding and pitches at E-Summit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `Startups can apply for the Funding Conclave and Pitch Competition via the official Passes portal (${absoluteUrl('/passes')}) by selecting Silver, Gold, or Diamond startup tiers.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Are there free passes for students?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, free student delegate passes are available for general sessions, keynote panels, and the startup expo.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the Hackathon format?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The 36-hour hackathon features problem statements around AI, FinTech, and Climate Tech, with mentorship and cash awards.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can startups exhibit at the summit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, early-stage startups can secure exhibition booths through the Startup Conclave tiers.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How can corporate organizations sponsor PEC E-Summit?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: `Sponsors can review tier options at ${absoluteUrl('/sponsors')} or reach out directly to ecell@pec.edu.in.`,
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is accommodation available for outstation attendees?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes, limited hostel and partner accommodation is facilitated for verified outstation participants registered for multi-day tracks.',
+      },
+    },
+  ],
 }
 
 export default function RootLayout({
@@ -169,6 +268,14 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_EVENT_SCHEMA) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_ORGANIZATION_SCHEMA) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD_FAQ_SCHEMA) }}
         />
       </head>
       <body

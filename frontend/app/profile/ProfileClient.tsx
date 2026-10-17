@@ -13,7 +13,7 @@ import {
   Trash2,
   X,
   Settings,
-  Sparkles,
+  Share2,
   Briefcase,
   Building2,
   TrendingUp,
@@ -40,8 +40,10 @@ import {
 } from '@/lib/registrations'
 import toast, { Toaster } from 'react-hot-toast'
 import NavHeader from '@/components/Nav/NavHeader'
+import { PillSegmentedTabs, type PillTab } from '@/components/Common/PillSegmentedTabs'
 import { useSummitData } from '@/hooks/useSummitData'
 import { TOAST_STYLE } from '@/lib/constants'
+import { SITE_DOMAIN } from '@/lib/siteConfig'
 import { auth, isFirebaseConfigured } from '@/lib/firebase'
 import { updateProfile } from 'firebase/auth'
 import AccountPreferencesForm from '@/components/Profile/AccountPreferencesForm'
@@ -52,6 +54,8 @@ import {
   PROFILE_UPDATED_EVENT,
   getStoredProfile,
   saveStoredProfile,
+  fetchUserProfileFromDb,
+  saveUserProfileToDb,
   normalizeGradYear,
 } from '@/lib/onboarding'
 
@@ -268,8 +272,7 @@ export default function ProfileClient() {
   const [editingPass, setEditingPass] = useState<RegistrationRecord | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSavingProfile, setIsSavingProfile] = useState(false)
-  const [lookupEmail, setLookupEmail] = useState('')
-  const [isLookingUp, setIsLookingUp] = useState(false)
+
 
   const [profile, setProfile] = useState<AttendeeProfile>(() => {
     return (
@@ -445,11 +448,22 @@ export default function ProfileClient() {
     }
   }, [])
 
+  useEffect(() => {
+    if (user?.email) {
+      fetchUserProfileFromDb(user.email)
+        .then((dbProf) => {
+          if (dbProf) setProfile(dbProf)
+        })
+        .catch(() => {})
+    }
+  }, [user?.email])
+
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSavingProfile(true)
     try {
       saveStoredProfile(profile)
+      await saveUserProfileToDb(profile)
 
       // Update cached auth display name if changed
       const localAuthStr = localStorage.getItem('pec_summit_auth_user')
@@ -520,56 +534,119 @@ export default function ProfileClient() {
     toast.success('Signed out successfully', TOAST_STYLE)
   }
 
-  const handleLookupPasses = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const cleanEmail = lookupEmail.trim().toLowerCase()
-    if (!cleanEmail) return
+  const handleExportInstagramStory = () => {
+    if (!currentBadge) return
+    const canvas = document.createElement('canvas')
+    canvas.width = 1080
+    canvas.height = 1920
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
 
-    setIsLookingUp(true)
-    try {
-      const records = await getUserRegistrations(undefined, cleanEmail)
-      let foundApps: StartupPassApplication[] = []
+    const bgGradient = ctx.createLinearGradient(0, 0, 0, 1920)
+    bgGradient.addColorStop(0, '#060D0B')
+    bgGradient.addColorStop(0.5, '#081310')
+    bgGradient.addColorStop(1, '#020605')
+    ctx.fillStyle = bgGradient
+    ctx.fillRect(0, 0, 1080, 1920)
 
-      try {
-        const res = await fetch(`/api/funding-conclave/apply?email=${encodeURIComponent(cleanEmail)}`)
-        if (res.ok) {
-          const json = await res.json()
-          if (json.success && Array.isArray(json.applications)) {
-            foundApps = json.applications.filter(isRealStartupApp)
-          }
-        }
-      } catch {}
+    ctx.textAlign = 'center'
+    ctx.fillStyle = '#8AC53F'
+    ctx.font = 'bold 36px monospace'
+    ctx.fillText('PEC E-SUMMIT 2026', 540, 220)
 
-      if (records.length > 0 || foundApps.length > 0) {
-        if (records.length > 0) {
-          setMyRegistrations(records)
-          localStorage.setItem('pec_summit_registrations', JSON.stringify(records))
-          setProfile((prev) => ({
-            ...prev,
-            email: cleanEmail,
-            name: records[0].name || prev.name,
-            phone: records[0].phone && records[0].phone !== 'Not provided' ? records[0].phone : prev.phone,
-            college: records[0].college || prev.college,
-          }))
-          setActiveTab('passes')
-        }
-        if (foundApps.length > 0) {
-          setPassApplications(foundApps)
-          localStorage.setItem('pec_user_pass_applications', JSON.stringify(foundApps))
-          if (records.length === 0) {
-            setActiveTab('startup_passes')
-          }
-        }
-        toast.success(`Welcome back! Pass credentials loaded.`, TOAST_STYLE)
-        window.dispatchEvent(new Event('storage'))
-        window.dispatchEvent(new Event('pec_auth_changed'))
-      } else {
-        toast.error(`No passes found for ${cleanEmail}. Click Explore & Get Passes below to register.`, TOAST_STYLE)
+    ctx.fillStyle = '#FAFAFA'
+    ctx.font = '900 84px sans-serif'
+    ctx.fillText('OFFICIAL SUMMIT', 540, 320)
+
+    ctx.fillStyle = '#8AC53F'
+    ctx.font = '900 84px sans-serif'
+    ctx.fillText('ENTRY PASS', 540, 410)
+
+    const cardX = 100
+    const cardY = 490
+    const cardW = 880
+    const cardH = 1080
+
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(cardX, cardY, cardW, cardH)
+    ctx.fillStyle = '#0D1C18'
+    ctx.fill()
+    ctx.lineWidth = 2
+    ctx.strokeStyle = 'rgba(138, 197, 63, 0.35)'
+    ctx.stroke()
+    ctx.restore()
+
+    const categoryText = currentBadge.category || 'SUMMIT PASS'
+    ctx.fillStyle = 'rgba(138, 197, 63, 0.15)'
+    ctx.beginPath()
+    ctx.rect(540 - 180, cardY + 60, 360, 60)
+    ctx.fill()
+    ctx.strokeStyle = '#8AC53F'
+    ctx.lineWidth = 1.5
+    ctx.stroke()
+
+    ctx.fillStyle = '#8AC53F'
+    ctx.font = 'bold 26px monospace'
+    ctx.fillText(categoryText.toUpperCase(), 540, cardY + 100)
+
+    const nameText = (currentBadge.name || profile.name || 'ATTENDEE NAME').toUpperCase()
+    ctx.fillStyle = '#FAFAFA'
+    ctx.font = '900 68px sans-serif'
+    ctx.fillText(nameText, 540, cardY + 230)
+
+    const collegeText = (currentBadge.college || profile.college || 'PUNJAB ENGINEERING COLLEGE').toUpperCase()
+    ctx.fillStyle = '#94A3B8'
+    ctx.font = 'bold 28px monospace'
+    ctx.fillText(collegeText, 540, cardY + 290)
+
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.10)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(160, cardY + 340)
+    ctx.lineTo(920, cardY + 340)
+    ctx.stroke()
+
+    const finishAndDownload = () => {
+      const ticketId = currentBadge.id || 'PEC-000000'
+      ctx.fillStyle = '#8AC53F'
+      ctx.font = 'bold 32px monospace'
+      ctx.fillText(ticketId, 540, cardY + 760)
+
+      ctx.fillStyle = '#FAFAFA'
+      ctx.font = 'bold 28px sans-serif'
+      ctx.fillText(`${summitDates.toUpperCase()}  •  PEC CHANDIGARH`, 540, cardY + 840)
+
+      ctx.fillStyle = '#8AC53F'
+      ctx.font = 'bold 32px sans-serif'
+      ctx.fillText("I'M ATTENDING PEC E-SUMMIT '26!", 540, 1680)
+
+      ctx.fillStyle = '#94A3B8'
+      ctx.font = 'bold 24px monospace'
+      ctx.fillText(`JOIN ME AT ${SITE_DOMAIN.toUpperCase()}`, 540, 1740)
+
+      const link = document.createElement('a')
+      link.download = `PEC_Summit_Story_${(currentBadge.name || 'Attendee').replace(/\\s+/g, '_')}.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
+      toast.success('Instagram Story Badge Downloaded!', TOAST_STYLE)
+    }
+
+    if (currentBadge.qrCodeData && typeof window !== 'undefined') {
+      const qrImg = new (window as any).Image()
+      qrImg.crossOrigin = 'anonymous'
+      qrImg.onload = () => {
+        ctx.fillStyle = '#FFFFFF'
+        ctx.fillRect(540 - 160, cardY + 390, 320, 320)
+        ctx.drawImage(qrImg, 540 - 140, cardY + 410, 280, 280)
+        finishAndDownload()
       }
-    } catch {
-      toast.error('Failed to lookup passes. Please check your connection.', TOAST_STYLE)
-    } finally {
-      setIsLookingUp(false)
+      qrImg.onerror = () => {
+        finishAndDownload()
+      }
+      qrImg.src = currentBadge.qrCodeData
+    } else {
+      finishAndDownload()
     }
   }
 
@@ -673,49 +750,20 @@ export default function ProfileClient() {
           </div>
         </div>
 
-        {/* Navigation Tabs — Single-line horizontally scrollable with fully extending pill container */}
+        {/* Navigation Tabs — Fluid Sliding Pill Indicator */}
         {!currentBadge && (
           <div className="w-full border-b border-border-subtle pb-3.5 mb-6 overflow-x-auto no-scrollbar">
-            <div className="inline-flex min-w-full sm:min-w-0 items-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md">
-              <button
-                type="button"
-                onClick={() => setActiveTab('passes')}
-                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
-                  activeTab === 'passes'
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                <Ticket size={14} className={activeTab === 'passes' ? 'text-void stroke-[2.5]' : 'text-mint shrink-0'} />
-                <span>Student Passes ({myRegistrations.length})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab('startup_passes')}
-                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
-                  activeTab === 'startup_passes'
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                <Briefcase size={14} className={activeTab === 'startup_passes' ? 'text-void stroke-[2.5]' : 'text-mint shrink-0'} />
-                <span>Startup Passes ({passApplications.length})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab('account')}
-                className={`flex-1 inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
-                  activeTab === 'account'
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                <Settings size={14} className={activeTab === 'account' ? 'text-void stroke-[2.5]' : 'text-mint shrink-0'} />
-                <span>Personal Details</span>
-              </button>
-            </div>
+            <PillSegmentedTabs<'passes' | 'startup_passes' | 'account'>
+              tabs={[
+                { id: 'passes', label: `Student Passes (${myRegistrations.length})`, icon: Ticket },
+                { id: 'startup_passes', label: `Startup Passes (${passApplications.length})`, icon: Briefcase },
+                { id: 'account', label: 'Personal Details', icon: Settings },
+              ]}
+              activeTab={activeTab}
+              onChange={setActiveTab}
+              layoutId="profileActiveTabIndicator"
+              fullWidth
+            />
           </div>
         )}
 
@@ -795,13 +843,14 @@ export default function ProfileClient() {
 
               {/* Action Buttons */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                <Link
-                  href="/register"
+                <button
+                  type="button"
+                  onClick={handleExportInstagramStory}
                   className="py-2.5 px-3 rounded-full bg-mint hover:bg-white text-void text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-sm"
                 >
-                  <Sparkles size={14} />
+                  <Share2 size={14} />
                   <span>Story Badge</span>
-                </Link>
+                </button>
                 <button
                   type="button"
                   onClick={() => window.print()}
@@ -1241,60 +1290,107 @@ export default function ProfileClient() {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {myRegistrations.map((item) => (
-                    <div
-                      key={item.id}
-                      className="rounded-3xl border border-white/10 bg-[#13221C] p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-white/20 transition-all group"
-                    >
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] px-2.5 py-1 rounded-full bg-mint/10 text-mint font-bold uppercase tracking-wider font-mono">
-                            {item.category}
-                          </span>
-                          <span className="font-mono text-[10px] text-neutral-500 font-bold">#{item.id.slice(-6)}</span>
-                        </div>
-                        <div>
-                          <h3 className="text-lg font-bold text-white group-hover:text-mint transition-colors">{item.name}</h3>
-                          <p className="text-xs text-neutral-400 truncate mt-1">{item.college}</p>
-                        </div>
-                        {item.selectedEvents && item.selectedEvents.length > 0 && (
-                          <div className="flex flex-wrap gap-1.5 mt-2">
-                            {item.selectedEvents.map((ev) => (
-                              <span
-                                key={ev}
-                                className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-neutral-300 font-mono uppercase tracking-wider"
-                              >
-                                {ev}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                  {myRegistrations.map((item) => {
+                    const isPaidTier = Number(item.amountPaid) > 0
+                    const isConfirmed = item.status === 'PAYMENT_CONFIRMED' || item.paymentStatus === 'PAID' || !isPaidTier
+                    const isRejected = item.status === 'REJECTED'
 
-                      <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
-                        <span className="text-neutral-500 font-mono text-[10px] font-semibold uppercase tracking-wider">
-                          {item.paymentStatus === 'PAID' ? `₹${item.amountPaid || 0}` : 'FREE ENTRY'}
-                        </span>
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            onClick={() => setCurrentBadge(item)}
-                            className="px-3.5 py-1.5 rounded-full btn-mint-gradient text-void text-[11px] font-mono-data font-black uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all cursor-pointer"
-                          >
-                            View Ticket
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleDeletePass(item.id)}
-                            className="p-1.5 rounded-full border border-white/10 bg-white/5 hover:border-red-500/40 hover:bg-red-500/15 text-neutral-400 hover:text-red-400 transition-colors cursor-pointer"
-                            title="Cancel / Delete Pass"
-                            aria-label={`Cancel pass ${item.id}`}
-                          >
-                            <Trash2 size={13} />
-                          </button>
+                    return (
+                      <div
+                        key={item.id}
+                        className="rounded-3xl border border-white/10 bg-[#13221C] p-5 sm:p-6 flex flex-col justify-between gap-4 hover:border-white/20 transition-all group"
+                      >
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[10px] px-2.5 py-1 rounded-full bg-mint/10 text-mint font-bold uppercase tracking-wider font-mono">
+                              {item.category}
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                              {isConfirmed ? (
+                                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-mint/15 text-mint border border-mint/30 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-mint" />
+                                  Confirmed
+                                </span>
+                              ) : isRejected ? (
+                                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-400 border border-red-500/30 font-bold uppercase tracking-wider font-mono">
+                                  Not Confirmed
+                                </span>
+                              ) : (
+                                <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 font-bold uppercase tracking-wider font-mono flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                                  Payment Pending
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-bold text-white group-hover:text-mint transition-colors">{item.name}</h3>
+                            <p className="text-xs text-neutral-400 truncate mt-1">{item.college}</p>
+                          </div>
+                          {item.selectedEvents && item.selectedEvents.length > 0 && (
+                            <div className="flex flex-wrap gap-1.5 mt-2">
+                              {item.selectedEvents.map((ev) => (
+                                <span
+                                  key={ev}
+                                  className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-neutral-300 font-mono uppercase tracking-wider"
+                                >
+                                  {ev}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          {!isConfirmed && !isRejected && (
+                            <div className="p-3 rounded-2xl bg-amber-500/5 border border-amber-500/20 text-[11px] text-amber-300 leading-relaxed font-mono">
+                              Application received. Team will reach out via WhatsApp / Email for payment. Pass and QR badge will unlock here once confirmed in Response Manager.
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex items-center justify-between border-t border-white/10 pt-4 mt-2">
+                          <div className="flex flex-col">
+                            <span className="text-neutral-400 font-mono text-[10px] font-semibold uppercase tracking-wider">
+                              {isConfirmed
+                                ? (item.paymentStatus === 'PAID' ? `₹${item.amountPaid || 0} • PAID` : 'FREE ENTRY')
+                                : isRejected
+                                ? 'REJECTED'
+                                : `₹${item.amountPaid || 0} • PENDING`}
+                            </span>
+                            <span className="text-[9px] font-mono text-neutral-500">
+                              Ref: #{item.id.slice(-6).toUpperCase()}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            {isConfirmed ? (
+                              <button
+                                onClick={() => setCurrentBadge(item)}
+                                className="px-3.5 py-1.5 rounded-full btn-mint-gradient text-void text-[11px] font-mono-data font-black uppercase tracking-wider shadow-md hover:scale-[1.02] transition-all cursor-pointer"
+                              >
+                                View Ticket
+                              </button>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => toast('Payment verification in progress. Our team will contact you shortly.', TOAST_STYLE)}
+                                className="px-3 py-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 text-[11px] font-mono-data font-bold uppercase tracking-wider transition-all cursor-pointer"
+                              >
+                                Awaiting Confirmation
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleDeletePass(item.id)}
+                              className="p-1.5 rounded-full border border-white/10 bg-white/5 hover:border-red-500/40 hover:bg-red-500/15 text-neutral-400 hover:text-red-400 transition-colors cursor-pointer"
+                              title="Cancel / Delete Pass"
+                              aria-label={`Cancel pass ${item.id}`}
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             )}

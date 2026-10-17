@@ -1,24 +1,57 @@
 import { MetadataRoute } from 'next'
+import { SITE_URL, absoluteUrl } from '@/lib/siteConfig'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://esummit.pec.ac.in'
+  const lastModified = new Date()
 
-  // Add more dynamic routes here if you add pages to the /app directory
-  const routes = [
+  return [
     {
-      url: `${baseUrl}`,
-      lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      url: SITE_URL,
+      lastModified,
+      changeFrequency: 'daily',
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/register`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      url: absoluteUrl('/passes'),
+      lastModified,
+      changeFrequency: 'daily',
+      priority: 0.95,
+    },
+    {
+      url: absoluteUrl('/events'),
+      lastModified,
+      changeFrequency: 'weekly',
       priority: 0.9,
     },
+    {
+      url: absoluteUrl('/speakers'),
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    {
+      url: absoluteUrl('/timeline'),
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: absoluteUrl('/about'),
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: absoluteUrl('/sponsors'),
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: absoluteUrl('/register'),
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
   ]
-
-  return routes
-
 }

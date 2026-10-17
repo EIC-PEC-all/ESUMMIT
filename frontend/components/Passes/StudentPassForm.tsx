@@ -18,7 +18,6 @@ import {
   Copy,
   RotateCcw,
   ArrowLeft,
-  Sparkles,
   ArrowRight,
   Loader2,
   MapPin,
@@ -28,11 +27,11 @@ import {
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/context/AuthContext'
-import AuthCard from '@/components/Account/AuthCard'
 import { STATE_NAMES, getCitiesForState } from '@/data/indiaLocations'
 import {
   getStoredProfile,
   saveStoredProfile,
+  saveUserProfileToDb,
   GRADUATION_YEARS,
   normalizeGradYear,
 } from '@/lib/onboarding'
@@ -191,45 +190,7 @@ export default function StudentPassForm({
   const availableCities = getCitiesForState(form.state)
   const finalCity = form.city === 'Other' ? form.customCity.trim() : form.city.trim()
 
-  // ── STRICT AUTH GATE: GUEST CANNOT OPEN OR VIEW PASS REGISTRATION FORM ──
-  if (!user) {
-    return (
-      <div id="student-pass-form" className="w-full max-w-xl mx-auto my-8">
-        <Toaster position="top-right" />
-        <div className="mb-4 text-center">
-          <span className="font-mono-data text-xs font-black uppercase tracking-[0.25em] text-mint flex items-center justify-center gap-1.5 mb-1.5">
-            <Sparkles size={13} />
-            LOGIN REQUIRED TO CLAIM PASS
-          </span>
-          <h2 className="font-display text-2xl sm:text-3xl font-black uppercase tracking-tight text-primary">
-            Sign In To Access <span className="text-gradient-mint">{selectedPkg.name}</span>
-          </h2>
-          <p className="font-body text-xs text-secondary mt-1">
-            Sign in with Google or Email. Passes and QR badges are saved directly to your account.
-          </p>
-        </div>
-
-        <AuthCard
-          title="Sign In Required"
-          subtitle={`Please sign in to unlock and claim your official ${selectedPkg.name}.`}
-        />
-
-        {onBackToCards && (
-          <div className="text-center mt-5">
-            <button
-              type="button"
-              onClick={onBackToCards}
-              className="inline-flex items-center gap-2 font-mono-data text-xs text-secondary hover:text-mint transition-colors cursor-pointer group"
-            >
-              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-              <span>Back to All Passes</span>
-            </button>
-          </div>
-        )}
-      </div>
-    )
-  }
-
+  // ── Open Form for all users (logged in or guest) ──
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -244,7 +205,6 @@ export default function StudentPassForm({
     if (!form.state.trim()) return toast.error('State or UT is required')
     if (!finalCity) return toast.error('City is required')
     if (!form.courseYear.trim()) return toast.error('Degree & Year of Study is required')
-    if (!form.linkedin.trim()) return toast.error('LinkedIn Profile or ID is required')
     if (!form.motive.trim()) return toast.error('Please select your primary motive')
 
     setSubmitState('submitting')
@@ -264,12 +224,12 @@ export default function StudentPassForm({
         `Location: ${finalCity}, ${form.state.trim()}`,
         `Year: ${form.courseYear}`,
         `Motive: ${form.motive}`,
-        `LinkedIn: ${form.linkedin.trim()}`,
+        ...(form.linkedin.trim() ? [`LinkedIn: ${form.linkedin.trim()}`] : []),
         `Phone: ${form.phone.trim()}`,
       ]
 
       // ── Mark Onboarding Completed & Sync Profile ──
-      saveStoredProfile({
+      const profileData = {
         name: form.fullName.trim(),
         email: form.email.trim().toLowerCase(),
         phone: form.phone.trim(),
@@ -278,7 +238,9 @@ export default function StudentPassForm({
         city: finalCity,
         gradYear: form.courseYear,
         onboardingCompleted: true,
-      })
+      }
+      saveStoredProfile(profileData)
+      saveUserProfileToDb(profileData).catch(() => {})
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
 
@@ -313,8 +275,12 @@ export default function StudentPassForm({
         console.warn('Backend sync note:', backendErr)
       }
 
-      // ── Persist pass locally for instant profile access ──
+      // ── Persist pass record locally & to DB with status ──
       const qrDataUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(regId)}`
+      const isFree = selectedPkg.fee === 0
+      const initialStatus = isFree ? 'PAYMENT_CONFIRMED' : 'PENDING_REVIEW'
+      const initialPaymentStatus = isFree ? 'FREE' : 'PENDING'
+
       const newRecord: RegistrationRecord = {
         id: regId,
         userId: user?.uid,
@@ -325,7 +291,8 @@ export default function StudentPassForm({
         category: selectedPkg.name,
         tracks,
         amountPaid: selectedPkg.fee,
-        paymentStatus: selectedPkg.fee === 0 ? 'FREE' : 'PAID',
+        paymentStatus: initialPaymentStatus,
+        status: initialStatus,
         date: new Date().toLocaleDateString('en-IN', {
           month: 'short',
           day: 'numeric',
@@ -334,7 +301,7 @@ export default function StudentPassForm({
         qrCodeData: qrDataUrl,
       }
 
-      // ── Persist pass locally for instant profile access (Single Pass Rule) ──
+      // ── Persist pass locally (Single Pass Rule) ──
       saveLocalRegistrations([newRecord])
       setExistingPass({ id: regId, category: selectedPkg.name })
 
@@ -352,7 +319,8 @@ export default function StudentPassForm({
             category: selectedPkg.name,
             tracks,
             amountPaid: selectedPkg.fee,
-            paymentStatus: selectedPkg.fee === 0 ? 'FREE' : 'PAID',
+            paymentStatus: initialPaymentStatus,
+            status: initialStatus,
           }),
         })
       } catch {
@@ -374,7 +342,7 @@ export default function StudentPassForm({
 
       setRegistrationId(regId)
       setSubmitState('success')
-      toast.success('Student pass registered successfully!')
+      toast.success(isFree ? 'Registration confirmed successfully!' : 'Application submitted! Our team will contact you for payment verification.')
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Registration failed'
       setErrorMsg(msg)
@@ -404,13 +372,21 @@ export default function StudentPassForm({
 
         <div>
           <span className="font-mono-data text-xs font-bold uppercase tracking-[0.25em] text-mint">
-            REGISTRATION CONFIRMED
+            {selectedPkg.fee === 0 ? 'REGISTRATION CONFIRMED' : 'APPLICATION RECEIVED'}
           </span>
           <h2 className="font-display text-3xl sm:text-5xl font-black uppercase tracking-tight text-primary mt-2">
-            YOU&apos;RE <span className="text-gradient-mint">REGISTERED!</span>
+            {selectedPkg.fee === 0 ? (
+              <>YOU&apos;RE <span className="text-gradient-mint">REGISTERED!</span></>
+            ) : (
+              <>YOU&apos;RE <span className="text-gradient-mint">PRE-REGISTERED!</span></>
+            )}
           </h2>
           <p className="text-secondary font-body text-sm sm:text-base max-w-xl mx-auto leading-relaxed mt-2">
-            Your pass for <strong className="text-primary">{selectedPkg.name}</strong> has been secured in the E-Summit database.
+            {selectedPkg.fee === 0 ? (
+              <>Your pass for <strong className="text-primary">{selectedPkg.name}</strong> is confirmed in the E-Summit database.</>
+            ) : (
+              <>Thank you for applying for the <strong className="text-primary">{selectedPkg.name}</strong>. Your application is saved directly to your account. Our team will contact you on WhatsApp / Email for payment verification, after which your pass status will be confirmed on your profile.</>
+            )}
           </p>
         </div>
 
@@ -436,6 +412,12 @@ export default function StudentPassForm({
           <div className="flex justify-between">
             <span className="text-muted">Pass Tier:</span>
             <span className="font-bold text-primary">{selectedPkg.name} ({selectedPkg.price})</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-muted">Status:</span>
+            <span className={`font-bold ${selectedPkg.fee === 0 ? 'text-mint' : 'text-amber-400'}`}>
+              {selectedPkg.fee === 0 ? 'Confirmed & Active' : 'Pending Review / Payment Verification'}
+            </span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted">Delegate:</span>
@@ -492,8 +474,6 @@ export default function StudentPassForm({
       <Toaster position="top-right" />
 
       <div className="rounded-3xl bg-panel border border-border-subtle p-6 sm:p-9 md:p-11 shadow-2xl relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-mint/5 blur-[100px] pointer-events-none rounded-full" />
 
         {/* Back Link */}
         {onBackToCards && (
@@ -510,7 +490,6 @@ export default function StudentPassForm({
         {/* Header */}
         <div className="mb-7">
           <span className="font-mono-data text-xs font-black uppercase tracking-[0.25em] text-mint flex items-center gap-1.5 mb-1.5">
-            <Sparkles size={13} />
             PEC E-SUMMIT 2026 DELEGATE PASS
           </span>
           <h2 className="font-display text-2xl sm:text-4xl font-black uppercase tracking-tight text-primary">
@@ -522,13 +501,22 @@ export default function StudentPassForm({
         </div>
 
         {/* Auth Status Banner */}
-        <div className="mb-6 px-4 py-2.5 rounded-2xl bg-mint/10 border border-mint/20 flex items-center justify-between gap-3 text-xs font-mono-data">
-          <div className="flex items-center gap-2 text-mint font-bold">
-            <CheckCircle2 size={15} />
-            <span>Logged in as: <strong className="text-white">{user.email}</strong></span>
+        {user ? (
+          <div className="mb-6 px-4 py-2.5 rounded-2xl bg-mint/10 border border-mint/20 flex items-center justify-between gap-3 text-xs font-mono-data">
+            <div className="flex items-center gap-2 text-mint font-bold">
+              <CheckCircle2 size={15} />
+              <span>Logged in as: <strong className="text-white">{user.email}</strong></span>
+            </div>
+            <span className="text-[10px] text-muted uppercase tracking-wider hidden sm:inline">Details Auto-Synced</span>
           </div>
-          <span className="text-[10px] text-muted uppercase tracking-wider hidden sm:inline">Details Auto-Synced</span>
-        </div>
+        ) : (
+          <div className="mb-6 p-3.5 rounded-2xl bg-panel-alt border border-border-subtle flex items-center justify-between gap-3 text-xs font-mono-data">
+            <div className="flex items-center gap-2 text-secondary">
+              <ArrowRight size={14} className="text-mint shrink-0" />
+              <span>Have an existing account? <Link href="/login?callbackUrl=/passes" className="text-mint font-bold hover:underline">Sign In</Link> to sync your passes, or fill details below to apply directly.</span>
+            </div>
+          </div>
+        )}
 
         {/* Existing Pass Notice */}
         {existingPass && (
@@ -672,17 +660,16 @@ export default function StudentPassForm({
             {/* LinkedIn ID */}
             <div>
               <label htmlFor="student-linkedin" className="block font-mono-data text-xs font-bold uppercase tracking-wider text-secondary mb-1.5">
-                LinkedIn Profile / ID <span className="text-mint">*</span>
+                LinkedIn Profile / ID <span className="text-muted text-[10px] font-normal lowercase">(optional)</span>
               </label>
               <div className="relative">
                 <Linkedin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <input
                   id="student-linkedin"
                   type="text"
-                  required
                   value={form.linkedin}
                   onChange={(e) => updateField('linkedin', e.target.value)}
-                  placeholder="https://linkedin.com/in/username"
+                  placeholder="https://linkedin.com/in/username (optional)"
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-panel-alt border border-border-subtle focus:border-mint focus:outline-none text-primary font-body text-sm placeholder:text-muted transition-colors"
                 />
               </div>
@@ -841,18 +828,22 @@ export default function StudentPassForm({
               {submitState === 'submitting' ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
-                  <span>Registering Pass to Database...</span>
+                  <span>Registering Application to Database...</span>
                 </>
               ) : (
                 <>
-                  <span>Claim {selectedPkg.name} ({selectedPkg.price})</span>
+                  <span>
+                    {selectedPkg.fee === 0
+                      ? `Submit Registration for ${selectedPkg.name}`
+                      : `Submit Application for ${selectedPkg.name} (${selectedPkg.price})`}
+                  </span>
                   <ArrowRight size={16} />
                 </>
               )}
             </button>
             <p className="text-center font-mono-data text-[10px] text-muted uppercase tracking-wider mt-2.5 flex items-center justify-center gap-1.5">
               <Shield size={12} className="text-mint shrink-0" />
-              <span>Instant confirmation. Pass credentials will be available on your summit profile.</span>
+              <span>Form responses are saved directly to E-Summit database. Team will reach out for payment confirmation.</span>
             </p>
           </div>
         </form>

@@ -221,7 +221,7 @@ export function DetailModal({ event, onClose }: DetailModalProps) {
               </a>
             ) : (
               <a
-                href="/register"
+                href="/passes?type=student"
                 onClick={onClose}
                 className="w-full flex items-center justify-center gap-1.5 h-11 px-5 rounded-full btn-mint-gradient font-mono-data text-[11px] sm:text-xs font-black uppercase tracking-wider hover:opacity-90 transition-opacity whitespace-nowrap cursor-pointer shadow-md"
               >

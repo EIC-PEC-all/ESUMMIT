@@ -7,9 +7,7 @@ import {
   Lock,
   User as UserIcon,
   ArrowRight,
-  Sparkles,
   KeyRound,
-  Search,
   CheckCircle2,
   Ticket,
 } from 'lucide-react'
@@ -39,54 +37,11 @@ export default function AuthCard({
   const router = useRouter()
   const { user, loginWithGoogle, loginWithEmail, registerWithEmail, resetPassword } = useAuth()
 
-  const [mode, setMode] = useState<'signin' | 'signup' | 'forgot' | 'lookup'>('signin')
+  const [mode, setMode] = useState<'signin' | 'signup' | 'forgot'>('signin')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
-  const [lookupEmail, setLookupEmail] = useState('')
-  const [lookupLoading, setLookupLoading] = useState(false)
-
-  // ── Sync user passes from backend database ──
-  const syncPassesForEmail = async (targetEmail: string) => {
-    try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
-      const res = await fetch(
-        `${apiUrl}/registrations/by-email?email=${encodeURIComponent(targetEmail.trim().toLowerCase())}`
-      )
-      if (res.ok) {
-        const data = await res.json()
-        const passes = Array.isArray(data) ? data : data?.registrations || []
-        if (passes.length > 0) {
-          const formatted: RegistrationRecord[] = passes.map((p: any) => ({
-            id: p.passId || p.id || `PEC-${Math.floor(100000 + Math.random() * 900000)}`,
-            userId: user?.uid,
-            name: p.name || 'Attendee',
-            email: p.email || targetEmail,
-            phone: p.phone || '',
-            college: p.college || 'Punjab Engineering College (PEC)',
-            category: p.category || p.passType || 'Student Pass',
-            tracks: Array.isArray(p.tracks) ? p.tracks : [],
-            amountPaid: p.amountPaid || 0,
-            paymentStatus: p.paymentStatus || 'FREE',
-            date: p.createdAt ? new Date(p.createdAt).toLocaleDateString() : 'Nov 14, 2026',
-            qrCodeData:
-              p.qrCodeData ||
-              `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(
-                p.passId || p.id || targetEmail
-              )}`,
-          }))
-          const existing = getLocalRegistrations()
-          const combined = [...formatted, ...existing.filter((e) => !formatted.some((f) => f.id === e.id))]
-          saveLocalRegistrations(combined)
-          window.dispatchEvent(new Event('pec_auth_changed'))
-          window.dispatchEvent(new Event('storage'))
-        }
-      }
-    } catch {
-      // Non-fatal sync
-    }
-  }
 
   // ── 1. Google 1-Tap Sign In ──
   const handleGoogleSignIn = async () => {
@@ -95,13 +50,6 @@ export default function AuthCard({
       const res = await loginWithGoogle()
       if (res.success) {
         toast.success('Signed in with Google successfully!', TOAST_STYLE)
-        const localAuth = localStorage.getItem('pec_summit_auth_user')
-        if (localAuth) {
-          try {
-            const parsed = JSON.parse(localAuth)
-            if (parsed.email) await syncPassesForEmail(parsed.email)
-          } catch {}
-        }
         window.dispatchEvent(new Event('pec_auth_changed'))
         window.dispatchEvent(new Event('storage'))
         if (onSuccess) {
@@ -134,7 +82,6 @@ export default function AuthCard({
         const res = await loginWithEmail(email.trim(), password)
         if (res.success) {
           toast.success('Signed in successfully!', TOAST_STYLE)
-          await syncPassesForEmail(email)
           window.dispatchEvent(new Event('pec_auth_changed'))
           window.dispatchEvent(new Event('storage'))
           if (onSuccess) {
@@ -159,7 +106,6 @@ export default function AuthCard({
         const res = await registerWithEmail(email.trim(), password, name.trim())
         if (res.success) {
           toast.success('Account created successfully!', TOAST_STYLE)
-          await syncPassesForEmail(email)
           window.dispatchEvent(new Event('pec_auth_changed'))
           window.dispatchEvent(new Event('storage'))
           if (onSuccess) {
@@ -186,37 +132,6 @@ export default function AuthCard({
     }
   }
 
-  // ── 3. Legacy Email Pass Lookup ──
-  const handleLookupPasses = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!lookupEmail.trim()) {
-      toast.error('Please enter your email to search.', TOAST_STYLE)
-      return
-    }
-
-    setLookupLoading(true)
-    try {
-      await syncPassesForEmail(lookupEmail)
-      const existing = getLocalRegistrations()
-      const found = existing.filter((p) => p.email.toLowerCase() === lookupEmail.trim().toLowerCase())
-      if (found.length > 0) {
-        toast.success(`Found ${found.length} pass(es) for ${lookupEmail}!`, TOAST_STYLE)
-        window.dispatchEvent(new Event('pec_auth_changed'))
-        window.dispatchEvent(new Event('storage'))
-        if (onSuccess) {
-          onSuccess()
-        } else {
-          router.push(callbackUrl)
-        }
-      } else {
-        toast.error('No passes found for this email. Please register for a pass.', TOAST_STYLE)
-      }
-    } catch {
-      toast.error('Unable to fetch passes at this time.', TOAST_STYLE)
-    } finally {
-      setLookupLoading(false)
-    }
-  }
 
   return (
     <div className="relative z-10 w-full max-w-md mx-auto p-6 sm:p-8 rounded-3xl bg-panel border border-border-panel shadow-2xl text-left">
@@ -271,7 +186,7 @@ export default function AuthCard({
       </div>
 
       {/* ── Mode Selector Tabs (Sign In vs Create Account) ── */}
-      {mode !== 'lookup' && mode !== 'forgot' && (
+      {mode !== 'forgot' && (
         <div className="flex items-center p-1 rounded-full bg-panel-alt border border-border-subtle mb-4">
           <button
             type="button"
@@ -299,142 +214,93 @@ export default function AuthCard({
       )}
 
       {/* ── Form Inputs ── */}
-      {mode !== 'lookup' ? (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          {mode === 'signup' && (
-            <div className="space-y-1">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        {mode === 'signup' && (
+          <div className="space-y-1">
+            <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <UserIcon size={12} className="text-mint" />
+              <span>Full Name</span>
+            </label>
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Aryan Sharma"
+              className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
+            />
+          </div>
+        )}
+
+        <div className="space-y-1">
+          <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <Mail size={12} className="text-mint" />
+            <span>Email Address</span>
+          </label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="name@college.edu or gmail.com"
+            className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
+          />
+        </div>
+
+        {mode !== 'forgot' && (
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
               <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <UserIcon size={12} className="text-mint" />
-                <span>Full Name</span>
+                <Lock size={12} className="text-mint" />
+                <span>Password</span>
               </label>
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Aryan Sharma"
-                className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
-              />
+              {mode === 'signin' && (
+                <button
+                  type="button"
+                  onClick={() => setMode('forgot')}
+                  className="text-[10px] font-mono text-mint hover:underline"
+                >
+                  Forgot password?
+                </button>
+              )}
             </div>
-          )}
-
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <Mail size={12} className="text-mint" />
-              <span>Email Address</span>
-            </label>
             <input
-              type="email"
+              type="password"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="name@college.edu or gmail.com"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
               className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
             />
           </div>
+        )}
 
-          {mode !== 'forgot' && (
-            <div className="space-y-1">
-              <div className="flex items-center justify-between">
-                <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <Lock size={12} className="text-mint" />
-                  <span>Password</span>
-                </label>
-                {mode === 'signin' && (
-                  <button
-                    type="button"
-                    onClick={() => setMode('forgot')}
-                    className="text-[10px] font-mono text-mint hover:underline"
-                  >
-                    Forgot password?
-                  </button>
-                )}
-              </div>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
-              />
-            </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full mt-2 py-3.5 px-6 rounded-full btn-mint-gradient text-void font-mono-data font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md hover:scale-[1.01] active:scale-98 disabled:opacity-50"
+        >
+          {loading ? (
+            'Processing...'
+          ) : mode === 'signin' ? (
+            'Sign In & Access Passes'
+          ) : mode === 'signup' ? (
+            'Create Account & Continue'
+          ) : (
+            'Send Reset Link'
           )}
+        </button>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full mt-2 py-3.5 px-6 rounded-full btn-mint-gradient text-void font-mono-data font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md hover:scale-[1.01] active:scale-98 disabled:opacity-50"
-          >
-            {loading ? (
-              'Processing...'
-            ) : mode === 'signin' ? (
-              'Sign In & Access Passes'
-            ) : mode === 'signup' ? (
-              'Create Account & Continue'
-            ) : (
-              'Send Reset Link'
-            )}
-          </button>
-
-          {mode === 'forgot' && (
-            <button
-              type="button"
-              onClick={() => setMode('signin')}
-              className="text-center text-xs font-mono text-neutral-400 hover:text-white mt-1"
-            >
-              ← Back to Sign In
-            </button>
-          )}
-        </form>
-      ) : (
-        /* Legacy Email Pass Lookup */
-        <form onSubmit={handleLookupPasses} className="flex flex-col gap-3">
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <Search size={12} className="text-mint" />
-              <span>Registered Email</span>
-            </label>
-            <input
-              type="email"
-              required
-              value={lookupEmail}
-              onChange={(e) => setLookupEmail(e.target.value)}
-              placeholder="Enter email used when claiming pass"
-              className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={lookupLoading}
-            className="w-full mt-2 py-3 px-6 rounded-full btn-mint-gradient text-void font-mono-data font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md disabled:opacity-50"
-          >
-            {lookupLoading ? 'Searching Database...' : 'Find My Passes'}
-          </button>
-
+        {mode === 'forgot' && (
           <button
             type="button"
             onClick={() => setMode('signin')}
             className="text-center text-xs font-mono text-neutral-400 hover:text-white mt-1"
           >
-            ← Back to Standard Sign In
+            ← Back to Sign In
           </button>
-        </form>
-      )}
-
-      {/* ── Footer Link: Legacy Pass Search Toggle ── */}
-      <div className="mt-6 pt-4 border-t border-border-subtle flex flex-col items-center gap-2 text-center">
-        {mode !== 'lookup' ? (
-          <button
-            type="button"
-            onClick={() => setMode('lookup')}
-            className="text-xs text-neutral-400 hover:text-mint font-mono transition-colors"
-          >
-            Already claimed a pass previously? <span className="underline">Find by email</span>
-          </button>
-        ) : null}
-      </div>
+        )}
+      </form>
     </div>
   )
 }

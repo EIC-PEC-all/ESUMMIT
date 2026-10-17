@@ -3,7 +3,7 @@
 import React from 'react'
 import { motion, MotionValue } from 'framer-motion'
 import Link from 'next/link'
-import { Ticket, Sparkles, ArrowUpRight, Play } from 'lucide-react'
+import { Ticket, ArrowUpRight, Play } from 'lucide-react'
 import { prefetchRegister } from '@/lib/prefetch'
 
 export interface HeroPinnedContentProps {
@@ -64,17 +64,17 @@ export default function HeroPinnedContent({
         {/* Clean Open Metrics Row (No Box) */}
         <div className="flex items-center justify-center gap-6 sm:gap-10 py-1.5 px-4 select-none">
           <div className="flex flex-col items-center text-center">
-            <span className="font-display font-black text-base sm:text-xl text-gradient-mint-btn drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] leading-tight">₹10L+</span>
+            <span className="font-display font-black text-base sm:text-xl text-white keep-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] leading-tight">₹10L+</span>
             <span className="font-mono-data text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Prize Pool</span>
           </div>
           <div className="h-6 w-px bg-white/20" />
           <div className="flex flex-col items-center text-center">
-            <span className="font-display font-black text-base sm:text-xl text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] leading-tight">3,000+</span>
+            <span className="font-display font-black text-base sm:text-xl text-white keep-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] leading-tight">3,000+</span>
             <span className="font-mono-data text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Attendees</span>
           </div>
           <div className="h-6 w-px bg-white/20" />
           <div className="flex flex-col items-center text-center">
-            <span className="font-display font-black text-base sm:text-xl text-gradient-mint-btn drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] leading-tight">50+</span>
+            <span className="font-display font-black text-base sm:text-xl text-white keep-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] leading-tight">50+</span>
             <span className="font-mono-data text-[9px] sm:text-[10px] uppercase tracking-wider text-slate-300 drop-shadow-[0_2px_6px_rgba(0,0,0,0.95)]">Investors</span>
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function HeroPinnedContent({
         {/* CTAs (Rounded-Full Capsule Buttons with Deep Shadows) */}
         <div className="mt-2 flex w-full flex-wrap items-center justify-center gap-3.5">
           <Link
-            href="/register"
+            href="/passes"
             onMouseEnter={prefetchRegister}
             onTouchStart={prefetchRegister}
             onFocus={prefetchRegister}
@@ -112,7 +112,7 @@ export default function HeroPinnedContent({
               href="/events"
               className="group relative inline-flex h-11 sm:h-12 items-center justify-center gap-2 overflow-hidden rounded-full px-8 font-mono-data text-xs font-bold uppercase tracking-wider text-white bg-black/50 hover:bg-black/70 border border-white/30 hover:border-[#74FB44] backdrop-blur-md transition-all hover:scale-105 active:scale-95 cursor-pointer shadow-lg"
             >
-              <Sparkles size={15} strokeWidth={2} className="text-[#74FB44]" />
+              <ArrowUpRight size={15} strokeWidth={2} className="text-[#74FB44] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               <span>EXPLORE TRACKS</span>
             </Link>
           )}

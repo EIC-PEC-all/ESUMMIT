@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, ArrowUpRight, User, Ticket, Download, LogOut, LogIn } from 'lucide-react'
+import { X, ArrowUpRight, Ticket, LogOut, LogIn } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -182,61 +182,64 @@ export default function NavMobileDrawer({
                     </Link>
                   )
                 })}
+
+                {/* Profile Navigation Link (Shown for registered users) */}
+                {isRegistered && (
+                  <div className="group flex items-baseline justify-between py-2 border-b border-border-subtle transition-all">
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href="/profile"
+                        onClick={onClose}
+                        className="inline-block"
+                      >
+                        <span
+                          className={`font-display text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight transition-colors ${
+                            pathname === '/profile'
+                              ? 'text-mint underline decoration-mint decoration-4 underline-offset-8'
+                              : 'text-primary/90 group-hover:text-mint group-hover:underline decoration-mint/50 underline-offset-4'
+                          }`}
+                        >
+                          PROFILE
+                        </span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={handleDrawerSignOut}
+                        className="p-1.5 -mb-1 rounded-full text-muted hover:text-red-500 hover:bg-black/5 dark:hover:bg-white/10 active:scale-90 transition-all cursor-pointer border-none bg-transparent"
+                        title="Sign Out"
+                        aria-label="Sign Out"
+                      >
+                        <LogOut size={22} className="stroke-[2.5]" />
+                      </button>
+                    </div>
+                    <span className="font-mono-data text-xs text-muted group-hover:text-mint transition-colors font-black tracking-widest">
+                      08
+                    </span>
+                  </div>
+                )}
               </nav>
 
-              {/* Drawer Action CTAs */}
-              <div className="pt-4 flex flex-col gap-2.5">
-                {isRegistered ? (
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href="/profile"
-                      onClick={onClose}
-                      className="flex-1 py-3 px-5 rounded-full btn-mint-gradient text-void font-mono-data text-xs font-black uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-md cursor-pointer hover:scale-[1.01]"
-                    >
-                      <User size={14} className="stroke-[2.5]" />
-                      <span>MY PROFILE &amp; PASSES</span>
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={handleDrawerSignOut}
-                      className="py-3 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-neutral-300 hover:text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-colors"
-                      title="Sign Out"
-                    >
-                      <LogOut size={13} />
-                      <span className="hidden sm:inline">SIGN OUT</span>
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    <Link
-                      href="/passes"
-                      onClick={onClose}
-                      className="w-full py-3 px-5 rounded-full btn-mint-gradient text-void font-mono-data text-xs font-black uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-md cursor-pointer hover:scale-[1.01]"
-                    >
-                      <Ticket size={14} className="stroke-[2.5]" />
-                      <span>REGISTER FOR PASSES</span>
-                    </Link>
-                    <Link
-                      href="/login"
-                      onClick={onClose}
-                      className="w-full py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors"
-                    >
-                      <LogIn size={13} className="text-mint" />
-                      <span>SIGN IN / ATTENDEE PORTAL</span>
-                    </Link>
-                  </>
-                )}
-
-                <a
-                  href="/e-summit-brochure.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors"
-                >
-                  <Download size={13} className="text-mint" />
-                  <span>DOWNLOAD BROCHURE (PDF)</span>
-                </a>
-              </div>
+              {/* Drawer Action CTAs (Shown for non-registered users only) */}
+              {!isRegistered && (
+                <div className="pt-4 flex flex-col gap-2.5">
+                  <Link
+                    href="/login?redirect=/passes"
+                    onClick={onClose}
+                    className="w-full py-3 px-5 rounded-full btn-mint-gradient text-void font-mono-data text-xs font-black uppercase tracking-wider inline-flex items-center justify-center gap-2 shadow-md cursor-pointer hover:scale-[1.01]"
+                  >
+                    <Ticket size={14} className="stroke-[2.5]" />
+                    <span>REGISTER FOR PASSES</span>
+                  </Link>
+                  <Link
+                    href="/login"
+                    onClick={onClose}
+                    className="w-full py-2.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono-data text-xs font-bold uppercase tracking-wider inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors"
+                  >
+                    <LogIn size={13} className="text-mint" />
+                    <span>SIGN IN / ATTENDEE PORTAL</span>
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Socials & Meta */}

@@ -17,7 +17,6 @@ import {
   Phone,
   Users,
   Trophy,
-  Sparkles,
   CheckCircle2,
   ChevronRight,
 } from 'lucide-react'
@@ -214,8 +213,22 @@ export function RegisterCTA() {
             className="mb-6 font-display font-black uppercase text-center leading-none tracking-tight select-none"
             style={{ fontSize: 'clamp(2rem, 6.5vw, 5rem)' }}
           >
-            <span className="hidden dark:inline text-gradient-mint drop-shadow-[0_0_35px_var(--border-glow)]">REGISTER</span>
-            <span className="dark:hidden font-black text-emerald-950 tracking-tight" style={{ background: 'linear-gradient(180deg, #064E3B 0%, #047857 60%, #059669 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>REGISTER</span>
+            {isDark ? (
+              <span className="text-gradient-mint drop-shadow-[0_0_35px_var(--border-glow)]">
+                REGISTER
+              </span>
+            ) : (
+              <span
+                className="font-black text-emerald-950 tracking-tight"
+                style={{
+                  background: 'linear-gradient(180deg, #064E3B 0%, #047857 60%, #059669 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                REGISTER
+              </span>
+            )}
           </h2>
 
           {/* Subtitle */}
@@ -226,7 +239,7 @@ export function RegisterCTA() {
           {/* Single Primary Pill CTA */}
           <div className="flex items-center justify-center">
             <Link
-              href="/register"
+              href="/passes"
               onMouseEnter={prefetchRegister}
               onTouchStart={prefetchRegister}
               onFocus={prefetchRegister}

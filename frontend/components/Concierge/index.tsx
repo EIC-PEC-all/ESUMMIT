@@ -269,12 +269,11 @@ export default function Concierge() {
           isHidden ? 'opacity-0 scale-75 pointer-events-none translate-y-4' : 'opacity-100 scale-100 pointer-events-auto translate-y-0'
         }`}
       >
-        <div className="relative flex items-center p-1 sm:p-1.5 rounded-full bg-panel/95 backdrop-blur-2xl border border-mint/40 shadow-[0_12px_40px_rgba(0,0,0,0.3)] group">
+        <div data-theme-dark="true" className="relative flex items-center p-1 sm:p-1.5 rounded-full bg-[#060D0B]/85 backdrop-blur-2xl border border-white/15 shadow-[0_12px_40px_rgba(0,0,0,0.45)] group">
           {/* Collapsible Left Countdown Pill (expanded in desktop at top of page, ONLY on landing page) */}
           <AnimatePresence>
             {!isScrolled && !open && isLandingPage && (
               <motion.div
-
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 'auto', opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
@@ -283,17 +282,17 @@ export default function Concierge() {
               >
                 {/* Live or Starts Indicator */}
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="w-2 h-2 rounded-full dark:bg-mint bg-emerald-500 animate-pulse" />
-                  <span className="text-[9px] font-mono-data font-bold dark:text-mint text-emerald-800 uppercase tracking-widest">
+                  <span className="w-2 h-2 rounded-full bg-[#74FB44] animate-pulse" />
+                  <span className="text-[9px] font-mono-data font-bold text-[#74FB44] keep-mint uppercase tracking-widest">
                     {isLive ? 'LIVE' : 'STARTS'}
                   </span>
                 </div>
 
-                <div className="w-px h-3.5 dark:bg-mint/25 bg-emerald-300 shrink-0" />
+                <div className="w-px h-3.5 bg-white/20 shrink-0" />
 
                 {/* Countdown values */}
                 {isLive ? (
-                  <span className="text-[11px] font-mono-data font-black dark:text-mint text-emerald-800 tracking-wider shrink-0">
+                  <span className="text-[11px] font-mono-data font-black text-[#74FB44] keep-mint tracking-wider shrink-0">
                     SUMMIT LIVE NOW
                   </span>
                 ) : (
@@ -306,28 +305,28 @@ export default function Concierge() {
                     className="flex items-center gap-1.5 font-mono-data tabular-nums shrink-0 cursor-pointer hover:opacity-85 transition-opacity"
                   >
                     <div className="flex items-baseline gap-0.5">
-                      <span className="text-xs sm:text-sm font-black dark:text-white text-slate-900">{timeLeft.days}</span>
-                      <span className="text-[8px] font-extrabold dark:text-mint/90 text-emerald-700 uppercase">d</span>
+                      <span className="text-xs sm:text-sm font-black text-white keep-white">{timeLeft.days}</span>
+                      <span className="text-[8px] font-extrabold text-[#74FB44] keep-mint uppercase">d</span>
                     </div>
-                    <span className="dark:text-mint/40 text-emerald-600 text-[9px] font-black">:</span>
+                    <span className="text-[#74FB44]/60 keep-mint text-[9px] font-black">:</span>
                     <div className="flex items-baseline gap-0.5">
-                      <span className="text-xs sm:text-sm font-black dark:text-white text-slate-900">{timeLeft.hours}</span>
-                      <span className="text-[8px] font-extrabold dark:text-mint/90 text-emerald-700 uppercase">h</span>
+                      <span className="text-xs sm:text-sm font-black text-white keep-white">{timeLeft.hours}</span>
+                      <span className="text-[8px] font-extrabold text-[#74FB44] keep-mint uppercase">h</span>
                     </div>
-                    <span className="dark:text-mint/40 text-emerald-600 text-[9px] font-black">:</span>
+                    <span className="text-[#74FB44]/60 keep-mint text-[9px] font-black">:</span>
                     <div className="flex items-baseline gap-0.5">
-                      <span className="text-xs sm:text-sm font-black dark:text-white text-slate-900">{timeLeft.minutes}</span>
-                      <span className="text-[8px] font-extrabold dark:text-mint/90 text-emerald-700 uppercase">m</span>
+                      <span className="text-xs sm:text-sm font-black text-white keep-white">{timeLeft.minutes}</span>
+                      <span className="text-[8px] font-extrabold text-[#74FB44] keep-mint uppercase">m</span>
                     </div>
-                    <span className="dark:text-mint/40 text-emerald-600 text-[9px] font-black">:</span>
+                    <span className="text-[#74FB44]/60 keep-mint text-[9px] font-black">:</span>
                     <div className="flex items-baseline gap-0.5">
-                      <span className="text-xs sm:text-sm font-black dark:text-mint text-emerald-800">{timeLeft.seconds}</span>
-                      <span className="text-[8px] font-extrabold dark:text-mint text-emerald-800 uppercase">s</span>
+                      <span className="text-xs sm:text-sm font-black text-[#74FB44] keep-mint">{timeLeft.seconds}</span>
+                      <span className="text-[8px] font-extrabold text-[#74FB44] keep-mint uppercase">s</span>
                     </div>
                   </div>
                 )}
 
-                <div className="w-px h-4 dark:bg-mint/25 bg-emerald-300 shrink-0 mx-1" />
+                <div className="w-px h-4 bg-white/20 shrink-0 mx-1" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -397,7 +396,7 @@ export default function Concierge() {
                 )}
                 <button
                   onClick={() => setOpen(false)}
-                  className="min-h-[44px] min-w-[44px] rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer"
+                  className="min-h-[44px] min-w-[44px] rounded-full bg-mint/15 hover:bg-mint/25 text-primary flex items-center justify-center transition-all cursor-pointer"
                   aria-label="Close Assistant"
                 >
                   <ChevronDown size={18} />
@@ -415,7 +414,7 @@ export default function Concierge() {
                         <TrendingUp size={13} className="text-mint" />
                       </div>
                     ) : (
-                      <div className="w-7 h-7 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                      <div className="w-7 h-7 rounded-full bg-mint/10 border border-mint/20 flex items-center justify-center shrink-0">
                         <Bot size={13} className="text-mint" />
                       </div>
                     )}

@@ -62,6 +62,9 @@ export async function POST(req: NextRequest) {
     const isAmbassador = category.toLowerCase().includes('ambassador')
     const passType = isHackathon ? 'HACKATHON_BUILDER' : isAmbassador ? 'CAMPUS_AMBASSADOR' : 'STUDENT_GENERAL'
     const fee = Number(body.amountPaid) || 0
+    const isFree = fee === 0
+    const status = body.status || (isFree ? 'PAYMENT_CONFIRMED' : 'PENDING_REVIEW')
+    const paymentStatus = body.paymentStatus || (isFree ? 'FREE' : 'PENDING')
 
     // Enforce 1 active student pass per user (overwrite previous pass registration)
     await regCollection.deleteMany({
@@ -74,6 +77,8 @@ export async function POST(req: NextRequest) {
       userId: user._id,
       passType,
       amountPaid: fee,
+      status,
+      paymentStatus,
       qrToken: `QR-${passId}-${Date.now()}`,
       tracks: Array.isArray(body.tracks) ? body.tracks : [category],
       isCheckedIn: false,
@@ -145,6 +150,10 @@ export async function GET(req: NextRequest) {
 
       const tracks = Array.isArray(r.tracks) ? r.tracks : [category]
       const fee = Number(r.amountPaid) || 0
+      const isRevoked = Boolean(r.isRevoked)
+      const rawStatus = r.status || (fee === 0 ? 'PAYMENT_CONFIRMED' : (r.paymentStatus === 'PAID' ? 'PAYMENT_CONFIRMED' : 'PENDING_REVIEW'))
+      const status = isRevoked ? 'REJECTED' : rawStatus
+      const paymentStatus = r.paymentStatus || (fee === 0 ? 'FREE' : (status === 'PAYMENT_CONFIRMED' ? 'PAID' : 'PENDING'))
 
       return {
         id: r.passId || String(r._id),
@@ -155,7 +164,8 @@ export async function GET(req: NextRequest) {
         category,
         tracks,
         amountPaid: fee,
-        paymentStatus: fee === 0 ? 'FREE' : 'PAID',
+        status,
+        paymentStatus,
         date: new Date(r.createdAt || Date.now()).toLocaleDateString('en-IN', {
           month: 'short',
           day: 'numeric',

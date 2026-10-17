@@ -15,7 +15,9 @@ import {
   Trash2,
   Save,
   Globe,
-  Video
+  Video,
+  Clock,
+  Calendar
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -139,7 +141,10 @@ export function ApplicationDetailModal({
             <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono-data tracking-[0.16em] uppercase text-slate-500 dark:text-slate-400">
               <span className="text-emerald-700 dark:text-mint font-extrabold">{application.applicationId}</span>
               <span>•</span>
-              <span>Submitted {new Date(application.createdAt).toLocaleString()}</span>
+              <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 font-bold">
+                <Clock className="w-3.5 h-3.5 text-emerald-700 dark:text-mint shrink-0" />
+                Submitted {new Date(application.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}, {new Date(application.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+              </span>
               <span>•</span>
               <span className="text-slate-900 dark:text-white font-bold">{application.passTierName || 'GOLD PASS'}</span>
             </div>
@@ -297,6 +302,25 @@ export function ApplicationDetailModal({
                 </span>
                 <span className="text-slate-900 dark:text-white font-mono-data font-semibold text-xs block truncate" title={application.motive}>
                   {application.motive || 'Showcase & Networking'}
+                </span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-white dark:bg-[#081310] border border-slate-200/60 dark:border-white/10 shadow-xs">
+                <span className="font-mono-data uppercase text-[10px] tracking-[0.16em] text-emerald-700 dark:text-mint font-bold block mb-1 flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  Submission Timestamp
+                </span>
+                <span className="text-slate-900 dark:text-white font-mono-data font-bold text-xs block">
+                  {new Date(application.createdAt).toLocaleDateString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                  })}{' '}
+                  at{' '}
+                  {new Date(application.createdAt).toLocaleTimeString('en-IN', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                  })}
                 </span>
               </div>
             </div>

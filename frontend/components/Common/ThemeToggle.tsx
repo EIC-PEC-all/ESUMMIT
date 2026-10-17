@@ -10,23 +10,15 @@ interface ThemeToggleProps {
   variant?: 'pill' | 'icon'
 }
 
-// Light mode toggle temporarily disabled
-const HIDE_THEME_TOGGLE = true
-
 export default function ThemeToggle({ className = '', variant = 'pill' }: ThemeToggleProps) {
   const { theme, toggleTheme, isLoaded } = useTheme()
-
-  if (HIDE_THEME_TOGGLE) {
-    return null
-  }
-
   const isLight = isLoaded && theme === 'light'
 
   if (variant === 'icon') {
     return (
       <button
         onClick={toggleTheme}
-        className={`relative inline-flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-full btn-dark-gradient border transition-all duration-200 cursor-pointer hover:border-mint focus:outline-none focus-visible:ring-2 focus-visible:ring-mint ${className}`}
+        className={`relative inline-flex items-center justify-center min-h-[32px] sm:min-h-[38px] h-[32px] sm:h-[38px] w-[32px] sm:w-[38px] rounded-full btn-dark-gradient border transition-all duration-200 cursor-pointer hover:border-mint focus:outline-none focus-visible:ring-2 focus-visible:ring-mint shrink-0 shadow-sm ${className}`}
         aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
         title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
       >
@@ -40,9 +32,9 @@ export default function ThemeToggle({ className = '', variant = 'pill' }: ThemeT
             className="flex items-center justify-center"
           >
             {isLight ? (
-              <Moon size={16} className="text-secondary stroke-[2.2]" />
+              <Moon size={15} className="text-secondary stroke-[2.2]" />
             ) : (
-              <Sun size={16} className="text-mint stroke-[2.2]" />
+              <Sun size={15} className="text-mint stroke-[2.2]" />
             )}
           </motion.div>
         </AnimatePresence>
@@ -53,7 +45,7 @@ export default function ThemeToggle({ className = '', variant = 'pill' }: ThemeT
   return (
     <button
       onClick={toggleTheme}
-      className={`btn-dark-gradient min-h-[36px] sm:min-h-[44px] h-9 sm:h-11 box-border inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider leading-none transition-all duration-200 cursor-pointer hover:border-mint focus:outline-none focus-visible:ring-2 focus-visible:ring-mint ${className}`}
+      className={`btn-dark-gradient min-h-[32px] sm:min-h-[38px] h-[32px] sm:h-[38px] box-border inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider leading-none transition-all duration-200 cursor-pointer hover:border-mint focus:outline-none focus-visible:ring-2 focus-visible:ring-mint shrink-0 shadow-sm ${className}`}
       aria-label={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
       title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
     >

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Clock, MapPin, Tag, Sparkles, ArrowUpRight } from 'lucide-react'
+import { Clock, MapPin, Tag, ArrowUpRight } from 'lucide-react'
 import type { TimelineEvent, EventItem } from '@/data/summitData'
 import { getLinkedEvent, TRACK_STYLES } from './eventMapping'
 
@@ -109,7 +109,6 @@ export default function TimelineTableDesktop({
 
                         {ev.badge && (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-mono-data font-bold uppercase tracking-wider bg-mint/15 text-mint border border-mint/30">
-                            <Sparkles className="w-2.5 h-2.5" />
                             {ev.badge}
                           </span>
                         )}

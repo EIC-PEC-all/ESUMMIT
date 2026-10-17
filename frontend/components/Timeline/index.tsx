@@ -1,13 +1,21 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
-import { Calendar, Download, MapPin, Sparkles, Search, X } from 'lucide-react'
+import { Calendar, Download, MapPin, Search, X } from 'lucide-react'
 import PageBanner from '@/components/Common/PageBanner'
+import { PillSegmentedTabs, type PillTab } from '@/components/Common/PillSegmentedTabs'
 import { MASTER_TIMELINE, MASTER_EVENTS, EventItem } from '@/data/summitData'
 import { DetailModal } from '@/components/EventPortfolio/DetailModal'
 import { useSummitData } from '@/hooks/useSummitData'
 import TimelineTableDesktop from './TimelineTableDesktop'
 import TimelineListMobile from './TimelineListMobile'
+
+const TIMELINE_DAY_TABS: PillTab<0 | 1 | 2>[] = [
+  { id: 1, label: 'Day 01 (14 Nov)' },
+  { id: 2, label: 'Day 02 (15 Nov)' },
+  { id: 0, label: 'All Sessions' },
+]
+
 
 const CATEGORIES = [
   'All',
@@ -81,42 +89,15 @@ export default function Timeline() {
         <div className="max-w-7xl mx-auto relative z-10">
           {/* Top Control Bar: Day Switcher, Search, and Brochure */}
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 mb-6 pb-5 border-b border-border-subtle">
-            {/* Segmented Day Switcher (Rounded-Full Pill Container) */}
-            <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md backdrop-blur-md self-start sm:self-auto overflow-x-auto no-scrollbar flex-nowrap max-w-full">
-              <button
-                type="button"
-                onClick={() => setSelectedDay(1)}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
-                  selectedDay === 1
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                Day 01 (14 Nov)
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedDay(2)}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
-                  selectedDay === 2
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                Day 02 (15 Nov)
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedDay(0)}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
-                  selectedDay === 0
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                All Sessions
-              </button>
-            </div>
+            {/* Segmented Day Switcher */}
+            <PillSegmentedTabs<0 | 1 | 2>
+              tabs={TIMELINE_DAY_TABS}
+              activeTab={selectedDay}
+              onChange={setSelectedDay}
+              layoutId="timelineActiveDayIndicator"
+              size="sm"
+              className="self-start sm:self-auto shrink-0"
+            />
 
             {/* Desktop Quick Search & Brochure PDF Actions */}
             <div className="flex items-center gap-2.5 self-stretch md:self-auto">
@@ -216,7 +197,7 @@ export default function Timeline() {
             </>
           ) : (
             <div className="rounded-2xl bg-panel border border-border-panel p-12 text-center">
-              <Sparkles className="w-8 h-8 text-mint mx-auto mb-3 opacity-60" />
+              <Calendar className="w-8 h-8 text-mint mx-auto mb-3 opacity-60" />
               <p className="font-sans text-primary text-base font-semibold mb-1">
                 No sessions matched your criteria
               </p>

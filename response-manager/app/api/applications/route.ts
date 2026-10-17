@@ -66,8 +66,12 @@ export async function GET(req: NextRequest) {
 
       const appStatus = reg.isRevoked
         ? 'REJECTED'
-        : reg.isCheckedIn
+        : reg.status
+        ? reg.status
+        : reg.paymentStatus === 'PAID' || reg.paymentStatus === 'PAYMENT_CONFIRMED'
         ? 'PAYMENT_CONFIRMED'
+        : isPaid
+        ? 'PENDING_REVIEW'
         : 'PAYMENT_CONFIRMED'
 
       return {
@@ -95,10 +99,10 @@ export async function GET(req: NextRequest) {
         committedCapital: 'N/A',
         pitchDeckUrl: reg.badgePdfUrl || '',
         demoVideoUrl: '',
-        mouComfortable: reg.isCheckedIn ? 'Checked-In at Gate' : 'Registration Verified',
+        mouComfortable: reg.isCheckedIn ? 'Checked-In at Gate' : appStatus === 'PAYMENT_CONFIRMED' ? 'Payment Verified' : 'Payment Pending',
         status: appStatus,
-        paymentMethod: isPaid ? 'ONLINE' : 'FREE',
-        reviewNotes: reg.isCheckedIn ? 'Checked in at Summit Desk' : 'Verified Attendee',
+        paymentMethod: isPaid ? (reg.paymentStatus === 'PAID' ? 'PAID_OFFLINE_VERIFIED' : 'PENDING_OFFLINE') : 'FREE',
+        reviewNotes: reg.reviewNotes || (reg.isCheckedIn ? 'Checked in at Summit Desk' : appStatus === 'PAYMENT_CONFIRMED' ? 'Confirmed Delegate' : 'Payment Pending'),
         internalRating: 5,
         createdAt: reg.createdAt ? new Date(reg.createdAt).toISOString() : new Date().toISOString(),
         updatedAt: reg.updatedAt ? new Date(reg.updatedAt).toISOString() : new Date().toISOString(),

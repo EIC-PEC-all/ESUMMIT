@@ -90,7 +90,7 @@ export default function StudentPassesTable() {
                       <span
                         className={`text-[9px] font-mono-data font-black px-2 py-0.5 rounded-md uppercase tracking-wider ${
                           row.popular
-                            ? 'bg-amber-400/20 text-amber-600 dark:text-amber-300 border border-amber-400/40'
+                            ? 'bg-tier-combo/15 text-tier-combo border border-tier-combo/30'
                             : 'bg-panel-alt text-secondary border border-border-subtle'
                         }`}
                       >
@@ -113,7 +113,7 @@ export default function StudentPassesTable() {
                     href={`/register?pass=${row.passId}`}
                     className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-mono-data text-xs font-bold uppercase tracking-wider transition-all shadow-sm ${
                       row.popular
-                        ? 'bg-amber-500 hover:bg-amber-400 text-black shadow-md'
+                        ? 'bg-tier-combo hover:brightness-105 text-white shadow-md'
                         : 'bg-mint hover:opacity-90 text-white dark:text-void'
                     }`}
                   >
@@ -134,7 +134,7 @@ export default function StudentPassesTable() {
             key={row.name}
             className={`p-4 rounded-xl border ${
               row.popular
-                ? 'bg-mint/[0.04] border-amber-400/40'
+                ? 'bg-tier-combo/[0.04] border-tier-combo/40'
                 : 'bg-panel-alt border-border-subtle'
             }`}
           >

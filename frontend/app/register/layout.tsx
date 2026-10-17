@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { absoluteUrl } from '@/lib/siteConfig'
 
 export const metadata: Metadata = {
   title: 'Delegate Registration & E-Badge — PEC E-Summit 2026',
@@ -6,7 +7,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Register for PEC E-Summit 2026',
     description: 'Claim your delegate pass for North India\'s premier entrepreneurship summit at Punjab Engineering College, Chandigarh.',
-    url: 'https://esummit.pec.ac.in/register',
+    url: absoluteUrl('/register'),
   },
 }
 

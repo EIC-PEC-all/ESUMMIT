@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Clock, MapPin, Tag, Sparkles } from 'lucide-react'
+import { Clock, MapPin, Tag } from 'lucide-react'
 import type { TimelineEvent } from '@/data/summitData'
 
 interface TimelineCardProps {
@@ -27,7 +27,6 @@ export default function TimelineCard({ event }: TimelineCardProps) {
           </span>
           {event.badge && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-mono-data font-bold uppercase tracking-wider bg-panel-alt text-primary border border-border-subtle">
-              <Sparkles className="w-2.5 h-2.5 text-mint" />
               {event.badge}
             </span>
           )}

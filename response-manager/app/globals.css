@@ -159,3 +159,45 @@ html.light .text-gradient-gold {
   -webkit-text-fill-color: transparent !important;
   color: transparent !important;
 }
+
+/* ─── Button Styles ─── */
+.btn-mint-gradient {
+  background: linear-gradient(180deg, #E2FFA8 0%, #B8F754 22%, #8AC53F 65%, #76B42D 100%) !important;
+  color: #060D0B !important;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 2px 8px rgba(138, 197, 63, 0.32);
+  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-mint-gradient:hover {
+  filter: brightness(1.05);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 4px 14px rgba(138, 197, 63, 0.45);
+}
+
+.btn-mint-gradient:active {
+  filter: brightness(0.97);
+}
+
+html[data-theme="light"] .btn-mint-gradient,
+html.light .btn-mint-gradient {
+  background: linear-gradient(180deg, #059669 0%, #047857 100%) !important;
+  color: #FFFFFF !important;
+  border-color: rgba(5, 150, 105, 0.4) !important;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25) !important;
+}
+
+html[data-theme="light"] .btn-mint-gradient > *:not([class*="bg-"]),
+html[data-theme="light"] .btn-mint-gradient > span:not([class*="bg-"]),
+html[data-theme="light"] .btn-mint-gradient > svg,
+html.light .btn-mint-gradient > *:not([class*="bg-"]),
+html.light .btn-mint-gradient > span:not([class*="bg-"]),
+html.light .btn-mint-gradient > svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+

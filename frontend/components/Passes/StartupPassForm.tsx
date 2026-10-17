@@ -17,7 +17,6 @@ import {
   Copy,
   RotateCcw,
   ArrowLeft,
-  Sparkles,
   ArrowRight,
   Loader2,
   AlertCircle,
@@ -25,8 +24,7 @@ import {
 import Link from 'next/link'
 import toast, { Toaster } from 'react-hot-toast'
 import { useAuth } from '@/context/AuthContext'
-import AuthCard from '@/components/Account/AuthCard'
-import { getStoredProfile, saveStoredProfile } from '@/lib/onboarding'
+import { getStoredProfile, saveStoredProfile, saveUserProfileToDb } from '@/lib/onboarding'
 import { STARTUP_PACKAGES } from './passesData'
 
 interface StartupFormData {
@@ -171,13 +169,15 @@ export default function StartupPassForm({
 
     try {
       // Sync attendee profile
-      saveStoredProfile({
+      const profData = {
         name: form.fullName.trim(),
         email: form.email.trim().toLowerCase(),
         phone: form.phone.trim(),
         college: form.organization.trim(),
         onboardingCompleted: true,
-      })
+      }
+      saveStoredProfile(profData)
+      saveUserProfileToDb(profData).catch(() => {})
 
       const payload = {
         fullName: form.fullName.trim(),
@@ -341,53 +341,12 @@ export default function StartupPassForm({
     )
   }
 
-  // ── STRICT AUTH GATE: GUEST CANNOT OPEN OR VIEW PASS APPLICATION FORM ──
-  if (!user) {
-    return (
-      <div id="startup-pass-form" className="w-full max-w-xl mx-auto my-8">
-        <Toaster position="top-right" />
-        <div className="mb-4 text-center">
-          <span className="font-mono-data text-xs font-black uppercase tracking-[0.25em] text-mint flex items-center justify-center gap-1.5 mb-1.5">
-            <Sparkles size={13} />
-            LOGIN REQUIRED TO APPLY
-          </span>
-          <h2 className="font-display text-2xl sm:text-3xl font-black uppercase tracking-tight text-primary">
-            Sign In To Access <span className="text-gradient-mint">{selectedPkg.name}</span>
-          </h2>
-          <p className="font-body text-xs text-secondary mt-1">
-            Sign in with Google or Email. Passes and applications are linked directly to your official account.
-          </p>
-        </div>
-
-        <AuthCard
-          title="Sign In Required"
-          subtitle={`Please sign in to unlock and apply for your ${selectedPkg.name}.`}
-        />
-
-        {onBackToComparison && (
-          <div className="text-center mt-5">
-            <button
-              type="button"
-              onClick={onBackToComparison}
-              className="inline-flex items-center gap-2 font-mono-data text-xs text-secondary hover:text-mint transition-colors cursor-pointer group"
-            >
-              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
-              <span>Back to Packages</span>
-            </button>
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  // ── Main Form Screen ───────────────────────────────────────────────────────
+  // ── Main Form Screen (Accessible for all users) ──
   return (
     <div id="startup-pass-form" className="w-full max-w-6xl mx-auto">
       <Toaster position="top-right" />
 
       <div className="rounded-3xl bg-panel border border-border-subtle p-6 sm:p-9 md:p-11 shadow-2xl relative overflow-hidden">
-        {/* Subtle background glow */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-mint/5 blur-[100px] pointer-events-none rounded-full" />
 
         {/* Back Link */}
         {onBackToComparison && (
@@ -404,7 +363,6 @@ export default function StartupPassForm({
         {/* Header */}
         <div className="mb-7">
           <span className="font-mono-data text-xs font-black uppercase tracking-[0.25em] text-mint flex items-center gap-1.5 mb-1.5">
-            <Sparkles size={13} />
             PEC E-SUMMIT 2026 REGISTRATION
           </span>
           <h2 className="font-display text-2xl sm:text-4xl font-black uppercase tracking-tight text-primary">
@@ -416,13 +374,22 @@ export default function StartupPassForm({
         </div>
 
         {/* Auth Status Banner */}
-        <div className="mb-6 px-4 py-2.5 rounded-2xl bg-mint/10 border border-mint/20 flex items-center justify-between gap-3 text-xs font-mono-data">
-          <div className="flex items-center gap-2 text-mint font-bold">
-            <CheckCircle2 size={15} />
-            <span>Logged in as: <strong className="text-white">{user.email}</strong></span>
+        {user ? (
+          <div className="mb-6 px-4 py-2.5 rounded-2xl bg-mint/10 border border-mint/20 flex items-center justify-between gap-3 text-xs font-mono-data">
+            <div className="flex items-center gap-2 text-mint font-bold">
+              <CheckCircle2 size={15} />
+              <span>Logged in as: <strong className="text-white">{user.email}</strong></span>
+            </div>
+            <span className="text-[10px] text-muted uppercase tracking-wider hidden sm:inline">Details Auto-Synced</span>
           </div>
-          <span className="text-[10px] text-muted uppercase tracking-wider hidden sm:inline">Details Auto-Synced</span>
-        </div>
+        ) : (
+          <div className="mb-6 p-3.5 rounded-2xl bg-panel-alt border border-border-subtle flex items-center justify-between gap-3 text-xs font-mono-data">
+            <div className="flex items-center gap-2 text-secondary">
+              <ArrowRight size={14} className="text-mint shrink-0" />
+              <span>Have an existing account? <Link href="/login?callbackUrl=/passes" className="text-mint font-bold hover:underline">Sign In</Link> to link your applications, or submit directly below.</span>
+            </div>
+          </div>
+        )}
 
         {/* Existing Application Notice */}
         {existingApp && (

@@ -58,7 +58,17 @@ h1, h2, h3, h4, h5, h6, .font-display, .font-kanit, .font-asimovian {
   --tier-delegate: #74FB44;
   --tier-allaccess: #38BDF8;
   --tier-hackathon: #10B981;
-  --tier-combo: #F59E0B;
+  --tier-combo: #FF6B00;
+
+  /* ── Route Transition Curtain (Dark Mode: Pure Lime Spectrum Light to Dark, No Purple) ── */
+  --route-transition-bg: linear-gradient(
+    to bottom,
+    #A8EE4A 0%, #A8EE4A 20%,
+    #8AC53F 20%, #8AC53F 40%,
+    #6EA828 40%, #6EA828 60%,
+    #487814 60%, #487814 80%,
+    #060D0B 80%, #060D0B 100%
+  );
 
   /* ── Boundary Masks & Overlays ── */
   --mask-edge-color: rgba(6, 13, 11, 0.95);
@@ -102,7 +112,17 @@ html.light {
   --tier-delegate: #059669;
   --tier-allaccess: #0284C7;
   --tier-hackathon: #10B981;
-  --tier-combo: #D97706;
+  --tier-combo: #EA580C;
+
+  /* ── Route Transition Curtain (Light Mode: Shades of Emerald Green from Image 3 #04855F) ── */
+  --route-transition-bg: linear-gradient(
+    to bottom,
+    #D1F4E6 0%, #D1F4E6 20%,
+    #7DE2B5 20%, #7DE2B5 40%,
+    #1CB879 40%, #1CB879 60%,
+    #04855F 60%, #04855F 80%,
+    #023D2A 80%, #023D2A 100%
+  );
 
   --text-primary: #061A12;    /* Deep forest obsidian (18:1 contrast ratio) */
   --text-secondary: #1B3B2B;  /* Crisp dark forest slate (10:1 contrast ratio) */
@@ -131,9 +151,9 @@ html[data-theme="light"] body {
 }
 
 /* ─── Logo Badges (Navbar & Footer in Light Mode) ─── */
-/* The logo artwork uses white typography; in Light Mode, it sits within a sleek dark green pill badge */
-html[data-theme="light"] .nav-logo-badge,
-html:not([data-theme="dark"]) .nav-logo-badge {
+/* The logo artwork uses white typography; in Light Mode, when not over dark hero, it sits within a sleek dark green pill badge */
+html[data-theme="light"] header:not([data-nav-dark="true"]) .nav-logo-badge,
+html:not([data-theme="dark"]) header:not([data-nav-dark="true"]) .nav-logo-badge {
   background-color: #061A12 !important;
   border: 1px solid rgba(116, 251, 68, 0.35) !important;
   box-shadow: 0 2px 10px rgba(6, 26, 18, 0.25) !important;
@@ -204,6 +224,103 @@ html[data-theme="light"] .glass {
   background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 40%, transparent 70%);
 }
 
+/* ─── Option 1: Smart Navbar Dynamic Dark Glass over Hero ─── */
+html[data-theme="light"] header[data-nav-dark="true"],
+html[data-theme="dark"] header[data-nav-dark="true"],
+header[data-nav-dark="true"] {
+  background: rgba(6, 13, 11, 0.85) !important;
+  background-color: rgba(6, 13, 11, 0.85) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5) !important;
+  color: #FFFFFF !important;
+}
+
+html[data-theme="light"] header[data-nav-dark="true"] .nav-logo-badge,
+header[data-nav-dark="true"] .nav-logo-badge {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"] header[data-nav-dark="true"] .btn-dark-gradient,
+html[data-theme="light"] header[data-nav-dark="true"] button,
+header[data-nav-dark="true"] .btn-dark-gradient,
+header[data-nav-dark="true"] button {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+html[data-theme="light"] header[data-nav-dark="true"] .btn-dark-gradient *,
+html[data-theme="light"] header[data-nav-dark="true"] button *,
+header[data-nav-dark="true"] .btn-dark-gradient *,
+header[data-nav-dark="true"] button * {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+html[data-theme="light"] header[data-nav-dark="true"] .btn-dark-gradient:hover,
+html[data-theme="light"] header[data-nav-dark="true"] button:hover,
+header[data-nav-dark="true"] .btn-dark-gradient:hover,
+header[data-nav-dark="true"] button:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(116, 251, 68, 0.4) !important;
+}
+
+html[data-theme="light"] header[data-nav-dark="true"] a#nav-brochure-btn,
+header[data-nav-dark="true"] a#nav-brochure-btn {
+  background: rgba(255, 255, 255, 0.10) !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+html[data-theme="light"] header[data-nav-dark="true"] a#nav-brochure-btn:hover,
+header[data-nav-dark="true"] a#nav-brochure-btn:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(116, 251, 68, 0.4) !important;
+}
+html[data-theme="light"] header[data-nav-dark="true"] a#nav-brochure-btn *,
+header[data-nav-dark="true"] a#nav-brochure-btn * {
+  color: #FFFFFF !important;
+}
+html[data-theme="light"] header[data-nav-dark="true"] a#nav-brochure-btn svg,
+header[data-nav-dark="true"] a#nav-brochure-btn svg {
+  color: #74FB44 !important;
+  stroke: #74FB44 !important;
+}
+
+/* Hard guarantee: top navbar brochure button is strictly hidden on mobile and tablets (< 1024px) */
+@media (max-width: 1023px) {
+  #nav-brochure-btn,
+  a#nav-brochure-btn,
+  header #nav-brochure-btn {
+    display: none !important;
+  }
+}
+
+html[data-theme="light"] header[data-nav-dark="true"] .btn-mint-gradient,
+header[data-nav-dark="true"] .btn-mint-gradient,
+html[data-theme="light"] #esummit-hero .btn-mint-gradient,
+#esummit-hero .btn-mint-gradient,
+html[data-theme="light"] [data-theme-dark] .btn-mint-gradient,
+[data-theme-dark] .btn-mint-gradient {
+  background: linear-gradient(180deg, #E2FFA8 0%, #B8F754 22%, #8AC53F 65%, #76B42D 100%) !important;
+  color: #060D0B !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 4px 20px rgba(116, 251, 68, 0.4) !important;
+}
+html[data-theme="light"] header[data-nav-dark="true"] .btn-mint-gradient *,
+header[data-nav-dark="true"] .btn-mint-gradient *,
+html[data-theme="light"] #esummit-hero .btn-mint-gradient *,
+#esummit-hero .btn-mint-gradient *,
+html[data-theme="light"] [data-theme-dark] .btn-mint-gradient *,
+[data-theme-dark] .btn-mint-gradient * {
+  color: #060D0B !important;
+  stroke: #060D0B !important;
+}
+
 /* Light Mode High-Contrast Forest & Emerald Text Gradients */
 html[data-theme="light"] .text-gradient-white:not([data-theme-dark] *):not(.keep-white) {
   background: linear-gradient(180deg, #061A12 15%, #15402D 60%, #2A5E44 100%) !important;
@@ -214,7 +331,8 @@ html[data-theme="light"] .text-gradient-white:not([data-theme-dark] *):not(.keep
 }
 
 html[data-theme="light"] .text-gradient-mint:not([data-theme-dark] *):not(.keep-mint),
-html[data-theme="light"] .text-gradient-green:not([data-theme-dark] *) {
+html[data-theme="light"] .text-gradient-green:not([data-theme-dark] *),
+html[data-theme="light"] .text-gradient-mint-btn:not([data-theme-dark] *) {
   background: linear-gradient(180deg, #047857 0%, #059669 65%, #10B981 100%) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
@@ -257,28 +375,28 @@ html[data-theme="light"] em.text-mint:not(.keep-mint):not([data-theme-dark] *) {
 }
 
 /* Light Mode Buttons (Clean Brand Green Styling) */
-html[data-theme="light"] .btn-mint-gradient {
+html[data-theme="light"] .btn-mint-gradient:not(#esummit-hero *):not([data-theme-dark] *):not(header[data-nav-dark="true"] *) {
   background: linear-gradient(180deg, #10B981 0%, #059669 50%, #047857 100%) !important;
   color: #FFFFFF !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25) !important;
 }
-html[data-theme="light"] .btn-mint-gradient:hover {
+html[data-theme="light"] .btn-mint-gradient:not(#esummit-hero *):not([data-theme-dark] *):not(header[data-nav-dark="true"] *):hover {
   transform: translateY(-1px) !important;
   filter: brightness(1.05) !important;
   box-shadow: 
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     0 4px 14px rgba(5, 150, 105, 0.32) !important;
 }
-html[data-theme="light"] .btn-mint-gradient:active {
+html[data-theme="light"] .btn-mint-gradient:not(#esummit-hero *):not([data-theme-dark] *):not(header[data-nav-dark="true"] *):active {
   transform: translateY(1px) !important;
   box-shadow: 
     inset 0 1px 2px rgba(0, 0, 0, 0.2),
     0 1px 3px rgba(5, 150, 105, 0.2) !important;
 }
-html[data-theme="light"] .btn-mint-gradient *,
-html[data-theme="light"] .btn-mint-gradient span,
-html[data-theme="light"] .btn-mint-gradient svg {
+html[data-theme="light"] .btn-mint-gradient:not(#esummit-hero *):not([data-theme-dark] *):not(header[data-nav-dark="true"] *) > *:not([class*="bg-"]),
+html[data-theme="light"] .btn-mint-gradient:not(#esummit-hero *):not([data-theme-dark] *):not(header[data-nav-dark="true"] *) > span:not([class*="bg-"]),
+html[data-theme="light"] .btn-mint-gradient:not(#esummit-hero *):not([data-theme-dark] *):not(header[data-nav-dark="true"] *) > svg {
   color: #FFFFFF !important;
   stroke: #FFFFFF !important;
 }
@@ -322,8 +440,9 @@ html[data-theme="light"] .btn-ghost:hover {
   background: var(--accent-green-dim) !important;
 }
 
-/* ─── Light Mode Floating Navbar Styling ─── */
-html[data-theme="light"] .nav-floating-pill {
+/* ─── Light Mode Floating Navbar Styling (When not over dark hero) ─── */
+html[data-theme="light"] header:not([data-nav-dark="true"]).nav-floating-pill,
+html[data-theme="light"] header:not([data-nav-dark="true"]) .nav-floating-pill {
   background: var(--bg-panel) !important;
   border-color: var(--border-panel) !important;
   box-shadow: 
@@ -332,15 +451,15 @@ html[data-theme="light"] .nav-floating-pill {
   color: var(--text-primary) !important;
 }
 
-html[data-theme="light"] .nav-subpage-bar {
+html[data-theme="light"] header:not([data-nav-dark="true"]) .nav-subpage-bar {
   background: var(--bg-panel) !important;
   border-bottom-color: var(--border-panel) !important;
   box-shadow: 0 4px 20px -2px rgba(5, 150, 105, 0.06) !important;
   color: var(--text-primary) !important;
 }
 
-html[data-theme="light"] .nav-logo-badge {
-  /* The official logo is white; keep a compact evergreen field behind it in light mode. */
+html[data-theme="light"] header:not([data-nav-dark="true"]) .nav-logo-badge {
+  /* The official logo is white; keep a compact evergreen field behind it in light mode when past hero. */
   background: #07130F !important;
   border: 1px solid rgba(5, 150, 105, 0.28) !important;
   box-shadow: 0 2px 8px rgba(5, 80, 45, 0.16) !important;
@@ -551,31 +670,182 @@ html[data-theme="light"] .border-mint\/40 {
   -webkit-text-fill-color: #8AC53F !important;
 }
 
-html[data-theme="light"] .text-white:not(.keep-white):not(.btn-mint-gradient *):not(.btn-dark-gradient .text-white):not([data-theme-dark] *):not(.speaker-overlay *):not(.keep-light-dark *) {
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNIVERSAL AUTO-CONTRAST ENGINE (Automatic Text Inversion based on Surface BG)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Dark surface definition helper */
+:is(
+  [data-theme-dark],
+  [data-surface="dark"],
+  .dark-surface,
+  header[data-nav-dark="true"],
+  #esummit-hero,
+  [class*="bg-[#060D0B]"],
+  [class*="bg-[#07130F]"],
+  [class*="bg-[#06261B]"],
+  [class*="bg-[#061510]"],
+  [class*="bg-[#0A110E]"],
+  [class*="bg-[#040F0B]"],
+  [class*="bg-[#091D15]"],
+  [class*="bg-[#091812]"],
+  [class*="bg-[#080C10]"],
+  [class*="bg-[#081510]"],
+  [class*="bg-black"],
+  [class*="bg-slate-900"],
+  [class*="bg-slate-950"],
+  [class*="bg-zinc-900"],
+  [class*="bg-zinc-950"],
+  [class*="bg-neutral-900"],
+  [class*="bg-neutral-950"],
+  [class*="bg-gray-900"],
+  [class*="bg-gray-950"]
+) {
+  --surface-is-dark: 1;
+}
+
+/* 1. On ALL Dark Backgrounds (Both Themes): Text is ALWAYS High-Contrast White */
+html[data-theme="light"] :is(
+  [data-theme-dark],
+  [data-surface="dark"],
+  .dark-surface,
+  header[data-nav-dark="true"],
+  #esummit-hero,
+  [class*="bg-[#060D0B]"],
+  [class*="bg-[#07130F]"],
+  [class*="bg-[#06261B]"],
+  [class*="bg-[#061510]"],
+  [class*="bg-[#0A110E]"],
+  [class*="bg-[#040F0B]"],
+  [class*="bg-[#091D15]"],
+  [class*="bg-[#091812]"],
+  [class*="bg-[#080C10]"],
+  [class*="bg-[#081510]"],
+  [class*="bg-black"],
+  [class*="bg-slate-900"],
+  [class*="bg-slate-950"],
+  [class*="bg-zinc-900"],
+  [class*="bg-zinc-950"],
+  [class*="bg-neutral-900"],
+  [class*="bg-neutral-950"],
+  [class*="bg-gray-900"],
+  [class*="bg-gray-950"]
+) :is(
+  .text-white,
+  span:not([class*="text-"]):not(.btn-mint-gradient *),
+  p:not([class*="text-"]):not(.btn-mint-gradient *),
+  a:not([class*="text-"]):not(.btn-mint-gradient *),
+  h1:not([class*="text-"]):not(.btn-mint-gradient *),
+  h2:not([class*="text-"]):not(.btn-mint-gradient *),
+  h3:not([class*="text-"]):not(.btn-mint-gradient *),
+  h4:not([class*="text-"]):not(.btn-mint-gradient *),
+  div:not([class*="text-"]):not(.btn-mint-gradient *)
+) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* 2. On Dark Surfaces: Secondary/muted text automatically stays high-contrast light slate */
+html[data-theme="light"] :is(
+  [data-theme-dark],
+  [data-surface="dark"],
+  .dark-surface,
+  header[data-nav-dark="true"],
+  #esummit-hero,
+  [class*="bg-[#060D0B]"],
+  [class*="bg-[#07130F]"],
+  [class*="bg-[#06261B]"],
+  [class*="bg-[#061510]"],
+  [class*="bg-[#0A110E]"],
+  [class*="bg-[#040F0B]"],
+  [class*="bg-[#091D15]"],
+  [class*="bg-[#091812]"],
+  [class*="bg-[#080C10]"],
+  [class*="bg-[#081510]"],
+  [class*="bg-black"],
+  [class*="bg-slate-900"],
+  [class*="bg-slate-950"],
+  [class*="bg-zinc-900"],
+  [class*="bg-zinc-950"],
+  [class*="bg-neutral-900"],
+  [class*="bg-neutral-950"],
+  [class*="bg-gray-900"],
+  [class*="bg-gray-950"]
+) :is(
+  .text-neutral-300,
+  .text-neutral-400,
+  .text-gray-300,
+  .text-gray-400,
+  .text-slate-300,
+  .text-slate-400
+) {
+  color: #CBD5E1 !important;
+  -webkit-text-fill-color: #CBD5E1 !important;
+}
+
+/* 3. On Dark Surfaces: Mint/accent text and icons automatically use luminous cyber lime #74FB44 */
+html[data-theme="light"] :is(
+  [data-theme-dark],
+  [data-surface="dark"],
+  .dark-surface,
+  header[data-nav-dark="true"],
+  #esummit-hero,
+  [class*="bg-[#060D0B]"],
+  [class*="bg-[#07130F]"],
+  [class*="bg-[#06261B]"],
+  [class*="bg-[#061510]"],
+  [class*="bg-[#0A110E]"],
+  [class*="bg-[#040F0B]"],
+  [class*="bg-[#091D15]"],
+  [class*="bg-[#091812]"],
+  [class*="bg-[#080C10]"],
+  [class*="bg-[#081510]"],
+  [class*="bg-black"],
+  [class*="bg-slate-900"],
+  [class*="bg-slate-950"],
+  [class*="bg-zinc-900"],
+  [class*="bg-zinc-950"],
+  [class*="bg-neutral-900"],
+  [class*="bg-neutral-950"],
+  [class*="bg-gray-900"],
+  [class*="bg-gray-950"]
+) :is(
+  .text-mint,
+  [class*="text-[#8AC53F]"],
+  [class*="text-[#00F5D4]"],
+  svg.text-mint
+) {
+  color: #74FB44 !important;
+  stroke: #74FB44 !important;
+  -webkit-text-fill-color: #74FB44 !important;
+}
+
+/* 4. On Light Surfaces ONLY: Invert text-white to deep obsidian text */
+html[data-theme="light"] .text-white:not(.keep-white):not(.btn-mint-gradient *):not(.btn-dark-gradient .text-white):not([data-theme-dark] *):not(.speaker-overlay *):not(.keep-light-dark *):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *) {
   color: var(--text-primary) !important;
 }
 
-html[data-theme="light"] .text-neutral-300,
-html[data-theme="light"] .text-neutral-400,
-html[data-theme="light"] .text-gray-300,
-html[data-theme="light"] .text-gray-400,
-html[data-theme="light"] .text-slate-400 {
+html[data-theme="light"] .text-neutral-300:not([data-theme-dark] *):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *),
+html[data-theme="light"] .text-neutral-400:not([data-theme-dark] *):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *),
+html[data-theme="light"] .text-gray-300:not([data-theme-dark] *):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *),
+html[data-theme="light"] .text-gray-400:not([data-theme-dark] *):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *),
+html[data-theme="light"] .text-slate-400:not([data-theme-dark] *):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *) {
   color: var(--text-secondary) !important;
 }
 
-html[data-theme="light"] .text-neutral-500,
-html[data-theme="light"] .text-gray-500,
-html[data-theme="light"] .text-slate-500 {
+html[data-theme="light"] .text-neutral-500:not([data-theme-dark] *),
+html[data-theme="light"] .text-gray-500:not([data-theme-dark] *),
+html[data-theme="light"] .text-slate-500:not([data-theme-dark] *) {
   color: var(--text-muted) !important;
 }
 
-html[data-theme="light"] .text-\[\#00F5D4\],
-html[data-theme="light"] .text-\[\#8AC53F\],
-html[data-theme="light"] .text-mint {
+html[data-theme="light"] .text-\[\#00F5D4\]:not([data-theme-dark] *):not(.keep-mint):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *),
+html[data-theme="light"] .text-\[\#8AC53F\]:not([data-theme-dark] *):not(.keep-mint):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *),
+html[data-theme="light"] .text-mint:not([data-theme-dark] *):not(.keep-mint):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *) {
   color: var(--accent-mint) !important;
 }
 
-html[data-theme="light"] .text-\[\#94A3B8\] {
+html[data-theme="light"] .text-\[\#94A3B8\]:not([data-theme-dark] *):not(:is([data-surface="dark"], .dark-surface, header[data-nav-dark="true"], #esummit-hero, [class*="bg-[#060D0B]"], [class*="bg-[#07130F]"], [class*="bg-[#06261B]"], [class*="bg-[#061510]"], [class*="bg-[#0A110E]"], [class*="bg-[#040F0B]"], [class*="bg-[#091D15]"], [class*="bg-[#091812]"], [class*="bg-[#080C10]"], [class*="bg-[#081510]"], [class*="bg-black"], [class*="bg-slate-900"], [class*="bg-slate-950"], [class*="bg-zinc-900"], [class*="bg-zinc-950"], [class*="bg-neutral-900"], [class*="bg-neutral-950"], [class*="bg-gray-900"], [class*="bg-gray-950"]) *) {
   color: var(--text-secondary) !important;
 }
 
@@ -601,14 +871,13 @@ html[data-theme="light"] .border-\[\#00F5D4\]\/30,
 html[data-theme="light"] .border-\[\#8AC53F\]\/30 {
   border-color: var(--border-glow) !important;
 }
-/* Light Mode Pass Card Gradients & Accents (Variable-Driven) */
-html[data-theme="light"] .pass-tier-card {
-  background: var(--bg-panel) !important;
-  box-shadow: 0 4px 20px -2px rgba(67, 65, 168, 0.08), 0 1px 3px 0 rgba(0, 0, 0, 0.04) !important;
+/* Pass Card Solid Surfaces & Clean Layered Shadows (No Glow) */
+.pass-tier-card {
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.45), 0 2px 8px -1px rgba(0, 0, 0, 0.25) !important;
 }
 
-html[data-theme="light"] .pass-tier-card:hover {
-  box-shadow: 0 8px 28px -4px rgba(67, 65, 168, 0.14), 0 2px 6px 0 rgba(0, 0, 0, 0.04) !important;
+.pass-tier-card:hover {
+  box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.55), 0 4px 12px -2px rgba(0, 0, 0, 0.3) !important;
 }
 
 html[data-theme="light"] .glass-surface-container {
@@ -1211,10 +1480,18 @@ h1, h2, h3 {
 /* â”€â”€â”€ Global Heading Gradient (Subtle Lime) â”€â”€â”€ */
 /* \u2500\u2500\u2500 Global Heading Gradient (Subtle Lime) \u2500\u2500\u2500 */
 /* Scoped to text elements only â€” SVG/icon currentColor is untouched */
-h1.text-mint, h2.text-mint, h3.text-mint, h4.text-mint,
-p.text-mint, span.text-mint, label.text-mint,
-a.text-mint, li.text-mint, strong.text-mint, em.text-mint,
-.font-display.text-mint {
+html[data-theme="dark"] h1.text-mint,
+html[data-theme="dark"] h2.text-mint,
+html[data-theme="dark"] h3.text-mint,
+html[data-theme="dark"] h4.text-mint,
+html[data-theme="dark"] p.text-mint,
+html[data-theme="dark"] span.text-mint,
+html[data-theme="dark"] label.text-mint,
+html[data-theme="dark"] a.text-mint,
+html[data-theme="dark"] li.text-mint,
+html[data-theme="dark"] strong.text-mint,
+html[data-theme="dark"] em.text-mint,
+html[data-theme="dark"] .font-display.text-mint {
   color: var(--accent-mint);
   background: linear-gradient(180deg, #FFFFFF 0%, var(--accent-mint) 75%);
   -webkit-background-clip: text;
@@ -1284,5 +1561,17 @@ a.text-mint, li.text-mint, strong.text-mint, em.text-mint,
 /* OSM Dark Mode Tiles */
 .osm-dark-tiles {
   filter: invert(100%) hue-rotate(180deg) brightness(75%) contrast(110%) sepia(20%) hue-rotate(45deg) !important;
+}
+
+/* Next.js dev server overlay discreet positioning in development */
+nextjs-portal {
+  pointer-events: none !important;
+  opacity: 0.25 !important;
+  transform: scale(0.7) !important;
+  transform-origin: bottom left !important;
+}
+nextjs-portal:hover {
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 

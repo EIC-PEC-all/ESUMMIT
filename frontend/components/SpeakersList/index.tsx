@@ -2,9 +2,10 @@
 
 import React, { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
-import { Search, X, Sparkles } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import BlurImage from '@/components/ui/BlurImage'
 import PageBanner from '@/components/Common/PageBanner'
+import { PillSegmentedTabs, type PillTab } from '@/components/Common/PillSegmentedTabs'
 
 export type SpeakerCategory = 'all' | 'founders' | 'investors' | 'creators'
 
@@ -15,7 +16,7 @@ interface Speaker {
   category: 'founders' | 'investors' | 'creators'
 }
 
-const CATEGORIES: { id: SpeakerCategory; label: string }[] = [
+const CATEGORIES: PillTab<SpeakerCategory>[] = [
   { id: 'all', label: 'All' },
   { id: 'founders', label: 'Founders & CEOs' },
   { id: 'investors', label: 'Investors & VCs' },
@@ -128,22 +129,13 @@ export default function SpeakersList() {
         {/* Controls: Category Tabs + Search Bar (Rounded-Full Pill Styling) */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-10">
           {/* Category Tabs */}
-          <div className="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-panel-alt border border-border-subtle shadow-md overflow-x-auto no-scrollbar max-w-full flex-nowrap">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-mono-data font-black uppercase tracking-wider transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                  activeCategory === cat.id
-                    ? 'btn-mint-gradient text-void shadow-md scale-[1.01]'
-                    : 'text-secondary hover:text-primary hover:bg-panel'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+          <PillSegmentedTabs<SpeakerCategory>
+            tabs={CATEGORIES}
+            activeTab={activeCategory}
+            onChange={setActiveCategory}
+            layoutId="speakersActiveCategoryIndicator"
+            className="shrink-0"
+          />
 
           {/* Quick Search Bar */}
           <div className="relative w-full md:w-72 lg:w-80">
@@ -199,8 +191,6 @@ export default function SpeakersList() {
       {/* --- E-Summit '26 Speakers (Coming Soon) --- */}
       <div className="max-w-7xl mx-auto w-full mt-16 sm:mt-20 mb-12">
         <div className="rounded-2xl border border-border-panel bg-panel p-8 sm:p-14 text-center flex flex-col items-center justify-center space-y-5">
-          <Sparkles className="text-mint w-8 h-8 opacity-80" />
-          
           <div className="space-y-2">
             <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-wider text-primary">
               E-Summit &apos;26 <span className="text-mint">Speakers</span>

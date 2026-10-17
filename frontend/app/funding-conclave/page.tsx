@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { absoluteUrl } from '@/lib/siteConfig'
 import FundingConclaveClient from './FundingConclaveClient'
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
     title: 'Funding Conclave Application | PEC E-Summit 2026',
     description:
       'Pitch your startup live to leading angel investors and VCs during PEC E-Summit 2026 on November 14–15, 2026.',
-    url: 'https://esummit.pec.ac.in/funding-conclave',
+    url: absoluteUrl('/funding-conclave'),
     siteName: 'PEC E-Summit 2026',
   },
 }

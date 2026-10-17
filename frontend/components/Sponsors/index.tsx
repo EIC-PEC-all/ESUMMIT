@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Sparkles, Building2, Handshake, Download, Mail } from 'lucide-react'
+import { Award, Building2, Handshake, Download, Mail } from 'lucide-react'
 import PageBanner from '@/components/Common/PageBanner'
 import { MASTER_CONTACTS } from '@/data/summitData'
 
@@ -57,7 +57,7 @@ export default function Sponsors() {
 
               <div className="p-3.5 rounded-xl bg-panel-alt border border-border-subtle text-center">
                 <div className="flex items-center justify-center gap-1.5 text-mint mb-1">
-                  <Sparkles size={15} />
+                  <Award size={15} />
                   <span className="font-mono-data text-xs font-bold uppercase">100+ Years</span>
                 </div>
                 <p className="text-[10px] text-muted font-body">PEC Legacy &amp; 1K+ Alumni Network</p>

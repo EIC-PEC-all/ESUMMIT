@@ -11,6 +11,7 @@ export interface RegistrationRecord {
   selectedEvents?: string[]
   amountPaid?: number
   paymentStatus?: 'PAID' | 'FREE' | 'PENDING'
+  status?: string
   paymentId?: string
   teamName?: string
   date: string
@@ -191,9 +192,11 @@ export const getUserRegistrations = async (
         const data = await res.json()
         if (data.success && Array.isArray(data.passes) && data.passes.length > 0) {
           const dbPasses: RegistrationRecord[] = data.passes.filter((p: any) => !deletedIds.has(p.id))
-          const merged = [...dbPasses]
+          const dbPassMap = new Map<string, RegistrationRecord>(dbPasses.map((p) => [p.id, p]))
+          const merged: RegistrationRecord[] = [...dbPasses]
           for (const local of localList) {
-            if (!merged.some((m) => m.id === local.id)) {
+            const fromDb = dbPassMap.get(local.id)
+            if (!fromDb) {
               merged.push(local)
             }
           }
