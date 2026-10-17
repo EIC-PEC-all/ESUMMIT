@@ -151,14 +151,14 @@ export default function StudentPassForm({
     // Check backend API for user registration
     const email = user?.email || profile?.email
     if (email) {
-      fetch(`/api/registrations/record?email=${encodeURIComponent(email.trim())}`)
+      fetch(`/api/profile?email=${encodeURIComponent(email.trim().toLowerCase())}`)
         .then((res) => res.json())
         .then((data) => {
-          if (data.success && Array.isArray(data.registrations) && data.registrations.length > 0) {
-            const first = data.registrations[0]
+          if (data?.success && Array.isArray(data?.profile?.registrations) && data.profile.registrations.length > 0) {
+            const first = data.profile.registrations[0]
             setExistingPass({
-              id: first.passId || first._id,
-              category: first.category || first.passType,
+              id: first.passId || first.id,
+              category: first.passType,
             })
           }
         })
@@ -247,32 +247,57 @@ export default function StudentPassForm({
       // Submit to backend NestJS API with database persistence
       let regId = `PEC-STU-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
 
-      try {
-        const res = await fetch(`${apiUrl}/registrations/create`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: form.fullName.trim(),
-            email: form.email.trim().toLowerCase(),
-            phone: form.phone.trim(),
-            college: form.college.trim(),
-            passType: backendPassType,
-            tracks,
-          }),
-          signal: AbortSignal.timeout(6000),
-        })
+      const res = await fetch(`${apiUrl}/registrations/create`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.fullName.trim(),
+          email: form.email.trim().toLowerCase(),
+          phone: form.phone.trim(),
+          college: form.college.trim(),
+          passType: backendPassType,
+          tracks,
+        }),
+        signal: AbortSignal.timeout(8000),
+      })
 
-        const data = await res.json().catch(() => ({}))
-        if (data?.registration?.passId) {
-          regId = data.registration.passId
-        } else if (data?.passId) {
-          regId = data.passId
-        } else if (typeof data?.message === 'string') {
-          const match = data.message.match(/pass ID\s+([A-Z0-9-]+)/i)
-          if (match?.[1]) regId = match[1]
-        }
-      } catch (backendErr) {
-        console.warn('Backend sync note:', backendErr)
+      const data = await res.json().catch(() => ({}))
+
+      if (res.status === 409) {
+        const duplicatePassId =
+          data?.passId ||
+          data?.registration?.passId ||
+          (typeof data?.message === 'string'
+            ? data.message.match(/pass ID\s+([A-Z0-9-]+)/i)?.[1]
+            : null) ||
+          existingPass?.id ||
+          'Existing'
+
+        setExistingPass({ id: duplicatePassId, category: selectedPkg.name })
+        const friendlyMsg = `User ${form.email.trim().toLowerCase()} is already registered with pass ID ${duplicatePassId}. Each attendee is permitted 1 active student pass.`
+        setErrorMsg(friendlyMsg)
+        setSubmitState('error')
+        toast.error(`Already registered with Pass ID ${duplicatePassId}!`, { duration: 6000 })
+        return
+      }
+
+      if (!res.ok) {
+        const errMsg =
+          typeof data?.message === 'string'
+            ? data.message
+            : Array.isArray(data?.message)
+            ? data.message.join(', ')
+            : `Registration failed (${res.status}). Please try again.`
+        setErrorMsg(errMsg)
+        setSubmitState('error')
+        toast.error(errMsg)
+        return
+      }
+
+      if (data?.registration?.passId) {
+        regId = data.registration.passId
+      } else if (data?.passId) {
+        regId = data.passId
       }
 
       // ── Persist pass record locally & to DB with status ──
@@ -304,28 +329,6 @@ export default function StudentPassForm({
       // ── Persist pass locally (Single Pass Rule) ──
       saveLocalRegistrations([newRecord])
       setExistingPass({ id: regId, category: selectedPkg.name })
-
-      // ── Sync with Response Manager store ──
-      try {
-        await fetch('/api/registrations/record', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            applicationId: regId,
-            name: form.fullName.trim(),
-            email: form.email.trim().toLowerCase(),
-            phone: form.phone.trim(),
-            college: form.college.trim(),
-            category: selectedPkg.name,
-            tracks,
-            amountPaid: selectedPkg.fee,
-            paymentStatus: initialPaymentStatus,
-            status: initialStatus,
-          }),
-        })
-      } catch {
-        // Non-fatal
-      }
 
       // Update attendee profile
       try {
@@ -520,16 +523,25 @@ export default function StudentPassForm({
 
         {/* Existing Pass Notice */}
         {existingPass && (
-          <div className="mb-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3 text-left">
-            <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <p className="font-mono-data text-xs font-bold text-amber-300 uppercase tracking-wider">
-                Active Student Pass Detected ({existingPass.category || 'General Pass'})
-              </p>
-              <p className="font-body text-xs text-secondary leading-relaxed">
-                Attendees are limited to <strong className="text-primary">one active student pass</strong>. Registering another pass will automatically <strong className="text-amber-300">overwrite and replace your existing pass</strong> ({existingPass.id}).
-              </p>
+          <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <p className="font-mono-data text-xs font-bold text-amber-300 uppercase tracking-wider">
+                  Active Pass Detected ({existingPass.id})
+                </p>
+                <p className="font-body text-xs text-secondary leading-relaxed">
+                  You already have an active pass registered for <strong className="text-primary">{existingPass.category || 'Student Pass'}</strong>. Each attendee is permitted 1 pass per category.
+                </p>
+              </div>
             </div>
+            <Link
+              href="/profile?tab=passes"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-mint text-void font-mono-data text-xs font-bold uppercase tracking-wider hover:brightness-105 transition-all shrink-0 shadow-sm"
+            >
+              <span>View Pass</span>
+              <ArrowRight size={13} />
+            </Link>
           </div>
         )}
 
@@ -811,10 +823,38 @@ export default function StudentPassForm({
             </div>
           </div>
 
-          {/* Error display */}
+          {/* Graceful Error Display */}
           {errorMsg && (
-            <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 font-mono-data text-xs">
-              {errorMsg}
+            <div className="p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-left space-y-3 shadow-lg">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                <div className="flex-1 space-y-1">
+                  <h4 className="font-mono-data text-xs font-black uppercase tracking-wider text-amber-300">
+                    Registration Alert
+                  </h4>
+                  <p className="font-body text-xs text-secondary leading-relaxed">
+                    {errorMsg}
+                  </p>
+                </div>
+              </div>
+
+              {existingPass?.id && (
+                <div className="pt-2 border-t border-amber-500/20 flex flex-wrap items-center justify-between gap-2">
+                  <div className="font-mono-data text-xs text-secondary flex items-center gap-1.5">
+                    <span>Active Pass ID:</span>
+                    <span className="font-bold text-primary px-2.5 py-0.5 rounded bg-panel border border-border-subtle">
+                      {existingPass.id}
+                    </span>
+                  </div>
+                  <Link
+                    href="/profile?tab=passes"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-mint text-void font-mono-data text-[11px] font-bold uppercase tracking-wider hover:brightness-105 transition-all shadow-sm"
+                  >
+                    <span>View Pass in Profile</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
+              )}
             </div>
           )}
 

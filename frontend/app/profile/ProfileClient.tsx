@@ -57,6 +57,8 @@ import {
   fetchUserProfileFromDb,
   saveUserProfileToDb,
   normalizeGradYear,
+  validateAttendeeProfile,
+  isValid10DigitPhone,
 } from '@/lib/onboarding'
 
 export type { AttendeeProfile }
@@ -460,6 +462,13 @@ export default function ProfileClient() {
 
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    const validation = validateAttendeeProfile(profile)
+    if (!validation.isValid) {
+      toast.error(validation.error || 'Please fill in all compulsory fields correctly.', TOAST_STYLE)
+      return
+    }
+
     setIsSavingProfile(true)
     try {
       saveStoredProfile(profile)
@@ -1430,12 +1439,31 @@ export default function ProfileClient() {
                 onSubmit={async (e) => {
                   e.preventDefault()
                   if (!editingPass) return
+
+                  const passName = (editingPass.name || '').trim()
+                  if (!passName || passName.length < 2) {
+                    toast.error('Full Name must be at least 2 characters long.', TOAST_STYLE)
+                    return
+                  }
+
+                  const passPhone = (editingPass.phone || '').trim()
+                  if (!passPhone || !isValid10DigitPhone(passPhone)) {
+                    toast.error('A valid 10-digit WhatsApp number is required.', TOAST_STYLE)
+                    return
+                  }
+
+                  const passCollege = (editingPass.college || '').trim()
+                  if (!passCollege || passCollege.length < 2) {
+                    toast.error('College name is required.', TOAST_STYLE)
+                    return
+                  }
+
                   setIsSubmitting(true)
                   try {
                     await updateRegistrationRecord(editingPass.id, {
-                      name: editingPass.name,
-                      phone: editingPass.phone,
-                      college: editingPass.college,
+                      name: passName,
+                      phone: passPhone,
+                      college: passCollege,
                     })
                     await fetchRegistrations()
                     if (currentBadge?.id === editingPass.id) {

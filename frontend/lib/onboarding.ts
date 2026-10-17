@@ -75,14 +75,72 @@ export function getStoredProfile(userEmail?: string | null): AttendeeProfile | n
   }
 }
 
+export function normalizePhoneNumber(phone?: string | null): string {
+  if (!phone) return ''
+  const digits = phone.replace(/\D/g, '')
+  if (digits.startsWith('91') && digits.length === 12) {
+    return digits.slice(2)
+  }
+  if (digits.startsWith('0') && digits.length === 11) {
+    return digits.slice(1)
+  }
+  return digits
+}
+
+export function isValid10DigitPhone(phone?: string | null): boolean {
+  if (!phone) return false
+  const normalized = normalizePhoneNumber(phone)
+  return normalized.length === 10 && /^\d{10}$/.test(normalized)
+}
+
+export function validateAttendeeProfile(profile: Partial<AttendeeProfile>): {
+  isValid: boolean
+  error?: string
+} {
+  const name = (profile.name || '').trim()
+  if (!name || name.length < 2) {
+    return { isValid: false, error: 'Please enter your full name (at least 2 characters).' }
+  }
+
+  const phone = (profile.phone || '').trim()
+  if (!phone) {
+    return { isValid: false, error: 'WhatsApp number is compulsory.' }
+  }
+  if (!isValid10DigitPhone(phone)) {
+    return { isValid: false, error: 'Please enter a valid 10-digit WhatsApp number.' }
+  }
+
+  const college = (profile.college || '').trim()
+  if (!college || college.length < 2) {
+    return { isValid: false, error: 'Please enter your college or institution name.' }
+  }
+
+  const state = (profile.state || '').trim()
+  if (!state) {
+    return { isValid: false, error: 'Please select your State / UT.' }
+  }
+
+  const city = (profile.city || '').trim()
+  if (!city || city.length < 2) {
+    return { isValid: false, error: 'Please select or specify your City / District.' }
+  }
+
+  const gradYear = (profile.gradYear || '').trim()
+  if (!gradYear) {
+    return { isValid: false, error: 'Please select your Year of Study / Graduation.' }
+  }
+
+  return { isValid: true }
+}
+
 export function isOnboardingComplete(profile: AttendeeProfile | null): boolean {
   if (!profile) return false
-  if (profile.onboardingCompleted === true) return true
-  const hasCollege = Boolean(profile.college && profile.college.trim().length > 0)
+  const hasPhone = isValid10DigitPhone(profile.phone)
+  const hasCollege = Boolean(profile.college && profile.college.trim().length >= 2)
   const hasGradYear = Boolean(profile.gradYear && profile.gradYear.trim().length > 0)
   const hasState = Boolean(profile.state && profile.state.trim().length > 0)
-  const hasCity = Boolean(profile.city && profile.city.trim().length > 0)
-  return hasCollege && hasGradYear && hasState && hasCity
+  const hasCity = Boolean(profile.city && profile.city.trim().length >= 2)
+  return hasPhone && hasCollege && hasGradYear && hasState && hasCity
 }
 
 export function saveStoredProfile(updates: Partial<AttendeeProfile>): AttendeeProfile {

@@ -19,6 +19,8 @@ import {
   normalizeGradYear,
   saveStoredProfile,
   saveUserProfileToDb,
+  isValid10DigitPhone,
+  normalizePhoneNumber,
 } from '@/lib/onboarding'
 import { STATE_NAMES, getCitiesForState } from '@/data/indiaLocations'
 import { TOAST_STYLE } from '@/lib/constants'
@@ -95,13 +97,24 @@ export default function OnboardingModal({
 
     const trimmedName = name.trim()
     const trimmedCollege = college.trim()
+    const trimmedPhone = phone.trim()
 
-    if (!trimmedName) {
-      toast.error('Please enter your full name.', TOAST_STYLE)
+    if (!trimmedName || trimmedName.length < 2) {
+      toast.error('Please enter your full name (at least 2 characters).', TOAST_STYLE)
       return
     }
 
-    if (!trimmedCollege) {
+    if (!trimmedPhone) {
+      toast.error('WhatsApp number is compulsory.', TOAST_STYLE)
+      return
+    }
+
+    if (!isValid10DigitPhone(trimmedPhone)) {
+      toast.error('Please enter a valid 10-digit WhatsApp number.', TOAST_STYLE)
+      return
+    }
+
+    if (!trimmedCollege || trimmedCollege.length < 2) {
       toast.error('Please enter your college or institution name.', TOAST_STYLE)
       return
     }
@@ -111,7 +124,7 @@ export default function OnboardingModal({
       return
     }
 
-    if (!finalCity) {
+    if (!finalCity || finalCity.length < 2) {
       toast.error('Please select or specify your city.', TOAST_STYLE)
       return
     }
@@ -362,17 +375,17 @@ export default function OnboardingModal({
               </div>
             </div>
 
-            {/* Phone / WhatsApp (Optional) */}
+            {/* WhatsApp Number (Compulsory) */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="onboarding-phone"
                   className="block text-xs font-mono font-bold uppercase tracking-wider text-secondary"
                 >
-                  WhatsApp / Phone Number
+                  WhatsApp Number <span className="text-mint font-bold">*</span>
                 </label>
-                <span className="text-[10px] font-mono text-muted uppercase tracking-wide">
-                  Optional
+                <span className="px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider font-bold bg-mint/10 text-mint border border-mint/20">
+                  Compulsory
                 </span>
               </div>
               <div className="relative">
@@ -380,22 +393,42 @@ export default function OnboardingModal({
                 <input
                   id="onboarding-phone"
                   type="tel"
+                  required
+                  maxLength={16}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+91 98765 43210"
-                  className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-3.5 py-2.5 text-sm text-primary placeholder:text-muted outline-none focus:border-mint transition-colors"
+                  className={`w-full rounded-xl border pl-10 pr-10 py-2.5 text-sm text-primary placeholder:text-muted outline-none transition-colors ${
+                    phone && !isValid10DigitPhone(phone)
+                      ? 'border-amber-500/50 bg-panel-alt focus:border-amber-400'
+                      : phone && isValid10DigitPhone(phone)
+                      ? 'border-mint/50 bg-panel-alt focus:border-mint'
+                      : 'border-border-subtle bg-panel-alt focus:border-mint'
+                  }`}
                 />
+                {phone && isValid10DigitPhone(phone) && (
+                  <CheckCircle2 size={15} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-mint" />
+                )}
               </div>
-              <p className="text-[11px] text-muted">
-                Optional for instant WhatsApp pass badges, schedule changes, and entry updates.
-              </p>
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                {phone && !isValid10DigitPhone(phone) ? (
+                  <span className="text-amber-400">Enter a valid 10-digit number</span>
+                ) : (
+                  <span className="text-muted">Compulsory for pass badges and WhatsApp updates</span>
+                )}
+                {phone && (
+                  <span className="text-muted text-[10px]">
+                    {normalizePhoneNumber(phone).length}/10 digits
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Submit Action */}
             <div className="pt-3">
               <button
                 type="submit"
-                disabled={isSubmitting || !name.trim() || !college.trim() || !selectedState.trim() || !finalCity}
+                disabled={isSubmitting || !name.trim() || !phone.trim() || !college.trim() || !selectedState.trim() || !finalCity}
                 className="btn-mint-gradient w-full py-4 px-6 rounded-full text-void font-mono-data font-black text-xs sm:text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:scale-[1.01] active:scale-98"
               >
                 {isSubmitting ? (

@@ -12,10 +12,17 @@ import {
   CheckCircle2,
   Save,
   MapPin,
+  AlertCircle,
+  Check,
 } from 'lucide-react'
 import type { AttendeeProfile } from '@/app/profile/ProfileClient'
 import { STATE_NAMES, getCitiesForState } from '@/data/indiaLocations'
-import { GRADUATION_YEARS, normalizeGradYear } from '@/lib/onboarding'
+import {
+  GRADUATION_YEARS,
+  normalizeGradYear,
+  isValid10DigitPhone,
+  normalizePhoneNumber,
+} from '@/lib/onboarding'
 
 interface AccountPreferencesFormProps {
   profile: AttendeeProfile
@@ -81,13 +88,15 @@ export default function AccountPreferencesForm({
             {/* Full Name */}
             <div className="space-y-1.5">
               <label className="block text-[11px] font-mono font-bold text-secondary uppercase tracking-wider">
-                Full Name
+                Full Name <span className="text-mint font-bold">*</span>
               </label>
               <div className="relative">
                 <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
                 <input
                   type="text"
                   required
+                  minLength={2}
+                  maxLength={100}
                   value={profile.name}
                   onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                   placeholder="e.g. Ananay Dubey"
@@ -115,33 +124,66 @@ export default function AccountPreferencesForm({
               </div>
             </div>
 
-            {/* Phone Number */}
+            {/* WhatsApp Number (Compulsory) */}
             <div className="space-y-1.5">
-              <label className="block text-[11px] font-mono font-bold text-secondary uppercase tracking-wider">
-                Phone / WhatsApp Number
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="block text-[11px] font-mono font-bold text-secondary uppercase tracking-wider">
+                  WhatsApp Number <span className="text-mint font-bold">*</span>
+                </label>
+                <span className="px-2 py-0.5 rounded text-[9px] font-mono uppercase tracking-wider font-bold bg-mint/10 text-mint border border-mint/20">
+                  Compulsory
+                </span>
+              </div>
               <div className="relative">
                 <Phone size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
                 <input
                   type="tel"
-                  value={profile.phone}
+                  required
+                  value={profile.phone || ''}
                   onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                   placeholder="+91 98765 43210"
-                  className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-3.5 py-2.5 text-sm text-primary placeholder:text-muted outline-none focus:border-mint transition-colors"
+                  maxLength={16}
+                  className={`w-full rounded-xl border pl-10 pr-10 py-2.5 text-sm text-primary placeholder:text-muted outline-none transition-colors ${
+                    profile.phone && !isValid10DigitPhone(profile.phone)
+                      ? 'border-amber-500/50 bg-panel-alt focus:border-amber-400'
+                      : profile.phone && isValid10DigitPhone(profile.phone)
+                      ? 'border-mint/50 bg-panel-alt focus:border-mint'
+                      : 'border-border-subtle bg-panel-alt focus:border-mint'
+                  }`}
                 />
+                {profile.phone && isValid10DigitPhone(profile.phone) && (
+                  <Check size={15} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-mint" />
+                )}
+              </div>
+              <div className="flex items-center justify-between text-[11px] font-mono">
+                {profile.phone && !isValid10DigitPhone(profile.phone) ? (
+                  <span className="text-amber-400 flex items-center gap-1">
+                    <AlertCircle size={12} />
+                    <span>Please enter a valid 10-digit mobile number</span>
+                  </span>
+                ) : (
+                  <span className="text-muted">Required: 10-digit number for badges &amp; alerts</span>
+                )}
+                {profile.phone && (
+                  <span className="text-muted text-[10px]">
+                    {normalizePhoneNumber(profile.phone).length}/10 digits
+                  </span>
+                )}
               </div>
             </div>
 
             {/* College Name */}
             <div className="space-y-1.5">
               <label className="block text-[11px] font-mono font-bold text-secondary uppercase tracking-wider">
-                College / Institution Name
+                College / Institution Name <span className="text-mint font-bold">*</span>
               </label>
               <div className="relative">
                 <Building2 size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
                 <input
                   type="text"
                   required
+                  minLength={2}
+                  maxLength={150}
                   value={profile.college}
                   onChange={(e) => setProfile({ ...profile, college: e.target.value })}
                   placeholder="e.g. Punjab Engineering College (PEC)"
@@ -153,11 +195,12 @@ export default function AccountPreferencesForm({
             {/* State & City */}
             <div className="space-y-1.5">
               <label className="block text-[11px] font-mono font-bold text-secondary uppercase tracking-wider">
-                State / UT
+                State / UT <span className="text-mint font-bold">*</span>
               </label>
               <div className="relative">
                 <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <select
+                  required
                   value={profile.state || ''}
                   onChange={(e) => setProfile({ ...profile, state: e.target.value, city: '' })}
                   className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-8 py-2.5 text-sm text-primary outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
@@ -176,11 +219,12 @@ export default function AccountPreferencesForm({
 
             <div className="space-y-1.5">
               <label className="block text-[11px] font-mono font-bold text-secondary uppercase tracking-wider">
-                City / District
+                City / District <span className="text-mint font-bold">*</span>
               </label>
               <div className="relative">
                 <MapPin size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <select
+                  required
                   disabled={!profile.state}
                   value={
                     profile.city && !getCitiesForState(profile.state || '').includes(profile.city)
@@ -213,11 +257,13 @@ export default function AccountPreferencesForm({
               {profile.state && (!profile.city || !getCitiesForState(profile.state || '').includes(profile.city)) && (
                 <div className="pt-1.5 space-y-1">
                   <label className="block text-[10px] font-mono text-mint uppercase font-semibold">
-                    Specify City / Town Name
+                    Specify City / Town Name <span className="text-mint font-bold">*</span>
                   </label>
                   <input
                     type="text"
                     required
+                    minLength={2}
+                    maxLength={60}
                     value={profile.city || ''}
                     onChange={(e) => setProfile({ ...profile, city: e.target.value })}
                     placeholder="e.g. Pilani, Abohar, Manipal, etc."
@@ -236,6 +282,7 @@ export default function AccountPreferencesForm({
                 <BookOpen size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
                 <input
                   type="text"
+                  maxLength={80}
                   value={profile.branch || ''}
                   onChange={(e) => setProfile({ ...profile, branch: e.target.value })}
                   placeholder="e.g. Computer Science, Mechanical, MBA"
@@ -247,11 +294,12 @@ export default function AccountPreferencesForm({
             {/* Academic Year */}
             <div className="space-y-1.5">
               <label className="block text-[11px] font-mono font-bold text-secondary uppercase tracking-wider">
-                Year of Study / Graduation
+                Year of Study / Graduation <span className="text-mint font-bold">*</span>
               </label>
               <div className="relative">
                 <GraduationCap size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
                 <select
+                  required
                   value={normalizeGradYear(profile.gradYear)}
                   onChange={(e) => setProfile({ ...profile, gradYear: e.target.value })}
                   className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-8 py-2.5 text-sm text-primary outline-none focus:border-mint transition-colors appearance-none cursor-pointer"

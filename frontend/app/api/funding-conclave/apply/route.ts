@@ -1,9 +1,9 @@
 /**
  * /api/funding-conclave/apply  thin proxy to the NestJS backend.
  *
- * POST /api/funding-conclave/apply  ?  POST /api/v1/funding-conclave/applications
+ * POST /api/funding-conclave/apply  ->  POST /api/v1/funding-conclave/applications
  * GET  /api/funding-conclave/apply?email=<addr>
- *                                   ?  GET  /api/v1/funding-conclave/applications?email=<addr>
+ *                                   ->  GET  /api/v1/funding-conclave/applications?email=<addr>
  *
  * No database logic lives here. All persistence goes through the backend.
  */
