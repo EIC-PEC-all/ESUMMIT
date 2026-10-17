@@ -1,8 +1,8 @@
 /**
- * /api/profile — thin proxy to the NestJS backend.
+ * /api/profile - thin proxy to the NestJS backend.
  *
- * GET  /api/profile?email=<addr>  ?  GET  /api/v1/users/profile?email=<addr>
- * POST /api/profile               ?  PATCH /api/v1/users/profile?email=<body.email>
+ * GET  /api/profile?email=<addr>  ->  GET  /api/v1/users/profile?email=<addr>
+ * POST /api/profile               ->  PATCH /api/v1/users/profile?email=<body.email>
  *
  * No database logic lives here. All reads/writes go through the backend.
  */
@@ -46,8 +46,58 @@ export async function POST(req: NextRequest) {
   }
 
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : null
-  if (!email) {
-    return NextResponse.json({ success: false, error: 'email is required' }, { status: 400 })
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return NextResponse.json({ success: false, error: 'A valid email address is required' }, { status: 400 })
+  }
+
+  // Validate compulsory name
+  if (typeof body.name === 'string') {
+    const trimmedName = body.name.trim()
+    if (trimmedName.length < 2) {
+      return NextResponse.json(
+        { success: false, error: 'Full Name must be at least 2 characters long' },
+        { status: 400 },
+      )
+    }
+  }
+
+  // Validate compulsory WhatsApp number
+  const rawPhone = typeof body.phone === 'string' ? body.phone.trim() : ''
+  if (!rawPhone) {
+    return NextResponse.json(
+      { success: false, error: 'WhatsApp number is compulsory' },
+      { status: 400 },
+    )
+  }
+  const digits = rawPhone.replace(/\D/g, '')
+  const normalizedPhone =
+    digits.startsWith('91') && digits.length === 12
+      ? digits.slice(2)
+      : digits.startsWith('0') && digits.length === 11
+      ? digits.slice(1)
+      : digits
+
+  if (normalizedPhone.length !== 10) {
+    return NextResponse.json(
+      { success: false, error: 'WhatsApp number must be a valid 10-digit mobile number' },
+      { status: 400 },
+    )
+  }
+
+  // Validate college
+  if (typeof body.college === 'string' && body.college.trim().length < 2) {
+    return NextResponse.json(
+      { success: false, error: 'College name must be at least 2 characters long' },
+      { status: 400 },
+    )
+  }
+
+  // Validate city
+  if (typeof body.city === 'string' && body.city.trim().length < 2) {
+    return NextResponse.json(
+      { success: false, error: 'City name must be at least 2 characters long' },
+      { status: 400 },
+    )
   }
 
   try {
