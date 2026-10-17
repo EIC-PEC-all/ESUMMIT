@@ -1,5 +1,5 @@
 /**
- * /api/profile - thin proxy to the NestJS backend.
+ * /api/profile  thin proxy to the NestJS backend.
  *
  * GET  /api/profile?email=<addr>  ->  GET  /api/v1/users/profile?email=<addr>
  * POST /api/profile               ->  PATCH /api/v1/users/profile?email=<body.email>
