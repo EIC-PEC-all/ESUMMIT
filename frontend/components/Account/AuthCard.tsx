@@ -32,7 +32,7 @@ export default function AuthCard({
   callbackUrl = '/profile',
   onSuccess,
   title = 'Attendee Pass Portal',
-  subtitle = 'Sign in to access your official PEC E-Summit 2026 passes, entry QR badges, and startup applications.',
+  subtitle = 'Sign in with your Google account to access your official PEC E-Summit 2026 passes, entry QR badges, and startup applications.',
 }: AuthCardProps) {
   const router = useRouter()
   const { user, loginWithGoogle, loginWithEmail, registerWithEmail, resetPassword } = useAuth()
@@ -67,7 +67,7 @@ export default function AuthCard({
     }
   }
 
-  // ── 2. Email + Password Sign In / Sign Up ──
+  // ── 2. Email + Password Sign In / Sign Up (Retained for quick re-enablement) ──
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.trim()) {
@@ -148,12 +148,12 @@ export default function AuthCard({
         </p>
       </div>
 
-      {/* ── Option 1: 1-Tap Google Sign In ── */}
+      {/* ── Option 1: 1-Tap Google Sign In (Primary Action) ── */}
       <button
         type="button"
         disabled={loading}
         onClick={handleGoogleSignIn}
-        className="w-full py-3.5 px-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 hover:border-mint text-white font-mono-data text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-3 transition-all cursor-pointer shadow-md disabled:opacity-50"
+        className="w-full py-4 px-4 rounded-full border border-mint/40 bg-white/10 hover:bg-white/15 hover:border-mint text-white font-mono-data text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-3 transition-all cursor-pointer shadow-lg hover:scale-[1.01] active:scale-98 disabled:opacity-50"
       >
         <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
           <path
@@ -176,131 +176,146 @@ export default function AuthCard({
         <span>Continue with Google</span>
       </button>
 
-      {/* Divider */}
-      <div className="flex items-center gap-3 my-5">
-        <div className="flex-1 h-px bg-white/10" />
-        <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-mono font-bold">
-          OR WITH EMAIL
-        </span>
-        <div className="flex-1 h-px bg-white/10" />
+      {/* Security & Convenience Note */}
+      <div className="flex items-center justify-center gap-2 mt-4 text-[11px] font-mono-data text-neutral-400">
+        <CheckCircle2 size={13} className="text-mint shrink-0" />
+        <span>Instant 1-tap sign in with any Google account</span>
       </div>
 
-      {/* ── Mode Selector Tabs (Sign In vs Create Account) ── */}
-      {mode !== 'forgot' && (
-        <div className="flex items-center p-1 rounded-full bg-panel-alt border border-border-subtle mb-4">
-          <button
-            type="button"
-            onClick={() => setMode('signin')}
-            className={`flex-1 py-2 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider text-center transition-all cursor-pointer ${
-              mode === 'signin'
-                ? 'btn-mint-gradient text-void shadow-sm'
-                : 'text-neutral-400 hover:text-white'
-            }`}
-          >
-            Sign In
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode('signup')}
-            className={`flex-1 py-2 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider text-center transition-all cursor-pointer ${
-              mode === 'signup'
-                ? 'btn-mint-gradient text-void shadow-sm'
-                : 'text-neutral-400 hover:text-white'
-            }`}
-          >
-            Create Account
-          </button>
-        </div>
-      )}
-
-      {/* ── Form Inputs ── */}
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        {mode === 'signup' && (
-          <div className="space-y-1">
-            <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <UserIcon size={12} className="text-mint" />
-              <span>Full Name</span>
-            </label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Aryan Sharma"
-              className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
-            />
+      {/* =========================================================================
+          [FEATURE TOGGLE: EMAIL_AUTH_DISABLED]
+          Temporarily disabled email/password login and registration.
+          To re-enable: change `false &&` to `true &&` below.
+          ========================================================================= */}
+      {false && (
+        <>
+          {/* Divider */}
+          <div className="flex items-center gap-3 my-5">
+            <div className="flex-1 h-px bg-white/10" />
+            <span className="text-[10px] text-neutral-500 uppercase tracking-widest font-mono font-bold">
+              OR WITH EMAIL
+            </span>
+            <div className="flex-1 h-px bg-white/10" />
           </div>
-        )}
 
-        <div className="space-y-1">
-          <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-            <Mail size={12} className="text-mint" />
-            <span>Email Address</span>
-          </label>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="name@college.edu or gmail.com"
-            className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
-          />
-        </div>
-
-        {mode !== 'forgot' && (
-          <div className="space-y-1">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                <Lock size={12} className="text-mint" />
-                <span>Password</span>
-              </label>
-              {mode === 'signin' && (
-                <button
-                  type="button"
-                  onClick={() => setMode('forgot')}
-                  className="text-[10px] font-mono text-mint hover:underline"
-                >
-                  Forgot password?
-                </button>
-              )}
+          {/* ── Mode Selector Tabs (Sign In vs Create Account) ── */}
+          {mode !== 'forgot' && (
+            <div className="flex items-center p-1 rounded-full bg-panel-alt border border-border-subtle mb-4">
+              <button
+                type="button"
+                onClick={() => setMode('signin')}
+                className={`flex-1 py-2 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider text-center transition-all cursor-pointer ${
+                  mode === 'signin'
+                    ? 'btn-mint-gradient text-void shadow-sm'
+                    : 'text-neutral-400 hover:text-white'
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode('signup')}
+                className={`flex-1 py-2 rounded-full font-mono-data text-xs font-bold uppercase tracking-wider text-center transition-all cursor-pointer ${
+                  mode === 'signup'
+                    ? 'btn-mint-gradient text-void shadow-sm'
+                    : 'text-neutral-400 hover:text-white'
+                }`}
+              >
+                Create Account
+              </button>
             </div>
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
-            />
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full mt-2 py-3.5 px-6 rounded-full btn-mint-gradient text-void font-mono-data font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md hover:scale-[1.01] active:scale-98 disabled:opacity-50"
-        >
-          {loading ? (
-            'Processing...'
-          ) : mode === 'signin' ? (
-            'Sign In & Access Passes'
-          ) : mode === 'signup' ? (
-            'Create Account & Continue'
-          ) : (
-            'Send Reset Link'
           )}
-        </button>
 
-        {mode === 'forgot' && (
-          <button
-            type="button"
-            onClick={() => setMode('signin')}
-            className="text-center text-xs font-mono text-neutral-400 hover:text-white mt-1"
-          >
-            ← Back to Sign In
-          </button>
-        )}
-      </form>
+          {/* ── Form Inputs ── */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            {mode === 'signup' && (
+              <div className="space-y-1">
+                <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                  <UserIcon size={12} className="text-mint" />
+                  <span>Full Name</span>
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Aryan Sharma"
+                  className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
+                />
+              </div>
+            )}
+
+            <div className="space-y-1">
+              <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <Mail size={12} className="text-mint" />
+                <span>Email Address</span>
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@college.edu or gmail.com"
+                className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
+              />
+            </div>
+
+            {mode !== 'forgot' && (
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-mono-data text-neutral-300 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                    <Lock size={12} className="text-mint" />
+                    <span>Password</span>
+                  </label>
+                  {mode === 'signin' && (
+                    <button
+                      type="button"
+                      onClick={() => setMode('forgot')}
+                      className="text-[10px] font-mono text-mint hover:underline"
+                    >
+                      Forgot password?
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-2.5 rounded-xl bg-panel-alt border border-border-subtle text-white placeholder-neutral-500 font-mono text-xs focus:outline-none focus:border-mint transition-colors"
+                />
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-2 py-3.5 px-6 rounded-full btn-mint-gradient text-void font-mono-data font-black text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md hover:scale-[1.01] active:scale-98 disabled:opacity-50"
+            >
+              {loading ? (
+                'Processing...'
+              ) : mode === 'signin' ? (
+                'Sign In & Access Passes'
+              ) : mode === 'signup' ? (
+                'Create Account & Continue'
+              ) : (
+                'Send Reset Link'
+              )}
+            </button>
+
+            {mode === 'forgot' && (
+              <button
+                type="button"
+                onClick={() => setMode('signin')}
+                className="text-center text-xs font-mono text-neutral-400 hover:text-white mt-1"
+              >
+                ← Back to Sign In
+              </button>
+            )}
+          </form>
+        </>
+      )}
     </div>
   )
 }

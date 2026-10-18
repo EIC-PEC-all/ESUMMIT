@@ -20,6 +20,7 @@ export interface RegistrationRecord {
 }
 
 import { STORAGE_KEYS } from '@/lib/constants'
+import { getStoredProfile } from './onboarding'
 
 const LOCAL_STORAGE_KEY = STORAGE_KEYS.REGISTRATIONS
 const DELETED_PASSES_KEY = STORAGE_KEYS.DELETED_PASS_IDS
@@ -114,6 +115,11 @@ export const createRegistrationRecord = async (
       ? [...(data.tracks || []), `Package: ${data.category}`]
       : data.tracks
 
+    const userProf = getStoredProfile(data.email)
+    const city = (data as any).city || userProf?.city || undefined
+    const state = (data as any).state || userProf?.state || undefined
+    const district = (data as any).district || userProf?.district || undefined
+
     const res = await fetch(`${API_URL}/registrations/create`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -122,6 +128,9 @@ export const createRegistrationRecord = async (
         email: data.email,
         phone: data.phone !== 'Not provided' ? data.phone : undefined,
         college: data.college,
+        city,
+        state,
+        district,
         passType,
         tracks,
       }),

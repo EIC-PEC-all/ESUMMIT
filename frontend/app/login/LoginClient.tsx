@@ -36,7 +36,7 @@ export default function LoginClient() {
       <AuthCard
         callbackUrl={callbackUrl}
         title="Attendee Portal"
-        subtitle="Sign in with Google or Email to view your passes, QR badges, and access the PEC E-Summit 2026."
+        subtitle="Sign in with your Google account to view your passes, QR badges, and access the PEC E-Summit 2026."
       />
     </div>
   )

@@ -51,14 +51,12 @@ export async function POST(req: NextRequest) {
   }
 
   // Validate compulsory name
-  if (typeof body.name === 'string') {
-    const trimmedName = body.name.trim()
-    if (trimmedName.length < 2) {
-      return NextResponse.json(
-        { success: false, error: 'Full Name must be at least 2 characters long' },
-        { status: 400 },
-      )
-    }
+  const name = typeof body.name === 'string' ? body.name.trim() : ''
+  if (!name || name.length < 2) {
+    return NextResponse.json(
+      { success: false, error: 'Full Name must be at least 2 characters long' },
+      { status: 400 },
+    )
   }
 
   // Validate compulsory WhatsApp number
@@ -84,20 +82,60 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  // Validate college
-  if (typeof body.college === 'string' && body.college.trim().length < 2) {
+  // Validate compulsory college
+  const college = typeof body.college === 'string' ? body.college.trim() : ''
+  if (!college || college.length < 2) {
     return NextResponse.json(
       { success: false, error: 'College name must be at least 2 characters long' },
       { status: 400 },
     )
   }
 
-  // Validate city
-  if (typeof body.city === 'string' && body.city.trim().length < 2) {
+  // Validate compulsory gradYear
+  const gradYear = typeof body.gradYear === 'string' ? body.gradYear.trim() : ''
+  if (!gradYear) {
+    return NextResponse.json(
+      { success: false, error: 'Graduation year is required' },
+      { status: 400 },
+    )
+  }
+
+  // Validate compulsory city
+  const city = typeof body.city === 'string' ? body.city.trim() : ''
+  if (!city || city.length < 2) {
     return NextResponse.json(
       { success: false, error: 'City name must be at least 2 characters long' },
       { status: 400 },
     )
+  }
+
+  // Build clean, whitelist-safe payload for the backend API
+  const sanitizedPayload: Record<string, unknown> = {
+    name,
+    phone: normalizedPhone,
+    email,
+    college,
+    gradYear,
+    city,
+  }
+
+  if (typeof body.state === 'string' && body.state.trim()) {
+    sanitizedPayload.state = body.state.trim()
+  }
+  if (typeof body.district === 'string' && body.district.trim()) {
+    sanitizedPayload.district = body.district.trim()
+  }
+  if (typeof body.branch === 'string' && body.branch.trim()) {
+    sanitizedPayload.branch = body.branch.trim()
+  }
+  if (typeof body.onboardingCompleted === 'boolean') {
+    sanitizedPayload.onboardingCompleted = body.onboardingCompleted
+  }
+  if (typeof body.whatsappAlerts === 'boolean') {
+    sanitizedPayload.whatsappAlerts = body.whatsappAlerts
+  }
+  if (typeof body.emailAlerts === 'boolean') {
+    sanitizedPayload.emailAlerts = body.emailAlerts
   }
 
   try {
@@ -106,7 +144,7 @@ export async function POST(req: NextRequest) {
       {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(sanitizedPayload),
       },
     )
     const data = await upstream.json()

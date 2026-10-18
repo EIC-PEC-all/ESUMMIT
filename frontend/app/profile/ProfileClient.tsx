@@ -472,7 +472,11 @@ export default function ProfileClient() {
     setIsSavingProfile(true)
     try {
       saveStoredProfile(profile)
-      await saveUserProfileToDb(profile)
+      const savedToDb = await saveUserProfileToDb(profile)
+      if (!savedToDb) {
+        toast.error('Could not sync profile with server. Please try again.', TOAST_STYLE)
+        return
+      }
 
       // Update cached auth display name if changed
       const localAuthStr = localStorage.getItem(STORAGE_KEYS.AUTH_USER)
@@ -704,7 +708,7 @@ export default function ProfileClient() {
 
         <AuthCard
           title="Attendee Pass Portal"
-          subtitle="Sign in with Google or Email to view, download, and manage your official PEC E-Summit 2026 passes and applications."
+          subtitle="Sign in with your Google account to view, download, and manage your official PEC E-Summit 2026 passes and applications."
           onSuccess={() => {
             fetchRegistrations()
             fetchPassApplications()
