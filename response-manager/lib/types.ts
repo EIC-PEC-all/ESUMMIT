@@ -40,3 +40,56 @@ export interface FundingApplication {
   createdAt: string
   updatedAt: string
 }
+
+export interface UserSession {
+  _id: string
+  userAgent?: string
+  ipAddress?: string
+  expiresAt: string
+  createdAt: string
+  isActive: boolean
+}
+
+export interface UserRegistrationPass {
+  _id: string
+  passId: string
+  passType: string
+  amountPaid: number
+  qrToken?: string
+  isCheckedIn: boolean
+  isRevoked: boolean
+  tracks?: string[]
+  createdAt: string
+}
+
+export interface UserProfile {
+  _id: string
+  email: string
+  name: string
+  phone?: string
+  college?: string
+  gradYear?: string
+  city?: string
+  state?: string
+  district?: string
+  role: string
+  referralCode?: string
+  referredById?: string
+  createdAt: string
+  updatedAt: string
+  // Aggregated session & pass details
+  activeSessionsCount: number
+  isLoggedIn: boolean
+  lastLoginAt?: string
+  sessions: UserSession[]
+  registrations: UserRegistrationPass[]
+}
+
+export interface UsersMetricsStats {
+  totalUsers: number
+  activeLoggedInUsers: number
+  totalActiveSessions: number
+  usersWithPasses: number
+  totalRegistrations: number
+}
+

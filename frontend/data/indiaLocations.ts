@@ -790,3 +790,15 @@ export function getCitiesForState(state: string): string[] {
   if (!state) return []
   return INDIA_STATES_AND_UT[state] || []
 }
+
+export function findStateForCity(city: string): string | null {
+  if (!city) return null
+  const clean = city.trim().toLowerCase()
+  for (const [state, cities] of Object.entries(INDIA_STATES_AND_UT)) {
+    if (cities.some((c) => c.toLowerCase() === clean || c.toLowerCase().includes(clean))) {
+      return state
+    }
+  }
+  return null
+}
+

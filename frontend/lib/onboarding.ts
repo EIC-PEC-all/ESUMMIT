@@ -2,6 +2,7 @@
 // Central attendee profile and onboarding state helpers
 
 import { STORAGE_KEYS } from '@/lib/constants'
+import { findStateForCity } from '@/data/indiaLocations'
 
 export interface AttendeeProfile {
   name: string
@@ -9,6 +10,7 @@ export interface AttendeeProfile {
   phone: string
   college: string
   state?: string
+  district?: string
   city?: string
   branch?: string
   gradYear: string
@@ -165,9 +167,33 @@ export function saveStoredProfile(updates: Partial<AttendeeProfile>): AttendeePr
     ? normalizeGradYear(current.gradYear)
     : '1st Year (Class of 2030)'
 
+  // Resolve state: explicit updates take precedence, then current, then deduction from city
+  let resolvedState =
+    updates.state !== undefined && updates.state !== null && updates.state !== ''
+      ? updates.state.trim()
+      : current.state || ''
+
+  const resolvedCity =
+    updates.city !== undefined && updates.city !== null && updates.city !== ''
+      ? updates.city.trim()
+      : current.city || ''
+
+  const resolvedDistrict =
+    updates.district !== undefined && updates.district !== null && updates.district !== ''
+      ? updates.district.trim()
+      : current.district || ''
+
+  if (!resolvedState && resolvedCity) {
+    const deduced = findStateForCity(resolvedCity)
+    if (deduced) resolvedState = deduced
+  }
+
   const merged: AttendeeProfile = {
     ...current,
     ...updates,
+    state: resolvedState || undefined,
+    city: resolvedCity || undefined,
+    district: resolvedDistrict || undefined,
     gradYear: normalizedGrad,
     onboardingCompleted: true,
   }
@@ -199,6 +225,11 @@ export async function fetchUserProfileFromDb(email: string): Promise<AttendeePro
     const data = await res.json()
     if (data?.success && data.profile) {
       const prof = data.profile as AttendeeProfile
+      // Auto-deduce state if missing in DB record but city exists
+      if (!prof.state && prof.city) {
+        const deduced = findStateForCity(prof.city)
+        if (deduced) prof.state = deduced
+      }
       saveStoredProfile(prof)
       return prof
     }
@@ -217,8 +248,15 @@ export async function saveUserProfileToDb(profile: Partial<AttendeeProfile>): Pr
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(profile),
     })
-    const data = await res.json()
-    return Boolean(data?.success)
+    const data = await res.json().catch(() => null)
+    if (!res.ok || !data?.success) {
+      const errMsg = Array.isArray(data?.message)
+        ? data.message.join(', ')
+        : data?.error || data?.message || 'Server rejected profile update'
+      console.warn('Failed to save user profile to DB:', errMsg)
+      return false
+    }
+    return true
   } catch (err) {
     console.warn('Failed to save user profile to DB:', err)
     return false

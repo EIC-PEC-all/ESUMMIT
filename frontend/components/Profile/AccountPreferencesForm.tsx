@@ -16,7 +16,7 @@ import {
   Check,
 } from 'lucide-react'
 import type { AttendeeProfile } from '@/app/profile/ProfileClient'
-import { STATE_NAMES, getCitiesForState } from '@/data/indiaLocations'
+import { STATE_NAMES, getCitiesForState, findStateForCity } from '@/data/indiaLocations'
 import {
   GRADUATION_YEARS,
   normalizeGradYear,
@@ -40,6 +40,16 @@ export default function AccountPreferencesForm({
   userDisplayName,
 }: AccountPreferencesFormProps) {
   const initials = (profile.name || userDisplayName || 'D').slice(0, 2).toUpperCase()
+
+  // Auto-recover state if missing in profile but city exists
+  React.useEffect(() => {
+    if (!profile.state && profile.city) {
+      const deduced = findStateForCity(profile.city)
+      if (deduced) {
+        setProfile((prev) => ({ ...prev, state: deduced }))
+      }
+    }
+  }, [profile.state, profile.city, setProfile])
 
   return (
     <div className="w-full space-y-5">
@@ -202,7 +212,7 @@ export default function AccountPreferencesForm({
                 <select
                   required
                   value={profile.state || ''}
-                  onChange={(e) => setProfile({ ...profile, state: e.target.value, city: '' })}
+                  onChange={(e) => setProfile({ ...profile, state: e.target.value, city: '', district: '' })}
                   className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-8 py-2.5 text-sm text-primary outline-none focus:border-mint transition-colors appearance-none cursor-pointer"
                 >
                   <option value="" disabled className="bg-panel text-muted">
@@ -233,9 +243,9 @@ export default function AccountPreferencesForm({
                   }
                   onChange={(e) => {
                     if (e.target.value === 'Other') {
-                      setProfile({ ...profile, city: '' })
+                      setProfile({ ...profile, city: '', district: '' })
                     } else {
-                      setProfile({ ...profile, city: e.target.value })
+                      setProfile({ ...profile, city: e.target.value, district: e.target.value })
                     }
                   }}
                   className="w-full rounded-xl border border-border-subtle bg-panel-alt pl-10 pr-8 py-2.5 text-sm text-primary outline-none focus:border-mint transition-colors appearance-none cursor-pointer disabled:opacity-40"
@@ -265,7 +275,7 @@ export default function AccountPreferencesForm({
                     minLength={2}
                     maxLength={60}
                     value={profile.city || ''}
-                    onChange={(e) => setProfile({ ...profile, city: e.target.value })}
+                    onChange={(e) => setProfile({ ...profile, city: e.target.value, district: e.target.value })}
                     placeholder="e.g. Pilani, Abohar, Manipal, etc."
                     className="w-full rounded-xl border border-mint/40 bg-panel-alt px-3.5 py-2 text-xs text-primary placeholder:text-muted outline-none focus:border-mint transition-colors"
                   />

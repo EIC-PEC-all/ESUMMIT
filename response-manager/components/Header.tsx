@@ -9,12 +9,16 @@ interface HeaderProps {
   totalCount: number
   onRefresh: () => void
   isRefreshing: boolean
-  category?: 'startup' | 'student'
+  category?: 'startup' | 'student' | 'users'
 }
 
 export function Header({ totalCount, onRefresh, isRefreshing, category = 'startup' }: HeaderProps) {
   const handleExport = () => {
-    window.open('/api/applications/export', '_blank')
+    if (category === 'users') {
+      window.open('/api/users/export', '_blank')
+    } else {
+      window.open(`/api/applications/export?category=${category}`, '_blank')
+    }
   }
 
   return (
@@ -39,7 +43,9 @@ export function Header({ totalCount, onRefresh, isRefreshing, category = 'startu
               </span>
             </div>
             <p className="font-mono-data text-[10px] font-bold uppercase tracking-widest mt-1 text-slate-500 dark:text-slate-400">
-              {category === 'student'
+              {category === 'users'
+                ? 'AUTHENTICATED USER DIRECTORY • ACTIVE SESSIONS & PROFILES'
+                : category === 'student'
                 ? 'STUDENT & BUILDER PASSES • ATTENDEE RESPONSES'
                 : 'STARTUP PASSES & FUNDING CONCLAVE RESPONSES'}
             </p>
@@ -52,7 +58,11 @@ export function Header({ totalCount, onRefresh, isRefreshing, category = 'startu
           <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200 dark:border-white/10 text-[11px] font-mono-data font-bold uppercase tracking-wider bg-slate-50 dark:bg-[#12241F] text-slate-800 dark:text-slate-200 shadow-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <Database size={13} className="text-emerald-700 dark:text-mint" />
-            <span>{totalCount} LIVE RESPONSES</span>
+            <span>
+              {category === 'users'
+                ? `${totalCount} REGISTERED USERS`
+                : `${totalCount} LIVE RESPONSES`}
+            </span>
           </div>
 
           <ThemeToggle />
