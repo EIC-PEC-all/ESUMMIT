@@ -9,6 +9,7 @@ import { DetailModal } from '@/components/EventPortfolio/DetailModal'
 import { useSummitData } from '@/hooks/useSummitData'
 import TimelineTableDesktop from './TimelineTableDesktop'
 import TimelineListMobile from './TimelineListMobile'
+import { BROCHURE_URL } from '@/lib/siteConfig'
 
 const TIMELINE_DAY_TABS: PillTab<0 | 1 | 2>[] = [
   { id: 1, label: 'Day 01 (14 Nov)' },
@@ -124,7 +125,7 @@ export default function Timeline() {
 
               {/* Slim Brochure Download */}
               <a
-                href="/e-summit-brochure.pdf"
+                href={BROCHURE_URL}
                 download="PEC-E-Summit-2026-Brochure.pdf"
                 target="_blank"
                 rel="noopener noreferrer"

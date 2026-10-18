@@ -1,10 +1,15 @@
 import { useEffect, useRef, useCallback, useState } from "react"
+import { CAMPUS_VENUES } from "@/lib/data"
 import {
   VENUE_TYPE_COLORS,
   DEFAULT_VIEWPORT,
-} from "./constants"
-import { CAMPUS_VENUES } from "@/lib/data"
-import type { RouteData, UserLocation, DayEventVenue, DayKey, MapViewport, CampusVenue } from "./types"
+  type RouteData,
+  type UserLocation,
+  type DayEventVenue,
+  type DayKey,
+  type MapViewport,
+  type CampusVenue,
+} from "./types"
 
 const PEC_LAT = 30.7645
 const PEC_LNG = 76.7854

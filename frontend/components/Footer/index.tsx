@@ -28,13 +28,12 @@ import DynamicWeightHeading from '../DynamicWeightHeading'
 
 const CRTWarp = dynamic(() => import('@/components/ui/CRTWarp'), { ssr: false })
 import { ScrollGradientFill, GlitchText } from '@/components/Common/TextAnims'
-import StackedSlicedText from '@/components/ui/StackedSlicedText'
 import { FEST_META } from '@/lib/data'
-import { TOAST_STYLE } from '@/lib/constants'
+import { TOAST_STYLE, STORAGE_KEYS } from '@/lib/constants'
 import { useSiteConfig } from '@/hooks/useSummitData'
 import { api } from '@/lib/api'
-import { prefetchRegister } from '@/lib/prefetch'
 import { useTheme } from '@/context/ThemeContext'
+import { BROCHURE_URL } from '@/lib/siteConfig'
 
 function EmailCapture() {
   const [email, setEmail] = useState('')
@@ -56,10 +55,10 @@ function EmailCapture() {
     })
 
     try {
-      const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
+      const existing: string[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.SUBSCRIBERS) || '[]')
       if (!existing.includes(cleanEmail)) {
         existing.push(cleanEmail)
-        localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
+        localStorage.setItem(STORAGE_KEYS.SUBSCRIBERS, JSON.stringify(existing))
       }
     } catch {
       // non-critical — continue
@@ -132,9 +131,9 @@ const QUICK_LINKS = [
   { label: 'Speakers', href: '/speakers' },
   { label: 'Schedule', href: '/timeline' },
   { label: 'Sponsors', href: '/sponsors' },
-  { label: 'Brochure (PDF)', href: '/e-summit-brochure.pdf' },
+  { label: 'Brochure (PDF)', href: BROCHURE_URL },
   { label: 'FAQ', href: '/#faq' },
-  { label: 'Register', href: '/register' },
+  { label: 'Passes', href: '/passes' },
 ]
 
 export function RegisterCTA() {
@@ -240,9 +239,6 @@ export function RegisterCTA() {
           <div className="flex items-center justify-center">
             <Link
               href="/passes"
-              onMouseEnter={prefetchRegister}
-              onTouchStart={prefetchRegister}
-              onFocus={prefetchRegister}
               className="btn-mint-gradient flex items-center justify-center gap-2 rounded-full px-10 py-4 text-base font-bold shadow-lg transition-transform hover:scale-105 cursor-pointer dark:text-[#060D0B] text-white"
               id="footer-register-btn"
               aria-label="Claim Your Pass for E-Summit"

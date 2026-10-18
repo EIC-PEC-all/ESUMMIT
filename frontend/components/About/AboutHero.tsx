@@ -8,6 +8,7 @@ import AnimatedText from '@/components/ui/AnimatedText'
 import GlassSurface from '@/components/ui/GlassSurface'
 import { useSummitData } from '@/hooks/useSummitData'
 import GeometricNodesCanvas from './GeometricNodesCanvas'
+import { BROCHURE_URL } from '@/lib/siteConfig'
 
 const SPOTLIGHT_PILLARS = [
   {
@@ -115,7 +116,7 @@ export default function AboutHero() {
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full sm:w-auto mt-6">
           <a
-            href="/e-summit-brochure.pdf"
+            href={BROCHURE_URL}
             download="PEC-E-Summit-2026-Brochure.pdf"
             target="_blank"
             rel="noopener noreferrer"

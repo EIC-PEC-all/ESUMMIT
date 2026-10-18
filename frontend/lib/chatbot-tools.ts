@@ -3,6 +3,7 @@
 
 import { CAMPUS_VENUES, CAMPUS_GRAPH, findShortestPath, getVenueCoordinates, SCHEDULE, DAY_EVENT_VENUES, SPEAKERS } from '@/lib/data'
 import type { CampusVenue } from '@/lib/data'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 // Tool function implementations
 export async function scrollToSection(section: string): Promise<string> {
@@ -207,12 +208,12 @@ export async function subscribeEmail(email: string): Promise<string> {
 
   if (typeof window !== 'undefined') {
     try {
-      const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
+      const existing: string[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.SUBSCRIBERS) || '[]')
       if (existing.includes(cleanEmail)) {
         return `${cleanEmail} is already on the E-Summit PEC updates list!`
       }
       existing.push(cleanEmail)
-      localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
+      localStorage.setItem(STORAGE_KEYS.SUBSCRIBERS, JSON.stringify(existing))
     } catch {
       // Non-critical local storage fallback
     }

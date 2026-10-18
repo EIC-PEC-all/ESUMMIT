@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic'
 import localFont from 'next/font/local'
 import { Inter, Marcellus } from 'next/font/google'
 import './globals.css'
-import { SITE_URL, absoluteUrl } from '@/lib/siteConfig'
+import { SITE_URL, absoluteUrl, getOgImageUrl } from '@/lib/siteConfig'
 import SmoothScrollProvider from '@/components/Providers/SmoothScrollProvider'
 import ChevronRouteTransition from '@/components/Common/ChevronRouteTransition'
 import SessionProviderWrapper from '@/components/Providers/SessionProviderWrapper'
@@ -53,6 +53,10 @@ export const metadata: Metadata = {
   },
   other: {
     'mobile-web-app-capable': 'yes',
+    'geo.region': 'IN-CH',
+    'geo.placename': 'Chandigarh, Punjab Engineering College',
+    'geo.position': '30.765515;76.784261',
+    'ICBM': '30.765515, 76.784261',
   },
   alternates: {
     canonical: '/',
@@ -90,10 +94,16 @@ export const metadata: Metadata = {
     siteName: 'PEC E-Summit 2026',
     images: [
       {
-        url: '/readme-hero.png',
+        url: getOgImageUrl('PEC E-Summit 2026', 'NOVEMBER 14-15'),
         width: 1200,
         height: 630,
         alt: 'PEC E-Summit 2026 Official Banner',
+      },
+      {
+        url: '/readme-hero.png',
+        width: 1200,
+        height: 630,
+        alt: 'PEC E-Summit 2026 Banner',
       },
     ],
     locale: 'en_IN',
@@ -103,13 +113,13 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'PEC E-Summit 2026',
     description: "Build and launch at Chandigarh's premier student entrepreneurship summit.",
-    images: ['/readme-hero.png'],
+    images: [getOgImageUrl('PEC E-Summit 2026', 'NOVEMBER 14-15')],
   },
 }
 
 const JSON_LD_EVENT_SCHEMA = {
   '@context': 'https://schema.org',
-  '@type': 'Event',
+  '@type': ['Event', 'BusinessEvent', 'Festival'],
   name: 'PEC E-Summit 2026',
   description:
     "North India's largest student entrepreneurship summit at Punjab Engineering College. 2 days of keynotes, high-stakes startup pitches, hackathons, and angel investor networking.",
@@ -117,9 +127,11 @@ const JSON_LD_EVENT_SCHEMA = {
   endDate: '2026-11-15T20:00:00+05:30',
   eventStatus: 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  maximumAttendeeCapacity: 5000,
   location: {
     '@type': 'Place',
     name: 'Punjab Engineering College (PEC)',
+    hasMap: 'https://maps.google.com/?q=Punjab+Engineering+College+Sector+12+Chandigarh',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Sector 12',
@@ -130,11 +142,16 @@ const JSON_LD_EVENT_SCHEMA = {
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 30.7672,
-      longitude: 76.7874,
+      latitude: 30.765515,
+      longitude: 76.784261,
     },
+    telephone: '+91 90413 09108',
   },
-  image: [absoluteUrl('/readme-hero.png')],
+  image: [
+    getOgImageUrl('PEC E-Summit 2026', 'NOVEMBER 14-15'),
+    absoluteUrl('/readme-hero.png'),
+    absoluteUrl('/esummit-mark.png'),
+  ],
   offers: {
     '@type': 'AggregateOffer',
     url: absoluteUrl('/passes'),

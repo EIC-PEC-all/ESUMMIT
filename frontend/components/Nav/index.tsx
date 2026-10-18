@@ -8,6 +8,8 @@ import { useAuth } from '@/context/AuthContext'
 import NavHeader from './NavHeader'
 import NavCountdown from './NavCountdown'
 import NavMobileDrawer, { NavItem } from './NavMobileDrawer'
+import { BROCHURE_URL } from '@/lib/siteConfig'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'HOME', code: '01', href: '/', sectionId: null },
@@ -46,8 +48,8 @@ export default function Nav() {
   useEffect(() => {
     const checkPasses = () => {
       try {
-        const saved = localStorage.getItem('pec_summit_registrations')
-        const passApps = localStorage.getItem('pec_user_pass_applications')
+        const saved = localStorage.getItem(STORAGE_KEYS.REGISTRATIONS)
+        const passApps = localStorage.getItem(STORAGE_KEYS.PASS_APPLICATIONS)
         const hasRegistrations = Boolean(saved && JSON.parse(saved).length > 0)
         const hasApplications = Boolean(passApps && JSON.parse(passApps).length > 0)
         setHasStoredPasses(hasRegistrations || hasApplications)
@@ -119,7 +121,7 @@ export default function Nav() {
   useEffect(() => {
     const updateCount = () => {
       try {
-        const saved = localStorage.getItem('pec_summit_my_plan')
+        const saved = localStorage.getItem(STORAGE_KEYS.MY_PLAN)
         setPlanCount(saved ? JSON.parse(saved)?.length ?? 0 : 0)
       } catch {
         setPlanCount(0)
@@ -300,7 +302,7 @@ export default function Nav() {
       >
         <div className="flex items-center gap-2">
           <a
-            href="/e-summit-brochure.pdf"
+            href={BROCHURE_URL}
             target="_blank"
             className="flex-1 flex items-center justify-center gap-2 rounded-full bg-white/10 hover:bg-white/15 border border-white/10 py-2.5 px-4 shadow-sm text-white font-mono-data text-[11px] font-bold tracking-wider uppercase active:scale-[0.98] transition-all"
           >

@@ -7,6 +7,7 @@ import { MASTER_CONTACTS } from '@/data/summitData'
 
 import PreviousSponsorsGrid from './PreviousSponsorsGrid'
 import UpcomingSponsorsComingSoon from './UpcomingSponsorsComingSoon'
+import { BROCHURE_URL } from '@/lib/siteConfig'
 
 export default function Sponsors() {
   return (
@@ -66,7 +67,7 @@ export default function Sponsors() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5">
               <a
-                href="/e-summit-brochure.pdf"
+                href={BROCHURE_URL}
                 download="PEC-E-Summit-2026-Brochure.pdf"
                 target="_blank"
                 rel="noopener noreferrer"

@@ -6,6 +6,7 @@ import { Search, X } from 'lucide-react'
 import BlurImage from '@/components/ui/BlurImage'
 import PageBanner from '@/components/Common/PageBanner'
 import { PillSegmentedTabs, type PillTab } from '@/components/Common/PillSegmentedTabs'
+import { useSpeakers } from '@/hooks/useSummitData'
 
 export type SpeakerCategory = 'all' | 'founders' | 'investors' | 'creators'
 
@@ -94,9 +95,29 @@ function SpeakerCard({ person }: { person: Speaker }) {
 export default function SpeakersList() {
   const [activeCategory, setActiveCategory] = useState<SpeakerCategory>('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const { speakers: cmsSpeakers } = useSpeakers()
+
+  const allSpeakers = useMemo<Speaker[]>(() => {
+    if (Array.isArray(cmsSpeakers) && cmsSpeakers.length > 0) {
+      return cmsSpeakers.map((s) => {
+        const cat = (s.category || '').toLowerCase()
+        let category: Speaker['category'] = 'founders'
+        if (cat.includes('invest') || cat.includes('vc')) category = 'investors'
+        else if (cat.includes('creator') || cat.includes('tech') || cat.includes('mentor')) category = 'creators'
+
+        return {
+          name: s.name,
+          role: s.role || s.title,
+          image: s.avatarUrl || '',
+          category,
+        }
+      })
+    }
+    return PREVIOUS_SPEAKERS
+  }, [cmsSpeakers])
 
   const filteredSpeakers = useMemo(() => {
-    return PREVIOUS_SPEAKERS.filter((speaker) => {
+    return allSpeakers.filter((speaker) => {
       const matchesCategory =
         activeCategory === 'all' || speaker.category === activeCategory
       const q = searchQuery.toLowerCase().trim()
@@ -106,7 +127,7 @@ export default function SpeakersList() {
         speaker.role.toLowerCase().includes(q)
       return matchesCategory && matchesSearch
     })
-  }, [activeCategory, searchQuery])
+  }, [allSpeakers, activeCategory, searchQuery])
 
   return (
     <>

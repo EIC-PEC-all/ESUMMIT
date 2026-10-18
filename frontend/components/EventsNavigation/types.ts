@@ -66,3 +66,10 @@ export const VENUE_TYPE_LABELS: Record<CampusVenue['type'], string> = {
   social: 'Social',
   entrance: 'Entrance',
 }
+
+export const DEFAULT_VIEWPORT: MapViewport = {
+  center: [76.7749, 30.7415],
+  zoom: 18,
+  pitch: 45,
+  bearing: 0,
+}

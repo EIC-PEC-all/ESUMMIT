@@ -6,6 +6,7 @@
 
 import { emitAgentEvent } from '@/lib/events'
 import type { FestContext } from '@/lib/data'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 export interface ItinerarySession {
   id: string
@@ -65,7 +66,7 @@ function subscribeEmail(email: string): { message: string; toast: string } {
     .catch(() => {})
 
   try {
-    const existing: string[] = JSON.parse(localStorage.getItem('pec_summit_subscribers') || '[]')
+    const existing: string[] = JSON.parse(localStorage.getItem(STORAGE_KEYS.SUBSCRIBERS) || '[]')
     if (existing.includes(cleanEmail)) {
       return {
         message: `${cleanEmail} is already on the list! You'll be among the first to hear any updates.`,
@@ -73,7 +74,7 @@ function subscribeEmail(email: string): { message: string; toast: string } {
       }
     }
     existing.push(cleanEmail)
-    localStorage.setItem('pec_summit_subscribers', JSON.stringify(existing))
+    localStorage.setItem(STORAGE_KEYS.SUBSCRIBERS, JSON.stringify(existing))
   } catch {
     // Non-critical local storage fallback
   }

@@ -1,6 +1,8 @@
 // lib/onboarding.ts
 // Central attendee profile and onboarding state helpers
 
+import { STORAGE_KEYS } from '@/lib/constants'
+
 export interface AttendeeProfile {
   name: string
   email: string
@@ -15,7 +17,7 @@ export interface AttendeeProfile {
   onboardingCompleted?: boolean
 }
 
-export const PROFILE_STORAGE_KEY = 'pec_summit_attendee_profile'
+export const PROFILE_STORAGE_KEY = STORAGE_KEYS.ATTENDEE_PROFILE
 export const PROFILE_UPDATED_EVENT = 'pec_profile_updated'
 
 export const POPULAR_COLLEGES = [

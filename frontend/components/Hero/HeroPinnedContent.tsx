@@ -4,7 +4,6 @@ import React from 'react'
 import { motion, MotionValue } from 'framer-motion'
 import Link from 'next/link'
 import { Ticket, ArrowUpRight, Play } from 'lucide-react'
-import { prefetchRegister } from '@/lib/prefetch'
 
 export interface HeroPinnedContentProps {
   opacity: MotionValue<number>
@@ -83,9 +82,6 @@ export default function HeroPinnedContent({
         <div className="mt-2 flex w-full flex-wrap items-center justify-center gap-3.5">
           <Link
             href="/passes"
-            onMouseEnter={prefetchRegister}
-            onTouchStart={prefetchRegister}
-            onFocus={prefetchRegister}
             className="group relative inline-flex h-11 sm:h-12 items-center justify-center gap-2 overflow-hidden rounded-full px-8 font-mono-data text-xs font-black uppercase tracking-wider text-void btn-mint-gradient shadow-[0_4px_24px_rgba(116,251,68,0.45)] transition-all hover:scale-105 active:scale-95 hover:brightness-110 cursor-pointer"
           >
             <Ticket size={16} strokeWidth={2.4} />

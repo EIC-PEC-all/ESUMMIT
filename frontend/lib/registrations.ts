@@ -19,8 +19,10 @@ export interface RegistrationRecord {
   createdAt?: any
 }
 
-const LOCAL_STORAGE_KEY = 'pec_summit_registrations'
-const DELETED_PASSES_KEY = 'pec_deleted_registration_ids'
+import { STORAGE_KEYS } from '@/lib/constants'
+
+const LOCAL_STORAGE_KEY = STORAGE_KEYS.REGISTRATIONS
+const DELETED_PASSES_KEY = STORAGE_KEYS.DELETED_PASS_IDS
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1'
 
 export const getDeletedPassIds = (): string[] => {
@@ -150,32 +152,10 @@ export const createRegistrationRecord = async (
   const updated = [record, ...currentList.filter((r) => r.id !== record.id)]
   saveLocalRegistrations(updated)
 
-  // 3. Sync to Response Manager CMS store immediately so CMS on localhost:3002 shows it in real-time
-  try {
-    await fetch('/api/registrations/record', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        applicationId: record.id,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        college: data.college,
-        category: data.category,
-        tracks: data.tracks,
-        amountPaid: data.amountPaid,
-        paymentStatus: data.paymentStatus,
-        teamName: data.teamName,
-      }),
-    })
-  } catch {
-    // Non-fatal sync
-  }
-
   return record
 }
 
-// ── READ (MongoDB + Local Offline Sync) ──
+// ── READ (Backend API + Local Offline Sync) ──
 export const getUserRegistrations = async (
   userId?: string,
   userEmail?: string
@@ -184,34 +164,9 @@ export const getUserRegistrations = async (
   const rawLocalList = getLocalRegistrations()
   const localList = rawLocalList.filter((r) => !deletedIds.has(r.id))
 
-  // 1. Try fetching from live database API by email
-  if (userEmail) {
-    try {
-      const res = await fetch(`/api/registrations/record?email=${encodeURIComponent(userEmail.trim())}`)
-      if (res.ok) {
-        const data = await res.json()
-        if (data.success && Array.isArray(data.passes) && data.passes.length > 0) {
-          const dbPasses: RegistrationRecord[] = data.passes.filter((p: any) => !deletedIds.has(p.id))
-          const dbPassMap = new Map<string, RegistrationRecord>(dbPasses.map((p) => [p.id, p]))
-          const merged: RegistrationRecord[] = [...dbPasses]
-          for (const local of localList) {
-            const fromDb = dbPassMap.get(local.id)
-            if (!fromDb) {
-              merged.push(local)
-            }
-          }
-          saveLocalRegistrations(merged)
-          return merged
-        }
-      }
-    } catch {
-      // Offline fallback
-    }
-  }
-
-  // 2. Try fetching from NestJS backend API if auth token is present
+  // 1. Try fetching from NestJS backend API if auth token is present
   try {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('pec_summit_access_token') : null
+    const token = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) : null
     if (token) {
       const res = await fetch(`${API_URL}/registrations/my-passes`, {
         headers: {

@@ -47,11 +47,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.7,
     },
-    {
-      url: absoluteUrl('/register'),
-      lastModified,
-      changeFrequency: 'weekly',
-      priority: 0.85,
-    },
   ]
 }

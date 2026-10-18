@@ -1,6 +1,9 @@
 // lib/data.ts
 // Official PEC E-Summit 2026 Dataset & Geo-Graph
 
+import type { Feature, Polygon } from 'geojson'
+import { MASTER_SPONSORS, MASTER_FAQS, MASTER_SPEAKERS } from '@/data/summitData'
+
 export const FEST_META = {
   name: 'PEC E-Summit',
   edition: '2026',
@@ -92,68 +95,16 @@ export const TRACKS = [
   },
 ]
 
-export const SPEAKERS = [
-  {
-    id: 'spk1',
-    name: 'Sandeep Jain',
-    title: 'Founder, GeeksforGeeks',
-    bio: 'Pioneered computer science education in India, scaling GeeksforGeeks into a global coding powerhouse empowering millions.',
-    track: 'panels',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80&auto=format&fit=crop',
-    initials: 'SJ',
-    color: '#8AC53F',
-  },
-  {
-    id: 'spk2',
-    name: 'Saurabh Munjal',
-    title: 'Co-Founder & CEO, Lahori Zeera',
-    bio: 'Revolutionized ethnic beverages across India, scaling Lahori Zeera with nationwide FMCG retail distribution.',
-    track: 'pitch',
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&q=80&auto=format&fit=crop',
-    initials: 'SM',
-    color: '#8AC53F',
-  },
-  {
-    id: 'spk3',
-    name: 'Aditi Bhutia Madan',
-    title: 'Founder, Momo Mami',
-    bio: 'Shark Tank India pioneer and chef-entrepreneur scaling BluePine Foods and frozen gourmet cuisine pan-India.',
-    track: 'panels',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80&auto=format&fit=crop',
-    initials: 'AM',
-    color: '#FF8C42',
-  },
-  {
-    id: 'spk4',
-    name: 'Aseem Ghavri',
-    title: 'Co-Founder, Third Unicorn',
-    bio: 'Serial entrepreneur and fintech builder co-founding Third Unicorn alongside Ashneer Grover.',
-    track: 'pitch',
-    avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80&auto=format&fit=crop',
-    initials: 'AG',
-    color: '#9B5CFF',
-  },
-  {
-    id: 'spk5',
-    name: 'Varun Singla',
-    title: 'Founder, Gate Smashers',
-    bio: 'India’s foremost computer science educator mentoring over 1.5M+ engineers across core technology topics.',
-    track: 'panels',
-    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&q=80&auto=format&fit=crop',
-    initials: 'VS',
-    color: '#FF4D3D',
-  },
-  {
-    id: 'spk6',
-    name: 'Sarvjeet Singh',
-    title: 'Founder, Finvasia',
-    bio: 'Multinational fintech leader and creator of Shoonya zero-brokerage trading ecosystem.',
-    track: 'expo',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&auto=format&fit=crop',
-    initials: 'SS',
-    color: '#4341A8',
-  },
-]
+export const SPEAKERS = MASTER_SPEAKERS.map((s) => ({
+  id: s.id,
+  name: s.name,
+  title: `${s.role}, ${s.company}`,
+  bio: s.bio,
+  track: s.track,
+  avatar: s.image || '',
+  initials: s.initials,
+  color: '#8AC53F',
+}))
 
 export interface CampusVenue {
   id: string
@@ -229,9 +180,9 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     shortName: 'Main Auditorium',
     code: 'AUD-101',
     building: 'PEC Main Auditorium',
-    lat: 30.7675,
-    lng: 76.7878,
-    coordinates: [76.7878, 30.7675],
+    lat: 30.76551511053145,
+    lng: 76.78426071541261,
+    coordinates: [76.78426071541261, 30.76551511053145],
     x: 320,
     y: 360,
     description: 'Primary stage for keynotes, inaugurals, and pitch finals',
@@ -317,9 +268,9 @@ export const CAMPUS_VENUES: Record<string, CampusVenue> = {
     shortName: 'Student Center',
     code: 'STC-MAIN',
     building: 'PEC Student Center',
-    lat: 30.7678,
-    lng: 76.7880,
-    coordinates: [76.7880, 30.7678],
+    lat: 30.766326667038925,
+    lng: 76.78348530072951,
+    coordinates: [76.78348530072951, 30.766326667038925],
     x: 640,
     y: 440,
     description: 'Central hub for dining, networking lunch & social mixers',
@@ -810,89 +761,46 @@ export const SCHEDULE = {
   },
 }
 
+const sponsorLogoMap = new Map(MASTER_SPONSORS.map((s) => [s.id, s.logo]))
+
 export const SPONSORS = {
   title: [
-    { id: 'sp-1', name: 'Finvasia', logo: 'https://cdn.simpleicons.org/f-secure/white', url: 'https://finvasia.com' },
-    { id: 'sp-2', name: 'SBI', logo: 'https://upload.wikimedia.org/wikipedia/commons/c/cc/SBI-Logo.svg', url: 'https://sbi.co.in' },
+    { id: 'sp-1', name: 'Finvasia', logo: sponsorLogoMap.get('sp-1') || '', url: 'https://finvasia.com' },
+    { id: 'sp-2', name: 'SBI', logo: sponsorLogoMap.get('sp-2') || '', url: 'https://sbi.co.in' },
   ],
   gold: [
-    { id: 'sp-3', name: 'Fireside Ventures', logo: 'https://cdn.simpleicons.org/firefoxbrowser/white', url: 'https://firesideventures.com' },
-    { id: 'sp-9', name: 'Chiratae Ventures', logo: 'https://cdn.simpleicons.org/chartdotjs/white', url: 'https://chiratae.com' },
-    { id: 'sp-7', name: 'Monster Energy', logo: 'https://cdn.simpleicons.org/monster/white', url: 'https://monsterenergy.com' },
-    { id: 'sp-8', name: 'Vivo', logo: 'https://cdn.simpleicons.org/vivo/white', url: 'https://vivo.com' },
+    { id: 'sp-3', name: 'Fireside Ventures', logo: sponsorLogoMap.get('sp-3') || '', url: 'https://firesideventures.com' },
+    { id: 'sp-9', name: 'Chiratae Ventures', logo: sponsorLogoMap.get('sp-9') || '', url: 'https://chiratae.com' },
+    { id: 'sp-7', name: 'Monster Energy', logo: sponsorLogoMap.get('sp-7') || '', url: 'https://monsterenergy.com' },
+    { id: 'sp-8', name: 'Vivo', logo: sponsorLogoMap.get('sp-8') || '', url: 'https://vivo.com' },
   ],
   silver: [
-    { id: 'sp-5', name: 'CII', logo: 'https://cdn.simpleicons.org/civic/white', url: 'https://cii.in' },
-    { id: 'sp-6', name: 'uTrade', logo: 'https://cdn.simpleicons.org/trademarked/white', url: 'https://utradesolutions.com' },
-    { id: 'sp-20', name: 'Decathlon Play', logo: 'https://cdn.simpleicons.org/decathlon/white', url: 'https://decathlon.in' },
-    { id: 'sp-21', name: 'Shoonya', logo: 'https://cdn.simpleicons.org/shazam/white', url: 'https://shoonya.com' },
-    { id: 'sp-22', name: 'Rebel Foods', logo: 'https://cdn.simpleicons.org/foodpanda/white', url: 'https://rebelfoods.com' },
-    { id: 'sp-12', name: 'Young Indians (Yi)', logo: 'https://cdn.simpleicons.org/youtubekids/white', url: 'https://youngindians.net' },
-    { id: 'sp-11', name: 'Shoutlo', logo: 'https://cdn.simpleicons.org/speakerdeck/white', url: 'https://shoutlo.com' },
-    { id: 'sp-19', name: 'Smaaash', logo: 'https://cdn.simpleicons.org/smashdotgg/white', url: 'https://smaaash.in' },
-    { id: 'sp-14', name: 'CityWoofer', logo: 'https://cdn.simpleicons.org/woocommerce/white', url: 'https://citywoofer.com' },
-    { id: 'sp-15', name: 'Venture Wolf', logo: 'https://cdn.simpleicons.org/wolfram/white', url: 'https://venturewolf.in' },
-    { id: 'sp-16', name: "Victoria's Cafe", logo: 'https://cdn.simpleicons.org/vlcmediaplayer/white', url: 'https://victoriascafe.in' },
-    { id: 'sp-18', name: 'CITCO', logo: 'https://cdn.simpleicons.org/cisco/white', url: 'https://citcochandigarh.com' },
-    { id: 'sp-17', name: 'JAL', logo: 'https://cdn.simpleicons.org/japanairlines/white', url: 'https://jal.in' },
-    { id: 'sp-10', name: 'Shree Ganesh', logo: 'https://cdn.simpleicons.org/googlehangouts/white', url: 'https://shreeganesh.in' },
+    { id: 'sp-5', name: 'CII', logo: sponsorLogoMap.get('sp-5') || '', url: 'https://cii.in' },
+    { id: 'sp-6', name: 'uTrade', logo: sponsorLogoMap.get('sp-6') || '', url: 'https://utradesolutions.com' },
+    { id: 'sp-20', name: 'Decathlon Play', logo: sponsorLogoMap.get('sp-20') || '', url: 'https://decathlon.in' },
+    { id: 'sp-21', name: 'Shoonya', logo: sponsorLogoMap.get('sp-21') || '', url: 'https://shoonya.com' },
+    { id: 'sp-22', name: 'Rebel Foods', logo: sponsorLogoMap.get('sp-22') || '', url: 'https://rebelfoods.com' },
+    { id: 'sp-12', name: 'Young Indians (Yi)', logo: sponsorLogoMap.get('sp-12') || '', url: 'https://youngindians.net' },
+    { id: 'sp-11', name: 'Shoutlo', logo: sponsorLogoMap.get('sp-11') || '', url: 'https://shoutlo.com' },
+    { id: 'sp-19', name: 'Smaaash', logo: sponsorLogoMap.get('sp-19') || '', url: 'https://smaaash.in' },
+    { id: 'sp-14', name: 'CityWoofer', logo: sponsorLogoMap.get('sp-14') || '', url: 'https://citywoofer.com' },
+    { id: 'sp-15', name: 'Venture Wolf', logo: sponsorLogoMap.get('sp-15') || '', url: 'https://venturewolf.in' },
+    { id: 'sp-16', name: "Victoria's Cafe", logo: sponsorLogoMap.get('sp-16') || '', url: 'https://victoriascafe.in' },
+    { id: 'sp-18', name: 'CITCO', logo: sponsorLogoMap.get('sp-18') || '', url: 'https://citcochandigarh.com' },
+    { id: 'sp-17', name: 'JAL', logo: sponsorLogoMap.get('sp-17') || '', url: 'https://jal.in' },
+    { id: 'sp-10', name: 'Shree Ganesh', logo: sponsorLogoMap.get('sp-10') || '', url: 'https://shreeganesh.in' },
   ],
   media: [
-    { id: 'sp-4', name: 'Amar Ujala', logo: 'https://cdn.simpleicons.org/newsblur/white', url: 'https://amarujala.com' },
-    { id: 'sp-13', name: 'Dainik Bhaskar', logo: 'https://cdn.simpleicons.org/dailymotion/white', url: 'https://bhaskar.com' },
+    { id: 'sp-4', name: 'Amar Ujala', logo: sponsorLogoMap.get('sp-4') || '', url: 'https://amarujala.com' },
+    { id: 'sp-13', name: 'Dainik Bhaskar', logo: sponsorLogoMap.get('sp-13') || '', url: 'https://bhaskar.com' },
   ],
 }
 
-export const FAQS = [
-  {
-    id: 'faq1',
-    question: 'Who can attend E-Summit?',
-    answer:
-      'E-Summit is open to all college students, recent graduates, early-stage founders, and professionals interested in the startup ecosystem. There is no restriction on college or city — attendees come from across North India.',
-  },
-  {
-    id: 'faq2',
-    question: 'How do I register for the Pitch Competition?',
-    answer:
-      'Register your team through the main registration portal and select "Pitch Competition" as your event. You\'ll need to submit a 1-page executive summary by the deadline (10 days before the summit). Shortlisted teams are notified within 5 days.',
-  },
-  {
-    id: 'faq3',
-    question: 'Is the event free to attend?',
-    answer:
-      'General attendance passes are available at an early-bird price for students. Passes include access to all panels, the startup expo, and networking sessions. The hackathon and pitch competition have separate (free) registration. Check the registration section for current pricing.',
-  },
-  {
-    id: 'faq4',
-    question: 'What is the Hackathon theme?',
-    answer:
-      'The theme is revealed 48 hours before the Hackathon kickoff. Past themes have included: "AI for Bharat", "Climate-First Products", and "Next Billion Users". Register early and keep an eye on our socials!',
-  },
-  {
-    id: 'faq5',
-    question: 'Can I apply for Investor Open Hours?',
-    answer:
-      'Yes! Investor Open Hours are limited to 15-minute one-on-one slots with select investors. Preference is given to registered pitch competition teams and startup expo exhibitors. Apply during registration — slots fill fast.',
-  },
-  {
-    id: 'faq6',
-    question: 'Where is E-Summit held?',
-    answer:
-      'E-Summit takes place on the campus of Punjab Engineering College (PEC), Sector 12, Chandigarh. Detailed venue maps and shuttle information will be shared with registered attendees.',
-  },
-  {
-    id: 'faq7',
-    question: 'How do I become a sponsor or exhibitor?',
-    answer:
-      'Reach out to our partnerships team at partnerships@pec-esummit.org. We offer Title, Gold, Silver, and Media Partner tiers with different benefits. Startup Expo booths are applied for separately.',
-  },
-  {
-    id: 'faq8',
-    question: 'Will there be accommodation for outstation attendees?',
-    answer:
-      'We partner with a few hotels near campus and provide a list of recommended stays. E-Cell also facilitates hostel access on a limited basis for outstation participants registered for 2+ day events. Details shared post-registration.',
-  },
-]
+export const FAQS = MASTER_FAQS.map((faq) => ({
+  id: faq.id,
+  question: faq.question,
+  answer: faq.answer,
+}))
 
 // Type exports for use by the Concierge agent
 export type Track = typeof TRACKS[0]
@@ -983,10 +891,6 @@ export const DAY_EVENT_VENUES = {
     { eventId: 'd2-10', title: 'Closing Mixer & Farewells', time: '19:30', venue: 'student-center', venueName: 'Student Center' },
   ],
 } as const
-
-import type { Feature, Polygon } from 'geojson'
-
-// ... existing code ...
 
 export const CAMPUS_BOUNDARY: Feature<Polygon, { name: string }> = {
   type: 'Feature',

@@ -16,8 +16,5 @@
     "build:responses": "npm --prefix response-manager run build",
     "typecheck": "npm --prefix frontend run typecheck",
     "lint": "npm --prefix frontend run lint"
-  },
-  "dependencies": {
-    "ogl": "^1.0.11"
   }
 }

@@ -15,6 +15,7 @@ import {
   browserLocalPersistence,
 } from 'firebase/auth'
 import { auth, googleProvider, isFirebaseConfigured } from '@/lib/firebase'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 export interface SimpleUser {
   uid: string
@@ -40,7 +41,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const LOCAL_USER_KEY = 'pec_summit_auth_user'
+const LOCAL_USER_KEY = STORAGE_KEYS.AUTH_USER
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | SimpleUser | null>(null)
@@ -234,12 +235,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null)
     try {
       localStorage.removeItem(LOCAL_USER_KEY)
-      localStorage.removeItem('pec_summit_access_token')
+      localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN)
       localStorage.removeItem('pec_summit_auth_token')
-      localStorage.removeItem('pec_summit_registrations')
-      localStorage.removeItem('pec_user_pass_applications')
-      localStorage.removeItem('pec_summit_attendee_profile')
-      localStorage.removeItem('pec_checkout_draft')
+      localStorage.removeItem(STORAGE_KEYS.REGISTRATIONS)
+      localStorage.removeItem(STORAGE_KEYS.PASS_APPLICATIONS)
+      localStorage.removeItem(STORAGE_KEYS.ATTENDEE_PROFILE)
+      localStorage.removeItem(STORAGE_KEYS.CHECKOUT_DRAFT)
       sessionStorage.clear()
     } catch {}
     setLoading(false)

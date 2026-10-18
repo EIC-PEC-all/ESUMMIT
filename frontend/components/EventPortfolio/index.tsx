@@ -9,6 +9,7 @@ import { Card } from './Card'
 import { DetailModal } from './DetailModal'
 import { useSummitData } from '@/hooks/useSummitData'
 import PageBanner from '@/components/Common/PageBanner'
+import { BROCHURE_URL } from '@/lib/siteConfig'
 
 const FILTER_TABS = [
   { id: 'all', label: 'All Events' },
@@ -146,7 +147,7 @@ export default function EventPortfolioShowcase() {
 
             {/* Brochure CTA */}
             <a
-              href="/e-summit-brochure.pdf"
+              href={BROCHURE_URL}
               download="PEC-E-Summit-2026-Brochure.pdf"
               target="_blank"
               rel="noopener noreferrer"

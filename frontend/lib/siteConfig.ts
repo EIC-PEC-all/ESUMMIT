@@ -29,6 +29,11 @@ export const SITE_DOMAIN: string = (() => {
 })()
 
 /**
+ * Public brochure URL — defaults to local static file, configurable via env for CDN / Google Drive hosting.
+ */
+export const BROCHURE_URL = process.env.NEXT_PUBLIC_BROCHURE_URL || '/e-summit-brochure.pdf'
+
+/**
  * Builds an absolute URL from a given relative path.
  * If the path is already absolute, it returns the path untouched.
  *

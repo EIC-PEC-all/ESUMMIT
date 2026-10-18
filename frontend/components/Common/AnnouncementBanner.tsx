@@ -5,8 +5,9 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { X, ExternalLink } from 'lucide-react'
 import { useSiteConfig } from '@/hooks/useSummitData'
+import { STORAGE_KEYS } from '@/lib/constants'
 
-const STORAGE_KEY = 'pec_summit_dismissed_announcement'
+const STORAGE_KEY = STORAGE_KEYS.DISMISSED_ANNOUNCEMENT
 
 export default function AnnouncementBanner() {
   const pathname = usePathname()

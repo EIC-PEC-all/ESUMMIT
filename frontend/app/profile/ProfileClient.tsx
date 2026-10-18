@@ -42,7 +42,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import NavHeader from '@/components/Nav/NavHeader'
 import { PillSegmentedTabs, type PillTab } from '@/components/Common/PillSegmentedTabs'
 import { useSummitData } from '@/hooks/useSummitData'
-import { TOAST_STYLE } from '@/lib/constants'
+import { TOAST_STYLE, STORAGE_KEYS } from '@/lib/constants'
 import { SITE_DOMAIN } from '@/lib/siteConfig'
 import { auth, isFirebaseConfigured } from '@/lib/firebase'
 import { updateProfile } from 'firebase/auth'
@@ -312,14 +312,14 @@ export default function ProfileClient() {
     // 1. Read from local cache first for zero-latency instant rendering
     let localList: StartupPassApplication[] = []
     try {
-      const cached = localStorage.getItem('pec_user_pass_applications')
+      const cached = localStorage.getItem(STORAGE_KEYS.PASS_APPLICATIONS)
       if (cached) {
         const parsed = JSON.parse(cached)
         if (Array.isArray(parsed) && parsed.length > 0) {
           localList = deduplicateApps(parsed)
           setPassApplications(localList)
           // Cleanse local storage of any previously erroneously cached student passes
-          localStorage.setItem('pec_user_pass_applications', JSON.stringify(localList))
+          localStorage.setItem(STORAGE_KEYS.PASS_APPLICATIONS, JSON.stringify(localList))
         }
       }
     } catch {
@@ -360,7 +360,7 @@ export default function ProfileClient() {
           const finalApps = deduplicateApps(merged)
           setPassApplications(finalApps)
           try {
-            localStorage.setItem('pec_user_pass_applications', JSON.stringify(finalApps))
+            localStorage.setItem(STORAGE_KEYS.PASS_APPLICATIONS, JSON.stringify(finalApps))
           } catch {}
         }
       }
@@ -371,17 +371,17 @@ export default function ProfileClient() {
 
   useEffect(() => {
     if (authLoading) return
-    const local = typeof window !== 'undefined' ? localStorage.getItem('pec_summit_registrations') : null
+    const local = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.REGISTRATIONS) : null
     const hasLocal = local && JSON.parse(local).length > 0
     let hasLocalPassApps = false
     try {
-      const localPassApps = typeof window !== 'undefined' ? localStorage.getItem('pec_user_pass_applications') : null
+      const localPassApps = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.PASS_APPLICATIONS) : null
       if (localPassApps) {
         const parsed = JSON.parse(localPassApps)
         if (Array.isArray(parsed)) {
           const valid = parsed.filter(isRealStartupApp)
           hasLocalPassApps = valid.length > 0
-          localStorage.setItem('pec_user_pass_applications', JSON.stringify(valid))
+          localStorage.setItem(STORAGE_KEYS.PASS_APPLICATIONS, JSON.stringify(valid))
         }
       }
     } catch {}
@@ -475,12 +475,12 @@ export default function ProfileClient() {
       await saveUserProfileToDb(profile)
 
       // Update cached auth display name if changed
-      const localAuthStr = localStorage.getItem('pec_summit_auth_user')
+      const localAuthStr = localStorage.getItem(STORAGE_KEYS.AUTH_USER)
       if (localAuthStr) {
         try {
           const authObj = JSON.parse(localAuthStr)
           authObj.displayName = profile.name
-          localStorage.setItem('pec_summit_auth_user', JSON.stringify(authObj))
+          localStorage.setItem(STORAGE_KEYS.AUTH_USER, JSON.stringify(authObj))
         } catch {}
       }
 
@@ -523,13 +523,13 @@ export default function ProfileClient() {
     } catch {}
 
     try {
-      localStorage.removeItem('pec_summit_auth_user')
-      localStorage.removeItem('pec_summit_access_token')
+      localStorage.removeItem(STORAGE_KEYS.AUTH_USER)
+      localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN)
       localStorage.removeItem('pec_summit_auth_token')
-      localStorage.removeItem('pec_summit_registrations')
-      localStorage.removeItem('pec_user_pass_applications')
-      localStorage.removeItem('pec_summit_attendee_profile')
-      localStorage.removeItem('pec_checkout_draft')
+      localStorage.removeItem(STORAGE_KEYS.REGISTRATIONS)
+      localStorage.removeItem(STORAGE_KEYS.PASS_APPLICATIONS)
+      localStorage.removeItem(STORAGE_KEYS.ATTENDEE_PROFILE)
+      localStorage.removeItem(STORAGE_KEYS.CHECKOUT_DRAFT)
       sessionStorage.clear()
     } catch {}
 

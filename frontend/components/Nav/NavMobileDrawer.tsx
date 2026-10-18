@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import ThemeToggle from '@/components/Common/ThemeToggle'
 import { FEST_META } from '@/lib/data'
 import { useAuth } from '@/context/AuthContext'
+import { STORAGE_KEYS } from '@/lib/constants'
 
 export interface NavItem {
   label: string
@@ -47,13 +48,13 @@ export default function NavMobileDrawer({
       await logout()
     } catch {}
     try {
-      localStorage.removeItem('pec_summit_auth_user')
-      localStorage.removeItem('pec_summit_access_token')
+      localStorage.removeItem(STORAGE_KEYS.AUTH_USER)
+      localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN)
       localStorage.removeItem('pec_summit_auth_token')
-      localStorage.removeItem('pec_summit_registrations')
-      localStorage.removeItem('pec_user_pass_applications')
-      localStorage.removeItem('pec_summit_attendee_profile')
-      localStorage.removeItem('pec_checkout_draft')
+      localStorage.removeItem(STORAGE_KEYS.REGISTRATIONS)
+      localStorage.removeItem(STORAGE_KEYS.PASS_APPLICATIONS)
+      localStorage.removeItem(STORAGE_KEYS.ATTENDEE_PROFILE)
+      localStorage.removeItem(STORAGE_KEYS.CHECKOUT_DRAFT)
       sessionStorage.clear()
     } catch {}
     window.dispatchEvent(new Event('storage'))

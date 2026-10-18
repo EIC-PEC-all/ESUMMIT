@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { Menu, Ticket, User, Download } from 'lucide-react'
 import Magnetic from '@/components/Common/Magnetic'
 import ThemeToggle from '@/components/Common/ThemeToggle'
-import { prefetchRegister } from '@/lib/prefetch'
+import { BROCHURE_URL } from '@/lib/siteConfig'
 
 export interface NavHeaderProps {
   showHeader: boolean
@@ -88,7 +88,7 @@ export default function NavHeader({
           {/* Desktop Download Brochure Button */}
           <Magnetic strength={0.3}>
             <a
-              href="/e-summit-brochure.pdf"
+              href={BROCHURE_URL}
               target="_blank"
               rel="noopener noreferrer"
               className={`!hidden lg:!inline-flex min-h-[32px] sm:min-h-[38px] h-[32px] sm:h-[38px] box-border items-center justify-center gap-1.5 px-3 sm:px-4 rounded-full font-mono-data text-[10px] sm:text-xs font-bold uppercase tracking-wider leading-none shrink-0 shadow-sm transition-all duration-300 hover:scale-105 cursor-pointer ${
