@@ -1,24 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getDatabase } from '@/lib/mongodb'
 import { randomBytes } from 'crypto'
+import type { Registration } from '@/lib/types'
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     const search = searchParams.get('search')?.trim().toLowerCase() || ''
     const status = searchParams.get('status') || ''
-    const stage = searchParams.get('stage') || ''
 
     const db = await getDatabase()
 
-    // 1. Fetch startup funding conclave applications
+    // 1. Fetch startup pass applications from funding_conclave_applications
     const fundingApps = await db
       .collection('funding_conclave_applications')
       .find({})
       .sort({ createdAt: -1 })
       .toArray()
 
-    // 2. Fetch student delegate & builder registrations with User lookup
+    const mappedStartupApps: Registration[] = fundingApps.map((doc: any) => ({
+      _id: String(doc._id),
+      applicationId: doc.applicationId || `PEC-FC-${String(doc._id).slice(-6).toUpperCase()}`,
+      category: 'startup' as const,
+
+      fullName: doc.founderName || doc.fullName || '',
+      email: doc.email || '',
+      phone: doc.phone || '',
+      linkedin: doc.founderLinkedIn || doc.linkedin || '',
+      motive: doc.motive || '',
+
+      organization: doc.startupName || doc.organization || '',
+      role: doc.role || 'Founder',
+
+      passTier: doc.passTier || 'gold',
+      passTierName: doc.passTierName || 'GOLD PASS',
+      passPrice: doc.passPrice || '',
+      paymentMethod: String(doc.paymentMethod || '').replace(/_?MOU_?/gi, '_').replace(/^_+|_+$/g, '') || 'OFFLINE_DIRECT_TRANSFER',
+
+      status: doc.status || 'PENDING_REVIEW',
+      reviewNotes: doc.reviewNotes || '',
+      createdAt: doc.createdAt ? new Date(doc.createdAt).toISOString() : new Date().toISOString(),
+      updatedAt: doc.updatedAt ? new Date(doc.updatedAt).toISOString() : new Date().toISOString(),
+    }))
+
+    // 2. Fetch student registrations with joined User
     const studentRegs = await db
       .collection('Registration')
       .aggregate([
@@ -40,8 +65,8 @@ export async function GET(req: NextRequest) {
       ])
       .toArray()
 
-    // 3. Map registrations to unified FundingApplication interface
-    const mappedStudentApps = studentRegs.map((reg: any) => {
+    // 3. Map student registrations to Registration interface
+    const mappedStudentApps: Registration[] = studentRegs.map((reg: any) => {
       const pType = String(reg.passType || '').toUpperCase()
       const isHack = pType.includes('HACKATHON')
       const isAmb = pType.includes('AMBASSADOR')
@@ -56,74 +81,67 @@ export async function GET(req: NextRequest) {
         ? 'ALL-ACCESS PASS'
         : 'FREE DELEGATE PASS'
 
-      const tracksList = Array.isArray(reg.tracks) ? reg.tracks : []
-      const motive = tracksList.length > 0 ? tracksList.join(', ') : 'Student Delegate'
-      const userName = reg.user?.name || 'Student Delegate'
-      const userCollege = reg.user?.college || 'Punjab Engineering College'
-      const userEmail = reg.user?.email || ''
-      const userPhone = reg.user?.phone || 'Not provided'
-      const userGrad = reg.user?.gradYear ? `Class of ${reg.user.gradYear}` : 'Delegate'
+      const tracksList: string[] = Array.isArray(reg.tracks) ? reg.tracks : []
 
-      const appStatus = reg.isRevoked
+      const appStatus: Registration['status'] = reg.isRevoked
         ? 'REJECTED'
-        : reg.status
+        : reg.status === 'PAYMENT_CONFIRMED' || reg.status === 'SHORTLISTED' || reg.status === 'REJECTED'
         ? reg.status
         : reg.paymentStatus === 'PAID' || reg.paymentStatus === 'PAYMENT_CONFIRMED'
         ? 'PAYMENT_CONFIRMED'
         : isPaid
         ? 'PENDING_REVIEW'
-        : 'PAYMENT_CONFIRMED'
+        : 'PAYMENT_CONFIRMED' // free pass = confirmed by default
 
       return {
         _id: String(reg._id),
         applicationId: reg.passId || `PEC-REG-${String(reg._id).slice(-6).toUpperCase()}`,
+        category: 'student' as const,
+
+        fullName: reg.user?.name || 'Student',
+        email: reg.user?.email || '',
+        phone: reg.user?.phone || '',
+        linkedin: '',
+        motive: tracksList.length > 0 ? tracksList.join(', ') : '',
+
+        college: reg.user?.college || '',
+        state: reg.user?.state || '',
+        city: reg.user?.city || '',
+        courseYear: reg.user?.gradYear ? `Class of ${reg.user.gradYear}` : '',
+
         passTier: tierKey,
         passTierName: tierName,
         passPrice: isPaid ? `₹${reg.amountPaid}` : 'FREE',
-        email: userEmail,
-        founderName: userName,
-        phone: userPhone,
-        founderLinkedIn: '',
-        startupName: userCollege,
-        organization: userCollege,
-        role: 'Student Delegate',
-        motive,
-        websiteUrl: '',
-        dpiitNumber: '',
-        stage: userGrad,
-        sector: tracksList[0] || 'Delegate',
-        revenueStage: 'General Registration',
-        totalFundingRaised: 'N/A',
-        currentAsk: 'N/A',
-        preMoneyValuation: 'N/A',
-        committedCapital: 'N/A',
-        pitchDeckUrl: reg.badgePdfUrl || '',
-        demoVideoUrl: '',
-        mouComfortable: reg.isCheckedIn ? 'Checked-In at Gate' : appStatus === 'PAYMENT_CONFIRMED' ? 'Payment Verified' : 'Payment Pending',
+        paymentMethod: isPaid
+          ? reg.paymentStatus === 'PAID'
+            ? 'OFFLINE_VERIFIED'
+            : 'PENDING_OFFLINE'
+          : 'FREE',
+
         status: appStatus,
-        paymentMethod: isPaid ? (reg.paymentStatus === 'PAID' ? 'PAID_OFFLINE_VERIFIED' : 'PENDING_OFFLINE') : 'FREE',
-        reviewNotes: reg.reviewNotes || (reg.isCheckedIn ? 'Checked in at Summit Desk' : appStatus === 'PAYMENT_CONFIRMED' ? 'Confirmed Delegate' : 'Payment Pending'),
-        internalRating: 5,
+        reviewNotes: reg.reviewNotes || '',
         createdAt: reg.createdAt ? new Date(reg.createdAt).toISOString() : new Date().toISOString(),
         updatedAt: reg.updatedAt ? new Date(reg.updatedAt).toISOString() : new Date().toISOString(),
       }
     })
 
-    // 4. Combine both datasets
-    const allApplications = [...fundingApps, ...mappedStudentApps]
+    // 4. Combine datasets
+    const allApplications: Registration[] = [...mappedStartupApps, ...mappedStudentApps]
 
     // 5. Apply filters
-    const filtered = allApplications.filter((app: any) => {
+    const filtered = allApplications.filter((app) => {
       if (status && status !== 'ALL' && app.status !== status) return false
-      if (stage && stage !== 'ALL' && app.stage !== stage) return false
       if (search) {
-        const matchesName = String(app.startupName || '').toLowerCase().includes(search)
-        const matchesFounder = String(app.founderName || '').toLowerCase().includes(search)
-        const matchesEmail = String(app.email || '').toLowerCase().includes(search)
-        const matchesSector = String(app.sector || '').toLowerCase().includes(search)
-        const matchesId = String(app.applicationId || '').toLowerCase().includes(search)
-        const matchesTier = String(app.passTierName || '').toLowerCase().includes(search)
-        if (!matchesName && !matchesFounder && !matchesEmail && !matchesSector && !matchesId && !matchesTier) {
+        const q = search.toLowerCase()
+        if (
+          !app.fullName?.toLowerCase().includes(q) &&
+          !app.email?.toLowerCase().includes(q) &&
+          !app.phone?.toLowerCase().includes(q) &&
+          !app.organization?.toLowerCase().includes(q) &&
+          !app.college?.toLowerCase().includes(q) &&
+          !app.applicationId?.toLowerCase().includes(q) &&
+          !app.passTierName?.toLowerCase().includes(q)
+        ) {
           return false
         }
       }
@@ -153,9 +171,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Enter a valid email address' }, { status: 400 })
     }
 
-    const founderName = String(body.founderName || body.fullName || '').trim()
-    if (!founderName) {
-      return NextResponse.json({ success: false, error: 'Founder or applicant name is required' }, { status: 400 })
+    const fullName = String(body.fullName || body.founderName || '').trim()
+    if (!fullName) {
+      return NextResponse.json({ success: false, error: 'Applicant name is required' }, { status: 400 })
     }
 
     const phone = String(body.phone || '').trim()
@@ -163,49 +181,42 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Enter a valid phone number (at least 10 digits)' }, { status: 400 })
     }
 
-    const founderLinkedIn = String(body.founderLinkedIn || body.linkedin || '').trim()
-    const tier = String(body.passTier || 'gold').trim().toLowerCase()
+    const category = body.category === 'student' ? 'student' : 'startup'
+    const now = new Date().toISOString()
+
     const passDetails: Record<string, { name: string; price: string }> = {
       diamond: { name: 'DIAMOND PASS', price: '₹8,000 + GST' },
       gold: { name: 'GOLD PASS', price: '₹3,500 + GST' },
       silver: { name: 'SILVER PASS', price: '₹1,000 + GST' },
     }
-    const now = new Date().toISOString()
-    const application = {
+    const tier = String(body.passTier || 'gold').trim().toLowerCase()
+
+    const application: Partial<Registration> & Record<string, unknown> = {
       applicationId: body.applicationId || `PEC-FC-${randomBytes(3).toString('hex').toUpperCase()}`,
-      passTier: passDetails[tier] ? tier : 'gold',
-      passTierName: body.passTierName?.trim() || passDetails[tier]?.name || passDetails.gold.name,
-      passPrice: body.passPrice?.trim() || passDetails[tier]?.price || passDetails.gold.price,
+      category,
+      fullName,
       email,
-      founderName,
       phone,
-      founderLinkedIn,
-      startupName: String(body.startupName || body.organization || `${founderName}'s Venture`).trim(),
+      linkedin: String(body.linkedin || body.founderLinkedIn || '').trim(),
+      motive: String(body.motive || '').trim(),
       organization: String(body.organization || body.startupName || '').trim(),
-      motive: String(body.motive || 'Showcase & Networking').trim(),
       role: String(body.role || 'Founder').trim(),
-      websiteUrl: String(body.websiteUrl || '').trim(),
-      dpiitNumber: String(body.dpiitNumber || '').trim(),
-      stage: String(body.stage || 'Early Stage').trim(),
-      sector: String(body.sector || 'Technology / General').trim(),
-      revenueStage: String(body.revenueStage || 'Pre-revenue').trim(),
-      totalFundingRaised: String(body.totalFundingRaised || '0').trim(),
-      currentAsk: String(body.currentAsk || 'N/A').trim(),
-      preMoneyValuation: String(body.preMoneyValuation || '').trim(),
-      committedCapital: String(body.committedCapital || '').trim(),
-      pitchDeckUrl: String(body.pitchDeckUrl || '').trim(),
-      demoVideoUrl: String(body.demoVideoUrl || '').trim(),
-      mouComfortable: String(body.mouComfortable || 'Yes').trim(),
+      college: String(body.college || '').trim(),
+      state: String(body.state || '').trim(),
+      city: String(body.city || '').trim(),
+      courseYear: String(body.courseYear || '').trim(),
+      passTier: passDetails[tier] ? tier : 'gold',
+      passTierName: String(body.passTierName || passDetails[tier]?.name || passDetails.gold.name).trim(),
+      passPrice: String(body.passPrice || passDetails[tier]?.price || passDetails.gold.price).trim(),
+      paymentMethod: String(body.paymentMethod || 'OFFLINE_DIRECT_TRANSFER').trim(),
       status: body.status || 'PENDING_REVIEW',
-      reviewNotes: body.reviewNotes || '',
-      internalRating: body.internalRating || 0,
-      paymentMethod: body.paymentMethod || 'OFFLINE_MOU_DIRECT_TRANSFER',
+      reviewNotes: String(body.reviewNotes || '').trim(),
       createdAt: body.createdAt || now,
       updatedAt: now,
     }
 
     const db = await getDatabase()
-    await db.collection('funding_conclave_applications').insertOne(application)
+    await db.collection('funding_conclave_applications').insertOne(application as any)
     return NextResponse.json({ success: true, application }, { status: 201 })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to create application'
