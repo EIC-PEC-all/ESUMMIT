@@ -4,8 +4,7 @@ import { getDatabase } from '@/lib/mongodb'
 import { ObjectId } from 'mongodb'
 
 const VALID_STATUSES = new Set([
-  'PENDING_REVIEW', 'UNDER_REVIEW', 'SHORTLISTED', 'MOU_SENT',
-  'MOU_ACCEPTED', 'PAYMENT_CONFIRMED', 'REJECTED',
+  'PENDING_REVIEW', 'SHORTLISTED', 'PAYMENT_CONFIRMED', 'REJECTED',
 ])
 
 interface Params {

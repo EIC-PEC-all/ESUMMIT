@@ -8,7 +8,7 @@ import { StatusBadge } from '@/components/StatusBadge'
 import { ApplicationDetailModal } from '@/components/ApplicationDetailModal'
 import { UserProfileModal } from '@/components/UserProfileModal'
 import { NewApplicationModal } from '@/components/NewApplicationModal'
-import { FundingApplication, UserProfile, UsersMetricsStats } from '@/lib/types'
+import { Registration, UserProfile, UsersMetricsStats } from '@/lib/types'
 import {
   Search,
   Eye,
@@ -28,13 +28,10 @@ import toast from 'react-hot-toast'
 
 const STATUS_FILTERS: { id: string; label: string }[] = [
   { id: 'ALL', label: 'ALL STATUSES' },
-  { id: 'PENDING_REVIEW', label: 'PENDING' },
-  { id: 'UNDER_REVIEW', label: 'UNDER REVIEW' },
+  { id: 'PENDING_REVIEW', label: 'PENDING PAYMENT' },
   { id: 'SHORTLISTED', label: 'SHORTLISTED' },
-  { id: 'MOU_SENT', label: 'MOU SENT' },
-  { id: 'MOU_ACCEPTED', label: 'MOU ACCEPTED' },
   { id: 'PAYMENT_CONFIRMED', label: 'CONFIRMED' },
-  { id: 'REJECTED', label: 'NOT SELECTED' },
+  { id: 'REJECTED', label: 'REJECTED' },
 ]
 
 const USER_ROLES: { id: string; label: string }[] = [
@@ -49,35 +46,12 @@ const USER_ROLES: { id: string; label: string }[] = [
   { id: 'DELEGATE', label: 'DELEGATES' },
 ]
 
-function isStudentPass(app: FundingApplication): boolean {
-  const tier = (app.passTier || '').toLowerCase()
-  const name = (app.passTierName || '').toLowerCase()
-  const price = (app.passPrice || '').toLowerCase()
-  const role = (app.role || '').toLowerCase()
-  const rev = (app.revenueStage || '').toLowerCase()
-
-  if (['silver', 'gold', 'diamond'].includes(tier)) return false
-  if (name.includes('silver') || name.includes('gold') || name.includes('diamond')) return false
-
-  if (['delegate', 'hackathon', 'all-access', 'combo', 'standard'].includes(tier)) return true
-  if (
-    name.includes('delegate') ||
-    name.includes('student') ||
-    name.includes('hackathon') ||
-    name.includes('combo') ||
-    name.includes('builder')
-  ) {
-    return true
-  }
-  if (rev.includes('general registration') || role.includes('student') || price.includes('free')) {
-    return true
-  }
-
-  return false
+function isStudentPass(app: Registration): boolean {
+  return app.category === 'student'
 }
 
 export default function Home() {
-  const [applications, setApplications] = useState<FundingApplication[]>([])
+  const [applications, setApplications] = useState<Registration[]>([])
   const [users, setUsers] = useState<UserProfile[]>([])
   const [usersStats, setUsersStats] = useState<UsersMetricsStats | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
@@ -87,7 +61,7 @@ export default function Home() {
   // Search & Filter States for Applications
   const [search, setSearch] = useState<string>('')
   const [statusFilter, setStatusFilter] = useState<string>('ALL')
-  const [stageFilter, setStageFilter] = useState<string>('ALL')
+  const [roleFilter, setRoleFilter] = useState<string>('ALL')
   const [tierFilter, setTierFilter] = useState<string>('ALL')
 
   // Filter States for Users Directory
@@ -96,7 +70,7 @@ export default function Home() {
   const [userPassFilter, setUserPassFilter] = useState<'ALL' | 'WITH_PASS' | 'NO_PASS'>('ALL')
 
   // Modals & Selected Records
-  const [selectedApp, setSelectedApp] = useState<FundingApplication | null>(null)
+  const [selectedApp, setSelectedApp] = useState<Registration | null>(null)
   const [selectedUser, setSelectedUser] = useState<UserProfile | null>(null)
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
   const [isCreateOpen, setIsCreateOpen] = useState(false)
@@ -153,41 +127,47 @@ export default function Home() {
     return activeCategory === 'student' ? studentApps : startupApps
   }, [activeCategory, studentApps, startupApps])
 
-  // Extract unique stages for filter dropdown within active category
-  const uniqueStages = useMemo(() => {
+  // Extract unique roles / course years for filter dropdown within active category
+  const uniqueRoles = useMemo(() => {
     const set = new Set<string>()
     activeApps.forEach((a) => {
-      if (a.stage) set.add(a.stage)
+      const val = activeCategory === 'student' ? a.courseYear : a.role
+      if (val) set.add(val)
     })
     return Array.from(set)
-  }, [activeApps])
+  }, [activeApps, activeCategory])
 
   // Applications filtering
   const filteredApplications = useMemo(() => {
     return activeApps.filter((app) => {
       if (statusFilter !== 'ALL' && app.status !== statusFilter) return false
-      if (stageFilter !== 'ALL' && app.stage !== stageFilter) return false
       if (tierFilter !== 'ALL') {
         const t = (app.passTier || '').toLowerCase()
         const n = (app.passTierName || '').toLowerCase()
         const tf = tierFilter.toLowerCase()
         if (t !== tf && !n.includes(tf)) return false
       }
+      if (roleFilter !== 'ALL') {
+        const val = activeCategory === 'student' ? app.courseYear : app.role
+        if (val !== roleFilter) return false
+      }
       if (search.trim()) {
         const q = search.toLowerCase()
-        const matchesName = app.startupName?.toLowerCase().includes(q)
-        const matchesFounder = app.founderName?.toLowerCase().includes(q)
-        const matchesEmail = app.email?.toLowerCase().includes(q)
-        const matchesSector = app.sector?.toLowerCase().includes(q)
-        const matchesId = app.applicationId?.toLowerCase().includes(q)
-        const matchesTier = app.passTierName?.toLowerCase().includes(q)
-        if (!matchesName && !matchesFounder && !matchesEmail && !matchesSector && !matchesId && !matchesTier) {
+        if (
+          !app.fullName?.toLowerCase().includes(q) &&
+          !app.email?.toLowerCase().includes(q) &&
+          !app.phone?.toLowerCase().includes(q) &&
+          !app.organization?.toLowerCase().includes(q) &&
+          !app.college?.toLowerCase().includes(q) &&
+          !app.applicationId?.toLowerCase().includes(q) &&
+          !app.passTierName?.toLowerCase().includes(q)
+        ) {
           return false
         }
       }
       return true
     })
-  }, [activeApps, statusFilter, stageFilter, tierFilter, search])
+  }, [activeApps, statusFilter, tierFilter, roleFilter, search])
 
   // Users Directory filtering
   const filteredUsers = useMemo(() => {
@@ -232,7 +212,7 @@ export default function Home() {
     })
   }, [users, userSessionFilter, userRoleFilter, userPassFilter, search])
 
-  const handleUpdateApplication = (updated: FundingApplication) => {
+  const handleUpdateApplication = (updated: Registration) => {
     setApplications((prev) =>
       prev.map((app) => (app.applicationId === updated.applicationId ? updated : app))
     )
@@ -286,7 +266,7 @@ export default function Home() {
               onClick={() => {
                 setActiveCategory('startup')
                 setTierFilter('ALL')
-                setStageFilter('ALL')
+                setRoleFilter('ALL')
                 setSearch('')
               }}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
@@ -317,7 +297,7 @@ export default function Home() {
               onClick={() => {
                 setActiveCategory('student')
                 setTierFilter('ALL')
-                setStageFilter('ALL')
+                setRoleFilter('ALL')
                 setSearch('')
               }}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-mono-data text-xs font-black uppercase tracking-wider transition-all cursor-pointer shrink-0 whitespace-nowrap ${
@@ -409,7 +389,7 @@ export default function Home() {
                 ? 'AUTHENTICATED ACCOUNTS • ACTIVE LOGIN SESSIONS • PROFILES • TICKET LINKAGE'
                 : activeCategory === 'student'
                 ? 'DELEGATE ACCREDITATION • HACKATHON BUILDERS • ALL-ACCESS • ENTRY BADGES'
-                : 'SCREENING • INVESTOR FIT • MOU WORKFLOW • OFFLINE DIRECT PAYMENTS'}
+                : 'FOUNDER & EXECUTIVE REGISTRATIONS • STARTUP DETAILS • PAYMENT VERIFICATION'}
             </p>
           </div>
 
@@ -543,21 +523,21 @@ export default function Home() {
                     </select>
                   </div>
 
-                  {/* Stage Filter */}
-                  {uniqueStages.length > 0 && (
+                  {/* Role / Year Filter */}
+                  {uniqueRoles.length > 0 && (
                     <div className="flex items-center gap-2">
                       <span className="text-[11px] font-mono-data font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">
-                        {activeCategory === 'student' ? 'TRACK:' : 'STAGE:'}
+                        {activeCategory === 'student' ? 'YEAR:' : 'ROLE:'}
                       </span>
                       <select
-                        value={stageFilter}
-                        onChange={(e) => setStageFilter(e.target.value)}
+                        value={roleFilter}
+                        onChange={(e) => setRoleFilter(e.target.value)}
                         className="px-4 py-2 rounded-full bg-slate-50 dark:bg-[#12241F] border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white text-xs font-mono-data font-bold uppercase focus:outline-none focus:border-emerald-500 cursor-pointer shadow-xs"
                       >
-                        <option value="ALL">ALL {activeCategory === 'student' ? 'TRACKS' : 'STAGES'}</option>
-                        {uniqueStages.map((stage) => (
-                          <option key={stage} value={stage}>
-                            {stage}
+                        <option value="ALL">ALL {activeCategory === 'student' ? 'YEARS' : 'ROLES'}</option>
+                        {uniqueRoles.map((role) => (
+                          <option key={role} value={role}>
+                            {role}
                           </option>
                         ))}
                       </select>
@@ -822,19 +802,14 @@ export default function Home() {
                 <thead>
                   <tr className="border-b border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-[#12241F] text-[11px] font-mono-data font-black text-slate-600 dark:text-slate-400 uppercase tracking-[0.15em]">
                     <th className="py-4 px-5 font-bold">
-                      {activeCategory === 'student' ? 'DELEGATE & PASS TIER' : 'STARTUP & PASS TIER'}
+                      {activeCategory === 'student' ? 'STUDENT & PASS TIER' : 'STARTUP & PASS TIER'}
+                    </th>
+                    <th className="py-4 px-5 font-bold">CONTACT DETAILS</th>
+                    <th className="py-4 px-5 font-bold">
+                      {activeCategory === 'student' ? 'COLLEGE / INSTITUTION' : 'ORGANIZATION & ROLE'}
                     </th>
                     <th className="py-4 px-5 font-bold">
-                      {activeCategory === 'student' ? 'STUDENT DETAILS' : 'PRIMARY FOUNDER'}
-                    </th>
-                    <th className="py-4 px-5 font-bold">
-                      {activeCategory === 'student' ? 'COLLEGE / INSTITUTION' : 'STAGE & SECTOR'}
-                    </th>
-                    <th className="py-4 px-5 font-bold">
-                      {activeCategory === 'student' ? 'TRACKS / MOTIVE' : 'FUNDRAISE ASK'}
-                    </th>
-                    <th className="py-4 px-5 font-bold">
-                      {activeCategory === 'student' ? 'VERIFICATION' : 'MOU READINESS'}
+                      {activeCategory === 'student' ? 'LOCATION & MOTIVE' : 'MOTIVE'}
                     </th>
                     <th className="py-4 px-5 font-bold">STATUS</th>
                     <th className="py-4 px-5 font-bold text-right">ACTIONS</th>
@@ -843,14 +818,14 @@ export default function Home() {
                 <tbody className="divide-y divide-slate-100 dark:divide-white/5 text-xs">
                   {loading ? (
                     <tr>
-                      <td colSpan={7} className="py-20 text-center text-slate-500 dark:text-slate-400 font-mono-data">
+                      <td colSpan={6} className="py-20 text-center text-slate-500 dark:text-slate-400 font-mono-data">
                         <div className="w-7 h-7 border-2 border-emerald-600 dark:border-mint border-t-transparent rounded-full animate-spin mx-auto mb-3" />
                         LOADING {activeCategory === 'student' ? 'REGISTRATIONS' : 'SUBMISSIONS'}...
                       </td>
                     </tr>
                   ) : filteredApplications.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-20 text-center">
+                      <td colSpan={6} className="py-20 text-center">
                         <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-[#12241F] border border-slate-200 dark:border-white/10 flex items-center justify-center mx-auto mb-4 text-slate-400 dark:text-slate-500">
                           <Inbox className="w-7 h-7" />
                         </div>
@@ -858,7 +833,7 @@ export default function Home() {
                           NO {activeCategory === 'student' ? 'STUDENT PASSES' : 'APPLICATIONS'} FOUND
                         </span>
                         <p className="text-xs text-slate-500 dark:text-slate-400 font-mono-data max-w-sm mx-auto font-medium">
-                          {search || statusFilter !== 'ALL' || stageFilter !== 'ALL' || tierFilter !== 'ALL'
+                          {search || statusFilter !== 'ALL' || roleFilter !== 'ALL' || tierFilter !== 'ALL'
                             ? 'TRY ADJUSTING SEARCH CRITERIA OR RESETTING STATUS FILTERS.'
                             : `NO ${activeCategory === 'student' ? 'STUDENT PASSES' : 'STARTUP APPLICATIONS'} RECORDED YET.`}
                         </p>
@@ -874,8 +849,15 @@ export default function Home() {
                         {/* Name / Startup & ID & Pass Tier */}
                         <td className="py-4 px-5">
                           <div className="font-display font-black text-slate-900 dark:text-white text-base group-hover:text-emerald-700 dark:group-hover:text-mint transition-colors flex items-center gap-2">
-                            {activeCategory === 'student' ? app.founderName : app.startupName}
+                            {activeCategory === 'student'
+                              ? app.fullName
+                              : app.organization || app.fullName}
                           </div>
+                          {activeCategory === 'startup' && app.organization && app.fullName && (
+                            <div className="font-mono-data text-xs text-slate-500 dark:text-slate-400 font-medium">
+                              Rep: {app.fullName}
+                            </div>
+                          )}
                           <div className="flex flex-wrap items-center gap-2 mt-1.5">
                             <span className="font-mono-data text-[10px] text-emerald-700 dark:text-mint font-extrabold tracking-wider">
                               {app.applicationId}
@@ -915,10 +897,10 @@ export default function Home() {
                           )}
                         </td>
 
-                        {/* Founder / Contact Info */}
+                        {/* Contact Info */}
                         <td className="py-4 px-5">
                           <div className="font-mono-data font-bold text-slate-900 dark:text-white text-xs">
-                            {activeCategory === 'student' ? app.founderName : app.founderName}
+                            {app.fullName}
                           </div>
                           <div className="font-mono-data text-slate-500 dark:text-slate-400 text-xs mt-0.5">
                             {app.email}
@@ -928,43 +910,49 @@ export default function Home() {
                           </div>
                         </td>
 
-                        {/* College / Stage & Sector */}
+                        {/* College / Institution OR Org & Role */}
                         <td className="py-4 px-5">
-                          <div className="font-display font-bold text-slate-900 dark:text-white text-xs">
-                            {activeCategory === 'student'
-                              ? app.startupName || app.organization || 'PEC'
-                              : app.stage || 'EARLY'}
-                          </div>
-                          <div className="font-mono-data text-emerald-700 dark:text-mint text-xs mt-0.5 uppercase tracking-wide font-bold">
-                            {app.sector}
-                          </div>
-                        </td>
-
-                        {/* Motive / Tracks or Ask */}
-                        <td className="py-4 px-5">
-                          <div className="font-mono-data text-slate-700 dark:text-slate-300 text-xs max-w-xs truncate">
-                            {activeCategory === 'student' ? app.motive || 'Delegate Registration' : app.currentAsk}
-                          </div>
-                          {activeCategory !== 'student' && app.totalFundingRaised && (
-                            <div className="font-mono-data text-slate-500 dark:text-slate-400 text-[11px] mt-0.5">
-                              Raised: {app.totalFundingRaised}
-                            </div>
+                          {activeCategory === 'student' ? (
+                            <>
+                              <div className="font-display font-bold text-slate-900 dark:text-white text-xs">
+                                {app.college || 'Punjab Engineering College'}
+                              </div>
+                              {app.courseYear && (
+                                <div className="font-mono-data text-slate-500 dark:text-slate-400 text-xs mt-0.5">
+                                  {app.courseYear}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <div className="font-display font-bold text-slate-900 dark:text-white text-xs">
+                                {app.organization || 'Independent'}
+                              </div>
+                              <div className="font-mono-data text-emerald-700 dark:text-mint text-xs mt-0.5 uppercase tracking-wide font-bold">
+                                {app.role || 'Founder'}
+                              </div>
+                            </>
                           )}
                         </td>
 
-                        {/* Verification / MoU */}
-                        <td className="py-4 px-5 max-w-[200px]">
-                          <span
-                            className={`text-xs leading-relaxed line-clamp-2 ${
-                              app.mouComfortable?.toLowerCase().includes('comfortable') ||
-                              app.mouComfortable?.toLowerCase().includes('verified') ||
-                              app.status === 'PAYMENT_CONFIRMED'
-                                ? 'text-emerald-700 dark:text-emerald-400 font-bold'
-                                : 'text-amber-800 dark:text-amber-400 font-bold'
-                            }`}
-                          >
-                            {app.mouComfortable || 'Registration Recorded'}
-                          </span>
+                        {/* Location / Motive */}
+                        <td className="py-4 px-5">
+                          {activeCategory === 'student' ? (
+                            <>
+                              {(app.city || app.state) && (
+                                <div className="font-mono-data text-slate-900 dark:text-white text-xs font-semibold">
+                                  {app.city ? `${app.city}${app.state ? `, ${app.state}` : ''}` : app.state}
+                                </div>
+                              )}
+                              <div className="font-mono-data text-slate-500 dark:text-slate-400 text-xs mt-0.5 max-w-xs truncate">
+                                {app.motive || 'Delegate Registration'}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="font-mono-data text-slate-700 dark:text-slate-300 text-xs max-w-xs truncate">
+                              {app.motive || 'Startup Pass Application'}
+                            </div>
+                          )}
                         </td>
 
                         {/* Status Badge */}

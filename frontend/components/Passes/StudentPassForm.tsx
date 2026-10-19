@@ -109,6 +109,7 @@ export default function StudentPassForm({
   const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [registrationId, setRegistrationId] = useState<string>('')
   const [errorMsg, setErrorMsg] = useState<string>('')
+  const [isUpdatedPass, setIsUpdatedPass] = useState<boolean>(false)
   const [existingPass, setExistingPass] = useState<{
     id: string
     category?: string
@@ -260,12 +261,14 @@ export default function StudentPassForm({
           gradYear: form.courseYear,
           passType: backendPassType,
           tracks,
+          existingPassId: existingPass?.id || undefined,
         }),
         signal: AbortSignal.timeout(8000),
       })
 
       const data = await res.json().catch(() => ({}))
 
+      // If backend reports existing registration or returns 409, gracefully treat as pass change/update
       if (res.status === 409) {
         const duplicatePassId =
           data?.passId ||
@@ -274,13 +277,39 @@ export default function StudentPassForm({
             ? data.message.match(/pass ID\s+([A-Z0-9-]+)/i)?.[1]
             : null) ||
           existingPass?.id ||
-          'Existing'
+          'PEC-PASS'
 
-        setExistingPass({ id: duplicatePassId, category: selectedPkg.name })
-        const friendlyMsg = `User ${form.email.trim().toLowerCase()} is already registered with pass ID ${duplicatePassId}. Each attendee is permitted 1 active student pass.`
-        setErrorMsg(friendlyMsg)
-        setSubmitState('error')
-        toast.error(`Already registered with Pass ID ${duplicatePassId}!`, { duration: 6000 })
+        regId = duplicatePassId
+        const isFree = selectedPkg.fee === 0
+        const initialStatus = isFree ? 'PAYMENT_CONFIRMED' : 'PENDING_REVIEW'
+        const initialPaymentStatus = isFree ? 'FREE' : 'PENDING'
+
+        const updatedRecord: RegistrationRecord = {
+          id: regId,
+          userId: user?.uid,
+          name: form.fullName.trim(),
+          email: form.email.trim().toLowerCase(),
+          phone: form.phone.trim(),
+          college: form.college.trim(),
+          category: selectedPkg.name,
+          tracks,
+          amountPaid: selectedPkg.fee,
+          paymentStatus: initialPaymentStatus,
+          status: initialStatus,
+          date: new Date().toLocaleDateString('en-IN', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          }),
+          qrCodeData: `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(regId)}`,
+        }
+
+        saveLocalRegistrations([updatedRecord])
+        setExistingPass({ id: regId, category: selectedPkg.name })
+        setRegistrationId(regId)
+        setIsUpdatedPass(true)
+        setSubmitState('success')
+        toast.success(`Pass updated to ${selectedPkg.name} successfully!`)
         return
       }
 
@@ -296,6 +325,9 @@ export default function StudentPassForm({
         toast.error(errMsg)
         return
       }
+
+      const isUpdate = Boolean(data?.isUpdated || existingPass?.id)
+      setIsUpdatedPass(isUpdate)
 
       if (data?.registration?.passId) {
         regId = data.registration.passId
@@ -348,7 +380,15 @@ export default function StudentPassForm({
 
       setRegistrationId(regId)
       setSubmitState('success')
-      toast.success(isFree ? 'Registration confirmed successfully!' : 'Application submitted! Our team will contact you for payment verification.')
+      if (isUpdate) {
+        toast.success(`Pass updated to ${selectedPkg.name} successfully!`)
+      } else {
+        toast.success(
+          isFree
+            ? 'Registration confirmed successfully!'
+            : 'Application submitted! Our team will contact you for payment verification.',
+        )
+      }
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Registration failed'
       setErrorMsg(msg)
@@ -361,6 +401,7 @@ export default function StudentPassForm({
     setSubmitState('idle')
     setErrorMsg('')
     setRegistrationId('')
+    setIsUpdatedPass(false)
   }
 
   // ── Success State Screen ───────────────────────────────────────────────────
@@ -378,20 +419,40 @@ export default function StudentPassForm({
 
         <div>
           <span className="font-mono-data text-xs font-bold uppercase tracking-[0.25em] text-mint">
-            {selectedPkg.fee === 0 ? 'REGISTRATION CONFIRMED' : 'APPLICATION RECEIVED'}
+            {isUpdatedPass
+              ? 'PASS UPDATED SUCCESSFULLY'
+              : selectedPkg.fee === 0
+              ? 'REGISTRATION CONFIRMED'
+              : 'APPLICATION RECEIVED'}
           </span>
           <h2 className="font-display text-3xl sm:text-5xl font-black uppercase tracking-tight text-primary mt-2">
-            {selectedPkg.fee === 0 ? (
-              <>YOU&apos;RE <span className="text-gradient-mint">REGISTERED!</span></>
+            {isUpdatedPass ? (
+              <>
+                PASS <span className="text-gradient-mint">UPDATED!</span>
+              </>
+            ) : selectedPkg.fee === 0 ? (
+              <>
+                YOU&apos;RE <span className="text-gradient-mint">REGISTERED!</span>
+              </>
             ) : (
-              <>YOU&apos;RE <span className="text-gradient-mint">PRE-REGISTERED!</span></>
+              <>
+                YOU&apos;RE <span className="text-gradient-mint">PRE-REGISTERED!</span>
+              </>
             )}
           </h2>
           <p className="text-secondary font-body text-sm sm:text-base max-w-xl mx-auto leading-relaxed mt-2">
-            {selectedPkg.fee === 0 ? (
-              <>Your pass for <strong className="text-primary">{selectedPkg.name}</strong> is confirmed in the E-Summit database.</>
+            {isUpdatedPass ? (
+              <>
+                Your pass has been updated to <strong className="text-primary">{selectedPkg.name}</strong> ({selectedPkg.price}). Your changes are saved directly to your account.
+              </>
+            ) : selectedPkg.fee === 0 ? (
+              <>
+                Your pass for <strong className="text-primary">{selectedPkg.name}</strong> is confirmed in the E-Summit database.
+              </>
             ) : (
-              <>Thank you for applying for the <strong className="text-primary">{selectedPkg.name}</strong>. Your application is saved directly to your account. Our team will contact you on WhatsApp / Email for payment verification, after which your pass status will be confirmed on your profile.</>
+              <>
+                Thank you for applying for the <strong className="text-primary">{selectedPkg.name}</strong>. Your application is saved directly to your account. Our team will contact you on WhatsApp / Email for payment verification, after which your pass status will be confirmed on your profile.
+              </>
             )}
           </p>
         </div>
@@ -526,23 +587,28 @@ export default function StudentPassForm({
 
         {/* Existing Pass Notice */}
         {existingPass && (
-          <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left">
+          <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-mint/10 border border-mint/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-left">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-mint shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <p className="font-mono-data text-xs font-bold text-amber-300 uppercase tracking-wider">
-                  Active Pass Detected ({existingPass.id})
-                </p>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <p className="font-mono-data text-xs font-black text-mint uppercase tracking-wider">
+                    Current Active Pass ({existingPass.id})
+                  </p>
+                  <span className="font-mono-data text-[10px] px-2 py-0.5 rounded-full bg-mint/20 text-mint font-bold uppercase">
+                    {existingPass.category || 'Registered'}
+                  </span>
+                </div>
                 <p className="font-body text-xs text-secondary leading-relaxed">
-                  You already have an active pass registered for <strong className="text-primary">{existingPass.category || 'Student Pass'}</strong>. Each attendee is permitted 1 pass per category.
+                  Want to switch your tier or change your details? Select any pass package below and click <strong className="text-primary">Update Pass</strong> to update your existing pass anytime.
                 </p>
               </div>
             </div>
             <Link
               href="/profile?tab=passes"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-mint text-void font-mono-data text-xs font-bold uppercase tracking-wider hover:brightness-105 transition-all shrink-0 shadow-sm"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-panel-alt border border-mint/30 text-mint hover:bg-mint hover:text-void font-mono-data text-xs font-bold uppercase tracking-wider transition-all shrink-0 shadow-sm"
             >
-              <span>View Pass</span>
+              <span>View in Profile</span>
               <ArrowRight size={13} />
             </Link>
           </div>
@@ -871,12 +937,16 @@ export default function StudentPassForm({
               {submitState === 'submitting' ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
-                  <span>Registering Application to Database...</span>
+                  <span>
+                    {existingPass ? 'Updating Pass in Database...' : 'Registering Application to Database...'}
+                  </span>
                 </>
               ) : (
                 <>
                   <span>
-                    {selectedPkg.fee === 0
+                    {existingPass
+                      ? `Update Pass to ${selectedPkg.name} (${selectedPkg.price})`
+                      : selectedPkg.fee === 0
                       ? `Submit Registration for ${selectedPkg.name}`
                       : `Submit Application for ${selectedPkg.name} (${selectedPkg.price})`}
                   </span>

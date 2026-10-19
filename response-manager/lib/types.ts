@@ -1,45 +1,49 @@
 export type ApplicationStatus =
   | 'PENDING_REVIEW'
-  | 'UNDER_REVIEW'
   | 'SHORTLISTED'
-  | 'MOU_SENT'
-  | 'MOU_ACCEPTED'
   | 'PAYMENT_CONFIRMED'
   | 'REJECTED'
 
-export interface FundingApplication {
+// Discriminated union type so we know which form type this came from
+export type PassCategory = 'student' | 'startup'
+
+export interface Registration {
   _id?: string
   applicationId: string
+  category: PassCategory
+
+  // Common fields (both forms)
+  fullName: string
+  email: string
+  phone: string
+  linkedin?: string
+  motive?: string
+
+  // Student pass fields
+  college?: string
+  state?: string
+  city?: string
+  courseYear?: string
+
+  // Startup pass fields
+  organization?: string
+  role?: string
+
+  // Pass metadata
   passTier?: string
   passTierName?: string
   passPrice?: string
-  email: string
-  founderName: string
-  phone: string
-  founderLinkedIn: string
-  startupName: string
-  organization?: string
-  role?: string
-  motive?: string
-  websiteUrl?: string
-  dpiitNumber?: string
-  stage?: string
-  sector?: string
-  revenueStage: string
-  totalFundingRaised: string
-  currentAsk: string
-  preMoneyValuation?: string
-  committedCapital?: string
-  pitchDeckUrl: string
-  demoVideoUrl?: string
-  mouComfortable: string
-  status: ApplicationStatus
   paymentMethod?: string
+
+  // Status & admin
+  status: ApplicationStatus
   reviewNotes?: string
-  internalRating?: number
   createdAt: string
   updatedAt: string
 }
+
+// Legacy alias used across the portal — maps to Registration
+export type FundingApplication = Registration
 
 export interface UserSession {
   _id: string
@@ -55,6 +59,7 @@ export interface UserRegistrationPass {
   passId: string
   passType: string
   amountPaid: number
+  paymentStatus?: string
   qrToken?: string
   isCheckedIn: boolean
   isRevoked: boolean
@@ -92,4 +97,3 @@ export interface UsersMetricsStats {
   usersWithPasses: number
   totalRegistrations: number
 }
-
