@@ -315,7 +315,7 @@ npm run typecheck
 **E-Cell PEC (Entrepreneurship and Incubation Cell)**  
 *Punjab Engineering College (Deemed to be University), Sector 12, Chandigarh - 160012*
 
-- **Website**: [eicpec.in](https://eicpec.in)
+- **Website**: [eicpec.com](https://eicpec.com)
 - **Email**: support@pec-esummit.org
 
 <div align="center">
